@@ -1,0 +1,45 @@
+{
+  "manifest_version": 2,
+  "name": "Join/Ntfy",
+  "version": "1.0",
+  "description": "Descrição da minha extensão",
+  "permissions": [
+    "webSocket",
+    "http://*/*",
+    "https://*/*",
+    "identity",
+    "identity.email",
+    "background",
+    "gcm",
+    "unlimitedStorage",
+    "notifications",
+    "tabs",
+    "clipboardRead",
+    "clipboardWrite",
+    "https://ntfy.sh/",
+    "http://ntfy.sh/",
+    "https://joinjoaomgcd.appspot.com/",
+		"http://localhost:8080/",
+		"https://accounts.google.com/o/oauth2/v2/auth/",
+    "contextMenus",
+    "geolocation",
+    "tts"
+  ],
+  "icons": {
+    "16": "z_icon.png",
+    "32": "z_icon.png",
+    "48": "z_icon.png",
+    "128": "z_icon.png"
+  },
+  "browser_action": {},
+  "background": {
+    "scripts": [
+      "1_background.js"
+    ]
+  },
+  "commands": {
+    "atalho_1": {
+      "description": "atalho_1 _ DESCRIÇÃO"
+    }
+  }
+}
