@@ -1,10 +1,16 @@
-function clipboard(inf1) {
-    const el = document.createElement('textarea');
-    el.value = inf1;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-  }
+async function clipboard(inf1) {
 
-  export default clipboard
+  const el = document.createElement('textarea');
+  el.value = inf1;
+  el.setAttribute('readonly', '');
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+
+}
+
+export default clipboard
+
