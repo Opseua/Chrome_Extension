@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "Join/Ntfy",
+  "name": "NTFY",
   "version": "1.0",
   "description": "Descrição da minha extensão",
   "permissions": [
@@ -35,7 +35,7 @@
   "browser_action": {},
   "background": {
     "scripts": [
-      "1_background.js"
+      "background.js"
     ]
   },
   "commands": {

@@ -1,15 +1,29 @@
-const WebSocket = require('ws');
+let Api;
+import('./src/recursos/Api.js').then(module => {
+  Api = module.default;
+});
 
-const socket = new WebSocket('wss://ntfy.sh/OPSEUA/ws');
-socket.addEventListener('message', function (event) {
+let AreaDeTransferencia;
+import('./src/recursos/AreaDeTransferencia.js').then(module => {
+  AreaDeTransferencia = module.default;
+});
 
-  const json = JSON.parse(event.data);
-  const inf1 = json.message;
-  if (inf1) {
-    console.log(inf1);
+
+async function teste() {
+  var a0 = 'https://ntfy.s/OPSEUA';
+  var b0 = 'POST';
+  var c0 = { 'Content-Type': 'text/plain', 'title': 'OK TITULO' };
+  var d0 = 'OK ESSA É O BODY';
+
+  var inf = {
+    url: a0,
+    method: b0,
+    headers: c0,
+    body: d0
   }
 
-});
-socket.addEventListener('close', function (event) {
-  alert('A conexão com o servidor foi interrompida.');
-});
+  await Api(inf)
+
+}
+
+export default teste
