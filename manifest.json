@@ -27,10 +27,10 @@
     "tts"
   ],
   "icons": {
-    "16": "z_icon.png",
-    "32": "z_icon.png",
-    "48": "z_icon.png",
-    "128": "z_icon.png"
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
   },
   "browser_action": {},
   "background": {

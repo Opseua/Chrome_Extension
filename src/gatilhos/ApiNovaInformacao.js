@@ -15,10 +15,8 @@ async function ApiNovaInformacao(inf) {
   const comando_tag_comando = await DefinirTagComando(inf);
 
   if (comando_tag_comando.des == 'chr') {
-
     //console.log('NOVA INFORMACAO: EXECUTANDO');
     Comando2(comando_tag_comando);
-
   }
 
 }

@@ -21,7 +21,6 @@ import('../recursos/Prompt.js').then(module => {
 // *******************************************************
 
 async function Comando2(inf) {
-
   //console.log('COMANDO 2: EXECUTANDO');
 
   if (inf.tag.includes('com') && inf.tag.length == 1) {

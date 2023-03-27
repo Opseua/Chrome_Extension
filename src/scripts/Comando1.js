@@ -26,7 +26,6 @@ import('../recursos/Prompt.js').then(module => {
 // *******************************************************
 
 async function Comando1(inf) {
-
   //console.log('COMANDO 1: EXECUTANDO');
 
   const texto_prompt = await Prompt(`GALAXY`);
