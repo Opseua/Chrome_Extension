@@ -16,11 +16,11 @@ socket.addEventListener('message', async function (event) {
 
   const background = JSON.parse(event.data)
   if (background.event == 'open') {
-    console.log('BACKGROUND: CONEXAO ESTABELECIDA');
+    //console.log('BACKGROUND: CONEXAO ESTABELECIDA');
   }
   else
     if (background.event == 'message') {
-      console.log('BACKGROUND: NOVA MENSAGEM');
+      //console.log('BACKGROUND: NOVA MENSAGEM');
       ApiNovaInformacao(background)
     }
     else {
@@ -32,18 +32,13 @@ socket.addEventListener('message', async function (event) {
 
 // ######################### CONEXAO: OFFLINE
 socket.addEventListener('close', async function (event) {
-
   const background = JSON.parse(event.data)
   console.log('BACKGROUND: CONEXAO INTERROMPIDA');
-  alert('BACKGROUND: CONEXAO INTERROMPIDA');
-
 });
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {
-
   console.log('BACKGROUND: ICONE PRESSIONADO');
-
 });
 
 // ######################### ATALHO PRESSIONADO
@@ -72,9 +67,12 @@ chrome.commands.onCommand.addListener(async function (command) {
     atalho: background_atalho,
     comando: background_comando
   }
-  console.log('BACKGROUND: ATALHO PRESSIONADO ' + atalho_comando.atalho);
+  //console.log('BACKGROUND: ATALHO PRESSIONADO ' + atalho_comando.atalho);
   AtalhoPressionado(atalho_comando);
 
 });
+
+
+
 
 

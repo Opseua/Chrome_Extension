@@ -4,7 +4,7 @@ async function Prompt(inf) {
     const ret = prompt(`${texto}`);
 
     if (ret) {
-        console.log('PROMPT: NOVO VALOR RECEBIDO');
+        //console.log('PROMPT: NOVO VALOR RECEBIDO');
         return ret;
     }
 

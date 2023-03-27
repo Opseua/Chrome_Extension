@@ -3,6 +3,11 @@ import('../recursos/Api.js').then(module => {
   Api = module.default;
 });
 
+let DefinirTagComando;
+import('../recursos/DefinirTagComando.js').then(module => {
+  DefinirTagComando = module.default;
+});
+
 let AreaDeTransferencia;
 import('../recursos/AreaDeTransferencia.js').then(module => {
   AreaDeTransferencia = module.default;
@@ -22,30 +27,28 @@ import('../recursos/Prompt.js').then(module => {
 
 async function Comando1(inf) {
 
-  console.log('COMANDO 1: EXECUTANDO');
+  //console.log('COMANDO 1: EXECUTANDO');
+
   const texto_prompt = await Prompt(`GALAXY`);
 
   if (texto_prompt) {
-    const atalho =
-    {
-      atalho: inf.atalho,
-      comando: inf.comando,
-      texto_prompt: texto_prompt,
-      ori: 'chr',
-      des: 'gal'
-    };
+
+    const comando = {
+      title: '[chr>gal]',
+      message: texto_prompt,
+    }
+
+    const comando_tag_comando = await DefinirTagComando(comando);
 
     const req = {
       url: `https://ntfy.sh/OPSEUA`,
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain', 'title': `[chr>gal]` },
-      body:
-      `
-      ${atalho.texto_prompt}
-      `
+      headers: { 'Content-Type': 'text/plain', 'title': `${comando_tag_comando.titulo}` },
+      body: comando_tag_comando.tex
     }
 
     await Api(req);
+
   }
 
 

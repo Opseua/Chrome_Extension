@@ -20,8 +20,8 @@
     "https://ntfy.sh/",
     "http://ntfy.sh/",
     "https://joinjoaomgcd.appspot.com/",
-		"http://localhost:8080/",
-		"https://accounts.google.com/o/oauth2/v2/auth/",
+    "http://localhost:8080/",
+    "https://accounts.google.com/o/oauth2/v2/auth/",
     "contextMenus",
     "geolocation",
     "tts"
@@ -40,7 +40,10 @@
   },
   "commands": {
     "atalho_1": {
-      "description": "atalho_1 _ DESCRIÇÃO"
+      "description": "atalho_1 DESCRIÇÃO"
+    },
+    "atalho_2": {
+      "description": "atalho_2 DESCRIÇÃO"
     }
   }
 }
