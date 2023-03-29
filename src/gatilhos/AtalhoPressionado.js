@@ -8,6 +8,11 @@ import('../scripts/Comando2.js').then(module => {
   Comando2 = module.default;
 });
 
+let Notificacao;
+import('../recursos/Notificacao.js').then(module => {
+  Notificacao = module.default;
+});
+
 // *******************************************************
 
 async function AtalhoPressionado(inf) {

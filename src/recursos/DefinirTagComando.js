@@ -46,7 +46,7 @@ async function DefinirTagComando(inf) {
     if (inf.message === undefined) {
         com = `[#comando]\n\n[#com]${com}[#/com]\n\n[#/comando]`;
     } else if ((inf.message.match(/\[#comando\]/)) && (inf.message.match(/\[#\/comando\]/))) {
-        const matches = inf.message.match(/\[#comando\]([^,]*[\n]?.*?)\[#\/comando\]/);
+        const matches = inf.message.match(/\[#comando\]([\s\S]*?)\[#\/comando\]/s);
         var m = matches[1].match(/\[#\/(.*?)\]/g);
         com = `[#comando]${matches[1]}[#/comando]`;
     }

@@ -49,14 +49,27 @@ async function Comando2(inf) {
     return
 
   } else {
-
+    const send_tit = inf.tex.match(/\[#tit\](.*?)\n?\[#\/tit\]/s);
+    const send_tex = inf.tex.match(/\[#tex\](.*?)\n?\[#\/tex\]/s);
+    const send_cli = inf.tex.match(/\[#cli\](.*?)\n?\[#\/cli\]/s);
 
     if (inf.tag.includes('cli')) {
-      const send_clip = inf.tex.match(/\[#cli\](.*?)\n?\[#\/cli\]/s);
-      AreaDeTransferencia(send_clip[1]);
+      AreaDeTransferencia(send_cli[1]);
     }
     if (inf.tag.includes('tit') && inf.tag.includes('tex')) {
+
+      var notificar =
+      {
+        tempo: 5,
+        type: 'basic',
+        iconUrl: 'icon.png',
+        title: `${send_tit[1]}`,
+        message: `${send_tex[1]}`,
+        buttons: [],
+      };
+      Notificacao(notificar)
       console.log('NOTIFICACAO: TITULO + TEXTO');
+
     } else if (inf.tag.includes('tit')) {
       console.log('NOTIFICACAO: SO TITULO');
       removeEventListener

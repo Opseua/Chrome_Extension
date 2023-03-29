@@ -9,7 +9,7 @@ async function AreaDeTransferencia(inf) {
   el.select();
   document.execCommand('copy');
   document.body.removeChild(el);
-  console.log('AREA DE TRANSFERENCIA: NOVO VALOR DEFINIDO')
+  //console.log('AREA DE TRANSFERENCIA: NOVO VALOR DEFINIDO')
 
 }
 
