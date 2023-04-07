@@ -19,7 +19,6 @@ async function Notificacao(inf) {
         var imgBase64 = inf.iconUrl;
     }
 
-
     var json =
     {
         tempo: ((inf.tempo === undefined) || !(inf.tempo > 0)) ? `5` : `${inf.tempo}`,

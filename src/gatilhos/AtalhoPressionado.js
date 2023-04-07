@@ -32,9 +32,6 @@ async function AtalhoPressionado(inf) {
     return
   }
 
-  // ######################### ATALHO3
-
-
 
 
 

@@ -38,7 +38,6 @@ async function DefinirTagComando(inf) {
     }
     else {
         var pad = variavel_global.comandos.includes(inf.message.toLowerCase()) ? true : false;
-        //var pad = localStorage.getItem('variavel_global').includes(inf.message.toLowerCase()) ? true : false;
         com = pad ? `[#com]${inf.message}[#/com]` : `[#cli]${inf.message}[#/cli]`;
         var m = com.match(/\[#\/(.*?)\]/g);
         com = `[#comando]\n\n${com}\n\n[#/comando]`;
