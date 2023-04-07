@@ -8,6 +8,11 @@ import('./src/gatilhos/AtalhoPressionado.js').then(module => {
   AtalhoPressionado = module.default;
 });
 
+let VariavelGlobal;
+import('./src/recursos/VariavelGlobal.js').then(module => {
+  VariavelGlobal = module.default;
+});
+
 // *******************************************************
 
 // ######################### CONEXAO: ONLINE
@@ -17,6 +22,7 @@ socket.addEventListener('message', async function (event) {
   const background = JSON.parse(event.data)
   if (background.event == 'open') {
     //console.log('BACKGROUND: CONEXAO ESTABELECIDA');
+    VariavelGlobal();
   }
   else
     if (background.event == 'message') {

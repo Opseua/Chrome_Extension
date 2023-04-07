@@ -28,8 +28,11 @@ async function AtalhoPressionado(inf) {
   if (inf.comando == 'atalho_2') {
     console.log('VARIAVEL GLOBAL LIMPA!');
     localStorage.removeItem('variavel_global');
+    VariavelGlobal();
     return
   }
+
+  // ######################### ATALHO3
 
 
 

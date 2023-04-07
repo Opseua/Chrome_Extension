@@ -1,27 +1,13 @@
-let Api;
-import('../recursos/Api.js').then(module => {
-    Api = module.default;
+let VariavelGlobal;
+import('../recursos/VariavelGlobal.js').then(module => {
+    VariavelGlobal = module.default;
 });
 
 // *******************************************************
 
 async function DefinirTagComando(inf) {
 
-    //console.log('DEFINIR TAG E COMANDO: EXECUTANDO');
-
-    if (localStorage.getItem('variavel_global') == null) {
-        console.log('VARIAVEL GLOBAL: NAO DEFINIDA')
-        const inf = {
-            url: `https://banco-de-dados-9bc75-default-rtdb.firebaseio.com/tasker.json`,
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            body: { 'tags': ['1', '2', '3'] }
-        }
-        const real_time = await Api(inf);
-        window.localStorage.setItem('variavel_global', JSON.stringify(real_time.comandos_tasker));
-    } else {
-        //console.log('VARIAVEL GLOBAL: DEFINIDA')
-    }
+    const variavel_global = JSON.parse(localStorage.getItem('variavel_global'));
 
     if (inf.title === undefined) {
         var inf1 = 'ntf';
@@ -51,7 +37,8 @@ async function DefinirTagComando(inf) {
         com = `[#comando]${matches[1]}[#/comando]`;
     }
     else {
-        var pad = localStorage.getItem('variavel_global').includes(inf.message.toLowerCase()) ? true : false;
+        var pad = variavel_global.comandos.includes(inf.message.toLowerCase()) ? true : false;
+        //var pad = localStorage.getItem('variavel_global').includes(inf.message.toLowerCase()) ? true : false;
         com = pad ? `[#com]${inf.message}[#/com]` : `[#cli]${inf.message}[#/cli]`;
         var m = com.match(/\[#\/(.*?)\]/g);
         com = `[#comando]\n\n${com}\n\n[#/comando]`;
@@ -66,9 +53,11 @@ async function DefinirTagComando(inf) {
         tex: com,
         tag: r,
         pad: pad,
+        goo: r.includes('ico') ? variavel_global : undefined,
     }
 
     return definir_tag_comandos
 }
 
-export default DefinirTagComando 
+export default DefinirTagComando
+

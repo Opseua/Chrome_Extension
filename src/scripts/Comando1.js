@@ -46,6 +46,7 @@ async function Comando1(inf) {
       body: comando_tag_comando.tex
     }
 
+
     await Api(req);
 
   }

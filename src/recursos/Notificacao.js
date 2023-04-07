@@ -1,14 +1,30 @@
+let Api;
+import('../recursos/Api.js').then(module => {
+    Api = module.default;
+});
+
+// *******************************************************
+
 async function Notificacao(inf) {
 
     if (!inf) { var inf = {}; };
 
-    console.log(inf.title)
+    //console.log(inf.title)
+
+    if (inf.iconUrl === undefined || inf.iconUrl.length > 1) {
+        const imgSrc = inf.iconUrl === undefined ? 'icon.png' : inf.iconUrl;
+        const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
+        var imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
+    } else {
+        var imgBase64 = inf.iconUrl;
+    }
+
 
     var json =
     {
         tempo: ((inf.tempo === undefined) || !(inf.tempo > 0)) ? `5` : `${inf.tempo}`,
         type: 'basic',
-        iconUrl: ((inf.iconUrl === undefined) || !(inf.iconUrl.match(/.png/))) ? `z_icon.png` : `${inf.iconUrl}`,
+        iconUrl: `data:image/png;base64,${imgBase64}`,
         title: ((inf.title === undefined) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
         message: ((inf.message === undefined) || (inf.message == '')) ? `MESSAGE VAZIO` : `${inf.message}`,
         buttons: inf.buttons || [],
