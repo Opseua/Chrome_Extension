@@ -2,7 +2,7 @@ async function Notificacao(inf) {
 
     if (!inf) { var inf = {}; };
 
-    //console.log(inf.title)
+    console.log(inf.title)
 
     var json =
     {
