@@ -13,6 +13,11 @@ import('../recursos/Notificacao.js').then(module => {
   Notificacao = module.default;
 });
 
+let SalvarArquivo;
+import('../recursos/SalvarArquivo.js').then(module => {
+  SalvarArquivo = module.default;
+});
+
 // *******************************************************
 
 async function AtalhoPressionado(inf) {
@@ -22,7 +27,7 @@ async function AtalhoPressionado(inf) {
     //console.log('ATALHO 1: EXECUTANDO');
     Comando1(inf);
     return
-  }
+  };
 
   // ######################### ATALHO2
   if (inf.comando == 'atalho_2') {
@@ -30,8 +35,28 @@ async function AtalhoPressionado(inf) {
     localStorage.removeItem('variavel_global');
     VariavelGlobal();
     return
-  }
+  };
 
+  // ######################### ATALHO3
+  if (inf.comando == 'atalho_3') {
+
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      var tab = tabs[0];
+      chrome.tabs.executeScript(tab.id, { code: "document.documentElement.outerHTML" }, function (result) {
+        var html = result[0];
+
+        const inf = {
+          nom: 'NOME_ARQUIVO.txt',
+          inf: html,
+          typ: 'text/plain;charset=utf-8'
+        }
+        SalvarArquivo(inf)
+
+      });
+    });
+
+    return
+  };
 
 
 

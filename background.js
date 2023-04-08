@@ -26,7 +26,7 @@ socket.addEventListener('message', async function (event) {
   }
   else
     if (background.event == 'message') {
-      //console.log('BACKGROUND: NOVA MENSAGEM');
+      console.log('BACKGROUND: NOVA MENSAGEM');
       ApiNovaInformacao(background)
     }
     else {
@@ -38,7 +38,6 @@ socket.addEventListener('message', async function (event) {
 
 // ######################### CONEXAO: OFFLINE
 socket.addEventListener('close', async function (event) {
-  const background = JSON.parse(event.data)
   console.log('BACKGROUND: CONEXAO INTERROMPIDA');
 });
 

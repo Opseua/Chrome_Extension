@@ -21,7 +21,7 @@ import('../recursos/Prompt.js').then(module => {
 // *******************************************************
 
 async function Comando2(inf) {
-  //console.log('COMANDO 2: EXECUTANDO');
+  console.log('COMANDO 2: EXECUTANDO');
 
   if (inf.tag.includes('cli')) {
     const send_cli = inf.tex.match(/\[#cli\](.*?)\n?\[#\/cli\]/s);
@@ -57,6 +57,7 @@ async function Comando2(inf) {
       iconUrl: send_ico === undefined ? undefined : send_ico,
       buttons: [],
     };
+    console.log('COMANDO 2: TITULO + TEXTO');
     Notificacao(notificar)
     console.log('NOTIFICACAO: TITULO + TEXTO');
 
