@@ -46,7 +46,7 @@ async function AtalhoPressionado(inf) {
         var html = result[0];
 
         const inf = {
-          nom: 'NOME_ARQUIVO.txt',
+          nom: 'NOME_ARQUIVO.html',
           inf: html,
           typ: 'text/plain;charset=utf-8'
         }

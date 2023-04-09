@@ -23,14 +23,12 @@ async function VariavelGlobal(inf) {
         //console.log('VARIAVEL GLOBAL: DEFINIDA')
     }
 
-    if(!inf){
+    if (!inf) {
         return
     }
 
     //console.log(`VARIAVEL GLOBAL: ${inf.met}`);
-
     if (inf.met == 'get') {
-
         if (variavel_global[inf.nom] === undefined) {
             var ret = undefined
         } else {
@@ -38,11 +36,9 @@ async function VariavelGlobal(inf) {
         }
         //console.log(ret);
         return ret;
-
     };
 
     if (inf.met == 'post') {
-
         variavel_global[inf.nom] = inf.val;
         const ret = variavel_global[inf.nom];
         //console.log(ret);
@@ -60,7 +56,6 @@ async function VariavelGlobal(inf) {
     };
 
     if (inf.met == 'delete') {
-
         if (variavel_global[inf.nom]) {
             delete variavel_global[inf.nom];
             window.localStorage.setItem('variavel_global', JSON.stringify(variavel_global));

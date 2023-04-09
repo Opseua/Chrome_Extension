@@ -12,7 +12,7 @@ async function Notificacao(inf) {
     //console.log(inf.title)
 
     if (inf.iconUrl === undefined || inf.iconUrl.length > 1) {
-        const imgSrc = inf.iconUrl === undefined ? 'icon.png' : inf.iconUrl;
+        const imgSrc = inf.iconUrl === undefined ? 'icon_1.png' : inf.iconUrl;
         const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
         var imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
     } else {

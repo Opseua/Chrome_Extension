@@ -5,7 +5,8 @@ async function SalvarArquivo(inf) {
     const downloadOptions = {
         url: URL.createObjectURL(blob),
         filename: inf.nom,
-        saveAs: false
+        saveAs: false, // PERGUTAR AO USUARIO ONDE SALVAR
+        conflictAction: 'overwrite' // SUBSTITUIR SE JA EXISTIR
     };
     chrome.downloads.download(downloadOptions, function (downloadId) {
     });

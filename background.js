@@ -15,31 +15,33 @@ import('./src/recursos/VariavelGlobal.js').then(module => {
 
 // *******************************************************
 
-// ######################### CONEXAO: ONLINE
-const socket = new WebSocket('wss://ntfy.sh/OPSEUA/ws');
-socket.addEventListener('message', async function (event) {
+// ######################### CONEXÃO | WEBSOCKET
+let socket;
+async function connect() {
+  socket = new WebSocket('wss://ntfy.sh/OPSEUA/ws');
 
-  const background = JSON.parse(event.data)
-  if (background.event == 'open') {
-    //console.log('BACKGROUND: CONEXAO ESTABELECIDA');
+  // CONEXAO: ONLINE
+  socket.addEventListener('open', async function (event) {
+    console.log('BACKGROUND: CONEXAO ESTABELECIDA');
     VariavelGlobal();
-  }
-  else
+  });
+
+  // CONEXAO: NOVA MENSAGEM
+  socket.addEventListener('message', async function (event) {
+    const background = JSON.parse(event.data)
     if (background.event == 'message') {
-      console.log('BACKGROUND: NOVA MENSAGEM');
+      console.log('BACKGROUND: CONEXAO NOVA MENSAGEM');
       ApiNovaInformacao(background)
     }
-    else {
-      console.log('BACKGROUND: OUTRO EVENTO');
-      return
-    }
+  });
 
-});
-
-// ######################### CONEXAO: OFFLINE
-socket.addEventListener('close', async function (event) {
-  console.log('BACKGROUND: CONEXAO INTERROMPIDA');
-});
+  // CONEXAO: OFFLINE, TENTAR NOVAMENTE
+  socket.addEventListener('close', async function (event) {
+    console.log('BACKGROUND: RECONEXAO EM 30 SEGUNDOS');
+    setTimeout(connect, 30000);
+  });
+}
+connect();
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {
