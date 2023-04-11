@@ -1,10 +1,3 @@
-let Api;
-import('../recursos/Api.js').then(module => {
-    Api = module.default;
-});
-
-// *******************************************************
-
 async function Notificacao(inf) {
 
     if (!inf) { var inf = {}; };

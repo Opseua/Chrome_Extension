@@ -9,7 +9,6 @@ async function VariavelGlobal(inf) {
 
     let variavel_global = JSON.parse(localStorage.getItem('variavel_global'));
     if (!variavel_global) {
-        console.log('VARIAVEL GLOBAL: NAO DEFINIDA')
         const inf_api = {
             url: `https://banco-de-dados-9bc75-default-rtdb.firebaseio.com/tasker.json`,
             method: 'GET',
@@ -19,8 +18,7 @@ async function VariavelGlobal(inf) {
         const api = await Api(inf_api);
         window.localStorage.setItem('variavel_global', JSON.stringify(api));
         variavel_global = api;
-    } else {
-        //console.log('VARIAVEL GLOBAL: DEFINIDA')
+        console.log('VARIAVEL GLOBAL: DEFINIDA')
     }
 
     if (!inf) {
