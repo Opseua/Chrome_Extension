@@ -10,6 +10,8 @@
     "https://*/*",
     "http://*",
     "https://*",
+    "*://*/*",
+    "<all_urls>",
     "identity",
     "downloads",
     "fileSystem",
@@ -83,7 +85,8 @@
     "wallpaper",
     "webNavigation",
     "webRequest",
-    "webRequestBlocking"
+    "webRequestBlocking",
+    "tcpServer"
   ],
   "icons": {
     "16": "icon_1.png",
@@ -109,3 +112,5 @@
     }
   }
 }
+
+

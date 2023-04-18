@@ -39,10 +39,18 @@ async function Comando1(inf) {
 
     const comando_tag_comando = await DefinirTagComando(comando);
 
-    const req = {
+/*     const req = {
       url: `https://ntfy.sh/OPSEUA`,
       method: 'POST',
       headers: { 'Content-Type': 'text/plain', 'title': `${comando_tag_comando.titulo}` },
+      body: comando_tag_comando.tex
+    } */
+
+    const texto = ''
+    const req = {
+      url: `https://ntfy.sh/OPSEUA`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'title': `${comando_tag_comando.titulo}` },
       body: comando_tag_comando.tex
     }
 

@@ -1,18 +1,37 @@
 async function Api(inf) {
 
-  let a = inf.url;
-  let b = inf.method;
-  let c = inf.headers;
-  let d = typeof inf.body === 'object' ? JSON.stringify(inf.body).replace(/(?:\r\n|\r|\n)/g, '\\n').replace(/"/g, '\\"') : inf.body.replace(/(?:\r\n|\r|\n)/g, '\\n').replace(/"/g, '\\"')
-
-  try {
-    let r = JSON.parse(`{"w": "${a}", "z": { "method": "${b}","headers":${JSON.stringify(c)}${(b == "GET") ? '' : `,"${(typeof UrlFetchApp == "undefined") ? "body" : "payload"}":"${d}"`}}}`);
-    let s = (typeof UrlFetchApp == "undefined") ? await fetch(r.w, r.z) : UrlFetchApp.fetch(r.w, r.z);
-    //console.log('API: OK');
-    return s.json();
-  } catch (error) {
-    console.log('API: DEU ERRO');
-    return error;
+  if (typeof fetch == "undefined") {
+    try {
+      var req = UrlFetchApp.fetch(inf.url, {
+        'method': inf.method,
+        'payload': inf.method === "POST" ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
+        'headers': inf.headers,
+        redirect: 'follow',
+        keepalive: true,
+        muteHttpExceptions: true,
+        validateHttpsCertificates: true,
+      });
+      console.log('API: OK');
+      return req.getContentText();
+    } catch (error) {
+      console.log('API: ERRO');
+      return error.message;
+    }
+  } else {
+    try {
+      var req = await fetch(inf.url, {
+        method: inf.method,
+        body: inf.method === "POST" ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
+        headers: inf.headers,
+        redirect: 'follow',
+        keepalive: true
+      });
+      console.log('API: OK');
+      return req;
+    } catch (error) {
+      console.log('API: ERRO');
+      return error;
+    }
   }
 
 }
