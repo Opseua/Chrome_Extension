@@ -4,13 +4,15 @@
   "version": "1.0",
   "description": "Descrição da minha extensão",
   "permissions": [
-    "https://*.pusher.com/*",
     "webSocket",
     "http://*/*",
     "https://*/*",
     "http://*",
     "https://*",
+    "ws://*/*",
+    "wss://*/*",
     "*://*/*",
+    "devtools",
     "<all_urls>",
     "identity",
     "downloads",
@@ -112,5 +114,3 @@
     }
   }
 }
-
-

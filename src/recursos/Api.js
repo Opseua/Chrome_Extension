@@ -1,6 +1,14 @@
-async function Api(inf) {
+async function Api(inf_ok) {
+
+  const inf = {
+    url: inf_ok.url,
+    method: inf_ok.method,
+    headers: inf_ok.headers,
+    body: inf_ok.body
+  };
 
   if (typeof fetch == "undefined") {
+    // Google App Script
     try {
       var req = UrlFetchApp.fetch(inf.url, {
         'method': inf.method,
@@ -18,6 +26,7 @@ async function Api(inf) {
       return error.message;
     }
   } else {
+    // JavaScript
     try {
       var req = await fetch(inf.url, {
         method: inf.method,
@@ -27,7 +36,7 @@ async function Api(inf) {
         keepalive: true
       });
       console.log('API: OK');
-      return req;
+      return await req.text();
     } catch (error) {
       console.log('API: ERRO');
       return error;
@@ -37,3 +46,17 @@ async function Api(inf) {
 }
 
 export default Api
+
+
+
+
+/* const valor = String.raw`ESSA \ É / " A ' INFORMACAO`;
+//const valor = { teste: 'OLA TUDO BEM' };
+const requisicao = {
+  url: 'https://ntfy.sh/OPSEUA',
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: valor
+};
+const re = await Api(requisicao);
+console.log(re) */

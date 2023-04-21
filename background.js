@@ -90,6 +90,22 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 
 
+/* chrome.webRequest.onBeforeRequest.addListener(
+  function(details) {
+    if(details.type === "xmlhttprequest") {
+      const requestInfo = {
+        url: details.url,
+        method: details.method,
+        headers: details.requestHeaders,
+        //body: details.requestBody ? new TextDecoder("utf-8").decode(new Uint8Array(details.requestBody.raw[0].bytes)) : ''
+      };
+      console.log(details.requestBody);
+      //console.log(requestInfo);
+    }
+  },
+  { urls: ["<all_urls>"] },
+  ["requestBody", "extraHeaders"]
+); */
 
 
 
@@ -97,9 +113,46 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 
 
+/* chrome.webRequest.onBeforeRequest.addListener(
+  function(details) {
+    try {
+      if (details.type === "xmlhttprequest" && details.requestBody !== undefined) {
+        const requestInfo = {
+          url: details.url,
+          method: details.method,
+          headers: details.requestHeaders,
+          body: details.requestBody ? details.requestBody.formData : ''
+        };
+        console.log(requestInfo);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  { urls: ["<all_urls>"] },
+  ["requestBody"]
+);
+ */
 
 
 
+
+
+/* chrome.webRequest.onBeforeRequest.addListener(
+  function(details) {
+    if(details.type === "xmlhttprequest") {
+      const requestInfo = {
+        url: details.url,
+        method: details.method,
+        headers: details.requestHeaders,
+        body: details.requestBody ? details.requestBody.formData : ''
+      };
+      console.log(requestInfo);
+    }
+  },
+  { urls: ["<all_urls>"] },
+  ["requestBody"]
+);  */
 
 
 
@@ -163,16 +216,7 @@ function chamar() {
       `
     });
   }
-  
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    if (tabs && tabs.length > 0) {
-      const tabId = tabs[0].id;
-      injectScript(tabId);
-    } else {
-      console.log("Nenhuma aba ativa encontrada");
-    }
-  });
-   */
+
 
 
   /* function injectScript(tabId) {
@@ -192,13 +236,12 @@ function chamar() {
     });
   }
   
-  chrome.tabs.query({}, function(tabs) {
-    tabs.forEach(function(tab) {
-      if (tab.url && !tab.url.startsWith("chrome://") && !tab.url.startsWith("chrome-extension://")) {
-        injectScript(tab.id);
-      }
-    });
-  }); */
+*/
+
+
+
+
+
 
 
 

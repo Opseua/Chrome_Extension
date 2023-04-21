@@ -28,6 +28,11 @@ import('../recursos/Api.js').then(module => {
   Api = module.default;
 });
 
+let BuscarAba;
+import('../recursos/BuscarAba.js').then(module => {
+  BuscarAba = module.default;
+});
+
 // *******************************************************
 
 async function AtalhoPressionado(inf) {
@@ -50,33 +55,36 @@ async function AtalhoPressionado(inf) {
   // ######################### ATALHO3
   if (inf.comando == 'atalho_3') {
 
-    /*     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-          var tab = tabs[0];
-          chrome.tabs.executeScript(tab.id, { code: "document.documentElement.outerHTML" }, function (result) {
-            var html = result[0];
-    
-            const inf = {
-              nom: 'NOME_ARQUIVO.html',
-              inf: html,
-              typ: 'text/plain;charset=utf-8'
-            }
-            SalvarArquivo(inf)
-    
-          });
-        }); */
 
 
 
-    const valor = String.raw`ESSA \ É / " A ' INFORMACAO`;
-    //const valor = { teste: 'OLA TUDO BEM' };
-    const requisicao = {
-      url: 'https://ntfy.sh/OPSEUA',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: valor
 
-    };
-    Api(requisicao)
+
+
+
+
+// Listener para interceptar as solicitações
+    chrome.webRequest.onBeforeRequest.addListener(
+      function(details) {
+        // Log das informações da solicitação
+        console.log(`URL: ${details.url}`);
+        console.log(`Método: ${details.method}`);
+        console.log(`Headers da solicitação:`, details.requestHeaders);
+        console.log(`Corpo da solicitação:`, details.requestBody);
+      },
+      {urls: ["<all_urls>"]},
+      ["requestHeaders", "requestBody"]
+    ); 
+
+
+
+
+
+
+    /*     const teste = await BuscarAba('ATIVA')
+        console.log(teste) */
+
+
 
 
 
