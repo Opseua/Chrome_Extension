@@ -20,6 +20,8 @@ import('./src/recursos/Network.js').then(module => {
 
 // *******************************************************
 
+chamar()
+
 // ######################### CONEXÃO | WEBSOCKET
 let socket;
 /* async function connect() {
@@ -57,7 +59,7 @@ chrome.browserAction.onClicked.addListener(async function () {
 chrome.commands.onCommand.addListener(async function (command) {
 
 
-  chamar()
+
 
   // identificar comando do atalho
   function getShortcutForCommand(commandName, callback) {
@@ -90,153 +92,292 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 
 
-/* chrome.webRequest.onBeforeRequest.addListener(
-  function(details) {
-    if(details.type === "xmlhttprequest") {
-      const requestInfo = {
-        url: details.url,
-        method: details.method,
-        headers: details.requestHeaders,
-        //body: details.requestBody ? new TextDecoder("utf-8").decode(new Uint8Array(details.requestBody.raw[0].bytes)) : ''
-      };
-      console.log(details.requestBody);
-      //console.log(requestInfo);
-    }
-  },
-  { urls: ["<all_urls>"] },
-  ["requestBody", "extraHeaders"]
-); */
-
-
-
-
-
-
-
-/* chrome.webRequest.onBeforeRequest.addListener(
-  function(details) {
-    try {
-      if (details.type === "xmlhttprequest" && details.requestBody !== undefined) {
-        const requestInfo = {
-          url: details.url,
-          method: details.method,
-          headers: details.requestHeaders,
-          body: details.requestBody ? details.requestBody.formData : ''
-        };
-        console.log(requestInfo);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  },
-  { urls: ["<all_urls>"] },
-  ["requestBody"]
-);
- */
-
-
-
-
-
-/* chrome.webRequest.onBeforeRequest.addListener(
-  function(details) {
-    if(details.type === "xmlhttprequest") {
-      const requestInfo = {
-        url: details.url,
-        method: details.method,
-        headers: details.requestHeaders,
-        body: details.requestBody ? details.requestBody.formData : ''
-      };
-      console.log(requestInfo);
-    }
-  },
-  { urls: ["<all_urls>"] },
-  ["requestBody"]
-);  */
-
-
-
-
-
-
-
-
 
 function chamar() {
 
-  /* chrome.webRequest.onBeforeRequest.addListener(
-    function(details) {
-      if(details.type === "xmlhttprequest") {
-        const requestInfo = {
-          url: details.url,
-          method: details.method,
-          headers: details.requestHeaders,
-          body: details.requestBody ? details.requestBody.formData : ''
+  console.log("OK")
+
+
+
+
+
+
+
+// Criar uma função para interceptar e modificar a requisição
+function interceptarRequisicao(details) {
+  // Extrair as informações relevantes da requisição
+  const { url, method, requestHeaders } = details;
+
+  // Exibir as informações da requisição original no console
+  console.log('Requisição original:');
+  console.log('URL:', url);
+  console.log('Método:', method);
+  console.log('Cabeçalhos:', requestHeaders);
+
+  // Cancelar a requisição original
+  return { cancel: true };
+}
+
+// Adicionar um listener para o evento 'onBeforeRequest' da API 'webRequest'
+chrome.webRequest.onBeforeRequest.addListener(
+  interceptarRequisicao,
+  { urls: ["<all_urls>"] },
+  ["requestHeaders", "blocking"]
+);
+
+
+
+
+
+
+
+
+  return
+
+
+
+
+  let requestInfo = {};
+  let onBeforeRequestListener;
+  let onBeforeSendHeadersListener;
+
+  function iniciarMonitoramento() {
+
+    onBeforeRequestListener = function (details) {
+      var tipo = "";
+      if (details.type === "xmlhttprequest") {
+        let requestBody = "";
+        if (details.requestBody) {
+          if (details.requestBody.formData) { // BODY TIPO: formData
+            requestBody = JSON.stringify(details.requestBody.formData);
+            tipo = "formData";
+          }
+          else if (details.requestBody.raw) { // BODY TIPO: raw
+            const rawBytes = new Uint8Array(details.requestBody.raw[0].bytes);
+            requestBody = String.fromCharCode.apply(null, rawBytes);
+            tipo = "raw";
+          }
+          else if (details.requestBody.urlencoded) { // BODY TIPO: urlencoded
+            const params = new URLSearchParams();
+            for (const key in details.requestBody.urlencoded) {
+              if (details.requestBody.urlencoded.hasOwnProperty(key)) {
+                params.append(key, details.requestBody.urlencoded[key]);
+              }
+            }
+            requestBody = params.toString();
+            tipo = "urlencoded";
+          }
+        }
+        requestInfo = {
+          body: requestBody,
+          tipo: tipo,
+          documentId: details.documentId
         };
-        console.log(requestInfo);
       }
-    },
-    { urls: ["<all_urls>"] },
-    ["requestBody"]
-  );
-  
-  chrome.webRequest.onCompleted.addListener(
-    function(details) {
-      if(details.type === "xmlhttprequest") {
-        const responseInfo = {
-          url: details.url,
-          status: details.statusCode,
-          statusText: details.statusText,
-          headers: details.responseHeaders,
-          body: details.responseBody
-        };
-        console.log(responseInfo);
+    };
+
+    onBeforeSendHeadersListener = function (details) {
+      requestInfo = {
+        x: "ETAPA: 2",
+        method: details.method,
+        url: details.url,
+        headers: details.requestHeaders,
+        ...requestInfo,
+      };
+      console.log(requestInfo);
+      if (requestInfo.body.includes("CASA")) {
+        console.log("REQUISICAO CANCELADA");
+        return { cancel: true };
+      } else {
+        console.log("REQUISICAO ENVIADA");
+        return { cancel: false };
       }
-    },
-    { urls: ["<all_urls>"] },
-    ["responseHeaders"]
-  ); */
+    };
 
+    chrome.webRequest.onBeforeRequest.addListener(
+      onBeforeRequestListener,
+      { urls: ["<all_urls>"] },
+      ["requestBody"]
+    );
 
-
-
-  /* function injectScript(tabId) {
-    chrome.tabs.executeScript(tabId, {
-      code: `
-        const origWebSocket = WebSocket;
-        const newWebSocket = function(url, protocols) {
-          console.log("WebSocket conectado em", url);
-          const socket = new origWebSocket(url, protocols);
-          socket.addEventListener("message", function(event) {
-            console.log("Mensagem recebida:", event.data);
-          });
-          return socket;
-        };
-        WebSocket = newWebSocket;
-      `
-    });
+    chrome.webRequest.onBeforeSendHeaders.addListener(
+      onBeforeSendHeadersListener,
+      { urls: ["<all_urls>"] },
+      ["requestHeaders", "blocking"]
+    );
   }
 
-
-
-  /* function injectScript(tabId) {
-    chrome.tabs.executeScript(tabId, {
-
-        const origWebSocket : WebSocket;
-        const newWebSocket = function(url, protocols) {
-          console.log("WebSocket conectado em", url);
-          const socket = new origWebSocket(url, protocols);
-          socket.addEventListener("message", function(event) {
-            console.log("Mensagem recebida:", event.data);
-          });
-          return socket;
-        };
-        WebSocket = newWebSocket;
-      
-    });
+  function pararMonitoramento() {
+    chrome.webRequest.onBeforeRequest.removeListener(onBeforeRequestListener);
+    chrome.webRequest.onBeforeSendHeaders.removeListener(onBeforeSendHeadersListener);
   }
+
+  function alterarMonitoramento(valor) {
+    if (valor) {
+      iniciarMonitoramento();
+    } else {
+      console.log("REMOVENDO LISTENER");
+      pararMonitoramento();
+    }
+  }
+
+  async function concluido(inf) {
+
+    let requisicaoCancelar = '';
+    let listenerRemover = '';
+    console.log(inf);
+
+    if (inf.body.includes("CASA")) {
+      requisicaoCancelar = true
+      listenerRemover = true
+    } else {
+      requisicaoCancelar = false
+      listenerRemover = false
+    }
+
+    return requisicaoCancelar
+
+  }
+
+  alterarMonitoramento(true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* TUDO OK
   
-*/
+  
+  let requestInfo = {};
+    chrome.webRequest.onBeforeRequest.addListener(
+      async function (details) {
+        var tipo = "";
+        if (details.type === "xmlhttprequest") {
+          let requestBody = '';
+          if (details.requestBody) {
+            if (details.requestBody.formData) { // BODY TIPO: formData
+              requestBody = JSON.stringify(details.requestBody.formData);
+              tipo = "formData";
+            }
+            else if (details.requestBody.raw) { // BODY TIPO: raw
+              const rawBytes = new Uint8Array(details.requestBody.raw[0].bytes);
+              requestBody = String.fromCharCode.apply(null, rawBytes);
+              tipo = "raw";
+            }
+            else if (details.requestBody.urlencoded) { // BODY TIPO: urlencoded
+              const params = new URLSearchParams();
+              for (const key in details.requestBody.urlencoded) {
+                if (details.requestBody.urlencoded.hasOwnProperty(key)) {
+                  params.append(key, details.requestBody.urlencoded[key]);
+                }
+              }
+              requestBody = params.toString();
+              tipo = "urlencoded";
+            }
+          }
+          requestInfo = {
+            x: "ETAPA: 1",
+            url: details.url,
+            method: details.method,
+            body: requestBody,
+            tipo: tipo,
+          };
+          if (requestInfo.headers) {
+            displayRequestInfo();
+          }
+        }
+      },
+      { urls: ["<all_urls>"] },
+      ["requestBody"]
+    );
+    
+    chrome.webRequest.onBeforeSendHeaders.addListener(
+      function (details) {
+        const method = details.method;
+        const url = details.url;
+        const headers = details.requestHeaders;
+        // Adiciona o novo cabeçalho "TESTE: VALOR"
+        headers.push({ name: 'TESTE', value: 'VALOR' });
+        requestInfo = {
+          ...requestInfo,
+          x: "ETAPA: 2",
+          url: url,
+          method: method,
+          headers: headers,
+        };
+        if (requestInfo.body) {
+          displayRequestInfo();
+        }
+        return { requestHeaders: headers };
+      },
+      { urls: ["<all_urls>"] },
+      ["requestHeaders", "blocking"]
+    );
+    
+    // Função para exibir as informações no console
+    function displayRequestInfo() {
+      console.log(requestInfo);
+    }
+  
+  
+  
+  
+  
+  
+  /*
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    /* function injectScript(tabId) {
+      chrome.tabs.executeScript(tabId, {
+  
+          const origWebSocket : WebSocket;
+          const newWebSocket = function(url, protocols) {
+            console.log("WebSocket conectado em", url);
+            const socket = new origWebSocket(url, protocols);
+            socket.addEventListener("message", function(event) {
+              console.log("Mensagem recebida:", event.data);
+            });
+            return socket;
+          };
+          WebSocket = newWebSocket;
+        
+      });
+    }
+    
+  */
 
 
 

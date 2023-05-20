@@ -12,7 +12,6 @@
     "ws://*/*",
     "wss://*/*",
     "*://*/*",
-    "devtools",
     "<all_urls>",
     "identity",
     "downloads",
