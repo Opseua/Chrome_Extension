@@ -1,3 +1,10 @@
+import('./onStart.js').then(module => module.default());
+
+let Comando1;
+import('./src/scripts/Comando1.js').then(module => {
+  Comando1 = module.default;
+});
+
 let ApiNovaInformacao;
 import('./src/gatilhos/ApiNovaInformacao.js').then(module => {
   ApiNovaInformacao = module.default;
@@ -32,7 +39,7 @@ async function connect() {
 
   if (!ws1On) {
     ws1 = new WebSocket('wss://ntfy.sh/OPSEUA/ws');
-    
+
     // CONEXAO: ONLINE - WS 1
     ws1.addEventListener('open', async function (event) {
       msg('BACKGROUND: CONEXÃO ESTABELECIDA - WS 1');
@@ -82,7 +89,6 @@ async function connect() {
   }
 
 }
-
 connect();
 
 // ######################### CLICK NO ICONE
@@ -118,8 +124,33 @@ chrome.commands.onCommand.addListener(async function (command) {
     comando: background_comando
   }
   //console.log('BACKGROUND: ATALHO PRESSIONADO ' + atalho_comando.atalho);
+
   AtalhoPressionado(atalho_comando);
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

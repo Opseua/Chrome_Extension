@@ -90,10 +90,10 @@
     "tcpServer"
   ],
   "icons": {
-    "16": "icon_1.png",
-    "32": "icon_1.png",
-    "48": "icon_1.png",
-    "128": "icon_1.png"
+    "16": "./src/media/icon_1.png",
+    "32": "./src/media/icon_1.png",
+    "48": "./src/media/icon_1.png",
+    "128": "./src/media/icon_1.png"
   },
   "browser_action": {},
   "background": {

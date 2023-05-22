@@ -50,13 +50,38 @@ export default Api
 
 
 
-/* const valor = String.raw`ESSA \ É / " A ' INFORMACAO`;
-//const valor = { teste: 'OLA TUDO BEM' };
-const requisicao = {
-  url: 'https://ntfy.sh/OPSEUA',
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: valor
-};
-const re = await Api(requisicao);
-console.log(re) */
+
+/* async function teste() {
+  const corpo = String.raw`ESSA \ É / " A ' INFORMACAO`;
+  //const corpo = { teste: 'OLA TUDO BEM' };
+  const requisicao = {
+    url: 'https://ntfy.sh/OPSEUA',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: valor
+  };
+  const re = await Api(requisicao);
+  console.log(re)
+}
+teste() */
+
+
+
+/* async function teste() {
+  // POST → x-www-form-urlencoded
+  const formData = new URLSearchParams();
+  formData.append('grant_type', 'client_credentials');
+  formData.append('client_id', 'c683fd93-XXXXXXXXXXXXX');
+  formData.append('client_secret', '0008Q~XXXXXXXXXX');
+  formData.append('resource', 'https://graph.microsoft.com');
+  const corpo = formData.toString()
+  const requisicao = {
+    url: 'https://login.microsoft.com/c5a6c78e-7c99-4631-bb7f-27660b938469/oauth2/token',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: corpo
+  };
+  const re = await Api(requisicao);
+  console.log(re)
+}
+teste() */

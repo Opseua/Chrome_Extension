@@ -24,3 +24,9 @@ async function ApiNovaInformacao(inf) {
 }
 
 export default ApiNovaInformacao
+
+
+
+
+
+

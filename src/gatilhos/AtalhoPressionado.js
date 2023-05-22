@@ -37,6 +37,10 @@ import('../recursos/BuscarAba.js').then(module => {
 
 async function AtalhoPressionado(inf) {
 
+console.log("OK");
+return
+
+
   // ######################### ATALHO1
   if (inf.comando == 'atalho_1') {
     //console.log('ATALHO 1: EXECUTANDO');
@@ -51,46 +55,6 @@ async function AtalhoPressionado(inf) {
     VariavelGlobal();
     return
   };
-
-  // ######################### ATALHO3
-  if (inf.comando == 'atalho_3') {
-
-
-
-
-
-
-
-
-
-// Listener para interceptar as solicitações
-    chrome.webRequest.onBeforeRequest.addListener(
-      function(details) {
-        // Log das informações da solicitação
-        console.log(`URL: ${details.url}`);
-        console.log(`Método: ${details.method}`);
-        console.log(`Headers da solicitação:`, details.requestHeaders);
-        console.log(`Corpo da solicitação:`, details.requestBody);
-      },
-      {urls: ["<all_urls>"]},
-      ["requestHeaders", "requestBody"]
-    ); 
-
-
-
-
-
-
-    /*     const teste = await BuscarAba('ATIVA')
-        console.log(teste) */
-
-
-
-
-
-    return
-  };
-
 
 
 
