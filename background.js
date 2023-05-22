@@ -89,7 +89,7 @@ async function connect() {
   }
 
 }
-connect();
+//connect();
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {

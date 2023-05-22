@@ -37,10 +37,6 @@ import('../recursos/BuscarAba.js').then(module => {
 
 async function AtalhoPressionado(inf) {
 
-console.log("OK");
-return
-
-
   // ######################### ATALHO1
   if (inf.comando == 'atalho_1') {
     //console.log('ATALHO 1: EXECUTANDO');
