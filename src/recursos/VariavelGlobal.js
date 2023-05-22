@@ -1,11 +1,11 @@
-let Api;
+let api;
 import('./Api.js').then(module => {
-    Api = module.default;
+    api = module.default;
 });
 
 // *******************************************************
 
-async function VariavelGlobal(inf) {
+async function variavelGlobal(inf) {
 
     let variavel_global = JSON.parse(localStorage.getItem('variavel_global'));
     if (!variavel_global) {
@@ -76,4 +76,4 @@ async function VariavelGlobal(inf) {
 
 }
 
-export default VariavelGlobal
+export default variavelGlobal

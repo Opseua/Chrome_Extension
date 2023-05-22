@@ -1,11 +1,11 @@
-let VariavelGlobal;
-import('../recursos/VariavelGlobal.js').then(module => {
-    VariavelGlobal = module.default;
+let variavelGlobal;
+import('../recursos/variavelGlobal.js').then(module => {
+    variavelGlobal = module.default;
 });
 
 // *******************************************************
 
-async function DefinirTagComando(inf) {
+async function definirTagComando(inf) {
 
     const variavel_global = JSON.parse(localStorage.getItem('variavel_global'));
 
@@ -58,5 +58,5 @@ async function DefinirTagComando(inf) {
     return definir_tag_comandos
 }
 
-export default DefinirTagComando
+export default definirTagComando
 

@@ -1,4 +1,4 @@
-async function AreaDeTransferencia(inf) {
+async function areaDeTransferencia(inf) {
 
   const el = document.createElement('textarea');
   el.value = inf.replace(/\\n/g, '<br>');
@@ -13,5 +13,5 @@ async function AreaDeTransferencia(inf) {
 
 }
 
-export default AreaDeTransferencia
+export default areaDeTransferencia
 

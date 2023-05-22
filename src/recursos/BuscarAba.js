@@ -1,4 +1,4 @@
-async function BuscarAba(inf) {
+async function buscarAba(inf) {
 
     let result;
     switch (true) {
@@ -106,4 +106,4 @@ async function BuscarAba(inf) {
 
 }
 
-export default BuscarAba
+export default buscarAba

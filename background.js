@@ -20,11 +20,6 @@ import('./src/recursos/VariavelGlobal.js').then(module => {
   VariavelGlobal = module.default;
 });
 
-let Network;
-import('./src/recursos/Network.js').then(module => {
-  Network = module.default;
-});
-
 // *******************************************************
 
 // ######################### CONEXÃO | WEBSOCKET

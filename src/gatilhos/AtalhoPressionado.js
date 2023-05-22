@@ -1,46 +1,31 @@
-let Comando1;
-import('../scripts/Comando1.js').then(module => {
-  Comando1 = module.default;
+let comando1;
+import('../scripts/comando1.js').then(module => {
+  comando1 = module.default;
 });
 
-let Comando2;
-import('../scripts/Comando2.js').then(module => {
-  Comando2 = module.default;
+let comando2;
+import('../scripts/comando2.js').then(module => {
+  comando2 = module.default;
 });
 
-let Notificacao;
-import('../recursos/Notificacao.js').then(module => {
-  Notificacao = module.default;
+let notificacao;
+import('../recursos/notificacao.js').then(module => {
+  notificacao = module.default;
 });
 
-let SalvarArquivo;
-import('../recursos/SalvarArquivo.js').then(module => {
-  SalvarArquivo = module.default;
-});
-
-let Network;
-import('../recursos/Network.js').then(module => {
-  Network = module.default;
-});
-
-let Api;
-import('../recursos/Api.js').then(module => {
-  Api = module.default;
-});
-
-let BuscarAba;
-import('../recursos/BuscarAba.js').then(module => {
-  BuscarAba = module.default;
+let variavelGlobal;
+import('../recursos/variavelGlobal.js').then(module => {
+  variavelGlobal = module.default;
 });
 
 // *******************************************************
 
-async function AtalhoPressionado(inf) {
+async function atalhoPressionado(inf) {
 
   // ######################### ATALHO1
   if (inf.comando == 'atalho_1') {
     //console.log('ATALHO 1: EXECUTANDO');
-    Comando1(inf);
+    comando1(inf);
     return
   };
 
@@ -48,7 +33,7 @@ async function AtalhoPressionado(inf) {
   if (inf.comando == 'atalho_2') {
     console.log('VARIAVEL GLOBAL LIMPA!');
     localStorage.removeItem('variavel_global');
-    VariavelGlobal();
+    variavelGlobal();
     return
   };
 
@@ -65,4 +50,4 @@ async function AtalhoPressionado(inf) {
 
 }
 
-export default AtalhoPressionado
+export default atalhoPressionado

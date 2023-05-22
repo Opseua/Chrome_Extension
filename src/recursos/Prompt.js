@@ -1,4 +1,4 @@
-async function Prompt(inf) {
+async function prompt(inf) {
 
     const texto = (inf) ? `${inf} | Digite o comando:` : `Digite o comando:`;
     const ret = prompt(`${texto}`);
@@ -9,4 +9,4 @@ async function Prompt(inf) {
 
 }
 
-export default Prompt
+export default prompt

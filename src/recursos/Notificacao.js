@@ -1,4 +1,4 @@
-async function Notificacao(inf) {
+async function notificacao(inf) {
 
     if (!inf) { var inf = {}; };
 
@@ -53,4 +53,4 @@ async function Notificacao(inf) {
 
 }
 
-export default Notificacao
+export default notificacao

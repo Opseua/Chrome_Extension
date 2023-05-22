@@ -1,4 +1,4 @@
-async function Api(inf_ok) {
+async function api(inf_ok) {
 
   const inf = {
     url: inf_ok.url,
@@ -45,7 +45,7 @@ async function Api(inf_ok) {
 
 }
 
-export default Api
+export default api
 
 
 
@@ -60,7 +60,7 @@ export default Api
     headers: { 'Content-Type': 'application/json' },
     body: valor
   };
-  const re = await Api(requisicao);
+  const re = await api(requisicao);
   console.log(re)
 }
 teste() */
@@ -81,7 +81,7 @@ teste() */
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: corpo
   };
-  const re = await Api(requisicao);
+  const re = await api(requisicao);
   console.log(re)
 }
 teste() */
