@@ -44,8 +44,8 @@ async function onStart(inf) {
       console.log('→ ' + event.data);
     });
     ws2.addEventListener('close', async function (event) { // CONEXAO: OFFLINE, TENTAR NOVAMENTE - WS2
-      console.log(`BACKGROUND: RECONEXAO EM 30 SEGUNDOS - WS2`)
-      setTimeout(web2, 3000);
+      console.log(`BACKGROUND: RECONEXAO EM 10 SEGUNDOS - WS2`)
+      setTimeout(web2, 10000);
     });
   }
   web2();
