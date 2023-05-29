@@ -23,7 +23,7 @@ import('./src/recursos/VariavelGlobal.js').then(module => {
 // *******************************************************
 
 // ######################### CONEXÃO | WEBSOCKET
-async function connect() {
+/* async function connect() {
   let ws1;
   let ws2;
   let ws1On = false;
@@ -58,13 +58,14 @@ async function connect() {
   }
 
   if (!ws2On) {
-    ws2 = new WebSocket('ws://localhost:8887');
+    ws2 = new WebSocket('ws://127.0.0.1:8880');
 
     // CONEXAO: ONLINE - WS 2
     ws2.addEventListener('open', async function (event) {
       msg('BACKGROUND: CONEXÃO ESTABELECIDA - WS 2');
       ws2On = true;
       setTimeout(function () {
+        console.log("RODANDO")
         ws2.send("Chrome: mensagem de teste");
       }, 3000);
     });
@@ -84,7 +85,7 @@ async function connect() {
   }
 
 }
-//connect();
+connect(); */
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {
