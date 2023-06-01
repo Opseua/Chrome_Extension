@@ -7,8 +7,9 @@ async function api(inf_ok) {
     body: inf_ok.body
   };
 
-  if (typeof fetch == "undefined") {
-    // Google App Script
+  const ret = { ret: false };
+
+  if (typeof fetch == "undefined") { // ################ Google App Script
     try {
       var req = UrlFetchApp.fetch(inf.url, {
         'method': inf.method,
@@ -19,14 +20,15 @@ async function api(inf_ok) {
         muteHttpExceptions: true,
         validateHttpsCertificates: true,
       });
-      console.log('API: OK');
-      return req.getContentText();
+      //console.log('API: OK');
+      ret['ret'] = true;
+      ret['res'] = req.getContentText();
     } catch (error) {
       console.log('API: ERRO');
-      return error.message;
+      //return error.message;
+      ret['res'] = error.message;
     }
-  } else {
-    // JavaScript
+  } else { // ######################################### JavaScript
     try {
       var req = await fetch(inf.url, {
         method: inf.method,
@@ -35,16 +37,18 @@ async function api(inf_ok) {
         redirect: 'follow',
         keepalive: true
       });
-      console.log('API: OK');
-      return await req.text();
+      //console.log('API: OK');
+      ret['ret'] = true;
+      ret['res'] = await req.text();
     } catch (error) {
       console.log('API: ERRO');
-      return error;
+      //return error;
+      ret['res'] = error;
     }
   }
 
+  return ret
 }
-
 export default api
 
 
@@ -60,8 +64,8 @@ export default api
     headers: { 'Content-Type': 'application/json' },
     body: valor
   };
-  const re = await api(requisicao);
-  console.log(re)
+  const retApi = await api(requisicao);
+  console.log(retApi.res)
 }
 teste() */
 
@@ -81,7 +85,7 @@ teste() */
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: corpo
   };
-  const re = await api(requisicao);
-  console.log(re)
+  const retApi = await api(requisicao);
+  console.log(retApi.res)
 }
 teste() */
