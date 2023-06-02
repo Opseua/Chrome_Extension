@@ -13,9 +13,9 @@ import('../recursos/Notificacao.js').then(module => {
   Notificacao = module.default;
 });
 
-let Prompt;
-import('../recursos/Prompt.js').then(module => {
-  Prompt = module.default;
+let promptChrome;
+import('../recursos/promptChrome.js').then(module => {
+  promptChrome = module.default;
 });
 
 // *******************************************************

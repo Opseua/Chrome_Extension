@@ -1,4 +1,4 @@
-async function prompt(inf) {
+async function promptChrome(inf) {
 
     const texto = (inf) ? `${inf} | Digite o comando:` : `Digite o comando:`;
     const ret = prompt(`${texto}`);
@@ -9,4 +9,4 @@ async function prompt(inf) {
 
 }
 
-export default prompt
+export { promptChrome }

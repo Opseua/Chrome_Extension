@@ -24,7 +24,7 @@ async function atalhoPressionado(inf) {
 
   // ######################### ATALHO1
   if (inf.comando == 'atalho_1') {
-    //console.log('ATALHO 1: EXECUTANDO');
+    console.log('ATALHO 1: EXECUTANDO');
     comando1(inf);
     return
   };

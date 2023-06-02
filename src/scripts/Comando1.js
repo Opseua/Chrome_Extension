@@ -18,17 +18,19 @@ import('../recursos/Notificacao.js').then(module => {
   Notificacao = module.default;
 });
 
-let Prompt;
-import('../recursos/Prompt.js').then(module => {
-  Prompt = module.default;
-});
+// let prompt;
+// import('../recursos/prompt.js').then(module => {
+//   prompt = module.default;
+// });
+
+import { promptChrome } from '../recursos/promptChrome.js';
 
 // *******************************************************
 
 async function Comando1(inf) {
   //console.log('COMANDO 1: EXECUTANDO');
 
-  const texto_prompt = await Prompt(`GALAXY`);
+  const texto_prompt = await promptChrome(`GALAXY`);
 
   if (texto_prompt) {
 
