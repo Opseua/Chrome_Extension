@@ -1,3 +1,5 @@
+import { clearConsole } from './clearConsole.js';
+
 let Api;
 import('./src/recursos/Api.js').then(module => {
   Api = module.default;
