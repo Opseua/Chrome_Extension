@@ -33,7 +33,7 @@ async function onStart(inf) {
 
   let ws2;
   async function web2() {
-    ws2 = new WebSocket('ws://127.0.0.1:8888');
+    ws2 = new WebSocket('ws://18.119.140.20:8888');
     ws2.addEventListener('open', async function (event) { // CONEXAO: ONLINE - WS2
       console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS2`)
       setTimeout(function () {
