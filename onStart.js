@@ -3,12 +3,8 @@ const api = async (i) => (await import('./src/recursos/api.js')).api(i);
 
 let WebSocket;
 if (typeof window === 'undefined') { // NODEJS
-  // const imp = () => import('isomorphic-ws').then(module => module.default);
-  // WebSocket = await imp();
-
   const imp = () => import('isomorphic-ws').then(module => module.default);
   WebSocket = await imp();
-
   onStart()
 } else { // CHROME
   WebSocket = window.WebSocket;
@@ -65,7 +61,7 @@ async function onStart(inf) {
         console.error(`BACKGROUND: ERRO W2 | ${error.message}`);
       });
     }
-    //web2();
+    web2();
 
   }
 
