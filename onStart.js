@@ -1,5 +1,4 @@
-import { clearConsole } from './clearConsole.js';
-const api = async (i) => (await import('./src/recursos/api.js')).api(i);
+const clearConsole = await import('./clearConsole.js');
 
 let WebSocket;
 if (typeof window === 'undefined') { // NODEJS
@@ -10,6 +9,7 @@ if (typeof window === 'undefined') { // NODEJS
   WebSocket = window.WebSocket;
 }
 // ############################################################################
+
 async function onStart(inf) {
 
 
@@ -77,4 +77,4 @@ async function onStart(inf) {
 
   client()
 }
-export { onStart }
+export default onStart

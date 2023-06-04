@@ -1,4 +1,4 @@
-const variavelGlobal = async (i) => (await import('../recursos/variavelGlobal.j')).variavelGlobal(i);
+const variavelGlobal = async (i) => (await import('../recursos/variavelGlobal.js')).default(i);
 
 // *******************************************************
 
@@ -55,5 +55,5 @@ async function definirTagComando(inf) {
     return definir_tag_comandos
 }
 
-export { definirTagComando }
+export default definirTagComando
 

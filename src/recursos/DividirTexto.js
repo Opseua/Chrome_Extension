@@ -23,5 +23,5 @@ function dividirTexto(text) {
     return chunks;
 }
 
-export { dividirTexto }
+export default dividirTexto
 

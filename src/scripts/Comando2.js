@@ -1,5 +1,5 @@
-const areaDeTransferencia = async (i) => (await import('../recursos/areaDeTransferencia.js')).areaDeTransferencia(i);
-const notificacao = async (i) => (await import('../recursos/notificacao.js')).notificacao(i);
+const areaDeTransferencia = async (i) => (await import('../recursos/areaDeTransferencia.js')).default(i);
+const notificacao = async (i) => (await import('../recursos/notificacao.js')).default(i);
 
 // *******************************************************
 
@@ -57,5 +57,5 @@ async function comando2(inf) {
   //console.log('NENHUM COMANDO ENCONTRADO')
 };
 
-export { comando2 }
+export default comando2
 

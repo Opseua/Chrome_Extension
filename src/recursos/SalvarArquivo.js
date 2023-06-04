@@ -13,5 +13,5 @@ async function salvarArquivo(inf) {
 
 }
 
-export { salvarArquivo }
+export default salvarArquivo
 

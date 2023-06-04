@@ -9,4 +9,4 @@ async function promptChrome(inf) {
 
 }
 
-export { promptChrome }
+export default promptChrome 

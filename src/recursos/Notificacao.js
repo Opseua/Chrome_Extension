@@ -53,4 +53,4 @@ async function notificacao(inf) {
 
 }
 
-export { notificacao }
+export default notificacao

@@ -1,5 +1,5 @@
-const definirTagComando = async (i) => (await import('../recursos/definirTagComando.js')).definirTagComando(i);
-const comando2 = async (i) => (await import('../scripts/comando2.js')).comando2(i);
+const definirTagComando = async (i) => (await import('../recursos/definirTagComando.js')).default(i);
+const comando2 = async (i) => (await import('../scripts/comando2.js')).default(i);
 
 // *******************************************************
 
@@ -16,7 +16,7 @@ async function apiNovaInformacao(inf) {
 
 }
 
-export { apiNovaInformacao }
+export default apiNovaInformacao
 
 
 
