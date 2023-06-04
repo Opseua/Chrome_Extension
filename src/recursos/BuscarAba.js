@@ -3,7 +3,7 @@ async function buscarAba(inf) {
     let result;
     switch (true) {
         // ################################### ABA: ATIVA
-        case inf === "ATIVA":
+        case inf === 'ATIVA':
             result = await new Promise(resolve => {
                 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
                     if (tabs.length > 0) {
@@ -22,7 +22,7 @@ async function buscarAba(inf) {
             break;
 
         // ################################### ABA: TODAS
-        case inf === "TODAS":
+        case inf === 'TODAS':
             result = await new Promise(resolve => {
                 chrome.tabs.query({}, function (tabs) {
                     if (tabs.length > 0) {
@@ -42,7 +42,7 @@ async function buscarAba(inf) {
             break;
 
         // ################################### ABA: ID
-        case typeof inf === "number":
+        case typeof inf === 'number':
             result = await new Promise(resolve => {
                 chrome.tabs.get(inf, function (tab) {
                     if (!(typeof tab === 'undefined')) {
@@ -60,7 +60,7 @@ async function buscarAba(inf) {
             break;
 
         // ################################### ABA: TITULO
-        case typeof inf === "string" && !inf.includes('http'):
+        case typeof inf === 'string' && !inf.includes('http'):
             result = await new Promise(resolve => {
                 chrome.tabs.query({ title: inf }, function (tabs) {
                     if (tabs.length > 0) {
@@ -79,7 +79,7 @@ async function buscarAba(inf) {
             break;
 
         // ################################### ABA: URL
-        case typeof inf === "string" && inf.includes('http'):
+        case typeof inf === 'string' && inf.includes('http'):
             result = await new Promise(resolve => {
                 chrome.tabs.query({ url: inf }, function (tabs) {
                     if (!(typeof tabs === 'undefined')) {

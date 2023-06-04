@@ -22,7 +22,7 @@ async function onStart(inf) {
       ws1.addEventListener('open', async function (event) { // CONEXAO: ONLINE - WS1
         console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS1`);
         // setTimeout(function () {
-        //   ws1.send("Chrome: mensagem de teste");
+        //   ws1.send('Chrome: mensagem de teste');
         // }, 3000);
       });
       ws1.addEventListener('message', async function (event) { // CONEXAO: NOVA MENSAGEM - WS1
@@ -47,7 +47,7 @@ async function onStart(inf) {
       ws2.addEventListener('open', async function (event) { // CONEXAO: ONLINE - WS2
         console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS2`)
         // setTimeout(function () {
-        //   ws2.send("Chrome: mensagem de teste");
+        //   ws2.send('Chrome: mensagem de teste');
         // }, 3000);
       });
       ws2.addEventListener('message', async function (event) { // CONEXAO: NOVA MENSAGEM - WS2
