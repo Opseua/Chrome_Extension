@@ -1,30 +1,13 @@
-let Api;
-import('../recursos/Api.js').then(module => {
-  Api = module.default;
-});
-
-let AreaDeTransferencia;
-import('../recursos/AreaDeTransferencia.js').then(module => {
-  AreaDeTransferencia = module.default;
-});
-
-let Notificacao;
-import('../recursos/Notificacao.js').then(module => {
-  Notificacao = module.default;
-});
-
-let promptChrome;
-import('../recursos/promptChrome.js').then(module => {
-  promptChrome = module.default;
-});
+const areaDeTransferencia = async (i) => (await import('../recursos/areaDeTransferencia.js')).areaDeTransferencia(i);
+const notificacao = async (i) => (await import('../recursos/notificacao.js')).notificacao(i);
 
 // *******************************************************
 
-async function Comando2(inf) {
+async function comando2(inf) {
 
   if (inf.tag.includes('cli')) {
     const send_cli = inf.tex.match(/\[#cli\]([\S\s]*)\[#\/cli\]/s);
-    AreaDeTransferencia(send_cli[1]);
+    areaDeTransferencia(send_cli[1]);
   }
 
   if (inf.tag.includes('tit') || inf.tag.includes('tex')) {
@@ -57,7 +40,7 @@ async function Comando2(inf) {
       buttons: [],
     };
     //console.log('COMANDO 2: TITULO + TEXTO');
-    Notificacao(notificar)
+    notificacao(notificar)
     console.log('NOTIFICACAO: TITULO + TEXTO');
 
   }
@@ -74,4 +57,5 @@ async function Comando2(inf) {
   //console.log('NENHUM COMANDO ENCONTRADO')
 };
 
-export default Comando2
+export { comando2 }
+

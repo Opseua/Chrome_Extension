@@ -1,33 +1,10 @@
-let Api;
-import('../recursos/Api.js').then(module => {
-  Api = module.default;
-});
-
-let DefinirTagComando;
-import('../recursos/DefinirTagComando.js').then(module => {
-  DefinirTagComando = module.default;
-});
-
-let AreaDeTransferencia;
-import('../recursos/AreaDeTransferencia.js').then(module => {
-  AreaDeTransferencia = module.default;
-});
-
-let Notificacao;
-import('../recursos/Notificacao.js').then(module => {
-  Notificacao = module.default;
-});
-
-// let prompt;
-// import('../recursos/prompt.js').then(module => {
-//   prompt = module.default;
-// });
-
-import { promptChrome } from '../recursos/promptChrome.js';
+const api = async (i) => (await import('../recursos/api.js')).api(i);
+const definirTagComando = async (i) => (await import('../recursos/definirTagComando.js')).definirTagComando(i);
+const promptChrome = async (i) => (await import('../recursos/promptChrome.js')).promptChrome(i);
 
 // *******************************************************
 
-async function Comando1(inf) {
+async function comando1(inf) {
   //console.log('COMANDO 1: EXECUTANDO');
 
   const texto_prompt = await promptChrome(`GALAXY`);
@@ -39,7 +16,7 @@ async function Comando1(inf) {
       message: texto_prompt,
     }
 
-    const comando_tag_comando = await DefinirTagComando(comando);
+    const comando_tag_comando = await definirTagComando(comando);
 
     const texto = ''
     const req = {
@@ -49,11 +26,10 @@ async function Comando1(inf) {
       body: comando_tag_comando.tex
     }
 
-    await Api(req);
+    await api(req);
 
   }
 
-
 }
 
-export default Comando1 
+export { comando1 }

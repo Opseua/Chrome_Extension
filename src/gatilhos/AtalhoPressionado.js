@@ -1,22 +1,5 @@
-let comando1;
-import('../scripts/comando1.js').then(module => {
-  comando1 = module.default;
-});
-
-let comando2;
-import('../scripts/comando2.js').then(module => {
-  comando2 = module.default;
-});
-
-let notificacao;
-import('../recursos/notificacao.js').then(module => {
-  notificacao = module.default;
-});
-
-let variavelGlobal;
-import('../recursos/variavelGlobal.js').then(module => {
-  variavelGlobal = module.default;
-});
+const comando1 = async (i) => (await import('../scripts/comando1.js')).comando1(i);
+const variavelGlobal = async (i) => (await import('../recursos/variavelGlobal.js')).variavelGlobal(i);
 
 // *******************************************************
 
@@ -50,4 +33,4 @@ async function atalhoPressionado(inf) {
 
 }
 
-export default atalhoPressionado
+export { atalhoPressionado }

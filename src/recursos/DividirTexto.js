@@ -1,4 +1,5 @@
 function dividirTexto(text) {
+
     const text_novo = text.replace(/\n/g, '\\n');
     const maxLength = 30;
     const chunks = [];
@@ -22,10 +23,5 @@ function dividirTexto(text) {
     return chunks;
 }
 
+export { dividirTexto }
 
-
-
-
-console.log(dividirTexto(`Ola, tudo bem com você? Como você está hoje? 
-  Podemos 
-  almoçar meio dia?`))
