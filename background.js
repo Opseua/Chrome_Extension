@@ -1,4 +1,4 @@
-import('./onStart.js').then(module => module.default());
+import('./onStart.js'); 
 
 const atalhoPressionado = async (i) => (await import('./src/gatilhos/atalhoPressionado.js')).default(i);
 
