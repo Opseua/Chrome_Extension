@@ -1,5 +1,5 @@
-const comando1 = async (i) => (await import('../scripts/comando1.js')).default(i);
-const variavelGlobal = async (i) => (await import('../recursos/variavelGlobal.js')).default(i);
+const { comando1 } = await import('../scripts/comando1.js');
+const { variavelGlobal } = await import('../recursos/variavelGlobal.js');
 
 // *******************************************************
 
@@ -33,4 +33,4 @@ async function atalhoPressionado(inf) {
 
 }
 
-export default atalhoPressionado 
+export { atalhoPressionado }

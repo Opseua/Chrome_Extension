@@ -13,5 +13,5 @@ async function areaDeTransferencia(inf) {
 
 }
 
-export default areaDeTransferencia
+export { areaDeTransferencia }
 

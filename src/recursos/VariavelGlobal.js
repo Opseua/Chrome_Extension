@@ -1,4 +1,4 @@
-const api = async (i) => (await import('./api.js')).default(i);
+const { api } = await import('./api.js');
 
 // *******************************************************
 
@@ -73,4 +73,4 @@ async function variavelGlobal(inf) {
 
 }
 
-export default variavelGlobal
+export { variavelGlobal }

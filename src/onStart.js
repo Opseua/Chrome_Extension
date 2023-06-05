@@ -1,11 +1,11 @@
 await import('./clearConsole.js');
 
-let WebSocket;
+let WebS;
 if (typeof window === 'undefined') { // NODEJS
-  const imp = () => import('isomorphic-ws').then(module => module.default);
-  WebSocket = await imp();
+    const { default: WebSocket } = await import('isomorphic-ws');
+    WebS = WebSocket;
 } else { // CHROME
-  WebSocket = window.WebSocket;
+    WebS = window.WebSocket;
 }
 // ############################################################################
 
@@ -14,7 +14,7 @@ async function client(inf) {
   const port = 8888;
   let ws1;
   async function web1() {
-    ws1 = new WebSocket(`wss://ntfy.sh/OPSEUA/ws`);
+    ws1 = new WebS(`wss://ntfy.sh/OPSEUA/ws`);
     ws1.addEventListener('open', async function (event) { // CONEXAO: ONLINE - WS1
       console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS1`);
       // setTimeout(function () {
@@ -39,8 +39,8 @@ async function client(inf) {
 
   let ws2;
   async function web2() {
-    ws2 = new WebSocket(`ws://127.0.0.1:${port}`);
-    //ws2 = new WebSocket(`ws://18.119.140.20:${port}`);
+    ws2 = new WebS(`ws://127.0.0.1:${port}`);
+    //ws2 = new WebS(`ws://18.119.140.20:${port}`);
     ws2.addEventListener('open', async function (event) { // CONEXAO: ONLINE - WS2
       console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS2`)
       // setTimeout(function () {
@@ -61,7 +61,7 @@ async function client(inf) {
   web2();
 
 }
-//client()
+client()
 
 
 
