@@ -1,6 +1,6 @@
-const api = async (i) => (await import('../recursos/api.js')).default(i);
-const definirTagComando = async (i) => (await import('../recursos/definirTagComando.js')).default(i);
-const promptChrome = async (i) => (await import('../recursos/promptChrome.js')).default(i);
+const { api } = await import('../recursos/api.js');
+const { definirTagComando } = await import('../recursos/definirTagComando.js');
+const { promptChrome } = await import('../recursos/promptChrome.js');
 
 // *******************************************************
 
@@ -31,5 +31,4 @@ async function comando1(inf) {
   }
 
 }
-
-export default comando1 
+export { comando1 }

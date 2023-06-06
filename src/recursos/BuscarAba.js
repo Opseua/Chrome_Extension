@@ -106,4 +106,4 @@ async function buscarAba(inf) {
 
 }
 
-export default buscarAba
+export { buscarAba }
