@@ -2,7 +2,7 @@ const { api } = await import('./api.js');
 
 // *******************************************************
 
-async function variavelGlobal(inf) {
+async function globalVariable(inf) {
 
     let variavel_global = JSON.parse(localStorage.getItem('variavel_global'));
     if (!variavel_global) {
@@ -73,4 +73,4 @@ async function variavelGlobal(inf) {
 
 }
 
-export { variavelGlobal }
+export { globalVariable }

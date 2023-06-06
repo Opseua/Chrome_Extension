@@ -1,8 +1,8 @@
-const { variavelGlobal } = await import('../recursos/variavelGlobal.js');
+const { globalVariable } = await import('../resources/globalVariable.js');
 
 // *******************************************************
 
-async function definirTagComando(inf) {
+async function setTag(inf) {
 
     const variavel_global = JSON.parse(localStorage.getItem('variavel_global'));
 
@@ -55,5 +55,5 @@ async function definirTagComando(inf) {
     return definir_tag_comandos
 }
 
-export { definirTagComando }
+export { setTag }
 

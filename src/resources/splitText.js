@@ -1,4 +1,4 @@
-function dividirTexto(text) {
+function splitText(text) {
 
     const text_novo = text.replace(/\n/g, '\\n');
     const maxLength = 30;
@@ -23,5 +23,5 @@ function dividirTexto(text) {
     return chunks;
 }
 
-export { dividirTexto }
+export { splitText }
 

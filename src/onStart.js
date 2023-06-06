@@ -1,5 +1,5 @@
 await import('./clearConsole.js');
-const { atalhoPressionado } = await import('./gatilhos/atalhoPressionado.js');
+const { shortcutPressed } = await import('./actions/shortcutPressed.js');
 
 // *******************************************************
 
@@ -37,7 +37,7 @@ chrome.commands.onCommand.addListener(async function (command) {
   }
   //console.log('BACKGROUND: ATALHO PRESSIONADO ' + atalho_comando.atalho);
 
-  atalhoPressionado(atalho_comando);
+  shortcutPressed(atalho_comando);
 
 });
 

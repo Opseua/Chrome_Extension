@@ -1,4 +1,4 @@
-async function buscarAba(inf) {
+async function searchTab(inf) {
 
     let result;
     switch (true) {
@@ -106,4 +106,4 @@ async function buscarAba(inf) {
 
 }
 
-export { buscarAba }
+export { searchTab }

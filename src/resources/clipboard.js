@@ -1,4 +1,4 @@
-async function areaDeTransferencia(inf) {
+async function clipboard(inf) {
 
   const el = document.createElement('textarea');
   el.value = inf.replace(/\\n/g, '<br>');
@@ -13,5 +13,5 @@ async function areaDeTransferencia(inf) {
 
 }
 
-export { areaDeTransferencia }
+export { clipboard }
 

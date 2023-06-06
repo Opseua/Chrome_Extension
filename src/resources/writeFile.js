@@ -1,4 +1,4 @@
-async function salvarArquivo(inf) {
+async function writeFile(inf) {
 
     const conteudo = inf.inf;
     const blob = new Blob([conteudo], { type: inf.typ });
@@ -13,5 +13,5 @@ async function salvarArquivo(inf) {
 
 }
 
-export { salvarArquivo }
+export { writeFile }
 

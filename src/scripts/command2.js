@@ -1,13 +1,13 @@
-const { areaDeTransferencia } = await import('../recursos/areaDeTransferencia.js');
-const { notificacao } = await import('../recursos/notificacao.js');
+const { clipboard } = await import('../resources/clipboard.js');
+const { notification } = await import('../resources/notification.js');
 
 // *******************************************************
 
-async function comando2(inf) {
+async function command2(inf) {
 
   if (inf.tag.includes('cli')) {
     const send_cli = inf.tex.match(/\[#cli\]([\S\s]*)\[#\/cli\]/s);
-    areaDeTransferencia(send_cli[1]);
+    clipboard(send_cli[1]);
   }
 
   if (inf.tag.includes('tit') || inf.tag.includes('tex')) {
@@ -40,8 +40,8 @@ async function comando2(inf) {
       buttons: [],
     };
     //console.log('COMANDO 2: TITULO + TEXTO');
-    notificacao(notificar)
-    console.log('NOTIFICACAO: TITULO + TEXTO');
+    notification(notificar)
+    console.log('notification: TITULO + TEXTO');
 
   }
 
@@ -56,5 +56,5 @@ async function comando2(inf) {
 
   //console.log('NENHUM COMANDO ENCONTRADO')
 };
-export { comando2 }
+export { command2 }
 

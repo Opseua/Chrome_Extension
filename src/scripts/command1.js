@@ -1,10 +1,10 @@
-const { api } = await import('../recursos/api.js');
-const { definirTagComando } = await import('../recursos/definirTagComando.js');
-const { promptChrome } = await import('../recursos/promptChrome.js');
+const { api } = await import('../resources/api.js');
+const { setTag } = await import('../resources/setTag.js');
+const { promptChrome } = await import('../resources/promptChrome.js');
 
 // *******************************************************
 
-async function comando1(inf) {
+async function command1(inf) {
   //console.log('COMANDO 1: EXECUTANDO');
 
   const texto_prompt = await promptChrome(`GALAXY`);
@@ -16,7 +16,7 @@ async function comando1(inf) {
       message: texto_prompt,
     }
 
-    const comando_tag_comando = await definirTagComando(comando);
+    const comando_tag_comando = await setTag(comando);
 
     const texto = ''
     const req = {
@@ -31,4 +31,4 @@ async function comando1(inf) {
   }
 
 }
-export { comando1 }
+export { command1 }

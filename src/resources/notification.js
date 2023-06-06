@@ -1,4 +1,4 @@
-async function notificacao(inf) {
+async function notification(inf) {
 
     if (!inf) { var inf = {}; };
 
@@ -53,4 +53,4 @@ async function notificacao(inf) {
 
 }
 
-export { notificacao }
+export { notification }

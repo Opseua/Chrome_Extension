@@ -1,14 +1,14 @@
-const { comando1 } = await import('../scripts/comando1.js');
-const { variavelGlobal } = await import('../recursos/variavelGlobal.js');
+const { command1 } = await import('../scripts/command1.js');
+const { globalVariable } = await import('../resources/globalVariable.js');
 
 // *******************************************************
 
-async function atalhoPressionado(inf) {
+async function shortcutPressed(inf) {
 
   // ######################### ATALHO1
   if (inf.comando == 'atalho_1') {
     console.log('ATALHO 1: EXECUTANDO');
-    comando1(inf);
+    command1(inf);
     return
   };
 
@@ -16,7 +16,7 @@ async function atalhoPressionado(inf) {
   if (inf.comando == 'atalho_2') {
     console.log('VARIAVEL GLOBAL LIMPA!');
     localStorage.removeItem('variavel_global');
-    variavelGlobal();
+    globalVariable();
     return
   };
 
@@ -33,4 +33,4 @@ async function atalhoPressionado(inf) {
 
 }
 
-export { atalhoPressionado }
+export { shortcutPressed }
