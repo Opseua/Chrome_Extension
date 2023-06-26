@@ -1,5 +1,7 @@
-const { command1 } = await import('../scripts/command1.js');
-const { globalVariable } = await import('../resources/globalVariable.js');
+// const { command1 } = await import('../scripts/command1.js');
+// const { globalVariable } = await import('../resources/globalVariable.js');
+import { command1 } from '../scripts/command1.js';
+import { globalVariable } from '../resources/globalVariable.js';
 
 // *******************************************************
 

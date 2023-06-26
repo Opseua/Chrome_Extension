@@ -1,7 +1,9 @@
 {
   "type": "module",
   "dependencies": {
+    "events": "^3.3.0",
     "fs": "^0.0.1-security",
+    "http-proxy": "^1.18.1",
     "isomorphic-ws": "^5.0.0"
   }
 }

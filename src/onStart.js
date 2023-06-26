@@ -1,7 +1,12 @@
 await import('./clearConsole.js');
-const { shortcutPressed } = await import('./actions/shortcutPressed.js');
+// const { shortcutPressed } = await import('./actions/shortcutPressed.js');
+// const { writeFile } = await import('./resources/writeFile.js');
+import { shortcutPressed } from './actions/shortcutPressed.js';
+import { writeFile } from './resources/writeFile.js';
 
 // *******************************************************
+
+console.log('OK')
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {
@@ -103,10 +108,5 @@ async function client(inf) {
   web2();
 
 }
-client()
-
-
-
-
-
+//client()
 

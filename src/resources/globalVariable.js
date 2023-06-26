@@ -1,4 +1,6 @@
-const { api } = await import('./api.js');
+//const { api } = await import('./api.js');
+import { api } from './api.js';
+
 
 // *******************************************************
 
@@ -12,9 +14,9 @@ async function globalVariable(inf) {
             headers: { 'Content-Type': 'application/json' },
             body: { 'tags': ['1', '2', '3'] }
         }
-        const api = await api(inf_api);
-        window.localStorage.setItem('variavel_global', JSON.stringify(api));
-        variavel_global = api;
+        const retApi = await api(inf_api);
+        window.localStorage.setItem('variavel_global', JSON.stringify(retApi));
+        variavel_global = retApi;
         console.log('VARIAVEL GLOBAL: DEFINIDA')
     }
 
@@ -45,7 +47,7 @@ async function globalVariable(inf) {
             headers: { 'Content-Type': 'application/json' },
             body: variavel_global
         }
-        const api = await api(inf_api);
+        const retApi = await api(inf_api);
 
         return ret;
     };
@@ -62,7 +64,7 @@ async function globalVariable(inf) {
                 headers: { 'Content-Type': 'application/json' },
                 body: variavel_global
             }
-            const api = await api(inf_api);
+            const retApi = await api(inf_api);
 
         } else {
             var ret = undefined;
