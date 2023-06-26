@@ -19,6 +19,7 @@ async function nodeOrBrowser() {
         }
     } catch { }
 
+    return ret
 }
 
 export { nodeOrBrowser }
