@@ -13,7 +13,8 @@ async function fileInf(inf) {
         const fileWithExtension = parsedPath.base;
         const fileWithoutExtension = parsedPath.name;
         let filesToSearch = ['package.json', 'package-lock.json', '.gitignore'];
-        let currentDir = process.cwd(); let iterations = 0;
+        let currentDir = parsedPath.dir.replace(/\//g, '\\').slice(1); let iterations = 0;
+
         while (!filesToSearch.find(file => fs.existsSync(path.join(currentDir, file)))) {
             iterations++; const parentDir = path.dirname(currentDir);
             if (iterations >= 15 || parentDir === currentDir) {
@@ -29,7 +30,8 @@ async function fileInf(inf) {
             'pathCurrent2': parsedPath.dir.slice(1).charAt(0).toUpperCase() + parsedPath.dir.slice(1).slice(1),
             'fileFull': fileWithExtension,
             'fileName': fileWithoutExtension,
-            'fileExtension': parsedPath.ext
+            'fileExtension': parsedPath.ext,
+            'parameterReceived': inf
         };
         ret['ret'] = true;
     } catch (error) {
