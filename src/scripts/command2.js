@@ -1,5 +1,3 @@
-// const { clipboard } = await import('../resources/clipboard.js');
-// const { notification } = await import('../resources/notification.js');
 import { clipboard } from '../resources/clipboard.js';
 import { notification } from '../resources/notification.js';
 

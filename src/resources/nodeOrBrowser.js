@@ -7,12 +7,12 @@ async function nodeOrBrowser() {
 
     try {
 
-        if (typeof process.versions.node !== 'undefined') { // NodeJS
-            ret['res'] = 'NodeJS'
+        if (typeof process.versions.node !== 'undefined') { // Node
+            ret['res'] = 'node'
         } else if (typeof window !== 'undefined') { // Chrome
-            ret['res'] = 'Chrome'
+            ret['res'] = 'chrome'
         } else if (typeof UrlFetchApp !== 'undefined') { // Google App Script
-            ret['res'] = 'Google App Script'
+            ret['res'] = 'googleAppScript'
         } else { // NAO IDENTIFICADO
             ret['res'] = 'NAO IDENTIFICADO'
         }

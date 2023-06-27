@@ -1,4 +1,3 @@
-//const { nodeOrBrowser } = await import('./nodeOrBrowser.js');
 import { nodeOrBrowser } from './nodeOrBrowser.js';
 
 async function writeFile(inf) {

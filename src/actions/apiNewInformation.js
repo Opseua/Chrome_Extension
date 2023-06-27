@@ -1,5 +1,3 @@
-// const { setTag } = await import('../resources/setTag.js');
-// const { command2 } = await import('../scripts/command2.js');
 import { setTag } from '../resources/setTag.js';
 import { command2 } from '../scripts/command2.js';
 

@@ -1,10 +1,6 @@
-// const { api } = await import('../resources/api.js');
-// const { setTag } = await import('../resources/setTag.js');
-// const { promptChrome } = await import('../resources/promptChrome.js');
 import { api } from '../resources/api.js';
 import { setTag } from '../resources/setTag.js';
 import { promptChrome } from '../resources/promptChrome.js';
-
 
 // *******************************************************
 

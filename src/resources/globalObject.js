@@ -17,8 +17,10 @@ const globalObject = new Proxy(data, {
         return true
     }
 });
+
 function addListener(listener) { listeners.add(listener) }
 function removeListener(listener) { listeners.delete(listener) }
+
 async function globalChanged(i) {
     console.log('globalObject ALTERADO →', i);
 }

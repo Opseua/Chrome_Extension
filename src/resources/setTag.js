@@ -1,4 +1,3 @@
-// const { globalVariable } = await import('../resources/globalVariable.js');
 import { globalVariable } from '../resources/globalVariable.js';
 
 // *******************************************************
