@@ -87,7 +87,8 @@
     "webNavigation",
     "webRequest",
     "webRequestBlocking",
-    "tcpServer"
+    "tcpServer",
+    "runtime"
   ],
   "icons": {
     "16": "./src/media/icon_1.png",

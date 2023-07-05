@@ -1,3 +1,17 @@
+// var notificar =
+// {
+//   tempo: 5,
+//   type: 'basic',
+//   title: 'DEU ERRO',
+//   message: e,
+//   iconUrl: undefined,
+//   buttons: [{ title: 'Botão 1' }, { title: 'Botão 2' }],
+// };
+// notification(notificar)
+
+
+
+
 async function notification(inf) {
 
     if (!inf) { var inf = {}; };
@@ -5,7 +19,7 @@ async function notification(inf) {
     //console.log(inf.title)
 
     if (inf.iconUrl === undefined || inf.iconUrl.length > 1) {
-        const imgSrc = inf.iconUrl === undefined ? 'icon_1.png' : inf.iconUrl;
+        const imgSrc = inf.iconUrl === undefined ? './src/media/icon_1.png' : inf.iconUrl;
         const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
         var imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
     } else {
@@ -51,6 +65,7 @@ async function notification(inf) {
 
     });
 
+    //console.log('NOTIFICATION');
 }
 
 export { notification }

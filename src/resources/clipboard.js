@@ -1,15 +1,20 @@
 async function clipboard(inf) {
 
-  const el = document.createElement('textarea');
-  el.value = inf.replace(/\\n/g, '<br>');
-  el.setAttribute('readonly', '');
-  el.style.position = 'absolute';
-  el.style.left = '-9999px';
-  document.body.appendChild(el);
-  el.select();
+  let text = inf
+
+  // OBJETO INDENTADO EM TEXTO BRUTO
+  if (typeof text === 'object' && text !== null) {
+    text = JSON.stringify(text, null, 2);
+  }
+
+  const element = document.createElement('textarea');
+  element.value = text;
+  document.body.appendChild(element);
+  element.select();
   document.execCommand('copy');
-  document.body.removeChild(el);
-  //console.log('AREA DE TRANSFERENCIA: NOVO VALOR DEFINIDO')
+  document.body.removeChild(element);
+
+  console.log('AREA DE TRANSFERENCIA: NOVO VALOR DEFINIDO')
 
 }
 
