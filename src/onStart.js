@@ -4,35 +4,6 @@ import { fileWrite } from './resources/fileWrite.js';
 import { fileRead } from './resources/fileRead.js';
 
 // *******************************************************
-const retFileRead = await fileRead('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/teste.txt')
-const resultList = JSON.parse(retFileRead).tasks[0].taskData.resultSet.resultList;
-const testQuestionInformation = JSON.parse(retFileRead).tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
-
-const res = resultList.map((v, index) => {
-  const idTask = [v.surveyKeys['193']];
-
-  return {
-    '1_RESULTADO': index + 1,
-    '2_NOME': v.value.name,
-    '3_ENDERECO': v.value.address[0],
-    '4_FECHADO': testQuestionInformation['Closed-DNE'][idTask].closed_dne.value ? 'SIM' : 'NAO',
-    '5_Relevance': testQuestionInformation.Relevance[idTask].Relevance[0].label,
-    '6_Name_Accurracy': testQuestionInformation.Data[idTask].Name[0].value,
-    '7_Address_Accurracy': testQuestionInformation.Data[idTask].Address[0].value,
-    '8_Pin_Accurracy': testQuestionInformation.Data[idTask].Pin[0].value,
-    '9_COMENTARIO': resultList[index].comments,
-  };
-});
-
-
-console.log(res);
-
-
-//        object►tasks►0►taskData►resultSet►resultList►1►value►address
-
-
-
-
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {
