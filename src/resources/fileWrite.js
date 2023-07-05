@@ -1,6 +1,6 @@
 import { nodeOrBrowser } from './nodeOrBrowser.js';
 
-async function writeFile(inf) {
+async function fileWrite(inf) {
 
     if (inf.file == undefined || inf.file == '') {
         console.log('INFORMAR O "file"');
@@ -98,4 +98,4 @@ async function writeFile(inf) {
     }
 }
 
-export { writeFile }
+export { fileWrite }

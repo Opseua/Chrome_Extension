@@ -1,10 +1,30 @@
 await import('./clearConsole.js');
 import { shortcutPressed } from './actions/shortcutPressed.js';
-import { writeFile } from './resources/writeFile.js';
+import { fileWrite } from './resources/fileWrite.js';
+import { fileRead } from './resources/fileRead.js';
 
 // *******************************************************
 
-console.log('OK')
+const teste = await fileRead('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/teste.txt')
+console.log(teste)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {
