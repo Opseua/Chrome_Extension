@@ -1,10 +1,10 @@
-// const teste = await fileRead('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/teste.txt')
-// console.log(teste)
+// const retFileRead = await fileRead('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/teste.txt')
+// console.log(retFileRead)
 
-async function fileRead(file) {
+async function fileRead(inf) {
     try {
-        const response = await fetch(`file:///${file}`);
-        return await response.text();
+        const ret = await fetch(`file:///${inf}`);
+        return await ret.text();
     } catch (error) {
         return 'ERRO AO LER ARQUIVO \nExemplo de como usar ↓ \n"D:/ARQUIVOS/arquivo.txt"';
     }

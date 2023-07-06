@@ -9,11 +9,11 @@ import { notification } from '../resources/notification.js';
 async function command1(inf) {
   //console.log('COMANDO 1: EXECUTANDO');
 
-  const texto_prompt = await promptChrome(`GALAXY`);
+  const textPrompt = await promptChrome(`GALAXY`);
 
-  if (texto_prompt) {
+  if (textPrompt) {
     try {
-      const retFileRead = texto_prompt
+      const retFileRead = textPrompt
       const resultList = JSON.parse(retFileRead).tasks[0].taskData.resultSet.resultList;
       const testQuestionInformation = JSON.parse(retFileRead).tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
 
@@ -47,8 +47,6 @@ async function command1(inf) {
         let comentario = null
         try { comentario = resultList[index].comments } catch (e) { }
 
-
-
         return {
           '1_RESULTADO': resultado,
           '2_NOME': nome,
@@ -61,11 +59,9 @@ async function command1(inf) {
           '9_COMENTARIO': comentario,
         };
       });
-
-      console.log(res);
+      //console.log(res);
 
       const textIndentado = JSON.stringify(res, null, 2);
-      //const textJson = JSON.stringify(res);
       var notificar =
       {
         tempo: 5,
@@ -103,24 +99,24 @@ async function command1(inf) {
 
 
 
-  // if (texto_prompt) {
+  // if (textPrompt) {
 
   //   const comando = {
   //     title: '[chr>gal]',
-  //     message: texto_prompt,
+  //     message: textPrompt,
   //   }
 
-  //   const comando_tag_comando = await setTag(comando);
+  //   const retSetTag = await setTag(comando);
 
   //   const texto = ''
-  //   const req = {
+  //   const infApi = {
   //     url: `https://ntfy.sh/OPSEUA`,
   //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json', 'title': `${comando_tag_comando.titulo}` },
-  //     body: comando_tag_comando.tex
+  //     headers: { 'Content-Type': 'application/json', 'title': `${retSetTag.titulo}` },
+  //     body: retSetTag.tex
   //   }
 
-  //   await api(req);
+  //   await api(infApi);
 
   // }
 

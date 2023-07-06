@@ -6,16 +6,16 @@ import { globalVariable } from '../resources/globalVariable.js';
 async function shortcutPressed(inf) {
 
   // ######################### ATALHO1
-  if (inf.comando == 'atalho_1') {
+  if (inf.command == 'atalho_1') {
     console.log('ATALHO 1: EXECUTANDO');
     command1(inf);
     return
   };
 
   // ######################### ATALHO2
-  if (inf.comando == 'atalho_2') {
+  if (inf.command == 'atalho_2') {
     console.log('VARIAVEL GLOBAL LIMPA!');
-    localStorage.removeItem('variavel_global');
+    localStorage.removeItem('varGlobal');
     globalVariable();
     return
   };

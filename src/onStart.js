@@ -1,7 +1,5 @@
 await import('./clearConsole.js');
 import { shortcutPressed } from './actions/shortcutPressed.js';
-import { fileWrite } from './resources/fileWrite.js';
-import { fileRead } from './resources/fileRead.js';
 
 // *******************************************************
 
@@ -25,21 +23,20 @@ chrome.commands.onCommand.addListener(async function (command) {
     });
   }
   // identificar teclas pressionadas
-  const background_atalho = await new Promise(function (resolve, reject) {
+  const shortcutKey = await new Promise(function (resolve, reject) {
     getShortcutForCommand(command, function (shortcut) {
       resolve(shortcut);
     });
   });
-  const background_comando = command;
 
-  const atalho_comando =
+  const infShortcutPressed =
   {
-    atalho: background_atalho,
-    comando: background_comando
+    'atalho': shortcutKey,
+    'command': command
   }
-  //console.log('BACKGROUND: ATALHO PRESSIONADO ' + atalho_comando.atalho);
+  //console.log('BACKGROUND: ATALHO PRESSIONADO ' + infShortcutPressed.atalho);
 
-  shortcutPressed(atalho_comando);
+  shortcutPressed(infShortcutPressed);
 
 });
 

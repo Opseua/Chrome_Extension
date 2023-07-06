@@ -1,11 +1,11 @@
-function splitText(text) {
+function splitText(inf) {
 
-    const text_novo = text.replace(/\n/g, '\\n');
+    const text = inf.replace(/\n/g, '\\n');
     const maxLength = 30;
     const chunks = [];
     let currentChunk = '';
 
-    for (let word of text_novo.split(/\s+/)) {
+    for (let word of text.split(/\s+/)) {
         if (currentChunk.length + word.length > maxLength) {
             chunks.push(currentChunk.trim());
             currentChunk = '';

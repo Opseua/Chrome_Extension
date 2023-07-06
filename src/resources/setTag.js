@@ -4,7 +4,7 @@ import { globalVariable } from '../resources/globalVariable.js';
 
 async function setTag(inf) {
 
-    const variavel_global = JSON.parse(localStorage.getItem('variavel_global'));
+    const varGlobal = JSON.parse(localStorage.getItem('varGlobal'));
 
     if (inf.title === undefined) {
         var inf1 = 'ntf';
@@ -34,7 +34,7 @@ async function setTag(inf) {
         com = `[#comando]${matches[1]}[#/comando]`;
     }
     else {
-        var pad = variavel_global.comandos.includes(inf.message.toLowerCase()) ? true : false;
+        var pad = varGlobal.comandos.includes(inf.message.toLowerCase()) ? true : false;
         com = pad ? `[#com]${inf.message}[#/com]` : `[#cli]${inf.message}[#/cli]`;
         var m = com.match(/\[#\/(.*?)\]/g);
         com = `[#comando]\n\n${com}\n\n[#/comando]`;
@@ -49,7 +49,7 @@ async function setTag(inf) {
         tex: com,
         tag: r,
         pad: pad,
-        goo: r.includes('ico') ? variavel_global : undefined,
+        goo: r.includes('ico') ? varGlobal : undefined,
     }
 
     return definir_tag_comandos
