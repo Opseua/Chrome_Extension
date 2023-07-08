@@ -1,5 +1,6 @@
 await import('./clearConsole.js');
 import { shortcutPressed } from './actions/shortcutPressed.js';
+import { fileWrite } from './resources/fileWrite.js';
 
 // *******************************************************
 
@@ -103,4 +104,5 @@ async function client(inf) {
 
 }
 //client()
+
 

@@ -1,101 +1,62 @@
+// const infFileWrite = {
+//     'file': 'TESTE.txt',
+//     'rewrite': false, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
+//     'text': '1'
+// }
+// fileWrite(infFileWrite)
+
+
 import { nodeOrBrowser } from './nodeOrBrowser.js';
+import { fileRead } from './fileRead.js';
 
 async function fileWrite(inf) {
 
     if (inf.file == undefined || inf.file == '') {
         console.log('INFORMAR O "file"');
-    } else if (typeof inf.replace !== 'boolean') {
-        console.log('INFORMAR O "replace" TRUE ou FALSE');
+    } else if (typeof inf.rewrite !== 'boolean') {
+        console.log('INFORMAR O "rewrite" TRUE ou FALSE');
     } else if (inf.text == undefined || inf.text == '') {
         console.log('INFORMAR O "text"');
     } else {
-        const resNodeOrBrowser = await nodeOrBrowser()
-        if (resNodeOrBrowser.res == 'node') {
-            const fs = await import('fs');
-            fs.writeFile(inf.file, inf.text, { flag: inf.replace ? 'w' : 'a' }, function (err) {
-                if (err) {
-                    console.log('ARQUIVO: ERRO | ', err);
-                } else { console.log('ARQUIVO: OK'); }
-            });
-        } else {
-            try {
-                // const blob = new Blob(['3333\nCASA'], { type: 'text/plain' });
-                // const downloadOptions = {
-                //     url: URL.createObjectURL(blob),
-                //     filename: 'NOVO.txt',
-                //     saveAs: false, // PERGUNTAR AO USUÁRIO ONDE SALVAR
-                //     conflictAction: 'overwrite' // overwrite (SUBSTITUIR) OU uniquify (REESCREVER→ ADICIONANDO (1), (2), (3)... NO FINAL)
-                // };
-
-                // chrome.downloads.download(downloadOptions, function (downloadId) {
-                //     console.log('Download iniciado:', downloadId);
-
-                //     // Verificar a condição desejada
-                //     const condition = false;
-
-                //     if (condition) {
-                //         // Excluir o download da lista do Chrome
-                //         chrome.downloads.erase({ id: downloadId }, function () {
-                //             console.log('Download excluído com sucesso');
-                //         });
-                //     } else {
-                //         console.log('Download não foi excluído');
-                //     }
-                // });
-
-
-
-
-
-
-                chrome.downloads.search({ query: 'nome_do_arquivo.txt' }, function (results) {
-                    if (results.length > 0) {
-                        const fileId = results[0].id;
-                        chrome.downloads.getFileIcon(fileId, { size: 0 }, function (iconUrl) {
-                            chrome.fileSystem.getDisplayPath(fileId, function (filePath) {
-                                chrome.fileSystem.restoreEntry(filePath, function (entry) {
-                                    entry.file(function (file) {
-                                        const reader = new FileReader();
-                                        reader.onloadend = function () {
-                                            const existingContent = reader.result;
-
-                                            // Adicione o novo conteúdo ao conteúdo existente
-                                            const newContent = existingContent + '\nNovo conteúdo a ser adicionado';
-
-                                            // Crie um novo Blob com o conteúdo atualizado
-                                            const updatedBlob = new Blob([newContent], { type: 'text/plain' });
-
-                                            // Substitua o arquivo existente pelo novo conteúdo atualizado
-                                            chrome.fileSystem.getWritableEntry(entry, function (writableEntry) {
-                                                writableEntry.createWriter(function (writer) {
-                                                    writer.onwriteend = function () {
-                                                        console.log('Conteúdo adicionado ao arquivo com sucesso');
-                                                    };
-                                                    writer.write(updatedBlob);
-                                                });
-                                            });
-                                        };
-                                        reader.readAsText(file);
-                                    });
-                                });
-                            });
+        try {
+            const resNodeOrBrowser = await nodeOrBrowser()
+            if (resNodeOrBrowser.res == 'node') {
+                // NODEJS
+                const fs = await import('fs');
+                fs.writeFile(inf.file, inf.text, { flag: inf.rewrite ? 'a' : 'w' }, function (err) {
+                });
+            } else {
+                // CHROME
+                let textOk = inf.text;
+                if (inf.rewrite) {
+                    textOk = `${await fileRead(`D:/Downloads/Google Chrome/${inf.file}`)}${textOk}`
+                }
+                const blob = new Blob([textOk], { type: 'text/plain' });
+                const downloadOptions = {
+                    url: URL.createObjectURL(blob),
+                    filename: inf.file,
+                    saveAs: false, // PERGUNTAR AO USUARIO ONDE SALVAR
+                    conflictAction: 'overwrite' // overwrite (SUBSTITUIR) OU uniquify (REESCREVER→ ADICIONANDO (1), (2), (3)... NO FINAL)
+                };
+                chrome.downloads.download(downloadOptions, async function (downloadId) {
+                    const deleteListDownload = true;
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    if (deleteListDownload) {
+                        // EXCLUIR O DOWNLOAD DA LISTA DO CHROME
+                        chrome.downloads.erase({ id: downloadId }, function () {
+                            //console.log('Download excluído com sucesso');
                         });
+                    } else {
+                        //console.log('Download não foi excluído');
                     }
                 });
-
-
-
-
-
-
-
-
-
-            } catch (err) {
-                console.log('ARQUIVO: ERRO');
             }
+            console.log('ARQUIVO: OK');
+        } catch (err) {
+            console.log('ARQUIVO: ERRO', err);
         }
     }
+
 }
 
 export { fileWrite }
