@@ -65,26 +65,20 @@ async function fileWrite(inf) {
                     }
                 });
             }
+            
             ret['ret'] = true;
-            ret['msg'] = `ARQUIVO: OK`;
-        } catch (err) {
-            ret['msg'] = `ARQUIVO: ERRO ${err}`;
+            ret['msg'] = `FILE WRITE: OK`;
+        } catch (e) {
+            ret['msg'] = `FILE WRITE: ERRO | ${e}`;
         }
     }
 
-    console.log(ret.msg);
+    if (!ret.ret) { console.log(ret.msg) }
     return ret;
 }
 
 export { fileWrite };
 
-const infFileWrite = {
-    'file': 'PASTAS 1/PASTA 2/arquivo.txt',
-    'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-    'text': 'LINHA 1\nLINHA 2\nLINHA 3\n'
-};
-
-fileWrite(infFileWrite);
 
 
 

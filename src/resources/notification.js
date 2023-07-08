@@ -13,59 +13,62 @@
 
 
 async function notification(inf) {
+    let ret = { ret: false }
 
-    if (!inf) { var inf = {}; };
+    try {
+        if (!inf) { var inf = {}; };
+        if (inf.iconUrl === undefined || inf.iconUrl.length > 1) {
+            const imgSrc = inf.iconUrl === undefined ? './src/media/icon_1.png' : inf.iconUrl;
+            const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
+            var imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
+        } else {
+            var imgBase64 = inf.iconUrl;
+        }
 
-    //console.log(inf.title)
+        var json =
+        {
+            tempo: ((inf.tempo === undefined) || !(inf.tempo > 0)) ? `5` : `${inf.tempo}`,
+            type: 'basic',
+            iconUrl: `data:image/png;base64,${imgBase64}`,
+            title: ((inf.title === undefined) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
+            message: ((inf.message === undefined) || (inf.message == '')) ? `MESSAGE VAZIO` : `${inf.message}`,
+            buttons: inf.buttons || [],
+        };
 
-    if (inf.iconUrl === undefined || inf.iconUrl.length > 1) {
-        const imgSrc = inf.iconUrl === undefined ? './src/media/icon_1.png' : inf.iconUrl;
-        const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
-        var imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
-    } else {
-        var imgBase64 = inf.iconUrl;
-    }
+        var not =
+        {
+            type: json.type,
+            iconUrl: json.iconUrl,
+            title: json.title,
+            message: json.message.substring(0, 128),
+            buttons: json.buttons,
+        };
 
-    var json =
-    {
-        tempo: ((inf.tempo === undefined) || !(inf.tempo > 0)) ? `5` : `${inf.tempo}`,
-        type: 'basic',
-        iconUrl: `data:image/png;base64,${imgBase64}`,
-        title: ((inf.title === undefined) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
-        message: ((inf.message === undefined) || (inf.message == '')) ? `MESSAGE VAZIO` : `${inf.message}`,
-        buttons: inf.buttons || [],
-    };
+        chrome.notifications.create(not, (notificationId) => {
+            // ALGUM BOTAO PRESSIONADO
+            chrome.notifications.onButtonClicked.addListener((notifId, btnIdx) => {
+                if (notifId === notificationId && btnIdx === 0) {
+                    alert('1');
+                }
 
-    var not =
-    {
-        type: json.type,
-        iconUrl: json.iconUrl,
-        title: json.title,
-        message: json.message.substring(0, 128),
-        buttons: json.buttons,
-    };
+                if (notifId === notificationId && btnIdx === 1) {
+                    alert('2');
+                }
+            });
 
-    chrome.notifications.create(not, (notificationId) => {
-
-        // ALGUM BOTAO PRESSIONADO
-        chrome.notifications.onButtonClicked.addListener((notifId, btnIdx) => {
-
-            if (notifId === notificationId && btnIdx === 0) {
-                alert('1');
-            }
-
-            if (notifId === notificationId && btnIdx === 1) {
-                alert('2');
-            }
+            setTimeout(() => {
+                chrome.notifications.clear(notificationId);
+            }, json.tempo * 1000);
         });
 
-        setTimeout(() => {
-            chrome.notifications.clear(notificationId);
-        }, json.tempo * 1000);
+        ret['ret'] = true;
+        ret['msg'] = 'NOTIFICATION: OK';
+    } catch (e) {
+        ret['msg'] = `NOTIFICATION: ERRO | ${e}`;
+    }
 
-    });
-
-    //console.log('NOTIFICATION');
+    if (!ret.ret) { console.log(ret.msg) }
+    return ret
 }
 
 export { notification }

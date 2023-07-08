@@ -6,14 +6,15 @@ async function fileRead(inf) {
 
     try {
         const retFetch = await fetch(`file:///${inf}`);
+
         ret['ret'] = true;
-        ret['msg'] = `LER ARQUIVO: OK`;
+        ret['msg'] = `FILE READ: OK`;
         ret['res'] = await retFetch.text();
-    } catch (error) {
-        ret['msg'] = `LER ARQUIVO: ERRO | ${error}`;
+    } catch (e) {
+        ret['msg'] = `FILE READ: ERRO | ${e}`;
     }
 
-    //console.log(ret.msg);
+    if (!ret.ret) { console.log(ret.msg) }
     return ret;
 }
 

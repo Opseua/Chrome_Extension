@@ -21,9 +21,7 @@ async function fileInf(inf) {
                 currentDir = 'NAO ENCONTRADO | MAX DE 15 BUSCAS'; break;
             } currentDir = parentDir;
         }
-
-        ret['res'] =
-        {
+        const retFileInf = {
             'pathProject1': currentDir,
             'pathProject2': currentDir.replace(/\\/g, '\/'),
             'pathCurrent1': parsedPath.dir.replace(/\//g, '\\').slice(1).charAt(0).toUpperCase() + parsedPath.dir.replace(/\//g, '\\').slice(1).slice(1),
@@ -33,11 +31,15 @@ async function fileInf(inf) {
             'fileExtension': parsedPath.ext,
             'parameterReceived': inf
         };
+
         ret['ret'] = true;
-    } catch (error) {
-        ret['msg'] = error.message;
+        ret['msg'] = 'FILE INF: OK';
+        ret['res'] = retFileInf
+    } catch (e) {
+        ret['msg'] = `FILE INF: ERRO | ${e}`;
     }
 
+    if (!ret.ret) { console.log(ret.msg) }
     return ret;
 }
 

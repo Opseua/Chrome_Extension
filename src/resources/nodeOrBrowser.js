@@ -16,12 +16,14 @@ async function nodeOrBrowser() {
         } else { // NAO IDENTIFICADO
             ret['res'] = 'NAO IDENTIFICADO'
         }
+        
         ret['ret'] = true;
-
-    } catch (error) {
-        ret['msg'] = error.message;
+        ret['msg'] = 'NODE OR BROWSER: OK';
+    } catch (e) {
+        ret['msg'] = `NODE OR BROWSER: ERRO | ${e.message}`;
     }
 
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 

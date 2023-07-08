@@ -1,21 +1,28 @@
 async function clipboard(inf) {
+  const ret = { ret: false };
 
   let text = inf
+  try {
+    // OBJETO INDENTADO EM TEXTO BRUTO
+    if (typeof text === 'object' && text !== null) {
+      text = JSON.stringify(text, null, 2);
+    }
 
-  // OBJETO INDENTADO EM TEXTO BRUTO
-  if (typeof text === 'object' && text !== null) {
-    text = JSON.stringify(text, null, 2);
+    const element = document.createElement('textarea');
+    element.value = text;
+    document.body.appendChild(element);
+    element.select();
+    document.execCommand('copy');
+    document.body.removeChild(element);
+    
+    ret['ret'] = true;
+    ret['msg'] = 'CLIPBOARD: OK';
+  } catch (e) {
+    ret['msg'] = `CLIPBOARD: ERRO | ${e}`;
   }
 
-  const element = document.createElement('textarea');
-  element.value = text;
-  document.body.appendChild(element);
-  element.select();
-  document.execCommand('copy');
-  document.body.removeChild(element);
-
-  console.log('AREA DE TRANSFERENCIA: NOVO VALOR DEFINIDO')
-
+  if (!ret.ret) { console.log(ret.msg) }
+  return ret
 }
 
 export { clipboard }
