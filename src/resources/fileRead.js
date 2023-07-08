@@ -2,12 +2,19 @@
 // console.log(retFileRead)
 
 async function fileRead(inf) {
+    const ret = { ret: false };
+
     try {
-        const ret = await fetch(`file:///${inf}`);
-        return await ret.text();
+        const retFetch = await fetch(`file:///${inf}`);
+        ret['ret'] = true;
+        ret['msg'] = `LER ARQUIVO: OK`;
+        ret['res'] = await retFetch.text();
     } catch (error) {
-        return 'ERRO AO LER ARQUIVO \nExemplo de como usar ↓ \n"D:/ARQUIVOS/arquivo.txt"';
+        ret['msg'] = `LER ARQUIVO: ERRO | ${error}`;
     }
+
+    //console.log(ret.msg);
+    return ret;
 }
 
 export { fileRead }

@@ -1,35 +1,49 @@
 // const infFileWrite = {
-//     'file': 'TESTE.txt',
-//     'rewrite': false, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-//     'text': '1'
-// }
-// fileWrite(infFileWrite)
+//     'file': 'PASTAS 1/PASTA 2/arquivo.txt',
+//     'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
+//     'text': 'LINHA 1\nLINHA 2\nLINHA 3\n'
+// };
+
+// fileWrite(infFileWrite);
 
 
 import { nodeOrBrowser } from './nodeOrBrowser.js';
 import { fileRead } from './fileRead.js';
 
 async function fileWrite(inf) {
+    const ret = { ret: false };
 
     if (inf.file == undefined || inf.file == '') {
-        console.log('INFORMAR O "file"');
+        ret['msg'] = `INFORMAR O "file"`;
     } else if (typeof inf.rewrite !== 'boolean') {
-        console.log('INFORMAR O "rewrite" TRUE ou FALSE');
+        ret['msg'] = `INFORMAR O "rewrite" TRUE ou FALSE`;
     } else if (inf.text == undefined || inf.text == '') {
-        console.log('INFORMAR O "text"');
+        ret['msg'] = `INFORMAR O "text"`;
     } else {
         try {
             const resNodeOrBrowser = await nodeOrBrowser()
             if (resNodeOrBrowser.res == 'node') {
                 // NODEJS
                 const fs = await import('fs');
-                fs.writeFile(inf.file, inf.text, { flag: inf.rewrite ? 'a' : 'w' }, function (err) {
-                });
+                const path = await import('path');
+                async function createDirectoriesRecursive(directoryPath) {
+                    const normalizedPath = path.normalize(directoryPath);
+                    const directories = normalizedPath.split(path.sep);
+                    let currentDirectory = '';
+                    for (let directory of directories) {
+                        currentDirectory += directory + path.sep;
+                        if (!fs.existsSync(currentDirectory)) { await fs.promises.mkdir(currentDirectory); }
+                    }; return true;
+                }
+                const folderPath = path.dirname(infFileWrite.file);
+                await createDirectoriesRecursive(folderPath);
+                await fs.promises.writeFile(infFileWrite.file, infFileWrite.text, { flag: infFileWrite.rewrite ? 'a' : 'w' });
             } else {
                 // CHROME
                 let textOk = inf.text;
                 if (inf.rewrite) {
-                    textOk = `${await fileRead(`D:/Downloads/Google Chrome/${inf.file}`)}${textOk}`
+                    const retFileRead = await fileRead(`D:/Downloads/Google Chrome/${inf.file}`)
+                    if (retFileRead.ret) { textOk = `${retFileRead.res}${textOk}` }
                 }
                 const blob = new Blob([textOk], { type: 'text/plain' });
                 const downloadOptions = {
@@ -51,12 +65,27 @@ async function fileWrite(inf) {
                     }
                 });
             }
-            console.log('ARQUIVO: OK');
+            ret['ret'] = true;
+            ret['msg'] = `ARQUIVO: OK`;
         } catch (err) {
-            console.log('ARQUIVO: ERRO', err);
+            ret['msg'] = `ARQUIVO: ERRO ${err}`;
         }
     }
 
+    console.log(ret.msg);
+    return ret;
 }
 
-export { fileWrite }
+export { fileWrite };
+
+const infFileWrite = {
+    'file': 'PASTAS 1/PASTA 2/arquivo.txt',
+    'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
+    'text': 'LINHA 1\nLINHA 2\nLINHA 3\n'
+};
+
+fileWrite(infFileWrite);
+
+
+
+
