@@ -6,17 +6,16 @@ async function nodeOrBrowser() {
     let ret = { ret: false }
 
     try {
-
-        if (typeof process.versions.node !== 'undefined') { // Node
+        if (typeof process !== 'undefined') { // NODE
             ret['res'] = 'node'
-        } else if (typeof window !== 'undefined') { // Chrome
+        } else if (typeof window !== 'undefined') { // CHROME
             ret['res'] = 'chrome'
-        } else if (typeof UrlFetchApp !== 'undefined') { // Google App Script
+        } else if (typeof UrlFetchApp !== 'undefined') { // GOOGLE APP SCRIPT
             ret['res'] = 'googleAppScript'
         } else { // NAO IDENTIFICADO
             ret['res'] = 'NAO IDENTIFICADO'
         }
-        
+
         ret['ret'] = true;
         ret['msg'] = 'NODE OR BROWSER: OK';
     } catch (e) {
