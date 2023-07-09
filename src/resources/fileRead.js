@@ -1,3 +1,4 @@
+// import { fileRead } from './fileRead.js';
 // const retFileRead = await fileRead('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/teste.txt')
 // console.log(retFileRead)
 

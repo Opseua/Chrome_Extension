@@ -1,3 +1,29 @@
+// import { api } from './api.js';
+// // POST → normal
+// const infApi = {
+//     url: 'https://ntfy.sh/OPSEUA',
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: String.raw`ESSA \ É / " A ' INFORMACAO`
+// };
+// const retApi = await api(infApi);
+// const res = JSON.parse(retApi.res);
+// console.log(res)
+
+// // POST → x-www-form-urlencoded
+// const formData = new URLSearchParams();
+// formData.append('grant_type', 'client_credentials');
+// formData.append('resource', 'https://graph.microsoft.com');
+// const infApi = {
+//     url: 'https://login.microsoft.com/c5a6c78e/oauth2/token',
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//     body: formData.toString()
+// };
+// const retApi = await api(infApi);
+// const res = JSON.parse(retApi.res);
+// console.log(res)
+
 async function api(infOk) {
   const inf = {
     url: infOk.url,
@@ -49,38 +75,3 @@ async function api(infOk) {
 }
 export { api }
 
-
-
-
-
-/* async function teste() {
-  const infApi = {
-    url: 'https://ntfy.sh/OPSEUA',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: String.raw`ESSA \ É / " A ' INFORMACAO`
-  };
-  const retApi = await api(infApi);
-  console.log(retApi.res)
-}
-teste() */
-
-
-
-/* async function teste() {
-  // POST → x-www-form-urlencoded
-  const formData = new URLSearchParams();
-  formData.append('grant_type', 'client_credentials');
-  formData.append('client_id', 'c683fd93-XXXXXXXXXXXXX');
-  formData.append('client_secret', '0008Q~XXXXXXXXXX');
-  formData.append('resource', 'https://graph.microsoft.com');
-  const infApi = {
-    url: 'https://login.microsoft.com/c5a6c78e-7c99-4631-bb7f-27660b938469/oauth2/token',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: formData.toString()
-  };
-  const retApi = await api(infApi);
-  console.log(retApi.res)
-}
-teste() */

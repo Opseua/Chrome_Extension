@@ -9,12 +9,12 @@ import { notification } from '../resources/notification.js';
 async function command1(inf) {
   //console.log('COMANDO 1: EXECUTANDO');
 
-  const textPrompt = await promptChrome(`GALAXY`);
+  const retPromptChrome = await promptChrome(`GALAXY`);
 
-  if (textPrompt) {
+  if (retPromptChrome) {
     let infNotification, infclipboard
     try {
-      const retFileRead = textPrompt
+      const retFileRead = retPromptChrome
       const resultList = JSON.parse(retFileRead).tasks[0].taskData.resultSet.resultList;
       const testQuestionInformation = JSON.parse(retFileRead).tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
 

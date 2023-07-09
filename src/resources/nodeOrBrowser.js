@@ -1,6 +1,6 @@
 // import { nodeOrBrowser } from './nodeOrBrowser.js';
-// const retFunction = await nodeOrBrowser();
-// console.log(retFunction);
+// const retNodeOrBrowser = await nodeOrBrowser();
+// console.log(retNodeOrBrowser);
 
 async function nodeOrBrowser() {
     let ret = { ret: false }

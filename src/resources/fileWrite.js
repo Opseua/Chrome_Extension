@@ -1,3 +1,4 @@
+// import { fileWrite } from './fileWrite.js';
 // const infFileWrite = {
 //     'file': 'PASTAS 1/PASTA 2/arquivo.txt',
 //     'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco

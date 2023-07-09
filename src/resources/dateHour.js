@@ -1,4 +1,8 @@
-async function dateHour() {
+// import { dateHour } from './dateHour.js';
+// const RetDH = dateHour()
+// console.log(RetDH)
+ 
+ function dateHour() { // NAO POR COMO 'async'!!!
     const ret = { ret: false };
 
     try {

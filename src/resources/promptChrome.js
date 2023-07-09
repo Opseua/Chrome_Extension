@@ -1,3 +1,7 @@
+// import { promptChrome } from './promptChrome.js';
+// const retPromptChrome = await promptChrome(`GALAXY`);
+// console.log(retPromptChrome)
+
 async function promptChrome(inf) {
     let ret = { ret: false }
 
