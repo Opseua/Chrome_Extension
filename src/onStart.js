@@ -1,6 +1,7 @@
 await import('./clearConsole.js');
 import { shortcutPressed } from './actions/shortcutPressed.js';
 import { fileWrite } from './resources/fileWrite.js';
+import { notification } from './resources/notification.js';
 
 // *******************************************************
 
@@ -15,7 +16,7 @@ chrome.commands.onCommand.addListener(async function (command) {
   // identificar comando do atalho
   function getShortcutForCommand(commandName, callback) {
     chrome.commands.getAll(function (commands) {
-      for (var i = 0; i < commands.length; i++) {
+      for (let i = 0; i < commands.length; i++) {
         if (commands[i].name === commandName) {
           callback(commands[i].shortcut);
           return;
@@ -81,7 +82,7 @@ async function client(inf) {
 
   let ws2;
   async function web2() {
-    ws2 = new WebS(`ws://127.0.0.1:${port}`);
+    ws2 = new WebS(`ws://18.119.140.20:${port}`);
     //ws2 = new WebS(`ws://18.119.140.20:${port}`);
     ws2.addEventListener('open', async function (event) { // CONEXAO: ONLINE - WS2
       console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS2`)
@@ -91,6 +92,16 @@ async function client(inf) {
     });
     ws2.addEventListener('message', async function (event) { // CONEXAO: NOVA MENSAGEM - WS2
       console.log('→ ' + event.data);
+      const infNotificar =
+      {
+        tempo: 5,
+        type: 'basic',
+        title: 'TITULO',
+        message: event.data,
+        iconUrl: undefined,
+        buttons: [],
+      };
+      notification(infNotificar)
     });
     ws2.addEventListener('close', async function (event) { // CONEXAO: OFFLINE, TENTAR NOVAMENTE - WS2
       console.log(`BACKGROUND: RECONEXAO EM 10 SEGUNDOS - WS2`)
@@ -103,6 +114,7 @@ async function client(inf) {
   web2();
 
 }
-//client()
+client()
+
 
 

@@ -1,4 +1,4 @@
-// var notificar =
+// const infNotificar =
 // {
 //   tempo: 5,
 //   type: 'basic',
@@ -7,25 +7,26 @@
 //   iconUrl: undefined,
 //   buttons: [{ title: 'Botão 1' }, { title: 'Botão 2' }],
 // };
-// notification(notificar)
+// notification(infNotificar)
 
-
-
-
-async function notification(inf) {
+async function notification(infOk) {
     let ret = { ret: false }
 
     try {
-        if (!inf) { var inf = {}; };
+        let inf
+        if (!infOk) { inf = {} } else { inf = infOk };
+        let imgBase64
         if (inf.iconUrl === undefined || inf.iconUrl.length > 1) {
+            // const retfileInf = await fileInf(new URL(import.meta.url).pathname);
+            // const configPath = `${retfileInf.res.pathProject1}\\config.json`
             const imgSrc = inf.iconUrl === undefined ? './src/media/icon_1.png' : inf.iconUrl;
             const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
-            var imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
+            imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
         } else {
-            var imgBase64 = inf.iconUrl;
+            imgBase64 = inf.iconUrl;
         }
 
-        var json =
+        const json =
         {
             tempo: ((inf.tempo === undefined) || !(inf.tempo > 0)) ? `5` : `${inf.tempo}`,
             type: 'basic',
@@ -35,7 +36,7 @@ async function notification(inf) {
             buttons: inf.buttons || [],
         };
 
-        var not =
+        const not =
         {
             type: json.type,
             iconUrl: json.iconUrl,

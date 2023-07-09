@@ -62,7 +62,7 @@ async function command1(inf) {
       //console.log(res);
 
       const textIndentado = JSON.stringify(res, null, 2);
-      var notificar =
+      const notificar =
       {
         tempo: 5,
         type: 'basic',
@@ -75,7 +75,7 @@ async function command1(inf) {
       clipboard(textIndentado)
 
     } catch (e) {
-      var notificar =
+      const notificar =
       {
         tempo: 5,
         type: 'basic',

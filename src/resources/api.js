@@ -10,7 +10,7 @@ async function api(infOk) {
 
   if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
     try {
-      var req = UrlFetchApp.fetch(inf.url, {
+      const req = UrlFetchApp.fetch(inf.url, {
         'method': inf.method,
         'payload': inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
         'headers': inf.headers,
@@ -28,7 +28,7 @@ async function api(infOk) {
     }
   } else { // ######################################### NODEJS ou CHROME
     try {
-      var req = await fetch(inf.url, {
+      const req = await fetch(inf.url, {
         method: inf.method,
         body: inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
         headers: inf.headers,

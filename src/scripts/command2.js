@@ -6,37 +6,38 @@ import { notification } from '../resources/notification.js';
 async function command2(inf) {
 
   if (inf.tag.includes('cli')) {
-    const send_cli = inf.tex.match(/\[#cli\]([\S\s]*)\[#\/cli\]/s);
-    clipboard(send_cli[1]);
+    const sendCli = inf.tex.match(/\[#cli\]([\S\s]*)\[#\/cli\]/s);
+    clipboard(sendCli[1]);
   }
 
   if (inf.tag.includes('tit') || inf.tag.includes('tex')) {
+    let sendTit,sendTex,sendIco
 
     if (inf.tag.includes('tit')) {
-      var send_tit = inf.tex.match(/\[#tit\]([\S\s]*)\[#\/tit\]/s);
-      var send_tit = send_tit[1];
+       sendTit = inf.tex.match(/\[#tit\]([\S\s]*)\[#\/tit\]/s);
+       sendTit = sendTit[1];
     };
     if (inf.tag.includes('tex')) {
-      var send_tex = inf.tex.match(/\[#tex\]([\S\s]*)\[#\/tex\]/s);
-      var send_tex = send_tex[1];
+       sendTex = inf.tex.match(/\[#tex\]([\S\s]*)\[#\/tex\]/s);
+       sendTex = sendTex[1];
     };
     if (inf.tag.includes('ico')) {
-      var send_ico = inf.tex.match(/\[#ico\]([\S\s]*)\[#\/ico\]/s);
-      if (send_ico[1].match(/base64/)) {
-        var send_ico_2 = send_ico[1].replace('base64_', '').replace('.png', '').replace('.jpg', '')
-        var send_ico = inf.goo.icon.base64[send_ico_2];
+       sendIco = inf.tex.match(/\[#ico\]([\S\s]*)\[#\/ico\]/s);
+      if (sendIco[1].match(/base64/)) {
+         sendIco2 = sendIco[1].replace('base64_', '').replace('.png', '').replace('.jpg', '')
+         sendIco = inf.goo.icon.base64[sendIco2];
       } else {
-        var send_ico = send_ico[1]
+         sendIco = sendIco[1]
       }
     };
 
-    var notificar =
+    const notificar =
     {
       tempo: 5,
       type: 'basic',
-      title: send_tit === undefined ? undefined : send_tit,
-      message: send_tex === undefined ? undefined : send_tex,
-      iconUrl: send_ico === undefined ? undefined : send_ico,
+      title: sendTit === undefined ? undefined : sendTit,
+      message: sendTex === undefined ? undefined : sendTex,
+      iconUrl: sendIco === undefined ? undefined : sendIco,
       buttons: [],
     };
     //console.log('COMANDO 2: TITULO + TEXTO');
