@@ -1,4 +1,4 @@
-import { globalVariable } from '../resources/globalVariable.js';
+//import { globalVariable } from '../resources/globalVariable.js';
 
 // *******************************************************
 

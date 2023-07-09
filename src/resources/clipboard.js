@@ -1,6 +1,6 @@
 // import { clipboard } from './clipboard.js';
-// let infclipboard = { 'value': 'Esse é o valor'};
-// clipboard(infclipboard)
+// let infClipboard = { 'value': 'Esse é o valor'};
+// clipboard(infClipboard)
 
 async function clipboard(inf) {
   const ret = { ret: false };

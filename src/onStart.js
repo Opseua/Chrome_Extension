@@ -116,3 +116,17 @@ async function client(inf) {
 client()
 
 
+
+import { storageSet, storageGet, storageDel } from './resources/storage.js';
+
+const infStorageSet = { 'key': 'nome', 'value': '1111' }
+const retStorageSet = await storageSet(infStorageSet);
+console.log(retStorageSet);
+
+const infStorageGet = { 'key': 'nome' }
+const retStorageGet = await storageGet(infStorageGet);
+console.log(retStorageGet);
+
+const infStorageDel = { 'key': 'nome' }
+const retStorageDel = await storageDel(infStorageDel);
+console.log(retStorageDel);
