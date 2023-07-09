@@ -8,7 +8,7 @@ async function api(infOk) {
 
   const ret = { ret: false };
 
-  if (typeof UrlFetchApp !== 'undefined') { // ################ Google App Script
+  if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
     try {
       var req = UrlFetchApp.fetch(inf.url, {
         'method': inf.method,
@@ -26,7 +26,7 @@ async function api(infOk) {
     } catch (e) {
       ret['msg'] = `API: ERRO | ${e.message}`;
     }
-  } else { // ######################################### NodeJS ou Chrome
+  } else { // ######################################### NODEJS ou CHROME
     try {
       var req = await fetch(inf.url, {
         method: inf.method,

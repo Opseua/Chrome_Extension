@@ -34,9 +34,9 @@ async function fileWrite(inf) {
                         if (!fs.existsSync(currentDirectory)) { await fs.promises.mkdir(currentDirectory); }
                     }; return true;
                 }
-                const folderPath = path.dirname(infFileWrite.file);
+                const folderPath = path.dirname(inf.file);
                 await createDirectoriesRecursive(folderPath);
-                await fs.promises.writeFile(infFileWrite.file, infFileWrite.text, { flag: infFileWrite.rewrite ? 'a' : 'w' });
+                await fs.promises.writeFile(inf.file, inf.text, { flag: inf.rewrite ? 'a' : 'w' });
             } else {
                 // CHROME
                 let textOk = inf.text;
