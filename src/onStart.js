@@ -1,6 +1,5 @@
 await import('./clearConsole.js');
 import { shortcutPressed } from './actions/shortcutPressed.js';
-import { fileWrite } from './resources/fileWrite.js';
 import { notification } from './resources/notification.js';
 
 // *******************************************************
@@ -114,7 +113,13 @@ async function client(inf) {
   web2();
 
 }
-client()
+//client()
 
+import { searchTab } from './resources/searchTab.js';
+const infSearchTab = {
+    'search': `TODAS`
+}
+const retSearchTab = await searchTab(infSearchTab)
+console.log(retSearchTab)
 
 

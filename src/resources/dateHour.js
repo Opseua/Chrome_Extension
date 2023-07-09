@@ -1,4 +1,4 @@
-function dateHour() {
+async function dateHour() {
     const ret = { ret: false };
 
     try {

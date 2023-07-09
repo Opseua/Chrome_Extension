@@ -1,4 +1,4 @@
-function splitText(inf) {
+async function splitText(inf) {
     let ret = { ret: false }
 
     try {
