@@ -78,7 +78,7 @@ async function client(inf) {
       console.error(`BACKGROUND: ERRO W1 | ${error.message}`);
     });
   }
-  web1();
+  //web1();
 
   let ws2;
   async function web2() {
@@ -91,10 +91,10 @@ async function client(inf) {
       // }, 3000);
     });
     ws2.addEventListener('message', async function (event) { // CONEXAO: NOVA MENSAGEM - WS2
-      console.log('→ ' + event.data);
+      //console.log('→ ' + event.data);
       const infNotificar =
       {
-        tempo: 5,
+        duration: 1,
         type: 'basic',
         title: 'TITULO',
         message: event.data,

@@ -64,7 +64,7 @@ async function command1(inf) {
       const textIndentado = JSON.stringify(res, null, 2);
       const notificar =
       {
-        tempo: 5,
+        duration: 5,
         type: 'basic',
         title: 'OK: Na área de transferência',
         message: textIndentado,
@@ -77,7 +77,7 @@ async function command1(inf) {
     } catch (e) {
       const notificar =
       {
-        tempo: 5,
+        duration: 5,
         type: 'basic',
         title: 'ERRO: Na área de transferência',
         message: `${e}`,

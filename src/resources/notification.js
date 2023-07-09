@@ -1,6 +1,6 @@
 // const infNotificar =
 // {
-//   tempo: 5,
+//   duration: 5,
 //   type: 'basic',
 //   title: 'DEU ERRO',
 //   message: e,
@@ -28,7 +28,7 @@ async function notification(infOk) {
 
         const json =
         {
-            tempo: ((inf.tempo === undefined) || !(inf.tempo > 0)) ? `5` : `${inf.tempo}`,
+            duration: ((inf.duration === undefined) || !(inf.duration > 0)) ? `5` : `${inf.duration}`,
             type: 'basic',
             iconUrl: `data:image/png;base64,${imgBase64}`,
             title: ((inf.title === undefined) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
@@ -59,7 +59,7 @@ async function notification(infOk) {
 
             setTimeout(() => {
                 chrome.notifications.clear(notificationId);
-            }, json.tempo * 1000);
+            }, json.duration * 1000);
         });
 
         ret['ret'] = true;

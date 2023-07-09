@@ -33,7 +33,7 @@ async function command2(inf) {
 
     const notificar =
     {
-      tempo: 5,
+      duration: 5,
       type: 'basic',
       title: sendTit === undefined ? undefined : sendTit,
       message: sendTex === undefined ? undefined : sendTex,
