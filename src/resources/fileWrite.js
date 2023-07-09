@@ -3,7 +3,6 @@
 //     'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
 //     'text': 'LINHA 1\nLINHA 2\nLINHA 3\n'
 // };
-
 // fileWrite(infFileWrite);
 
 
@@ -78,14 +77,4 @@ async function fileWrite(inf) {
 }
 
 export { fileWrite };
-
-
-
-const infFileWrite = {
-    'file': 'PASTAS 1/PASTA 2/arquivo.txt',
-    'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-    'text': 'LINHA 1\nLINHA 2\nLINHA 3\n'
-};
-
-fileWrite(infFileWrite);
 
