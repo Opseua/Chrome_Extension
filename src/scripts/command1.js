@@ -12,6 +12,7 @@ async function command1(inf) {
   const textPrompt = await promptChrome(`GALAXY`);
 
   if (textPrompt) {
+    let infNotification, infclipboard
     try {
       const retFileRead = textPrompt
       const resultList = JSON.parse(retFileRead).tasks[0].taskData.resultSet.resultList;
@@ -61,33 +62,34 @@ async function command1(inf) {
       });
       //console.log(res);
 
-      const textIndentado = JSON.stringify(res, null, 2);
-      const notificar =
+      infNotification =
       {
-        duration: 5,
-        type: 'basic',
-        title: 'OK: Na área de transferência',
-        message: textIndentado,
-        iconUrl: undefined,
-        buttons: [],
+        'duration': 5,
+        'type': 'basic',
+        'title': 'OK: Na área de transferência',
+        'message': JSON.stringify(res, null, 2),
+        'iconUrl': undefined,
+        'buttons': [],
       };
-      notification(notificar)
-      clipboard(textIndentado)
 
+      infclipboard = { 'value': JSON.stringify(res, null, 2) };
     } catch (e) {
-      const notificar =
+      infNotification =
       {
-        duration: 5,
-        type: 'basic',
-        title: 'ERRO: Na área de transferência',
-        message: `${e}`,
-        iconUrl: undefined,
-        buttons: [],
+        'duration': 5,
+        'type': 'basic',
+        'title': 'ERRO: Na área de transferência',
+        'message': `${e}`,
+        'iconUrl': undefined,
+        'buttons': [],
       };
-      notification(notificar)
-      clipboard(`${e}`)
 
+      infclipboard = { 'value': `${e}` };
     }
+
+
+    notification(infNotification)
+    clipboard(infclipboard)
   }
 
 

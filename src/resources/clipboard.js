@@ -1,7 +1,11 @@
+// import { clipboard } from './clipboard.js';
+// let infclipboard = { 'value': 'Esse é o valor'};
+// clipboard(infclipboard)
+
 async function clipboard(inf) {
   const ret = { ret: false };
 
-  let text = inf
+  let text = inf.value
   try {
     // OBJETO INDENTADO EM TEXTO BRUTO
     if (typeof text === 'object' && text !== null) {

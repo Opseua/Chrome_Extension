@@ -113,13 +113,6 @@ async function client(inf) {
   web2();
 
 }
-//client()
-
-import { searchTab } from './resources/searchTab.js';
-const infSearchTab = {
-    'search': `TODAS`
-}
-const retSearchTab = await searchTab(infSearchTab)
-console.log(retSearchTab)
+client()
 
 

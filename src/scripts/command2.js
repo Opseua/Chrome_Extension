@@ -7,27 +7,28 @@ async function command2(inf) {
 
   if (inf.tag.includes('cli')) {
     const sendCli = inf.tex.match(/\[#cli\]([\S\s]*)\[#\/cli\]/s);
-    clipboard(sendCli[1]);
+    const infclipboard = { 'value': sendCli[1] };
+    clipboard(infclipboard);
   }
 
   if (inf.tag.includes('tit') || inf.tag.includes('tex')) {
-    let sendTit,sendTex,sendIco
+    let sendTit, sendTex, sendIco
 
     if (inf.tag.includes('tit')) {
-       sendTit = inf.tex.match(/\[#tit\]([\S\s]*)\[#\/tit\]/s);
-       sendTit = sendTit[1];
+      sendTit = inf.tex.match(/\[#tit\]([\S\s]*)\[#\/tit\]/s);
+      sendTit = sendTit[1];
     };
     if (inf.tag.includes('tex')) {
-       sendTex = inf.tex.match(/\[#tex\]([\S\s]*)\[#\/tex\]/s);
-       sendTex = sendTex[1];
+      sendTex = inf.tex.match(/\[#tex\]([\S\s]*)\[#\/tex\]/s);
+      sendTex = sendTex[1];
     };
     if (inf.tag.includes('ico')) {
-       sendIco = inf.tex.match(/\[#ico\]([\S\s]*)\[#\/ico\]/s);
+      sendIco = inf.tex.match(/\[#ico\]([\S\s]*)\[#\/ico\]/s);
       if (sendIco[1].match(/base64/)) {
-         sendIco2 = sendIco[1].replace('base64_', '').replace('.png', '').replace('.jpg', '')
-         sendIco = inf.goo.icon.base64[sendIco2];
+        sendIco2 = sendIco[1].replace('base64_', '').replace('.png', '').replace('.jpg', '')
+        sendIco = inf.goo.icon.base64[sendIco2];
       } else {
-         sendIco = sendIco[1]
+        sendIco = sendIco[1]
       }
     };
 

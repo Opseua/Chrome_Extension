@@ -1,13 +1,14 @@
-// const infNotificar =
+// import { notification } from './notification.js';
+// let infNotification =
 // {
-//   duration: 5,
-//   type: 'basic',
-//   title: 'DEU ERRO',
-//   message: e,
-//   iconUrl: undefined,
-//   buttons: [{ title: 'Botão 1' }, { title: 'Botão 2' }],
+//   'duration': 5,
+//   'type': 'basic',
+//   'title': 'ERRO: Na área de transferência',
+//   'message': `texto`,
+//   'iconUrl': undefined,
+//   'buttons': [{ 'title': 'BOTÃO 1' }, { 'title': 'BOTÃO 2' }],
 // };
-// notification(infNotificar)
+// notification(infNotification)
 
 async function notification(infOk) {
     let ret = { ret: false }
