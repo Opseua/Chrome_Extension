@@ -17,8 +17,6 @@ async function notification(infOk) {
         if (!infOk) { inf = {} } else { inf = infOk };
         let imgBase64
         if (inf.iconUrl === undefined || inf.iconUrl.length > 1) {
-            // const retfileInf = await fileInf(new URL(import.meta.url).pathname);
-            // const configPath = `${retfileInf.res.pathProject1}\\config.json`
             const imgSrc = inf.iconUrl === undefined ? './src/media/icon_1.png' : inf.iconUrl;
             const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
             imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
