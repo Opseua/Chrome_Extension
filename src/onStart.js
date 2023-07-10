@@ -2,6 +2,8 @@ await import('./clearConsole.js');
 import { shortcutPressed } from './actions/shortcutPressed.js';
 import { notification } from './resources/notification.js';
 import { oraAi } from './resources/chatGpt.js';
+const { getCookies } = await import('./resources/getCookies.js');
+import { storageSet, storageGet, storageDel } from './resources/storage.js';
 
 // *******************************************************
 
@@ -117,11 +119,6 @@ async function client(inf) {
 client()
 
 
-const infOraAi = { 'input': `Qual a velocidade da Voyager?` }
+const infOraAi = { 'input': `Quando nasceu Albert Eistein?` }
 const retOraAi = await oraAi(infOraAi)
-console.log(retOraAi);
-
-// import { getCookies } from './resources/getCookies.js';
-// const infGetCookies = { 'search': `casa - Pesquisa Google` }
-// const retGetCookies = await getCookies(infGetCookies)
-// console.log(retGetCookies);
+console.log(retOraAi)

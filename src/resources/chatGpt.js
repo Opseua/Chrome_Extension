@@ -5,14 +5,22 @@
 
 const { api } = await import('./api.js');
 const { getCookies } = await import('./getCookies.js');
+import { storageSet, storageGet, storageDel } from './storage.js';
 
 async function oraAi(inf) {
     let ret = { 'ret': false };
 
-    const infGetCookies = { 'search': `Orlando | ora.ai` }
-    const retGetCookies = await getCookies(infGetCookies)
-    if (!retGetCookies.ret) { return ret }
-
+    let cookie
+    const infStorageGet = { 'key': 'oraAiCookie' }
+    const retStorageGet = await storageGet(infStorageGet);
+    if (!retStorageGet.ret) {
+        const infGetCookies = { 'search': `Orlando | ora.ai` }
+        const retGetCookies = await getCookies(infGetCookies)
+        if (!retGetCookies.ret) { return ret }
+        cookie = retGetCookies.res.concat
+        const infStorageSet = { 'key': 'oraAiCookie', 'value': cookie }
+        const retStorageSet = await storageSet(infStorageSet);
+    } else { cookie = retStorageGet.res }
     const retConfigJson = await fetch('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/config.json');
     const config = await retConfigJson.json();
 
@@ -30,7 +38,7 @@ async function oraAi(inf) {
             "sec-fetch-mode": "cors",
             "sec-fetch-site": "same-origin",
             "Referer": config.Referer,
-            "cookie": retGetCookies.res.concat,
+            "cookie": cookie,
             "Referrer-Policy": "strict-origin-when-cross-origin"
         },
         body: { "chatbotId": config.chatbotId, "input": inf.input, "conversationId": config.conversationId, "userId": config.userId, "provider": "OPEN_AI", "config": false, "includeHistory": true }
