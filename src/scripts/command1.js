@@ -7,9 +7,11 @@ import { notification } from '../resources/notification.js';
 // *******************************************************
 
 async function command1(inf) {
+  let ret = { 'ret': false };
   //console.log('COMANDO 1: EXECUTANDO');
 
   const retPromptChrome = await promptChrome(`GALAXY`);
+  if (!retPromptChrome.ret) { return ret }
 
   if (retPromptChrome) {
     let infNotification, infclipboard
@@ -89,7 +91,7 @@ async function command1(inf) {
 
 
     notification(infNotification)
-    clipboard(infclipboard)
+    clipboard(infclipboard);
   }
 
 

@@ -18,13 +18,15 @@ async function searchTab(inf) {
                         if (tabs.length > 0) {
                             const tab = tabs[0];
                             const abaInf = {
-                                id: tab.id,
-                                tit: tab.title,
-                                url: tab.url
+                                'ret': true,
+                                'msg': 'SEARCH TAB: OK',
+                                'id': tab.id,
+                                'tit': tab.title,
+                                'url': tab.url
                             };
                             resolve(abaInf);
                         } else {
-                            resolve('NENHUM ABA ATIVA');
+                            resolve({ 'ret': false, 'msg': 'SEARCH TAB: ERRO | NENHUM ABA ATIVA' });
                         }
                     });
                 }); break;
@@ -36,14 +38,16 @@ async function searchTab(inf) {
                         if (tabs.length > 0) {
                             const tabsArray = tabs.map(function (tab) {
                                 return {
-                                    id: tab.id,
-                                    title: tab.title,
-                                    url: tab.url
+                                    'ret': true,
+                                    'msg': 'SEARCH TAB: OK',
+                                    'id': tab.id,
+                                    'tit': tab.title,
+                                    'url': tab.url
                                 };
                             });
                             resolve(tabsArray);
                         } else {
-                            resolve('NENHUMA ABA ATIVA [todas]');
+                            resolve({ 'ret': false, 'msg': 'SEARCH TAB: ERRO | NENHUMA ABA ATIVA' });
                         }
                     });
                 }); break;
@@ -54,13 +58,15 @@ async function searchTab(inf) {
                     chrome.tabs.get(inf.search, function (tab) {
                         if (!(typeof tab === 'undefined')) {
                             const abaInf = {
-                                id: tab.id,
-                                tit: tab.title,
-                                url: tab.url
+                                'ret': true,
+                                'msg': 'SEARCH TAB: OK',
+                                'id': tab.id,
+                                'tit': tab.title,
+                                'url': tab.url
                             };
                             resolve(abaInf);
                         } else {
-                            resolve('ABA ID "' + inf.search + '" NAO ENCONTRADA');
+                            resolve({ 'ret': false, 'msg': `SEARCH TAB: ERRO | "${inf.search}" NAO ENCONTRADA` });
                         }
                     });
                 }); break;
@@ -72,13 +78,15 @@ async function searchTab(inf) {
                         if (tabs.length > 0) {
                             const tab = tabs[0];
                             const abaInf = {
-                                id: tab.id,
-                                tit: tab.title,
-                                url: tab.url
+                                'ret': true,
+                                'msg': 'SEARCH TAB: OK',
+                                'id': tab.id,
+                                'tit': tab.title,
+                                'url': tab.url
                             };
                             resolve(abaInf);
                         } else {
-                            resolve('ABA NOME "' + inf.search + '" NAO ENCONTRADA');
+                            resolve({ 'ret': false, 'msg': `SEARCH TAB: ERRO | "${inf.search}" NAO ENCONTRADA` });
                         }
                     });
                 }); break;
@@ -90,13 +98,15 @@ async function searchTab(inf) {
                         if (!(typeof tabs === 'undefined')) {
                             const tab = tabs[0];
                             const abaInf = {
-                                id: tab.id,
-                                tit: tab.title,
-                                url: tab.url
+                                'ret': true,
+                                'msg': 'SEARCH TAB: OK',
+                                'id': tab.id,
+                                'tit': tab.title,
+                                'url': tab.url
                             };
                             resolve(abaInf);
                         } else {
-                            resolve('ABA URL "' + inf.search + '" NAO ENCONTRADA');
+                            resolve({ 'ret': false, 'msg': `SEARCH TAB: ERRO | "${inf.search}" NAO ENCONTRADA` });
                         }
                     });
                 }); break;
@@ -105,9 +115,9 @@ async function searchTab(inf) {
                 result = 'PARAMETRO DA ABA ERRADO "ATIVA", "TODAS", ID, TITULO, URL';
                 break;
         }
-        ret['ret'] = true;
-        ret['msg'] = 'SEARCH TAB: OK';
-        ret['res'] = result;
+        ret['ret'] = result.ret;
+        ret['msg'] = result.msg;
+        ret['res'] = {'id': result.id, 'tit': result.title,'url': result.url};
     } catch (e) {
         ret['msg'] = `SEARCH TAB: ERRO | ${e}`;
     }

@@ -1,7 +1,5 @@
-// import { getCookies } from './resources/getCookies.js';
-// const infGetCookies = {
-//   'search': `casa - Pesquisa Google`
-// }
+// import { getCookies } from './getCookies.js';
+// const infGetCookies = { 'search': `casa - Pesquisa Google` }
 // const retGetCookies = await getCookies(infGetCookies)
 // console.log(retGetCookies);
 
@@ -12,6 +10,8 @@ async function getCookies(inf) {
 
     try {
         const retSearchTab = await searchTab(inf)
+        if (!retSearchTab.ret) { return ret }
+
         const cookiesPromise = new Promise((resolve) => {
             chrome.cookies.getAll({
                 "url": retSearchTab.res.url
@@ -24,12 +24,12 @@ async function getCookies(inf) {
 
         let cookie = '';
         const cookieMap = JSON.parse(retCookies).reduce((accumulator, v) => {
-          cookie += `${v.name}=${v.value}; `;
-          return accumulator;
+            cookie += `${v.name}=${v.value}; `;
+            return accumulator;
         }, '');
         ret['ret'] = true;
         ret['msg'] = 'GET COOKIES: OK';
-        ret['res'] = {'array':retCookies,'concat':cookie};
+        ret['res'] = { 'array': retCookies, 'concat': cookie };
     }
     catch (e) {
         ret['msg'] = `GET COOKIES: ERRO | ${e}`;
