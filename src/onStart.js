@@ -119,6 +119,19 @@ async function client(inf) {
 client()
 
 
-const infOraAi = { 'input': `Quando nasceu Albert Eistein?` }
-const retOraAi = await oraAi(infOraAi)
-console.log(retOraAi)
+// const infOraAi = { 'input': `Quando nasceu Albert Eistein?` }
+// const retOraAi = await oraAi(infOraAi)
+// console.log(retOraAi)
+
+import { tabSearch } from './resources/tabSearch.js';
+async function tabOpen() {
+
+  const infTabSearch = { 'search': 'TODAS' }
+  const retTabSearch = await tabSearch(infTabSearch)
+  console.log(retTabSearch)
+  // chrome.tabs.create({ url: 'https://bing.com', active: false }, (novaAba) => {
+  //   chrome.tabs.update(novaAba.id, { pinned: true });
+  // });
+
+}
+tabOpen()

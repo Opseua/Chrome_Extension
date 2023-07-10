@@ -3,18 +3,18 @@
 // const retGetCookies = await getCookies(infGetCookies)
 // console.log(retGetCookies);
 
-import { searchTab } from './searchTab.js';
+import { tabSearch } from './tabSearch.js';
 
 async function getCookies(inf) {
     const ret = { ret: false };
 
     try {
-        const retSearchTab = await searchTab(inf)
-        if (!retSearchTab.ret) { return ret }
+        const rettabSearch = await tabSearch(inf)
+        if (!rettabSearch.ret) { return ret }
 
         const cookiesPromise = new Promise((resolve) => {
             chrome.cookies.getAll({
-                "url": retSearchTab.res.url
+                "url": rettabSearch.res.url
             }, cookies => {
                 const retCookies = JSON.stringify(cookies)
                 resolve(retCookies);

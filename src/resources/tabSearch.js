@@ -1,11 +1,9 @@
-// import { searchTab } from './searchTab.js';
-// const infSearchTab = {
-//     'search': `TODAS`
-// }
-// const retSearchTab = await searchTab(infSearchTab)
-// console.log(retSearchTab)
+// import { tabSearch } from './tabSearch.js';
+// const inftabSearch = {'search': `TODAS`}
+// const rettabSearch = await tabSearch(inftabSearch)
+// console.log(rettabSearch)
 
-async function searchTab(inf) {
+async function tabSearch(inf) {
     const ret = { ret: false };
 
     try {
@@ -15,16 +13,17 @@ async function searchTab(inf) {
             case inf.search === 'ATIVA':
                 result = await new Promise(resolve => {
                     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                        if (tabs.length > 0) {
+                        if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {
                             const tab = tabs[0];
                             const abaInf = {
-                                'ret': true,
-                                'msg': 'SEARCH TAB: OK',
                                 'id': tab.id,
                                 'tit': tab.title,
-                                'url': tab.url
+                                'url': tab.url,
+                                'active': tab.active,
+                                'index': tab.index,
+                                'pinned': tab.pinned
                             };
-                            resolve(abaInf);
+                            resolve({ 'ret': true, 'msg': 'SEARCH TAB: OK', 'res': abaInf });
                         } else {
                             resolve({ 'ret': false, 'msg': 'SEARCH TAB: ERRO | NENHUM ABA ATIVA' });
                         }
@@ -35,19 +34,20 @@ async function searchTab(inf) {
             case inf.search === 'TODAS':
                 result = await new Promise(resolve => {
                     chrome.tabs.query({}, function (tabs) {
-                        if (tabs.length > 0) {
-                            const tabsArray = tabs.map(function (tab) {
+                        if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {
+                            const abaInf = tabs.map(function (tab) {
                                 return {
-                                    'ret': true,
-                                    'msg': 'SEARCH TAB: OK',
                                     'id': tab.id,
                                     'tit': tab.title,
-                                    'url': tab.url
+                                    'url': tab.url,
+                                    'active': tab.active,
+                                    'index': tab.index,
+                                    'pinned': tab.pinned
                                 };
                             });
-                            resolve(tabsArray);
+                            resolve({ 'ret': true, 'msg': 'SEARCH TAB: OK', 'res': abaInf });
                         } else {
-                            resolve({ 'ret': false, 'msg': 'SEARCH TAB: ERRO | NENHUMA ABA ATIVA' });
+                            resolve([]); // Retorna um array vazio se não houver nenhuma aba ativa
                         }
                     });
                 }); break;
@@ -55,16 +55,18 @@ async function searchTab(inf) {
             // ################################### ABA: ID
             case typeof inf.search === 'number':
                 result = await new Promise(resolve => {
-                    chrome.tabs.get(inf.search, function (tab) {
-                        if (!(typeof tab === 'undefined')) {
+                    chrome.tabs.get(inf.search, function (tabs) {
+                        if (!(typeof tabs === 'undefined')) {
+                            const tab = tabs;
                             const abaInf = {
-                                'ret': true,
-                                'msg': 'SEARCH TAB: OK',
                                 'id': tab.id,
                                 'tit': tab.title,
-                                'url': tab.url
+                                'url': tab.url,
+                                'active': tab.active,
+                                'index': tab.index,
+                                'pinned': tab.pinned
                             };
-                            resolve(abaInf);
+                            resolve({ 'ret': true, 'msg': 'SEARCH TAB: OK', 'res': abaInf });
                         } else {
                             resolve({ 'ret': false, 'msg': `SEARCH TAB: ERRO | "${inf.search}" NAO ENCONTRADA` });
                         }
@@ -75,16 +77,17 @@ async function searchTab(inf) {
             case typeof inf.search === 'string' && !inf.search.includes('http'):
                 result = await new Promise(resolve => {
                     chrome.tabs.query({ title: inf.search }, function (tabs) {
-                        if (tabs.length > 0) {
+                        if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {
                             const tab = tabs[0];
                             const abaInf = {
-                                'ret': true,
-                                'msg': 'SEARCH TAB: OK',
                                 'id': tab.id,
                                 'tit': tab.title,
-                                'url': tab.url
+                                'url': tab.url,
+                                'active': tab.active,
+                                'index': tab.index,
+                                'pinned': tab.pinned
                             };
-                            resolve(abaInf);
+                            resolve({ 'ret': true, 'msg': 'SEARCH TAB: OK', 'res': abaInf });
                         } else {
                             resolve({ 'ret': false, 'msg': `SEARCH TAB: ERRO | "${inf.search}" NAO ENCONTRADA` });
                         }
@@ -95,16 +98,17 @@ async function searchTab(inf) {
             case typeof inf.search === 'string' && inf.search.includes('http'):
                 result = await new Promise(resolve => {
                     chrome.tabs.query({ url: inf.search }, function (tabs) {
-                        if (!(typeof tabs === 'undefined')) {
+                        if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {
                             const tab = tabs[0];
                             const abaInf = {
-                                'ret': true,
-                                'msg': 'SEARCH TAB: OK',
                                 'id': tab.id,
                                 'tit': tab.title,
-                                'url': tab.url
+                                'url': tab.url,
+                                'active': tab.active,
+                                'index': tab.index,
+                                'pinned': tab.pinned
                             };
-                            resolve(abaInf);
+                            resolve({ 'ret': true, 'msg': 'SEARCH TAB: OK', 'res': abaInf });
                         } else {
                             resolve({ 'ret': false, 'msg': `SEARCH TAB: ERRO | "${inf.search}" NAO ENCONTRADA` });
                         }
@@ -115,9 +119,9 @@ async function searchTab(inf) {
                 result = 'PARAMETRO DA ABA ERRADO "ATIVA", "TODAS", ID, TITULO, URL';
                 break;
         }
-        ret['ret'] = result.ret;
-        ret['msg'] = result.msg;
-        ret['res'] = {'id': result.id, 'tit': result.title,'url': result.url};
+        if (result.ret) {
+            ret['ret'] = result.ret; ret['msg'] = result.msg; ret['res'] = result.res;
+        } else { ret['ret'] = result.ret; ret['msg'] = result.msg; }
     } catch (e) {
         ret['msg'] = `SEARCH TAB: ERRO | ${e}`;
     }
@@ -126,4 +130,4 @@ async function searchTab(inf) {
     return ret
 }
 
-export { searchTab }
+export { tabSearch }
