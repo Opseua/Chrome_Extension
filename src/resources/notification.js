@@ -11,7 +11,7 @@
 // notification(infNotification)
 
 async function notification(infOk) {
-    const ret = { ret: false }
+    const ret = { 'ret': false }
 
     try {
         let inf

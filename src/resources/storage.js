@@ -14,7 +14,7 @@
 
 function storageSet(inf) {
   return new Promise((resolve) => {
-    const ret = { ret: false };
+    const ret = { 'ret': false };
 
     const data = {};
     if (!inf.key) {
@@ -42,7 +42,7 @@ function storageSet(inf) {
 
 function storageGet(inf) {
   return new Promise((resolve) => {
-    const ret = { ret: false };
+    const ret = { 'ret': false };
 
     chrome.storage.local.get(inf.key, (result) => {
       if (chrome.runtime.lastError) {
@@ -63,7 +63,7 @@ function storageGet(inf) {
 
 function storageDel(inf) {
   return new Promise((resolve) => {
-    const ret = { ret: false };
+    const ret = { 'ret': false };
 
     chrome.storage.local.get(inf.key, (result) => {
       if (chrome.runtime.lastError) {

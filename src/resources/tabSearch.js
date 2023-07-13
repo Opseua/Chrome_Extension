@@ -4,7 +4,7 @@
 // console.log(rettabSearch)
 
 async function tabSearch(inf) {
-    const ret = { ret: false };
+    const ret = { 'ret': false };
 
     try {
         let result;

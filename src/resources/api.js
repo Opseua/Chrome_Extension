@@ -32,7 +32,7 @@ async function api(infOk) {
     body: infOk.body
   };
 
-  const ret = { ret: false };
+  const ret = { 'ret': false };
 
   if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
     try {

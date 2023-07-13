@@ -6,7 +6,7 @@
 import { tabSearch } from './tabSearch.js';
 
 async function getCookies(inf) {
-    const ret = { ret: false };
+    const ret = { 'ret': false };
 
     try {
         const rettabSearch = await tabSearch(inf)

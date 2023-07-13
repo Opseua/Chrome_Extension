@@ -3,7 +3,7 @@
 // console.log(retNodeOrBrowser);
 
 async function nodeOrBrowser() {
-    const ret = { ret: false }
+    const ret = { 'ret': false }
 
     try {
         if (typeof process !== 'undefined') { // NODE

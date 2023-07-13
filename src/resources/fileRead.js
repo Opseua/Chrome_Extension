@@ -3,7 +3,7 @@
 // console.log(retFileRead)
 
 async function fileRead(inf) {
-    const ret = { ret: false };
+    const ret = { 'ret': false };
 
     try {
         const retFetch = await fetch(`file:///${inf}`);

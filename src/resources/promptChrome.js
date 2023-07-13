@@ -3,7 +3,7 @@
 // console.log(retPromptChrome)
 
 async function promptChrome(inf) {
-    const ret = { ret: false }
+    const ret = { 'ret': false }
 
     try {
         const text = (inf) ? `${inf} | Digite o comando:` : `Digite o comando:`;

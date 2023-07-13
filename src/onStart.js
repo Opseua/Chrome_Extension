@@ -118,7 +118,7 @@ async function client(inf) {
   web2();
 
 }
-client()
+//client()
 
 async function teste() {
   const infOraAi = { 'input': `Qual a idade do dono do Google?` }
@@ -130,5 +130,19 @@ async function teste() {
 
 
 import { configStorage } from './resources/configStorage.js';
+async function fun() {
+  let infConfigStorage, retConfigStorage
 
-configStorage()
+  infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+  retConfigStorage = await configStorage(infConfigStorage)
+  console.log(1, retConfigStorage)
+
+  infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' }
+  retConfigStorage = await configStorage(infConfigStorage)
+  console.log(2, retConfigStorage)
+
+  infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
+  retConfigStorage = await configStorage(infConfigStorage)
+  console.log(3, retConfigStorage)
+
+}; fun()

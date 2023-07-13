@@ -3,7 +3,7 @@
 // *******************************************************
 
 async function setTag(inf) {
-    const ret = { ret: false }
+    const ret = { 'ret': false }
 
     try {
         const varGlobal = JSON.parse(localStorage.getItem('varGlobal'));
