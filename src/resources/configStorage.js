@@ -2,15 +2,15 @@
 // async function fun() {
 //   let infConfigStorage, retConfigStorage
 
-//   infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+//   infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
 //   retConfigStorage = await configStorage(infConfigStorage)
 //   console.log(1, retConfigStorage)
 
-//   infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' }
+//   infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
 //   retConfigStorage = await configStorage(infConfigStorage)
 //   console.log(2, retConfigStorage)
 
-//   infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
+//   infConfigStorage = {'path': '/src/config.json',  'action': 'del', 'key': 'NomeDaChave' }
 //   retConfigStorage = await configStorage(infConfigStorage)
 //   console.log(3, retConfigStorage)
 
@@ -21,7 +21,6 @@ import { nodeOrBrowser } from './nodeOrBrowser.js';
 async function configStorage(inf) {
     const ret = { 'ret': false };
     const retNodeOrBrowser = await nodeOrBrowser();
-    const pathConfig = '/src/config.json'
 
     try {
 
@@ -66,7 +65,7 @@ async function configStorage(inf) {
                                     ret['msg'] = `STORAGE GET: ERRO | ${chrome.runtime.lastError}`;
                                 } else if (Object.keys(result).length === 0) {
                                     async function checkConfig() {
-                                        const retConfigJson = await fetch(`${pathConfig}`);
+                                        const retConfigJson = await fetch(`${inf.path}`);
                                         const config = await retConfigJson.json();
                                         if (config[inf.key]) {
                                             const data = {};
@@ -136,7 +135,7 @@ async function configStorage(inf) {
             const fs = await import('fs');
             const { fileInf } = await import('./fileInf.js');
             const retfileInf = await fileInf(new URL(import.meta.url).pathname);
-            const configPath = `${retfileInf.res.pathProject1}${pathConfig}`
+            const configPath = `${retfileInf.res.pathProject1}${inf.path}`
             const configFile = fs.readFileSync(configPath);
             const config = JSON.parse(configFile);
 
@@ -206,4 +205,3 @@ async function configStorage(inf) {
 }
 
 export { configStorage };
-

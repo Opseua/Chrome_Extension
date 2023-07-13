@@ -133,16 +133,16 @@ import { configStorage } from './resources/configStorage.js';
 async function fun() {
   let infConfigStorage, retConfigStorage
 
-  infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-  retConfigStorage = await configStorage(infConfigStorage)
-  console.log(1, retConfigStorage)
+  // infConfigStorage = { 'path': './src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+  // retConfigStorage = await configStorage(infConfigStorage)
+  // console.log(1, retConfigStorage)
 
-  infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' }
+  infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'NomeDaChaveeee' }
   retConfigStorage = await configStorage(infConfigStorage)
   console.log(2, retConfigStorage)
 
-  infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
-  retConfigStorage = await configStorage(infConfigStorage)
-  console.log(3, retConfigStorage)
+  // infConfigStorage = {'path': './src/config.json',  'action': 'del', 'key': 'NomeDaChave' }
+  // retConfigStorage = await configStorage(infConfigStorage)
+  // console.log(3, retConfigStorage)
 
 }; fun()
