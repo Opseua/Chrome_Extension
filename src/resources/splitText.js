@@ -1,5 +1,5 @@
 async function splitText(inf) {
-    let ret = { ret: false }
+    const ret = { ret: false }
 
     try {
         const text = inf.replace(/\n/g, '\\n');

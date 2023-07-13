@@ -58,7 +58,7 @@ async function client(inf) {
 
   const port = 8888;
   let ws1;
-  const retConfigJson = await fetch('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/config.json');
+  const retConfigJson = await fetch('./src/config.json');
   const config = await retConfigJson.json();
   async function web1() {
     ws1 = new WebS(`${config.ws1}`);
@@ -82,7 +82,7 @@ async function client(inf) {
       console.error(`BACKGROUND: ERRO W1 | ${error.message}`);
     });
   }
-  web1();
+  //web1();
 
   let ws2;
   async function web2() {
@@ -128,3 +128,7 @@ async function teste() {
 //teste()
 
 
+
+import { configStorage } from './resources/configStorage.js';
+
+configStorage()

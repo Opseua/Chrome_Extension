@@ -6,7 +6,7 @@ import path from 'path';
 import fs from 'fs';
 
 async function fileInf(inf) {
-    let ret = { 'ret': false };
+    const ret = { 'ret': false };
 
     try {
         const parsedPath = path.parse(inf);

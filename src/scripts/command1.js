@@ -7,7 +7,7 @@ import { notification } from '../resources/notification.js';
 // *******************************************************
 
 async function command1(inf) {
-  let ret = { 'ret': false };
+  const ret = { 'ret': false };
   //console.log('COMANDO 1: EXECUTANDO');
 
   const retPromptChrome = await promptChrome(`GALAXY`);

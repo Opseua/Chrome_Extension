@@ -1,7 +1,10 @@
 // import { oraAi } from './chatGpt.js';
-// const infOraAi = { 'input': `Qual a velocidade da Voyager?` }
-// const retOraAi = await oraAi(infOraAi)
-// console.log(retOraAi);
+// async function chat() {
+//     const infOraAi = { 'input': `Qual a idade do dono do Google?` }
+//     const retOraAi = await oraAi(infOraAi)
+//     console.log(retOraAi)
+// }
+// chat()
 
 const { api } = await import('./api.js');
 const { getCookies } = await import('./getCookies.js');
@@ -9,7 +12,7 @@ import { storageSet, storageGet, storageDel } from './storage.js';
 import { tabSearch } from './tabSearch.js';
 
 async function oraAi(inf) {
-    let ret = { 'ret': false };
+    const ret = { 'ret': false };
 
     const retConfigJson = await fetch('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/config.json');
     const config = await retConfigJson.json();
