@@ -8,7 +8,8 @@
 
 const { api } = await import('./api.js');
 const { getCookies } = await import('./getCookies.js');
-import { storageSet, storageGet, storageDel } from './storage.js';
+import { storageSet } from './storage.js';
+import { configStorage } from './configStorage.js';
 import { tabSearch } from './tabSearch.js';
 
 async function oraAi(inf) {
@@ -31,11 +32,12 @@ async function oraAi(inf) {
         return await rodarOraAi(infRodar)
     }
 
-    const retStorageGet = await storageGet(par);
-    if (!retStorageGet.ret) {
-        const rettabSearch = await tabSearch(par)
+    const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'oraAiCookie', 'search': config.Referer, 'input': inf.input }
+    const retConfigStorage = await configStorage(infConfigStorage);
+    if (!retConfigStorage.ret) {
+        const rettabSearch = await tabSearch(infConfigStorage)
         if (!rettabSearch.ret) {
-            chrome.tabs.create({ url: par.search, active: false }, (novaAba) => {
+            chrome.tabs.create({ url: infConfigStorage.search, active: false }, (novaAba) => {
                 chrome.tabs.update(novaAba.id, { pinned: true });
                 chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo) {
                     if (tabId === novaAba.id && changeInfo.status === 'complete') {
@@ -47,7 +49,7 @@ async function oraAi(inf) {
             await fun1()
         }
     } else {
-        const infRodar = { 'input': par.input, 'cookie': retStorageGet.res }
+        const infRodar = { 'input': infConfigStorage.input, 'cookie': retConfigStorage.res }
         return await rodarOraAi(infRodar)
     }
 

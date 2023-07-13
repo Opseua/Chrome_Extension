@@ -8,7 +8,7 @@ async function promptChrome(inf) {
     try {
         const text = (inf) ? `${inf} | Digite o comando:` : `Digite o comando:`;
         let retPrompt = prompt(`${text}`);
-        if (!retPrompt) { retPrompt = '' }
+        if (!retPrompt) { return ret }
 
         ret['ret'] = true;
         ret['msg'] = 'PROMPT CHROME: OK';

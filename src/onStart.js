@@ -121,28 +121,10 @@ async function client(inf) {
 //client()
 
 async function teste() {
-  const infOraAi = { 'input': `Qual a idade do dono do Google?` }
+  const infOraAi = { 'input': `Qual a idade do dono do Bing?` }
   const retOraAi = await oraAi(infOraAi)
   console.log(retOraAi)
 }
 //teste()
 
 
-
-import { configStorage } from './resources/configStorage.js';
-async function fun() {
-  let infConfigStorage, retConfigStorage
-
-  // infConfigStorage = { 'path': './src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-  // retConfigStorage = await configStorage(infConfigStorage)
-  // console.log(1, retConfigStorage)
-
-  infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'NomeDaChaveeee' }
-  retConfigStorage = await configStorage(infConfigStorage)
-  console.log(2, retConfigStorage)
-
-  // infConfigStorage = {'path': './src/config.json',  'action': 'del', 'key': 'NomeDaChave' }
-  // retConfigStorage = await configStorage(infConfigStorage)
-  // console.log(3, retConfigStorage)
-
-}; fun()
