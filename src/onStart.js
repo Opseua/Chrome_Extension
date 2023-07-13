@@ -58,8 +58,10 @@ async function client(inf) {
 
   const port = 8888;
   let ws1;
+  const retConfigJson = await fetch('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/config.json');
+  const config = await retConfigJson.json();
   async function web1() {
-    ws1 = new WebS(`wss://ntfy.sh/OPSEUA/ws`);
+    ws1 = new WebS(`${config.ws1}`);
     ws1.addEventListener('open', async function (event) { // CONEXAO: ONLINE - WS1
       console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS1`);
       // setTimeout(function () {
@@ -80,11 +82,11 @@ async function client(inf) {
       console.error(`BACKGROUND: ERRO W1 | ${error.message}`);
     });
   }
-  //web1();
+  web1();
 
   let ws2;
   async function web2() {
-    ws2 = new WebS(`ws://18.119.140.20:${port}`);
+    ws2 = new WebS(`${config.ws2}:${port}`);
     //ws2 = new WebS(`ws://18.119.140.20:${port}`);
     ws2.addEventListener('open', async function (event) { // CONEXAO: ONLINE - WS2
       console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS2`)
@@ -118,20 +120,11 @@ async function client(inf) {
 }
 client()
 
-
-// const infOraAi = { 'input': `Quando nasceu Albert Eistein?` }
-// const retOraAi = await oraAi(infOraAi)
-// console.log(retOraAi)
-
-import { tabSearch } from './resources/tabSearch.js';
-async function tabOpen() {
-
-  const infTabSearch = { 'search': 'TODAS' }
-  const retTabSearch = await tabSearch(infTabSearch)
-  console.log(retTabSearch)
-  // chrome.tabs.create({ url: 'https://bing.com', active: false }, (novaAba) => {
-  //   chrome.tabs.update(novaAba.id, { pinned: true });
-  // });
-
+async function teste() {
+  const infOraAi = { 'input': `Qual a idade do dono do Google?` }
+  const retOraAi = await oraAi(infOraAi)
+  console.log(retOraAi)
 }
-tabOpen()
+//teste()
+
+
