@@ -16,6 +16,21 @@ async function command1(inf) {
   let infNotification, infclipboard
   try {
     const retFileRead = JSON.parse(retPromptChrome.res)
+
+    if (!retFileRead.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
+      infNotification =
+      {
+        'duration': 5,
+        'type': 'basic',
+        'title': 'Não tem a resposta!',
+        'message': `Avaliar manualmente`,
+        'iconUrl': undefined,
+        'buttons': [],
+      };
+      notification(infNotification)
+      return
+    }
+
     const resultList = retFileRead.tasks[0].taskData.resultSet.resultList;
     const testQuestionInformation = retFileRead.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
 
@@ -67,7 +82,7 @@ async function command1(inf) {
     {
       'duration': 5,
       'type': 'basic',
-      'title': 'OK: Na área de transferência',
+      'title': 'OK: na área de transferência',
       'message': JSON.stringify(res, null, 2),
       'iconUrl': undefined,
       'buttons': [],
@@ -79,7 +94,7 @@ async function command1(inf) {
     {
       'duration': 5,
       'type': 'basic',
-      'title': 'ERRO: Na área de transferência',
+      'title': 'ERRO: na área de transferência',
       'message': `${e}`,
       'iconUrl': undefined,
       'buttons': [],
