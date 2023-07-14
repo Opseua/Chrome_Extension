@@ -1,4 +1,4 @@
-// import { fileWrite } from './fileWrite.js';
+// const { fileWrite } = await import('./fileWrite.js');
 // const infFileWrite = {
 //     'file': 'PASTAS 1/PASTA 2/arquivo.txt',
 //     'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
@@ -7,8 +7,10 @@
 // fileWrite(infFileWrite);
 
 
-import { nodeOrBrowser } from './nodeOrBrowser.js';
-import { fileRead } from './fileRead.js';
+//import { nodeOrBrowser } from './nodeOrBrowser.js';
+const { nodeOrBrowser } = await import('./nodeOrBrowser.js');
+//import { fileRead } from './fileRead.js';
+const { fileRead } = await import('./fileRead.js');
 
 async function fileWrite(inf) {
     const ret = { 'ret': false };

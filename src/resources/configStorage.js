@@ -1,4 +1,4 @@
-// import { configStorage } from './configStorage.js';
+// const { configStorage } = await import('./configStorage.js');
 // async function fun() {
 //   let infConfigStorage, retConfigStorage
 
@@ -16,7 +16,8 @@
 
 // }; fun()
 
-import { nodeOrBrowser } from './nodeOrBrowser.js';
+//import { nodeOrBrowser } from './nodeOrBrowser.js';
+const { nodeOrBrowser } = await import('./nodeOrBrowser.js');
 
 async function configStorage(inf) {
     const ret = { 'ret': false };

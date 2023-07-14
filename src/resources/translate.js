@@ -1,4 +1,4 @@
-// const { translate } = await import('./resources/translate.js');
+// const { translate } = await import('./translate.js');
 // const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': 'Hi' };
 // const retTranslate = await translate(infTranslate)
 // console.log(retTranslate)

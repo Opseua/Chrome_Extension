@@ -1,5 +1,5 @@
-import { command1 } from '../scripts/command1.js';
-//import { globalVariable } from '../resources/globalVariable.js';
+//import { command1 } from '../scripts/command1.js';
+const { command1 } = await import('../scripts/command1.js');
 
 // *******************************************************
 
@@ -16,7 +16,6 @@ async function shortcutPressed(inf) {
   if (inf.command == 'atalho_2') {
     console.log('VARIAVEL GLOBAL LIMPA!');
     localStorage.removeItem('varGlobal');
-    //globalVariable();
     return
   };
 

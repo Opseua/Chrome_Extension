@@ -1,4 +1,4 @@
-// import { oraAi } from './chatGpt.js';
+// const { oraAi } = await import('./chatGpt.js');
 // async function chat() {
 //     const infOraAi = { 'input': `Qual a idade do dono do Google?` }
 //     const retOraAi = await oraAi(infOraAi)
@@ -8,9 +8,12 @@
 
 const { api } = await import('./api.js');
 const { getCookies } = await import('./getCookies.js');
-import { storageSet } from './storage.js';
-import { configStorage } from './configStorage.js';
-import { tabSearch } from './tabSearch.js';
+//import { storageSet } from './storage.js';
+const { storageSet } = await import('./storage.js');
+//import { configStorage } from './configStorage.js';
+const { configStorage } = await import('./configStorage.js');
+//import { tabSearch } from './tabSearch.js';
+const { tabSearch } = await import('./tabSearch.js');
 
 async function oraAi(inf) {
     const ret = { 'ret': false };

@@ -1,9 +1,10 @@
-// import { getCookies } from './getCookies.js';
+// const { getCookies } = await import('./getCookies.js');
 // const infGetCookies = { 'search': `casa - Pesquisa Google` }
 // const retGetCookies = await getCookies(infGetCookies)
 // console.log(retGetCookies);
 
-import { tabSearch } from './tabSearch.js';
+//import { tabSearch } from './tabSearch.js';
+const { tabSearch } = await import('./tabSearch.js');
 
 async function getCookies(inf) {
     const ret = { 'ret': false };

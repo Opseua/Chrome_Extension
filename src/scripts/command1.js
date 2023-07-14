@@ -1,10 +1,17 @@
-import { api } from '../resources/api.js';
-import { setTag } from '../resources/setTag.js';
-import { promptChrome } from '../resources/promptChrome.js';
-import { clipboard } from '../resources/clipboard.js';
-import { notification } from '../resources/notification.js';
-import { translate } from '../resources/translate.js';
-import { oraAi } from '../resources/chatGpt.js';
+//import { api } from '../resources/api.js';
+const { api } = await import('../resources/api.js');
+//import { setTag } from '../resources/setTag.js';
+const { setTag } = await import('../resources/setTag.js');
+//import { promptChrome } from '../resources/promptChrome.js';
+const { promptChrome } = await import('../resources/promptChrome.js');
+//import { clipboard } from '../resources/clipboard.js';
+const { clipboard } = await import('../resources/clipboard.js');
+//import { notification } from '../resources/notification.js';
+const { notification } = await import('../resources/notification.js');
+//import { translate } from '../resources/translate.js';
+const { translate } = await import('../resources/translate.js');
+//import { oraAi } from '../resources/chatGpt.js';
+const { oraAi } = await import('../resources/chatGpt.js');
 
 // *******************************************************
 
@@ -163,4 +170,5 @@ async function command1(inf) {
   // }
 
 }
+
 export { command1 }

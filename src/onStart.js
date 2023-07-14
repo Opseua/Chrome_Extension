@@ -1,9 +1,14 @@
 await import('./clearConsole.js');
-import { shortcutPressed } from './actions/shortcutPressed.js';
-import { notification } from './resources/notification.js';
-import { oraAi } from './resources/chatGpt.js';
+console.log('onStart')
+const { shortcutPressed } = await import('./actions/shortcutPressed.js');
+//import { shortcutPressed } from './actions/shortcutPressed.js';
+const { notification } = await import('./resources/notification.js');
+//import { notification } from './resources/notification.js';
+const { oraAi } = await import('./resources/chatGpt.js');
+//import { oraAi } from './resources/chatGpt.js';
 const { getCookies } = await import('./resources/getCookies.js');
-import { storageSet, storageGet, storageDel } from './resources/storage.js';
+const { storageSet, storageGet, storageDel } = await import('./resources/storage.js');
+//import { storageSet, storageGet, storageDel } from './resources/storage.js';
 
 // *******************************************************
 
@@ -127,9 +132,3 @@ async function teste() {
 }
 //teste()
 
-
-//import { translate } from '../resources/translate.js';
-const { translate } = await import('./resources/translate.js');
-const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': 'Hi' };
-const retTranslate = await translate(infTranslate)
-console.log(retTranslate)
