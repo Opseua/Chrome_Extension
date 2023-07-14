@@ -1,3 +1,8 @@
+// const { translate } = await import('./resources/translate.js');
+// const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': 'Hi' };
+// const retTranslate = await translate(infTranslate)
+// console.log(retTranslate)
+
 const { api } = await import('./api.js');
 
 async function translate(inf) {

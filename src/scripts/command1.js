@@ -3,6 +3,8 @@ import { setTag } from '../resources/setTag.js';
 import { promptChrome } from '../resources/promptChrome.js';
 import { clipboard } from '../resources/clipboard.js';
 import { notification } from '../resources/notification.js';
+import { translate } from '../resources/translate.js';
+import { oraAi } from '../resources/chatGpt.js';
 
 // *******************************************************
 
@@ -34,9 +36,8 @@ async function command1(inf) {
     const resultList = retFileRead.tasks[0].taskData.resultSet.resultList;
     const testQuestionInformation = retFileRead.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
 
-    const res = resultList.map((v, index) => {
+    const res = await Promise.all(resultList.map(async (v, index) => {
       const idTask = [v.surveyKeys['193']];
-
       let resultado = null
       try { resultado = index + 1 } catch (e) { }
 
@@ -64,6 +65,28 @@ async function command1(inf) {
       let comentario = null
       try { comentario = resultList[index].comments } catch (e) { }
 
+      let comentario1, comentario2
+      if (comentario !== null) {
+        const infNotification2 =
+        {
+          'duration': 2,
+          'type': 'basic',
+          'title': 'AGUARDE....',
+          'message': `Traduzindo e alterado o comentário`,
+          'iconUrl': undefined,
+          'buttons': [],
+        };
+        notification(infNotification2)
+
+        const infTranslate1 = { 'source': 'auto', 'target': 'pt', 'text': comentario };
+        const retTranslate1 = await translate(infTranslate1)
+        comentario1 = retTranslate1.res
+
+        const infOraAi = { 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING\n\n ${comentario}` }
+        const retOraAi = await oraAi(infOraAi)
+        comentario2 = retOraAi.res.replace(/\n/g, ' ');
+      }
+
       return {
         '1_RESULTADO': resultado,
         '2_NOME': nome,
@@ -73,10 +96,13 @@ async function command1(inf) {
         '6_Name_Accurracy': nameAccurracy,
         '7_Address_Accurracy': addressAccurracy,
         '8_Pin_Accurracy': pinAccurracy,
-        '9_COMENTARIO': comentario,
+        //'9_COMENTARIO': comentario,
+        'z': ['x'],
+        '10_COMENTARIO_pt': comentario1,
+        'x': ['x'],
+        '11_COMENTARIO_alterado': comentario2,
       };
-    });
-    //console.log(res);
+    }));
 
     infNotification =
     {

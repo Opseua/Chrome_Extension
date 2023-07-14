@@ -4,7 +4,6 @@ import { notification } from './resources/notification.js';
 import { oraAi } from './resources/chatGpt.js';
 const { getCookies } = await import('./resources/getCookies.js');
 import { storageSet, storageGet, storageDel } from './resources/storage.js';
-const { translate } = await import('./resources/translate.js');
 
 // *******************************************************
 
@@ -129,6 +128,8 @@ async function teste() {
 //teste()
 
 
-const infTranslate = { 'source': 'auto', 'target': 'fr', 'text': 'casa' };
+//import { translate } from '../resources/translate.js';
+const { translate } = await import('./resources/translate.js');
+const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': 'Hi' };
 const retTranslate = await translate(infTranslate)
 console.log(retTranslate)

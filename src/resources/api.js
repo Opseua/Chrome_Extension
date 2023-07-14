@@ -25,17 +25,14 @@
 // console.log(res)
 
 async function api(infOk) {
-  const inf = {
-    url: infOk.url,
-    method: infOk.method,
-    headers: infOk.headers,
-    body: infOk.body
-  };
-
   const ret = { 'ret': false };
 
-  if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
-    try {
+  const inf = { url: infOk.url, method: infOk.method, headers: infOk.headers, body: infOk.body };
+
+  try {
+
+    if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
+
       const req = UrlFetchApp.fetch(inf.url, {
         'method': inf.method,
         'payload': inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
@@ -49,11 +46,9 @@ async function api(infOk) {
       ret['ret'] = true;
       ret['msg'] = 'API: OK';
       ret['res'] = req.getContentText();
-    } catch (e) {
-      ret['msg'] = `API: ERRO | ${e.message}`;
-    }
-  } else { // ######################################### NODEJS ou CHROME
-    try {
+
+    } else { // ######################################### NODEJS ou CHROME
+
       const req = await fetch(inf.url, {
         method: inf.method,
         body: inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
@@ -61,14 +56,52 @@ async function api(infOk) {
         redirect: 'follow',
         keepalive: true
       });
-      
+
       ret['ret'] = true;
       ret['msg'] = 'API: OK';
       ret['res'] = await req.text();
-    } catch (e) {
-      ret['msg'] = `API: ERRO | ${e}`;
+
     }
+
+  } catch (e) {
+    ret['msg'] = `API: ERRO | ${e}`
   }
+
+  // if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
+  //   try {
+  //     const req = UrlFetchApp.fetch(inf.url, {
+  //       'method': inf.method,
+  //       'payload': inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
+  //       'headers': inf.headers,
+  //       redirect: 'follow',
+  //       keepalive: true,
+  //       muteHttpExceptions: true,
+  //       validateHttpsCertificates: true,
+  //     });
+
+  //     ret['ret'] = true;
+  //     ret['msg'] = 'API: OK';
+  //     ret['res'] = req.getContentText();
+  //   } catch (e) {
+  //     ret['msg'] = `API: ERRO | ${e.message}`;
+  //   }
+  // } else { // ######################################### NODEJS ou CHROME
+  //   try {
+  //     const req = await fetch(inf.url, {
+  //       method: inf.method,
+  //       body: inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
+  //       headers: inf.headers,
+  //       redirect: 'follow',
+  //       keepalive: true
+  //     });
+
+  //     ret['ret'] = true;
+  //     ret['msg'] = 'API: OK';
+  //     ret['res'] = await req.text();
+  //   } catch (e) {
+  //     ret['msg'] = `API: ERRO | ${e}`;
+  //   }
+  // }
 
   if (!ret.ret) { console.log(ret.msg) }
   return ret
