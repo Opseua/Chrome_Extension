@@ -27,9 +27,9 @@
 async function api(infOk) {
   const ret = { 'ret': false };
 
-  const inf = { url: infOk.url, method: infOk.method, headers: infOk.headers, body: infOk.body };
-
   try {
+
+    const inf = { url: infOk.url, method: infOk.method, headers: infOk.headers, body: infOk.body };
 
     if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
 
