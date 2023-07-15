@@ -9,6 +9,8 @@ const { oraAi } = await import('./resources/chatGpt.js');
 const { getCookies } = await import('./resources/getCookies.js');
 const { storageSet, storageGet, storageDel } = await import('./resources/storage.js');
 //import { storageSet, storageGet, storageDel } from './resources/storage.js';
+const { nodeOrBrowser } = await import('./resources/funtions.js');
+const { sniffer } = await import('./resources/sniffer.js');
 
 // *******************************************************
 
@@ -52,10 +54,11 @@ chrome.commands.onCommand.addListener(async function (command) {
 // *************************
 
 let WebS;
-if (typeof window === 'undefined') { // NODEJS
+const retNodeOrBrowser = await nodeOrBrowser();
+if (retNodeOrBrowser.res == 'node') { // NODEJS
   const { default: WebSocket } = await import('isomorphic-ws');
   WebS = WebSocket;
-} else { // CHROME
+} else if (retNodeOrBrowser.res == 'chrome') { // CHROME
   WebS = window.WebSocket;
 }
 
@@ -132,3 +135,4 @@ async function teste() {
 }
 //teste()
 
+sniffer()

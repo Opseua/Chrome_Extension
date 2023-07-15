@@ -25,7 +25,7 @@
 // console.log(res)
 
 async function api(infOk) {
-  const ret = { 'ret': false };
+  let ret = { 'ret': false };
 
   try {
 

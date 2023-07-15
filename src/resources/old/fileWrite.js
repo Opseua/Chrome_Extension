@@ -13,7 +13,7 @@ const { nodeOrBrowser } = await import('./nodeOrBrowser.js');
 const { fileRead } = await import('./fileRead.js');
 
 async function fileWrite(inf) {
-    const ret = { 'ret': false };
+    let ret = { 'ret': false };
 
     if (inf.file == undefined || inf.file == '') {
         ret['msg'] = `INFORMAR O "file"`;

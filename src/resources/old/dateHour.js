@@ -3,8 +3,7 @@
 // console.log(RetDH)
  
  function dateHour() { // NAO POR COMO 'async'!!!
-    const ret = { 'ret': false };
-
+    let ret = { 'ret': false };
     try {
         const date = new Date();
         const retDate = {

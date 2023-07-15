@@ -1,29 +1,26 @@
-// const { configStorage } = await import('./configStorage.js');
-// async function fun() {
-//   let infConfigStorage, retConfigStorage
+// const { configStorage } = await import('./resources/configStorage.js');
+// let infConfigStorage, retConfigStorage
 
-//   infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-//   retConfigStorage = await configStorage(infConfigStorage)
-//   console.log(1, retConfigStorage)
+// infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+// retConfigStorage = await configStorage(infConfigStorage)
+// console.log(1, retConfigStorage)
 
-//   infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-//   retConfigStorage = await configStorage(infConfigStorage)
-//   console.log(2, retConfigStorage)
+// infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
+// retConfigStorage = await configStorage(infConfigStorage)
+// console.log(2, retConfigStorage)
 
-//   infConfigStorage = {'path': '/src/config.json',  'action': 'del', 'key': 'NomeDaChave' }
-//   retConfigStorage = await configStorage(infConfigStorage)
-//   console.log(3, retConfigStorage)
-
-// }; fun()
+// infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
+// retConfigStorage = await configStorage(infConfigStorage)
+// console.log(3, retConfigStorage)
 
 //import { nodeOrBrowser } from './nodeOrBrowser.js';
 const { nodeOrBrowser } = await import('./nodeOrBrowser.js');
 
 async function configStorage(inf) {
-    const ret = { 'ret': false };
-    const retNodeOrBrowser = await nodeOrBrowser();
-
+    let ret = { 'ret': false };
     try {
+
+        const retNodeOrBrowser = await nodeOrBrowser();
 
         if (retNodeOrBrowser.res == 'chrome') { // ################## CHROME
 

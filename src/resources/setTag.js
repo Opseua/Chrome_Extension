@@ -1,9 +1,5 @@
-//import { globalVariable } from '../resources/globalVariable.js';
-
-// *******************************************************
-
 async function setTag(inf) {
-    const ret = { 'ret': false }
+    let ret = { 'ret': false }
 
     try {
         const varGlobal = JSON.parse(localStorage.getItem('varGlobal'));

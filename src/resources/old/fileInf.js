@@ -6,8 +6,7 @@ import path from 'path';
 import fs from 'fs';
 
 async function fileInf(inf) {
-    const ret = { 'ret': false };
-
+    let ret = { 'ret': false };
     try {
         const parsedPath = path.parse(inf);
         const fileWithExtension = parsedPath.base;

@@ -16,7 +16,7 @@ const { oraAi } = await import('../resources/chatGpt.js');
 // *******************************************************
 
 async function command1(inf) {
-  const ret = { 'ret': false };
+  let ret = { 'ret': false };
   //console.log('COMANDO 1: EXECUTANDO');
 
   const retPromptChrome = await promptChrome(`GALAXY`);

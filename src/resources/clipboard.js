@@ -3,7 +3,7 @@
 // clipboard(infClipboard)
 
 async function clipboard(inf) {
-  const ret = { 'ret': false };
+  let ret = { 'ret': false };
 
   let text = inf.value
   try {

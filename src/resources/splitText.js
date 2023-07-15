@@ -1,5 +1,5 @@
 async function splitText(inf) {
-    const ret = { 'ret': false }
+    let ret = { 'ret': false }
 
     try {
         const text = inf.replace(/\n/g, '\\n');
@@ -25,6 +25,7 @@ async function splitText(inf) {
         ret['ret'] = true;
         ret['msg'] = 'SPLIT TEXT: OK';
         ret['res'] = chunks;
+
     } catch (e) {
         ret['msg'] = `SPLIT TEXT: ERRO | ${e}`;
     }

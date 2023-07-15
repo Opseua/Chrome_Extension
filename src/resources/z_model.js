@@ -1,8 +1,7 @@
 const { api } = await import('./api.js');
 
 async function model(inf) {
-    const ret = { 'ret': false };
-
+    let ret = { 'ret': false };
     try {
 
         // CODIGO AQUI

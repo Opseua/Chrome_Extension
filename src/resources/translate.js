@@ -6,9 +6,9 @@
 const { api } = await import('./api.js');
 
 async function translate(inf) {
-    const ret = { 'ret': false };
-
+    let ret = { 'ret': false };
     try {
+
         const text = 'Olá';
         const infApi = {
             url: `https://translate.google.com/m?sl=${inf.source}&tl=${inf.target}&q=${encodeURIComponent(inf.text)}&hl=pt-BR`,
@@ -27,6 +27,7 @@ async function translate(inf) {
         } else {
             ret['msg'] = `TRANSLATE: ERRO | TAG NAO ENCONTRADA`;
         }
+
     } catch (e) {
         ret['msg'] = `TRANSLATE: ERRO | ${e}`;
     }

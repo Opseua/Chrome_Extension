@@ -4,9 +4,9 @@
 // console.log(rettabSearch)
 
 async function tabSearch(inf) {
-    const ret = { 'ret': false };
-
+    let ret = { 'ret': false };
     try {
+
         let result;
         switch (true) {
             // ################################### ABA: ATIVA
@@ -122,6 +122,7 @@ async function tabSearch(inf) {
         if (result.ret) {
             ret['ret'] = result.ret; ret['msg'] = result.msg; ret['res'] = result.res;
         } else { ret['ret'] = result.ret; ret['msg'] = result.msg; }
+        
     } catch (e) {
         ret['msg'] = `SEARCH TAB: ERRO | ${e}`;
     }

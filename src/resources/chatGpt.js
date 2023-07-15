@@ -8,15 +8,12 @@
 
 const { api } = await import('./api.js');
 const { getCookies } = await import('./getCookies.js');
-//import { storageSet } from './storage.js';
 const { storageSet } = await import('./storage.js');
-//import { configStorage } from './configStorage.js';
-const { configStorage } = await import('./configStorage.js');
-//import { tabSearch } from './tabSearch.js';
+const { configStorage } = await import('./funtions.js');
 const { tabSearch } = await import('./tabSearch.js');
 
 async function oraAi(inf) {
-    const ret = { 'ret': false };
+    let ret = { 'ret': false };
 
     const retConfigJson = await fetch('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/config.json');
     const config = await retConfigJson.json();

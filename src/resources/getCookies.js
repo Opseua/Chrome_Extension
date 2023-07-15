@@ -3,12 +3,10 @@
 // const retGetCookies = await getCookies(infGetCookies)
 // console.log(retGetCookies);
 
-//import { tabSearch } from './tabSearch.js';
 const { tabSearch } = await import('./tabSearch.js');
 
 async function getCookies(inf) {
-    const ret = { 'ret': false };
-
+    let ret = { 'ret': false };
     try {
         const rettabSearch = await tabSearch(inf)
         if (!rettabSearch.ret) { return ret }
