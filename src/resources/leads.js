@@ -7,14 +7,14 @@ async function leads(inf) {
     let ret = { 'ret': false };
     try {
 
-        // const infGetCookies = { 'search': `casa - Pesquisa Google` }
-        // const retGetCookies = await getCookies(infGetCookies)
-        // console.log(retGetCookies);
-
         const infTabSearch = { 'search': `*ora*` }
         const retTabSearch = await tabSearch(infTabSearch)
         console.log(2, retTabSearch)
-        
+
+        const infGetCookies = { 'search': retTabSearch.res.id }
+        const retGetCookies = await getCookies(infGetCookies)
+        console.log(retGetCookies);
+
         // const rettabSearch = [{
         //     "id": 182501626,
         //     "tit": "(18) ntfy",

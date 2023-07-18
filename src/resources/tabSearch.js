@@ -62,6 +62,21 @@ async function tabSearch(inf) {
                 };
             } else if (inf.search == 'TODAS') {
                 ret['res'] = result.res;
+
+            } else if (typeof inf.search === 'number') {
+                for (const obj of result.res) {
+                    if (regex(obj.id.toString(), inf.search.toString())) {
+                        ret['res'] = {
+                            'id': obj.id,
+                            'tit': obj.tit,
+                            'url': obj.url,
+                            'active': obj.active,
+                            'index': obj.index,
+                            'pinned': obj.pinned
+                        };
+                        break;
+                    }
+                }
             } else {
                 for (const obj of result.res) {
                     if (regex(obj.url, inf.search)) {
