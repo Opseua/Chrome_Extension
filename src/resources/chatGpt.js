@@ -9,7 +9,7 @@
 const { api } = await import('./api.js');
 const { getCookies } = await import('./getCookies.js');
 const { storageSet } = await import('./storage.js');
-const { configStorage } = await import('./funtions.js');
+const { configStorage } = await import('./functions.js');
 const { tabSearch } = await import('./tabSearch.js');
 
 async function oraAi(inf) {

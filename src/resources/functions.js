@@ -409,7 +409,12 @@ function dateHour() { // NAO POR COMO 'async'!!!
     return ret
 }
 
-export { nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour };
+function regex(a, b) {
+    const c = b.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+    return new RegExp(`^${c}$`).test(a);
+}
+
+export { nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex };
 
 
 
@@ -553,12 +558,12 @@ let perfils = ["adelar_santos_", "lightbrotherz", "carolescavassini", "cafe_ligh
 //             await fileWrite(infFileWrite);
 
 //             ret['ret'] = true;
-//             ret['msg'] = 'FUNTIONS: OK';
+//             ret['msg'] = 'FUNCTIONS: OK';
 //             console.log(`${perfils.length} - ${i + 1} | ${res.data.user.id} = ${perfilId}`);
 
 //         }
 //     } catch (e) {
-//         ret['msg'] = `FUNTIONS: ERRO | ${e}`
+//         ret['msg'] = `FUNCTIONS: ERRO | ${e}`
 //     }
 
 //     if (!ret.ret) { console.log(ret.msg) }

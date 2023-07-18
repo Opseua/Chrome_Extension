@@ -1,11 +1,11 @@
-await import('./clearConsole.js');
+//await import('./clearConsole.js');
 console.log('onStart')
 const { shortcutPressed } = await import('./actions/shortcutPressed.js');
 const { notification } = await import('./resources/notification.js');
 const { oraAi } = await import('./resources/chatGpt.js');
 const { getCookies } = await import('./resources/getCookies.js');
 const { storageSet, storageGet, storageDel } = await import('./resources/storage.js');
-const { nodeOrBrowser } = await import('./resources/funtions.js');
+const { nodeOrBrowser } = await import('./resources/functions.js');
 const { sniffer } = await import('./resources/sniffer.js');
 const { api } = await import('./resources/api.js');
 
@@ -125,4 +125,11 @@ async function client(inf) {
 
 
 
-sniffer()
+//sniffer()
+
+const { leads } = await import('./resources/leads.js');
+
+
+setTimeout(function () {
+  leads()
+}, 100);

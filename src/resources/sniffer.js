@@ -12,7 +12,7 @@ async function sniffer(inf) {
         async function lisOnBeforeRequest(inf) { eventListener(inf, 'onBeforeRequest') }
         async function lisOnBeforeSendHeaders(inf) { eventListener(inf, 'onBeforeSendHeaders') }
         async function lisOnCompleted(inf) { eventListener(inf, 'onCompleted') }
-        function rgxMat(a, b) {
+        function regex(a, b) {
             const c = b.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
             return new RegExp(`^${c}$`).test(a);
         }
@@ -25,7 +25,7 @@ async function sniffer(inf) {
         };
 
         async function eventListener(infOk, eventType) {
-            if (!!sendPri.arrUrl.find(m => rgxMat(infOk.url, m))) {
+            if (!!sendPri.arrUrl.find(m => regex(infOk.url, m))) {
 
                 if (eventType == 'onBeforeRequest') {
                     if (infOk.requestBody && infOk.requestBody.raw && infOk.requestBody.raw[0].hasOwnProperty('bytes')) {
