@@ -1,4 +1,4 @@
-// import { notification } from './notification.js';
+// const { notification } = await import('./notification.js');
 // let infNotification =
 // {
 //   'duration': 5,

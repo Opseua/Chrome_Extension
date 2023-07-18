@@ -13,7 +13,6 @@
 // retConfigStorage = await configStorage(infConfigStorage)
 // console.log(3, retConfigStorage)
 
-//import { nodeOrBrowser } from './nodeOrBrowser.js';
 const { nodeOrBrowser } = await import('./nodeOrBrowser.js');
 
 async function configStorage(inf) {

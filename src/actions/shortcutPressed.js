@@ -1,7 +1,4 @@
-//import { command1 } from '../scripts/command1.js';
 const { command1 } = await import('../scripts/command1.js');
-
-// *******************************************************
 
 async function shortcutPressed(inf) {
 

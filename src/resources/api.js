@@ -1,4 +1,4 @@
-// import { api } from './api.js';
+// const { api } = await import('./api.js');
 // ########## TYPE → text
 // const infApi = {
 //   url: 'https://ntfy.sh/',

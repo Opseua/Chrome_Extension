@@ -1,4 +1,4 @@
-// import { tabSearch } from './tabSearch.js';
+// const { tabSearch } = await import('./tabSearch.js');
 // const inftabSearch = {'search': `TODAS`}
 // const rettabSearch = await tabSearch(inftabSearch)
 // console.log(rettabSearch)
@@ -122,7 +122,7 @@ async function tabSearch(inf) {
         if (result.ret) {
             ret['ret'] = result.ret; ret['msg'] = result.msg; ret['res'] = result.res;
         } else { ret['ret'] = result.ret; ret['msg'] = result.msg; }
-        
+
     } catch (e) {
         ret['msg'] = `SEARCH TAB: ERRO | ${e}`;
     }

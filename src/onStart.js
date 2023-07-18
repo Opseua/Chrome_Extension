@@ -1,19 +1,13 @@
 await import('./clearConsole.js');
 console.log('onStart')
 const { shortcutPressed } = await import('./actions/shortcutPressed.js');
-//import { shortcutPressed } from './actions/shortcutPressed.js';
 const { notification } = await import('./resources/notification.js');
-//import { notification } from './resources/notification.js';
 const { oraAi } = await import('./resources/chatGpt.js');
-//import { oraAi } from './resources/chatGpt.js';
 const { getCookies } = await import('./resources/getCookies.js');
 const { storageSet, storageGet, storageDel } = await import('./resources/storage.js');
-//import { storageSet, storageGet, storageDel } from './resources/storage.js';
 const { nodeOrBrowser } = await import('./resources/funtions.js');
 const { sniffer } = await import('./resources/sniffer.js');
 const { api } = await import('./resources/api.js');
-
-// *******************************************************
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {

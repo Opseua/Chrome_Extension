@@ -1,4 +1,4 @@
-// import { promptChrome } from './promptChrome.js';
+// const { promptChrome } = await import('./promptChrome.js');
 // const retPromptChrome = await promptChrome(`GALAXY`);
 // console.log(retPromptChrome)
 

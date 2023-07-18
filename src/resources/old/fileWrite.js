@@ -6,10 +6,7 @@
 // };
 // fileWrite(infFileWrite);
 
-
-//import { nodeOrBrowser } from './nodeOrBrowser.js';
 const { nodeOrBrowser } = await import('./nodeOrBrowser.js');
-//import { fileRead } from './fileRead.js';
 const { fileRead } = await import('./fileRead.js');
 
 async function fileWrite(inf) {

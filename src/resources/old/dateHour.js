@@ -1,8 +1,8 @@
-// import { dateHour } from './dateHour.js';
+// const { dateHour } = await import('./dateHour.js');
 // const RetDH = dateHour()
 // console.log(RetDH)
- 
- function dateHour() { // NAO POR COMO 'async'!!!
+
+function dateHour() { // NAO POR COMO 'async'!!!
     let ret = { 'ret': false };
     try {
         const date = new Date();
@@ -16,7 +16,7 @@
             'mil': String(date.getMilliseconds()).padStart(3, '0'),
             'tim': Date.now()
         }
-        
+
         ret['ret'] = true;
         ret['msg'] = `DATE HOUR: OK`;
         ret['res'] = retDate;

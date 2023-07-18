@@ -1,4 +1,4 @@
-// import { storageSet, storageGet, storageDel } from './storage.js';
+// const { storageSet, storageGet, storageDel } = await import('./storage.js');
 
 // const infStorageSet = { 'key': 'nome', 'value': '111111' }
 // const retStorageSet = await storageSet(infStorageSet);

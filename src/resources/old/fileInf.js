@@ -1,4 +1,4 @@
-// import { fileInf } from './fileInf.js';
+// const { fileInf } = await import('./fileInf.js');
 // const retFunction = await fileInf(new URL(import.meta.url).pathname);
 // console.log(retFunction);
 

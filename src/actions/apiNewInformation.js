@@ -1,9 +1,5 @@
-//import { setTag } from '../resources/setTag.js';
 const { setTag } = await import('../resources/setTag.js');
-//import { command2 } from '../scripts/command2.js';
 const { command2 } = await import('../scripts/command2.js');
-
-// *******************************************************
 
 async function apiNewInformation(inf) {
 

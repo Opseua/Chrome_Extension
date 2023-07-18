@@ -1,4 +1,4 @@
-// import { clipboard } from './clipboard.js';
+// const { clipboard } = await import('./clipboard.js');
 // let infClipboard = { 'value': 'Esse é o valor'};
 // clipboard(infClipboard)
 
@@ -18,7 +18,7 @@ async function clipboard(inf) {
     element.select();
     document.execCommand('copy');
     document.body.removeChild(element);
-    
+
     ret['ret'] = true;
     ret['msg'] = 'CLIPBOARD: OK';
   } catch (e) {

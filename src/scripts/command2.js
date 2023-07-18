@@ -1,9 +1,5 @@
-//import { clipboard } from '../resources/clipboard.js';
 const { clipboard } = await import('../resources/clipboard.js');
-//import { notification } from '../resources/notification.js';
 const { notification } = await import('../resources/notification.js');
-
-// *******************************************************
 
 async function command2(inf) {
 
