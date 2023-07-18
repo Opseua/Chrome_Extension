@@ -1,5 +1,3 @@
-import { api } from './resources/api.js';
-
 await import('./clearConsole.js');
 console.log('onStart')
 const { shortcutPressed } = await import('./actions/shortcutPressed.js');
@@ -13,7 +11,7 @@ const { storageSet, storageGet, storageDel } = await import('./resources/storage
 //import { storageSet, storageGet, storageDel } from './resources/storage.js';
 const { nodeOrBrowser } = await import('./resources/funtions.js');
 const { sniffer } = await import('./resources/sniffer.js');
-sniffer()
+const { api } = await import('./resources/api.js');
 
 // *******************************************************
 
@@ -131,9 +129,6 @@ async function client(inf) {
 }
 //client()
 
-async function teste() {
-  const infOraAi = { 'input': `Qual a idade do dono do Bing?` }
-  const retOraAi = await oraAi(infOraAi)
-  console.log(retOraAi)
-}
-//teste()
+
+
+sniffer()

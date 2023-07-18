@@ -543,7 +543,7 @@ let perfils = ["adelar_santos_", "lightbrotherz", "carolescavassini", "cafe_ligh
 //             const retApi = await api(infApi);
 //             console.log(retApi)
 //             if (!retApi.ret) { ret['ret'] = false; }
-//             const res = JSON.parse(retApi.res);
+//             const res = JSON.parse(retApi.res.body);
 
 //             const infFileWrite = {
 //                 'file': `PERFILS/${res.data.user.id}=${perfilId}.txt`,

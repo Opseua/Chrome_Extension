@@ -76,7 +76,7 @@ async function oraAi(inf) {
         const retApi = await api(infApi);
         if (!retApi.ret) { return ret }
 
-        const res = JSON.parse(retApi.res);
+        const res = JSON.parse(retApi.res.body);
         if ('response' in res) {
             ret['ret'] = true;
             ret['msg'] = `GPT ORA AI: OK`;

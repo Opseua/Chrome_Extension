@@ -1,6 +1,5 @@
 const { api } = await import('./api.js');
 
-
 async function sniffer(inf) {
     let ret = { 'ret': false, 'res': {} };
     const filters = { urls: ["<all_urls>"] };
@@ -62,9 +61,9 @@ async function sniffer(inf) {
                         for (let header of ret.res.requestHeaders) { hea[header.name] = header.value; }
                         hea['naoInterceptar'] = 'naoInterceptar';
                         const infApi = { 'url': ret.res.url, 'method': ret.res.method, 'headers': hea };
-                        if (typeof ret.res.body !== 'undefined') { infApi['body'] = ret.res.body }
+                        if (typeof ret.res.requestBody !== 'undefined') { infApi['body'] = ret.res.requestBody }
                         const retApi = await api(infApi);
-                        console.log(8, retApi)
+                        console.log(retApi.res.body)
                     }
 
                     ret = { 'ret': false, 'res': {} }
@@ -82,99 +81,6 @@ async function sniffer(inf) {
     }
 
     return ret;
-
-
-
-
-
-    // let interceptedData = true;
-
-    // chrome.webRequest.onBeforeRequest.addListener(
-    //     function (details) {
-    //         console.log(1)
-    //         // Verifica se a interceptação deve ser ignorada
-    //         if (interceptedData && interceptedData.ignoreInterception) {
-    //             return;
-    //         }
-
-    //         // Realize o processamento necessário para a interceptação aqui
-
-    //         // Salve os dados interceptados em interceptedData
-    //         interceptedData = {
-    //             method: details.method,
-    //             url: details.url,
-    //             headers: details.requestHeaders,
-    //             body: details.requestBody,
-    //             ignoreInterception: false
-    //         };
-    //     },
-    //     { urls: ['http://18.119.140.20:8888/get/OLA'] }
-    // );
-
-    // chrome.webRequest.onCompleted.addListener(
-    //     function (details) {
-    //         console.log(2)
-    //         // Verifique se o objeto interceptedData existe e faça a requisição idêntica usando fetch
-    //         if (interceptedData) {
-    //             // Define a flag ignoreInterception como true para evitar a interceptação da requisição fetch reproduzida
-    //             interceptedData.ignoreInterception = true;
-
-    //             // Verifica se o objeto interceptedData possui a propriedade 'headers' e realiza o filtro
-    //             const headers = interceptedData.headers && interceptedData.headers.filter(header => header.name !== 'X-Requested-With');
-    //             if (!headers) {
-    //                 return;
-    //             }
-    //             headers.push({ name: 'X-Requested-With', value: 'MyCustomHeader' });
-    //             console.log(2)
-    //             fetch(interceptedData.url, {
-    //                 method: interceptedData.method,
-    //                 headers: headers,
-    //                 body: interceptedData.body
-    //             })
-    //                 .then(response => {
-    //                     console.log(response);
-
-    //                     // Redefine a flag ignoreInterception como false para permitir futuras interceptações
-    //                     interceptedData.ignoreInterception = false;
-    //                 })
-    //                 .catch(error => {
-    //                     // Lide com o erro aqui
-
-    //                     // Redefine a flag ignoreInterception como false para permitir futuras interceptações
-    //                     interceptedData.ignoreInterception = false;
-    //                 });
-    //         }
-    //     },
-    //     { urls: ['http://18.119.140.20:8888/get/OLA'] }
-    // );
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export { sniffer }

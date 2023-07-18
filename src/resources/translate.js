@@ -17,7 +17,7 @@ async function translate(inf) {
         };
 
         const retApi = await api(infApi);
-        const html = retApi.res;
+        const html = retApi.res.body;
         const regex = /<div class="result-container">(.*?)<\/div>/;
         const match = html.match(regex);
         if (match && match[1]) {
