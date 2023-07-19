@@ -1,13 +1,41 @@
 // const { tabSearch } = await import('./tabSearch.js');
-// const infTabSearch = {'search': `TODAS`}
+// const infTabSearch = { 'search': '*google*', 'openIfNotExist': true, 'active':true, 'pinned': false, 'url': 'https://www.google.com/'  } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // const retTabSearch = await tabSearch(infTabSearch)
 // console.log(retTabSearch)
 const { regex } = await import('./functions.js');
 
+async function openTab(inf) {
+    try {
+        const active = inf.active ? true : false;
+        const pinned = inf.pinned ? true : false;
+        const url = inf.url ? inf.url : 'https://www.google.com';
+        return await new Promise((resolve, reject) => {
+            chrome.tabs.create({ 'url': url, 'active': active, 'pinned': pinned }, function (novaAba) {
+                chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+                    if (tabId === novaAba.id && changeInfo.status === 'complete') {
+                        chrome.tabs.get(novaAba.id, function (tab) {
+                            chrome.tabs.onUpdated.removeListener(listener);
+                            resolve({
+                                'id': tab.id,
+                                'tit': tab.title,
+                                'url': tab.url,
+                                'active': tab.active,
+                                'index': tab.index,
+                                'pinned': tab.pinned
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    } catch (e) {
+        return `SEARCH TAB: ERRO | ${e}`;
+    }
+}
+
 async function tabSearch(inf) {
     let ret = { 'ret': false };
     try {
-
         let result = {};
         if (inf.search == 'ATIVA') {
             result = await new Promise(resolve => {
@@ -96,7 +124,12 @@ async function tabSearch(inf) {
                 ret['ret'] = true;
                 ret['msg'] = `SEARCH TAB: OK`;
             } else {
-                ret['msg'] = `SEARCH TAB: ERRO | ABA '${inf.search}' NAO ENCONTRADA`
+                if (typeof inf.search === 'number') {
+                    ret['msg'] = `SEARCH TAB: ERRO | ABA ID '${inf.search}' NAO ENCONTRADA`
+                }
+                else {
+                    ret['msg'] = `SEARCH TAB: ERRO | ABA '${inf.search}' NAO ENCONTRADA`
+                }
             }
         } else {
             if (inf.search == 'ATIVA' || inf.search == 'TODAS') {
@@ -104,11 +137,22 @@ async function tabSearch(inf) {
             } else {
                 ret['msg'] = `SEARCH TAB: ERRO | ABA '${inf.search}' NAO ENCONTRADA`
             }
-
         }
 
     } catch (e) {
         ret['msg'] = `SEARCH TAB: ERRO | ${e}`;
+    }
+
+    if (!ret.ret) {
+        if (inf.openIfNotExist) {
+            const retOpenTab = await openTab(inf)
+            if (retOpenTab.hasOwnProperty('id')) {
+                ret['ret'] = true;
+                ret['res'] = retOpenTab;
+            } else {
+                ret['msg'] = retOpenTab;
+            }
+        }
     }
 
     if (!ret.ret) { console.log(ret.msg) }

@@ -1,21 +1,23 @@
+// const { regex, fileRead, fileWrite } = await import('./functions.js');
 // const retNodeOrBrowser = await nodeOrBrowser();
 // console.log(retNodeOrBrowser);
-// -          -          -          -          -          -          -          
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -                   
 // const retFunction = await fileInf(new URL(import.meta.url).pathname);     ## CHROME NAO!
 // console.log(retFunction);
-// -          -          -          -          -          -          -          
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -       
 // const infFileWrite = {
-//     'file': 'PASTAS 1/PASTA 2/arquivo.txt',
+//     'file': `PASTAS 1/PASTA 2/arquivo.txt`,
 //     'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
 //     'text': 'LINHA 1\nLINHA 2\nLINHA 3\n'
 // };
 // const retFileWrite = await fileWrite(infFileWrite);
 // console.log(retFileWrite);
-// -          -          -          -          -          -          -          
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -      
+// const infFileRead = { 'file': `D:/Downloads/Google Chrome/arquivo.txt` }
 // const infFileRead = { 'file': 'D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/resources/teste.txt' }
 // const retFileRead = await fileRead(infFileRead)
 // console.log(retFileRead)
-// -          -          -          -          -          -          -          
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -      
 //let infConfigStorage, retConfigStorage
 // infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
 // retConfigStorage = await configStorage(infConfigStorage)
@@ -28,9 +30,30 @@
 // infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
 // retConfigStorage = await configStorage(infConfigStorage)
 // console.log(3, retConfigStorage)
-// -          -          -          -          -          -          -          
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -       
 // const RetDateHour = dateHour()
 // console.log(RetDateHour)
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// const infRandom = { 'min': 10, 'max': 50, 'msg': true }
+// const retRandom = await random(infRandom)
+// console.log(retRandom)
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// const loop = ['A', 'B', 'C', 'D', 'E'];
+// let i = 0;
+// async function runLoop() {
+//     while (i < loop.length) {
+//         i++;
+//         const infRandom = { 'min': 1, 'max': 5, 'msg': true }
+//         const retRandom = await random(infRandom)
+//         await new Promise(resolve => setTimeout(resolve, retRandom));
+//         console.log(loop[i - 1]);
+//         if (loop[i - 1] == 'C') {
+//             break
+//         }
+//     }
+//     console.log("Loop concluído!");
+// }
+// runLoop();
 
 async function nodeOrBrowser() {
     let ret = { 'ret': false }
@@ -414,7 +437,18 @@ function regex(a, b) {
     return new RegExp(`^${c}$`).test(a);
 }
 
-export { nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex };
+async function random(inf) {
+    const min = inf.min;
+    const max = inf.max;
+    const msg = inf.msg ? true : false
+    const ret = Math.floor(Math.random() * (max - min + 1) + min) * 1000;
+    if (msg) {
+        console.log(`AGUARDANDO: ${ret / 1000} SEGUNDOS`);
+    }
+    return ret;
+}
+
+export { nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex, random };
 
 
 

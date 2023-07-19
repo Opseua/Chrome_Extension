@@ -1,7 +1,7 @@
 // const { api } = await import('./api.js');
 // ########## TYPE → text
 // const infApi = {
-//   url: 'https://ntfy.sh/',
+//   url: `https://ntfy.sh/`,
 //   method: 'PUT',
 //   headers: {
 //     'accept': '*/*',
@@ -14,7 +14,7 @@
 
 // ########## TYPE → json
 // const infApi = {
-//   url: 'https://ora.ai/api/conversation',
+//   url: `https://ora.ai/api/conversation`,
 //   method: 'POST',
 //   headers: {
 //     'accept': '*/*',
@@ -28,9 +28,9 @@
 // ########## TYPE → x-www-form-urlencoded
 // const formData = new URLSearchParams();
 // formData.append('grant_type', 'client_credentials');
-// formData.append('resource', 'https://graph.microsoft.com');
+// formData.append('resource', https://graph.microsoft.com');
 // const infApi = {
-//   url: 'https://login.microsoft.com/c5a6c78e/oauth2/token',
+//   url: `https://login.microsoft.com/c5a6c78e/oauth2/token`,
 //   method: 'POST',
 //   headers: {
 //     'accept': '*/*',
@@ -50,42 +50,67 @@ async function api(infOk) {
 
     if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
 
-      const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
-      if (inf.headers) {
-        reqOpt['headers'] = inf.headers
-      }
-      if (inf.body && (inf.method == 'POST' || inf.method == 'PUT')) {
-        reqOpt['payload'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
-      }
-      const req = UrlFetchApp.fetch(inf.url, reqOpt);
 
-      ret['ret'] = true;
-      ret['msg'] = 'API: OK';
-      ret['res'] = {
-        'code': req.getResponseCode(),
-        'headers': req.getAllHeaders(),
-        'body': req.getContentText()
-      }
+      //        ####  ###  NAO USAR  ####  ###
+
+      // const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
+      // if (inf.headers) {
+      //   reqOpt['headers'] = inf.headers
+      // }
+      // if (inf.body && (inf.method == 'POST' || inf.method == 'PUT')) {
+      //   reqOpt['payload'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
+      // }
+      // const req = UrlFetchApp.fetch(inf.url, reqOpt);
+
+      // ret['ret'] = true;
+      // ret['msg'] = 'API: OK';
+      // ret['res'] = {
+      //   'code': req.getResponseCode(),
+      //   'headers': req.getAllHeaders(),
+      //   'body': req.getContentText()
+      // }
 
     } else { // ######################################### NODEJS ou CHROME
 
-      const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
-      if (inf.headers) {
-        reqOpt['headers'] = inf.headers
-      }
-      if (inf.body && (inf.method == 'POST' || inf.method == 'PUT')) {
-        reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
-      }
-      const req = await fetch(inf.url, reqOpt)
+      if (inf.url.includes('instagram')) {
 
-      const resHeaders = {};
-      req.headers.forEach((value, name) => { resHeaders[name] = value; });
-      ret['ret'] = true;
-      ret['msg'] = 'API: OK';
-      ret['res'] = {
-        'code': req.status,
-        'headers': resHeaders,
-        'body': await req.text()
+        const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
+        if (inf.headers) {
+          reqOpt['headers'] = inf.headers
+        }
+        if (inf.body && (inf.method == 'POST' || inf.method == 'PUT')) {
+          reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
+        }
+        const req = await fetch(inf.url, reqOpt)
+
+        const resHeaders = {};
+        req.headers.forEach((value, name) => { resHeaders[name] = value; });
+        ret['ret'] = true;
+        ret['msg'] = 'API: OK';
+        ret['res'] = {
+          'code': req.status,
+          'headers': resHeaders,
+          'body': await req.text()
+        }
+
+      } else {
+
+        const req = await fetch(inf.url, {
+          method: inf.method,
+          body: inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
+          headers: inf.headers,
+          redirect: 'follow',
+          keepalive: true
+        });
+
+        ret['ret'] = true;
+        ret['msg'] = 'API: OK';
+        ret['res'] = {
+          'code': req.status,
+          'headers': resHeaders,
+          'body': await req.text()
+        }
+
       }
 
     }
@@ -136,3 +161,34 @@ async function api(infOk) {
 
 export { api }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
+// if (inf.headers) {
+//   reqOpt['headers'] = inf.headers
+// }
+// if (inf.body && (inf.method == 'POST' || inf.method == 'PUT')) {
+//   reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
+// }
+// const req = await fetch(inf.url, reqOpt)
+
+// const resHeaders = {};
+// req.headers.forEach((value, name) => { resHeaders[name] = value; });
+// ret['ret'] = true;
+// ret['msg'] = 'API: OK';
+// ret['res'] = {
+//   'code': req.status,
+//   'headers': resHeaders,
+//   'body': await req.text()
+// }
