@@ -17,7 +17,7 @@ async function openTab(inf) {
                             chrome.tabs.onUpdated.removeListener(listener);
                             resolve({
                                 'id': tab.id,
-                                'tit': tab.title,
+                                'title': tab.title,
                                 'url': tab.url,
                                 'active': tab.active,
                                 'index': tab.index,
@@ -44,7 +44,7 @@ async function tabSearch(inf) {
                         const tab = tabs[0];
                         const abaInf = {
                             'id': tab.id,
-                            'tit': tab.title,
+                            'title': tab.title,
                             'url': tab.url,
                             'active': tab.active,
                             'index': tab.index,
@@ -63,7 +63,7 @@ async function tabSearch(inf) {
                         const abaInf = tabs.map(function (tab) {
                             return {
                                 'id': tab.id,
-                                'tit': tab.title,
+                                'title': tab.title,
                                 'url': tab.url,
                                 'active': tab.active,
                                 'index': tab.index,
@@ -82,7 +82,7 @@ async function tabSearch(inf) {
             if (inf.search == 'ATIVA') {
                 ret['res'] = {
                     'id': result.res.id,
-                    'tit': result.res.title,
+                    'title': result.res.title,
                     'url': result.res.url,
                     'active': result.res.active,
                     'index': result.res.index,
@@ -93,10 +93,12 @@ async function tabSearch(inf) {
 
             } else if (typeof inf.search === 'number') {
                 for (const obj of result.res) {
-                    if (regex(obj.id.toString(), inf.search.toString())) {
+                    const infRegex = { 'pattern': inf.search.toString(), 'text': obj.id.toString() }
+                    const retRegex = regex(infRegex)
+                    if (retRegex.res.bolean) {
                         ret['res'] = {
                             'id': obj.id,
-                            'tit': obj.tit,
+                            'title': obj.title,
                             'url': obj.url,
                             'active': obj.active,
                             'index': obj.index,
@@ -107,10 +109,12 @@ async function tabSearch(inf) {
                 }
             } else {
                 for (const obj of result.res) {
-                    if (regex(obj.url, inf.search)) {
+                    const infRegex = { 'pattern': inf.search, 'text': obj.url }
+                    const retRegex = regex(infRegex)
+                    if (retRegex.res.bolean) {
                         ret['res'] = {
                             'id': obj.id,
-                            'tit': obj.tit,
+                            'title': obj.title,
                             'url': obj.url,
                             'active': obj.active,
                             'index': obj.index,
@@ -148,6 +152,7 @@ async function tabSearch(inf) {
             const retOpenTab = await openTab(inf)
             if (retOpenTab.hasOwnProperty('id')) {
                 ret['ret'] = true;
+                ret['msg'] = `SEARCH TAB: OK`;
                 ret['res'] = retOpenTab;
             } else {
                 ret['msg'] = retOpenTab;

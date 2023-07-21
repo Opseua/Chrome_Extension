@@ -1,68 +1,75 @@
-// let retGetXAppId = false
-// async function getXAppId() {
-//     try {
-//         const response = await fetch("https://www.instagram.com/adelar_santos_/", {
-//             "headers": {
-//                 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-//                 "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-//                 "sec-ch-prefers-color-scheme": "dark",
-//                 "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"",
-//                 "sec-ch-ua-full-version-list": "\"Not.A/Brand\";v=\"8.0.0.0\", \"Chromium\";v=\"114.0.5735.199\", \"Google Chrome\";v=\"114.0.5735.199\"",
-//                 "sec-ch-ua-mobile": "?0",
-//                 "sec-ch-ua-platform": "\"Windows\"",
-//                 "sec-ch-ua-platform-version": "\"15.0.0\"",
-//                 "sec-fetch-dest": "document",
-//                 "sec-fetch-mode": "navigate",
-//                 "sec-fetch-site": "none",
-//                 "sec-fetch-user": "?1",
-//                 "upgrade-insecure-requests": "1",
-//                 //"cookie": "dpr=1.25; ig_did=F66BF6CD-C1F8-4831-9E27-4C994B66893A; ig_nrcb=1; datr=_LqlZINp88m9HnZGIFGO2lA4; mid=ZKW6_wALAAEUS9Zxybqg1FXEZS2C; csrftoken=1tBgSan0IX4cDutrkWl64efOExEVQYzt; ds_user_id=2229804097; fbm_124024574287414=base_domain=.instagram.com; shbid=\"9407\\0542229804097\\0541721230309:01f73937a7258d6234d0eb9d23abc1e442f3d2e1158dbdda9e7124e6411fdac29f59b0f3\"; shbts=\"1689694309\\0542229804097\\0541721230309:01f7f2a455ee60ed45811bbbeafd8844f8883430c12b146a5a9876e17a8281ff4844d0b5\"; sessionid=2229804097%3AGglnprjcSY8Dur%3A7%3AAYev6OLN-CdWAe8x0E67zr-4YiIVtEeKc-thnpZkLJE; rur=\"VLL\\0542229804097\\0541721241957:01f7746cb6767a5c370a0508eef93894ef8502cb1bb245f50b3be5f367a4fab3121fc56b\""
-//             },
-//             "referrerPolicy": "strict-origin-when-cross-origin",
-//             "body": null,
-//             "method": "GET"
-//         });
+const { regex, fileRead, fileWrite, configStorage } = await import('./functions.js');
+const { api } = await import('./api.js');
 
-//         const status = response.status;
-//         const data = await response.text();
-//         const regex = /,"APP_ID":"(.*?)","IS_BUSINESS_DOMAIN":/;
-//         const match = data.match(regex);
-
-//         if (match && match[1]) {
-//             return match[1].replace(/\\/g, '');
-//         } else {
-//             return 'NAO ENCONTRADO';
-//         }
-
-//         console.log(status);
-//     } catch (error) {
-//         console.error('Erro ao fazer a requisição:', error);
+// const infApi1 = {
+//     url: `https://thetvapp.to/tv/wabc-new-york-abc-east-live-stream/`,
+//     method: 'GET',
+//     headers: {
+//         "cookie": "_ga=GA1.1.722422937.1689607052; XSRF-TOKEN=eyJpdiI6IjdOekRkL2NWWmVoSHo1N3pyY09IdEE9PSIsInZhbHVlIjoibklBenBJdW1sVndWRlhYRlpoTWk0ZVlPN1h0UHNaQlpDT2wxOG52OXA0MzJhV25tUHh0cFFJcGc4Um1pcVJFRVdXUzNYa213aXJGMXYwOHk0bktFT3p6SkRBZnNDdll4WTBKK1RrallBOUJNalpSdmk4RGQ0SUFMWHFTRlpLdDQiLCJtYWMiOiJiOThiNDllZDE5OTY1YWRmMjUxYWQ4M2FhYTZkMjZjYzNhNWQ4N2U5ZDc5YTU5ZDkxN2ZlMmJiMTY2NTUxYjUwIiwidGFnIjoiIn0%3D; tvnow_session=eyJpdiI6IkFwZWcxaGs0dFE3clpnTHE3c2NOVHc9PSIsInZhbHVlIjoiMXprRCtvWW5qQWZNR21aRHdrK21BRUowS3JRM3lMaVFSUWxNU3hMZzNnVFBFa0lZYWlSNDRYTmVFdklYa28xbmd6V1Uzbm9OTkpuNytudXRSalp4N2JBVDMyaDQ1NVFOdTFSVkwvbkRDMVFmcWt0a21vNTltR0xlTHRlRzJnbFIiLCJtYWMiOiI1YWYzMjk3NGRiYWIzNDIxOWFmNmU5NDFlNTVkNWI5MDUyYzBmYzAzZjJiZmExYmI3MDY1OGE2OGQ5MTNmYzkxIiwidGFnIjoiIn0%3D; _ga_KDJRXWJ0P0=GS1.1.1689832775.7.1.1689834279.0.0.0"
 //     }
-// }
+// };
+// const retApi1 = await api(infApi1);
+// const infRegex = { 'pattern': 'csrf-token" content="(.*?)">', 'text': retApi1.res.body }
+// const retRegex = regex(infRegex)
+
+// const infApi2 = {
+//     url: `https://thetvapp.to/token/WABCDT1/`,
+//     method: 'POST',
+//     headers: {
+//         "x-csrf-token": retRegex.res.text,
+//         "cookie": "_ga=GA1.1.722422937.1689607052; XSRF-TOKEN=eyJpdiI6IkZoM3pEd2Q2ZXRoYzc3V2VVZGszQUE9PSIsInZhbHVlIjoibFZEbThQQkdWSSs1anNiS3BzWDFUOFlDdmk2N1hrUVZoUk5Scm4vTFZzWTVud2NEcDNjYW5wQjVLYzlNVnNHSkxDUlNVTzhqT01TR3hiSUlaZXE3blE4RkxQYXQrUWUxMXZuYnU0UmhZS1hISUhoVEJzeTJiemtqZHQ2Snp1VjMiLCJtYWMiOiI1NjUxN2QyZjJmYTM0ZjE5MjAzYjdjMTQzOGExNTNiYWE3ODMxMzc1NzE3ZjJiMzM5MjUwMDhiMWQwMzUwNzQwIiwidGFnIjoiIn0%3D; tvnow_session=eyJpdiI6Imo1eHc0cmo5RHpsQm1RdzVKaEwrcGc9PSIsInZhbHVlIjoiKzcreDAwNlphdnhwZnpiSHRPMWt6bVFjOGlFYktqQ0tNdGpoc3VqbkpLdTZmSDFKd1JQOWg1UUdwQXkrSDg4a1JDdm5SYjdFMUR5V2xMTkhSMHl1dHlKYzFpRFpSZFZuVUg3amplSGZCQU1DZHhqZzM3Z1FFeU9kNDVCWmZtOS8iLCJtYWMiOiJjZGQ4NGVjOWJiYWNjZDY3ZDA5NjUxNjFkOWFkNzM0ZGU0MDFkZTIyNTlmZDFmMzM3YTFiNmY4Njk5NzdkNjA4IiwidGFnIjoiIn0%3D; _ga_KDJRXWJ0P0=GS1.1.1689832775.7.1.1689833133.0.0.0",
+//     }
+// };
+// const retApi2 = await api(infApi2);
+// console.log('x-csrf-token', retRegex.res.text)
+// console.log('url', retApi2.res.body)
 
 
-// retGetXAppId = await getXAppId();
-// console.log('Resultado fora da função:', retGetXAppId);
-
-// const { dateHour } = await import('./functions.js');
-// const RetDateHour = dateHour()
-// console.log(RetDateHour)
-
-const { random } = await import('./functions.js');
+import fs from 'fs'
+// const filePath = "D:/ARQUIVOS/33333333.txt";
+// const content = '2222';
+// const overwrite = false;
+// const flag = overwrite ? 'w' : 'a';
+// await fs.promises.writeFile(filePath, content, { flag });
 
 
-const arrProfiles = ["adelar_santos_", "lightbrotherz", "carolescavassini", "cafe_light_", "djtavinhotavares", "manoel_doa_teclados", "prmauriciorr"];
+const pasta = './src/resources/leads';
+import { readdir } from 'fs/promises';
 
-async function runLoop() {
-    while (arrProfiles.length > 0) {
-        console.log('Valor do índice 0:', arrProfiles[0]);
-        arrProfiles.shift();
+async function listarArquivos(pasta) {
+  try {
+    const files = await readdir(pasta); // Usa o fs com suporte a promessas
+    for (const file of files) {
+      //console.log(file);
+      const infFileRead = { 'file': `./src/resources/leads/${file}` }
+      const retFileRead = await fileRead(infFileRead)
+      const res = JSON.parse(retFileRead.res)
+      //console.log(res.data.user.username)
+
+      const use = res.data.user.username
+      const bio = JSON.stringify(res.data.user.biography_with_entities.raw_text)
+      const lin = JSON.stringify(res.data.user.bio_links[0]) ? JSON.stringify(res.data.user.bio_links[0].url) : null
+      const med = res.data.user.edge_owner_to_timeline_media.count
+      const fld = res.data.user.edge_followed_by.count
+      const flw = res.data.user.edge_follow.count
+      const nam = res.data.user.full_name
+      const pri = res.data.user.is_private
+      const ver = res.data.user.is_verified
+
+      const infFileWrite = {
+        'file': `src/resources/leadsResult/CSV.txt`,
+        'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
+        'text': `${use}=:=${bio}=:=${lin}=:=${med}=:=${fld}=:=${flw}=:=${nam}=:=${pri}=:=${ver}\n`
+      };
+      const retFileWrite = await fileWrite(infFileWrite);
+      //console.log(retFileWrite.ret);
+
+      console.log(retFileWrite.ret, use)
     }
-    
-    console.log("Loop concluído!");
+  } catch (err) {
+    console.error('Erro ao ler a pasta:', err);
+  }
 }
+listarArquivos(pasta);
 
-runLoop();
 
-
-//console.log('b', arrProfiles)

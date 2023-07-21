@@ -5,7 +5,10 @@ async function shortcutPressed(inf) {
   // ######################### ATALHO1
   if (inf.command == 'atalho_1') {
     console.log('ATALHO 1: EXECUTANDO');
-    command1(inf);
+    
+    //command1(inf);
+    const { leads } = await import('../resources/leads.js');
+    leads()
     return
   };
 

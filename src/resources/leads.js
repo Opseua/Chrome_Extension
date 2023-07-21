@@ -1,12 +1,21 @@
 const { notification } = await import('./notification.js');
 const { getCookies } = await import('./getCookies.js');
-const { tabSearch } = await import('./tabSearch.js');
-const { regex, fileRead, fileWrite, dateHour, random } = await import('./functions.js');
+const { regex, fileRead, fileWrite, dateHour, random, configStorage } = await import('./functions.js');
 const { api } = await import('./api.js');
 
 let retGetXAppId = false
 let stopLoop = false
 async function leads(inf) {
+
+    const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
+    const retConfigStorage = await configStorage(infConfigStorage)
+    console.log(2, retConfigStorage)
+
+
+
+
+
+    return
     let ret = { 'ret': false };
     try {
 
@@ -25,7 +34,7 @@ async function leads(inf) {
                         if (stopLoop) { break }
                         const infRandom = { 'min': 10, 'max': 20, 'msg': true }
                         const retRandom = await random(infRandom)
-                        await new Promise(resolve => setTimeout(resolve, retRandom));
+                        await new Promise(resolve => setTimeout(resolve, retRandom.res));
                         // ########################
                         let arrayPro = arrProfiles[0]
                         console.log(`RESTANTE: ${arrProfiles.length} = ${arrayPro}`)

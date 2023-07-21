@@ -41,80 +41,50 @@
 // const retApi = await api(infApi);
 // console.log(retApi)
 
-async function api(infOk) {
+async function api(inf) {
   let ret = { 'ret': false };
-
   try {
-
-    const inf = { url: infOk.url, method: infOk.method, headers: infOk.headers, body: infOk.body };
-
     if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
-
-
-      //        ####  ###  NAO USAR  ####  ###
-
-      // const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
-      // if (inf.headers) {
-      //   reqOpt['headers'] = inf.headers
-      // }
-      // if (inf.body && (inf.method == 'POST' || inf.method == 'PUT')) {
-      //   reqOpt['payload'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
-      // }
-      // const req = UrlFetchApp.fetch(inf.url, reqOpt);
-
-      // ret['ret'] = true;
-      // ret['msg'] = 'API: OK';
-      // ret['res'] = {
-      //   'code': req.getResponseCode(),
-      //   'headers': req.getAllHeaders(),
-      //   'body': req.getContentText()
-      // }
-
-    } else { // ######################################### NODEJS ou CHROME
-
-      if (inf.url.includes('instagram')) {
-
-        const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
-        if (inf.headers) {
-          reqOpt['headers'] = inf.headers
-        }
-        if (inf.body && (inf.method == 'POST' || inf.method == 'PUT')) {
-          reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
-        }
-        const req = await fetch(inf.url, reqOpt)
-
-        const resHeaders = {};
-        req.headers.forEach((value, name) => { resHeaders[name] = value; });
-        ret['ret'] = true;
-        ret['msg'] = 'API: OK';
-        ret['res'] = {
-          'code': req.status,
-          'headers': resHeaders,
-          'body': await req.text()
-        }
-
-      } else {
-
-        const req = await fetch(inf.url, {
-          method: inf.method,
-          body: inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
-          headers: inf.headers,
-          redirect: 'follow',
-          keepalive: true
-        });
-
-        ret['ret'] = true;
-        ret['msg'] = 'API: OK';
-        ret['res'] = {
-          'code': req.status,
-          'headers': resHeaders,
-          'body': await req.text()
-        }
-
+      const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
+      if (inf.headers) {
+        reqOpt['headers'] = inf.headers
       }
+      if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
+        reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
+      }
+      const req = UrlFetchApp.fetch(inf.url, reqOpt);
+      const resHeaders = req.getAllHeaders();
+      const resBody = req.getContentText();
+      ret['ret'] = true;
+      ret['msg'] = 'API: OK';
+      ret['res'] = {
+        'code': req.getResponseCode(),
+        'headers': resHeaders,
+        'body': resBody
+      }
+    } else { // ######################################### NODEJS ou CHROME
+      const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
+      if (inf.headers) {
+        reqOpt['headers'] = inf.headers
+      }
+      if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
+        reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
+      }
+      const req = await fetch(inf.url, reqOpt)
+      const resHeaders = {};
+      req.headers.forEach((value, name) => {
+        resHeaders[name] = value
+      })
+      const resBody = await req.text();
 
+      ret['ret'] = true;
+      ret['msg'] = 'API: OK';
+      ret['res'] = {
+        'code': req.status,
+        'headers': resHeaders,
+        'body': resBody
+      }
     }
-
   } catch (e) {
     ret['msg'] = `API: ERRO | ${e}`
   }

@@ -2,34 +2,33 @@
 // const retNodeOrBrowser = await nodeOrBrowser();
 // console.log(retNodeOrBrowser);
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -                   
-// const retFunction = await fileInf(new URL(import.meta.url).pathname);     ## CHROME NAO!
-// console.log(retFunction);
+// const infFileInf = { 'path': new URL(import.meta.url).pathname }      ## CHROME NAO!
+// const retFileInf = await fileInf(infFileInf);
+// console.log(retFileInf)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -       
 // const infFileWrite = {
 //     'file': `PASTAS 1/PASTA 2/arquivo.txt`,
 //     'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-//     'text': 'LINHA 1\nLINHA 2\nLINHA 3\n'
+//     'text': `LINHA 1\nLINHA 2\nLINHA 3\n`
 // };
 // const retFileWrite = await fileWrite(infFileWrite);
 // console.log(retFileWrite);
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -      
 // const infFileRead = { 'file': `D:/Downloads/Google Chrome/arquivo.txt` }
-// const infFileRead = { 'file': 'D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/resources/teste.txt' }
 // const retFileRead = await fileRead(infFileRead)
 // console.log(retFileRead)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -      
-//let infConfigStorage, retConfigStorage
-// infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-// retConfigStorage = await configStorage(infConfigStorage)
-// console.log(1, retConfigStorage)
+// const infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+// const retConfigStorage = await configStorage(infConfigStorage)
+// console.log(retConfigStorage)
 
-// infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-// retConfigStorage = await configStorage(infConfigStorage)
-// console.log(2, retConfigStorage)
+// const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
+// const retConfigStorage = await configStorage(infConfigStorage)
+// console.log(retConfigStorage)
 
-// infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
-// retConfigStorage = await configStorage(infConfigStorage)
-// console.log(3, retConfigStorage)
+// const infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
+// const retConfigStorage = await configStorage(infConfigStorage)
+// console.log(retConfigStorage)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -       
 // const RetDateHour = dateHour()
 // console.log(RetDateHour)
@@ -54,11 +53,15 @@
 //     console.log("Loop concluído!");
 // }
 // runLoop();
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// const infRegex = { 'pattern': 'UM(.*?)TRES', 'text': 'UMDOISTRES' }
+// const infRegex = { 'pattern': '*DOIS*', 'text': 'UMDOISTRES' }
+// const retRegex = regex(infRegex)
+// console.log(retRegex)
 
 async function nodeOrBrowser() {
     let ret = { 'ret': false }
     try {
-
         if (typeof process !== 'undefined') { // NODE
             ret['res'] = 'node'
         } else if (typeof window !== 'undefined') { // CHROME
@@ -68,10 +71,8 @@ async function nodeOrBrowser() {
         } else { // NAO IDENTIFICADO
             ret['res'] = 'NAO IDENTIFICADO'
         }
-
         ret['ret'] = true;
         ret['msg'] = 'NODE OR BROWSER: OK';
-
     } catch (e) {
         ret['msg'] = `NODE OR BROWSER: ERRO | ${e.message}`;
     }
@@ -82,11 +83,11 @@ async function nodeOrBrowser() {
 
 async function fileInf(inf) {
     let ret = { 'ret': false };
-    const path = await import('path');
-    const fs = await import('fs');
     try {
+        const path = await import('path');
+        const fs = await import('fs');
 
-        const parsedPath = path.parse(inf);
+        const parsedPath = path.parse(inf.path);
         const fileWithExtension = parsedPath.base;
         const fileWithoutExtension = parsedPath.name;
         let filesToSearch = ['package.json', 'package-lock.json', '.gitignore'];
@@ -108,11 +109,9 @@ async function fileInf(inf) {
             'fileExtension': parsedPath.ext,
             'parameterReceived': inf
         };
-
         ret['ret'] = true;
         ret['msg'] = 'FILE INF: OK';
         ret['res'] = retFileInf
-
     } catch (e) {
         ret['msg'] = `FILE INF: ERRO | ${e}`;
     }
@@ -124,7 +123,6 @@ async function fileInf(inf) {
 async function fileWrite(inf) {
     let ret = { 'ret': false };
     try {
-
         if (inf.file == undefined || inf.file == '') {
             ret['msg'] = `INFORMAR O "file"`;
         } else if (typeof inf.rewrite !== 'boolean') {
@@ -154,7 +152,8 @@ async function fileWrite(inf) {
                 // CHROME
                 let textOk = inf.text;
                 if (inf.rewrite) {
-                    const retFileRead = await fileRead(`D:/Downloads/Google Chrome/${inf.file}`)
+                    const infFileRead = { 'file': `D:/Downloads/Google Chrome/${inf.file}` }
+                    const retFileRead = await fileRead(infFileRead)
                     if (retFileRead.ret) { textOk = `${retFileRead.res}${textOk}` }
                 }
                 const blob = new Blob([textOk], { type: 'text/plain' });
@@ -164,23 +163,10 @@ async function fileWrite(inf) {
                     saveAs: false, // PERGUNTAR AO USUARIO ONDE SALVAR
                     conflictAction: 'overwrite' // overwrite (SUBSTITUIR) OU uniquify (REESCREVER→ ADICIONANDO (1), (2), (3)... NO FINAL)
                 };
-                chrome.downloads.download(downloadOptions, async function (downloadId) {
-                    const deleteListDownload = true;
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    if (deleteListDownload) {
-                        // EXCLUIR O DOWNLOAD DA LISTA DO CHROME
-                        chrome.downloads.erase({ id: downloadId }, function () {
-                            //console.log('Download excluído com sucesso');
-                        });
-                    } else {
-                        //console.log('Download não foi excluído');
-                    }
-                });
+                chrome.downloads.download(downloadOptions);
             }
-
             ret['ret'] = true;
             ret['msg'] = `FILE WRITE: OK`;
-
         }
     } catch (e) {
         ret['msg'] = `FILE WRITE: ERRO | ${e}`;
@@ -193,7 +179,6 @@ async function fileWrite(inf) {
 async function fileRead(inf) {
     let ret = { 'ret': false };
     try {
-
         let retFetch
         const retNodeOrBrowser = await nodeOrBrowser();
 
@@ -206,11 +191,9 @@ async function fileRead(inf) {
             retFetch = await fetch(`file:///${inf.file}`);
             retFetch = await retFetch.text();
         }
-
         ret['ret'] = true;
         ret['msg'] = `FILE READ: OK`;
         ret['res'] = retFetch;
-
     } catch (e) {
         ret['msg'] = `FILE READ: ERRO | ${e}`;
     }
@@ -222,7 +205,6 @@ async function fileRead(inf) {
 async function configStorage(inf) {
     let ret = { 'ret': false };
     try {
-
         const retNodeOrBrowser = await nodeOrBrowser();
 
         if (retNodeOrBrowser.res == 'chrome') { // ################## CHROME
@@ -334,9 +316,9 @@ async function configStorage(inf) {
         if (retNodeOrBrowser.res == 'node') { // ################## NODE
 
             const fs = await import('fs');
-            const { fileInf } = await import('./fileInf.js');
-            const retfileInf = await fileInf(new URL(import.meta.url).pathname);
-            const configPath = `${retfileInf.res.pathProject1}${inf.path}`
+            const infFileInf = { 'path': new URL(import.meta.url).pathname }
+            const retFileInf = await fileInf(infFileInf);
+            const configPath = `${retFileInf.res.pathProject1}${inf.path}`
             const configFile = fs.readFileSync(configPath);
             const config = JSON.parse(configFile);
 
@@ -395,7 +377,6 @@ async function configStorage(inf) {
             }
 
         }
-
     }
     catch (e) {
         ret['msg'] = `CONFIG STORAGE: ERRO | ${e}`;
@@ -419,7 +400,6 @@ function dateHour() { // NAO POR COMO 'async'!!!
             'mil': String(date.getMilliseconds()).padStart(3, '0'),
             'tim': Date.now()
         }
-
         ret['ret'] = true;
         ret['msg'] = `DATE HOUR: OK`;
         ret['res'] = retDate;
@@ -432,20 +412,66 @@ function dateHour() { // NAO POR COMO 'async'!!!
     return ret
 }
 
-function regex(a, b) {
-    const c = b.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
-    return new RegExp(`^${c}$`).test(a);
+function regex(inf) {
+    let ret = { 'ret': false };
+    try {
+        if (inf.pattern.includes('(.*?)')) {
+            const result = inf.text.match(inf.pattern);
+            if (result && result[1].length > 0) {
+                ret['ret'] = true;
+                ret['msg'] = `REGEX: OK`;
+                ret['res'] = {
+                    'bolean': true,
+                    'text': result[1]
+                }
+            } else {
+                ret['ret'] = true;
+                ret['msg'] = `REGEX: ERRO | PADRAO '${inf.pattern}' NAO ENCONTRADO`;
+                ret['res'] = { 'bolean': false }
+            }
+        } else {
+            const pattern = inf.pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+            const result = new RegExp(`^${pattern}$`).test(inf.text);
+            if (result) {
+                ret['ret'] = true;
+                ret['msg'] = `REGEX: OK`;
+                ret['res'] = {
+                    'bolean': true,
+                    'text': 'TEXTO POSSUI O PADRAO'
+                }
+            } else {
+                ret['ret'] = true;
+                ret['msg'] = `REGEX: ERRO | PADRAO '${inf.pattern}' NAO ENCONTRADO`;
+                ret['res'] = { 'bolean': false }
+            }
+        }
+    } catch (e) {
+        ret['msg'] = `REGEX: ERRO | ${e}`
+    }
+
+    if (!ret.ret) { console.log(ret.msg) }
+    return ret
 }
 
 async function random(inf) {
-    const min = inf.min;
-    const max = inf.max;
-    const msg = inf.msg ? true : false
-    const ret = Math.floor(Math.random() * (max - min + 1) + min) * 1000;
-    if (msg) {
-        console.log(`AGUARDANDO: ${ret / 1000} SEGUNDOS`);
+    let ret = { 'ret': false };
+    try {
+        const min = inf.min;
+        const max = inf.max;
+        const message = inf.msg ? true : false
+        const number = Math.floor(Math.random() * (max - min + 1) + min) * 1000;
+        if (message) {
+            console.log(`AGUARDANDO: ${number / 1000} SEGUNDOS`);
+        }
+        ret['ret'] = true;
+        ret['msg'] = `RANDON: OK`;
+        ret['res'] = number;
+    } catch (e) {
+        ret['msg'] = `RANDON: ERRO | ${e}`
     }
-    return ret;
+
+    if (!ret.ret) { console.log(ret.msg) }
+    return ret
 }
 
 export { nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex, random };
