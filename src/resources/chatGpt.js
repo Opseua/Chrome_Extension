@@ -15,7 +15,7 @@ const { tabSearch } = await import('./tabSearch.js');
 async function oraAi(inf) {
     let ret = { 'ret': false };
 
-    const retConfigJson = await fetch('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/config.json');
+    const retConfigJson = await fetch('D:/ARQUIVOS/BIBLIOTECAS/PROJETOS/Chrome_Extension/src/config.json');
     const config = await retConfigJson.json();
     const par = { 'search': config.Referer, 'key': 'oraAiCookie', 'input': inf.input }
     async function fun1() {

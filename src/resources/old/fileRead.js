@@ -1,5 +1,5 @@
 // const { fileRead } = await import('./fileRead.js');
-// const retFileRead = await fileRead('D:/ARQUIVOS/BIBLIOTECAS/1_PROJETOS/Chrome_Extension/src/teste.txt')
+// const retFileRead = await fileRead('D:/ARQUIVOS/BIBLIOTECAS/PROJETOS/Chrome_Extension/src/teste.txt')
 // console.log(retFileRead)
 
 async function fileRead(inf) {
