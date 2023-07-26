@@ -37,8 +37,4 @@ async function getPage(inf) {
 
 export { getPage }
 
-if (typeof window !== 'undefined') { // CHOME
-    window['getPage'] = getPage;
-} else if (typeof global !== 'undefined') { // NODE
-    global['getPage'] = getPage;
-}
+window['getPage'] = getPage;

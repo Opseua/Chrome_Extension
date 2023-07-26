@@ -10,7 +10,7 @@ chrome.downloads.onChanged.addListener(function (inf) {
                     // console.log(`EVENTO: download do NTFY concluído\n`, downloadItem)
                     setTimeout(function () {
                         chrome.downloads.erase({ id: downloadItem.id });
-                        // console.log('DOWNLOAD REMOVIDO DA LISTA');
+                        console.log('DOWNLOAD REMOVIDO DA LISTA');
                         URL.revokeObjectURL(downloadItem.url);
                     }, 5000);
                 }

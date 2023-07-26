@@ -1,18 +1,18 @@
-// const { notification } = await import('./notification.js');
+// await import('./notification.js');
 // let infNotification =
 // {
-//   'duration': 5,
+//   'duration': 2,
 //   'type': 'basic',
 //   'title': 'ERRO: Na área de transferência',
 //   'message': `texto`,
 //   'iconUrl': undefined,
 //   'buttons': [{ 'title': 'BOTÃO 1' }, { 'title': 'BOTÃO 2' }],
 // };
-// notification(infNotification)
+// const retNotification = await notification(infNotification)
+// console.log(retNotification)
 
 async function notification(infOk) {
     let ret = { 'ret': false }
-
     try {
         let inf
         if (!infOk) { inf = {} } else { inf = infOk };
@@ -27,7 +27,7 @@ async function notification(infOk) {
 
         const json =
         {
-            duration: ((inf.duration === undefined) || !(inf.duration > 0)) ? `5` : `${inf.duration}`,
+            duration: ((inf.duration === undefined) || !(inf.duration > 0)) ? 5 : inf.duration,
             type: 'basic',
             iconUrl: `data:image/png;base64,${imgBase64}`,
             title: ((inf.title === undefined) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
@@ -73,8 +73,4 @@ async function notification(infOk) {
 
 export { notification }
 
-if (typeof window !== 'undefined') { // CHOME
-    window['notification'] = notification;
-} else if (typeof global !== 'undefined') { // NODE
-    global['notification'] = notification;
-}
+window['notification'] = notification;

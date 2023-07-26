@@ -1,9 +1,11 @@
-const { api } = await import('./api.js');
+// await import('./sniffer.js');
+// await sniffer()
+await import('./functions.js');
 
 async function sniffer(inf) {
     let ret = { 'ret': false, 'res': {} };
     const filters = { urls: ["<all_urls>"] };
-    let newReqSend = true
+    let newReqSend = false
     let newResBlock = false
     try {
         chrome.webRequest.onBeforeRequest.addListener(lisOnBeforeRequest, filters, ['requestBody']);
@@ -12,20 +14,16 @@ async function sniffer(inf) {
         async function lisOnBeforeRequest(inf) { eventListener(inf, 'onBeforeRequest') }
         async function lisOnBeforeSendHeaders(inf) { eventListener(inf, 'onBeforeSendHeaders') }
         async function lisOnCompleted(inf) { eventListener(inf, 'onCompleted') }
-        function regex(a, b) {
-            const c = b.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
-            return new RegExp(`^${c}$`).test(a);
-        }
         const sendPri = {
             'arrUrl': [
                 'http://18.119.140.20*', 'https://ntfy.sh/', 'https://jsonformatter.org/json-parser',
-                'https://notepad.pw/save', 'https://www.instagram.com/api/v1/users/web_profile_info/*'
+                'https://notepad.pw/save', 'https://ora.ai*'
 
             ]
         };
 
         async function eventListener(infOk, eventType) {
-            if (!!sendPri.arrUrl.find(m => regex(infOk.url, m))) {
+            if (!!sendPri.arrUrl.find(inf => regex({ 'simple': true, 'pattern': inf, 'text': infOk.url }))) {
 
                 if (eventType == 'onBeforeRequest') {
                     if (infOk.requestBody && infOk.requestBody.raw && infOk.requestBody.raw[0].hasOwnProperty('bytes')) {
@@ -35,6 +33,7 @@ async function sniffer(inf) {
                         ret.res['requestBodyType'] = 'formData';
                         ret.res['requestBody'] = infOk.requestBody.formData;
                     }
+                    ret.res['type'] = infOk.type; // 'main_frame' (requisicao inicial 'doc')
                 }
 
                 if (eventType == 'onBeforeSendHeaders') {
@@ -51,19 +50,24 @@ async function sniffer(inf) {
                 }
 
                 if (eventType == 'onCompleted' && !newResBlock) {
-                    if ((infOk.statusCode !== 200)) { console.log('DEU ERRO'); }
+                    // if ((infOk.statusCode !== 200)) {
+                    //     console.log('DEU ERRO', 'CODE:', infOk.statusCode, infOk.url)
+                    // }
                     ret.res['statusCode'] = infOk.statusCode;
                     ret['ret'] = true;
-                    console.log(ret)
+                    if (ret.res.type == 'main_frame') {
+                        console.log(ret)
+                    }
 
                     if (newReqSend) {
-                        const hea = {};
-                        for (let header of ret.res.requestHeaders) { hea[header.name] = header.value; }
-                        hea['naoInterceptar'] = 'naoInterceptar';
-                        const infApi = { 'url': ret.res.url, 'method': ret.res.method, 'headers': hea };
-                        if (typeof ret.res.requestBody !== 'undefined') { infApi['body'] = ret.res.requestBody }
-                        const retApi = await api(infApi);
-                        console.log(retApi.res.body)
+                        console.log('REENVIAR REQUISICAO')
+                        // const hea = {};
+                        // for (let header of ret.res.requestHeaders) { hea[header.name] = header.value; }
+                        // hea['naoInterceptar'] = 'naoInterceptar';
+                        // const infApi = { 'url': ret.res.url, 'method': ret.res.method, 'headers': hea };
+                        // if (typeof ret.res.requestBody !== 'undefined') { infApi['body'] = ret.res.requestBody }
+                        // const retApi = await api(infApi);
+                        // console.log(retApi.res.body)
                     }
 
                     ret = { 'ret': false, 'res': {} }
@@ -85,8 +89,4 @@ async function sniffer(inf) {
 
 export { sniffer }
 
-if (typeof window !== 'undefined') { // CHOME
-    window['sniffer'] = sniffer;
-} else if (typeof global !== 'undefined') { // NODE
-    global['sniffer'] = sniffer;
-}
+window['sniffer'] = sniffer;

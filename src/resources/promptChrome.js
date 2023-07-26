@@ -1,10 +1,9 @@
-// const { promptChrome } = await import('./promptChrome.js');
+// await import('./promptChrome.js');
 // const retPromptChrome = await promptChrome(`GALAXY`);
 // console.log(retPromptChrome)
 
 async function promptChrome(inf) {
     let ret = { 'ret': false }
-
     try {
         const text = (inf) ? `${inf} | Digite o comando:` : `Digite o comando:`;
         let retPrompt = prompt(`${text}`);
@@ -23,8 +22,4 @@ async function promptChrome(inf) {
 
 export { promptChrome }
 
-if (typeof window !== 'undefined') { // CHOME
-    window['promptChrome'] = promptChrome;
-} else if (typeof global !== 'undefined') { // NODE
-    global['promptChrome'] = promptChrome;
-}
+window['promptChrome'] = promptChrome;

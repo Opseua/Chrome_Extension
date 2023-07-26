@@ -1,9 +1,8 @@
-const { api } = await import('./api.js');
+// await import('./model.js');
 
 async function model(inf) {
     let ret = { 'ret': false };
     try {
-
         // CODIGO AQUI
         ret['ret'] = true;
         ret['msg'] = `MODEL: OK`;

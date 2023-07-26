@@ -1,23 +1,24 @@
-// const { regex, fileRead, fileWrite } = await import('./functions.js');
+// await import('./functions.js');
+
 // const retNodeOrBrowser = await nodeOrBrowser();
 // console.log(retNodeOrBrowser);
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -                   
-// const infFileInf = { 'path': new URL(import.meta.url).pathname }      ## CHROME NAO!
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -  
+// const infFileInf = { 'path': new URL(import.meta.url).pathname } // ## CHROME NAO!
 // const retFileInf = await fileInf(infFileInf);
 // console.log(retFileInf)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -       
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
 // const infFileWrite = {
 //     'file': `PASTAS 1/PASTA 2/arquivo.txt`,
 //     'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
 //     'text': `LINHA 1\nLINHA 2\nLINHA 3\n`
-// };
-// const retFileWrite = await fileWrite(infFileWrite);
-// console.log(retFileWrite);
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -      
-// const infFileRead = { 'file': `D:/Downloads/Google Chrome/arquivo.txt` }
+//   };
+//   const retFileWrite = await fileWrite(infFileWrite);
+//   console.log(retFileWrite);
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// const infFileRead = { 'file': `D:/Downloads/Google Chrome/PASTAS 1/PASTA 2/arquivo.txt` }
 // const retFileRead = await fileRead(infFileRead)
 // console.log(retFileRead)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -      
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -  
 // const infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
 // const retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
@@ -29,33 +30,32 @@
 // const infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
 // const retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -       
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -  
 // const RetDateHour = dateHour()
 // console.log(RetDateHour)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
-// const infRandom = { 'min': 10, 'max': 50, 'msg': true }
+// const infRandom = { 'min': 3, 'max': 10, 'await': true }
 // const retRandom = await random(infRandom)
 // console.log(retRandom)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
 // const loop = ['A', 'B', 'C', 'D', 'E'];
 // let i = 0;
 // async function runLoop() {
-//     while (i < loop.length) {
-//         i++;
-//         const infRandom = { 'min': 1, 'max': 5, 'msg': true }
-//         const retRandom = await random(infRandom)
-//         await new Promise(resolve => setTimeout(resolve, retRandom));
-//         console.log(loop[i - 1]);
-//         if (loop[i - 1] == 'C') {
-//             break
-//         }
+//   while (i < loop.length) {
+//     i++;
+//     console.log(loop[i - 1]);
+//     if (loop[i - 1] == 'C') {
+//       break
 //     }
-//     console.log("Loop concluído!");
+//     const infRandom = { 'min': 1, 'max': 5, 'await': true }
+//     const retRandom = await random(infRandom)
+//   }
+//   console.log("Loop concluído!");
 // }
 // runLoop();
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
-// const infRegex = { 'pattern': 'UM(.*?)TRES', 'text': 'UMDOISTRES' }
-// const infRegex = { 'pattern': '*DOIS*', 'text': 'UMDOISTRES' }
+// const infRegex = { 'simple': true, 'pattern': 'UM(.*?)TRES', 'text': 'UMDOISTRES' }
+// const infRegex = { 'simple': true, 'pattern': '*DOIS*', 'text': 'UMDOISTRES' }
 // const retRegex = regex(infRegex)
 // console.log(retRegex)
 
@@ -169,7 +169,7 @@ async function nodeOrBrowser() {
     return ret
 }
 
-async function fileInf(inf) {
+async function fileInf(inf) { // ## CHROME NAO!
     let ret = { 'ret': false };
     try {
         const path = await import('path');
@@ -520,17 +520,25 @@ function regex(inf) {
         } else {
             const pattern = inf.pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
             const result = new RegExp(`^${pattern}$`).test(inf.text);
-            if (result) {
-                ret['ret'] = true;
-                ret['msg'] = `REGEX: OK`;
-                ret['res'] = {
-                    'bolean': true,
-                    'text': 'TEXTO POSSUI O PADRAO'
+            if (inf.simple) {
+                if (result) {
+                    return true
+                } else {
+                    return false
                 }
             } else {
-                ret['ret'] = true;
-                ret['msg'] = `REGEX: ERRO | PADRAO '${inf.pattern}' NAO ENCONTRADO`;
-                ret['res'] = { 'bolean': false }
+                if (result) {
+                    ret['ret'] = true;
+                    ret['msg'] = `REGEX: OK`;
+                    ret['res'] = {
+                        'bolean': true,
+                        'text': 'TEXTO POSSUI O PADRAO'
+                    }
+                } else {
+                    ret['ret'] = true;
+                    ret['msg'] = `REGEX: ERRO | PADRAO '${inf.pattern}' NAO ENCONTRADO`;
+                    ret['res'] = { 'bolean': false }
+                }
             }
         }
     } catch (e) {
@@ -546,14 +554,15 @@ async function random(inf) {
     try {
         const min = inf.min;
         const max = inf.max;
-        const message = inf.msg ? true : false
+        const message = inf.await ? true : false
         const number = Math.floor(Math.random() * (max - min + 1) + min) * 1000;
         if (message) {
             console.log(`AGUARDANDO: ${number / 1000} SEGUNDOS`);
+            await new Promise(resolve => setTimeout(resolve, number));
         }
         ret['ret'] = true;
         ret['msg'] = `RANDON: OK`;
-        ret['res'] = number;
+        ret['res'] = number / 1000;
     } catch (e) {
         ret['msg'] = `RANDON: ERRO | ${e}`
     }

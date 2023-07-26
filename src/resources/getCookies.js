@@ -1,19 +1,14 @@
-// const { getCookies } = await import('./getCookies.js');
-// const infGetCookies = { 'search': `casa - Pesquisa Google` }
+// await import('./getCookies.js');
+// const infGetCookies = { 'url': retTabSearch.res.url }
 // const retGetCookies = await getCookies(infGetCookies)
 // console.log(retGetCookies);
-
-const { tabSearch } = await import('./tabSearch.js');
 
 async function getCookies(inf) {
     let ret = { 'ret': false };
     try {
-        const rettabSearch = await tabSearch(inf)
-        if (!rettabSearch.ret) { return ret }
-
         const cookiesPromise = new Promise((resolve) => {
             chrome.cookies.getAll({
-                "url": rettabSearch.res.url
+                'url': inf.url
             }, cookies => {
                 const retCookies = JSON.stringify(cookies)
                 resolve(retCookies);
@@ -40,8 +35,4 @@ async function getCookies(inf) {
 
 export { getCookies };
 
-if (typeof window !== 'undefined') { // CHOME
-    window['getCookies'] = getCookies;
-} else if (typeof global !== 'undefined') { // NODE
-    global['getCookies'] = getCookies;
-}
+window['getCookies'] = getCookies;

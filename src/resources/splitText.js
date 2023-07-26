@@ -1,9 +1,13 @@
+// await import('./splitText.js');
+// const infSplitText = { 'maxLength': 30, 'text': "Lorem Ipsum is simply dummy text of the printing and typesetting industry" }
+// const retSplitText = await splitText(infSplitText)
+// console.log(retSplitText)
+
 async function splitText(inf) {
     let ret = { 'ret': false }
-
     try {
-        const text = inf.replace(/\n/g, '\\n');
-        const maxLength = 30;
+        const text = inf.text.replace(/\n/g, '\\n');
+        const maxLength = inf.maxLength;
         const chunks = [];
         let currentChunk = '';
 

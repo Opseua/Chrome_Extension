@@ -1,14 +1,11 @@
-console.log('rodando')
-await import('./chatGpt.js');
-await import('./tabSearch.js');
-
 async function teste() {
+  console.log('rodando')
 
-  const infChatGpt = { 'provider': 'ora.ai', 'input': `Qual a idade da Vênus?` }
-  const retChatGpt = await chatGpt(infChatGpt)
-  console.log(retChatGpt)
+  await import('./translate.js');
+  const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': 'Hi, what your name?' };
+  const retTranslate = await translate(infTranslate)
+  console.log(retTranslate)
 
 }
 teste()
-
 

@@ -1,24 +1,22 @@
-// const { clipboard } = await import('./clipboard.js');
-// let infClipboard = { 'value': 'Esse é o valor'};
-// clipboard(infClipboard)
+// await import('./clipboard.js');
+// const infClipboard = { 'value': 'Esse é o valor' };
+// const retClipboard = await clipboard(infClipboard)
+// console.log(retClipboard)
 
 async function clipboard(inf) {
   let ret = { 'ret': false };
-
-  let text = inf.value
   try {
+    let text = inf.value
     // OBJETO INDENTADO EM TEXTO BRUTO
     if (typeof text === 'object' && text !== null) {
       text = JSON.stringify(text, null, 2);
     }
-
     const element = document.createElement('textarea');
     element.value = text;
     document.body.appendChild(element);
     element.select();
     document.execCommand('copy');
     document.body.removeChild(element);
-
     ret['ret'] = true;
     ret['msg'] = 'CLIPBOARD: OK';
   } catch (e) {
@@ -31,9 +29,5 @@ async function clipboard(inf) {
 
 export { clipboard }
 
-if (typeof window !== 'undefined') { // CHOME
-  window['clipboard'] = clipboard;
-} else if (typeof global !== 'undefined') { // NODE
-  global['clipboard'] = clipboard;
-}
+window['clipboard'] = clipboard;
 

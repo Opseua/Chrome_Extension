@@ -2,7 +2,6 @@
 // const infChatGpt = { 'provider': 'ora.ai', 'input': `Qual a idade da Vênus?` }
 // const retChatGpt = await chatGpt(infChatGpt)
 // console.log(retChatGpt)
-
 await import('./functions.js');
 await import('./tabSearch.js');
 await import('./getCookies.js');
@@ -10,9 +9,7 @@ await import('./getCookies.js');
 async function chatGpt(inf) {
     let ret = { 'ret': false };
     try {
-
         let infConfigStorage, retConfigStorage
-
         if (inf.provider == 'ora.ai') {
             infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'chatGptOra.ai' }
             retConfigStorage = await configStorage(infConfigStorage)
@@ -30,7 +27,7 @@ async function chatGpt(inf) {
                     console.log(2)
                     return ret
                 }
-                const infGetCookies = { 'search': retTabSearch.res.id }
+                const infGetCookies = { 'url': retTabSearch.res.url }
                 const retGetCookies = await getCookies(infGetCookies)
                 console.log(retGetCookies);
                 if (!retGetCookies.ret) {
@@ -79,8 +76,6 @@ async function chatGpt(inf) {
                 ret['msg'] = `CHAT GPT AI: ERRO | ${res.error.message}`;
             }
         }
-
-
     } catch (e) {
         ret['msg'] = `CHAT GPT AI: ERRO | ${e}`
     }

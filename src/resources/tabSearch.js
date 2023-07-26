@@ -1,8 +1,8 @@
-// const { tabSearch } = await import('./tabSearch.js');
+// await import('./tabSearch.js');
 // const infTabSearch = { 'search': '*google*', 'openIfNotExist': true, 'active':true, 'pinned': false, 'url': 'https://www.google.com/'  } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // const retTabSearch = await tabSearch(infTabSearch)
 // console.log(retTabSearch)
-const { regex } = await import('./functions.js');
+await import('./functions.js');
 
 async function openTab(inf) {
     try {
@@ -94,7 +94,7 @@ async function tabSearch(inf) {
             } else if (typeof inf.search === 'number') { // ID ret
                 for (const obj of result.res) {
                     const infRegex = { 'pattern': inf.search.toString(), 'text': obj.id.toString() }
-                    const retRegex = regex(infRegex)
+                    const retRegex =  regex(infRegex)
                     if (retRegex.res.bolean) {
                         ret['res'] = {
                             'id': obj.id,
@@ -111,7 +111,7 @@ async function tabSearch(inf) {
                 for (const obj of result.res) {
                     let infRegex, retRegex
                     infRegex = { 'pattern': inf.search, 'text': obj.url } // URL ret
-                    retRegex = regex(infRegex)
+                    retRegex =  regex(infRegex)
                     if (retRegex.res.bolean) {
                         ret['res'] = {
                             'id': obj.id,
@@ -124,7 +124,7 @@ async function tabSearch(inf) {
                         break;
                     }
                     infRegex = { 'pattern': inf.search, 'text': obj.title } // TITULO ret
-                    retRegex = regex(infRegex)
+                    retRegex =  regex(infRegex)
                     if (retRegex.res.bolean) {
                         ret['res'] = {
                             'id': obj.id,

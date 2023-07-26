@@ -1,11 +1,10 @@
-// const { addListener, globalObject } = await import('./globalObject.js');
-
+// await import('./globalObject.js');
 // addListener(monitorGlobalObject);
 // async function monitorGlobalObject(value) {
-//     console.log('Valor de globalObject alterado: 1', value.inf);
+//   console.log('Valor de globalObject alterado: 1', value.inf);
 // }
 
-// await new Promise(resolve => setTimeout(resolve, (1500)));
+// await new Promise(resolve => setTimeout(resolve, (2500)));
 // globalObject.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
 
 console.log('globalObject RODANDO')

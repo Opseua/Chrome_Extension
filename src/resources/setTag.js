@@ -63,8 +63,4 @@ async function setTag(inf) {
 
 export { setTag }
 
-if (typeof window !== 'undefined') { // CHOME
-    window['setTag'] = setTag;
-} else if (typeof global !== 'undefined') { // NODE
-    global['setTag'] = setTag;
-}
+window['setTag'] = setTag;
