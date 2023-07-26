@@ -1,5 +1,5 @@
 // await import('./promptChrome.js');
-// const retPromptChrome = await promptChrome(`GALAXY`);
+// const retPromptChrome = await promptChrome(`NOME DO COMANDO`);
 // console.log(retPromptChrome)
 
 async function promptChrome(inf) {

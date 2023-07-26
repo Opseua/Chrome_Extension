@@ -12,7 +12,7 @@ async function command1(inf) {
   try {
     //console.log('COMANDO 1: EXECUTANDO');
 
-    const retPromptChrome = await promptChrome(`GALAXY`);
+    const retPromptChrome = await promptChrome(`NOME DO COMANDO`);
     if (retPromptChrome.ret) {
 
       const retFileRead = JSON.parse(retPromptChrome.res)
@@ -71,7 +71,7 @@ async function command1(inf) {
               'duration': 2,
               'type': 'basic',
               'title': 'AGUARDE....',
-              'message': `Traduzindo e alterado o comentário`,
+              'message': `Traduzindo e alterando o comentário`,
               'iconUrl': undefined,
               'buttons': [],
             };

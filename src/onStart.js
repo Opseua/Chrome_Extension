@@ -5,8 +5,8 @@ await import('./resources/functions.js');
 await import('./actions/shortcutPressed.js');
 
 // EXCLUIR DOWNLOAD DA LISTA SE FOR DO NTFY E TIVER '[KEEP]' NO TITULO DO ARQUIVO
-chrome.downloads.onChanged.addListener(function (inf) {
-    if (inf.state && inf.state.current === "complete") {
+chrome.downloads.onChanged.addListener(async function (...inf) {
+    if (inf[0].state && inf[0].state.current === "complete") {
         chrome.downloads.search({ id: inf.id }, async function (inf) {
             if (inf.length > 0) {
                 const downloadItem = inf[0];
