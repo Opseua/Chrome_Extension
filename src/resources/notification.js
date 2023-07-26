@@ -72,3 +72,9 @@ async function notification(infOk) {
 }
 
 export { notification }
+
+if (typeof window !== 'undefined') { // CHOME
+    window['notification'] = notification;
+} else if (typeof global !== 'undefined') { // NODE
+    global['notification'] = notification;
+}

@@ -1,94 +1,98 @@
-// const { oraAi } = await import('./chatGpt.js');
-// async function chat() {
-//     const infOraAi = { 'input': `Qual a idade do dono do Google?` }
-//     const retOraAi = await oraAi(infOraAi)
-//     console.log(retOraAi)
-// }
-// chat()
+// await import('./chatGpt.js');
+// const infChatGpt = { 'provider': 'ora.ai', 'input': `Qual a idade da Vênus?` }
+// const retChatGpt = await chatGpt(infChatGpt)
+// console.log(retChatGpt)
 
-const { api } = await import('./api.js');
-const { getCookies } = await import('./getCookies.js');
-const { storageSet } = await import('./storage.js');
-const { configStorage } = await import('./functions.js');
-const { tabSearch } = await import('./tabSearch.js');
+await import('./functions.js');
+await import('./tabSearch.js');
+await import('./getCookies.js');
 
-async function oraAi(inf) {
+async function chatGpt(inf) {
     let ret = { 'ret': false };
+    try {
 
-    const retConfigJson = await fetch('D:/ARQUIVOS/PROJETOS/Chrome_Extension/src/config.json');
-    const config = await retConfigJson.json();
-    const par = { 'search': config.Referer, 'key': 'oraAiCookie', 'input': inf.input }
-    async function fun1() {
-        const infGetCookies = { 'search': par.search };
-        const retGetCookies = await getCookies(infGetCookies)
-        const infFun2 = { 'key': par.key, 'value': retGetCookies.res.concat };
-        await fun2(infFun2)
-    }
+        let infConfigStorage, retConfigStorage
 
-    async function fun2(inf) {
-        const infStorageSet = { 'key': inf.key, 'value': inf.value };
-        const retStorageSet = await storageSet(infStorageSet);
-        const infRodar = { 'input': par.input, 'cookie': retStorageSet.res }
-        return await rodarOraAi(infRodar)
-    }
+        if (inf.provider == 'ora.ai') {
+            infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'chatGptOra.ai' }
+            retConfigStorage = await configStorage(infConfigStorage)
+            console.log(retConfigStorage)
+            if (!retConfigStorage.ret) {
+                console.log(1)
+                return ret
+            }
+            if (!retConfigStorage.res['cookie']) {
+                console.log(0)
+                const infTabSearch = { 'search': retConfigStorage.res['Referer'], 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': retConfigStorage.res['Referer'] } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
+                const retTabSearch = await tabSearch(infTabSearch)
+                console.log(retTabSearch)
+                if (!retTabSearch.ret) {
+                    console.log(2)
+                    return ret
+                }
+                const infGetCookies = { 'search': retTabSearch.res.id }
+                const retGetCookies = await getCookies(infGetCookies)
+                console.log(retGetCookies);
+                if (!retGetCookies.ret) {
+                    console.log(3)
+                    return ret
+                }
+                retConfigStorage.res['cookie'] = retGetCookies.res.concat;
+                infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage.res }
+                const retSETConfigStorage = await configStorage(infConfigStorage)
+                console.log(retSETConfigStorage)
+                if (!retSETConfigStorage.ret) {
+                    console.log(3)
+                    return ret
+                }
+            }
 
-    const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'oraAiCookie', 'search': config.Referer, 'input': inf.input }
-    const retConfigStorage = await configStorage(infConfigStorage);
-    if (!retConfigStorage.ret) {
-        const rettabSearch = await tabSearch(infConfigStorage)
-        if (!rettabSearch.ret) {
-            chrome.tabs.create({ url: infConfigStorage.search, active: false }, (novaAba) => {
-                chrome.tabs.update(novaAba.id, { pinned: true });
-                chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo) {
-                    if (tabId === novaAba.id && changeInfo.status === 'complete') {
-                        await fun1()
-                    }
-                });
-            });
-        } else {
-            await fun1()
+            const infApi = {
+                url: 'https://ora.ai/api/conversation',
+                method: 'POST',
+                headers: {
+                    "accept": "*/*",
+                    "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+                    "content-type": "application/json",
+                    "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"",
+                    "sec-ch-ua-mobile": "?0",
+                    "sec-ch-ua-platform": "\"Windows\"",
+                    "sec-fetch-dest": "empty",
+                    "sec-fetch-mode": "cors",
+                    "sec-fetch-site": "same-origin",
+                    "Referer": retConfigStorage.res['Referer'],
+                    "cookie": retConfigStorage.res['cookie'],
+                    "Referrer-Policy": "strict-origin-when-cross-origin"
+                },
+                body: { "chatbotId": retConfigStorage.res['chatbotId'], "input": inf.input, "conversationId": retConfigStorage.res['conversationId'], "userId": retConfigStorage.res['userId'], "provider": "OPEN_AI", "config": false, "includeHistory": true }
+            }
+
+            const retApi = await api(infApi);
+            if (!retApi.ret) { return ret }
+
+            const res = JSON.parse(retApi.res.body);
+            if ('response' in res) {
+                ret['ret'] = true;
+                ret['msg'] = `CHAT GPT AI: OK`;
+                ret['res'] = res.response;
+            } else {
+                ret['msg'] = `CHAT GPT AI: ERRO | ${res.error.message}`;
+            }
         }
-    } else {
-        const infRodar = { 'input': infConfigStorage.input, 'cookie': retConfigStorage.res }
-        return await rodarOraAi(infRodar)
+
+
+    } catch (e) {
+        ret['msg'] = `CHAT GPT AI: ERRO | ${e}`
     }
 
-    async function rodarOraAi(inf) {
-        const infApi = {
-            url: 'https://ora.ai/api/conversation',
-            method: 'POST',
-            headers: {
-                "accept": "*/*",
-                "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-                "content-type": "application/json",
-                "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"",
-                "sec-ch-ua-mobile": "?0",
-                "sec-ch-ua-platform": "\"Windows\"",
-                "sec-fetch-dest": "empty",
-                "sec-fetch-mode": "cors",
-                "sec-fetch-site": "same-origin",
-                "Referer": config.Referer,
-                "cookie": inf.cookie,
-                "Referrer-Policy": "strict-origin-when-cross-origin"
-            },
-            body: { "chatbotId": config.chatbotId, "input": inf.input, "conversationId": config.conversationId, "userId": config.userId, "provider": "OPEN_AI", "config": false, "includeHistory": true }
-        };
-        const retApi = await api(infApi);
-        if (!retApi.ret) { return ret }
-
-        const res = JSON.parse(retApi.res.body);
-        if ('response' in res) {
-            ret['ret'] = true;
-            ret['msg'] = `GPT ORA AI: OK`;
-            ret['res'] = res.response;
-        } else {
-            ret['msg'] = `GPT ORA AI: ERRO | ${res.error.message}`;
-        }
-
-        if (!ret.ret) { console.log(ret.msg) }
-        return ret
-    }
-
+    if (!ret.ret) { console.log(ret.msg) }
+    return ret
 }
 
-export { oraAi }
+export { chatGpt }
+
+if (typeof window !== 'undefined') { // CHOME
+    window['chatGpt'] = chatGpt;
+} else if (typeof global !== 'undefined') { // NODE
+    global['chatGpt'] = chatGpt;
+}

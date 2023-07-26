@@ -18,3 +18,9 @@ async function model(inf) {
 }
 
 export { model }
+
+if (typeof window !== 'undefined') { // CHOME
+    window['model'] = model;
+} else if (typeof global !== 'undefined') { // NODE
+    global['model'] = model;
+}

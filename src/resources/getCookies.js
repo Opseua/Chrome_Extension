@@ -39,3 +39,9 @@ async function getCookies(inf) {
 }
 
 export { getCookies };
+
+if (typeof window !== 'undefined') { // CHOME
+    window['getCookies'] = getCookies;
+} else if (typeof global !== 'undefined') { // NODE
+    global['getCookies'] = getCookies;
+}

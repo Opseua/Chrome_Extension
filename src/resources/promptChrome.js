@@ -22,3 +22,9 @@ async function promptChrome(inf) {
 }
 
 export { promptChrome }
+
+if (typeof window !== 'undefined') { // CHOME
+    window['promptChrome'] = promptChrome;
+} else if (typeof global !== 'undefined') { // NODE
+    global['promptChrome'] = promptChrome;
+}

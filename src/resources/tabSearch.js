@@ -37,7 +37,7 @@ async function tabSearch(inf) {
     let ret = { 'ret': false };
     try {
         let result = {};
-        if (inf.search == 'ATIVA') {
+        if (inf.search == 'ATIVA') { // ATIVA search
             result = await new Promise(resolve => {
                 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
                     if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {
@@ -78,7 +78,7 @@ async function tabSearch(inf) {
             })
         }
 
-        if (result.hasOwnProperty('res')) {
+        if (result.hasOwnProperty('res')) { // ATIVA ret
             if (inf.search == 'ATIVA') {
                 ret['res'] = {
                     'id': result.res.id,
@@ -88,10 +88,10 @@ async function tabSearch(inf) {
                     'index': result.res.index,
                     'pinned': result.res.pinned
                 };
-            } else if (inf.search == 'TODAS') {
+            } else if (inf.search == 'TODAS') { // TODAS ret
                 ret['res'] = result.res;
 
-            } else if (typeof inf.search === 'number') {
+            } else if (typeof inf.search === 'number') { // ID ret
                 for (const obj of result.res) {
                     const infRegex = { 'pattern': inf.search.toString(), 'text': obj.id.toString() }
                     const retRegex = regex(infRegex)
@@ -109,8 +109,22 @@ async function tabSearch(inf) {
                 }
             } else {
                 for (const obj of result.res) {
-                    const infRegex = { 'pattern': inf.search, 'text': obj.url }
-                    const retRegex = regex(infRegex)
+                    let infRegex, retRegex
+                    infRegex = { 'pattern': inf.search, 'text': obj.url } // URL ret
+                    retRegex = regex(infRegex)
+                    if (retRegex.res.bolean) {
+                        ret['res'] = {
+                            'id': obj.id,
+                            'title': obj.title,
+                            'url': obj.url,
+                            'active': obj.active,
+                            'index': obj.index,
+                            'pinned': obj.pinned
+                        };
+                        break;
+                    }
+                    infRegex = { 'pattern': inf.search, 'text': obj.title } // TITULO ret
+                    retRegex = regex(infRegex)
                     if (retRegex.res.bolean) {
                         ret['res'] = {
                             'id': obj.id,

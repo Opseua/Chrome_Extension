@@ -1,18 +1,13 @@
-//await import('./clearConsole.js');
+// await import('./clearConsole.js');
+await import('./resources/teste.js');
 console.log('onStart');
 await import('./resources/functions.js');
-await import('./resources/tabSearch.js');
-await import('./resources/getPage.js');
+// await import('./resources/tabSearch.js');
+// await import('./resources/getPage.js');
+// await import('./actions/shortcutPressed.js');
+// await import('./resources/notification.js');
+// await import('./resources/chatGpt.js');
 
-
-// const { shortcutPressed } = await import('./actions/shortcutPressed.js');
-// const { notification } = await import('./resources/notification.js');
-// const { oraAi } = await import('./resources/chatGpt.js');
-// const { getCookies } = await import('./resources/getCookies.js');
-// const { storageSet, storageGet, storageDel } = await import('./resources/storage.js');
-// const { nodeOrBrowser } = await import('./resources/functions.js');
-// const { sniffer } = await import('./resources/sniffer.js');
-// const { api } = await import('./resources/api.js');
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {
@@ -128,68 +123,14 @@ async function client(inf) {
 }
 //client()
 
-const infTabSearch = { 'search': 'ATIVA', 'openIfNotExist': false, 'active': true, 'pinned': false, 'url': 'https://www.google.com/' } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
-setTimeout(async function () {
-    const retTabSearch = await tabSearch(infTabSearch)
-    // console.log(retTabSearch)
-    const infGetPage = { 'id': retTabSearch.res.id }
-    const retGetPage = await getPage(infGetPage)
-    console.log(retGetPage)
-}, 3000)
-
-// async function savePage(inf) {
-//     chrome.pageCapture.saveAsMHTML({ 'tabId': inf.id }, async function (data) {
-//         if (data) {
-//             console.log('OK')
-//             try {
-//                 const blob = new Blob([data], { type: 'application/x-mimearchive' });
-//                 const reader = new FileReader();
-//                 reader.onloadend = async function () {
-//                     const textContent = reader.result;
-//                     const infFileWrite = {
-//                         'file': `${inf.title}.html`,
-//                         'rewrite': false, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-//                         'text': textContent
-//                     };
-//                     const retFileWrite = await fileWrite(infFileWrite);
-//                     console.log(retFileWrite);
-//                 };
-//                 reader.readAsText(blob);
-//             } catch (e) {
-//                 console.log('ERRO 1')
-//             }
-//         } else {
-//             console.log('ERRO 2')
-//         }
-//     });
-// }
 
 
-let infNotification =
-{
-    'duration': 5,
-    'type': 'basic',
-    'title': 'ERRO: Na área de transferência',
-    'message': `texto`,
-    'iconUrl': undefined,
-    'buttons': [{ 'title': 'BOTÃO 1' }, { 'title': 'BOTÃO 2' }],
-};
-// setTimeout(function () {
-//   notification(infNotification)
-// }, 3000)
-
-const infFileWrite = {
-    'file': `PASTAS 1/PASTA 2/arquivo[KEE].txt`,
-    'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-    'text': 'LINHA 1\nLINHA 2\nLINHA 3\n'
-};
-//const retFileWrite = await fileWrite(infFileWrite);
-//console.log(retFileWrite);
-
+// const infTabSearch = { 'search': 'ATIVA', 'openIfNotExist': false, 'active': true, 'pinned': false, 'url': 'https://www.google.com/' } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // setTimeout(async function () {
-//   //const retFileWrite = await fileWrite(infFileWrite);
-//   //console.log(retFileWrite);
+//     const retTabSearch = await tabSearch(infTabSearch)
+//     // console.log(retTabSearch)
+//     const infGetPage = { 'id': retTabSearch.res.id }
+//     const retGetPage = await getPage(infGetPage)
+//     console.log(retGetPage)
 // }, 3000)
-
-
 

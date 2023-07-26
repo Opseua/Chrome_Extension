@@ -31,3 +31,9 @@ async function clipboard(inf) {
 
 export { clipboard }
 
+if (typeof window !== 'undefined') { // CHOME
+  window['clipboard'] = clipboard;
+} else if (typeof global !== 'undefined') { // NODE
+  global['clipboard'] = clipboard;
+}
+

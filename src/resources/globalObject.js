@@ -31,3 +31,10 @@ async function globalChanged(i) {
 
 export { globalObject, addListener };
 
+if (typeof window !== 'undefined') { // CHOME
+    window['globalObject'] = globalObject;
+    window['addListener'] = addListener;
+} else if (typeof global !== 'undefined') { // NODE
+    global['globalObject'] = globalObject;
+    global['addListener'] = addListener;
+}

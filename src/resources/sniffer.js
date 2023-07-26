@@ -84,3 +84,9 @@ async function sniffer(inf) {
 }
 
 export { sniffer }
+
+if (typeof window !== 'undefined') { // CHOME
+    window['sniffer'] = sniffer;
+} else if (typeof global !== 'undefined') { // NODE
+    global['sniffer'] = sniffer;
+}
