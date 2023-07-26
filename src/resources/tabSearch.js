@@ -165,3 +165,9 @@ async function tabSearch(inf) {
 }
 
 export { tabSearch }
+
+if (typeof window !== 'undefined') { // CHOME
+    window['tabSearch'] = tabSearch;
+} else if (typeof global !== 'undefined') { // NODE
+    global['tabSearch'] = tabSearch;
+}

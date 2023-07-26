@@ -1,9 +1,9 @@
-await import('./clearConsole.js');
+//await import('./clearConsole.js');
 console.log('onStart');
 await import('./resources/functions.js');
-await import('./resources/savePage.js');
+await import('./resources/tabSearch.js');
+await import('./resources/getPage.js');
 
-await savePage()
 
 // const { shortcutPressed } = await import('./actions/shortcutPressed.js');
 // const { notification } = await import('./resources/notification.js');
@@ -129,39 +129,40 @@ async function client(inf) {
 //client()
 
 const infTabSearch = { 'search': 'ATIVA', 'openIfNotExist': false, 'active': true, 'pinned': false, 'url': 'https://www.google.com/' } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
-// setTimeout(async function () {
-//   const retTabSearch = await tabSearch(infTabSearch)
-//   console.log(retTabSearch)
-//   const infSavePage = { 'id': retTabSearch.res.id, 'title': retTabSearch.res.title }
-//   savePage(infSavePage)
-// }, 3000)
+setTimeout(async function () {
+    const retTabSearch = await tabSearch(infTabSearch)
+    // console.log(retTabSearch)
+    const infGetPage = { 'id': retTabSearch.res.id }
+    const retGetPage = await getPage(infGetPage)
+    console.log(retGetPage)
+}, 3000)
 
-async function savePage(inf) {
-    chrome.pageCapture.saveAsMHTML({ 'tabId': inf.id }, async function (data) {
-        if (data) {
-            console.log('OK')
-            try {
-                const blob = new Blob([data], { type: 'application/x-mimearchive' });
-                const reader = new FileReader();
-                reader.onloadend = async function () {
-                    const textContent = reader.result;
-                    const infFileWrite = {
-                        'file': `${inf.title}.html`,
-                        'rewrite': false, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-                        'text': textContent
-                    };
-                    const retFileWrite = await fileWrite(infFileWrite);
-                    console.log(retFileWrite);
-                };
-                reader.readAsText(blob);
-            } catch (e) {
-                console.log('ERRO 1')
-            }
-        } else {
-            console.log('ERRO 2')
-        }
-    });
-}
+// async function savePage(inf) {
+//     chrome.pageCapture.saveAsMHTML({ 'tabId': inf.id }, async function (data) {
+//         if (data) {
+//             console.log('OK')
+//             try {
+//                 const blob = new Blob([data], { type: 'application/x-mimearchive' });
+//                 const reader = new FileReader();
+//                 reader.onloadend = async function () {
+//                     const textContent = reader.result;
+//                     const infFileWrite = {
+//                         'file': `${inf.title}.html`,
+//                         'rewrite': false, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
+//                         'text': textContent
+//                     };
+//                     const retFileWrite = await fileWrite(infFileWrite);
+//                     console.log(retFileWrite);
+//                 };
+//                 reader.readAsText(blob);
+//             } catch (e) {
+//                 console.log('ERRO 1')
+//             }
+//         } else {
+//             console.log('ERRO 2')
+//         }
+//     });
+// }
 
 
 let infNotification =
@@ -189,7 +190,6 @@ const infFileWrite = {
 //   //const retFileWrite = await fileWrite(infFileWrite);
 //   //console.log(retFileWrite);
 // }, 3000)
-
 
 
 
