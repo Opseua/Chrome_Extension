@@ -571,7 +571,21 @@ async function random(inf) {
     return ret
 }
 
-export { api, nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex, random };
+// ############### GLOBAL OBJECT ###############
+const data = { inf: false };
+const listeners = new Set();
+const globalObject = new Proxy(data, {
+    set(target, key, value) {
+        target[key] = value; globalChanged(value);
+        listeners.forEach(listener => listener(target)); return true
+    }
+});
+function addListener(listener) { listeners.add(listener) }
+function removeListener(listener) { listeners.delete(listener) }
+async function globalChanged(i) { if (i.alert !== false) { console.log('globalObject ALTERADO →', i) } }
+// ############### ###############
+
+export { api, nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex, random, globalObject, addListener };
 
 if (typeof window !== 'undefined') { // CHOME
     window['api'] = api;
@@ -583,6 +597,8 @@ if (typeof window !== 'undefined') { // CHOME
     window['dateHour'] = dateHour;
     window['regex'] = regex;
     window['random'] = random;
+    window['globalObject'] = globalObject;
+    window['addListener'] = addListener;
 } else if (typeof global !== 'undefined') { // NODE
     global['api'] = api;
     global['nodeOrBrowser'] = nodeOrBrowser;
@@ -593,6 +609,8 @@ if (typeof window !== 'undefined') { // CHOME
     global['dateHour'] = dateHour;
     global['regex'] = regex;
     global['random'] = random;
+    global['globalObject'] = globalObject;
+    global['addListener'] = addListener;
 }
 
 

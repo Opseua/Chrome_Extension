@@ -1,10 +1,15 @@
 async function teste() {
   console.log('rodando')
 
-  await import('./translate.js');
-  const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': 'Hi, what your name?' };
-  const retTranslate = await translate(infTranslate)
-  console.log(retTranslate)
+await import('./functions.js');
+// addListener(monitorGlobalObject);
+// async function monitorGlobalObject(value) {
+//   console.log('Valor de globalObject alterado: 1', value.inf);
+// }
+
+
+await new Promise(resolve => setTimeout(resolve, (2500)));
+globalObject.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
 
 }
 teste()
