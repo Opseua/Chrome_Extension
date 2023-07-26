@@ -58,6 +58,9 @@
 // const infRegex = { 'simple': true, 'pattern': '*DOIS*', 'text': 'UMDOISTRES' }
 // const retRegex = regex(infRegex)
 // console.log(retRegex)
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// await new Promise(resolve => setTimeout(resolve, (2500)));
+// globalObject.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
 
 async function api(inf) {
     let ret = { 'ret': false };

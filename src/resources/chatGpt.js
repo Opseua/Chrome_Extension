@@ -2,6 +2,7 @@
 // const infChatGpt = { 'provider': 'ora.ai', 'input': `Qual a idade da Vênus?` }
 // const retChatGpt = await chatGpt(infChatGpt)
 // console.log(retChatGpt)
+
 await import('./functions.js');
 await import('./tabSearch.js');
 await import('./getCookies.js');
@@ -9,13 +10,13 @@ await import('./getCookies.js');
 async function chatGpt(inf) {
     let ret = { 'ret': false };
     try {
+
         let infConfigStorage, retConfigStorage
+
         if (inf.provider == 'ora.ai') {
             infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'chatGptOra.ai' }
             retConfigStorage = await configStorage(infConfigStorage)
-            console.log(retConfigStorage)
             if (!retConfigStorage.ret) {
-                console.log(1)
                 return ret
             }
             if (!retConfigStorage.res['cookie']) {
@@ -24,14 +25,12 @@ async function chatGpt(inf) {
                 const retTabSearch = await tabSearch(infTabSearch)
                 console.log(retTabSearch)
                 if (!retTabSearch.ret) {
-                    console.log(2)
                     return ret
                 }
-                const infGetCookies = { 'url': retTabSearch.res.url }
+                const infGetCookies = { 'search': retTabSearch.res.id }
                 const retGetCookies = await getCookies(infGetCookies)
                 console.log(retGetCookies);
                 if (!retGetCookies.ret) {
-                    console.log(3)
                     return ret
                 }
                 retConfigStorage.res['cookie'] = retGetCookies.res.concat;
@@ -39,7 +38,6 @@ async function chatGpt(inf) {
                 const retSETConfigStorage = await configStorage(infConfigStorage)
                 console.log(retSETConfigStorage)
                 if (!retSETConfigStorage.ret) {
-                    console.log(3)
                     return ret
                 }
             }
@@ -76,6 +74,7 @@ async function chatGpt(inf) {
                 ret['msg'] = `CHAT GPT AI: ERRO | ${res.error.message}`;
             }
         }
+
     } catch (e) {
         ret['msg'] = `CHAT GPT AI: ERRO | ${e}`
     }

@@ -1,13 +1,27 @@
-// await import('./clearConsole.js');
-await import('./resources/teste.js');
+//await import('./clearConsole.js');
 console.log('onStart');
+// await import('./resources/teste.js');
 await import('./resources/functions.js');
-// await import('./resources/tabSearch.js');
-// await import('./resources/getPage.js');
-// await import('./actions/shortcutPressed.js');
-// await import('./resources/notification.js');
-// await import('./resources/chatGpt.js');
+await import('./actions/shortcutPressed.js');
 
+// EXCLUIR DOWNLOAD DA LISTA SE FOR DO NTFY E TIVER '[KEEP]' NO TITULO DO ARQUIVO
+chrome.downloads.onChanged.addListener(function (inf) {
+    if (inf.state && inf.state.current === "complete") {
+        chrome.downloads.search({ id: inf.id }, async function (inf) {
+            if (inf.length > 0) {
+                const downloadItem = inf[0];
+                if (downloadItem.byExtensionName === 'NTFY' && !downloadItem.filename.includes('[KEEP]')) {
+                    // console.log(`EVENTO: download do NTFY concluído\n`, downloadItem)
+                    setTimeout(function () {
+                        chrome.downloads.erase({ id: downloadItem.id });
+                        console.log('DOWNLOAD REMOVIDO DA LISTA');
+                        URL.revokeObjectURL(downloadItem.url);
+                    }, 5000);
+                }
+            }
+        });
+    }
+});
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function () {
@@ -15,35 +29,12 @@ chrome.browserAction.onClicked.addListener(async function () {
 });
 
 // ######################### ATALHO PRESSIONADO
-chrome.commands.onCommand.addListener(async function (command) {
-
-    // identificar comando do atalho
-    function getShortcutForCommand(commandName, callback) {
-        chrome.commands.getAll(function (commands) {
-            for (let i = 0; i < commands.length; i++) {
-                if (commands[i].name === commandName) {
-                    callback(commands[i].shortcut);
-                    return;
-                }
-            } callback(null);
-        });
+chrome.commands.onCommand.addListener(async function (...inf) {
+    //console.log('BACKGROUND: ATALHO PRESSIONADO')
+    const infShortcutPressed = {
+        'shortcut': inf[0]
     }
-    // identificar teclas pressionadas
-    const shortcutKey = await new Promise(function (resolve, reject) {
-        getShortcutForCommand(command, function (shortcut) {
-            resolve(shortcut);
-        });
-    });
-
-    const infShortcutPressed =
-    {
-        'atalho': shortcutKey,
-        'command': command
-    }
-    //console.log('BACKGROUND: ATALHO PRESSIONADO ' + infShortcutPressed.atalho);
-
     shortcutPressed(infShortcutPressed);
-
 });
 
 // *************************
@@ -123,14 +114,4 @@ async function client(inf) {
 }
 //client()
 
-
-
-// const infTabSearch = { 'search': 'ATIVA', 'openIfNotExist': false, 'active': true, 'pinned': false, 'url': 'https://www.google.com/' } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
-// setTimeout(async function () {
-//     const retTabSearch = await tabSearch(infTabSearch)
-//     // console.log(retTabSearch)
-//     const infGetPage = { 'id': retTabSearch.res.id }
-//     const retGetPage = await getPage(infGetPage)
-//     console.log(retGetPage)
-// }, 3000)
 
