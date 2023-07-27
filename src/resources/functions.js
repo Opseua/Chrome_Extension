@@ -593,7 +593,6 @@ export { api, nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHo
 if (typeof window !== 'undefined') { // CHOME
     window['api'] = api;
     window['nodeOrBrowser'] = nodeOrBrowser;
-    window['fileInf'] = fileInf;
     window['fileWrite'] = fileWrite;
     window['fileRead'] = fileRead;
     window['configStorage'] = configStorage;
@@ -603,9 +602,9 @@ if (typeof window !== 'undefined') { // CHOME
     window['globalObject'] = globalObject;
     window['addListener'] = addListener;
 } else if (typeof global !== 'undefined') { // NODE
+    global['fileInf'] = fileInf;
     global['api'] = api;
     global['nodeOrBrowser'] = nodeOrBrowser;
-    global['fileInf'] = fileInf;
     global['fileWrite'] = fileWrite;
     global['fileRead'] = fileRead;
     global['configStorage'] = configStorage;

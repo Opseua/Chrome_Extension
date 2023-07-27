@@ -20,9 +20,9 @@ async function command1(inf) {
       if (!retFileRead.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
         infNotification =
         {
-          'duration': 5,
+          'duration': 3,
           'type': 'basic',
-          'title': 'Não tem a resposta!',
+          'title': '❌ Não tem a resposta!',
           'message': `Avaliar manualmente`,
           'iconUrl': undefined,
           'buttons': [],
@@ -34,7 +34,7 @@ async function command1(inf) {
 
         const resultList = retFileRead.tasks[0].taskData.resultSet.resultList;
         const testQuestionInformation = retFileRead.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
-
+        let not = true
         const res = await Promise.all(resultList.map(async (v, index) => {
           const idTask = [v.surveyKeys['193']];
           let resultado = null
@@ -66,16 +66,19 @@ async function command1(inf) {
 
           let comentario1, comentario2
           if (comentario !== null) {
-            const infNotification2 =
-            {
-              'duration': 2,
-              'type': 'basic',
-              'title': 'AGUARDE....',
-              'message': `Traduzindo e alterando o comentário`,
-              'iconUrl': undefined,
-              'buttons': [],
-            };
-            notification(infNotification2)
+            if (not) {
+              not = false
+              const infNotification2 =
+              {
+                'duration': 2,
+                'type': 'basic',
+                'title': '✅ AGUARDE....',
+                'message': `Traduzindo e alterando o comentário`,
+                'iconUrl': undefined,
+                'buttons': [],
+              };
+              notification(infNotification2)
+            }
 
             const infTranslate1 = { 'source': 'auto', 'target': 'pt', 'text': comentario };
             const retTranslate1 = await translate(infTranslate1)

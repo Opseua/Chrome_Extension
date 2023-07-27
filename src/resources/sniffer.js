@@ -4,6 +4,7 @@ await import('./functions.js');
 
 async function sniffer(inf) {
     let ret = { 'ret': false, 'res': {} };
+    console.log('sniffer rodando')
     const filters = { urls: ["<all_urls>"] };
     let newReqSend = false
     let newResBlock = false

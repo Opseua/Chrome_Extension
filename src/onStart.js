@@ -82,7 +82,7 @@ async function client(inf) {
                 console.error(`BACKGROUND: ERRO W1 | ${error.message}`);
             });
         }
-        web1();
+        //web1();
 
         let ws2;
         async function web2() {
