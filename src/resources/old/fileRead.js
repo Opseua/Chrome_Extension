@@ -11,7 +11,7 @@ async function fileRead(inf) {
         ret['msg'] = `FILE READ: OK`;
         ret['res'] = await retFetch.text();
     } catch (e) {
-        ret['msg'] = `FILE READ: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }

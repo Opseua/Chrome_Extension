@@ -149,7 +149,7 @@ async function configStorage(inf) {
                         fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
                     }
                 } catch (e) {
-                    ret['msg'] = `CONFIG SET: ERRO | ${e}`;
+                    ret['msg'] = regexE({ 'e': e }).res;
                 }
             }
 
@@ -167,7 +167,7 @@ async function configStorage(inf) {
                         }
                     }
                 } catch (e) {
-                    ret['msg'] = `CONFIG GET: ERRO | ${e}`;
+                    ret['msg'] = regexE({ 'e': e }).res;
                 }
             }
 
@@ -186,7 +186,7 @@ async function configStorage(inf) {
                         }
                     }
                 } catch (e) {
-                    ret['msg'] = `CONFIG DEL: ERRO | ${e}`;
+                    ret['msg'] = regexE({ 'e': e }).res;
                 }
             }
 
@@ -194,7 +194,7 @@ async function configStorage(inf) {
 
     }
     catch (e) {
-        ret['msg'] = `CONFIG STORAGE: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }

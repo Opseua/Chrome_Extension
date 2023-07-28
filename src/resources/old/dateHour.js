@@ -22,7 +22,7 @@ function dateHour() { // NAO POR COMO 'async'!!!
         ret['res'] = retDate;
     }
     catch (e) {
-        ret['msg'] = `DATE HOUR: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }

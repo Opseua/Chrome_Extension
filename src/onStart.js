@@ -120,7 +120,7 @@ async function client(inf) {
         ret['msg'] = `CLIENT: OK`;
 
     } catch (e) {
-        ret['msg'] = `CLIENT: ERRO | ${e}`
+        ret['msg'] = regexE({ 'e': e }).res
     }
 
     if (!ret.ret) { console.log(ret.msg) }

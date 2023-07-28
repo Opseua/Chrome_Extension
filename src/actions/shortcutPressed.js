@@ -19,7 +19,7 @@ async function shortcutPressed(inf) {
     }
 
   } catch (e) {
-    ret['msg'] = `SHORTCUT PRESSED: ERRO | ${e}`
+    ret['msg'] = regexE({ 'e': e }).res
   }
 
   if (!ret.ret) { console.log(ret.msg) }

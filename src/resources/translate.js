@@ -26,7 +26,7 @@ async function translate(inf) {
         }
 
     } catch (e) {
-        ret['msg'] = `TRANSLATE: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }

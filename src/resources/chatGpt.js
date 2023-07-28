@@ -76,7 +76,7 @@ async function chatGpt(inf) {
         }
 
     } catch (e) {
-        ret['msg'] = `CHAT GPT AI: ERRO | ${e}`
+        ret['msg'] = regexE({ 'e': e }).res
     }
 
     if (!ret.ret) { console.log(ret.msg) }

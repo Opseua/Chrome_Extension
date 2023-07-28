@@ -86,7 +86,7 @@ async function api(inf) {
       }
     }
   } catch (e) {
-    ret['msg'] = `API: ERRO | ${e}`
+    ret['msg'] = regexE({ 'e': e }).res
   }
 
   // if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
@@ -121,7 +121,7 @@ async function api(inf) {
   //     ret['msg'] = 'API: OK';
   //     ret['res'] = await req.text();
   //   } catch (e) {
-  //     ret['msg'] = `API: ERRO | ${e}`;
+  //     ret['msg'] = regexE({ 'e': e }).res;
   //   }
   // }
 

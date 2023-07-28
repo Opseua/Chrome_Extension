@@ -20,7 +20,7 @@ async function clipboard(inf) {
     ret['ret'] = true;
     ret['msg'] = 'CLIPBOARD: OK';
   } catch (e) {
-    ret['msg'] = `CLIPBOARD: ERRO | ${e}`;
+    ret['msg'] = regexE({ 'e': e }).res;
   }
 
   if (!ret.ret) { console.log(ret.msg) }

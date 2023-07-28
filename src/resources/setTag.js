@@ -54,7 +54,7 @@ async function setTag(inf) {
         ret['msg'] = 'SET TAG: OK';
         ret['res'] = retSetTag;
     } catch (e) {
-        ret['msg'] = `SET TAG: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }

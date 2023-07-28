@@ -107,7 +107,7 @@ async function api(inf) {
             }
         }
     } catch (e) {
-        ret['msg'] = `API: ERRO | ${e}`
+        ret['msg'] = regexE({ 'e': e }).res
     }
 
     if (!ret.ret) { console.log(ret.msg) }
@@ -168,7 +168,7 @@ async function fileInf(inf) { // ## CHROME NAO!
         ret['msg'] = 'FILE INF: OK';
         ret['res'] = retFileInf
     } catch (e) {
-        ret['msg'] = `FILE INF: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }
@@ -224,7 +224,7 @@ async function fileWrite(inf) {
             ret['msg'] = `FILE WRITE: OK`;
         }
     } catch (e) {
-        ret['msg'] = `FILE WRITE: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }
@@ -250,7 +250,7 @@ async function fileRead(inf) {
         ret['msg'] = `FILE READ: OK`;
         ret['res'] = retFetch;
     } catch (e) {
-        ret['msg'] = `FILE READ: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }
@@ -390,7 +390,7 @@ async function configStorage(inf) {
                         fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
                     }
                 } catch (e) {
-                    ret['msg'] = `CONFIG SET: ERRO | ${e}`;
+                    ret['msg'] = regexE({ 'e': e }).res;
                 }
             }
 
@@ -408,7 +408,7 @@ async function configStorage(inf) {
                         }
                     }
                 } catch (e) {
-                    ret['msg'] = `CONFIG GET: ERRO | ${e}`;
+                    ret['msg'] = regexE({ 'e': e }).res;
                 }
             }
 
@@ -427,14 +427,14 @@ async function configStorage(inf) {
                         }
                     }
                 } catch (e) {
-                    ret['msg'] = `CONFIG DEL: ERRO | ${e}`;
+                    ret['msg'] = regexE({ 'e': e }).res;
                 }
             }
 
         }
     }
     catch (e) {
-        ret['msg'] = `CONFIG STORAGE: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }
@@ -460,7 +460,7 @@ function dateHour() { // NAO POR COMO 'async'!!!
         ret['res'] = retDate;
     }
     catch (e) {
-        ret['msg'] = `DATE HOUR: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }
@@ -509,7 +509,7 @@ function regex(inf) {
             }
         }
     } catch (e) {
-        ret['msg'] = `REGEX: ERRO | ${e}`
+        ret['msg'] = regexE({ 'e': e }).res
     }
 
     if (!ret.ret) { console.log(ret.msg) }
@@ -531,7 +531,7 @@ async function random(inf) {
         ret['msg'] = `RANDON: OK`;
         ret['res'] = number / 1000;
     } catch (e) {
-        ret['msg'] = `RANDON: ERRO | ${e}`
+        ret['msg'] = regexE({ 'e': e }).res
     }
 
     if (!ret.ret) { console.log(ret.msg) }
@@ -626,7 +626,7 @@ if (typeof window !== 'undefined') { // CHOME
 //         ret['res'] = Number(response.data.values[0][0]);
 
 //     } catch (e) {
-//         ret['msg'] = `LAST LIN: ERRO | ${e}`
+//         ret['msg'] = regexE({ 'e': e }).res
 //     }
 
 //     if (!ret.ret) { console.log(ret.msg) }
@@ -645,7 +645,7 @@ if (typeof window !== 'undefined') { // CHOME
 //         ret['res'] = response.data.values;
 
 //     } catch (e) {
-//         ret['msg'] = `DATA GET: ERRO | ${e}`
+//         ret['msg'] = regexE({ 'e': e }).res
 //     }
 
 //     if (!ret.ret) { console.log(ret.msg) }
@@ -669,7 +669,7 @@ if (typeof window !== 'undefined') { // CHOME
 //         ret['msg'] = `DATA SEND: OK`;
 
 //     } catch (e) {
-//         ret['msg'] = `DATA SEND: ERRO | ${e}`
+//         ret['msg'] = regexE({ 'e': e }).res
 //     }
 
 //     if (!ret.ret) { console.log(ret.msg) }
@@ -734,7 +734,7 @@ if (typeof window !== 'undefined') { // CHOME
 
 //         }
 //     } catch (e) {
-//         ret['msg'] = `FUNCTIONS: ERRO | ${e}`
+//         ret['msg'] = regexE({ 'e': e }).res
 //     }
 
 //     if (!ret.ret) { console.log(ret.msg) }

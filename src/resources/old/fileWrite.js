@@ -68,7 +68,7 @@ async function fileWrite(inf) {
             ret['ret'] = true;
             ret['msg'] = `FILE WRITE: OK`;
         } catch (e) {
-            ret['msg'] = `FILE WRITE: ERRO | ${e}`;
+            ret['msg'] = regexE({ 'e': e }).res;
         }
     }
 

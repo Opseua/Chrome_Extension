@@ -9,7 +9,7 @@ async function model(inf) {
         ret['res'] = `resposta aqui`;
 
     } catch (e) {
-        ret['msg'] = `MODEL: ERRO | ${e}`
+        ret['msg'] = regexE({ 'e': e }).res
     }
 
     if (!ret.ret) { console.log(ret.msg) }

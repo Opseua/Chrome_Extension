@@ -78,7 +78,7 @@ async function sniffer(inf) {
         }
 
     } catch (e) {
-        ret['msg'] = `SNIFFER: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
         chrome.webRequest.onBeforeRequest.removeListener(eventListener, filters, ['requestBody']);
         chrome.webRequest.onBeforeSendHeaders.removeListener(eventListener, filters, ['requestHeaders']);
         chrome.webRequest.onCompleted.removeListener(eventListener, filters, ['responseHeaders']);

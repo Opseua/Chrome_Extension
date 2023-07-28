@@ -64,7 +64,7 @@ async function notification(infOk) {
         ret['ret'] = true;
         ret['msg'] = 'NOTIFICATION: OK';
     } catch (e) {
-        ret['msg'] = `NOTIFICATION: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }

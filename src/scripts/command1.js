@@ -126,7 +126,7 @@ async function command1(inf) {
     ret['msg'] = `COMMAND 1: OK`;
 
   } catch (e) {
-    ret['msg'] = `COMMAND 1: ERRO | ${e}`
+    ret['msg'] = regexE({ 'e': e }).res
     infNotification =
     {
       'duration': 5,

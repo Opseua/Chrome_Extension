@@ -158,7 +158,7 @@ async function tabSearch(inf) {
         }
 
     } catch (e) {
-        ret['msg'] = `SEARCH TAB: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) {

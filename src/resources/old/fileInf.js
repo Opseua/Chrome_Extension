@@ -35,7 +35,7 @@ async function fileInf(inf) {
         ret['msg'] = 'FILE INF: OK';
         ret['res'] = retFileInf
     } catch (e) {
-        ret['msg'] = `FILE INF: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }

@@ -31,7 +31,7 @@ async function splitText(inf) {
         ret['res'] = chunks;
 
     } catch (e) {
-        ret['msg'] = `SPLIT TEXT: ERRO | ${e}`;
+        ret['msg'] = regexE({ 'e': e }).res;
     }
 
     if (!ret.ret) { console.log(ret.msg) }

@@ -16,7 +16,7 @@ async function apiNewInformation(inf) {
     ret['msg'] = `API NEW INFORMATION: OK`;
 
   } catch (e) {
-    ret['msg'] = `API NEW INFORMATION: ERRO | ${e}`
+    ret['msg'] = regexE({ 'e': e }).res
   }
 
   if (!ret.ret) { console.log(ret.msg) }
