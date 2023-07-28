@@ -54,7 +54,7 @@
 // }
 // runLoop();
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
-// const infRegex = { 'simple': true, 'pattern': 'UM(.*?)TRES', 'text': 'UMDOISTRES' }
+// const infRegex = { 'pattern': 'UM(.*?)TRES', 'text': 'UMDOISTRES' }
 // const infRegex = { 'simple': true, 'pattern': '*DOIS*', 'text': 'UMDOISTRES' }
 // const retRegex = regex(infRegex)
 // console.log(retRegex)
@@ -109,42 +109,6 @@ async function api(inf) {
     } catch (e) {
         ret['msg'] = `API: ERRO | ${e}`
     }
-
-    // if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
-    //   try {
-    //     const req = UrlFetchApp.fetch(inf.url, {
-    //       'method': inf.method,
-    //       'payload': inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
-    //       'headers': inf.headers,
-    //       redirect: 'follow',
-    //       keepalive: true,
-    //       muteHttpExceptions: true,
-    //       validateHttpsCertificates: true,
-    //     });
-
-    //     ret['ret'] = true;
-    //     ret['msg'] = 'API: OK';
-    //     ret['res'] = req.getContentText();
-    //   } catch (e) {
-    //     ret['msg'] = `API: ERRO | ${e.message}`;
-    //   }
-    // } else { // ######################################### NODEJS ou CHROME
-    //   try {
-    //     const req = await fetch(inf.url, {
-    //       method: inf.method,
-    //       body: inf.method === 'POST' || inf.method === 'PATCH' ? typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body : null,
-    //       headers: inf.headers,
-    //       redirect: 'follow',
-    //       keepalive: true
-    //     });
-
-    //     ret['ret'] = true;
-    //     ret['msg'] = 'API: OK';
-    //     ret['res'] = await req.text();
-    //   } catch (e) {
-    //     ret['msg'] = `API: ERRO | ${e}`;
-    //   }
-    // }
 
     if (!ret.ret) { console.log(ret.msg) }
     return ret
@@ -588,7 +552,27 @@ function removeListener(listener) { listeners.delete(listener) }
 async function globalChanged(i) { if (i.alert !== false) { console.log('globalObject ALTERADO →', i) } }
 // ############### ###############
 
-export { api, nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex, random, globalObject, addListener };
+function regexE(inf) {
+    let ret = { 'ret': false };
+    try {
+        ret['ret'] = true;
+        ret['msg'] = `REGEX E: OK`;
+        const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/);
+        if (match && match.length === 3) {
+            ret['res'] = `\n #### ERRO ####  ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n`
+        } else {
+            ret['res'] = `\n #### ERRO ####  NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n`
+        }
+    } catch (e) {
+        const match = e.stack.match(/(\w+\.\w+):(\d+):\d+/);
+        ret['msg'] = `\n #### ERRO ####  ${match[1]} [${match[2]}] \n ${e.toString()} \n\n`
+    }
+
+    if (!ret.ret) { console.log(ret.msg) }
+    return ret
+}
+
+export { api, nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex, random, globalObject, addListener, regexE };
 
 if (typeof window !== 'undefined') { // CHOME
     window['api'] = api;
@@ -601,6 +585,7 @@ if (typeof window !== 'undefined') { // CHOME
     window['random'] = random;
     window['globalObject'] = globalObject;
     window['addListener'] = addListener;
+    window['regexE'] = regexE;
 } else if (typeof global !== 'undefined') { // NODE
     global['fileInf'] = fileInf;
     global['api'] = api;
@@ -613,6 +598,7 @@ if (typeof window !== 'undefined') { // CHOME
     global['random'] = random;
     global['globalObject'] = globalObject;
     global['addListener'] = addListener;
+    global['regexE'] = regexE;
 }
 
 

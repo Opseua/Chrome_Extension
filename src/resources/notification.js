@@ -3,7 +3,7 @@
 // {
 //   'duration': 2,
 //   'type': 'basic',
-//   'title': 'ERRO: Na área de transferência',
+//   'title': `titulo`,
 //   'message': `texto`,
 //   'iconUrl': undefined,
 //   'buttons': [{ 'title': 'BOTÃO 1' }, { 'title': 'BOTÃO 2' }],

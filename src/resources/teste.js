@@ -1,10 +1,10 @@
-async function teste() {
-  console.log('rodando')
-
-await import('./functions.js');
-await new Promise(resolve => setTimeout(resolve, (2500)));
-globalObject.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
-
+function throwError() {
+  throw new Error('Ocorreu um erro!');
 }
-teste()
 
+try {
+  throwError();
+} catch (error) {
+  const lineNumber = error.stack.split('\n')[1].split(':')[1];
+  console.log(error.stack);
+}
