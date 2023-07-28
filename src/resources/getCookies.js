@@ -3,6 +3,8 @@
 // const retGetCookies = await getCookies(infGetCookies)
 // console.log(retGetCookies);
 
+await import('./functions.js');
+
 async function getCookies(inf) {
     let ret = { 'ret': false };
     try {

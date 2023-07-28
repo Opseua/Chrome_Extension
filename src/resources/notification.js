@@ -11,6 +11,8 @@
 // const retNotification = await notification(infNotification)
 // console.log(retNotification)
 
+await import('./functions.js');
+
 async function notification(infOk) {
     let ret = { 'ret': false }
     try {

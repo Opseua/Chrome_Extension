@@ -50,7 +50,7 @@
 //     const infRandom = { 'min': 1, 'max': 5, 'await': true }
 //     const retRandom = await random(infRandom)
 //   }
-//   console.log("Loop concluído!");
+//   console.log('Loop concluído!');
 // }
 // runLoop();
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
@@ -129,7 +129,8 @@ async function nodeOrBrowser() {
         ret['ret'] = true;
         ret['msg'] = 'NODE OR BROWSER: OK';
     } catch (e) {
-        ret['msg'] = `NODE OR BROWSER: ERRO | ${e.message}`;
+        //ret['msg'] = `NODE OR BROWSER: ERRO | ${e.message}`;
+        ret['msg'] = regexE({ 'e': e.message }).res
     }
 
     if (!ret.ret) { console.log(ret.msg) }
@@ -179,11 +180,14 @@ async function fileWrite(inf) {
     let ret = { 'ret': false };
     try {
         if (inf.file == undefined || inf.file == '') {
-            ret['msg'] = `INFORMAR O "file"`;
+            //ret['msg'] = `INFORMAR O 'file'`;
+            ret['msg'] = `\n #### ERRO ####  FILE WRITE \n INFORMAR O 'file' \n\n`;
         } else if (typeof inf.rewrite !== 'boolean') {
-            ret['msg'] = `INFORMAR O "rewrite" TRUE ou FALSE`;
+            //ret['msg'] = `INFORMAR O 'rewrite' TRUE ou FALSE`;
+            ret['msg'] = `\n #### ERRO ####  FILE WRITE \n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`;
         } else if (inf.text == undefined || inf.text == '') {
-            ret['msg'] = `INFORMAR O "text"`;
+            //ret['msg'] = `INFORMAR O 'text'`;
+            ret['msg'] = `\n #### ERRO ####  FILE WRITE \n INFORMAR O 'text' \n\n`;
         } else {
 
             const resNodeOrBrowser = await nodeOrBrowser()
@@ -270,14 +274,17 @@ async function configStorage(inf) {
                     return new Promise((resolve) => {
                         const data = {};
                         if (!inf.key) {
-                            ret['msg'] = 'STORAGE SET: ERRO | INFORMAR A "key"';
+                            //ret['msg'] = 'STORAGE SET: ERRO | INFORMAR A "key"';
+                            ret['msg'] = `\n #### ERRO ####  STORAGE SET \n INFORMAR A 'key' \n\n`;
                         } else if (!inf.value) {
-                            ret['msg'] = 'STORAGE SET: ERRO | INFORMAR O "value"';
+                            //ret['msg'] = 'STORAGE SET: ERRO | INFORMAR O "value"';
+                            ret['msg'] = `\n #### ERRO ####  STORAGE SET \n INFORMAR O 'value' \n\n`;
                         } else {
                             data[inf.key] = inf.value;
                             chrome.storage.local.set(data, async () => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `STORAGE SET: ERRO | ${chrome.runtime.lastError}`;
+                                    //ret['msg'] = `STORAGE SET: ERRO | ${chrome.runtime.lastError}`;
+                                    ret['msg'] = `\n #### ERRO ####  STORAGE SET \n ${chrome.runtime.lastError} \n\n`;
                                 } else {
                                     ret['ret'] = true;
                                     ret['msg'] = 'STORAGE SET: OK';
@@ -296,11 +303,13 @@ async function configStorage(inf) {
                 async function storageGet(inf) {
                     return new Promise((resolve) => {
                         if (!inf.key) {
-                            ret['msg'] = 'STORAGE GET: ERRO | INFORMAR A "key"';
+                            //ret['msg'] = 'STORAGE GET: ERRO | INFORMAR A "key"';
+                            ret['msg'] = `\n #### ERRO ####  STORAGE GET \n INFORMAR A 'key' \n\n`;
                         } else {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `STORAGE GET: ERRO | ${chrome.runtime.lastError}`;
+                                    //ret['msg'] = `STORAGE GET: ERRO | ${chrome.runtime.lastError}`;
+                                    ret['msg'] = `\n #### ERRO ####  STORAGE GET \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length === 0) {
                                     async function checkConfig() {
                                         const retConfigJson = await fetch(`${inf.path}`);
@@ -311,7 +320,8 @@ async function configStorage(inf) {
                                             return new Promise((resolve) => {
                                                 chrome.storage.local.set(data, async () => {
                                                     if (chrome.runtime.lastError) {
-                                                        ret['msg'] = `STORAGE SET*: ERRO | ${chrome.runtime.lastError}`;
+                                                        //ret['msg'] = `STORAGE SET*: ERRO | ${chrome.runtime.lastError}`;
+                                                        ret['msg'] = `\n #### ERRO ####  STORAGE SET* \n ${chrome.runtime.lastError} \n\n`;
                                                     } else {
                                                         ret['ret'] = true;
                                                         ret['msg'] = 'STORAGE GET: OK';
@@ -322,7 +332,10 @@ async function configStorage(inf) {
                                                 return;
                                             })
                                         }
-                                        else { ret['msg'] = `STORAGE GET: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`; }
+                                        else {
+                                            //ret['msg'] = `STORAGE GET: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`;
+                                            ret['msg'] = `\n #### ERRO ####  STORAGE GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
+                                        }
                                         return ret;
                                     }
                                     await checkConfig()
@@ -345,13 +358,16 @@ async function configStorage(inf) {
                 async function storageDel(inf) {
                     return new Promise((resolve) => {
                         if (!inf.key) {
-                            ret['msg'] = 'STORAGE DEL: ERRO | INFORMAR A "key"';
+                            //ret['msg'] = 'STORAGE DEL: ERRO | INFORMAR A "key"';
+                            ret['msg'] = `\n #### ERRO ####  STORAGE DEL \n INFORMAR A 'key' \n\n`;
                         } else {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `STORAGE DEL: ERRO | ${chrome.runtime.lastError}`;
+                                    //ret['msg'] = `STORAGE DEL: ERRO | ${chrome.runtime.lastError}`;
+                                    ret['msg'] = `\n #### ERRO ####  STORAGE DEL \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length === 0) {
-                                    ret['msg'] = `STORAGE DEL: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`;
+                                    //ret['msg'] = `STORAGE DEL: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`;
+                                    ret['msg'] = `\n #### ERRO ####  STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                                 } else {
                                     chrome.storage.local.remove(inf.key, () => { });
                                     ret['ret'] = true;
@@ -380,9 +396,11 @@ async function configStorage(inf) {
             if (inf.action == 'set') { // CONFIG: SET
                 try {
                     if (!inf.key) {
-                        ret['msg'] = 'CONFIG SET: ERRO | INFORMAR A "key"';
+                        //ret['msg'] = 'CONFIG SET: ERRO | INFORMAR A "key"';
+                        ret['msg'] = `\n #### ERRO ####  CONFIG SET \n INFORMAR A 'key' \n\n`;
                     } else if (!inf.value) {
-                        ret['msg'] = 'CONFIG SET: ERRO | INFORMAR O "value"';
+                        //ret['msg'] = 'CONFIG SET: ERRO | INFORMAR O "value"';
+                        ret['msg'] = `\n #### ERRO ####  CONFIG SET \n INFORMAR O 'value' \n\n`;
                     } else {
                         ret['ret'] = true;
                         ret['msg'] = `CONFIG SET: OK`;
@@ -397,14 +415,16 @@ async function configStorage(inf) {
             if (inf.action == 'get') { // CONFIG NODE: GET
                 try {
                     if (!inf.key) {
-                        ret['msg'] = 'CONFIG GET: ERRO | INFORMAR A "key"';
+                        //ret['msg'] = 'CONFIG GET: ERRO | INFORMAR A "key"';
+                        ret['msg'] = `\n #### ERRO ####  CONFIG GET \n INFORMAR A 'key' \n\n`;
                     } else {
                         if (config[inf.key]) {
                             ret['ret'] = true;
                             ret['msg'] = `CONFIG GET: OK`;
                             ret['res'] = config[inf.key];
                         } else {
-                            ret['msg'] = `CONFIG GET: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`;
+                            //ret['msg'] = `CONFIG GET: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`;
+                            ret['msg'] = `\n #### ERRO ####  CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                         }
                     }
                 } catch (e) {
@@ -415,7 +435,8 @@ async function configStorage(inf) {
             if (inf.action == 'del') { // CONFIG NODE: DEL
                 try {
                     if (!inf.key) {
-                        ret['msg'] = 'CONFIG DEL: ERRO | INFORMAR A "key"';
+                        //ret['msg'] = 'CONFIG DEL: ERRO | INFORMAR A "key"';
+                        ret['msg'] = `\n #### ERRO ####  CONFIG DEL \n INFORMAR A 'key' \n\n`;
                     } else {
                         if (config[inf.key]) {
                             ret['ret'] = true;
@@ -423,7 +444,8 @@ async function configStorage(inf) {
                             delete config[inf.key];
                             fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
                         } else {
-                            ret['msg'] = `CONFIG DEL: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`;
+                            //ret['msg'] = `CONFIG DEL: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`;
+                            ret['msg'] = `\n #### ERRO ####  CONFIG DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                         }
                     }
                 } catch (e) {
@@ -481,7 +503,8 @@ function regex(inf) {
                 }
             } else {
                 ret['ret'] = true;
-                ret['msg'] = `REGEX: ERRO | PADRAO '${inf.pattern}' NAO ENCONTRADO`;
+                //ret['msg'] = `REGEX: ERRO | PADRAO '${inf.pattern}' NAO ENCONTRADO`;
+                ret['msg'] = `\n #### ERRO ####  REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
                 ret['res'] = { 'bolean': false }
             }
         } else {
@@ -503,7 +526,8 @@ function regex(inf) {
                     }
                 } else {
                     ret['ret'] = true;
-                    ret['msg'] = `REGEX: ERRO | PADRAO '${inf.pattern}' NAO ENCONTRADO`;
+                    //ret['msg'] = `REGEX: ERRO | PADRAO '${inf.pattern}' NAO ENCONTRADO`;
+                    ret['msg'] = `\n #### ERRO ####  REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
                     ret['res'] = { 'bolean': false }
                 }
             }

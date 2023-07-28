@@ -71,7 +71,8 @@ async function chatGpt(inf) {
                 ret['msg'] = `CHAT GPT AI: OK`;
                 ret['res'] = res.response;
             } else {
-                ret['msg'] = `CHAT GPT AI: ERRO | ${res.error.message}`;
+                //ret['msg'] = `CHAT GPT AI: ERRO | ${res.error.message}`;
+                ret['msg'] = `\n #### ERRO ####  CHAT GPT AI \n ${res.error.message} \n\n`;
             }
         }
 

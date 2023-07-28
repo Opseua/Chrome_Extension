@@ -18,7 +18,8 @@ async function nodeOrBrowser() {
         ret['ret'] = true;
         ret['msg'] = 'NODE OR BROWSER: OK';
     } catch (e) {
-        ret['msg'] = `NODE OR BROWSER: ERRO | ${e.message}`;
+        //ret['msg'] = `NODE OR BROWSER: ERRO | ${e.message}`;
+        ret['msg'] = regexE({ 'e': e.message }).res
     }
 
     if (!ret.ret) { console.log(ret.msg) }

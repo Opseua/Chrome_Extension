@@ -2,6 +2,7 @@
 // const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': 'Hi, what your name?' };
 // const retTranslate = await translate(infTranslate)
 // console.log(retTranslate)
+
 await import('./functions.js');
 
 async function translate(inf) {
@@ -22,7 +23,8 @@ async function translate(inf) {
             ret['msg'] = `TRANSLATE: OK`;
             ret['res'] = match[1];
         } else {
-            ret['msg'] = `TRANSLATE: ERRO | TAG NAO ENCONTRADA`;
+           // ret['msg'] = `TRANSLATE: ERRO | TAG NAO ENCONTRADA`;
+            ret['msg'] = `\n #### ERRO ####  TRANSLATE \n TAG NAO ENCONTRADA \n\n`;
         }
 
     } catch (e) {

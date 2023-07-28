@@ -2,6 +2,7 @@
 // const infTabSearch = { 'search': '*google*', 'openIfNotExist': true, 'active':true, 'pinned': false, 'url': 'https://www.google.com/'  } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // const retTabSearch = await tabSearch(infTabSearch)
 // console.log(retTabSearch)
+
 await import('./functions.js');
 
 async function openTab(inf) {
@@ -29,7 +30,8 @@ async function openTab(inf) {
             });
         });
     } catch (e) {
-        return `SEARCH TAB: ERRO | ${e}`;
+        //return `SEARCH TAB: ERRO | ${e}`;
+        return `\n #### ERRO ####  SEARCH TAB \n ${regexE({ 'e': e }).res} \n\n`;
     }
 }
 
@@ -143,17 +145,21 @@ async function tabSearch(inf) {
                 ret['msg'] = `SEARCH TAB: OK`;
             } else {
                 if (typeof inf.search === 'number') {
-                    ret['msg'] = `SEARCH TAB: ERRO | ABA ID '${inf.search}' NAO ENCONTRADA`
+                    //ret['msg'] = `SEARCH TAB: ERRO | ABA ID '${inf.search}' NAO ENCONTRADA`
+                    ret['msg'] = `\n #### ERRO ####  SEARCH TAB \n ABA ID '${inf.search}' NAO ENCONTRADA \n\n`;
                 }
                 else {
-                    ret['msg'] = `SEARCH TAB: ERRO | ABA '${inf.search}' NAO ENCONTRADA`
+                    //ret['msg'] = `SEARCH TAB: ERRO | ABA '${inf.search}' NAO ENCONTRADA`
+                    ret['msg'] = `\n #### ERRO ####  SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
                 }
             }
         } else {
             if (inf.search == 'ATIVA' || inf.search == 'TODAS') {
-                ret['msg'] = `SEARCH TAB: ERRO | NENHUM ABA ATIVA`
+                //ret['msg'] = `SEARCH TAB: ERRO | NENHUM ABA ATIVA`
+                ret['msg'] = `\n #### ERRO ####  SEARCH TAB \n NENHUM ABA ATIVA \n\n`;
             } else {
-                ret['msg'] = `SEARCH TAB: ERRO | ABA '${inf.search}' NAO ENCONTRADA`
+                //ret['msg'] = `SEARCH TAB: ERRO | ABA '${inf.search}' NAO ENCONTRADA`
+                ret['msg'] = `\n #### ERRO ####  SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
             }
         }
 

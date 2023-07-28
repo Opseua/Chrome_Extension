@@ -1,3 +1,5 @@
+await import('./functions.js');
+
 async function setTag(inf) {
     let ret = { 'ret': false }
 

@@ -6,16 +6,6 @@ const { api } = await import('./api.js');
 let retGetXAppId = false
 let stopLoop = false
 async function leads(inf) {
-
-    const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-    const retConfigStorage = await configStorage(infConfigStorage)
-    console.log(2, retConfigStorage)
-
-
-
-
-
-    return
     let ret = { 'ret': false };
     try {
 
@@ -144,7 +134,8 @@ async function leads(inf) {
                     console.log('fim')
                 }
             } else {
-                ret['msg'] = `LEADS: ERRO | NAO ACHOU O COOKIE DO USUARIO`;
+                //ret['msg'] = `LEADS: ERRO | NAO ACHOU O COOKIE DO USUARIO`;
+                ret['msg'] = `\n #### ERRO ####  LEADS \n NAO ACHOU O COOKIE DO USUARIO \n\n`;
             }
         }
 

@@ -130,21 +130,7 @@ client()
 
 
 
-// Exemplo de outra função que pode lançar um erro
- function anotherFunction() {
-    let ret = { 'ret': false };
-    try {
-        const variable = someUndefinedVariable;
-    } catch (e) {
-        ret['msg'] = regexE({ 'e': e }).res
-    }
-
-    if (!ret.ret) { console.log(ret.msg) }
-    return ret
-}
-
-// Chame a outra função que pode lançar um erro
-anotherFunction();
-
-
+const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
+const retConfigStorage = await configStorage(infConfigStorage)
+//console.log(retConfigStorage)
 

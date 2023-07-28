@@ -15,7 +15,8 @@ async function shortcutPressed(inf) {
       console.log('VARIAVEL GLOBAL LIMPA!');
       localStorage.removeItem('varGlobal');
     } else {
-      ret['msg'] = `SHORTCUT PRESSED: ERRO | ACAO DO ATALHO NAO DEFINIDA`;
+      ret['msg'] = `\n #### ERRO ####  SHORTCUT PRESSED | ACAO DO ATALHO NAO DEFINIDA \n\n`;
+      //ret['res'] = `\n #### ERRO ####  ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n`
     }
 
   } catch (e) {

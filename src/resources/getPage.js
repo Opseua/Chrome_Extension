@@ -3,6 +3,8 @@
 // const retGetPage = await getPage(infGetPage)
 // console.log(retGetPage)
 
+await import('./functions.js');
+
 async function getPage(inf) {
     let ret = { 'ret': false };
     try {

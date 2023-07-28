@@ -105,7 +105,8 @@ async function api(inf) {
   //     ret['msg'] = 'API: OK';
   //     ret['res'] = req.getContentText();
   //   } catch (e) {
-  //     ret['msg'] = `API: ERRO | ${e.message}`;
+  //    // ret['msg'] = `API: ERRO | ${e.message}`;
+  //       ret['msg'] = regexE({ 'e': e.message }).res
   //   }
   // } else { // ######################################### NODEJS ou CHROME
   //   try {
