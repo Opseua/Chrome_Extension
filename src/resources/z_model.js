@@ -21,7 +21,7 @@ async function model(inf) {
 
 export { model }
 
-if (typeof window !== 'undefined') { // CHOME
+if (typeof window !== 'undefined') { // CHROME
     window['model'] = model;
 } else if (typeof global !== 'undefined') { // NODE
     global['model'] = model;

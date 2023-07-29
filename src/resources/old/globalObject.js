@@ -33,7 +33,7 @@ function teste() {
 
 export { globalObject, addListener };
 
-if (typeof window !== 'undefined') { // CHOME
+if (typeof window !== 'undefined') { // CHROME
     window['globalObject'] = globalObject;
     window['addListener'] = addListener;
 } else if (typeof global !== 'undefined') { // NODE

@@ -1,5 +1,5 @@
 // await import('./getCookies.js');
-// const infGetCookies = { 'url': retTabSearch.res.url }
+// const infGetCookies = { 'url': retTabSearch.res.url, 'cookieSearch': '__Secure-next-auth.session-token' }
 // const retGetCookies = await getCookies(infGetCookies)
 // console.log(retGetCookies);
 
@@ -23,9 +23,15 @@ async function getCookies(inf) {
             cookie += `${v.name}=${v.value}; `;
             return accumulator;
         }, '');
-        ret['ret'] = true;
-        ret['msg'] = 'GET COOKIES: OK';
-        ret['res'] = { 'array': retCookies, 'concat': cookie };
+
+        if ((inf.cookieSearch) && !(retCookies.toString().includes(inf.cookieSearch))) {
+            ret['msg'] = `\n #### ERRO ####  GET COOKIES \n COOKIE '${inf.cookieSearch}' NAO CONTRADO \n\n`;
+        } else {
+            ret['ret'] = true;
+            ret['msg'] = 'GET COOKIES: OK';
+            ret['res'] = { 'array': retCookies, 'concat': cookie };
+        }
+
     }
     catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;

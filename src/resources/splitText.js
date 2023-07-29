@@ -42,7 +42,7 @@ async function splitText(inf) {
 
 export { splitText }
 
-if (typeof window !== 'undefined') { // CHOME
+if (typeof window !== 'undefined') { // CHROME
     window['splitText'] = splitText;
 } else if (typeof global !== 'undefined') { // NODE
     global['splitText'] = splitText;

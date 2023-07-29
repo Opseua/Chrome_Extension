@@ -369,7 +369,7 @@ async function configStorage(inf) {
                                     //ret['msg'] = `STORAGE DEL: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`;
                                     ret['msg'] = `\n #### ERRO ####  STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                                 } else {
-                                    chrome.storage.local.remove(inf.key, () => { });
+                                    chrome.storage.local.remove(inf.key, async () => {});
                                     ret['ret'] = true;
                                     ret['msg'] = 'STORAGE DEL: OK';
                                 }
@@ -598,7 +598,7 @@ function regexE(inf) {
 
 export { api, nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex, random, globalObject, addListener, regexE };
 
-if (typeof window !== 'undefined') { // CHOME
+if (typeof window !== 'undefined') { // CHROME
     window['api'] = api;
     window['nodeOrBrowser'] = nodeOrBrowser;
     window['fileWrite'] = fileWrite;

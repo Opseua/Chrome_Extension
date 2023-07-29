@@ -37,7 +37,7 @@ async function translate(inf) {
 
 export { translate }
 
-if (typeof window !== 'undefined') { // CHOME
+if (typeof window !== 'undefined') { // CHROME
     window['translate'] = translate;
 } else if (typeof global !== 'undefined') { // NODE
     global['translate'] = translate;

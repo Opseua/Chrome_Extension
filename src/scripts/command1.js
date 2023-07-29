@@ -84,8 +84,11 @@ async function command1(inf) {
             const retTranslate1 = await translate(infTranslate1)
             comentario1 = retTranslate1.res
 
-            const infChatGpt = { 'provider': 'ora.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING\n\n ${comentario}` }
+            const infChatGpt = { 'provider': 'ora.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING:\n\n ${comentario}` }
             const retChatGpt = await chatGpt(infChatGpt)
+            if (!retChatGpt.ret) {
+              return ret
+          }
             comentario2 = retChatGpt.res.replace(/\n/g, ' ');
           }
 

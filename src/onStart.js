@@ -128,9 +128,3 @@ async function client(inf) {
 }
 client()
 
-
-
-const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-const retConfigStorage = await configStorage(infConfigStorage)
-//console.log(retConfigStorage)
-

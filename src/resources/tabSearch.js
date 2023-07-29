@@ -186,7 +186,7 @@ async function tabSearch(inf) {
 
 export { tabSearch }
 
-if (typeof window !== 'undefined') { // CHOME
+if (typeof window !== 'undefined') { // CHROME
     window['tabSearch'] = tabSearch;
 } else if (typeof global !== 'undefined') { // NODE
     global['tabSearch'] = tabSearch;
