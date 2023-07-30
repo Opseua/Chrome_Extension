@@ -2,6 +2,7 @@ await import('./clearConsole.js');
 console.log('onStart');
 await import('./resources/functions.js');
 await import('./actions/shortcutPressed.js');
+await import('./resources/excel.js');
 
 // EXCLUIR DOWNLOAD DA LISTA SE FOR DO NTFY E TIVER '[KEEP]' NO TITULO DO ARQUIVO
 chrome.downloads.onChanged.addListener(async function (...inf) {
@@ -128,7 +129,30 @@ async function client(inf) {
 }
 client()
 
+let infExcel, retExcel, lin
+infExcel = { 'action': 'get', 'col': 'A', 'lin': 1 }
+retExcel = await excel(infExcel)
+lin = retExcel.res
+console.log(retExcel)
 
-await import('../src/resources/teste.js');
+const loop = 100;
+let i = 0;
+async function runLoop() {
+    while (i < loop) {
+        i++;
 
+        infExcel = { 'action': 'set', 'col': 'A', 'lin': lin, 'value': `A ${dateHour().res.tim} B` }
+        retExcel = await excel(infExcel)
+        console.log(retExcel)
+        if (!retExcel.ret) {
+            break
+        }
+        lin++
+
+        const infRandom = { 'min': 1, 'max': 2, 'await': true }
+        const retRandom = await random(infRandom)
+    }
+    console.log('Loop concluído!');
+}
+runLoop();
 

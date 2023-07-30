@@ -19,16 +19,17 @@
 // const retFileRead = await fileRead(infFileRead)
 // console.log(retFileRead)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -  
-// const infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-// const retConfigStorage = await configStorage(infConfigStorage)
+// let infConfigStorage, retConfigStorage
+// infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+// retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
 
-// const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-// const retConfigStorage = await configStorage(infConfigStorage)
+// infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
+// retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
 
-// const infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
-// const retConfigStorage = await configStorage(infConfigStorage)
+// infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
+// retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -  
 // const RetDateHour = dateHour()
@@ -369,7 +370,7 @@ async function configStorage(inf) {
                                     //ret['msg'] = `STORAGE DEL: ERRO | CHAVE '${inf.key}' NAO ENCONTRADA`;
                                     ret['msg'] = `\n #### ERRO ####  STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                                 } else {
-                                    chrome.storage.local.remove(inf.key, async () => {});
+                                    chrome.storage.local.remove(inf.key, async () => { });
                                     ret['ret'] = true;
                                     ret['msg'] = 'STORAGE DEL: OK';
                                 }
