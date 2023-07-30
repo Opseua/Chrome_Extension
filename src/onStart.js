@@ -128,3 +128,11 @@ async function client(inf) {
 }
 client()
 
+
+
+
+
+await import('../src/resources/sniffer.js');
+const infSniffer = { 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
+const retSniffer = await sniffer(infSniffer)
+console.log(retSniffer)
