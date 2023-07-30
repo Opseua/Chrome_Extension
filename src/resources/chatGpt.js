@@ -116,7 +116,7 @@ async function chatGpt(inf) {
     return ret
 }
 
-export { chatGpt }
+// export { chatGpt }
 
 if (typeof window !== 'undefined') { // CHROME
     window['chatGpt'] = chatGpt;

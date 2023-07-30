@@ -184,7 +184,7 @@ async function tabSearch(inf) {
     return ret
 }
 
-export { tabSearch }
+// export { tabSearch }
 
 if (typeof window !== 'undefined') { // CHROME
     window['tabSearch'] = tabSearch;

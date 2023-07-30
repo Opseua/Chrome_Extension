@@ -35,7 +35,7 @@ async function translate(inf) {
     return ret
 }
 
-export { translate }
+// export { translate }
 
 if (typeof window !== 'undefined') { // CHROME
     window['translate'] = translate;

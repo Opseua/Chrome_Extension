@@ -37,6 +37,6 @@ async function getPage(inf) {
     return ret
 }
 
-export { getPage }
+// export { getPage }
 
 window['getPage'] = getPage;

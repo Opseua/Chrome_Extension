@@ -26,4 +26,4 @@ async function nodeOrBrowser() {
     return ret
 }
 
-export { nodeOrBrowser }
+// export { nodeOrBrowser }

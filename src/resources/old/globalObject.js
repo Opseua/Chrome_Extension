@@ -31,7 +31,7 @@ function teste() {
     }
 }
 
-export { globalObject, addListener };
+// export { globalObject, addListener };
 
 if (typeof window !== 'undefined') { // CHROME
     window['globalObject'] = globalObject;

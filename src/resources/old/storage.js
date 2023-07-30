@@ -89,4 +89,4 @@ function storageDel(inf) {
   });
 }
 
-export { storageSet, storageGet, storageDel }
+// export { storageSet, storageGet, storageDel }

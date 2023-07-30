@@ -596,7 +596,7 @@ function regexE(inf) {
     return ret
 }
 
-//export { api, nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex, random, globalObject, addListener, regexE };
+// export { api, nodeOrBrowser, fileInf, fileWrite, fileRead, configStorage, dateHour, regex, random, globalObject, addListener, regexE };
 
 if (typeof window !== 'undefined') { // CHROME
     window['api'] = api;

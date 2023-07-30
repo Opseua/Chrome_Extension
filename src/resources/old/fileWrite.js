@@ -76,5 +76,5 @@ async function fileWrite(inf) {
     return ret;
 }
 
-export { fileWrite };
+// export { fileWrite };
 

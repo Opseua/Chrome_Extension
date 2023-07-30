@@ -29,7 +29,7 @@ async function clipboard(inf) {
   return ret
 }
 
-export { clipboard }
+// export { clipboard }
 
 window['clipboard'] = clipboard;
 

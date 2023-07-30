@@ -73,6 +73,6 @@ async function notification(infOk) {
     return ret
 }
 
-export { notification }
+// export { notification }
 
 window['notification'] = notification;

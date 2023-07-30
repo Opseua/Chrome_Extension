@@ -42,4 +42,4 @@ async function fileInf(inf) {
     return ret;
 }
 
-export { fileInf };
+// export { fileInf };

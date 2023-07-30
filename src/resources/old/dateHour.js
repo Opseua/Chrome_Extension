@@ -29,4 +29,4 @@ function dateHour() { // NAO POR COMO 'async'!!!
     return ret
 }
 
-export { dateHour };
+// export { dateHour };

@@ -41,6 +41,6 @@ async function getCookies(inf) {
     return ret
 }
 
-export { getCookies };
+// export { getCookies };
 
 window['getCookies'] = getCookies;

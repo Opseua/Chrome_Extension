@@ -19,7 +19,7 @@ async function model(inf) {
     return ret
 }
 
-export { model }
+// export { model }
 
 if (typeof window !== 'undefined') { // CHROME
     window['model'] = model;

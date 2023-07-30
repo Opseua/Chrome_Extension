@@ -18,4 +18,4 @@ async function fileRead(inf) {
     return ret;
 }
 
-export { fileRead }
+// export { fileRead }
