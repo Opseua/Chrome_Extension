@@ -59,6 +59,8 @@ async function client(inf) {
             return ret
         }
         const port = retConfigStorage.res.port;
+        const device = retConfigStorage.res.device1
+        const securityPass = retConfigStorage.res.securityPass
 
         let ws1;
         async function web1() {
@@ -87,25 +89,51 @@ async function client(inf) {
 
         let ws2;
         async function web2() {
-            ws2 = new WebS(`${retConfigStorage.res.ws2}:${port}`);
+            ws2 = new WebS(`${retConfigStorage.res.ws2}:${port}/${device}`);
             ws2.addEventListener('open', async function (event) { // CONEXAO: ONLINE - WS2
                 console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS2`)
                 // setTimeout(function () {
-                //   ws2.send('Chrome: mensagem de teste');
+                //     ws2.send('Chrome: mensagem de teste');
                 // }, 3000);
             });
             ws2.addEventListener('message', async function (event) { // CONEXAO: NOVA MENSAGEM - WS2
-                //console.log('→ ' + event.data);
-                const infNotificar =
-                {
-                    duration: 1,
-                    type: 'basic',
-                    title: 'TITULO',
-                    message: event.data,
-                    iconUrl: undefined,
-                    buttons: [],
-                };
-                notification(infNotificar)
+                let retWs = { 'ret': false };
+                const data = JSON.parse(event.data)
+                if (data.securityPass && data.securityPass == securityPass && data.funRun && data.funRun.name && data.funRun.par) {
+                    function propertyExists(property) {
+                        return typeof (typeof window !== 'undefined' ? window : global)[property] === 'function';
+                    }
+                    const searchFun = propertyExists(data.funRun.name)
+                    if (!searchFun) {
+                        retWs['msg'] = `FUNCAO ${data.funRun.name} NAO EXITE`;
+                    } else {
+                        try {
+                            const name = window[data.funRun.name];
+                            const infName = data.funRun.par
+                            const retName = await name(infName);
+                            //console.log(retName)
+                            retWs['ret'] = true;
+                            retWs['res'] = retName;
+                        } catch (e) {
+                            retWs['msg'] = regexE({ 'e': e }).res
+                        }
+                        if (data.funRet.ret) {
+                            let wsRet;
+                            wsRet = new WebS(`${data.funRet.url}`);
+                            wsRet.addEventListener('open', async function (event) {
+                                wsRet.send(JSON.stringify({ 'inf': data.funRet.inf, 'retWs': retWs }))
+                                wsRet.close();
+                            });
+                            wsRet.addEventListener('error', async function (error) {
+                                console.error(`BACKGROUND: ERRO WSRET`);
+                            });
+                        }
+                    }
+                } else {
+                    retWs['msg'] = `\n #### NAO RODAR ####  NAO RODAR \n ${event.data} \n\n`;
+                }
+                if (!retWs.ret) { console.log(retWs.msg) }
+                return retWs
             });
             ws2.addEventListener('close', async function (event) { // CONEXAO: OFFLINE, TENTAR NOVAMENTE - WS2
                 console.log(`BACKGROUND: RECONEXAO EM 10 SEGUNDOS - WS2`)
@@ -129,30 +157,32 @@ async function client(inf) {
 }
 client()
 
-let infExcel, retExcel, lin
-infExcel = { 'action': 'get', 'col': 'A', 'lin': 1 }
-retExcel = await excel(infExcel)
-lin = retExcel.res
-console.log(retExcel)
+// let infExcel, retExcel, lin // CQPT    KQRE
+// infExcel = { 'action': 'get', 'tab': 'KQRE', 'col': 'A', 'lin': 1 }
+// retExcel = await excel(infExcel)
+// lin = retExcel.res
+// console.log(retExcel)
 
-const loop = 100;
-let i = 0;
-async function runLoop() {
-    while (i < loop) {
-        i++;
+// const loop = 5;
+// let i = 0;
+// async function runLoop() {
+//     while (i < loop) {
+//         i++;
 
-        infExcel = { 'action': 'set', 'col': 'A', 'lin': lin, 'value': `A ${dateHour().res.tim} B` }
-        retExcel = await excel(infExcel)
-        console.log(retExcel)
-        if (!retExcel.ret) {
-            break
-        }
-        lin++
+//         infExcel = { 'action': 'set', 'tab': 'KQRE', 'col': 'A', 'lin': lin, 'value': `A ${ lin } B` }
+//         retExcel = await excel(infExcel)
+//         console.log(retExcel)
+//         if (!retExcel.ret) {
+//             break
+//         }
+//         lin++
 
-        const infRandom = { 'min': 1, 'max': 2, 'await': true }
-        const retRandom = await random(infRandom)
-    }
-    console.log('Loop concluído!');
-}
-runLoop();
+//         const infRandom = { 'min': 1, 'max': 1, 'await': true }
+//         //const retRandom = await random(infRandom)
+//     }
+//     console.log('Loop concluído!');
+// }
+// runLoop();
+
+
 

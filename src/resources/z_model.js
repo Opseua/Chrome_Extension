@@ -2,7 +2,7 @@
 
 await import('./functions.js');
 
-async function excel(inf) {
+async function model(inf) {
     let ret = { 'ret': false };
     try {
         // CODIGO AQUI
@@ -22,7 +22,7 @@ async function excel(inf) {
 // export { model }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['excel'] = excel;
+    window['model'] = model;
 } else if (typeof global !== 'undefined') { // NODE
-    global['excel'] = excel;
+    global['model'] = model;
 }

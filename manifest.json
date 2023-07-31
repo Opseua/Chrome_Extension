@@ -99,9 +99,7 @@
     "48": "./src/media/icon_1.png",
     "128": "./src/media/icon_1.png"
   },
-  "browser_action": {
-    
-  },
+  "browser_action": {},
   "background": {
     "scripts": [
       "./background.js"
@@ -119,5 +117,4 @@
       "description": "atalho_3 DESCRIÇÃO"
     }
   }
-
 }

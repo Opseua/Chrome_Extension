@@ -19,8 +19,8 @@ async function notification(infOk) {
         let inf
         if (!infOk) { inf = {} } else { inf = infOk };
         let imgBase64
-        if (inf.iconUrl === undefined || inf.iconUrl.length > 1) {
-            const imgSrc = inf.iconUrl === undefined ? './src/media/icon_1.png' : inf.iconUrl;
+        if (!inf.iconUrl || inf.iconUrl.length > 1) {
+            const imgSrc = !inf.iconUrl ? './src/media/icon_1.png' : inf.iconUrl;
             const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
             imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
         } else {
@@ -29,11 +29,11 @@ async function notification(infOk) {
 
         const json =
         {
-            duration: ((inf.duration === undefined) || !(inf.duration > 0)) ? 5 : inf.duration,
+            duration: ((!inf.duration ) || !(inf.duration > 0)) ? 5 : inf.duration,
             type: 'basic',
             iconUrl: `data:image/png;base64,${imgBase64}`,
-            title: ((inf.title === undefined) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
-            message: ((inf.message === undefined) || (inf.message == '')) ? `MESSAGE VAZIO` : `${inf.message}`,
+            title: ((!inf.title ) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
+            message: ((!inf.message) || (inf.message == '')) ? `MESSAGE VAZIO` : `${inf.message}`,
             buttons: inf.buttons || [],
         };
 

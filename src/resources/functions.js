@@ -627,142 +627,20 @@ if (typeof window !== 'undefined') { // CHROME
 }
 
 
-
-
-// const { google } = await import('googleapis');
-// const sheets = google.sheets('v4');
-// const spreadsheetId = '1lSl6VUYmp0c32Gu8qwlbtJ-BGdl1gKXB9YC4thffSOk'
-// const sheetTab = 'DADOS'
-// let sheetLin = 0
-// const authClient = new google.auth.GoogleAuth({
-//     keyFile: './src/resources/api.json',
-//     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-// });
-
-// async function lastLin(inf) {
-//     let ret = { 'ret': false };
-//     try {
-
-//         const auth = await authClient.getClient();
-//         const range = `${sheetTab}!A2`;
-//         const response = await sheets.spreadsheets.values.get({ auth, spreadsheetId, range, });
-//         ret['ret'] = true;
-//         ret['msg'] = `LAST LIN: OK`;
-//         ret['res'] = Number(response.data.values[0][0]);
-
-//     } catch (e) {
-//         ret['msg'] = regexE({ 'e': e }).res
+// {
+//     "securityPass": "#####",
+//     "funRet": {
+//       "ret": true,
+//       "url": "ws://18.119.140.20:8888/CHROME_RET",
+//       "inf": "excel"
+//     },
+//     "funRun": {
+//       "name": "excel",
+//       "par": {
+//         "action": "get",
+//         "tab": "CQPT",
+//         "col": "A",
+//         "lin": 1
+//       }
 //     }
-
-//     if (!ret.ret) { console.log(ret.msg) }
-//     return ret
-// }
-
-// async function dataGet(inf) {
-//     let ret = { 'ret': false };
-//     try {
-
-//         const auth = await authClient.getClient();
-//         const range = `${sheetTab}!B${inf.lin}`;
-//         const response = await sheets.spreadsheets.values.get({ auth, spreadsheetId, range, });
-//         ret['ret'] = true;
-//         ret['msg'] = `DATA GET: OK`;
-//         ret['res'] = response.data.values;
-
-//     } catch (e) {
-//         ret['msg'] = regexE({ 'e': e }).res
-//     }
-
-//     if (!ret.ret) { console.log(ret.msg) }
-//     return ret
-// }
-
-// async function dataSend(inf) {
-//     let ret = { 'ret': false };
-//     try {
-
-//         const auth = await authClient.getClient();
-//         console.log(auth)
-//         await sheets.spreadsheets.values.update({
-//             auth,
-//             spreadsheetId,
-//             range: `${sheetTab}!B${inf.lin}`,
-//             valueInputOption: 'USER_ENTERED',
-//             resource: { values: [[inf.values]] },
-//         });
-//         ret['ret'] = true;
-//         ret['msg'] = `DATA SEND: OK`;
-
-//     } catch (e) {
-//         ret['msg'] = regexE({ 'e': e }).res
-//     }
-
-//     if (!ret.ret) { console.log(ret.msg) }
-//     return ret
-// }
-
-// async function fun() {
-
-//     const retLastlin = await lastLin()
-//     console.log(retLastlin);
-
-//     const infDataSend = { 'lin': retLastlin.res, 'values': 'Ola' }
-//     const retDataSend = await dataSend(infDataSend)
-//     console.log(retDataSend);
-
-// }
-// //fun()
-
-
-
-
-
-
-
-
-// const { api } = await import('./api.js');
-// const { fileWrite } = await import('./fileWrite.js');
-
-// async function teste() {
-//     let ret = { 'ret': false };
-
-//     try {
-//         perfils = [perfils[0]]
-//         for (let i = 0; i < perfils.length; i++) {
-//             const perfilId = perfils[i];
-
-//             const infApi = {
-//                 url: `https://www.instagram.com/api/v1/users/web_profile_info/?username=${perfilId}`,
-//                 method: 'GET',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'x-ig-app-id': '936619743392459',
-//                     'sec-fetch-site': 'same-origin'
-//                 }
-//             };
-
-//             const retApi = await api(infApi);
-//             console.log(retApi)
-//             if (!retApi.ret) { ret['ret'] = false; }
-//             const res = JSON.parse(retApi.res.body);
-
-//             const infFileWrite = {
-//                 'file': `PERFILS/${res.data.user.id}=${perfilId}.txt`,
-//                 'rewrite': false,
-//                 'text': JSON.stringify(res)
-//             };
-//             await fileWrite(infFileWrite);
-
-//             ret['ret'] = true;
-//             ret['msg'] = 'FUNCTIONS: OK';
-//             console.log(`${perfils.length} - ${i + 1} | ${res.data.user.id} = ${perfilId}`);
-
-//         }
-//     } catch (e) {
-//         ret['msg'] = regexE({ 'e': e }).res
-//     }
-
-//     if (!ret.ret) { console.log(ret.msg) }
-// }
-
-// teste()
+//   }
