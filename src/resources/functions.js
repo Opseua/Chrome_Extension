@@ -39,6 +39,9 @@
 // const retRandom = await random(infRandom)
 // console.log(retRandom)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// for (let i = 0; i < 10; i++) {
+//     console.log(`Iteração ${i + 1}`);
+// }
 // const loop = ['A', 'B', 'C', 'D', 'E'];
 // let i = 0;
 // async function runLoop() {
@@ -626,21 +629,3 @@ if (typeof window !== 'undefined') { // CHROME
     global['regexE'] = regexE;
 }
 
-
-// {
-//     "securityPass": "#####",
-//     "funRet": {
-//       "ret": true,
-//       "url": "ws://18.119.140.20:8888/CHROME_RET",
-//       "inf": "excel"
-//     },
-//     "funRun": {
-//       "name": "excel",
-//       "par": {
-//         "action": "get",
-//         "tab": "CQPT",
-//         "col": "A",
-//         "lin": 1
-//       }
-//     }
-//   }

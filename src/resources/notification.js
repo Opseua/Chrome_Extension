@@ -5,7 +5,7 @@
 //   'type': 'basic',
 //   'title': `titulo`,
 //   'message': `texto`,
-//   'iconUrl': undefined,
+//   'iconUrl': null,
 //   'buttons': [{ 'title': 'BOTÃO 1' }, { 'title': 'BOTÃO 2' }],
 // };
 // const retNotification = await notification(infNotification)

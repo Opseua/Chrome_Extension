@@ -9,6 +9,8 @@
     "googleapis": "^122.0.0",
     "http-proxy": "^1.18.1",
     "isomorphic-ws": "^5.0.0",
-    "puppeteer": "^20.8.2"
+    "puppeteer": "^20.8.2",
+    "websocket-extensions": "^0.1.4",
+    "ws": "^8.13.0"
   }
 }
