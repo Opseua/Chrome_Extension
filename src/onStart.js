@@ -91,6 +91,12 @@ async function client(inf) {
 //client()
 
 let infExcel, retExcel
-infExcel = { 'action': 'get', 'tab': 'CQPT', 'col': 'A', 'lin':1 }
+
+infExcel = { 'action': 'set', 'tab': 'CQPT', 'col': 'A', 'value': `VALOR ${dateHour().res.tim}` }
 retExcel = await excel(infExcel)
 console.log(retExcel)
+
+// infExcel = { 'action': 'get', 'tab': 'CQPT', 'col': 'A', 'lin': 1 }
+// retExcel = await excel(infExcel)
+// console.log(retExcel)
+
