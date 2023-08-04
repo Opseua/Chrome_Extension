@@ -5,20 +5,22 @@
 // {
 //     "securityPass": "#####",
 //     "funRet": {
-//       "ret": true,
-//       "url": "ws://18.xxx.xxx.xx:xxxx/FUNCTION_RET",
-//       "inf": "excel"
+//         "ret": true,
+//         "url": "ws://xx.xxx.xxx.xx:xx/FUNCTION_RET",
+//         "inf": "ID DO RETORNO"
 //     },
 //     "funRun": {
-//       "name": "excel",
-//       "par": {
-//         "action": "get",
-//         "tab": "CQPT",
-//         "col": "A",
-//         "lin": 1
-//       }
+//         "name": "notification",
+//         "par": {
+//             "duration": 1,
+//             "type": "basic",
+//             "title": "titulo",
+//             "message": "texto",
+//             "iconUrl": null,
+//             "buttons": []
+//         }
 //     }
-//   }
+// }
 
 await import('./functions.js');
 
@@ -37,8 +39,6 @@ async function websocketRet(inf) {
         if (!retConfigStorage.ret) {
             return ret
         }
-        const port = retConfigStorage.res.port;
-        const device = retConfigStorage.res.device1
         const securityPass = retConfigStorage.res.securityPass
 
         const data = JSON.parse(inf.data)
@@ -56,8 +56,7 @@ async function websocketRet(inf) {
                 ret['ret'] = true;
                 ret['res'] = retName;
                 if (data.funRet.ret) {
-                    let wsRet;
-                    wsRet = new WebS(`${data.funRet.url}`);
+                    let wsRet = new WebS(`${data.funRet.url}`);
                     wsRet.onerror = (e) => { console.error(`BACKGROUND: ERRO WSRET`) };
                     wsRet.onopen = () => {
                         wsRet.send(JSON.stringify({ 'inf': data.funRet.inf, 'retWs': ret.res }));

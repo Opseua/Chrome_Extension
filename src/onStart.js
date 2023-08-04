@@ -56,12 +56,12 @@ async function client(inf) {
             return ret
         }
         const port = retConfigStorage.res.port;
-        const device = retConfigStorage.res.device1
+        const device1 = retConfigStorage.res.device1.name
         const securityPass = retConfigStorage.res.securityPass
 
         let ws1;
         async function web1() {
-            ws1 = new WebS(`${retConfigStorage.res.ws2}:${port}/${device}`);
+            let ws1 = new WebS(`${retConfigStorage.res.ws2}:${port}/${device1}`);
             ws1.onerror = (e) => { };
             ws1.onopen = () => { console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS1`) };
             ws1.onclose = async (event) => {
@@ -73,12 +73,12 @@ async function client(inf) {
                 try {
                     data = JSON.parse(event.data);
                     if (data.hasOwnProperty('funRun')) { fun = true }
-                } catch (e) { data = event.data }
+                } catch (e) { }
                 if (fun) {
                     const infWebsocketRet = { 'data': event.data }
                     const retWebsocketRet = websocketRet(infWebsocketRet)
                 } else {
-                    console.log(data)
+                    console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}`)
                 }
             }
         }
@@ -88,34 +88,9 @@ async function client(inf) {
         ret['msg'] = regexE({ 'e': e }).res
     }
 }
-client()
+//client()
 
-// let infExcel, retExcel, lin // CQPT    KQRE
-// infExcel = { 'action': 'get', 'tab': 'KQRE', 'col': 'A', 'lin': 1 }
-// retExcel = await excel(infExcel)
-// lin = retExcel.res
-// console.log(retExcel)
-
-// const loop = 5;
-// let i = 0;
-// async function runLoop() {
-//     while (i < loop) {
-//         i++;
-
-//         infExcel = { 'action': 'set', 'tab': 'KQRE', 'col': 'A', 'lin': lin, 'value': `A ${ lin } B` }
-//         retExcel = await excel(infExcel)
-//         console.log(retExcel)
-//         if (!retExcel.ret) {
-//             break
-//         }
-//         lin++
-
-//         const infRandom = { 'min': 1, 'max': 1, 'await': true }
-//         //const retRandom = await random(infRandom)
-//     }
-//     console.log('Loop concluído!');
-// }
-// runLoop();
-
-
-
+let infExcel, retExcel
+infExcel = { 'action': 'get', 'tab': 'CQPT', 'col': 'A', 'lin':1 }
+retExcel = await excel(infExcel)
+console.log(retExcel)
