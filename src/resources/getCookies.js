@@ -39,8 +39,6 @@ async function getCookies(inf) {
 
     if (!ret.ret) { console.log(ret.msg) }
     return ret
-}
-
-// export { getCookies };
+};
 
 window['getCookies'] = getCookies;

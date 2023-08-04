@@ -216,6 +216,4 @@ async function configStorage(inf) {
 
     if (!ret.ret) { console.log(ret.msg) }
     return ret
-}
-
-// export { configStorage };
+};

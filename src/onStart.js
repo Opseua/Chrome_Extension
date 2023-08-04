@@ -65,8 +65,8 @@ async function client(inf) {
             ws1.onerror = (e) => { };
             ws1.onopen = () => { console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS1`) };
             ws1.onclose = async (event) => {
-                console.log(`BACKGROUND: RECONEXAO EM 30 SEGUNDOS - WS1`);
-                await new Promise(r => setTimeout(r, 30000)); web1()
+                console.log(`BACKGROUND: RECONEXAO EM 10 SEGUNDOS - WS1`);
+                await new Promise(r => setTimeout(r, 10000)); web1()
             }
             ws1.onmessage = async (event) => {
                 let data, fun
@@ -88,13 +88,13 @@ async function client(inf) {
         ret['msg'] = regexE({ 'e': e }).res
     }
 }
-//client()
+client()
 
 let infExcel, retExcel
 
-infExcel = { 'action': 'set', 'tab': 'CQPT', 'col': 'A', 'value': `VALOR ${dateHour().res.tim}` }
-retExcel = await excel(infExcel)
-console.log(retExcel)
+// infExcel = { 'action': 'set', 'tab': 'CQPT', 'col': 'A', 'value': `VALOR ${dateHour().res.tim}` }
+// retExcel = await excel(infExcel)
+// console.log(retExcel)
 
 // infExcel = { 'action': 'get', 'tab': 'CQPT', 'col': 'A', 'lin': 1 }
 // retExcel = await excel(infExcel)

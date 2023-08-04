@@ -26,6 +26,4 @@ async function promptChrome(inf) {
     return ret
 }
 
-// export { promptChrome }
-
 window['promptChrome'] = promptChrome;

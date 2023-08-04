@@ -63,6 +63,4 @@ async function setTag(inf) {
     return ret
 }
 
-// export { setTag }
-
 window['setTag'] = setTag;

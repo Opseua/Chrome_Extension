@@ -59,6 +59,4 @@ async function command2(inf) {
   return ret
 };
 
-// export { command2 }
-
 window['command2'] = command2;

@@ -77,8 +77,6 @@ async function websocketRet(inf) {
     return ret
 }
 
-// export { websocketRet }
-
 if (typeof window !== 'undefined') { // CHROME
     window['websocketRet'] = websocketRet;
 } 

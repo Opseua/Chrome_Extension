@@ -88,5 +88,3 @@ function storageDel(inf) {
     });
   });
 }
-
-// export { storageSet, storageGet, storageDel }

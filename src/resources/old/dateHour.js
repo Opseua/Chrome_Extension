@@ -27,6 +27,4 @@ function dateHour() { // NAO POR COMO 'async'!!!
 
     if (!ret.ret) { console.log(ret.msg) }
     return ret
-}
-
-// export { dateHour };
+};

@@ -19,8 +19,6 @@ async function model(inf) {
     return ret
 }
 
-// export { model }
-
 if (typeof window !== 'undefined') { // CHROME
     window['model'] = model;
 } else if (typeof global !== 'undefined') { // NODE

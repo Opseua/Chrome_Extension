@@ -40,6 +40,4 @@ async function fileInf(inf) {
 
     if (!ret.ret) { console.log(ret.msg) }
     return ret;
-}
-
-// export { fileInf };
+};

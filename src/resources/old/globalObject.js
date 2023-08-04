@@ -29,9 +29,7 @@ function teste() {
             console.log('globalObject ALTERADO →', i)
         }
     }
-}
-
-// export { globalObject, addListener };
+};
 
 if (typeof window !== 'undefined') { // CHROME
     window['globalObject'] = globalObject;

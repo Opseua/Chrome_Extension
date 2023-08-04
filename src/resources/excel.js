@@ -54,8 +54,6 @@ async function excel(inf) {
             return retExcel
         }
 
-        // let lin = Number(inf.lin)
-
         function getColLin(column) {
             var result = 0; for (var i = 0; i < column.length; i++) {
                 result *= 26;
@@ -78,7 +76,10 @@ async function excel(inf) {
                 body: JSON.stringify({ 'context': { 'WorkbookMetadataParameter': { 'WorkbookMetadataState': { 'MetadataVersion': 1, 'ServerEventVersion': 0 } }, 'ClientRequestId': clientRequestId, 'InstantaneousType': 1, 'MakeInstantaneousChange': true, 'SessionId': decodeURIComponent(sessionId), 'TransientEditSessionToken': decodeURIComponent(transientEditSessionToken), 'PermissionFlags': 786431, 'Configurations': 5767952, 'CompleteResponseTimeout': 0, 'IsWindowHidden': false, 'IsWindowVisible': true, 'CollaborationParameter': { 'CollaborationState': { 'UserListVersion': linD, 'CollabStateId': 72 } }, 'MachineCluster': 'BR2', 'AjaxOptions': 0, 'ReturnSheetProcessedData': false, 'ActiveItemId': 'Sheet4', 'ViewportStateChange': { 'SheetViewportStateChanges': [{ 'SheetName': tab, 'SelectedRanges': { 'SheetName': tab, 'NamedObjectName': '', 'Ranges': [{ 'FirstRow': lin, 'FirstColumn': colNum, 'LastRow': lin, 'LastColumn': 0 }] }, 'ActiveCell': colLin }] }, 'MergeCount': { 'Current': 14, 'Pending': 14, 'SuspensionStartTimestamp': null }, 'ClientRevisions': { 'Min': 1, 'Max': 2, 'MaxFromBlockCache': 2 }, 'HasAnyNonOcsCoauthor': false, 'PaneType': 1, 'CellHtml': '', 'CellIfmt': 1, 'OriginalIfmt': 1 }, 'ewaControlId': 'm_excelWebRenderer_ewaCtl_m_ewa', 'currentObject': tab, 'isNamedItem': false, 'revision': 1, 'activeCell': { 'SheetName': tab, 'NamedObjectName': '', 'FirstRow': linT, 'FirstColumn': colNum }, 'formattedText': { 'Text': value, 'Fonts': null, 'TextRuns': null }, 'row': linT, 'column': 0, 'rowCount': 1, 'columnCount': 1, 'setCellRanges': { 'SheetName': tab, 'NamedObjectName': '', 'Ranges': [{ 'FirstRow': linT, 'FirstColumn': colNum, 'LastRow': linT, 'LastColumn': 0 }] }, 'comboKey': 0, 'allowedSetCellModes': 50, 'renderingOptions': 0, 'richValueParameter': { 'ParameterType': 5 }, 'colorScheme': null })
             };
             const retApi = await api(infApi);
-            if ((retApi.ret) && (retApi.res.body.toString().includes(`,"Text":"${value}","`))) {
+            const res = JSON.parse(retApi.res.body)
+            let valueOk
+            try { valueOk = res.d.Result.CellModel.Cells[0].Text } catch (e) { }
+            if (retApi.ret && valueOk) {
                 ret['ret'] = true;
                 ret['msg'] = `EXCEL: OK`;
             } else {
@@ -123,8 +124,6 @@ async function excel(inf) {
     if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
-
-// export { excel }
 
 if (typeof window !== 'undefined') { // CHROME
     window['excel'] = excel;

@@ -180,6 +180,4 @@ async function command1(inf) {
   return ret
 }
 
-// export { command1 }
-
 window['command1'] = command1;

@@ -27,6 +27,4 @@ async function shortcutPressed(inf) {
   return ret
 }
 
-// export { shortcutPressed }
-
 window['shortcutPressed'] = shortcutPressed;

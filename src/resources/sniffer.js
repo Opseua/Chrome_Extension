@@ -95,6 +95,4 @@ async function sniffer(inf) {
 
 }
 
-// export { sniffer }
-
 window['sniffer'] = sniffer;

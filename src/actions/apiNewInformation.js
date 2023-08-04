@@ -23,8 +23,6 @@ async function apiNewInformation(inf) {
   return ret
 }
 
-// export { apiNewInformation }
-
 window['apiNewInformation'] = apiNewInformation;
 
 
