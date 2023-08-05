@@ -168,7 +168,7 @@ async function command1(inf) {
   //   const retSetTag = await setTag(comando);
   //   const texto = ''
   //   const infApi = {
-  //     url: `https://ntfy.sh/OPSEUA`,
+  //     url: `https://ntfy.sh/AAAAAAA`,
   //     method: 'POST',
   //     headers: { 'Content-Type': 'application/json', 'title': `${retSetTag.titulo}` },
   //     body: retSetTag.tex

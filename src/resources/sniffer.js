@@ -6,9 +6,9 @@
 await import('./functions.js');
 
 async function sniffer(inf) {
+    let ret = { 'ret': false, 'res': {} };
 
     return new Promise(resolve => {
-        let ret = { 'ret': false, 'res': {} };
         let lisOnBeforeRequest, lisOnBeforeSendHeaders, lisOnCompleted
         function snifferOff() {
             chrome.webRequest.onBeforeRequest.removeListener(lisOnBeforeRequest);
@@ -25,14 +25,10 @@ async function sniffer(inf) {
             chrome.webRequest.onBeforeSendHeaders.addListener(lisOnBeforeSendHeaders, filters, ['requestHeaders']);
             chrome.webRequest.onCompleted.addListener(lisOnCompleted, filters, ['responseHeaders']);
             console.log('sniffer iniciado');
-            let newReqSend = true; let newResBlock = false
-            let sendPri = {
-                'arrUrl': [
-                    'https://ntfy.sh/', 'https://jsonformatter.org/json-parser',
-                    'https://notepad.pw/save', 'https://desk.oneforma.com/scribo_apps/MTPE_new_process/postediting.php?flogin=2'
-                ]
+            let sendPri, newReqSend = true; let newResBlock = false
+            if (inf && inf.arrUrl) { sendPri = { 'arrUrl': inf.arrUrl } } else {
+                sendPri = { 'arrUrl': ['https://ntfy.sh/'] }
             }
-            if (inf && inf.arrUrl) { sendPri = { 'arrUrl': inf.arrUrl } }
             async function intercept(infOk, eventType) {
                 if (!!sendPri.arrUrl.find(infRegex => regex({ 'simple': true, 'pattern': infRegex, 'text': infOk.url }))) {
 
