@@ -90,35 +90,92 @@ async function client(inf) {
 }
 client()
 
-let infExcel, retExcel
 
-// infExcel = { 'action': 'set', 'tab': 'YARE', 'col': 'A', 'value': `VALOR ${dateHour().res.tim}` }
-// retExcel = await excel(infExcel)
-// console.log(retExcel)
+await import('./scripts/oneFormaMTPE.js');
+oneFormaMTPE()
+// await import('./resources/sniffer.js');
+// await import('./resources/clipboard.js');
+// await import('./resources/notification.js');
+// await import('./resources/chatGpt.js');
+// let infRegex1, infRegex2, retRegex1, retRegex2, infSniffer, retSniffer, infNotification, retNotification, infChatGpt, retChatGpt, infClipboard, retClipboard
+// async function aaaaa() {
+//     infSniffer = { 'arrUrl': ['https://desk.oneforma.com/scribo_apps/MTPE_new_process/postediting.php?flogin=2*'] }
+//     retSniffer = await sniffer(infSniffer)
+//     //console.log(retSniffer)
 
-// await import('./resources/tabSearch.js');
-// const infTabSearch = { 'search': '*oneforma*', 'openIfNotExist': false, 'active': true, 'pinned': false, 'url': 'https://www.google.com/' } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
-// const retTabSearch = await tabSearch(infTabSearch)
-// console.log(retTabSearch)
+//     infRegex1 = { 'simple': true, 'pattern': '<p class="source_text"(.*?)/p>', 'text': retSniffer.res }
+//     retRegex1 = regex(infRegex1)
 
-// await import('./resources/getPage.js');
-// const infGetPage = { 'id': retTabSearch.res.id }
-// const retGetPage = await getPage(infGetPage)
-// console.log(retGetPage.res)
+//     infRegex2 = { 'simple': true, 'pattern': 'mt_textbox" dir class="form-control"(.*?)/textarea>', 'text': retSniffer.res }
+//     retRegex2 = regex(infRegex2)
 
-// const infFileWrite = {
-//     'file': `page.txt`,
-//     'rewrite': false, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-//     'text': retGetPage.res
-// };
-// const retFileWrite = await fileWrite(infFileWrite);
-// console.log(retFileWrite);
+//     if (retRegex1.ret && retRegex1.res.text.split('<').length - 1 == 1 && retRegex1.res.text.split('>').length - 1 == 1 && retRegex2.ret && retRegex2.res.text.split('<').length - 1 == 1 && retRegex2.res.text.split('>').length - 1 == 1) {
 
-// const infRegex = { 'pattern': 'UM(.*?)TRES#', 'text': `UM
-// DOIS
-// TRES
-// QUATRO
-// TRES#` }
-const infRegex = { 'simple': true, 'pattern': '*DOIS*', 'text': 'UMDOISTRES' }
-const retRegex = regex(infRegex)
-console.log(retRegex)
+//         infRegex1 = { 'simple': true, 'pattern': '>(.*?)<', 'text': retRegex1.res.text }
+//         retRegex1 = regex(infRegex1)
+
+//         infRegex2 = { 'simple': true, 'pattern': '>(.*?)<', 'text': retRegex2.res.text }
+//         retRegex2 = regex(infRegex2)
+
+//         infNotification =
+//         {
+//             'duration': 2,
+//             'type': 'basic',
+//             'title': `AGUARDE...`,
+//             'message': `Mudando o texto`,
+//             'iconUrl': null,
+//             'buttons': [],
+//         };
+//         retNotification = await notification(infNotification)
+
+
+//         infChatGpt = { 'provider': 'ora.ai', 'input': `REWRITE THIS SENTENCE IN ANOTHER WAY, KEEPING IT AS SIMILAR AS POSSIBLE AND WITH THE SAME NUMBER OF WORDS POSSIBLE, AND KEEPING CAPITAL LETTERS ACCORDING TO THE ORIGINAL TEXT\n\n${retRegex2.res.text}` }
+//         retChatGpt = await chatGpt(infChatGpt)
+//         //console.log('AQUI', retChatGpt.res)
+
+//         infClipboard = { 'value': retChatGpt.res };
+//         retClipboard = await clipboard(infClipboard)
+
+//         if (retRegex2.res.text == retChatGpt.res) {
+//             infNotification =
+//             {
+//                 'duration': 2,
+//                 'type': 'basic',
+//                 'title': `🟡 PULAR 🟡`,
+//                 'message': `Mesmo texto`,
+//                 'iconUrl': null,
+//                 'buttons': [],
+//             };
+//             retNotification = await notification(infNotification)
+//         } else {
+//             infNotification =
+//             {
+//                 'duration': 8,
+//                 'type': 'basic',
+//                 'title': `🟢 CONCLUÍDO 🟢`,
+//                 'message': `pt → ${retRegex1.res.text}\nen → ${retRegex2.res.text}\n🔵 ${retChatGpt.res}`,
+//                 'iconUrl': null,
+//                 'buttons': [],
+//             };
+//             retNotification = await notification(infNotification)
+//         }
+
+
+
+//         aaaaa()
+//     } else {
+//         //console.log(false)
+//         infNotification =
+//         {
+//             'duration': 1,
+//             'type': 'basic',
+//             'title': `🔴 PULAR 🔴`,
+//             'message': `Erro ao alterar texto`,
+//             'iconUrl': null,
+//             'buttons': [],
+//         };
+//         retNotification = await notification(infNotification)
+//     }
+// }
+// //aaaaa()
+

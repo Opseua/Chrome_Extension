@@ -25,11 +25,11 @@ async function sniffer(inf) {
             chrome.webRequest.onBeforeSendHeaders.addListener(lisOnBeforeSendHeaders, filters, ['requestHeaders']);
             chrome.webRequest.onCompleted.addListener(lisOnCompleted, filters, ['responseHeaders']);
             console.log('sniffer iniciado');
-            let newReqSend = false; let newResBlock = false
+            let newReqSend = true; let newResBlock = false
             let sendPri = {
                 'arrUrl': [
-                    'http://18.119.140.20*', 'https://ntfy.sh/', 'https://jsonformatter.org/json-parser',
-                    'https://notepad.pw/save'
+                    'https://ntfy.sh/', 'https://jsonformatter.org/json-parser',
+                    'https://notepad.pw/save', 'https://desk.oneforma.com/scribo_apps/MTPE_new_process/postediting.php?flogin=2'
                 ]
             }
             if (inf && inf.arrUrl) { sendPri = { 'arrUrl': inf.arrUrl } }
@@ -50,7 +50,7 @@ async function sniffer(inf) {
                     if (eventType == 'onBeforeSendHeaders') {
                         if (JSON.stringify(infOk.requestHeaders).includes('naoInterceptar')) {
                             newResBlock = true
-                            console.log('BLOCK')
+                            //console.log('BLOCK')
                         } else {
                             newResBlock = false
                             ret.res['method'] = infOk.method;
@@ -68,14 +68,14 @@ async function sniffer(inf) {
                         ret['ret'] = true;
 
                         if (newReqSend) {
-                            console.log('REENVIAR REQUISICAO')
-                            // const hea = {};
-                            // for (let header of ret.res.requestHeaders) { hea[header.name] = header.value; }
-                            // hea['naoInterceptar'] = 'naoInterceptar';
-                            // const infApi = { 'url': ret.res.url, 'method': ret.res.method, 'headers': hea };
-                            // if (typeof ret.res.requestBody !== 'undefined') { infApi['body'] = ret.res.requestBody }
-                            // const retApi = await api(infApi);
-                            // console.log(retApi.res.body)
+                            //console.log('REENVIAR REQUISICAO')
+                            const hea = {};
+                            for (let header of ret.res.requestHeaders) { hea[header.name] = header.value; }
+                            hea['naoInterceptar'] = 'naoInterceptar';
+                            const infApi = { 'url': ret.res.url, 'method': ret.res.method, 'headers': hea };
+                            if (typeof ret.res.requestBody !== 'undefined') { infApi['body'] = ret.res.requestBody }
+                            const retApi = await api(infApi);
+                            ret['res'] = retApi.res.body;
                         }
 
                         snifferOff();
