@@ -61,6 +61,7 @@ async function websocketRet(inf) {
                     wsRet.onopen = () => {
                         wsRet.send(JSON.stringify({ 'inf': data.funRet.inf, 'retWs': ret.res }));
                         wsRet.close()
+
                     }
                 }
             }

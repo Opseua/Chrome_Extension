@@ -11,7 +11,7 @@ await import('./functions.js');
 async function excel(inf) {
     let ret = { 'ret': false };
     try {
-        let clientRequestId, sessionId, transientEditSessionToken, infConfigStorage, retConfigStorage
+        let clientRequestId, sessionId, transientEditSessionToken, infConfigStorage, retConfigStorage, lastRun
         infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'excel' }
         retConfigStorage = await configStorage(infConfigStorage);
         if (retConfigStorage.ret) {
@@ -48,9 +48,34 @@ async function excel(inf) {
             let infExcel, retExcel
             infExcel = { 'action': 'get', 'tab': tab, 'col': col, 'lin': 1 }
             retExcel = await excel(infExcel)
+            lin = retExcel.res
+            console.log(4, dateHour().res.tim, `LINHA ${lin}`)
 
-            infExcel = { 'action': 'set', 'tab': tab, 'col': col, 'lin': retExcel.res, 'value': value }
+            if (inf.inf) {
+                const infNew = JSON.parse(inf.inf)
+                if (infNew.reqRes == 'res') {
+                    const infFileWrite = {
+                        'file': `welocalize.txt`,
+                        'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
+                        'text': `${infNew.id}##${lin}##${infNew.id}\n\n`
+                    };
+                    const retFileWrite = fileWrite(infFileWrite);
+                }
+
+                if (infNew.reqRes == 'req') {
+                    const infFileRead = { 'file': `D:/Downloads/Google Chrome/welocalize.txt` }
+                    const retFileRead = await fileRead(infFileRead)
+                    console.log(retFileRead)
+                    const infRegex = { 'pattern': `${infNew.id}##(.*?)##${infNew.id}`, 'text': retFileRead.res }
+                    const retRegex = regex(infRegex)
+                    console.log(retRegex)
+                    lin = retRegex.res.text
+                }
+            }
+
+            infExcel = { 'action': 'set', 'tab': tab, 'col': col, 'lin': lin, 'value': value }
             retExcel = await excel(infExcel)
+            //console.log(5, dateHour().res.tim)
             return retExcel
         }
 

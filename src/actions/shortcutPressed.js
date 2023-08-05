@@ -16,7 +16,6 @@ async function shortcutPressed(inf) {
       localStorage.removeItem('varGlobal');
     } else {
       ret['msg'] = `\n #### ERRO ####  SHORTCUT PRESSED | ACAO DO ATALHO NAO DEFINIDA \n\n`;
-      //ret['res'] = `\n #### ERRO ####  ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n`
     }
 
   } catch (e) {

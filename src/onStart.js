@@ -63,7 +63,7 @@ async function client(inf) {
         async function web1() {
             let ws1 = new WebS(`${retConfigStorage.res.ws2}:${port}/${device1}`);
             ws1.onerror = (e) => { };
-            ws1.onopen = () => { console.log(`BACKGROUND: CONEXAO ESTABELECIDA - WS1`) };
+            ws1.onopen = () => { console.log(`BACKGROUND: CONEXAO OK - WS1`) };
             ws1.onclose = async (event) => {
                 console.log(`BACKGROUND: RECONEXAO EM 10 SEGUNDOS - WS1`);
                 await new Promise(r => setTimeout(r, 10000)); web1()
@@ -92,11 +92,33 @@ client()
 
 let infExcel, retExcel
 
-// infExcel = { 'action': 'set', 'tab': 'CQPT', 'col': 'A', 'value': `VALOR ${dateHour().res.tim}` }
+// infExcel = { 'action': 'set', 'tab': 'YARE', 'col': 'A', 'value': `VALOR ${dateHour().res.tim}` }
 // retExcel = await excel(infExcel)
 // console.log(retExcel)
 
-// infExcel = { 'action': 'get', 'tab': 'CQPT', 'col': 'A', 'lin': 1 }
-// retExcel = await excel(infExcel)
-// console.log(retExcel)
+// await import('./resources/tabSearch.js');
+// const infTabSearch = { 'search': '*oneforma*', 'openIfNotExist': false, 'active': true, 'pinned': false, 'url': 'https://www.google.com/' } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
+// const retTabSearch = await tabSearch(infTabSearch)
+// console.log(retTabSearch)
 
+// await import('./resources/getPage.js');
+// const infGetPage = { 'id': retTabSearch.res.id }
+// const retGetPage = await getPage(infGetPage)
+// console.log(retGetPage.res)
+
+// const infFileWrite = {
+//     'file': `page.txt`,
+//     'rewrite': false, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
+//     'text': retGetPage.res
+// };
+// const retFileWrite = await fileWrite(infFileWrite);
+// console.log(retFileWrite);
+
+// const infRegex = { 'pattern': 'UM(.*?)TRES#', 'text': `UM
+// DOIS
+// TRES
+// QUATRO
+// TRES#` }
+const infRegex = { 'simple': true, 'pattern': '*DOIS*', 'text': 'UMDOISTRES' }
+const retRegex = regex(infRegex)
+console.log(retRegex)

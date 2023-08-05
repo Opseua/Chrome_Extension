@@ -10,7 +10,6 @@ async function promptChrome(inf) {
         const text = (inf) ? `${inf} | Digite o comando:` : `Digite o comando:`;
         let retPrompt = prompt(`${text}`);
         if (!retPrompt) {
-           // ret['msg'] = 'PROMPT CHROME: ERRO | EM BRANCO';
             ret['msg'] = `\n #### ERRO ####  PROMPT CHROME \n EM BRANCO \n\n`;
         } else {
             ret['ret'] = true;

@@ -89,7 +89,6 @@ async function chatGpt(inf) {
                 ret['msg'] = `CHAT GPT AI: OK`;
                 ret['res'] = res.response;
             } else {
-                //ret['msg'] = `CHAT GPT AI: ERRO | ${res.error.message}`;
                 infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'chatGptOra.ai' }
                 retConfigStorage = await configStorage(infConfigStorage)
                 let infNotification =

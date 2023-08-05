@@ -23,7 +23,6 @@ async function translate(inf) {
             ret['msg'] = `TRANSLATE: OK`;
             ret['res'] = match[1];
         } else {
-           // ret['msg'] = `TRANSLATE: ERRO | TAG NAO ENCONTRADA`;
             ret['msg'] = `\n #### ERRO ####  TRANSLATE \n TAG NAO ENCONTRADA \n\n`;
         }
 

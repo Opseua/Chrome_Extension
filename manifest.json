@@ -15,6 +15,7 @@
     "ws://*/*",
     "wss://*/*",
     "*://*/*",
+    "scripting",
     "<all_urls>",
     "identity",
     "downloads",
