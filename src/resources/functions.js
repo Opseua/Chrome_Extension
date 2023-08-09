@@ -66,6 +66,7 @@
 // await new Promise(resolve => setTimeout(resolve, (2500)));
 // globalObject.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
 
+
 async function api(inf) {
     let ret = { 'ret': false };
     try {
@@ -275,7 +276,7 @@ async function configStorage(inf) {
                         const data = {};
                         if (!inf.key) {
                             ret['msg'] = `\n #### ERRO ####  STORAGE SET \n INFORMAR A 'key' \n\n`;
-                        } else if (!inf.value) {
+                        } else if (!inf.value && !inf.value == false) {
                             ret['msg'] = `\n #### ERRO ####  STORAGE SET \n INFORMAR O 'value' \n\n`;
                         } else {
                             data[inf.key] = inf.value;
@@ -387,7 +388,7 @@ async function configStorage(inf) {
                 try {
                     if (!inf.key) {
                         ret['msg'] = `\n #### ERRO ####  CONFIG SET \n INFORMAR A 'key' \n\n`;
-                    } else if (!inf.value) {
+                    } else if (!inf.value && !inf.value == false) {
                         ret['msg'] = `\n #### ERRO ####  CONFIG SET \n INFORMAR O 'value' \n\n`;
                     } else {
                         ret['ret'] = true;
@@ -548,17 +549,23 @@ async function random(inf) {
 }
 
 // ############### GLOBAL OBJECT ###############
-const data = { inf: false };
+const data = { inf: '' };
 const listeners = new Set();
-const globalObject = new Proxy(data, {
+const gO = new Proxy(data, {
     set(target, key, value) {
-        target[key] = value; globalChanged(value);
-        listeners.forEach(listener => listener(target)); return true
+        target[key] = value;
+        globalChanged(value);
+        listeners.forEach(listener => listener(target));
+        return true
     }
 });
-function addListener(listener) { listeners.add(listener) }
-function removeListener(listener) { listeners.delete(listener) }
-async function globalChanged(i) { if (i.alert !== false) { console.log('globalObject ALTERADO →', i) } }
+function gOAdd(listener) { listeners.add(listener) }
+function gORem(listener) { listeners.delete(listener) }
+async function globalChanged(i) {
+    if (i.alert !== false) {
+        //console.log('globalObject ALTERADO →', i)
+    }
+}
 // ############### ###############
 
 function regexE(inf) {
@@ -590,9 +597,10 @@ if (typeof window !== 'undefined') { // CHROME
     window['dateHour'] = dateHour;
     window['regex'] = regex;
     window['random'] = random;
-    window['globalObject'] = globalObject;
-    window['addListener'] = addListener;
     window['regexE'] = regexE;
+    window['gO'] = gO;
+    window['gOAdd'] = gOAdd;
+    window['gORem'] = gORem;
 } else if (typeof global !== 'undefined') { // NODE
     global['fileInf'] = fileInf;
     global['api'] = api;
@@ -603,8 +611,9 @@ if (typeof window !== 'undefined') { // CHROME
     global['dateHour'] = dateHour;
     global['regex'] = regex;
     global['random'] = random;
-    global['globalObject'] = globalObject;
-    global['addListener'] = addListener;
     global['regexE'] = regexE;
+    global['gO'] = gO;
+    global['gOAdd'] = gOAdd;
+    global['gORem'] = gORem;
 }
 

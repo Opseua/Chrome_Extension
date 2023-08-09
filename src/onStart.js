@@ -1,18 +1,20 @@
 //await import('./resources/clearConsole.js');
 console.log('onStart');
+chrome.browserAction.setBadgeText({ text: '' });
 await import('./resources/functions.js');
 await import('./actions/shortcutPressed.js');
 await import('./resources/websocketRet.js');
 await import('./scripts/oneFormaMTPE.js');
+await import('./scripts/peroptyx.js');
 
-// EXCLUIR DOWNLOAD DA LISTA SE FOR DO NTFY E TIVER '[KEEP]' NO TITULO DO ARQUIVO
+// EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
 chrome.downloads.onChanged.addListener(async function (...inf) {
     if (inf[0].state && inf[0].state.current === "complete") {
         chrome.downloads.search({ id: inf.id }, async function (inf) {
             if (inf.length > 0) {
                 const downloadItem = inf[0];
-                if (downloadItem.byExtensionName === 'NTFY' && !downloadItem.filename.includes('[KEEP]')) {
-                    // console.log(`EVENTO: download do NTFY concluído\n`, downloadItem)
+                if (downloadItem.byExtensionName === 'BOT' && !downloadItem.filename.includes('[KEEP]')) {
+                    // console.log(`EVENTO: download do BOT concluído\n`, downloadItem)
                     setTimeout(function () {
                         chrome.downloads.erase({ id: downloadItem.id });
                         console.log('DOWNLOAD REMOVIDO DA LISTA');
@@ -27,6 +29,7 @@ chrome.downloads.onChanged.addListener(async function (...inf) {
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function (...inf) {
     console.log('BACKGROUND: ICONE PRESSIONADO');
+    //chrome.browserAction.setPopup({popup: "./popup.html"});
 });
 
 // ######################### ATALHO PRESSIONADO
@@ -90,6 +93,3 @@ async function client(inf) {
 }
 client()
 
-
-
-oneFormaMTPE()

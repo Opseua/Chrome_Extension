@@ -20,18 +20,18 @@ async function excel(inf) {
             transientEditSessionToken = retConfigStorage.res.transientEditSessionToken
         } else {
             await import('./sniffer.js');
-            const infSniffer = { 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
+            const infSniffer = { 'newReqSend': false,'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
             const retSniffer = await sniffer(infSniffer)
 
-            let infRegex = { 'pattern': 'ClientRequestId%22%3A%22(.*?)%22%2C%22InstantaneousType', 'text': retSniffer.res.url }
+            let infRegex = { 'pattern': 'ClientRequestId%22%3A%22(.*?)%22%2C%22InstantaneousType', 'text': retSniffer.res.res.url }
             let retRegex = regex(infRegex)
             clientRequestId = retRegex.res.text
 
-            infRegex = { 'pattern': 'SessionId%22%3A%22(.*?)%22%2C%22TransientEditSessionToken', 'text': retSniffer.res.url }
+            infRegex = { 'pattern': 'SessionId%22%3A%22(.*?)%22%2C%22TransientEditSessionToken', 'text': retSniffer.res.res.url }
             retRegex = regex(infRegex)
             sessionId = retRegex.res.text
 
-            infRegex = { 'pattern': 'TransientEditSessionToken%22%3A%22(.*?)%22%2C%22PermissionFlags', 'text': retSniffer.res.url }
+            infRegex = { 'pattern': 'TransientEditSessionToken%22%3A%22(.*?)%22%2C%22PermissionFlags', 'text': retSniffer.res.res.url }
             retRegex = regex(infRegex)
             transientEditSessionToken = retRegex.res.text
 

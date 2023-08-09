@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "NTFY",
+  "name": "BOT",
   "version": "1.0",
-  "description": "Descrição da minha extensão",
+  "description": "",
   "host_permissions": [
     "*://*/*"
   ],
@@ -28,12 +28,6 @@
     "activeTab",
     "clipboardRead",
     "clipboardWrite",
-    "https://ntfy.sh/",
-    "http://ntfy.sh/",
-    "https://joinjoaomgcd.appspot.com/",
-    "http://localhost:8080/",
-    "https://accounts.google.com/o/oauth2/v2/auth/",
-    "https://chat.openai.com/*",
     "contextMenus",
     "geolocation",
     "tts",
@@ -95,12 +89,14 @@
     "runtime"
   ],
   "icons": {
-    "16": "./src/media/icon_1.png",
-    "32": "./src/media/icon_1.png",
-    "48": "./src/media/icon_1.png",
-    "128": "./src/media/icon_1.png"
+    "16": "./src/media/icon_3.png",
+    "32": "./src/media/icon_3.png",
+    "48": "./src/media/icon_3.png",
+    "128": "./src/media/icon_3.png"
   },
-  "browser_action": {},
+  "browser_action": {
+    
+  },
   "background": {
     "scripts": [
       "./background.js"
@@ -116,6 +112,9 @@
     },
     "atalho_3": {
       "description": "atalho_3 DESCRIÇÃO"
+    },
+    "atalho_4": {
+      "description": "atalho_4 DESCRIÇÃO"
     }
   }
 }

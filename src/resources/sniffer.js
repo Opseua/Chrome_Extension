@@ -1,22 +1,25 @@
-// // await import('./sniffer.js');
-// const infSniffer = { 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
+// await import('./sniffer.js');
+// const infSniffer = { 'newReqSend': true, 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
 // const retSniffer = await sniffer(infSniffer)
 // console.log(retSniffer)
 
 await import('./functions.js');
 
 async function sniffer(inf) {
-    let ret = { 'ret': false, 'res': {} };
+    let ret = { 'ret': false, 'res': { 'req': {}, 'res': {} } };
 
     return new Promise(resolve => {
         let lisOnBeforeRequest, lisOnBeforeSendHeaders, lisOnCompleted
-        function snifferOff() {
+        function snifferOff(inf) {
+            if (inf) { console.log('sniffer parou'); resolve({ 'ret': false }) } else { console.log('sniffer off'); resolve(ret) }
             chrome.webRequest.onBeforeRequest.removeListener(lisOnBeforeRequest);
             chrome.webRequest.onBeforeSendHeaders.removeListener(lisOnBeforeSendHeaders);
             chrome.webRequest.onCompleted.removeListener(lisOnCompleted);
-            console.log('sniffer removido'); resolve(ret);
         }
         try {
+            gO.inf = { 'sniffer': 1 }
+            const gOEve = async (i) => { if (i.inf.sniffer === 2) { gO.inf = { 'sniffer': 0 }; gORem(gOEve); snifferOff(true) } };
+            gOAdd(gOEve);
             const filters = { urls: ["<all_urls>"] };
             lisOnBeforeRequest = function (infLis) { intercept(infLis, 'onBeforeRequest'); }
             lisOnBeforeSendHeaders = function (infLis) { intercept(infLis, 'onBeforeSendHeaders'); }
@@ -24,8 +27,12 @@ async function sniffer(inf) {
             chrome.webRequest.onBeforeRequest.addListener(lisOnBeforeRequest, filters, ['requestBody']);
             chrome.webRequest.onBeforeSendHeaders.addListener(lisOnBeforeSendHeaders, filters, ['requestHeaders']);
             chrome.webRequest.onCompleted.addListener(lisOnCompleted, filters, ['responseHeaders']);
-            console.log('sniffer iniciado');
-            let sendPri, newReqSend = true; let newResBlock = false
+            let sendPri, newResBlock = false, newReqSend = inf.newReqSend ? true : false
+            chrome.browserAction.setBadgeBackgroundColor({ color: [25, 255, 71, 255] });
+            if (newReqSend) {
+                console.log(`sniffer on [newReqSend]`);
+                chrome.browserAction.setBadgeText({ text: 'SIM' });
+            } else { console.log(`sniffer on`); chrome.browserAction.setBadgeText({ text: 'NAO' }); }
             if (inf && inf.arrUrl) { sendPri = { 'arrUrl': inf.arrUrl } } else {
                 sendPri = { 'arrUrl': ['https://ntfy.sh/'] }
             }
@@ -34,13 +41,13 @@ async function sniffer(inf) {
 
                     if (eventType == 'onBeforeRequest') {
                         if (infOk.requestBody && infOk.requestBody.raw && infOk.requestBody.raw[0].hasOwnProperty('bytes')) {
-                            ret.res['requestBodyType'] = 'binary';
-                            ret.res['requestBody'] = new TextDecoder("utf-8").decode(new Uint8Array(infOk.requestBody.raw[0].bytes));
+                            ret.res.req['requestBodyType'] = 'binary';
+                            ret.res.req['requestBody'] = new TextDecoder("utf-8").decode(new Uint8Array(infOk.requestBody.raw[0].bytes));
                         } else if (infOk.requestBody && infOk.requestBody.formData && infOk.requestBody.hasOwnProperty('formData')) {
-                            ret.res['requestBodyType'] = 'formData';
-                            ret.res['requestBody'] = infOk.requestBody.formData;
+                            ret.res.req['requestBodyType'] = 'formData';
+                            ret.res.req['requestBody'] = infOk.requestBody.formData;
                         }
-                        ret.res['type'] = infOk.type; // 'main_frame' (requisicao inicial 'doc')
+                        ret.res.req['type'] = infOk.type; // 'main_frame' (requisicao inicial 'doc')
                     }
 
                     if (eventType == 'onBeforeSendHeaders') {
@@ -49,33 +56,37 @@ async function sniffer(inf) {
                             //console.log('BLOCK')
                         } else {
                             newResBlock = false
-                            ret.res['method'] = infOk.method;
-                            ret.res['url'] = infOk.url;
-                            ret.res['tabId'] = infOk.tabId;
-                            ret.res['requestHeaders'] = infOk.requestHeaders;
+                            ret.res.req['method'] = infOk.method;
+                            ret.res.req['url'] = infOk.url;
+                            ret.res.req['tabId'] = infOk.tabId;
+                            ret.res.req['requestHeaders'] = infOk.requestHeaders;
                         }
                     }
 
-                    if (eventType == 'onCompleted' && ret.res.url && !newResBlock) {
+                    if (eventType == 'onCompleted' && ret.res.req.url && !newResBlock) {
                         // if ((infOk.statusCode !== 200)) {
                         //     console.log('DEU ERRO', 'CODE:', infOk.statusCode, infOk.url)
                         // }
-                        ret.res['statusCode'] = infOk.statusCode;
+                        ret.res.req['code'] = infOk.statusCode;
                         ret['ret'] = true;
 
                         if (newReqSend) {
+                            newReqSend = false
                             //console.log('REENVIAR REQUISICAO')
                             const hea = {};
-                            for (let header of ret.res.requestHeaders) { hea[header.name] = header.value; }
+                            for (let header of ret.res.req.requestHeaders) { hea[header.name] = header.value; }
                             hea['naoInterceptar'] = 'naoInterceptar';
-                            const infApi = { 'url': ret.res.url, 'method': ret.res.method, 'headers': hea };
-                            if (typeof ret.res.requestBody !== 'undefined') { infApi['body'] = ret.res.requestBody }
+                            const infApi = { 'url': ret.res.req.url, 'method': ret.res.req.method, 'headers': hea };
+                            if (typeof ret.res.res.requestBody !== 'undefined') { infApi['body'] = ret.res.req.requestBody }
                             const retApi = await api(infApi);
-                            ret['res'] = retApi.res.body;
+                            ret.res.res['method'] = ret.res.req.method;
+                            ret.res.res['code'] = retApi.res.code;
+                            ret.res.res['url'] = ret.res.req.url;
+                            ret.res.res['headers'] = retApi.res.headers;
+                            ret.res.res['body'] = retApi.res.body;
                         }
 
                         snifferOff();
-                        ret = { 'ret': false, 'res': {} }
                     }
 
                 }
@@ -92,3 +103,4 @@ async function sniffer(inf) {
 }
 
 window['sniffer'] = sniffer;
+
