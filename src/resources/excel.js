@@ -22,16 +22,17 @@ async function excel(inf) {
             await import('./sniffer.js');
             const infSniffer = { 'newReqSend': false,'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
             const retSniffer = await sniffer(infSniffer)
+            console.log(retSniffer)
 
-            let infRegex = { 'pattern': 'ClientRequestId%22%3A%22(.*?)%22%2C%22InstantaneousType', 'text': retSniffer.res.res.url }
+            let infRegex = { 'pattern': 'ClientRequestId%22%3A%22(.*?)%22%2C%22InstantaneousType', 'text': retSniffer.res.req.url }
             let retRegex = regex(infRegex)
             clientRequestId = retRegex.res.text
 
-            infRegex = { 'pattern': 'SessionId%22%3A%22(.*?)%22%2C%22TransientEditSessionToken', 'text': retSniffer.res.res.url }
+            infRegex = { 'pattern': 'SessionId%22%3A%22(.*?)%22%2C%22TransientEditSessionToken', 'text': retSniffer.res.req.url }
             retRegex = regex(infRegex)
             sessionId = retRegex.res.text
 
-            infRegex = { 'pattern': 'TransientEditSessionToken%22%3A%22(.*?)%22%2C%22PermissionFlags', 'text': retSniffer.res.res.url }
+            infRegex = { 'pattern': 'TransientEditSessionToken%22%3A%22(.*?)%22%2C%22PermissionFlags', 'text': retSniffer.res.req.url }
             retRegex = regex(infRegex)
             transientEditSessionToken = retRegex.res.text
 
@@ -51,27 +52,27 @@ async function excel(inf) {
             lin = retExcel.res
             console.log(4, dateHour().res.tim, `LINHA ${lin}`)
 
-            if (inf.inf) {
-                const infNew = JSON.parse(inf.inf)
-                if (infNew.reqRes == 'res') {
-                    const infFileWrite = {
-                        'file': `welocalize.txt`,
-                        'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-                        'text': `${infNew.id}##${lin}##${infNew.id}\n\n`
-                    };
-                    const retFileWrite = fileWrite(infFileWrite);
-                }
+            // if (inf.inf) {
+            //     const infNew = JSON.parse(inf.inf)
+            //     if (infNew.reqRes == 'res') {
+            //         const infFileWrite = {
+            //             'file': `welocalize.txt`,
+            //             'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
+            //             'text': `${infNew.id}##${lin}##${infNew.id}\n\n`
+            //         };
+            //         const retFileWrite = fileWrite(infFileWrite);
+            //     }
 
-                if (infNew.reqRes == 'req') {
-                    const infFileRead = { 'file': `D:/Downloads/Google Chrome/welocalize.txt` }
-                    const retFileRead = await fileRead(infFileRead)
-                    console.log(retFileRead)
-                    const infRegex = { 'pattern': `${infNew.id}##(.*?)##${infNew.id}`, 'text': retFileRead.res }
-                    const retRegex = regex(infRegex)
-                    console.log(retRegex)
-                    lin = retRegex.res.text
-                }
-            }
+            //     if (infNew.reqRes == 'req') {
+            //         const infFileRead = { 'file': `D:/Downloads/Google Chrome/welocalize.txt` }
+            //         const retFileRead = await fileRead(infFileRead)
+            //         console.log(retFileRead)
+            //         const infRegex = { 'pattern': `${infNew.id}##(.*?)##${infNew.id}`, 'text': retFileRead.res }
+            //         const retRegex = regex(infRegex)
+            //         console.log(retRegex)
+            //         lin = retRegex.res.text
+            //     }
+            // }
 
             infExcel = { 'action': 'set', 'tab': tab, 'col': col, 'lin': lin, 'value': value }
             retExcel = await excel(infExcel)

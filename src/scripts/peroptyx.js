@@ -75,8 +75,6 @@ async function peroptyx(inf) {
                             retNotification = await notification(infNotification)
                         }
 
-                        console.log(comentario)
-
                         infTranslate1 = { 'source': 'auto', 'target': 'pt', 'text': comentario };
                         retTranslate1 = await translate(infTranslate1)
                         comentario1 = retTranslate1.res

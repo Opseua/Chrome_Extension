@@ -23,6 +23,7 @@
 // }
 
 await import('./functions.js');
+await import('./excel.js');
 
 async function websocketRet(inf) {
     let ret = { 'ret': false };
