@@ -42,6 +42,6 @@ async function splitText(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['splitText'] = splitText;
-} else if (typeof global !== 'undefined') { // NODE
+} else { // NODEJS
     global['splitText'] = splitText;
 }

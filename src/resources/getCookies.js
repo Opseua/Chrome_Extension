@@ -41,4 +41,8 @@ async function getCookies(inf) {
     return ret
 };
 
-window['getCookies'] = getCookies;
+if (typeof window !== 'undefined') { // CHROME
+    window['getCookies'] = getCookies;
+} else { // NODEJS
+    global['getCookies'] = getCookies;
+}

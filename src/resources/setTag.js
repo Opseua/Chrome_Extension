@@ -63,4 +63,8 @@ async function setTag(inf) {
     return ret
 }
 
-window['setTag'] = setTag;
+if (typeof window !== 'undefined') { // CHROME
+    window['setTag'] = setTag;
+} else { // NODEJS
+    global['setTag'] = setTag;
+}

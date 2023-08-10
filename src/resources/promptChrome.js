@@ -25,4 +25,8 @@ async function promptChrome(inf) {
     return ret
 }
 
-window['promptChrome'] = promptChrome;
+if (typeof window !== 'undefined') { // CHROME
+    window['promptChrome'] = promptChrome;
+} else { // NODEJS
+    global['promptChrome'] = promptChrome;
+}

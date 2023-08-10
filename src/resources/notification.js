@@ -29,10 +29,10 @@ async function notification(infOk) {
 
         const json =
         {
-            duration: ((!inf.duration ) || !(inf.duration > 0)) ? 5 : inf.duration,
+            duration: ((!inf.duration) || !(inf.duration > 0)) ? 5 : inf.duration,
             type: 'basic',
             iconUrl: `data:image/png;base64,${imgBase64}`,
-            title: ((!inf.title ) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
+            title: ((!inf.title) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
             message: ((!inf.message) || (inf.message == '')) ? `MESSAGE VAZIO` : `${inf.message}`,
             buttons: inf.buttons || [],
         };
@@ -73,4 +73,8 @@ async function notification(infOk) {
     return ret
 }
 
-window['notification'] = notification;
+if (typeof window !== 'undefined') { // CHROME
+    window['notification'] = notification;
+} else { // NODEJS
+    global['notification'] = notification;
+}

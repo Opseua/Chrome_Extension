@@ -95,7 +95,7 @@ async function tabSearch(inf) {
             } else if (typeof inf.search === 'number') { // ID ret
                 for (const obj of result.res) {
                     const infRegex = { 'pattern': inf.search.toString(), 'text': obj.id.toString() }
-                    const retRegex =  regex(infRegex)
+                    const retRegex = regex(infRegex)
                     if (retRegex.res.bolean) {
                         ret['res'] = {
                             'id': obj.id,
@@ -112,7 +112,7 @@ async function tabSearch(inf) {
                 for (const obj of result.res) {
                     let infRegex, retRegex
                     infRegex = { 'pattern': inf.search, 'text': obj.url } // URL ret
-                    retRegex =  regex(infRegex)
+                    retRegex = regex(infRegex)
                     if (retRegex.res.bolean) {
                         ret['res'] = {
                             'id': obj.id,
@@ -125,7 +125,7 @@ async function tabSearch(inf) {
                         break;
                     }
                     infRegex = { 'pattern': inf.search, 'text': obj.title } // TITULO ret
-                    retRegex =  regex(infRegex)
+                    retRegex = regex(infRegex)
                     if (retRegex.res.bolean) {
                         ret['res'] = {
                             'id': obj.id,
@@ -181,6 +181,6 @@ async function tabSearch(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['tabSearch'] = tabSearch;
-} else if (typeof global !== 'undefined') { // NODE
+} else { // NODEJS
     global['tabSearch'] = tabSearch;
 }

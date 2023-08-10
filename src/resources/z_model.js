@@ -21,6 +21,6 @@ async function model(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['model'] = model;
-} else if (typeof global !== 'undefined') { // NODE
+} else { // NODEJS
     global['model'] = model;
 }

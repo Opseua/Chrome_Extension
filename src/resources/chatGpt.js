@@ -117,6 +117,6 @@ async function chatGpt(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['chatGpt'] = chatGpt;
-} else if (typeof global !== 'undefined') { // NODE
+} else { // NODEJS
     global['chatGpt'] = chatGpt;
 }

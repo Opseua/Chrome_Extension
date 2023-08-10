@@ -53,7 +53,7 @@ async function websocketRet(inf) {
                 let name
                 if (typeof window !== 'undefined') { // CHROME
                     name = window[data.fun.funRun.name];
-                } else if (typeof global !== 'undefined') { // NODE
+                } else { // NODEJS
                     name = global[data.fun.funRun.name];
                 }
                 const infName = data.fun.funRun.par;
@@ -82,6 +82,6 @@ async function websocketRet(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['websocketRet'] = websocketRet;
-} else if (typeof global !== 'undefined') { // NODE
+} else { // NODEJS
     global['websocketRet'] = websocketRet;
 }

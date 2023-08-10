@@ -161,7 +161,7 @@ async function excel(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['excel'] = excel;
-} else if (typeof global !== 'undefined') { // NODE
+} else { // NODEJS
     global['excel'] = excel;
 }
 

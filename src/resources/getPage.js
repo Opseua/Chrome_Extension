@@ -37,4 +37,8 @@ async function getPage(inf) {
     return ret
 }
 
-window['getPage'] = getPage;
+if (typeof window !== 'undefined') { // CHROME
+    window['getPage'] = getPage;
+} else { // NODEJS
+    global['getPage'] = getPage;
+}

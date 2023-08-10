@@ -1,5 +1,5 @@
 // await import('./functions.js');
- 
+
 // const infFileInf = { 'path': new URL(import.meta.url).pathname } // ## CHROME NAO!
 // const retFileInf = await fileInf(infFileInf);
 // console.log(retFileInf)
@@ -232,7 +232,7 @@ async function fileRead(inf) {
 async function configStorage(inf) {
     let ret = { 'ret': false };
     try {
-        if (typeof window !== 'undefined') { // ################## CHROME
+        if (typeof window !== 'undefined') { // CHROME
 
             if (inf.action == 'set') { // STORAGE: SET
                 await storageSet(inf)
@@ -555,7 +555,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['gO'] = gO;
     window['gOAdd'] = gOAdd;
     window['gORem'] = gORem;
-} else if (typeof global !== 'undefined') { // NODE
+} else { // NODEJS
     global['fileInf'] = fileInf;
     global['api'] = api;
     global['fileWrite'] = fileWrite;

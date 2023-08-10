@@ -36,6 +36,6 @@ async function translate(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['translate'] = translate;
-} else if (typeof global !== 'undefined') { // NODE
+} else { // NODEJS
     global['translate'] = translate;
 }

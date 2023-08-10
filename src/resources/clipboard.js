@@ -29,5 +29,8 @@ async function clipboard(inf) {
   return ret
 }
 
-window['clipboard'] = clipboard;
-
+if (typeof window !== 'undefined') { // CHROME
+  window['clipboard'] = clipboard;
+} else { // NODEJS
+  global['clipboard'] = clipboard;
+}

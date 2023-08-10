@@ -52,6 +52,6 @@ async function command2(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
   window['command2'] = command2;
-} else if (typeof global !== 'undefined') { // NODE
+} else { // NODEJS
   global['command2'] = command2;
 }

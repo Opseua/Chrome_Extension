@@ -102,5 +102,8 @@ async function sniffer(inf) {
 
 }
 
-window['sniffer'] = sniffer;
-
+if (typeof window !== 'undefined') { // CHROME
+    window['sniffer'] = sniffer;
+} else { // NODEJS
+    global['sniffer'] = sniffer;
+}
