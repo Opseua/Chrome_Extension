@@ -29,12 +29,12 @@ async function websocketRet(inf) {
     let ret = { 'ret': false };
     try {
         let WebS;
-        const retNodeOrBrowser = await nodeOrBrowser();
-        if (retNodeOrBrowser.res == 'node') { // NODEJS
-            const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
-        } else if (retNodeOrBrowser.res == 'chrome') { // CHROME
+        if (typeof window !== 'undefined') { // CHROME
             WebS = window.WebSocket;
+        } else { // NODEJS
+            const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
+
         const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'websocket' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
