@@ -1,0 +1,56 @@
+//await import('./resources/clearConsole.js');
+console.log('onStartNode');
+await import('./resources/functions.js');
+
+// *************************
+
+async function client(inf) {
+    let ret = { 'ret': false };
+    try {
+        let WebS;
+        const retNodeOrBrowser = await nodeOrBrowser();
+        if (retNodeOrBrowser.res == 'node') { // NODEJS
+            const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
+        } else if (retNodeOrBrowser.res == 'chrome') { // CHROME
+            WebS = window.WebSocket;
+        }
+        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'websocket' }
+        const retConfigStorage = await configStorage(infConfigStorage)
+        if (!retConfigStorage.ret) {
+            return ret
+        }
+        const port = retConfigStorage.res.port;
+        const device1 = retConfigStorage.res.device2.name
+        const securityPass = retConfigStorage.res.securityPass
+
+        let ws1;
+        async function web1() {
+            let ws1 = new WebS(`${retConfigStorage.res.ws2}:${port}/${device1}`);
+            ws1.onerror = (e) => { };
+            ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
+            ws1.onclose = async (event) => {
+                console.log(`ON START: RECONEXAO EM 10 SEGUNDOS - WS1`);
+                await new Promise(r => setTimeout(r, 10000)); web1()
+            }
+            ws1.onmessage = async (event) => {
+                let data, fun
+                try {
+                    data = JSON.parse(event.data);
+                    if (data.hasOwnProperty('fun')) { fun = true }
+                } catch (e) { }
+                if (fun) {
+                    const infWebsocketRet = { 'data': event.data.fun }
+                    const retWebsocketRet = websocketRet(infWebsocketRet)
+                } else {
+                    console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}`)
+                }
+            }
+        }
+        web1()
+
+    } catch (e) {
+        ret['msg'] = regexE({ 'e': e }).res
+    }
+}
+client()
+

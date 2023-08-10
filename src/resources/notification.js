@@ -20,7 +20,7 @@ async function notification(infOk) {
         if (!infOk) { inf = {} } else { inf = infOk };
         let imgBase64
         if (!inf.iconUrl || inf.iconUrl.length > 1) {
-            const imgSrc = !inf.iconUrl ? './src/media/icon_1.png' : inf.iconUrl;
+            const imgSrc = !inf.iconUrl ? './src/media/icon_3.png' : inf.iconUrl;
             const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
             imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
         } else {

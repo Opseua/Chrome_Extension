@@ -28,13 +28,13 @@ chrome.downloads.onChanged.addListener(async function (...inf) {
 
 // ######################### CLICK NO ICONE
 chrome.browserAction.onClicked.addListener(async function (...inf) {
-    console.log('BACKGROUND: ICONE PRESSIONADO');
+    console.log('ON START: ICONE PRESSIONADO');
     //chrome.browserAction.setPopup({popup: "./popup.html"});
 });
 
 // ######################### ATALHO PRESSIONADO
 chrome.commands.onCommand.addListener(async function (...inf) {
-    //console.log('BACKGROUND: ATALHO PRESSIONADO')
+    //console.log('ON START: ATALHO PRESSIONADO')
     const infShortcutPressed = {
         'shortcut': inf[0]
     }
@@ -66,22 +66,22 @@ async function client(inf) {
         async function web1() {
             let ws1 = new WebS(`${retConfigStorage.res.ws2}:${port}/${device1}`);
             ws1.onerror = (e) => { };
-            ws1.onopen = () => { console.log(`BACKGROUND: CONEXAO OK - WS1`) };
+            ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
             ws1.onclose = async (event) => {
-                console.log(`BACKGROUND: RECONEXAO EM 10 SEGUNDOS - WS1`);
+                console.log(`ON START: RECONEXAO EM 10 SEGUNDOS - WS1`);
                 await new Promise(r => setTimeout(r, 10000)); web1()
             }
             ws1.onmessage = async (event) => {
                 let data, fun
                 try {
                     data = JSON.parse(event.data);
-                    if (data.hasOwnProperty('funRun')) { fun = true }
+                    if (data.fun) { fun = true }
                 } catch (e) { }
                 if (fun) {
                     const infWebsocketRet = { 'data': event.data }
                     const retWebsocketRet = websocketRet(infWebsocketRet)
                 } else {
-                    console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}`)
+                    console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`)
                 }
             }
         }

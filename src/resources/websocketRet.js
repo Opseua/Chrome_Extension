@@ -5,7 +5,7 @@
 // {
 //     "securityPass": "#####",
 //     "funRet": {
-//         "ret": true,
+//         "ret": false,
 //         "url": "ws://xx.xxx.xxx.xx:xx/FUNCTION_RET",
 //         "inf": "ID DO RETORNO"
 //     },
@@ -41,38 +41,35 @@ async function websocketRet(inf) {
             return ret
         }
         const securityPass = retConfigStorage.res.securityPass
-
         const data = JSON.parse(inf.data)
-        if (data.securityPass && data.securityPass == securityPass && data.funRun && data.funRun.name && data.funRun.par) {
+        if (data.fun && data.fun.securityPass && data.fun.securityPass == securityPass && data.fun.funRun && data.fun.funRun.name && data.fun.funRun.par) {
             function label(pro) {
                 return typeof (typeof window !== 'undefined' ? window : global)[pro] === 'function'
             }
-            const searchFun = label(data.funRun.name)
+            const searchFun = label(data.fun.funRun.name)
             if (!searchFun) {
-                ret['msg'] = `FUNCAO '${data.funRun.name}' NAO EXITE`;
+                ret['msg'] = `FUNCAO '${data.fun.funRun.name}' NAO EXITE`;
             } else {
-                const name = window[data.funRun.name];
-                const infName = data.funRun.par;
+                const name = window[data.fun.funRun.name];
+                const infName = data.fun.funRun.par;
                 const retName = await name(infName);
                 ret['ret'] = true;
                 ret['res'] = retName;
-                if (data.funRet.ret) {
-                    let wsRet = new WebS(`${data.funRet.url}`);
-                    wsRet.onerror = (e) => { console.error(`BACKGROUND: ERRO WSRET`) };
+                if (data.fun.funRet.ret) {
+                    let wsRet = new WebS(`${data.fun.funRet.url}`);
+                    wsRet.onerror = (e) => { console.error(`WEBSOCKET RET: ERRO WS`) };
                     wsRet.onopen = () => {
-                        wsRet.send(JSON.stringify({ 'inf': data.funRet.inf, 'retWs': ret.res }));
+                        wsRet.send(JSON.stringify({ 'inf': data.fun.funRet.inf, 'retWs': ret, 'fun': data.fun.funRet.fun }));
                         wsRet.close()
-
                     }
                 }
             }
         } else {
-            ret['msg'] = `\n #### NAO RODAR ####  NAO RODAR \n ${inf.data} \n\n`;
+            ret['msg'] = `\n #### NAO RODAR ####  NAO RODAR \n\n ${inf.data} \n\n`;
         }
 
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
-        ret['msg'] = `\n #### ERRO ####  CONFIG SET \n INFORMAR A 'key' \n\n`;
     }
 
     if (!ret.ret) { console.log(ret.msg) }

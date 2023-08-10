@@ -20,7 +20,7 @@ async function excel(inf) {
             transientEditSessionToken = retConfigStorage.res.transientEditSessionToken
         } else {
             await import('./sniffer.js');
-            const infSniffer = { 'newReqSend': false,'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
+            const infSniffer = { 'newReqSend': false, 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
             const retSniffer = await sniffer(infSniffer)
             console.log(retSniffer)
 
@@ -74,7 +74,7 @@ async function excel(inf) {
             //     }
             // }
 
-            infExcel = { 'action': 'set', 'tab': tab, 'col': col, 'lin': lin, 'value': value }
+            infExcel = { 'action': 'set', 'tab': tab, 'col': col, 'lin': lin, 'value': value,'inf': inf.inf }
             retExcel = await excel(infExcel)
             //console.log(5, dateHour().res.tim)
             return retExcel
@@ -108,6 +108,7 @@ async function excel(inf) {
             if (retApi.ret && valueOk) {
                 ret['ret'] = true;
                 ret['msg'] = `EXCEL: OK`;
+                ret['res'] = { 'lin': lin, 'inf': inf.inf };
             } else {
                 infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'excel' }
                 retConfigStorage = await configStorage(infConfigStorage)
