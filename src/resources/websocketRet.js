@@ -50,16 +50,20 @@ async function websocketRet(inf) {
             if (!searchFun) {
                 ret['msg'] = `FUNCAO '${data.fun.funRun.name}' NAO EXITE`;
             } else {
-                const name = window[data.fun.funRun.name];
+                let name
+                if (typeof window !== 'undefined') { // CHROME
+                    name = window[data.fun.funRun.name];
+                } else if (typeof global !== 'undefined') { // NODE
+                    name = global[data.fun.funRun.name];
+                }
                 const infName = data.fun.funRun.par;
                 const retName = await name(infName);
                 ret['ret'] = true;
-                ret['res'] = retName;
                 if (data.fun.funRet.ret) {
                     let wsRet = new WebS(`${data.fun.funRet.url}`);
                     wsRet.onerror = (e) => { console.error(`WEBSOCKET RET: ERRO WS`) };
                     wsRet.onopen = () => {
-                        wsRet.send(JSON.stringify({ 'inf': data.fun.funRet.inf, 'retWs': ret, 'fun': data.fun.funRet.fun }));
+                        wsRet.send(JSON.stringify({ 'inf': data.fun.funRet.inf, 'retWs': retName, 'fun': data.fun.funRet.fun }));
                         wsRet.close()
                     }
                 }
@@ -78,4 +82,6 @@ async function websocketRet(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['websocketRet'] = websocketRet;
-} 
+} else if (typeof global !== 'undefined') { // NODE
+    global['websocketRet'] = websocketRet;
+}

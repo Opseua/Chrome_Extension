@@ -26,15 +26,15 @@ async function excel(inf) {
 
             let infRegex = { 'pattern': 'ClientRequestId%22%3A%22(.*?)%22%2C%22InstantaneousType', 'text': retSniffer.res.req.url }
             let retRegex = regex(infRegex)
-            clientRequestId = retRegex.res.text
+            clientRequestId = retRegex.res.text['1']
 
             infRegex = { 'pattern': 'SessionId%22%3A%22(.*?)%22%2C%22TransientEditSessionToken', 'text': retSniffer.res.req.url }
             retRegex = regex(infRegex)
-            sessionId = retRegex.res.text
+            sessionId = retRegex.res.text['1']
 
             infRegex = { 'pattern': 'TransientEditSessionToken%22%3A%22(.*?)%22%2C%22PermissionFlags', 'text': retSniffer.res.req.url }
             retRegex = regex(infRegex)
-            transientEditSessionToken = retRegex.res.text
+            transientEditSessionToken = retRegex.res.text['1']
 
             infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'excel', 'value': { 'clientRequestId': clientRequestId, 'sessionId': sessionId, 'transientEditSessionToken': transientEditSessionToken } }
             retConfigStorage = await configStorage(infConfigStorage);
@@ -47,10 +47,34 @@ async function excel(inf) {
 
         if (inf.action == 'set' && !lin) {
             let infExcel, retExcel
+
+            // if (JSON.stringify(inf).includes('reqRes\\":\\"req')) {
+            //     console.log(inf.inf)
+            //     // const infFileRead = { 'file': 'D:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt' }
+            //     // const retFileRead = await fileRead(infFileRead)
+            //     // console.log(retFileRead)
+            //     // const infRegex = { 'pattern': `"id":"(.*?)${infNew.id}`, 'text': retFileRead.res }
+            //     // const retRegex = regex(infRegex)
+            //     // console.log(retRegex)
+            // } else {
+            //     infExcel = { 'action': 'get', 'tab': tab, 'col': col, 'lin': 1 }
+            //     retExcel = await excel(infExcel)
+            //     lin = retExcel.res
+            //     console.log(4, dateHour().res.tim, `LINHA ${lin}`)
+            // }
+
+            console.log(JSON.parse(inf.inf).id)
+            const infFileRead = { 'file': 'D:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt' }
+            const retFileRead = await fileRead(infFileRead)
+            console.log(retFileRead)
+            const infRegex = { 'pattern': `"id":"(.*?)${JSON.parse(inf.inf).id}`, 'text': retFileRead.res }
+            const retRegex = regex(infRegex)
+            console.log(retRegex)
             infExcel = { 'action': 'get', 'tab': tab, 'col': col, 'lin': 1 }
             retExcel = await excel(infExcel)
             lin = retExcel.res
             console.log(4, dateHour().res.tim, `LINHA ${lin}`)
+
 
             // if (inf.inf) {
             //     const infNew = JSON.parse(inf.inf)
@@ -74,7 +98,7 @@ async function excel(inf) {
             //     }
             // }
 
-            infExcel = { 'action': 'set', 'tab': tab, 'col': col, 'lin': lin, 'value': value,'inf': inf.inf }
+            infExcel = { 'action': 'set', 'tab': tab, 'col': col, 'lin': lin, 'value': value, 'inf': inf.inf.replace(/AQUI_LIN/g, lin) }
             retExcel = await excel(infExcel)
             //console.log(5, dateHour().res.tim)
             return retExcel
@@ -108,7 +132,7 @@ async function excel(inf) {
             if (retApi.ret && valueOk) {
                 ret['ret'] = true;
                 ret['msg'] = `EXCEL: OK`;
-                ret['res'] = { 'lin': lin, 'inf': inf.inf };
+                ret['res'] = inf.inf;
             } else {
                 infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'excel' }
                 retConfigStorage = await configStorage(infConfigStorage)

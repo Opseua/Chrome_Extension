@@ -1,6 +1,7 @@
 //await import('./resources/clearConsole.js');
 console.log('onStartNode');
 await import('./resources/functions.js');
+await import('./resources/websocketRet.js');
 
 // *************************
 
@@ -36,13 +37,13 @@ async function client(inf) {
                 let data, fun
                 try {
                     data = JSON.parse(event.data);
-                    if (data.hasOwnProperty('fun')) { fun = true }
+                    if (data.fun) { fun = true }
                 } catch (e) { }
                 if (fun) {
-                    const infWebsocketRet = { 'data': event.data.fun }
+                    const infWebsocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
                     const retWebsocketRet = websocketRet(infWebsocketRet)
                 } else {
-                    console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}`)
+                    console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`)
                 }
             }
         }

@@ -478,46 +478,56 @@ function regex(inf) {
     let ret = { 'ret': false };
     try {
         if (inf.pattern.includes('(.*?)')) {
+            let res = {}
             const patternSplit = inf.pattern.split('(.*?)');
             const split1 = patternSplit[0].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
             const split2 = patternSplit[1].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
-            const result = inf.text.match(`${split1}([\\s\\S]*?)${split2}`);
-            if (result && result.length > 0) {
-                ret['ret'] = true;
-                ret['msg'] = `REGEX: OK`;
-                ret['res'] = {
-                    'bolean': true,
-                    'text': result[1]
-                }
-            } else {
-                ret['ret'] = true;
-                ret['msg'] = `\n #### ERRO ####  REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
-                ret['res'] = { 'bolean': false }
-            }
+            const result1 = inf.text.match(`${split1}(.*?)${split2}`);
+            const result2 = inf.text.match(`(?<=${split1})(.+)(?=${split2})`);
+            const result3 = inf.text.match(`${split1}([\\s\\S]*?)${split2}`);
+            const result4 = inf.text.match(`(?<=${split1})([\\s\\S]+)(?=${split2})`);
+            if (result1 && result1.length > 0) { res['1'] = result1[1] }
+            else { res['1'] = `[-|<] PADRAO '${inf.pattern}' NAO ENCONTRADO` } // SEM QUEBRA DE LINHA ATE A PRIMEIRA OCORRENCIA
+            if (result2 && result2.length > 0) { res['2'] = result2[1] }
+            else { res['2'] = `[-|>] PADRAO '${inf.pattern}' NAO ENCONTRADO` } // SEM QUEBRA DE LINHA ATE A ULTIMA OCORRENCIA
+            if (result3 && result3.length > 0) { res['3'] = result3[1] }
+            else { res['3'] = `[^|<] PADRAO '${inf.pattern}' NAO ENCONTRADO` } // COM QUEBRA DE LINHA ATE A PRIMEIRA OCORRENCIA
+            if (result4 && result4.length > 0) { res['4'] = result4[1] }
+            else { res['4'] = `[^|>] PADRAO '${inf.pattern}' NAO ENCONTRADO` } // COM QUEBRA DE LINHA ATE A ULTIMA OCORRENCIA
+            ret['msg'] = `REGEX: OK`;
+            ret['res'] = { 'bolean': true, 'text': res }
+            //}
+            // if (inf.pattern.includes('(.*?)')) {
+            //     const patternSplit = inf.pattern.split('(.*?)');
+            //     const split1 = patternSplit[0].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+            //     const split2 = patternSplit[1].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+            //     const result = inf.text.match(`${split1}([\\s\\S]*?)${split2}`);
+            //     if (result && result.length > 0) {
+            //         ret['ret'] = true;
+            //         ret['msg'] = `REGEX: OK`;
+            //         ret['res'] = {
+            //             'bolean': true,
+            //             'text': result[1]
+            //         }
+            //     } else {
+            //         ret['ret'] = true;
+            //         ret['msg'] = `\n #### ERRO ####  REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
+            //         ret['res'] = { 'bolean': false }
+            //     }
         } else {
             const pattern = inf.pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
             const result = new RegExp(`^${pattern}$`).test(inf.text);
-            if (inf.simple) {
+            if (inf.simple) { if (result) { return true } else { return false } } else {
                 if (result) {
-                    return true
-                } else {
-                    return false
-                }
-            } else {
-                if (result) {
-                    ret['ret'] = true;
                     ret['msg'] = `REGEX: OK`;
-                    ret['res'] = {
-                        'bolean': true,
-                        'text': 'TEXTO POSSUI O PADRAO'
-                    }
+                    ret['res'] = { 'bolean': true, 'text': 'TEXTO POSSUI O PADRAO' }
                 } else {
-                    ret['ret'] = true;
                     ret['msg'] = `\n #### ERRO ####  REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
                     ret['res'] = { 'bolean': false }
                 }
             }
         }
+        ret['ret'] = true;
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
