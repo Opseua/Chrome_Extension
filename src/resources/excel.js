@@ -22,7 +22,7 @@ async function excel(inf) {
             await import('./sniffer.js');
             const infSniffer = { 'newReqSend': false, 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
             const retSniffer = await sniffer(infSniffer)
-            console.log(retSniffer)
+            chrome.browserAction.setBadgeText({ text: '' });
 
             let infRegex = { 'pattern': 'ClientRequestId%22%3A%22(.*?)%22%2C%22InstantaneousType', 'text': retSniffer.res.req.url }
             let retRegex = regex(infRegex)
@@ -48,59 +48,24 @@ async function excel(inf) {
         if (inf.action == 'set' && !lin) {
             let infExcel, retExcel
 
-            // if (JSON.stringify(inf).includes('reqRes\\":\\"req')) {
-            //     console.log(inf.inf)
-            //     // const infFileRead = { 'file': 'D:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt' }
-            //     // const retFileRead = await fileRead(infFileRead)
-            //     // console.log(retFileRead)
-            //     // const infRegex = { 'pattern': `"id":"(.*?)${infNew.id}`, 'text': retFileRead.res }
-            //     // const retRegex = regex(infRegex)
-            //     // console.log(retRegex)
-            // } else {
-            //     infExcel = { 'action': 'get', 'tab': tab, 'col': col, 'lin': 1 }
-            //     retExcel = await excel(infExcel)
-            //     lin = retExcel.res
-            //     console.log(4, dateHour().res.tim, `LINHA ${lin}`)
-            // }
-
-            console.log(JSON.parse(inf.inf).id)
-            const infFileRead = { 'file': 'D:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt' }
-            const retFileRead = await fileRead(infFileRead)
-            console.log(retFileRead)
-            const infRegex = { 'pattern': `"id":"(.*?)${JSON.parse(inf.inf).id}`, 'text': retFileRead.res }
-            const retRegex = regex(infRegex)
-            console.log(retRegex)
             infExcel = { 'action': 'get', 'tab': tab, 'col': col, 'lin': 1 }
             retExcel = await excel(infExcel)
             lin = retExcel.res
-            console.log(4, dateHour().res.tim, `LINHA ${lin}`)
 
-
-            // if (inf.inf) {
-            //     const infNew = JSON.parse(inf.inf)
-            //     if (infNew.reqRes == 'res') {
-            //         const infFileWrite = {
-            //             'file': `welocalize.txt`,
-            //             'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
-            //             'text': `${infNew.id}##${lin}##${infNew.id}\n\n`
-            //         };
-            //         const retFileWrite = fileWrite(infFileWrite);
-            //     }
-
-            //     if (infNew.reqRes == 'req') {
-            //         const infFileRead = { 'file': `D:/Downloads/Google Chrome/welocalize.txt` }
-            //         const retFileRead = await fileRead(infFileRead)
-            //         console.log(retFileRead)
-            //         const infRegex = { 'pattern': `${infNew.id}##(.*?)##${infNew.id}`, 'text': retFileRead.res }
-            //         const retRegex = regex(infRegex)
-            //         console.log(retRegex)
-            //         lin = retRegex.res.text
-            //     }
-            // }
+            if (JSON.stringify(inf.inf).includes('reqRes\\":\\"req')) {
+                const infFileRead = { 'file': 'D:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt' }
+                const retFileRead = await fileRead(infFileRead)
+                const infRegex = { 'pattern': `","lin":"(.*?)","id":"${JSON.parse(inf.inf).id}`, 'text': retFileRead.res }
+                const retRegex = regex(infRegex)
+                if (retRegex.res.bolean && Number(retRegex.res.text['1']) > 0) {
+                    lin = retRegex.res.text['1']
+                    col = 'N'
+                }
+            }
 
             infExcel = { 'action': 'set', 'tab': tab, 'col': col, 'lin': lin, 'value': value, 'inf': inf.inf.replace(/AQUI_LIN/g, lin) }
             retExcel = await excel(infExcel)
-            //console.log(5, dateHour().res.tim)
+            console.log(4, dateHour().res.tim, `LINHA ${lin}`)
             return retExcel
         }
 
@@ -127,9 +92,7 @@ async function excel(inf) {
             };
             const retApi = await api(infApi);
             const res = JSON.parse(retApi.res.body)
-            let valueOk
-            try { valueOk = res.d.Result.CellModel.Cells[0].Text } catch (e) { }
-            if (retApi.ret && valueOk) {
+            if (retApi.ret && res.d && res.d.Errors && res.d.Errors.length == 0) {
                 ret['ret'] = true;
                 ret['msg'] = `EXCEL: OK`;
                 ret['res'] = inf.inf;

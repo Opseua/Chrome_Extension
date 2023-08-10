@@ -496,24 +496,6 @@ function regex(inf) {
             else { res['4'] = `[^|>] PADRAO '${inf.pattern}' NAO ENCONTRADO` } // COM QUEBRA DE LINHA ATE A ULTIMA OCORRENCIA
             ret['msg'] = `REGEX: OK`;
             ret['res'] = { 'bolean': true, 'text': res }
-            //}
-            // if (inf.pattern.includes('(.*?)')) {
-            //     const patternSplit = inf.pattern.split('(.*?)');
-            //     const split1 = patternSplit[0].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
-            //     const split2 = patternSplit[1].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
-            //     const result = inf.text.match(`${split1}([\\s\\S]*?)${split2}`);
-            //     if (result && result.length > 0) {
-            //         ret['ret'] = true;
-            //         ret['msg'] = `REGEX: OK`;
-            //         ret['res'] = {
-            //             'bolean': true,
-            //             'text': result[1]
-            //         }
-            //     } else {
-            //         ret['ret'] = true;
-            //         ret['msg'] = `\n #### ERRO ####  REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
-            //         ret['res'] = { 'bolean': false }
-            //     }
         } else {
             const pattern = inf.pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
             const result = new RegExp(`^${pattern}$`).test(inf.text);
