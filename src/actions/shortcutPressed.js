@@ -73,7 +73,7 @@ async function shortcutPressed(inf) {
       ret['ret'] = true;
       ret['msg'] = `SHORTCUT PRESSED: OK`;
     } else {
-      ret['msg'] = `\n #### ERRO ####  SHORTCUT PRESSED | ACAO DO ATALHO NAO DEFINIDA \n\n`;
+      ret['msg'] = `\n #### ERRO #### SHORTCUT PRESSED | ACAO DO ATALHO NAO DEFINIDA \n\n`;
     }
 
   } catch (e) {

@@ -25,7 +25,7 @@ async function getCookies(inf) {
         }, '');
 
         if ((inf.cookieSearch) && !(retCookies.toString().includes(inf.cookieSearch))) {
-            ret['msg'] = `\n #### ERRO ####  GET COOKIES \n COOKIE '${inf.cookieSearch}' NAO CONTRADO \n\n`;
+            ret['msg'] = `\n #### ERRO #### GET COOKIES \n COOKIE '${inf.cookieSearch}' NAO CONTRADO \n\n`;
         } else {
             ret['ret'] = true;
             ret['msg'] = 'GET COOKIES: OK';

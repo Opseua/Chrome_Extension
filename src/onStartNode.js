@@ -1,4 +1,4 @@
-//await import('./resources/clearConsole.js');
+await import('./resources/clearConsole.js');
 console.log('onStartNode');
 await import('./resources/functions.js');
 await import('./resources/websocketRet.js');

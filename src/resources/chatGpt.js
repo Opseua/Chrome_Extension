@@ -101,7 +101,7 @@ async function chatGpt(inf) {
                     'buttons': [],
                 };
                 const retNotification = await notification(infNotification)
-                ret['msg'] = `\n #### ERRO ####  CHAT GPT AI \n ${res.error.message} \n\n`;
+                ret['msg'] = `\n #### ERRO #### CHAT GPT AI \n ${res.error.message} \n\n`;
                 ret['res'] = res.error.message;
                 ret['ret'] = true;
             }

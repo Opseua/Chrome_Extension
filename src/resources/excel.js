@@ -99,7 +99,17 @@ async function excel(inf) {
             } else {
                 infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'excel' }
                 retConfigStorage = await configStorage(infConfigStorage)
-                ret['msg'] = `\n #### ERRO ####  EXCEL \n NAO CONSEGUIU ENVIAR A INFORMACAO \n\n`;
+                ret['msg'] = `\n #### ERRO #### EXCEL \n NAO CONSEGUIU ENVIAR A INFORMACAO \n\n`;
+                let infNotification =
+                {
+                  'duration': 2,
+                  'type': 'basic',
+                  'title': `#### ERRO #### EXCEL`,
+                  'message': `Não conseguiu enviar a informação`,
+                  'iconUrl': null,
+                  'buttons': [],
+                };
+                const retNotification = await notification(infNotification)
             }
         } else if (inf.action == 'get') {
             let url
@@ -127,7 +137,17 @@ async function excel(inf) {
             } else {
                 infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'excel' }
                 retConfigStorage = await configStorage(infConfigStorage)
-                ret['msg'] = `\n #### ERRO ####  EXCEL \n NAO CONSEGUIU PEGAR A INFORMACAO \n\n`;
+                ret['msg'] = `\n #### ERRO #### EXCEL \n NAO CONSEGUIU PEGAR A INFORMACAO \n\n`;
+                let infNotification =
+                {
+                  'duration': 2,
+                  'type': 'basic',
+                  'title': `#### ERRO #### EXCEL`,
+                  'message': `Não conseguiu pegar a informação`,
+                  'iconUrl': null,
+                  'buttons': [],
+                };
+                const retNotification = await notification(infNotification)
             }
         }
 
