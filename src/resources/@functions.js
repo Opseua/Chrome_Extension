@@ -12,8 +12,6 @@ await import('./tabSearch.js');
 await import('./translate.js');
 await import('./websocketRet.js');
 // actions | scripts
-await import('../actions/apiNewInformation.js');
-await import('../actions/shortcutPressed.js');
 await import('../scripts/command1.js');
 await import('../scripts/command2.js');
 await import('../scripts/oneFormaMTPE.js');
@@ -579,8 +577,6 @@ if (typeof window !== 'undefined') { // CHROME
     window['translate'] = translate;
     window['websocketRet'] = websocketRet;
     // ## actions | scripts
-    window['apiNewInformation'] = apiNewInformation;
-    window['shortcutPressed'] = shortcutPressed;
     window['command1'] = command1;
     window['command2'] = command2;
     window['oneFormaMTPE'] = oneFormaMTPE;
@@ -612,8 +608,6 @@ if (typeof window !== 'undefined') { // CHROME
     global['translate'] = translate;
     global['websocketRet'] = websocketRet;
     // ## actions | scripts
-    global['apiNewInformation'] = apiNewInformation;
-    global['shortcutPressed'] = shortcutPressed;
     global['command1'] = command1;
     global['command2'] = command2;
     global['oneFormaMTPE'] = oneFormaMTPE;

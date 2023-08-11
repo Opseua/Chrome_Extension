@@ -8,7 +8,14 @@ async function sniffer(inf) {
     return new Promise(resolve => {
         let lisOnBeforeRequest, lisOnBeforeSendHeaders, lisOnCompleted
         function snifferOff(inf) {
-            if (inf) { console.log('sniffer parou'); resolve({ 'ret': false }) } else { console.log('sniffer off'); resolve(ret) }
+            if (inf) {
+                // console.log('sniffer parou');
+                resolve({ 'ret': false })
+            }
+            else {
+                // console.log('sniffer off');
+                resolve(ret)
+            }
             chrome.webRequest.onBeforeRequest.removeListener(lisOnBeforeRequest);
             chrome.webRequest.onBeforeSendHeaders.removeListener(lisOnBeforeSendHeaders);
             chrome.webRequest.onCompleted.removeListener(lisOnCompleted);
@@ -27,9 +34,12 @@ async function sniffer(inf) {
             let sendPri, newResBlock = false, newReqSend = inf.newReqSend ? true : false
             chrome.browserAction.setBadgeBackgroundColor({ color: [25, 255, 71, 255] });
             if (newReqSend) {
-                console.log(`sniffer on [newReqSend]`);
+                // console.log(`sniffer on [newReqSend]`);
                 chrome.browserAction.setBadgeText({ text: 'SIM' });
-            } else { console.log(`sniffer on`); chrome.browserAction.setBadgeText({ text: 'NAO' }); }
+            } else {
+                // console.log(`sniffer on`);
+                chrome.browserAction.setBadgeText({ text: 'NAO' });
+            }
             if (inf && inf.arrUrl) { sendPri = { 'arrUrl': inf.arrUrl } } else {
                 sendPri = { 'arrUrl': ['https://ntfy.sh/'] }
             }

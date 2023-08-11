@@ -1,4 +1,4 @@
-await import('./resources/clearConsole.js');
+//await import('./resources/clearConsole.js');
 console.log('onStart');
 await import('./resources/@functions.js');
 

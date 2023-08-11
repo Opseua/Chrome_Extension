@@ -34,9 +34,6 @@ async function oneFormaMTPE(inf) {
             const retChatGpt = await chatGpt(infChatGpt)
             if (!retChatGpt.res || !gO.inf.sniffer == 1) { return ret }
 
-            const infClipboard = { 'value': retChatGpt.res };
-            const retClipboard = await clipboard(infClipboard)
-
             if (retRegex2.res.text['1'] == retChatGpt.res) {
                 infNotification =
                 {
@@ -49,9 +46,21 @@ async function oneFormaMTPE(inf) {
                 };
                 retNotification = await notification(infNotification)
             } else {
+
+                let clipboardText
+                if (retChatGpt.res.endsWith('.') && !retRegex2.res.text['1'].endsWith('.')) {
+                    clipboardText = retChatGpt.res.slice(0, -1);
+                } else if (!retChatGpt.res.endsWith('.') && retRegex2.res.text['1'].endsWith('.')) {
+                    clipboardText = `${retChatGpt.res}.`
+                } else {
+                    clipboardText = retChatGpt.res
+                }
+                const infClipboard = { 'value': clipboardText };
+                const retClipboard = await clipboard(infClipboard)
+
                 infNotification =
                 {
-                    'duration': 2,
+                    'duration': 1,
                     'type': 'basic',
                     'title': `CONCLUÍDO`,
                     'message': `pt → ${retRegex1.res.text['1']}\nen → ${retRegex2.res.text['1']}\n🟢 ${retChatGpt.res}`,
@@ -63,7 +72,7 @@ async function oneFormaMTPE(inf) {
         } else {
             infNotification =
             {
-                'duration': 1,
+                'duration': 2,
                 'type': 'basic',
                 'title': `PULAR`,
                 'message': `Erro ao alterar texto`,
