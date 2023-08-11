@@ -30,7 +30,7 @@ async function chatGpt(inf) {
                         'type': 'basic',
                         'title': `ERRO AO ABRIR CHATGPT`,
                         'message': `Não foi possível abrir a aba`,
-                        'iconUrl': undefined,
+                        'iconUrl': 'undefined',
                         'buttons': [],
                     };
                     const retNotification = await notification(infNotification)
@@ -47,7 +47,7 @@ async function chatGpt(inf) {
                         'type': 'basic',
                         'title': `ERRO AO PEGAR COOKIE`,
                         'message': `Verificar se a aba abriu e se está logado`,
-                        'iconUrl': undefined,
+                        'iconUrl': 'undefined',
                         'buttons': [],
                     };
                     const retNotification = await notification(infNotification)
@@ -97,7 +97,7 @@ async function chatGpt(inf) {
                     'type': 'basic',
                     'title': `ERRO AO PESQUISAR NO CHATGPT`,
                     'message': res.error.message,
-                    'iconUrl': undefined,
+                    'iconUrl': 'undefined',
                     'buttons': [],
                 };
                 const retNotification = await notification(infNotification)

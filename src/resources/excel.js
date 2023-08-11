@@ -53,9 +53,9 @@ async function excel(inf) {
             lin = retExcel.res
 
             if (JSON.stringify(inf.inf).includes('reqRes\\":\\"req')) {
-                const infFileRead = { 'file': 'D:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt' }
-                const retFileRead = await fileRead(infFileRead)
-                const infRegex = { 'pattern': `","lin":"(.*?)","id":"${JSON.parse(inf.inf).id}`, 'text': retFileRead.res }
+                const infFile = { 'action': 'read', 'file': 'D:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt' }
+                const retFile = await file(infFile)
+                const infRegex = { 'pattern': `","lin":"(.*?)","id":"${JSON.parse(inf.inf).id}`, 'text': retFile.res }
                 const retRegex = regex(infRegex)
                 if (retRegex.res.bolean && Number(retRegex.res.text['1']) > 0) {
                     lin = retRegex.res.text['1']
@@ -102,12 +102,12 @@ async function excel(inf) {
                 ret['msg'] = `\n #### ERRO #### EXCEL \n NAO CONSEGUIU ENVIAR A INFORMACAO \n\n`;
                 let infNotification =
                 {
-                  'duration': 2,
-                  'type': 'basic',
-                  'title': `#### ERRO #### EXCEL`,
-                  'message': `Não conseguiu enviar a informação`,
-                  'iconUrl': null,
-                  'buttons': [],
+                    'duration': 2,
+                    'type': 'basic',
+                    'title': `#### ERRO #### EXCEL`,
+                    'message': `Não conseguiu enviar a informação`,
+                    'iconUrl': null,
+                    'buttons': [],
                 };
                 const retNotification = await notification(infNotification)
             }
@@ -140,12 +140,12 @@ async function excel(inf) {
                 ret['msg'] = `\n #### ERRO #### EXCEL \n NAO CONSEGUIU PEGAR A INFORMACAO \n\n`;
                 let infNotification =
                 {
-                  'duration': 2,
-                  'type': 'basic',
-                  'title': `#### ERRO #### EXCEL`,
-                  'message': `Não conseguiu pegar a informação`,
-                  'iconUrl': null,
-                  'buttons': [],
+                    'duration': 2,
+                    'type': 'basic',
+                    'title': `#### ERRO #### EXCEL`,
+                    'message': `Não conseguiu pegar a informação`,
+                    'iconUrl': null,
+                    'buttons': [],
                 };
                 const retNotification = await notification(infNotification)
             }

@@ -6,7 +6,7 @@ async function setTag(inf) {
     try {
         const varGlobal = JSON.parse(localStorage.getItem('varGlobal'));
 
-        if (inf.title === undefined) {
+        if (inf.title === 'undefined') {
             var inf1 = 'ntf';
             var inf2 = 'gal';
             var inf3 = '';
@@ -26,7 +26,7 @@ async function setTag(inf) {
         }
 
         let com = 'VAZIO';
-        if (inf.message === undefined) {
+        if (inf.message === 'undefined') {
             com = `[#comando]\n\n[#com]${com}[#/com]\n\n[#/comando]`;
         } else if ((inf.message.match(/\[#comando\]/)) && (inf.message.match(/\[#\/comando\]/))) {
             const matches = inf.message.match(/\[#comando\]([\s\S]*?)\[#\/comando\]/s);
@@ -49,7 +49,7 @@ async function setTag(inf) {
             tex: com,
             tag: r,
             pad: pad,
-            goo: r.includes('ico') ? varGlobal : undefined,
+            goo: r.includes('ico') ? varGlobal : 'undefined',
         }
 
         ret['ret'] = true;

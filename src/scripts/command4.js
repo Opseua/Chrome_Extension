@@ -35,9 +35,9 @@ async function command2(inf) {
       {
         duration: 5,
         type: 'basic',
-        title: sendTit === undefined ? undefined : sendTit,
-        message: sendTex === undefined ? undefined : sendTex,
-        iconUrl: sendIco === undefined ? undefined : sendIco,
+        title: sendTit === 'undefined' ? 'undefined' : sendTit,
+        message: sendTex === 'undefined' ? 'undefined' : sendTex,
+        iconUrl: sendIco === 'undefined' ? 'undefined' : sendIco,
         buttons: [],
       };
       //console.log('COMANDO 2: TITULO + TEXTO');

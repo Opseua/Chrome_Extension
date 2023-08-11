@@ -22,8 +22,8 @@ async function peroptyx(inf) {
             console.log(retSniffer)
             if (!retSniffer.res || !gO.inf.sniffer == 1) { return ret }
 
-            const retFileRead = JSON.parse(retSniffer.res.res.body)
-            if (!retFileRead.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
+            const retSniffer = JSON.parse(retSniffer.res.res.body)
+            if (!retSniffer.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
                 infNotification =
                 {
                     'duration': 1,
@@ -36,8 +36,8 @@ async function peroptyx(inf) {
                 retNotification = await notification(infNotification)
             }
             else {
-                const resultList = retFileRead.tasks[0].taskData.resultSet.resultList;
-                const testQuestionInformation = retFileRead.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
+                const resultList = retSniffer.tasks[0].taskData.resultSet.resultList;
+                const testQuestionInformation = retSniffer.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
                 let not = true
                 const res = await Promise.all(resultList.map(async (v, index) => {
                     const idTask = [v.surveyKeys['193']];

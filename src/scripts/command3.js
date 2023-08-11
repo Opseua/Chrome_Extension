@@ -12,19 +12,19 @@ async function command1(inf) {
   try {
     //console.log('COMANDO 1: EXECUTANDO');
 
-    const retPromptChrome = await promptChrome(`NOME DO COMANDO`);
+    let retPromptChrome = await promptChrome(`NOME DO COMANDO`);
     if (retPromptChrome.ret) {
 
-      const retFileRead = JSON.parse(retPromptChrome.res)
+       retPromptChrome = JSON.parse(retPromptChrome.res)
 
-      if (!retFileRead.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
+      if (!retPromptChrome.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
         infNotification =
         {
           'duration': 3,
           'type': 'basic',
           'title': '❌ Não tem a resposta!',
           'message': `Avaliar manualmente`,
-          'iconUrl': undefined,
+          'iconUrl': 'undefined',
           'buttons': [],
         };
         //notification(infNotification)
@@ -32,8 +32,8 @@ async function command1(inf) {
       }
       else {
 
-        const resultList = retFileRead.tasks[0].taskData.resultSet.resultList;
-        const testQuestionInformation = retFileRead.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
+        const resultList = retPromptChrome.tasks[0].taskData.resultSet.resultList;
+        const testQuestionInformation = retPromptChrome.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
         let not = true
         const res = await Promise.all(resultList.map(async (v, index) => {
           const idTask = [v.surveyKeys['193']];
@@ -74,7 +74,7 @@ async function command1(inf) {
                 'type': 'basic',
                 'title': '✅ AGUARDE....',
                 'message': `Traduzindo e alterando o comentário`,
-                'iconUrl': undefined,
+                'iconUrl': 'undefined',
                 'buttons': [],
               };
               notification(infNotification2)
@@ -115,7 +115,7 @@ async function command1(inf) {
           'type': 'basic',
           'title': 'OK: na área de transferência',
           'message': JSON.stringify(res, null, 2),
-          'iconUrl': undefined,
+          'iconUrl': 'undefined',
           'buttons': [],
         };
 
@@ -136,7 +136,7 @@ async function command1(inf) {
       'type': 'basic',
       'title': 'ERRO: na área de transferência',
       'message': `${e}`,
-      'iconUrl': undefined,
+      'iconUrl': 'undefined',
       'buttons': [],
     };
 
