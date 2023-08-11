@@ -1,9 +1,6 @@
-// await import('./tabSearch.js');
 // const infTabSearch = { 'search': '*google*', 'openIfNotExist': true, 'active':true, 'pinned': false, 'url': 'https://www.google.com/'  } // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // const retTabSearch = await tabSearch(infTabSearch)
 // console.log(retTabSearch)
-
-await import('./functions.js');
 
 async function openTab(inf) {
     try {
@@ -157,7 +154,6 @@ async function tabSearch(inf) {
                 ret['msg'] = `\n #### ERRO #### SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
             }
         }
-
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }

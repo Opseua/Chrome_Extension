@@ -1,6 +1,3 @@
-await import('../resources/notification.js');
-await import('../resources/clipboard.js');
-
 async function command2(inf) {
   let ret = { 'ret': false };
   try {

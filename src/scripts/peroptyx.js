@@ -1,12 +1,4 @@
-// await import('./peroptyx.js');
 // peroptyx()
-
-await import('../resources/functions.js');
-await import('../resources/sniffer.js');
-await import('../resources/clipboard.js');
-await import('../resources/notification.js');
-await import('../resources/chatGpt.js');
-await import('../resources/translate.js');
 
 async function peroptyx(inf) {
     let ret = { 'ret': false };
@@ -137,4 +129,6 @@ async function peroptyx(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['peroptyx'] = peroptyx;
+} else { // NODEJS
+    global['peroptyx'] = peroptyx;
 }

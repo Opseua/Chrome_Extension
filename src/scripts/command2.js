@@ -1,8 +1,3 @@
-// await import('./command2.js');
-
-await import('../resources/functions.js');
-await import('../resources/sniffer.js');
-
 async function command2(inf) {
   let ret = { 'ret': false };
   try {

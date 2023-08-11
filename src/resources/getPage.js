@@ -1,9 +1,6 @@
-// await import('./getPage.js');
 // const infGetPage = { 'id': retTabSearch.res.id }
 // const retGetPage = await getPage(infGetPage)
 // console.log(retGetPage)
-
-await import('./functions.js');
 
 async function getPage(inf) {
     let ret = { 'ret': false };

@@ -1,12 +1,3 @@
-// await import('./oneFormaMTPE.js');
-// oneFormaMTPE()
-
-await import('../resources/functions.js');
-await import('../resources/sniffer.js');
-await import('../resources/clipboard.js');
-await import('../resources/notification.js');
-await import('../resources/chatGpt.js');
-
 async function oneFormaMTPE(inf) {
     let ret = { 'ret': false };
     try {
@@ -101,4 +92,6 @@ async function oneFormaMTPE(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['oneFormaMTPE'] = oneFormaMTPE;
+} else { // NODEJS
+    global['oneFormaMTPE'] = oneFormaMTPE;
 }

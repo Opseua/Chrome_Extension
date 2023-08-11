@@ -1,11 +1,3 @@
-await import('../resources/functions.js');
-await import('../resources/promptChrome.js');
-await import('../resources/notification.js');
-await import('../scripts/command2.js');
-
-await import('../scripts/peroptyx.js');
-await import('../scripts/oneFormaMTPE.js');
-
 async function shortcutPressed(inf) {
   let ret = { 'ret': false };
   try {
@@ -84,4 +76,8 @@ async function shortcutPressed(inf) {
   return ret
 }
 
-window['shortcutPressed'] = shortcutPressed;
+if (typeof window !== 'undefined') { // CHROME
+  window['shortcutPressed'] = shortcutPressed;
+} else { // NODEJS
+  global['shortcutPressed'] = shortcutPressed;
+}

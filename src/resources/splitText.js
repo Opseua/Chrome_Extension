@@ -1,9 +1,6 @@
-// await import('./splitText.js');
 // const infSplitText = { 'maxLength': 30, 'text': 'Lorem Ipsum is simply dummy text of the printing and typesetting industry' }
 // const retSplitText = await splitText(infSplitText)
 // console.log(retSplitText)
-
-await import('./functions.js');
 
 async function splitText(inf) {
     let ret = { 'ret': false }

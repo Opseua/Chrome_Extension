@@ -1,9 +1,6 @@
-// await import('./translate.js');
 // const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': 'Hi, what your name?' };
 // const retTranslate = await translate(infTranslate)
 // console.log(retTranslate)
-
-await import('./functions.js');
 
 async function translate(inf) {
     let ret = { 'ret': false };
@@ -25,7 +22,6 @@ async function translate(inf) {
         } else {
             ret['msg'] = `\n #### ERRO #### TRANSLATE \n TAG NAO ENCONTRADA \n\n`;
         }
-
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }

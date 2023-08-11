@@ -1,45 +1,41 @@
 await import('./resources/clearConsole.js');
 console.log('onStart');
-chrome.browserAction.setBadgeText({ text: '' });
-await import('./resources/functions.js');
-await import('./actions/shortcutPressed.js');
-await import('./resources/websocketRet.js');
-await import('./scripts/oneFormaMTPE.js');
-await import('./scripts/peroptyx.js');
+await import('./resources/@functions.js');
 
-// EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
-chrome.downloads.onChanged.addListener(async function (...inf) {
-    if (inf[0].state && inf[0].state.current === "complete") {
-        chrome.downloads.search({ id: inf.id }, async function (inf) {
-            if (inf.length > 0) {
-                const downloadItem = inf[0];
-                if (downloadItem.byExtensionName === 'BOT' && !downloadItem.filename.includes('[KEEP]')) {
-                    // console.log(`EVENTO: download do BOT concluído\n`, downloadItem)
-                    setTimeout(function () {
-                        chrome.downloads.erase({ id: downloadItem.id });
-                        console.log('DOWNLOAD REMOVIDO DA LISTA');
-                        URL.revokeObjectURL(downloadItem.url);
-                    }, 5000);
+if (typeof window !== 'undefined') { // CHROME
+    chrome.browserAction.setBadgeText({ text: '' });
+    // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
+    chrome.downloads.onChanged.addListener(async function (...inf) {
+        if (inf[0].state && inf[0].state.current === "complete") {
+            chrome.downloads.search({ id: inf.id }, async function (inf) {
+                if (inf.length > 0) {
+                    const downloadItem = inf[0];
+                    if (downloadItem.byExtensionName === 'BOT' && !downloadItem.filename.includes('[KEEP]')) {
+                        // console.log(`EVENTO: download do BOT concluído\n`, downloadItem)
+                        setTimeout(function () {
+                            chrome.downloads.erase({ id: downloadItem.id });
+                            console.log('DOWNLOAD REMOVIDO DA LISTA');
+                            URL.revokeObjectURL(downloadItem.url);
+                        }, 5000);
+                    }
                 }
-            }
-        });
-    }
-});
-
-// ######################### CLICK NO ICONE
-chrome.browserAction.onClicked.addListener(async function (...inf) {
-    console.log('ON START: ICONE PRESSIONADO');
-    //chrome.browserAction.setPopup({popup: "./popup.html"});
-});
-
-// ######################### ATALHO PRESSIONADO
-chrome.commands.onCommand.addListener(async function (...inf) {
-    //console.log('ON START: ATALHO PRESSIONADO')
-    const infShortcutPressed = {
-        'shortcut': inf[0]
-    }
-    shortcutPressed(infShortcutPressed);
-});
+            });
+        }
+    });
+    // ######################### CLICK NO ICONE
+    chrome.browserAction.onClicked.addListener(async function (...inf) {
+        console.log('ON START: ICONE PRESSIONADO');
+        //chrome.browserAction.setPopup({popup: "./popup.html"});
+    });
+    // ######################### ATALHO PRESSIONADO
+    chrome.commands.onCommand.addListener(async function (...inf) {
+        //console.log('ON START: ATALHO PRESSIONADO')
+        const infShortcutPressed = {
+            'shortcut': inf[0]
+        }
+        shortcutPressed(infShortcutPressed);
+    });
+}
 
 // *************************
 
@@ -92,4 +88,3 @@ async function client(inf) {
     }
 }
 client()
-

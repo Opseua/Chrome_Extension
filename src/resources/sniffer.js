@@ -1,9 +1,6 @@
-// await import('./sniffer.js');
 // const infSniffer = { 'newReqSend': true, 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
 // const retSniffer = await sniffer(infSniffer)
 // console.log(retSniffer)
-
-await import('./functions.js');
 
 async function sniffer(inf) {
     let ret = { 'ret': false, 'res': { 'req': {}, 'res': {} } };

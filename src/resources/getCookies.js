@@ -1,9 +1,6 @@
-// await import('./getCookies.js');
 // const infGetCookies = { 'url': retTabSearch.res.url, 'cookieSearch': '__Secure-next-auth.session-token' }
 // const retGetCookies = await getCookies(infGetCookies)
 // console.log(retGetCookies);
-
-await import('./functions.js');
 
 async function getCookies(inf) {
     let ret = { 'ret': false };

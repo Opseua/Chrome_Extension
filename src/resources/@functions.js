@@ -1,4 +1,23 @@
-// await import('./functions.js');
+// ## outros
+await import('./chatGpt.js');
+await import('./clipboard.js');
+await import('./excel.js');
+await import('./getCookies.js');
+await import('./notification.js');
+await import('./promptChrome.js');
+await import('./setTag.js');
+await import('./sniffer.js');
+await import('./splitText.js');
+await import('./tabSearch.js');
+await import('./translate.js');
+await import('./websocketRet.js');
+// actions | scripts
+await import('../actions/apiNewInformation.js');
+await import('../actions/shortcutPressed.js');
+await import('../scripts/command1.js');
+await import('../scripts/command2.js');
+await import('../scripts/oneFormaMTPE.js');
+await import('../scripts/peroptyx.js');
 
 // const infFileInf = { 'path': new URL(import.meta.url).pathname } // ## CHROME NAO!
 // const retFileInf = await fileInf(infFileInf);
@@ -7,7 +26,7 @@
 // const infFile = {
 //     'action':'write',
 //     'file': `PASTAS 1/PASTA 2/arquivo.txt`,
-//     'rewrite': true, // 'true' adiciona no MESMO arquivo, 'false' cria outro em branco
+//     'rewrite': true, // 'true' adiciona, 'false' limpa
 //     'text': `LINHA 1\nLINHA 2\nLINHA 3\n`
 //   };
 //   const retFile = await file(infFile);
@@ -15,13 +34,7 @@
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
 // let infConfigStorage, retConfigStorage
 // infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-// retConfigStorage = await configStorage(infConfigStorage)
-// console.log(retConfigStorage)
-
 // infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-// retConfigStorage = await configStorage(infConfigStorage)
-// console.log(retConfigStorage)
-
 // infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
 // retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
@@ -59,7 +72,6 @@
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
 // await new Promise(resolve => setTimeout(resolve, (2500)));
 // globalObject.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
-
 
 async function api(inf) {
     let ret = { 'ret': false };
@@ -169,7 +181,8 @@ async function file(inf) {
                     if (typeof window !== 'undefined') { // CHROME
                         let textOk = inf.text;
                         if (inf.rewrite) {
-                            const infFile = { 'action': 'read', 'file': `D:/Downloads/Google Chrome/${inf.file}` }
+                            const file = inf.file.includes(':') ? inf.file.slice(3) : inf.file;
+                            const infFile = { 'action': 'read', 'file': `D:/Downloads/Google Chrome/${file}` }
                             const retFile = await file(infFile)
                             if (retFile.ret) { textOk = `${retFile.res}${textOk}` }
                         }
@@ -537,8 +550,10 @@ function regexE(inf) {
 };
 
 if (typeof window !== 'undefined') { // CHROME
+    // ## functions
     window['api'] = api;
     window['file'] = file;
+    window['fileInf'] = fileInf;
     window['configStorage'] = configStorage;
     window['dateHour'] = dateHour;
     window['regex'] = regex;
@@ -547,10 +562,31 @@ if (typeof window !== 'undefined') { // CHROME
     window['gO'] = gO;
     window['gOAdd'] = gOAdd;
     window['gORem'] = gORem;
+    // ## outros
+    window['chatGpt'] = chatGpt;
+    window['clipboard'] = clipboard;
+    window['excel'] = excel;
+    window['getCookies'] = getCookies;
+    window['notification'] = notification;
+    window['promptChrome'] = promptChrome;
+    window['setTag'] = setTag;
+    window['sniffer'] = sniffer;
+    window['splitText'] = splitText;
+    window['tabSearch'] = tabSearch;
+    window['translate'] = translate;
+    window['websocketRet'] = websocketRet;
+    // ## actions | scripts
+    window['apiNewInformation'] = apiNewInformation;
+    window['shortcutPressed'] = shortcutPressed;
+    window['command1'] = command1;
+    window['command2'] = command2;
+    window['oneFormaMTPE'] = oneFormaMTPE;
+    window['peroptyx'] = peroptyx;
 } else { // NODEJS
-    global['fileInf'] = fileInf;
+    // ## functions
     global['api'] = api;
     global['file'] = file;
+    global['fileInf'] = fileInf;
     global['configStorage'] = configStorage;
     global['dateHour'] = dateHour;
     global['regex'] = regex;
@@ -559,5 +595,24 @@ if (typeof window !== 'undefined') { // CHROME
     global['gO'] = gO;
     global['gOAdd'] = gOAdd;
     global['gORem'] = gORem;
+    // ## outros
+    global['chatGpt'] = chatGpt;
+    global['clipboard'] = clipboard;
+    global['excel'] = excel;
+    global['getCookies'] = getCookies;
+    global['notification'] = notification;
+    global['promptChrome'] = promptChrome;
+    global['setTag'] = setTag;
+    global['sniffer'] = sniffer;
+    global['splitText'] = splitText;
+    global['tabSearch'] = tabSearch;
+    global['translate'] = translate;
+    global['websocketRet'] = websocketRet;
+    // ## actions | scripts
+    global['apiNewInformation'] = apiNewInformation;
+    global['shortcutPressed'] = shortcutPressed;
+    global['command1'] = command1;
+    global['command2'] = command2;
+    global['oneFormaMTPE'] = oneFormaMTPE;
+    global['peroptyx'] = peroptyx;
 }
-

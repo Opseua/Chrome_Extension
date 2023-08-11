@@ -1,8 +1,5 @@
-// await import('./promptChrome.js');
 // const retPromptChrome = await promptChrome(`NOME DO COMANDO`);
 // console.log(retPromptChrome)
-
-await import('./functions.js');
 
 async function promptChrome(inf) {
     let ret = { 'ret': false }
@@ -16,7 +13,6 @@ async function promptChrome(inf) {
             ret['msg'] = 'PROMPT CHROME: OK';
             ret['res'] = retPrompt;
         }
-
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }

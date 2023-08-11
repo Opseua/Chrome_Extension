@@ -1,12 +1,8 @@
-// let infExcel, retExcel, lin // CQPT    KQRE
+// let infExcel, retExcel // CQPT    KQRE
 // infExcel = { 'action': 'get', 'tab': 'KQRE', 'col': 'A', 'lin': 1 }
-// retExcel = await excel(infExcel)
-
-// infExcel = { 'action': 'set', 'tab': 'KQRE', 'col': 'A', 'lin': lin, 'value': `A ${lin} B` }
+// infExcel = { 'action': 'set', 'tab': 'KQRE', 'col': 'A', 'lin': 1, 'value': `VALOR` }
 // retExcel = await excel(infExcel)
 // console.log(retExcel)
-
-await import('./functions.js');
 
 async function excel(inf) {
     let ret = { 'ret': false };
@@ -19,7 +15,6 @@ async function excel(inf) {
             sessionId = retConfigStorage.res.sessionId
             transientEditSessionToken = retConfigStorage.res.transientEditSessionToken
         } else {
-            await import('./sniffer.js');
             const infSniffer = { 'newReqSend': false, 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
             const retSniffer = await sniffer(infSniffer)
             chrome.browserAction.setBadgeText({ text: '' });
@@ -150,7 +145,6 @@ async function excel(inf) {
                 const retNotification = await notification(infNotification)
             }
         }
-
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }

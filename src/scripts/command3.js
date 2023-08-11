@@ -1,10 +1,3 @@
-await import('../resources/functions.js');
-await import('../resources/notification.js');
-await import('../resources/clipboard.js');
-await import('../resources/translate.js');
-await import('../resources/promptChrome.js');
-await import('../resources/chatGpt.js');
-
 async function command1(inf) {
   let ret = { 'ret': false };
   let infNotification, infclipboard

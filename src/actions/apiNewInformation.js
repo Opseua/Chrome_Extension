@@ -1,6 +1,3 @@
-await import('../resources/setTag.js');
-await import('../scripts/command2.js');
-
 async function apiNewInformation(inf) {
   let ret = { 'ret': false };
   try {
@@ -23,7 +20,11 @@ async function apiNewInformation(inf) {
   return ret
 }
 
-window['apiNewInformation'] = apiNewInformation;
+if (typeof window !== 'undefined') { // CHROME
+  window['apiNewInformation'] = apiNewInformation;
+} else { // NODEJS
+  global['apiNewInformation'] = apiNewInformation;
+}
 
 
 

@@ -1,7 +1,6 @@
 await import('./resources/clearConsole.js');
 console.log('onStartNode');
-await import('./resources/functions.js');
-await import('./resources/websocketRet.js');
+await import('./resources/@functions.js');
 
 // *************************
 

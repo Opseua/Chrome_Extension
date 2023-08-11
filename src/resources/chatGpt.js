@@ -1,12 +1,6 @@
-// await import('./chatGpt.js');
 // const infChatGpt = { 'provider': 'ora.ai', 'input': `Qual a idade de Saturno?` }
 // const retChatGpt = await chatGpt(infChatGpt)
 // console.log(retChatGpt)
-
-await import('./functions.js');
-await import('./tabSearch.js');
-await import('./getCookies.js');
-await import('./notification.js');
 
 async function chatGpt(inf) {
     let ret = { 'ret': false };
@@ -106,7 +100,6 @@ async function chatGpt(inf) {
                 ret['ret'] = true;
             }
         }
-
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }

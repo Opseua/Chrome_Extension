@@ -1,4 +1,3 @@
-// await import('./websocketRet.js');
 // const infWebsocketRet = { 'data': event.data }
 // const retWebsocketRet = websocketRet(infWebsocketRet)
 
@@ -21,9 +20,6 @@
 //         }
 //     }
 // }
-
-await import('./functions.js');
-await import('./excel.js');
 
 async function websocketRet(inf) {
     let ret = { 'ret': false };
@@ -71,7 +67,6 @@ async function websocketRet(inf) {
         } else {
             ret['msg'] = `\n #### NAO RODAR ####  NAO RODAR \n\n ${inf.data} \n\n`;
         }
-
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }

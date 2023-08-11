@@ -1,9 +1,6 @@
-// await import('./clipboard.js');
 // const infClipboard = { 'value': 'Esse é o valor' };
 // const retClipboard = await clipboard(infClipboard)
 // console.log(retClipboard)
-
-await import('./functions.js');
 
 async function clipboard(inf) {
   let ret = { 'ret': false };

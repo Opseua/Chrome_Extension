@@ -1,7 +1,3 @@
-// await import('./model.js');
-
-await import('./functions.js');
-
 async function model(inf) {
     let ret = { 'ret': false };
     try {
