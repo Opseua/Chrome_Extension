@@ -2,14 +2,7 @@ async function shortcutPressed(inf) {
   let ret = { 'ret': false };
   try {
     let infConfigStorage, retConfigStorage, infNotification, retNotification
-    if (inf.shortcut == 'atalho_1') { // ######################### ATALHO1
-      //console.log('ATALHO 1: EXECUTANDO');
-      const retPromptChrome = await promptChrome(`NOME DO COMANDO`);
-      if (!retPromptChrome.res) { return ret }
-      ret['ret'] = true;
-      ret['msg'] = `SHORTCUT PRESSED: OK`;
-      return ret
-    } else if (inf.shortcut == 'atalho_2') { // ######################### ATALHO2
+    if (inf.shortcut == 'atalho_2') { // ######################### ATALHO2
       console.log('ATALHO 2: EXECUTANDO');
 
       if (!gO.inf.sniffer) {

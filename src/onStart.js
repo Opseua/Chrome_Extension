@@ -29,11 +29,55 @@ if (typeof window !== 'undefined') { // CHROME
     });
     // ######################### ATALHO PRESSIONADO
     chrome.commands.onCommand.addListener(async function (...inf) {
-        //console.log('ON START: ATALHO PRESSIONADO')
-        const infShortcutPressed = {
-            'shortcut': inf[0]
+        let ret = { 'ret': false };
+        try {
+            //console.log('ON START: ATALHO PRESSIONADO')
+            const infShortcutPressed = { 'shortcut': inf[0] }
+            if (infShortcutPressed.shortcut == 'atalho_1') {
+                command1()
+                ret['ret'] = true;
+                ret['msg'] = `SHORTCUT PRESSED: OK`;
+            } else if (infShortcutPressed.shortcut == 'atalho_2') {
+                if (!gO.inf.sniffer) {
+                    const infNotification =
+                    {
+                        'duration': 2,
+                        'type': 'basic',
+                        'title': `RODANDO`,
+                        'message': `OneForma | Peroptyx`,
+                        'iconUrl': "./src/media/icon_3.png",
+                        'buttons': [],
+                    };
+                    const retNotification = await notification(infNotification)
+                    command2();
+                } else {
+                    gO.inf = { 'sniffer': 2 }
+                    const infNotification =
+                    {
+                        'duration': 2,
+                        'type': 'basic',
+                        'title': `PAROU`,
+                        'message': `OneForma | Peroptyx`,
+                        'iconUrl': "./src/media/icon_3.png",
+                        'buttons': [],
+                    };
+                    const retNotification = await notification(infNotification)
+                }
+                ret['ret'] = true;
+                ret['msg'] = `SHORTCUT PRESSED: OK`;
+            } else if (infShortcutPressed.shortcut == 'atalho_3') {
+                command3()
+                ret['ret'] = true;
+                ret['msg'] = `SHORTCUT PRESSED: OK`;
+            } else {
+                ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n`;
+            }
+        } catch (e) {
+            ret['msg'] = regexE({ 'e': e }).res
         }
-        shortcutPressed(infShortcutPressed);
+
+        if (!ret.ret) { console.log(ret.msg) }
+        return ret
     });
 }
 
@@ -88,3 +132,4 @@ async function client(inf) {
     }
 }
 client()
+

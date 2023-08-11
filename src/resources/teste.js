@@ -2,7 +2,7 @@
 // const retTranslate = await translate(infTranslate)
 // console.log(retTranslate)
 
-async function translate(inf) {
+async function teste(inf) {
     let ret = { 'ret': false };
     try {
         const infApi = {
@@ -21,6 +21,7 @@ async function translate(inf) {
         ret['ret'] = true;
         ret['msg'] = `TRANSLATE: OK`;
         ret['res'] = retRegex.res.text['3'];
+        console.log(ret)
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
@@ -30,7 +31,7 @@ async function translate(inf) {
 }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['translate'] = translate;
+    window['teste'] = teste;
 } else { // NODEJS
-    global['translate'] = translate;
+    global['teste'] = teste;
 }

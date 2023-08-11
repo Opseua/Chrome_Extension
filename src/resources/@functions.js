@@ -181,10 +181,13 @@ async function file(inf) {
                     if (typeof window !== 'undefined') { // CHROME
                         let textOk = inf.text;
                         if (inf.rewrite) {
+                            let retFetch
                             const file = inf.file.includes(':') ? inf.file.slice(3) : inf.file;
-                            const infFile = { 'action': 'read', 'file': `D:/Downloads/Google Chrome/${file}` }
-                            const retFile = await file(infFile)
-                            if (retFile.ret) { textOk = `${retFile.res}${textOk}` }
+                            try {
+                                retFetch = await fetch(`file:///D:/Downloads/Google Chrome/${file}`);
+                                retFetch = await retFetch.text();
+                                textOk = `${retFetch}${textOk}`
+                            } catch (e) { }
                         }
                         const blob = new Blob([textOk], { type: 'text/plain' });
                         const downloadOptions = {

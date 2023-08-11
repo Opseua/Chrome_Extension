@@ -1,7 +1,7 @@
 async function command2(inf) {
   let ret = { 'ret': false };
   try {
-    let infSniffer, retSniffer, infRegex, retRegex, infNotification, retNotification, infChatGpt, retChatGpt, infClipboard, retClipboard, infTranslate1, retTranslate1, infTranslate2, retTranslate2
+    let infSniffer, retSniffer
     const gOEve = async (i) => {
       if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
     }; gOAdd(gOEve);
@@ -18,22 +18,34 @@ async function command2(inf) {
       }
       retSniffer = await sniffer(infSniffer)
       if (!retSniffer.res || !gO.inf.sniffer == 1) { return ret }
-      console.log(retSniffer)
 
       if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': 'https://desk.oneforma.com/scribo_apps/MTPE_new_process/postediting.php*' })) {
-        console.log('OneForma')
-      } else if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': 'https://www.tryrating.com/api/survey' })) {
-        console.log('Peroptyx')
-      } else if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': 'https://rating.ewoq.google.com/u/0/rpc/rating/SafeTemplateService/GetTemplate' })) {
-        console.log('Welocalize TASK NAME')
-      } else if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': 'https://rating.ewoq.google.com/u/0/rpc/rating/AssignmentAcquisitionService/GetNewTasks' })) {
-        console.log('Welocalize HIT')
+        const infOneFormaMPTE = { 'sniffer': retSniffer.res.res.body }
+        const retOneFormaMTPE = await oneFormaMTPE(infOneFormaMPTE)
+        console.log('OneForma', retOneFormaMTPE)
+        if (retOneFormaMTPE.ret) {
+          ret['ret'] = true;
+          ret['msg'] = `COMMAND 2: OK | OneForma`;
+        }
+      } else if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': 'https://www.tryrating.com/api/survey*' })) {
+        const infPeroptyx = { 'sniffer': retSniffer.res.res.body }
+        const retPeroptyx = await peroptyx(infPeroptyx)
+        const infFile = {
+          'action': 'write',
+          'file': `sniffer.txt`,
+          'rewrite': true, // 'true' adiciona, 'false' limpa
+          'text': `${retSniffer.res.res.body}\n\n`
+        };
+        const retFile = await file(infFile);
+        console.log(retFile);
+        console.log('Peroptyx', retPeroptyx)
+        if (retPeroptyx.ret) {
+          ret['ret'] = true;
+          ret['msg'] = `COMMAND 2: OK | Peroptyx`;
+        }
       }
 
-      ret['ret'] = true;
-      ret['msg'] = `COMMAND 2: OK`;
-      ret['res'] = `resposta aqui`;
-      if (gO.inf.sniffer == 1) { await run() }
+      if (gO.inf.sniffer == 1 && ret.ret) { await run() } else { chrome.browserAction.setBadgeText({ text: '' }); }
     }
     await run()
 
