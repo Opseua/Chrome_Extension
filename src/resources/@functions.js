@@ -118,7 +118,6 @@ async function api(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-
     if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
@@ -157,8 +156,7 @@ async function fileInf(inf) { // ## CHROME NAO!
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }
-
-    if (!ret.ret) { console.log(ret.msg) }
+    if(!ret.ret) { console.log(ret.msg) }
     return ret;
 }
 
@@ -231,8 +229,7 @@ async function file(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }
-
-    if (!ret.ret) { console.log(ret.msg) }
+    if(!ret.ret) { console.log(ret.msg) }
     return ret;
 }
 
@@ -413,8 +410,7 @@ async function configStorage(inf) {
     catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }
-
-    if (!ret.ret) { console.log(ret.msg) }
+    if(!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
@@ -422,7 +418,9 @@ function dateHour() { // NAO POR COMO 'async'!!!
     let ret = { 'ret': false };
     try {
         const date = new Date();
-        const retDate = {
+        ret['ret'] = true;
+        ret['msg'] = `DATE HOUR: OK`;
+        ret['res'] = {
             'day': String(date.getDate()).padStart(2, '0'),
             'mon': String(date.getMonth() + 1).padStart(2, '0'),
             'yea': String(date.getFullYear()),
@@ -431,16 +429,12 @@ function dateHour() { // NAO POR COMO 'async'!!!
             'sec': String(date.getSeconds()).padStart(2, '0'),
             'mil': String(date.getMilliseconds()).padStart(3, '0'),
             'tim': Date.now()
-        }
-        ret['ret'] = true;
-        ret['msg'] = `DATE HOUR: OK`;
-        ret['res'] = retDate;
+        };
     }
     catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }
-
-    if (!ret.ret) { console.log(ret.msg) }
+    if(!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
@@ -483,8 +477,7 @@ function regex(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-
-    if (!ret.ret) { console.log(ret.msg) }
+    if(!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
@@ -505,8 +498,7 @@ async function random(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-
-    if (!ret.ret) { console.log(ret.msg) }
+    if(!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
@@ -545,8 +537,7 @@ function regexE(inf) {
         const match = e.stack.match(/(\w+\.\w+):(\d+):\d+/);
         ret['msg'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${e.toString()} \n\n`
     }
-
-    if (!ret.ret) { console.log(ret.msg) }
+    if(!ret.ret) { console.log(ret.msg) }
     return ret
 };
 

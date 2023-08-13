@@ -157,8 +157,7 @@ async function tabSearch(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }
-
-    if (!ret.ret) {
+    if(!ret.ret) {
         if (inf.openIfNotExist) {
             const retOpenTab = await openTab(inf)
             if (retOpenTab.hasOwnProperty('id')) {
@@ -170,8 +169,7 @@ async function tabSearch(inf) {
             }
         }
     }
-
-    if (!ret.ret) { console.log(ret.msg) }
+    if(!ret.ret) { console.log(ret.msg) }
     return ret
 }
 

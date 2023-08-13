@@ -103,8 +103,7 @@ async function chatGpt(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-
-    if (!ret.ret) { console.log(ret.msg) }
+    if(!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
