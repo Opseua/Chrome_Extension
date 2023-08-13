@@ -104,7 +104,7 @@ async function client(inf) {
 
         let ws1;
         async function web1() {
-            let ws1 = new WebS(`${retConfigStorage.res.ws2}:${port}/${device1}`);
+            let ws1 = new WebS(`${retConfigStorage.res.ws1}:${port}/${device1}`);
             ws1.onerror = (e) => { };
             ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
             ws1.onclose = async (event) => {
