@@ -21,15 +21,15 @@ async function excel(inf) {
 
             let infRegex = { 'pattern': 'ClientRequestId%22%3A%22(.*?)%22%2C%22InstantaneousType', 'text': retSniffer.res.req.url }
             let retRegex = regex(infRegex)
-            clientRequestId = retRegex.res.text['1']
+            clientRequestId = retRegex.res['1']
 
             infRegex = { 'pattern': 'SessionId%22%3A%22(.*?)%22%2C%22TransientEditSessionToken', 'text': retSniffer.res.req.url }
             retRegex = regex(infRegex)
-            sessionId = retRegex.res.text['1']
+            sessionId = retRegex.res['1']
 
             infRegex = { 'pattern': 'TransientEditSessionToken%22%3A%22(.*?)%22%2C%22PermissionFlags', 'text': retSniffer.res.req.url }
             retRegex = regex(infRegex)
-            transientEditSessionToken = retRegex.res.text['1']
+            transientEditSessionToken = retRegex.res['1']
 
             infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'excel', 'value': { 'clientRequestId': clientRequestId, 'sessionId': sessionId, 'transientEditSessionToken': transientEditSessionToken } }
             retConfigStorage = await configStorage(infConfigStorage);
@@ -52,8 +52,8 @@ async function excel(inf) {
                 const retFile = await file(infFile)
                 const infRegex = { 'pattern': `","lin":"(.*?)","id":"${JSON.parse(inf.inf).id}`, 'text': retFile.res }
                 const retRegex = regex(infRegex)
-                if (retRegex.res.bolean && Number(retRegex.res.text['1']) > 0) {
-                    lin = retRegex.res.text['1']
+                if (retRegex.ret && Number(retRegex.res['1']) > 0) {
+                    lin = retRegex.res['1']
                     col = 'N'
                 }
             }

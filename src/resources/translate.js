@@ -16,11 +16,11 @@ async function translate(inf) {
         const res = retApi.res.body;
         const infRegex = { 'pattern': 'class="result-container">(.*?)</div>', 'text': res }
         const retRegex = regex(infRegex)
-        if (!retRegex.res.bolean) { return ret }
+        if (!retRegex.ret) { return ret }
 
         ret['ret'] = true;
         ret['msg'] = `TRANSLATE: OK`;
-        ret['res'] = retRegex.res.text['3'];
+        ret['res'] = retRegex.res['3'];
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }

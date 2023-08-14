@@ -93,7 +93,7 @@ async function tabSearch(inf) {
                 for (const obj of result.res) {
                     const infRegex = { 'pattern': inf.search.toString(), 'text': obj.id.toString() }
                     const retRegex = regex(infRegex)
-                    if (retRegex.res.bolean) {
+                    if (retRegex.ret) {
                         ret['res'] = {
                             'id': obj.id,
                             'title': obj.title,
@@ -110,7 +110,7 @@ async function tabSearch(inf) {
                     let infRegex, retRegex
                     infRegex = { 'pattern': inf.search, 'text': obj.url } // URL ret
                     retRegex = regex(infRegex)
-                    if (retRegex.res.bolean) {
+                    if (retRegex.ret) {
                         ret['res'] = {
                             'id': obj.id,
                             'title': obj.title,
@@ -123,7 +123,7 @@ async function tabSearch(inf) {
                     }
                     infRegex = { 'pattern': inf.search, 'text': obj.title } // TITULO ret
                     retRegex = regex(infRegex)
-                    if (retRegex.res.bolean) {
+                    if (retRegex.ret) {
                         ret['res'] = {
                             'id': obj.id,
                             'title': obj.title,

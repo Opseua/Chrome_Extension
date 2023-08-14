@@ -156,7 +156,7 @@ async function fileInf(inf) { // ## CHROME NAO!
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret;
 }
 
@@ -229,7 +229,7 @@ async function file(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret;
 }
 
@@ -410,7 +410,7 @@ async function configStorage(inf) {
     catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
@@ -434,7 +434,7 @@ function dateHour() { // NAO POR COMO 'async'!!!
     catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
@@ -442,7 +442,7 @@ function regex(inf) {
     let ret = { 'ret': false };
     try {
         if (inf.pattern.includes('(.*?)')) {
-            let res = {}
+            let res = {}; let ok = false
             const patternSplit = inf.pattern.split('(.*?)');
             const split1 = patternSplit[0].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
             const split2 = patternSplit[1].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
@@ -450,34 +450,55 @@ function regex(inf) {
             const result2 = inf.text.match(`(?<=${split1})(.+)(?=${split2})`);
             const result3 = inf.text.match(`${split1}([\\s\\S]*?)${split2}`);
             const result4 = inf.text.match(`(?<=${split1})([\\s\\S]+)(?=${split2})`);
-            if (result1 && result1.length > 0) { res['1'] = result1[1] }
-            else { res['1'] = `[-|<] PADRAO '${inf.pattern}' NAO ENCONTRADO` } // SEM QUEBRA DE LINHA ATE A PRIMEIRA OCORRENCIA
-            if (result2 && result2.length > 0) { res['2'] = result2[1] }
-            else { res['2'] = `[-|>] PADRAO '${inf.pattern}' NAO ENCONTRADO` } // SEM QUEBRA DE LINHA ATE A ULTIMA OCORRENCIA
-            if (result3 && result3.length > 0) { res['3'] = result3[1] }
-            else { res['3'] = `[^|<] PADRAO '${inf.pattern}' NAO ENCONTRADO` } // COM QUEBRA DE LINHA ATE A PRIMEIRA OCORRENCIA
-            if (result4 && result4.length > 0) { res['4'] = result4[1] }
-            else { res['4'] = `[^|>] PADRAO '${inf.pattern}' NAO ENCONTRADO` } // COM QUEBRA DE LINHA ATE A ULTIMA OCORRENCIA
-            ret['msg'] = `REGEX: OK`;
-            ret['res'] = { 'bolean': true, 'text': res }
+            if (result1 && result1.length > 0) {
+                res['1'] = result1[1];
+                ok = true
+            }
+            else { // SEM QUEBRA DE LINHA ATE A PRIMEIRA OCORRENCIA
+                res['1'] = `[-|<] PADRAO '${inf.pattern}' NAO ENCONTRADO`
+            }
+            if (result2 && result2.length > 0) {
+                res['2'] = result2[1];
+                ok = true
+            }
+            else { // SEM QUEBRA DE LINHA ATE A ULTIMA OCORRENCIA
+                res['2'] = `[-|>] PADRAO '${inf.pattern}' NAO ENCONTRADO`
+            }
+            if (result3 && result3.length > 0) {
+                res['3'] = result3[1];
+                ok = true
+            }
+            else { // COM QUEBRA DE LINHA ATE A PRIMEIRA OCORRENCIA
+                res['3'] = `[^|<] PADRAO '${inf.pattern}' NAO ENCONTRADO`
+            }
+            if (result4 && result4.length > 0) {
+                res['4'] = result4[1];
+                ok = true
+            }
+            else { // COM QUEBRA DE LINHA ATE A ULTIMA OCORRENCIA
+                res['4'] = `[^|>] PADRAO '${inf.pattern}' NAO ENCONTRADO`
+            }
+            if (ok) {
+                ret['msg'] = `REGEX: OK`;
+                ret['res'] = res;
+                ret['ret'] = true;
+            }
         } else {
             const pattern = inf.pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
             const result = new RegExp(`^${pattern}$`).test(inf.text);
             if (inf.simple) { if (result) { return true } else { return false } } else {
                 if (result) {
                     ret['msg'] = `REGEX: OK`;
-                    ret['res'] = { 'bolean': true, 'text': 'TEXTO POSSUI O PADRAO' }
-                } else {
-                    ret['msg'] = `\n #### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
-                    ret['res'] = { 'bolean': false }
+                    ret['res'] = 'TEXTO POSSUI O PADRAO';
+                    ret['ret'] = true;
                 }
+                else { ret['msg'] = `\n #### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`; }
             }
         }
-        ret['ret'] = true;
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
+        console.log(ret.msg)
     }
-    if(!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
@@ -498,7 +519,7 @@ async function random(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
@@ -537,7 +558,7 @@ function regexE(inf) {
         const match = e.stack.match(/(\w+\.\w+):(\d+):\d+/);
         ret['msg'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${e.toString()} \n\n`
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 };
 

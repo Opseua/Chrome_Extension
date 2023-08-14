@@ -11,11 +11,11 @@ async function oneFormaMTPE(inf) {
         infRegex2 = { 'simple': true, 'pattern': 'mt_textbox" dir class="form-control"(.*?)/textarea>', 'text': inf.sniffer }
         retRegex2 = regex(infRegex2)
 
-        if (retRegex1.ret && retRegex1.res.text['1'].split('<').length - 1 == 1 && retRegex1.res.text['1'].split('>').length - 1 == 1 && retRegex2.ret && retRegex2.res.text['1'].split('<').length - 1 == 1 && retRegex2.res.text['1'].split('>').length - 1 == 1) {
+        if (retRegex1.ret && retRegex1.res['1'].split('<').length - 1 == 1 && retRegex1.res['1'].split('>').length - 1 == 1 && retRegex2.ret && retRegex2.res['1'].split('<').length - 1 == 1 && retRegex2.res['1'].split('>').length - 1 == 1) {
 
-            infRegex1 = { 'simple': true, 'pattern': '>(.*?)<', 'text': retRegex1.res.text['1'] }
+            infRegex1 = { 'simple': true, 'pattern': '>(.*?)<', 'text': retRegex1.res['1'] }
             retRegex1 = regex(infRegex1)
-            infRegex2 = { 'simple': true, 'pattern': '>(.*?)<', 'text': retRegex2.res.text['1'] }
+            infRegex2 = { 'simple': true, 'pattern': '>(.*?)<', 'text': retRegex2.res['1'] }
             retRegex2 = regex(infRegex2)
 
             infNotification =
@@ -30,11 +30,11 @@ async function oneFormaMTPE(inf) {
             retNotification = await notification(infNotification)
 
             if (!gO.inf.sniffer == 1) { return ret }
-            const infChatGpt = { 'provider': 'ora.ai', 'input': `REWRITE THIS IN THE MOST NATURAL WAY POSSIBLE KEEPING THE SAME MEANING, AND IF POSSIBLE KEEPING THE SAME AMOUNT OF WORDS\n\n${retRegex2.res.text['1']}` }
+            const infChatGpt = { 'provider': 'ora.ai', 'input': `REWRITE THE SENTENCE IN ENGLISH, WHICH WAS IN PORTUGUESE AND WAS TRANSLATED, KEEPING THE SAME MEANING AND LEAVING THE MOST LIKE THE ORIGINAL\n\nPORTUGUESE:\n${retRegex1.res['1']}\n\nENGLISH:\n${retRegex2.res['1']}` }
             const retChatGpt = await chatGpt(infChatGpt)
             if (!retChatGpt.res || !gO.inf.sniffer == 1) { return ret }
 
-            if (retRegex2.res.text['1'] == retChatGpt.res) {
+            if (retRegex2.res['1'].toLowerCase() == retChatGpt.res.toLowerCase()) {
                 infNotification =
                 {
                     'duration': 1,
@@ -48,9 +48,9 @@ async function oneFormaMTPE(inf) {
             } else {
 
                 let clipboardText
-                if (retChatGpt.res.endsWith('.') && !retRegex2.res.text['1'].endsWith('.')) {
+                if (retChatGpt.res.endsWith('.') && !retRegex2.res['1'].endsWith('.')) {
                     clipboardText = retChatGpt.res.slice(0, -1);
-                } else if (!retChatGpt.res.endsWith('.') && retRegex2.res.text['1'].endsWith('.')) {
+                } else if (!retChatGpt.res.endsWith('.') && retRegex2.res['1'].endsWith('.')) {
                     clipboardText = `${retChatGpt.res}.`
                 } else {
                     clipboardText = retChatGpt.res
@@ -63,7 +63,7 @@ async function oneFormaMTPE(inf) {
                     'duration': 1,
                     'type': 'basic',
                     'title': `CONCLUÍDO`,
-                    'message': `pt → ${retRegex1.res.text['1']}\nen → ${retRegex2.res.text['1']}\n🟢 ${retChatGpt.res}`,
+                    'message': `pt → ${retRegex1.res['1']}\nen → ${retRegex2.res['1']}\n🟢 ${retChatGpt.res}`,
                     'iconUrl': "./src/media/notification_1.png",
                     'buttons': [],
                 };
@@ -86,7 +86,7 @@ async function oneFormaMTPE(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
