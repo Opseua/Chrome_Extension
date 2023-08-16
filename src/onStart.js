@@ -133,3 +133,7 @@ async function client(inf) {
 }
 client()
 
+// const infSniffer = {  'arrUrl': ['*.vtt*'] }
+// const retSniffer = await sniffer(infSniffer)
+// console.log(retSniffer)
+

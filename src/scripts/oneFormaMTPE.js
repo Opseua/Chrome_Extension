@@ -18,26 +18,35 @@ async function oneFormaMTPE(inf) {
             infRegex2 = { 'simple': true, 'pattern': '>(.*?)<', 'text': retRegex2.res['1'] }
             retRegex2 = regex(infRegex2)
 
-            infNotification =
-            {
-                'duration': 1,
-                'type': 'basic',
-                'title': `AGUARDE...`,
-                'message': `Mudando o texto`,
-                'iconUrl': "./src/media/icon_4.png",
-                'buttons': [],
-            };
-            retNotification = await notification(infNotification)
+            // infNotification =
+            // {
+            //     'duration': 1,
+            //     'type': 'basic',
+            //     'title': `AGUARDE...`,
+            //     'message': `Mudando o texto`,
+            //     'iconUrl': "./src/media/icon_4.png",
+            //     'buttons': [],
+            // };
+            // retNotification = await notification(infNotification)
 
             if (!gO.inf.sniffer == 1) { return ret }
             const infChatGpt = { 'provider': 'ora.ai', 'input': `REWRITE THE SENTENCE IN ENGLISH, WHICH WAS IN PORTUGUESE AND WAS TRANSLATED, KEEPING THE SAME MEANING AND LEAVING THE MOST LIKE THE ORIGINAL\n\nPORTUGUESE:\n${retRegex1.res['1']}\n\nENGLISH:\n${retRegex2.res['1']}` }
             const retChatGpt = await chatGpt(infChatGpt)
             if (!retChatGpt.res || !gO.inf.sniffer == 1) { return ret }
 
-            if (retRegex2.res['1'].toLowerCase() == retChatGpt.res.toLowerCase()) {
+            let clipboardText
+            if (retChatGpt.res.endsWith('.') && !retRegex2.res['1'].endsWith('.')) {
+                clipboardText = retChatGpt.res.slice(0, -1);
+            } else if (!retChatGpt.res.endsWith('.') && retRegex2.res['1'].endsWith('.')) {
+                clipboardText = `${retChatGpt.res}.`
+            } else {
+                clipboardText = retChatGpt.res
+            }
+
+            if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
                 infNotification =
                 {
-                    'duration': 1,
+                    'duration': 2,
                     'type': 'basic',
                     'title': `PULAR`,
                     'message': `Mesmo texto`,
@@ -45,29 +54,53 @@ async function oneFormaMTPE(inf) {
                     'buttons': [],
                 };
                 retNotification = await notification(infNotification)
-            } else {
-
-                let clipboardText
-                if (retChatGpt.res.endsWith('.') && !retRegex2.res['1'].endsWith('.')) {
-                    clipboardText = retChatGpt.res.slice(0, -1);
-                } else if (!retChatGpt.res.endsWith('.') && retRegex2.res['1'].endsWith('.')) {
-                    clipboardText = `${retChatGpt.res}.`
-                } else {
-                    clipboardText = retChatGpt.res
-                }
+            }
+            else {
                 const infClipboard = { 'value': clipboardText };
                 const retClipboard = await clipboard(infClipboard)
+                if (!retClipboard.ret) {
+                    console.log(retClipboard)
+                }
 
                 infNotification =
                 {
-                    'duration': 1,
+                    'duration': 2,
                     'type': 'basic',
                     'title': `CONCLUÍDO`,
-                    'message': `pt → ${retRegex1.res['1']}\nen → ${retRegex2.res['1']}\n🟢 ${retChatGpt.res}`,
+                    'message': `pt → ${retRegex1.res['1']}`,
+                    // 'message': `pt → ${retRegex1.res['1']}\nen → ${retRegex2.res['1']}\n🟢 ${retChatGpt.res}`,
                     'iconUrl': "./src/media/notification_1.png",
                     'buttons': [],
                 };
                 retNotification = await notification(infNotification)
+
+                let firstA = retRegex1.res['1'].charAt(0)
+                let firstB = retChatGpt.res.charAt(0)
+                if ((firstA === firstA.toUpperCase()) && !(firstB === firstB.toUpperCase())) {
+                    // clipboardText = clipboardText.charAt(0).toLowerCase() + clipboardText.slice(1)
+                    infNotification =
+                    {
+                        'duration': 4,
+                        'type': 'basic',
+                        'title': `ALERTA`,
+                        'message': `Conferir primeira letra!`,
+                        'iconUrl': "./src/media/notification_3.png",
+                        'buttons': [],
+                    };
+                    retNotification = await notification(infNotification)
+                } else if (!(firstA === firstA.toUpperCase()) && (firstB === firstB.toUpperCase())) {
+                    // clipboardText = clipboardText.charAt(0).toUpperCase() + clipboardText.slice(1)
+                    infNotification =
+                    {
+                        'duration': 4,
+                        'type': 'basic',
+                        'title': `ALERTA`,
+                        'message': `Conferir primeira letra!`,
+                        'iconUrl': "./src/media/notification_3.png",
+                        'buttons': [],
+                    };
+                    retNotification = await notification(infNotification)
+                }
             }
         } else {
             infNotification =
