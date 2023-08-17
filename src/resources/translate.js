@@ -1,4 +1,4 @@
-// const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': 'Hi, what your name?' };
+// const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
 // const retTranslate = await translate(infTranslate)
 // console.log(retTranslate)
 
@@ -18,13 +18,14 @@ async function translate(inf) {
         const retRegex = regex(infRegex)
         if (!retRegex.ret) { return ret }
 
+        let decode = new DOMParser().parseFromString(retRegex.res['3'], "text/html");
         ret['ret'] = true;
         ret['msg'] = `TRANSLATE: OK`;
-        ret['res'] = retRegex.res['3'];
+        ret['res'] = decode.documentElement.textContent;
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 

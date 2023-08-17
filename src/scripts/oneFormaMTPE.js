@@ -35,13 +35,37 @@ async function oneFormaMTPE(inf) {
             if (!retChatGpt.res || !gO.inf.sniffer == 1) { return ret }
 
             let clipboardText
-            if (!retRegex2.res['1'].endsWith('.') && retChatGpt.res.endsWith('.')) {
-                clipboardText = retChatGpt.res.slice(0, -1);
-            } else if (retRegex2.res['1'].endsWith('.') && !retChatGpt.res.endsWith('.')) {
-                clipboardText = `${retChatGpt.res}.`
-            } else {
-                clipboardText = retChatGpt.res
+            async function text(inf) {
+                if (!retRegex2.res['1'].endsWith('.') && retChatGpt.res.endsWith('.')) {
+                    clipboardText = retChatGpt.res.slice(0, -1);
+                } else if (retRegex2.res['1'].endsWith('.') && !retChatGpt.res.endsWith('.')) {
+                    clipboardText = `${retChatGpt.res}.`
+                } else {
+                    clipboardText = retChatGpt.res
+                }
+                if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
+                    const infTranslate = { 'source': 'pt', 'target': 'en', 'text': clipboardText };
+                    const retTranslate = await translate(infTranslate)
+                    if (!retRegex2.res['1'].endsWith('.') && retTranslate.res.endsWith('.')) {
+                        clipboardText = retTranslate.res.slice(0, -1);
+                    } else if (retRegex2.res['1'].endsWith('.') && !retTranslate.res.endsWith('.')) {
+                        clipboardText = `${retTranslate.res}.`
+                    } else {
+                        clipboardText = retTranslate.res
+                    }
+                    console.log('tradutor')
+                }
             }
+            await text()
+
+            // let clipboardText
+            // if (!retRegex2.res['1'].endsWith('.') && retChatGpt.res.endsWith('.')) {
+            //     clipboardText = retChatGpt.res.slice(0, -1);
+            // } else if (retRegex2.res['1'].endsWith('.') && !retChatGpt.res.endsWith('.')) {
+            //     clipboardText = `${retChatGpt.res}.`
+            // } else {
+            //     clipboardText = retChatGpt.res
+            // }
 
             const infClipboard = { 'value': clipboardText };
             const retClipboard = await clipboard(infClipboard)

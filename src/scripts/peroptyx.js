@@ -63,7 +63,6 @@ async function peroptyx(inf) {
 
                     const infTranslate1 = { 'source': 'auto', 'target': 'pt', 'text': comentario };
                     const retTranslate1 = await translate(infTranslate1)
-                    console.log(retTranslate1)
                     comentario1 = retTranslate1.res
 
                     // infTranslate2 = { 'source': 'auto', 'target': 'en', 'text': comentario };
