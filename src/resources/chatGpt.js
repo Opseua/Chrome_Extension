@@ -24,7 +24,7 @@ async function chatGpt(inf) {
                         'type': 'basic',
                         'title': `ERRO AO ABRIR CHATGPT`,
                         'message': `Não foi possível abrir a aba`,
-                        'iconUrl': 'undefined',
+                        'iconUrl': './src/media/notification_3.png',
                         'buttons': [],
                     };
                     const retNotification = await notification(infNotification)
@@ -39,9 +39,9 @@ async function chatGpt(inf) {
                     {
                         'duration': 5,
                         'type': 'basic',
-                        'title': `ERRO AO PEGAR COOKIE`,
+                        'title': `ERRO AO PEGAR COOKIE CHATGPT`,
                         'message': `Verificar se a aba abriu e se está logado`,
-                        'iconUrl': 'undefined',
+                        'iconUrl': './src/media/notification_3.png',
                         'buttons': [],
                     };
                     const retNotification = await notification(infNotification)
@@ -91,7 +91,7 @@ async function chatGpt(inf) {
                     'type': 'basic',
                     'title': `ERRO AO PESQUISAR NO CHATGPT`,
                     'message': res.error.message,
-                    'iconUrl': 'undefined',
+                    'iconUrl': './src/media/notification_3.png',
                     'buttons': [],
                 };
                 const retNotification = await notification(infNotification)
@@ -103,7 +103,7 @@ async function chatGpt(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 

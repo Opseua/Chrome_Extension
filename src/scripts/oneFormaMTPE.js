@@ -35,13 +35,16 @@ async function oneFormaMTPE(inf) {
             if (!retChatGpt.res || !gO.inf.sniffer == 1) { return ret }
 
             let clipboardText
-            if (retChatGpt.res.endsWith('.') && !retRegex2.res['1'].endsWith('.')) {
+            if (!retRegex2.res['1'].endsWith('.') && retChatGpt.res.endsWith('.')) {
                 clipboardText = retChatGpt.res.slice(0, -1);
-            } else if (!retChatGpt.res.endsWith('.') && retRegex2.res['1'].endsWith('.')) {
+            } else if (retRegex2.res['1'].endsWith('.') && !retChatGpt.res.endsWith('.')) {
                 clipboardText = `${retChatGpt.res}.`
             } else {
                 clipboardText = retChatGpt.res
             }
+
+            const infClipboard = { 'value': clipboardText };
+            const retClipboard = await clipboard(infClipboard)
 
             if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
                 infNotification =
@@ -56,12 +59,6 @@ async function oneFormaMTPE(inf) {
                 retNotification = await notification(infNotification)
             }
             else {
-                const infClipboard = { 'value': clipboardText };
-                const retClipboard = await clipboard(infClipboard)
-                if (!retClipboard.ret) {
-                    console.log(retClipboard)
-                }
-
                 infNotification =
                 {
                     'duration': 2,
@@ -102,6 +99,7 @@ async function oneFormaMTPE(inf) {
                     retNotification = await notification(infNotification)
                 }
             }
+
         } else {
             infNotification =
             {
