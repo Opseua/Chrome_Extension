@@ -1,22 +1,3 @@
-// ## outros
-await import('./chatGpt.js');
-await import('./clipboard.js');
-await import('./excel.js');
-await import('./getCookies.js');
-await import('./notification.js');
-await import('./promptChrome.js');
-await import('./setTag.js');
-await import('./sniffer.js');
-await import('./splitText.js');
-await import('./tabSearch.js');
-await import('./translate.js');
-await import('./websocketRet.js');
-// actions | scripts
-await import('../scripts/command1.js');
-await import('../scripts/command2.js');
-await import('../scripts/oneFormaMTPE.js');
-await import('../scripts/peroptyx.js');
-
 // const infFileInf = { 'path': new URL(import.meta.url).pathname } // ## CHROME NAO!
 // const retFileInf = await fileInf(infFileInf);
 // console.log(retFileInf)
@@ -70,6 +51,25 @@ await import('../scripts/peroptyx.js');
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
 // await new Promise(resolve => setTimeout(resolve, (2500)));
 // globalObject.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
+
+// ## resources
+await import('./chatGpt.js');
+await import('./clipboard.js');
+await import('./excel.js');
+await import('./getCookies.js');
+await import('./notification.js');
+await import('./promptChrome.js');
+await import('./setTag.js');
+await import('./sniffer.js');
+await import('./splitText.js');
+await import('./tabSearch.js');
+await import('./translate.js');
+await import('./websocketRet.js');
+// ## scripts
+await import('../scripts/command1.js');
+await import('../scripts/command2.js');
+await import('../scripts/oneFormaMTPE.js');
+await import('../scripts/peroptyxSearch2_0.js');
 
 async function api(inf) {
     let ret = { 'ret': false };
@@ -575,7 +575,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['gO'] = gO;
     window['gOAdd'] = gOAdd;
     window['gORem'] = gORem;
-    // ## outros
+    // ## resources
     window['chatGpt'] = chatGpt;
     window['clipboard'] = clipboard;
     window['excel'] = excel;
@@ -588,11 +588,11 @@ if (typeof window !== 'undefined') { // CHROME
     window['tabSearch'] = tabSearch;
     window['translate'] = translate;
     window['websocketRet'] = websocketRet;
-    // ## actions | scripts
+    // ## scripts
     window['command1'] = command1;
     window['command2'] = command2;
     window['oneFormaMTPE'] = oneFormaMTPE;
-    window['peroptyx'] = peroptyx;
+    window['peroptyxSearch2_0'] = peroptyxSearch2_0;
 } else { // NODEJS
     // ## functions
     global['api'] = api;
@@ -606,7 +606,7 @@ if (typeof window !== 'undefined') { // CHROME
     global['gO'] = gO;
     global['gOAdd'] = gOAdd;
     global['gORem'] = gORem;
-    // ## outros
+    // ## resources
     global['chatGpt'] = chatGpt;
     global['clipboard'] = clipboard;
     global['excel'] = excel;
@@ -619,9 +619,9 @@ if (typeof window !== 'undefined') { // CHROME
     global['tabSearch'] = tabSearch;
     global['translate'] = translate;
     global['websocketRet'] = websocketRet;
-    // ## actions | scripts
+    // ## scripts
     global['command1'] = command1;
     global['command2'] = command2;
     global['oneFormaMTPE'] = oneFormaMTPE;
-    global['peroptyx'] = peroptyx;
+    global['peroptyxSearch2_0'] = peroptyxSearch2_0;
 }

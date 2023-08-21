@@ -1,6 +1,6 @@
-// peroptyx()
+// peroptyxSearch2_0()
 
-async function peroptyx(inf) {
+async function peroptyxSearch2_0(inf) {
     let ret = { 'ret': false };
     try {
         let infNotification, retNotification
@@ -118,7 +118,7 @@ async function peroptyx(inf) {
 }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['peroptyx'] = peroptyx;
+    window['peroptyxSearch2_0'] = peroptyxSearch2_0;
 } else { // NODEJS
-    global['peroptyx'] = peroptyx;
+    global['peroptyxSearch2_0'] = peroptyxSearch2_0;
 }

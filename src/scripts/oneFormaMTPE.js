@@ -112,7 +112,7 @@ async function oneFormaMTPE(inf) {
             retNotification = await notification(infNotification)
         }
         ret['ret'] = true;
-        ret['msg'] = `ONEFORMA MTPE: OK`;
+        ret['msg'] = `ONEFORMA: OK`;
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }

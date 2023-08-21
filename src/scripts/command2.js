@@ -30,7 +30,7 @@ async function command2(inf) {
         }
       } else if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': 'https://www.tryrating.com/api/survey*' })) {
         const infPeroptyx = { 'sniffer': retSniffer.res.res.body }
-        const retPeroptyx = await peroptyx(infPeroptyx)
+        const retPeroptyx = await peroptyxSearch2_0(infPeroptyx)
         if (retPeroptyx.ret) {
           reRun = true
           ret['msg'] = `COMMAND 2: OK | Peroptyx`;
