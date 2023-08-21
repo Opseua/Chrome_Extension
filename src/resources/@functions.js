@@ -70,6 +70,7 @@ await import('../scripts/command1.js');
 await import('../scripts/command2.js');
 await import('../scripts/oneFormaMTPE.js');
 await import('../scripts/peroptyxSearch2_0.js');
+await import('../scripts/peroptyxQIDC.js');
 
 async function api(inf) {
     let ret = { 'ret': false };
@@ -593,6 +594,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['command2'] = command2;
     window['oneFormaMTPE'] = oneFormaMTPE;
     window['peroptyxSearch2_0'] = peroptyxSearch2_0;
+    window['peroptyxQIDC'] = peroptyxQIDC;
 } else { // NODEJS
     // ## functions
     global['api'] = api;
@@ -624,4 +626,5 @@ if (typeof window !== 'undefined') { // CHROME
     global['command2'] = command2;
     global['oneFormaMTPE'] = oneFormaMTPE;
     global['peroptyxSearch2_0'] = peroptyxSearch2_0;
+    global['peroptyxQIDC'] = peroptyxQIDC;
 }
