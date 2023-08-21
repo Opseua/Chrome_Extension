@@ -18,54 +18,32 @@ async function oneFormaMTPE(inf) {
             infRegex2 = { 'simple': true, 'pattern': '>(.*?)<', 'text': retRegex2.res['1'] }
             retRegex2 = regex(infRegex2)
 
-            // infNotification =
-            // {
-            //     'duration': 1,
-            //     'type': 'basic',
-            //     'title': `AGUARDE...`,
-            //     'message': `Mudando o texto`,
-            //     'iconUrl': "./src/media/icon_4.png",
-            //     'buttons': [],
-            // };
-            // retNotification = await notification(infNotification)
-
             if (!gO.inf.sniffer == 1) { return ret }
             const infChatGpt = { 'provider': 'ora.ai', 'input': `REWRITE THE SENTENCE IN ENGLISH, WHICH WAS IN PORTUGUESE AND WAS TRANSLATED, KEEPING THE SAME MEANING AND LEAVING THE MOST LIKE THE ORIGINAL\n\nPORTUGUESE:\n${retRegex1.res['1']}\n\nENGLISH:\n${retRegex2.res['1']}` }
             const retChatGpt = await chatGpt(infChatGpt)
             if (!retChatGpt.res || !gO.inf.sniffer == 1) { return ret }
 
             let clipboardText
-            async function text(inf) {
-                if (!retRegex2.res['1'].endsWith('.') && retChatGpt.res.endsWith('.')) {
-                    clipboardText = retChatGpt.res.slice(0, -1);
-                } else if (retRegex2.res['1'].endsWith('.') && !retChatGpt.res.endsWith('.')) {
-                    clipboardText = `${retChatGpt.res}.`
-                } else {
-                    clipboardText = retChatGpt.res
-                }
-                if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
-                    const infTranslate = { 'source': 'pt', 'target': 'en', 'text': clipboardText };
-                    const retTranslate = await translate(infTranslate)
-                    if (!retRegex2.res['1'].endsWith('.') && retTranslate.res.endsWith('.')) {
-                        clipboardText = retTranslate.res.slice(0, -1);
-                    } else if (retRegex2.res['1'].endsWith('.') && !retTranslate.res.endsWith('.')) {
-                        clipboardText = `${retTranslate.res}.`
-                    } else {
-                        clipboardText = retTranslate.res
-                    }
-                    console.log('tradutor')
-                }
+            if (!retRegex2.res['1'].endsWith('.') && retChatGpt.res.endsWith('.')) {
+                clipboardText = retChatGpt.res.slice(0, -1);
+            } else if (retRegex2.res['1'].endsWith('.') && !retChatGpt.res.endsWith('.')) {
+                clipboardText = `${retChatGpt.res}.`
+            } else {
+                clipboardText = retChatGpt.res
             }
-            await text()
-
-            // let clipboardText
-            // if (!retRegex2.res['1'].endsWith('.') && retChatGpt.res.endsWith('.')) {
-            //     clipboardText = retChatGpt.res.slice(0, -1);
-            // } else if (retRegex2.res['1'].endsWith('.') && !retChatGpt.res.endsWith('.')) {
-            //     clipboardText = `${retChatGpt.res}.`
-            // } else {
-            //     clipboardText = retChatGpt.res
-            // }
+            if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
+                let msg = `${retRegex2.res['1']}\n${clipboardText}`
+                const infTranslate = { 'source': 'pt', 'target': 'en', 'text': clipboardText };
+                const retTranslate = await translate(infTranslate)
+                if (!retRegex2.res['1'].endsWith('.') && retTranslate.res.endsWith('.')) {
+                    clipboardText = retTranslate.res.slice(0, -1);
+                } else if (retRegex2.res['1'].endsWith('.') && !retTranslate.res.endsWith('.')) {
+                    clipboardText = `${retTranslate.res}.`
+                } else {
+                    clipboardText = retTranslate.res
+                }
+                msg = `${msg}\n${clipboardText}`
+            }
 
             const infClipboard = { 'value': clipboardText };
             const retClipboard = await clipboard(infClipboard)
@@ -89,7 +67,6 @@ async function oneFormaMTPE(inf) {
                     'type': 'basic',
                     'title': `CONCLUÍDO`,
                     'message': `pt → ${retRegex1.res['1']}`,
-                    // 'message': `pt → ${retRegex1.res['1']}\nen → ${retRegex2.res['1']}\n🟢 ${retChatGpt.res}`,
                     'iconUrl': "./src/media/notification_1.png",
                     'buttons': [],
                 };
@@ -98,7 +75,6 @@ async function oneFormaMTPE(inf) {
                 let firstA = retRegex1.res['1'].charAt(0)
                 let firstB = retChatGpt.res.charAt(0)
                 if ((firstA === firstA.toUpperCase()) && !(firstB === firstB.toUpperCase())) {
-                    // clipboardText = clipboardText.charAt(0).toLowerCase() + clipboardText.slice(1)
                     infNotification =
                     {
                         'duration': 4,
@@ -110,7 +86,6 @@ async function oneFormaMTPE(inf) {
                     };
                     retNotification = await notification(infNotification)
                 } else if (!(firstA === firstA.toUpperCase()) && (firstB === firstB.toUpperCase())) {
-                    // clipboardText = clipboardText.charAt(0).toUpperCase() + clipboardText.slice(1)
                     infNotification =
                     {
                         'duration': 4,
