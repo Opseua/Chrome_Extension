@@ -3,19 +3,22 @@
 async function peroptyxQIDC(inf) {
     let ret = { 'ret': false };
     try {
-        let infNotification, retNotification
-        const gOEve = async (i) => {
-            if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
-        }; gOAdd(gOEve);
-
+        let infNotification, retNotification, infClipboard, retClipboard
+        if (!inf.server) {
+            const gOEve = async (i) => {
+                if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
+            }; gOAdd(gOEve);
+        }
         const retSniffer = JSON.parse(inf.sniffer)
+        infClipboard = { 'value': retSniffer.tasks[0].taskData.query }
+        retClipboard = await clipboard(infClipboard)
         if (retSniffer.targetLocalIds.length == 1) {
             infNotification =
             {
                 'duration': 4,
                 'type': 'basic',
-                'title': `ALERTA`,
-                'message': `Blind!\n\n${retSniffer.tasks[0].taskData.query}`,
+                'title': `BLIND`,
+                'message': `${retSniffer.tasks[0].taskData.query}`,
                 'iconUrl': "./src/media/notification_3.png",
                 'buttons': [],
             };
@@ -25,8 +28,8 @@ async function peroptyxQIDC(inf) {
             {
                 'duration': 2,
                 'type': 'basic',
-                'title': `CONCLUÍDO`,
-                'message': `Não blind\n\n${retSniffer.tasks[0].taskData.query}`,
+                'title': `NÃO BLIND`,
+                'message': `${retSniffer.tasks[0].taskData.query}`,
                 'iconUrl': "./src/media/notification_1.png",
                 'buttons': [],
             };

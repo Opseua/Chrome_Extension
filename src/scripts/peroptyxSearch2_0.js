@@ -3,11 +3,12 @@
 async function peroptyxSearch2_0(inf) {
     let ret = { 'ret': false };
     try {
-        let infNotification, retNotification
-        const gOEve = async (i) => {
-            if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
-        }; gOAdd(gOEve);
-
+        let infNotification, retNotification, infClipboard, retClipboard
+        if (!inf.server) {
+            const gOEve = async (i) => {
+                if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
+            }; gOAdd(gOEve);
+        }
         const retSniffer = JSON.parse(inf.sniffer)
         if (!retSniffer.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
             infNotification =
@@ -105,15 +106,15 @@ async function peroptyxSearch2_0(inf) {
             };
             retNotification = await notification(infNotification)
 
-            const infClipboard = { 'value': JSON.stringify(res, null, 2) }
-            const retClipboard = await clipboard(infClipboard)
+            infClipboard = { 'value': JSON.stringify(res, null, 2) }
+            retClipboard = await clipboard(infClipboard)
         }
         ret['ret'] = true;
         ret['msg'] = `PEROPTYX: OK`;
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 
