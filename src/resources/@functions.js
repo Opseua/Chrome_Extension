@@ -1,3 +1,5 @@
+// ####### await import('./@functions.js');
+
 // const infFileInf = { 'path': new URL(import.meta.url).pathname } // ## CHROME NAO!
 // const retFileInf = await fileInf(infFileInf);
 // console.log(retFileInf)
@@ -65,6 +67,7 @@ await import('./splitText.js');
 await import('./tabSearch.js');
 await import('./translate.js');
 await import('./websocketRet.js');
+await import('./commandLine.js');
 // ## scripts
 await import('../scripts/command1.js');
 await import('../scripts/command2.js');
@@ -589,6 +592,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['tabSearch'] = tabSearch;
     window['translate'] = translate;
     window['websocketRet'] = websocketRet;
+    window['commandLine'] = commandLine;
     // ## scripts
     window['command1'] = command1;
     window['command2'] = command2;
@@ -621,6 +625,7 @@ if (typeof window !== 'undefined') { // CHROME
     global['tabSearch'] = tabSearch;
     global['translate'] = translate;
     global['websocketRet'] = websocketRet;
+    global['commandLine'] = commandLine;
     // ## scripts
     global['command1'] = command1;
     global['command2'] = command2;

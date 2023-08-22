@@ -1,4 +1,5 @@
-var encodedText = "It&#39;s all so surreal";
-let doc = new DOMParser().parseFromString(encodedText, "text/html");
-var decodedText = doc.documentElement.textContent;
-console.log(decodedText); // Saída: It's all so surreal
+await import('./@functions.js');
+
+const infCommandLine = { 'background': true, 'command': 'notepad' } // 'background' 'false' → CODIGO FICA PRESO ATE TERMINAR O PROCESSO 
+const retCommandLine = await commandLine(infCommandLine)
+console.log(retCommandLine)
