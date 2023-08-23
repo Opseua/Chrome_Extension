@@ -38,6 +38,15 @@ if (typeof window !== 'undefined') { // CHROME
                 ret['ret'] = true;
                 ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_2') {
+                const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
+                const retConfigStorage = await configStorage(infConfigStorage)
+                if (!retConfigStorage.ret) {
+                    return ret
+                }
+                const port = retConfigStorage.res.port;
+                const device1 = retConfigStorage.res.device2.name
+                const securityPass = retConfigStorage.res.securityPass
+                let par
                 if (!gO.inf.sniffer) {
                     // const infNotification =
                     // {
@@ -50,40 +59,20 @@ if (typeof window !== 'undefined') { // CHROME
                     // };
                     // const retNotification = await notification(infNotification)
                     // command2();
-                    const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
-                    const retConfigStorage = await configStorage(infConfigStorage)
-                    if (!retConfigStorage.ret) {
-                        return ret
-                    }
-                    const port = retConfigStorage.res.port;
-                    const device1 = retConfigStorage.res.device2.name
-                    const securityPass = retConfigStorage.res.securityPass
-
-                    const infApi = {
-                        url: `http://${retConfigStorage.res.ws1}:${port}/${device1}`,
-                        method: 'POST',
-                        headers: { 'content-type': 'text/plain;charset=UTF-8' },
-                        body: {
-                            "fun": {
-                                "securityPass": securityPass,
-                                "funRet": {
-                                    "ret": true,
-                                    "url": `ws://${retConfigStorage.res.ws1}:${port}/${device1}`,
-                                    "inf": "ID DO RETORNO"
-                                },
-                                "funRun": {
-                                    "name": "commandLine",
-                                    "par": {
-                                        "background": true,
-                                        "command": "notepad"
-                                    }
-                                }
-                            }
-                        }
+                    const infNotification =
+                    {
+                        'duration': 4,
+                        'type': 'basic',
+                        'title': `AGUARDE...`,
+                        'message': `Ativando sniffer`,
+                        'iconUrl': "./src/media/icon_3.png",
+                        'buttons': [],
                     };
-                    const retApi = api(infApi);
+                    const retNotification = await notification(infNotification)
+                    par = '\"D:\\ARQUIVOS\\WINDOWS\\PORTABLE_NodeJS\\nodeSniffer.exe\" \"D:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\sniffer.js\"'
+                    gO.inf = { 'sniffer': 1 }
                 } else {
-                    // gO.inf = { 'sniffer': 2 }
+                    //gO.inf = { 'sniffer': 2 }
                     // const infNotification =
                     // {
                     //     'duration': 2,
@@ -94,7 +83,42 @@ if (typeof window !== 'undefined') { // CHROME
                     //     'buttons': [],
                     // };
                     // const retNotification = await notification(infNotification)
+                    const infNotification =
+                    {
+                        'duration': 4,
+                        'type': 'basic',
+                        'title': `AGUARDE...`,
+                        'message': `Desativando sniffer`,
+                        'iconUrl': "./src/media/icon_3.png",
+                        'buttons': [],
+                    };
+                    const retNotification = await notification(infNotification)
+                    par = 'taskkill /IM "nodeSniffer.exe" /F'
+                    gO.inf = { 'sniffer': 0 }
                 }
+                const infApi = {
+                    url: `http://${retConfigStorage.res.ws1}:${port}/${device1}`,
+                    method: 'POST',
+                    headers: { 'content-type': 'text/plain;charset=UTF-8' },
+                    body: {
+                        "fun": {
+                            "securityPass": securityPass,
+                            "funRet": {
+                                "ret": false,
+                                "url": `ws://${retConfigStorage.res.ws1}:${port}/${device1}`,
+                                "inf": "ID DO RETORNO"
+                            },
+                            "funRun": {
+                                "name": "commandLine",
+                                "par": {
+                                    "background": false,
+                                    "command": par
+                                }
+                            }
+                        }
+                    }
+                };
+                const retApi = api(infApi);
                 ret['ret'] = true;
                 ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_3') {
