@@ -2,23 +2,25 @@
 // const retWebSocketRet = webSocketRet(infWebSocketRet)
 
 // {
-//     "securityPass": "#####",
-//     "funRet": {
-//         "ret": false,
-//         "url": "ws://xx.xxx.xxx.xx:xx/FUNCTION_RET",
-//         "inf": "ID DO RETORNO"
-//     },
-//     "funRun": {
-//         "name": "notification",
-//         "par": {
-//             "duration": 1,
-//             "type": "basic",
-//             "title": "titulo",
-//             "message": "texto",
-//             "iconUrl": null,
-//             "buttons": []
-//         }
-//     }
+// 	"fun": {
+// 		"securityPass": "######",
+// 		"funRet": {
+// 			"ret": false,
+// 			"url": "ws://xx.xxx.xxx.xx:xx/######_RET",
+// 			"inf": "ID DO RETORNO"
+// 		},
+// 		"funRun": {
+// 			"name": "notification",
+// 			"par": {
+// 				"duration": 1,
+// 				"type": "basic",
+// 				"title": "titulo",
+// 				"message": "texto",
+// 				"iconUrl": null,
+// 				"buttons": []
+// 			}
+// 		}
+// 	}
 // }
 
 async function webSocketRet(inf) {

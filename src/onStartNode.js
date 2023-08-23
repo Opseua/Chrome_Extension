@@ -25,7 +25,7 @@ async function client(inf) {
 
         let ws1;
         async function web1() {
-            let ws1 = new WebS(`${retConfigStorage.res.ws1}:${port}/${device1}`);
+            let ws1 = new WebS(`ws://${retConfigStorage.res.ws1}:${port}/${device1}`);
             ws1.onerror = (e) => { };
             ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
             ws1.onclose = async (event) => {
@@ -39,7 +39,12 @@ async function client(inf) {
                     if (data.fun) { fun = true }
                 } catch (e) { }
                 if (fun) {
-                    const infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
+                    let infWebSocketRet
+                    if (data.retWs && data.retWs.res) {
+                        infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
+                    } else {
+                        infWebSocketRet = { 'data': event.data }
+                    }
                     const retWebSocketRet = webSocketRet(infWebSocketRet)
                 } else {
                     console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`)

@@ -39,29 +39,61 @@ if (typeof window !== 'undefined') { // CHROME
                 ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_2') {
                 if (!gO.inf.sniffer) {
-                    const infNotification =
-                    {
-                        'duration': 2,
-                        'type': 'basic',
-                        'title': `RODANDO`,
-                        'message': `OneForma | Peroptyx`,
-                        'iconUrl': "./src/media/icon_3.png",
-                        'buttons': [],
+                    // const infNotification =
+                    // {
+                    //     'duration': 2,
+                    //     'type': 'basic',
+                    //     'title': `RODANDO`,
+                    //     'message': `OneForma | Peroptyx`,
+                    //     'iconUrl': "./src/media/icon_3.png",
+                    //     'buttons': [],
+                    // };
+                    // const retNotification = await notification(infNotification)
+                    // command2();
+                    const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
+                    const retConfigStorage = await configStorage(infConfigStorage)
+                    if (!retConfigStorage.ret) {
+                        return ret
+                    }
+                    const port = retConfigStorage.res.port;
+                    const device1 = retConfigStorage.res.device2.name
+                    const securityPass = retConfigStorage.res.securityPass
+
+                    const infApi = {
+                        url: `http://${retConfigStorage.res.ws1}:${port}/${device1}`,
+                        method: 'POST',
+                        headers: { 'content-type': 'text/plain;charset=UTF-8' },
+                        body: {
+                            "fun": {
+                                "securityPass": securityPass,
+                                "funRet": {
+                                    "ret": true,
+                                    "url": `ws://${retConfigStorage.res.ws1}:${port}/${device1}`,
+                                    "inf": "ID DO RETORNO"
+                                },
+                                "funRun": {
+                                    "name": "commandLine",
+                                    "par": {
+                                        "background": true,
+                                        "command": "notepad"
+                                    }
+                                }
+                            }
+                        }
                     };
-                    const retNotification = await notification(infNotification)
-                    command2();
+                    const retApi = api(infApi);
                 } else {
-                    gO.inf = { 'sniffer': 2 }
-                    const infNotification =
-                    {
-                        'duration': 2,
-                        'type': 'basic',
-                        'title': `PAROU`,
-                        'message': `OneForma | Peroptyx`,
-                        'iconUrl': "./src/media/icon_3.png",
-                        'buttons': [],
-                    };
-                    const retNotification = await notification(infNotification)
+                    // gO.inf = { 'sniffer': 2 }
+                    // const infNotification =
+                    // {
+                    //     'duration': 2,
+                    //     'type': 'basic',
+                    //     'title': `PAROU`,
+                    //     'message': `OneForma | Peroptyx`,
+                    //     'iconUrl': "./src/media/icon_3.png",
+                    //     'buttons': [],
+                    // };
+                    // const retNotification = await notification(infNotification)
                 }
                 ret['ret'] = true;
                 ret['msg'] = `SHORTCUT PRESSED: OK`;
@@ -104,7 +136,7 @@ async function client(inf) {
 
         let ws1;
         async function web1() {
-            let ws1 = new WebS(`${retConfigStorage.res.ws1}:${port}/${device1}`);
+            let ws1 = new WebS(`ws://${retConfigStorage.res.ws1}:${port}/${device1}`);
             ws1.onerror = (e) => { };
             ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
             ws1.onclose = async (event) => {
