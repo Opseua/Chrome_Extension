@@ -14,7 +14,7 @@ async function client(inf) {
             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
 
-        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'websocket' }
+        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
             return ret
@@ -39,8 +39,8 @@ async function client(inf) {
                     if (data.fun) { fun = true }
                 } catch (e) { }
                 if (fun) {
-                    const infWebsocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
-                    const retWebsocketRet = websocketRet(infWebsocketRet)
+                    const infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
+                    const retWebSocketRet = webSocketRet(infWebSocketRet)
                 } else {
                     console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`)
                 }

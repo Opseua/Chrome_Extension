@@ -3,7 +3,7 @@ console.log('onStart');
 await import('./resources/@functions.js');
 
 if (typeof window !== 'undefined') { // CHROME
-    chrome.browserAction.setBadgeText({ text: '' });
+    await chromeActions({ 'action': 'badge', 'inf': { 'text': '' } })
     // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
     chrome.downloads.onChanged.addListener(async function (...inf) {
         if (inf[0].state && inf[0].state.current === "complete") {
@@ -93,7 +93,7 @@ async function client(inf) {
             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
 
-        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'websocket' }
+        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
             return ret
@@ -118,8 +118,8 @@ async function client(inf) {
                     if (data.fun) { fun = true }
                 } catch (e) { }
                 if (fun) {
-                    const infWebsocketRet = { 'data': event.data }
-                    const retWebsocketRet = websocketRet(infWebsocketRet)
+                    const infWebSocketRet = { 'data': event.data }
+                    const retWebSocketRet = webSocketRet(infWebSocketRet)
                 } else {
                     console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`)
                 }

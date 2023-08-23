@@ -66,8 +66,9 @@ await import('./sniffer.js');
 await import('./splitText.js');
 await import('./tabSearch.js');
 await import('./translate.js');
-await import('./websocketRet.js');
+await import('./webSocketRet.js');
 await import('./commandLine.js');
+await import('./chromeActions.js');
 // ## scripts
 await import('../scripts/command1.js');
 await import('../scripts/command2.js');
@@ -591,8 +592,9 @@ if (typeof window !== 'undefined') { // CHROME
     window['splitText'] = splitText;
     window['tabSearch'] = tabSearch;
     window['translate'] = translate;
-    window['websocketRet'] = websocketRet;
+    window['webSocketRet'] = webSocketRet;
     window['commandLine'] = commandLine;
+    window['chromeActions'] = chromeActions;
     // ## scripts
     window['command1'] = command1;
     window['command2'] = command2;
@@ -624,8 +626,9 @@ if (typeof window !== 'undefined') { // CHROME
     global['splitText'] = splitText;
     global['tabSearch'] = tabSearch;
     global['translate'] = translate;
-    global['websocketRet'] = websocketRet;
+    global['webSocketRet'] = webSocketRet;
     global['commandLine'] = commandLine;
+    global['chromeActions'] = chromeActions;
     // ## scripts
     global['command1'] = command1;
     global['command2'] = command2;

@@ -1,5 +1,5 @@
-// const infWebsocketRet = { 'data': event.data }
-// const retWebsocketRet = websocketRet(infWebsocketRet)
+// const infWebSocketRet = { 'data': event.data }
+// const retWebSocketRet = webSocketRet(infWebSocketRet)
 
 // {
 //     "securityPass": "#####",
@@ -21,7 +21,7 @@
 //     }
 // }
 
-async function websocketRet(inf) {
+async function webSocketRet(inf) {
     let ret = { 'ret': false };
     try {
         let WebS;
@@ -31,7 +31,7 @@ async function websocketRet(inf) {
             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
 
-        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'websocket' }
+        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
             return ret
@@ -75,7 +75,7 @@ async function websocketRet(inf) {
 }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['websocketRet'] = websocketRet;
+    window['webSocketRet'] = webSocketRet;
 } else { // NODEJS
-    global['websocketRet'] = websocketRet;
+    global['webSocketRet'] = webSocketRet;
 }
