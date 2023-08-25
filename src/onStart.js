@@ -39,9 +39,7 @@ if (typeof window !== 'undefined') { // CHROME
             } else if (infShortcutPressed.shortcut == 'atalho_2') {
                 const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
                 const retConfigStorage = await configStorage(infConfigStorage)
-                if (!retConfigStorage.ret) {
-                    return ret
-                }
+                if (!retConfigStorage.ret) { return ret }
                 const wsHost = retConfigStorage.res.ws1
                 const portWebSocket = retConfigStorage.res.portWebSocket;
                 const device1 = retConfigStorage.res.device1.name
@@ -57,7 +55,14 @@ if (typeof window !== 'undefined') { // CHROME
                     'buttons': [],
                 };
                 const retNotification = await notification(infNotification)
-                const par = '\"D:\\ARQUIVOS\\WINDOWS\\PORTABLE_NodeJS\\nodeSniffer.exe\" \"D:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\sniffer.js\"'
+                const infFile = { 'action': 'read', 'file': `D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
+                let par
+                const retFile = await file(infFile)
+                if (retFile.ret) {
+                    par = 'taskkill /IM "nodeSniffer.exe" /F'
+                } else {
+                    par = '\"D:\\ARQUIVOS\\WINDOWS\\PORTABLE_NodeJS\\nodeSniffer.exe\" \"D:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\sniffer.js\"'
+                }
                 const infApi = {
                     url: `http://${wsHost}:${portWebSocket}/${device2}`,
                     method: 'POST', headers: { 'accept-language': 'application/json' },
