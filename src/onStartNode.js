@@ -20,12 +20,12 @@ async function client(inf) {
         }
         const wsHost = retConfigStorage.res.ws1
         const portWebSocket = retConfigStorage.res.portWebSocket;
-        const device1 = retConfigStorage.res.device2.name
+        const device2 = retConfigStorage.res.device2.name
         const securityPass = retConfigStorage.res.securityPass
 
         let ws1;
         async function web1() {
-            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
+            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device2}`);
             ws1.onerror = (e) => { };
             ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
             ws1.onclose = async (event) => {

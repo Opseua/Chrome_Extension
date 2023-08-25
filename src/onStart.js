@@ -44,9 +44,31 @@ if (typeof window !== 'undefined') { // CHROME
                 }
                 const wsHost = retConfigStorage.res.ws1
                 const portWebSocket = retConfigStorage.res.portWebSocket;
-                const device1 = retConfigStorage.res.device2.name
+                const device1 = retConfigStorage.res.device1.name
+                const device2 = retConfigStorage.res.device2.name
                 const securityPass = retConfigStorage.res.securityPass
-                let par
+                const infNotification =
+                {
+                    'duration': 4,
+                    'type': 'basic',
+                    'title': `AGUARDE...`,
+                    'message': `Alternando sniffer`,
+                    'iconUrl': "./src/media/icon_3.png",
+                    'buttons': [],
+                };
+                const retNotification = await notification(infNotification)
+                const par = '\"D:\\ARQUIVOS\\WINDOWS\\PORTABLE_NodeJS\\nodeSniffer.exe\" \"D:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\sniffer.js\"'
+                const infApi = {
+                    url: `http://${wsHost}:${portWebSocket}/${device2}`,
+                    method: 'POST', headers: { 'accept-language': 'application/json' },
+                    body: {
+                        "fun": {
+                            "securityPass": securityPass, "funRet": { "ret": false, },
+                            "funRun": { "name": "commandLine", "par": { "background": false, "command": par } }
+                        }
+                    }
+                };
+                const retApi = await api(infApi);
                 if (!gO.inf.sniffer) {
                     // const infNotification =
                     // {
@@ -59,18 +81,7 @@ if (typeof window !== 'undefined') { // CHROME
                     // };
                     // const retNotification = await notification(infNotification)
                     // command2();
-                    const infNotification =
-                    {
-                        'duration': 4,
-                        'type': 'basic',
-                        'title': `AGUARDE...`,
-                        'message': `Ativando sniffer`,
-                        'iconUrl': "./src/media/icon_3.png",
-                        'buttons': [],
-                    };
-                    const retNotification = await notification(infNotification)
-                    par = '\"D:\\ARQUIVOS\\WINDOWS\\PORTABLE_NodeJS\\nodeSniffer.exe\" \"D:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\sniffer.js\"'
-                    gO.inf = { 'sniffer': 1 }
+                    // gO.inf = { 'sniffer': 1 }
                 } else {
                     //gO.inf = { 'sniffer': 2 }
                     // const infNotification =
@@ -83,42 +94,8 @@ if (typeof window !== 'undefined') { // CHROME
                     //     'buttons': [],
                     // };
                     // const retNotification = await notification(infNotification)
-                    const infNotification =
-                    {
-                        'duration': 4,
-                        'type': 'basic',
-                        'title': `AGUARDE...`,
-                        'message': `Desativando sniffer`,
-                        'iconUrl': "./src/media/icon_3.png",
-                        'buttons': [],
-                    };
-                    const retNotification = await notification(infNotification)
-                    par = 'taskkill /IM "nodeSniffer.exe" /F'
-                    gO.inf = { 'sniffer': 0 }
+                    // gO.inf = { 'sniffer': 0 }
                 }
-                const infApi = {
-                    url: `http://${wsHost}:${portWebSocket}/${device1}`,
-                    method: 'POST',
-                    headers: { 'content-type': 'text/plain;charset=UTF-8' },
-                    body: {
-                        "fun": {
-                            "securityPass": securityPass,
-                            "funRet": {
-                                "ret": false,
-                                "url": `ws://${wsHost}:${portWebSocket}/${device1}`,
-                                "inf": "ID DO RETORNO"
-                            },
-                            "funRun": {
-                                "name": "commandLine",
-                                "par": {
-                                    "background": false,
-                                    "command": par
-                                }
-                            }
-                        }
-                    }
-                };
-                const retApi = api(infApi);
                 ret['ret'] = true;
                 ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_3') {
@@ -206,20 +183,3 @@ client()
 // console.log(retExcel)
 
 
-
-const sendPri = {
-    'buffer': 500000,
-    'arrUrl': [
-        'https://ntfy.sh/',
-        'https://desk.oneforma.com/scribo_apps/MTPE_new_process/postediting.php*',
-        'https://www.tryrating.com/api/survey',
-        'https://rating.ewoq.google.com/u/0/rpc/rating/AssignmentAcquisitionService/GetNewTasks',
-        'https://rating.ewoq.google.com/u/0/rpc/rating/SafeTemplateService/GetTemplate',
-        'https://rating.ewoq.google.com/u/0/rpc/rating/SubmitFeedbackService/SubmitFeedback'
-    ]
-};
-
-let arrHost = [...new Set(sendPri.arrUrl.map(url => new URL(url).hostname))];
-arrHost = arrHost.map(hostname => `--allow-hosts '${hostname}'`).join(' ');
-
-console.log(arrHost);
