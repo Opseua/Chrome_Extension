@@ -61,7 +61,7 @@ if (typeof window !== 'undefined') { // CHROME
                 if (retFile.ret) {
                     par = 'taskkill /IM "nodeSniffer.exe" /F'
                 } else {
-                    par = '\"D:\\ARQUIVOS\\WINDOWS\\PORTABLE_NodeJS\\nodeSniffer.exe\" \"D:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\sniffer.js\"'
+                    par = '\"D:/ARQUIVOS/WINDOWS/PORTABLE_NodeJS/nodeSniffer.exe\" \"D:/ARQUIVOS/PROJETOS/Sniffer_Python/src/sniffer.js\"'
                 }
                 const infApi = {
                     url: `http://${wsHost}:${portWebSocket}/${device2}`,
@@ -186,5 +186,4 @@ client()
 // //infExcel = { 'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
 // retExcel = await excel(infExcel)
 // console.log(retExcel)
-
 
