@@ -1,6 +1,5 @@
-await import('./resources/clearConsole.js');
-console.log('onStartNode');
 await import('./resources/@functions.js');
+console.log('onStartNodeJS');
 
 // *************************
 

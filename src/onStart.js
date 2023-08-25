@@ -1,6 +1,5 @@
-await import('./resources/clearConsole.js');
-console.log('onStart');
 await import('./resources/@functions.js');
+console.log('onStart');
 
 if (typeof window !== 'undefined') { // CHROME
     await chromeActions({ 'action': 'badge', 'inf': { 'text': '' } })
