@@ -38,12 +38,13 @@ if (typeof window !== 'undefined') { // CHROME
                 ret['ret'] = true;
                 ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_2') {
-                const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
+                const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
                 const retConfigStorage = await configStorage(infConfigStorage)
                 if (!retConfigStorage.ret) {
                     return ret
                 }
-                const port = retConfigStorage.res.port;
+                const wsHost = retConfigStorage.res.ws1
+                const portWebSocket = retConfigStorage.res.portWebSocket;
                 const device1 = retConfigStorage.res.device2.name
                 const securityPass = retConfigStorage.res.securityPass
                 let par
@@ -97,7 +98,7 @@ if (typeof window !== 'undefined') { // CHROME
                     gO.inf = { 'sniffer': 0 }
                 }
                 const infApi = {
-                    url: `http://${retConfigStorage.res.ws1}:${port}/${device1}`,
+                    url: `http://${wsHost}:${portWebSocket}/${device1}`,
                     method: 'POST',
                     headers: { 'content-type': 'text/plain;charset=UTF-8' },
                     body: {
@@ -105,7 +106,7 @@ if (typeof window !== 'undefined') { // CHROME
                             "securityPass": securityPass,
                             "funRet": {
                                 "ret": false,
-                                "url": `ws://${retConfigStorage.res.ws1}:${port}/${device1}`,
+                                "url": `ws://${wsHost}:${portWebSocket}/${device1}`,
                                 "inf": "ID DO RETORNO"
                             },
                             "funRun": {
@@ -149,18 +150,19 @@ async function client(inf) {
             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
 
-        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
+        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
             return ret
         }
-        const port = retConfigStorage.res.port;
+        const wsHost = retConfigStorage.res.ws1
+        const portWebSocket = retConfigStorage.res.portWebSocket;
         const device1 = retConfigStorage.res.device1.name
         const securityPass = retConfigStorage.res.securityPass
 
         let ws1;
         async function web1() {
-            let ws1 = new WebS(`ws://${retConfigStorage.res.ws1}:${port}/${device1}`);
+            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
             ws1.onerror = (e) => { };
             ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
             ws1.onclose = async (event) => {
@@ -174,7 +176,12 @@ async function client(inf) {
                     if (data.fun) { fun = true }
                 } catch (e) { }
                 if (fun) {
-                    const infWebSocketRet = { 'data': event.data }
+                    let infWebSocketRet
+                    if (data.retWs && data.retWs.res) {
+                        infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
+                    } else {
+                        infWebSocketRet = { 'data': event.data }
+                    }
                     const retWebSocketRet = webSocketRet(infWebSocketRet)
                 } else {
                     console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`)
@@ -193,3 +200,27 @@ client()
 // const retSniffer = await sniffer(infSniffer)
 // console.log(retSniffer)
 
+// let infExcel, retExcel // CQPT    KQRE
+// infExcel = { 'action': 'get', 'tab': 'YARE', 'col': 'A', 'lin': 1 }
+// //infExcel = { 'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
+// retExcel = await excel(infExcel)
+// console.log(retExcel)
+
+
+
+const sendPri = {
+    'buffer': 500000,
+    'arrUrl': [
+        'https://ntfy.sh/',
+        'https://desk.oneforma.com/scribo_apps/MTPE_new_process/postediting.php*',
+        'https://www.tryrating.com/api/survey',
+        'https://rating.ewoq.google.com/u/0/rpc/rating/AssignmentAcquisitionService/GetNewTasks',
+        'https://rating.ewoq.google.com/u/0/rpc/rating/SafeTemplateService/GetTemplate',
+        'https://rating.ewoq.google.com/u/0/rpc/rating/SubmitFeedbackService/SubmitFeedback'
+    ]
+};
+
+let arrHost = [...new Set(sendPri.arrUrl.map(url => new URL(url).hostname))];
+arrHost = arrHost.map(hostname => `--allow-hosts '${hostname}'`).join(' ');
+
+console.log(arrHost);

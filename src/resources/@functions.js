@@ -1,4 +1,4 @@
-// ####### await import('./@functions.js');
+// await import('./@functions.js');
 
 // // ########## TYPE → text
 // const infApi = {

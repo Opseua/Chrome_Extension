@@ -14,18 +14,19 @@ async function client(inf) {
             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
 
-        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
+        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
             return ret
         }
-        const port = retConfigStorage.res.port;
+        const wsHost = retConfigStorage.res.ws1
+        const portWebSocket = retConfigStorage.res.portWebSocket;
         const device1 = retConfigStorage.res.device2.name
         const securityPass = retConfigStorage.res.securityPass
 
         let ws1;
         async function web1() {
-            let ws1 = new WebS(`ws://${retConfigStorage.res.ws1}:${port}/${device1}`);
+            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
             ws1.onerror = (e) => { };
             ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
             ws1.onclose = async (event) => {

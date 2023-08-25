@@ -47,7 +47,7 @@ async function excel(inf) {
             retExcel = await excel(infExcel)
             lin = retExcel.res
 
-            if (JSON.stringify(inf.inf).includes('reqRes\\":\\"req')) {
+            if (inf.inf && JSON.stringify(inf.inf).includes('reqRes\\":\\"req')) {
                 const infFile = { 'action': 'read', 'file': 'D:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt' }
                 const retFile = await file(infFile)
                 const infRegex = { 'pattern': `","lin":"(.*?)","id":"${JSON.parse(inf.inf).id}`, 'text': retFile.res }
@@ -148,7 +148,7 @@ async function excel(inf) {
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
-    if(!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 

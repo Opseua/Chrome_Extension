@@ -33,7 +33,7 @@ async function webSocketRet(inf) {
             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
 
-        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocketRet' }
+        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
             return ret
