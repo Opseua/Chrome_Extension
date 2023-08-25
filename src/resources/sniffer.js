@@ -34,10 +34,8 @@ async function sniffer(inf) {
             let sendPri, newResBlock = false, newReqSend = inf.newReqSend ? true : false
             chrome.browserAction.setBadgeBackgroundColor({ color: [25, 255, 71, 255] });
             if (newReqSend) {
-                // console.log(`sniffer on [newReqSend]`);
                 chrome.browserAction.setBadgeText({ text: 'SIM' });
             } else {
-                // console.log(`sniffer on`);
                 chrome.browserAction.setBadgeText({ text: 'NAO' });
             }
             if (inf && inf.arrUrl) { sendPri = { 'arrUrl': inf.arrUrl } } else {
