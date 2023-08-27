@@ -23,10 +23,6 @@
 //     body: formData.toString()
 // };
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
-// const infFileInf = { 'path': new URL(import.meta.url).pathname } // ## CHROME NAO!
-// const retFileInf = await fileInf(infFileInf);
-// console.log(retFileInf)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
 // const infFile = {
 //     'action':'write',
 //     'file': `PASTAS 1/PASTA 2/arquivo.txt`,
@@ -140,11 +136,11 @@ async function file(inf) {
     let ret = { 'ret': false };
     let _fs, _path, _appRoot
     try {
-        if (!inf.action || !['write', 'read', 'del', 'inf', 'pathChromeNode', 'relative', 'list'].includes(inf.action)) {
-            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
+        if (!inf.p || inf.p == '') {
+            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'p' \n\n`;
         } else {
-            if (!inf.p || inf.p == '') {
-                ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'p' \n\n`;
+            if (!inf.action || !['write', 'read', 'del', 'inf', 'pathChromeNode', 'relative', 'list'].includes(inf.action)) {
+                ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
             }
             else {
                 if ((!inf.path || inf.path == '') && ['write', 'read', 'del', 'list'].includes(inf.action)) {
@@ -161,16 +157,13 @@ async function file(inf) {
                         } else if (!inf.text || inf.text == '') {
                             ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'text' \n\n`;
                         } else {
-
                             let infFile, retFile, path
                             if (inf.path.includes(':')) { path = inf.path }
                             else {
                                 infFile = { 'p': inf.p, 'action': 'inf' }; retFile = await file(infFile);
                                 infFile = { 'p': inf.p, 'action': 'relative', 'relative': inf.path };
                                 retFile = await file(infFile); path = retFile.res
-                            }
-                            console.log(path)
-
+                            }; let text = inf.text
                             if (typeof window !== 'undefined') { // CHROME
                                 if (inf.rewrite) {
                                     try {
@@ -185,16 +178,13 @@ async function file(inf) {
                                 }; chrome.downloads.download(downloadOptions);
                             } else { // NODEJS
                                 async function createFolder(f) {
-                                    const p = path.normalize(f); const d = p.split(path.sep); let cF = '';
+                                    const p = _path.normalize(f); const d = p.split(_path.sep); let cF = '';
                                     for (let directory of d) {
-                                        cF += directory + path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF); }
+                                        cF += directory + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF); }
                                     }; return true;
-                                }
-                                const folderPath = path.dirname(path); await createFolder(folderPath);
+                                }; const folderPath = _path.dirname(path); await createFolder(folderPath);
                                 await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' }); // 'w' limpa | 'a' adiciona
-                            }
-                            ret['ret'] = true;
-                            ret['msg'] = `FILE WRITE: OK`;
+                            }; ret['ret'] = true; ret['msg'] = `FILE WRITE: OK`;
                         }
                     } else if (inf.action == 'read') { // #### READ
                         let infFile, retFile, path
@@ -203,25 +193,25 @@ async function file(inf) {
                             infFile = { 'p': inf.p, 'action': 'inf' }; retFile = await file(infFile);
                             infFile = { 'p': inf.p, 'action': 'relative', 'relative': inf.path };
                             retFile = await file(infFile); path = retFile.res
-                        }
-                        let retFetch
+                        }; let retFetch
                         if (typeof window !== 'undefined') { // CHROME
                             retFetch = await fetch(`file:///D:/Downloads/Google Chrome/${path}`); retFetch = await retFetch.text();
                         } else { // NODEJS
                             retFetch = _fs.readFileSync(path, 'utf8');
-                        }
-                        ret['ret'] = true; ret['msg'] = `FILE READ: OK`; ret['res'] = retFetch;
+                        }; ret['ret'] = true; ret['msg'] = `FILE READ: OK`; ret['res'] = retFetch;
                     } else if (inf.action == 'del' && typeof window == 'undefined') { // #### DEL
-                        _fs.unlinkSync(inf.path);
-                        ret['ret'] = true;
-                        ret['msg'] = `FILE DEL: OK`;
+                        let infFile, retFile, path
+                        if (inf.path.includes(':')) { path = inf.path }
+                        else {
+                            infFile = { 'p': inf.p, 'action': 'inf' }; retFile = await file(infFile);
+                            infFile = { 'p': inf.p, 'action': 'relative', 'relative': inf.path };
+                            retFile = await file(infFile); path = retFile.res
+                        }; _fs.unlinkSync(path); ret['ret'] = true; ret['msg'] = `FILE DEL: OK`;
                     } else if (inf.action == 'inf') { // #### INF (get current path full)
-                        let file, path, fileOk
-                        file = JSON.stringify(inf.p.stack).replace(/\/\//, '')
+                        let file, path, fileOk; file = JSON.stringify(inf.p.stack).replace(/\/\//, '')
                         file = `${file.match(/\/(.*?).js/)[1]}.js`; fileOk = file.substring(file.lastIndexOf('/') + 1)
                         path = (file.charAt(1) == ':' ? file.charAt(0).toUpperCase() + file.slice(1) : file).replace(`/${fileOk}`, '')
-                        ret['res'] = { 'file': fileOk, 'path': path }
-                        let pathOk = `${path}/${fileOk}`; path = []
+                        ret['res'] = { 'file': fileOk, 'path': path }; let pathOk = `${path}/${fileOk}`; path = []
                         if (pathOk.includes(':')) {
                             const split = pathOk.split(':'); path.push(`${split[0]}:/`); path.push(split[1].slice(1))
                         } else if (pathOk.startsWith('./')) { path.push(pathOk.slice(2)) }
@@ -230,49 +220,35 @@ async function file(inf) {
                         if (typeof window == 'undefined') { // NODEJS (pasta do projeto)
                             ret['res']['pathProject'] = _appRoot;
                             ret['res']['node'] = path.length > 1 ? `${path[0]}${path[1]}` : `../${path[0]}`
-                        } else {
-                            ret['res']['chrome'] = path.length > 1 ? path[1] : path[0]
-                        }
-                        ret['ret'] = true;
-                        ret['msg'] = `FILE INF: OK`;
-                    } else if (inf.action == 'pathChromeNode') { // #### PATH CHROME NODE
-                        let pathOk = inf.path.replace(/\\/g, '/'); let path = []
-                        if (pathOk.includes(':')) {
-                            const split = pathOk.split(':'); path.push(`${split[0].toUpperCase()}:/`); path.push(split[1].slice(1))
-                        } else if (pathOk.startsWith('./')) { path.push(pathOk.slice(2)) }
-                        else if (pathOk.startsWith('.') || pathOk.startsWith('/')) { path.push(pathOk.slice(1)) }
-                        else { path.push(pathOk) };
-                        const retPathChromeNode = {
-                            'chrome': path.length > 1 ? path[1] : path[0],
-                            'node': path.length > 1 ? `${path[0]}${path[1]}` : `../${path[0]}`
-                        };
-                        ret['res'] = retPathChromeNode
-                        ret['ret'] = true;
-                        ret['msg'] = `FILE PATH CHROME NODE: OK`;
+                        } else { ret['res']['chrome'] = path.length > 1 ? path[1] : path[0] }
+                        ret['ret'] = true; ret['msg'] = `FILE INF: OK`;
                     } else if (inf.action == 'relative') { // #### RELATIVE
-                        const infFile = { 'p': inf.p, 'action': 'inf' };
-                        const retFile = await file(infFile);
+                        const infFile = { 'p': inf.p, 'action': 'inf' }; const retFile = await file(infFile);
                         if (!inf.relative || inf.relative == '') {
                             ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'relative' \n\n`;
                         } else {
                             let relative = inf.relative
                             if (relative.startsWith('./')) { relative = relative.slice(2) }
                             else if (relative.startsWith('/')) { relative = relative.slice(1) }
-                            const pathFull = retFile.res.path.split('/');
-                            const relativeParts = relative.split('/');
+                            const pathFull = retFile.res.path.split('/'); const relativeParts = relative.split('/');
                             while (pathFull.length > 0 && relativeParts[0] === '..') { pathFull.pop(); relativeParts.shift(); }
                             let retRelative = pathFull.concat(relativeParts).join('/')
                             if (retRelative.endsWith('/.')) { retRelative = retRelative.slice(0, -2); }
                             else if (retRelative.endsWith('.') || retRelative.endsWith('/')) { retRelative = retRelative.slice(0, -1); }
-                            ret['ret'] = true;
-                            ret['msg'] = `FILE RELATIVE: OK`;
-                            ret['res'] = retRelative;
+                            ret['ret'] = true; ret['msg'] = `FILE RELATIVE: OK`; ret['res'] = retRelative;
                         }
                     } else if (inf.action == 'list' && typeof window == 'undefined') { // #### LIST
                         if (!inf.max || inf.max == '') {
                             ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'max' \n\n`;
                         } else {
-                            let retFilesList = { 'path': inf.path, 'max': inf.max }
+                            let infFile, retFile, path
+                            if (inf.path.includes(':')) { path = inf.path }
+                            else {
+                                infFile = { 'p': inf.p, 'action': 'inf' }; retFile = await file(infFile);
+                                infFile = { 'p': inf.p, 'action': 'relative', 'relative': inf.path };
+                                retFile = await file(infFile); path = retFile.res
+                            }
+                            let retFilesList = { 'path': path, 'max': inf.max }
                             function formatBytes(b, d = 2) {
                                 if (b === 0) return '0 Bytes'; const i = Math.floor(Math.log(b) / Math.log(1024));
                                 return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i];
@@ -292,13 +268,9 @@ async function file(inf) {
                                             }
                                         } catch (e) { iFilesList++; files.push({ 'ret': false, 'file': file, 'path': name, 'e': JSON.stringify(e) }) }
                                     }; return files;
-                                } catch (e) {
-                                    iFilesList++; files.push({ 'ret': false, 'e': JSON.stringify(e) })
-                                }
+                                } catch (e) { iFilesList++; files.push({ 'ret': false, 'e': JSON.stringify(e) }) }
                             }; retFilesList = await filesList(retFilesList)
-                            ret['ret'] = true;
-                            ret['msg'] = `FILE LIST: OK`;
-                            ret['res'] = retFilesList;
+                            ret['ret'] = true; ret['msg'] = `FILE LIST: OK`; ret['res'] = retFilesList;
                         }
                     }
                 }

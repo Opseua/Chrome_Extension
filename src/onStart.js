@@ -197,36 +197,52 @@ function orderObj(o) {
 let infFile, retFile
 infFile = {
     'p': new Error(),
-    'action': 'inf',
-    'relative': '/aaaaaa'
+    'action': 'inf'
 };
-retFile = await file(infFile);
-//console.log(retFile.res)
+//retFile = await file(infFile);
+//console.log(retFile)
 
 infFile = {
     'p': new Error(),
     'action': 'relative',
     'relative': './aaaa'
 };
-retFile = await file(infFile);
-//console.log(retFile.res)
+//retFile = await file(infFile);
+//console.log(retFile)
+
+infFile = {
+    'p': new Error(),
+    'action': 'write',
+    'path': '../aaa.txt',
+    'rewrite': true,
+    'text': '123'
+};
+//retFile = await file(infFile);
+//console.log(retFile)
 
 infFile = {
     'p': new Error(),
     'action': 'read',
-    'path': 'aaa.txt'
+    'path': '../aaa.txt'
+};
+//retFile = await file(infFile);
+//console.log(retFile)
+
+infFile = {
+    'p': new Error(),
+    'action': 'del',
+    'path': '../aaa.txt',
+};
+//retFile = await file(infFile);
+//console.log(retFile)
+
+infFile = {
+    'p': new Error(),
+    'action': 'list',
+    'path': 'C:/Windows',
+    'max': 10
 };
 retFile = await file(infFile);
 console.log(retFile)
-
-// infFile = {
-//     'p': new Error(),
-//     'action': 'write',
-//     'path': 'aaa.txt',
-//     'rewrite': true,
-//     'text': '123\n'
-// };
-// retFile = await file(infFile);
-// console.log(retFile)
 
 
