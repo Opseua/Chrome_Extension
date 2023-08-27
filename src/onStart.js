@@ -175,7 +175,13 @@ async function client(inf) {
         ret['msg'] = regexE({ 'e': e }).res
     }
 }
-client()
+//client()
+function orderObj(o) {
+    return Object.fromEntries(Object.entries(o).sort((a, b) => a[0].localeCompare(b[0])));
+}
+
+
+
 
 // const infSniffer = {  'arrUrl': ['*.vtt*'] }
 // const retSniffer = await sniffer(infSniffer)
@@ -186,4 +192,41 @@ client()
 // //infExcel = { 'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
 // retExcel = await excel(infExcel)
 // console.log(retExcel)
+
+
+let infFile, retFile
+infFile = {
+    'p': new Error(),
+    'action': 'inf',
+    'relative': '/aaaaaa'
+};
+retFile = await file(infFile);
+//console.log(retFile.res)
+
+infFile = {
+    'p': new Error(),
+    'action': 'relative',
+    'relative': './aaaa'
+};
+retFile = await file(infFile);
+//console.log(retFile.res)
+
+infFile = {
+    'p': new Error(),
+    'action': 'read',
+    'path': 'aaa.txt'
+};
+retFile = await file(infFile);
+console.log(retFile)
+
+// infFile = {
+//     'p': new Error(),
+//     'action': 'write',
+//     'path': 'aaa.txt',
+//     'rewrite': true,
+//     'text': '123\n'
+// };
+// retFile = await file(infFile);
+// console.log(retFile)
+
 
