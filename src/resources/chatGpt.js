@@ -1,3 +1,4 @@
+const p = new Error()
 // const infChatGpt = { 'provider': 'ora.ai', 'input': `Qual a idade de Saturno?` }
 // const retChatGpt = await chatGpt(infChatGpt)
 // console.log(retChatGpt)
@@ -9,7 +10,7 @@ async function chatGpt(inf) {
         let infConfigStorage, retConfigStorage
 
         if (inf.provider == 'ora.ai') {
-            infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'chatGptOra.ai' }
+            infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'get', 'key': 'chatGptOra.ai' }
             retConfigStorage = await configStorage(infConfigStorage)
             if (!retConfigStorage.ret) {
                 return ret
@@ -33,7 +34,7 @@ async function chatGpt(inf) {
                 const infGetCookies = { 'url': retTabSearch.res.url, 'cookieSearch': '__Secure-next-auth.session-token' }
                 const retGetCookies = await getCookies(infGetCookies)
                 if (!(retGetCookies.ret)) {
-                    infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'chatGptOra.ai' }
+                    infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'del', 'key': 'chatGptOra.ai' }
                     retConfigStorage = await configStorage(infConfigStorage)
                     let infNotification =
                     {
@@ -48,7 +49,7 @@ async function chatGpt(inf) {
                     return ret
                 }
                 retConfigStorage.res['cookie'] = retGetCookies.res.concat;
-                infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage.res }
+                infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage.res }
                 const retSETConfigStorage = await configStorage(infConfigStorage)
                 if (!retSETConfigStorage.ret) {
                     return ret
@@ -83,7 +84,7 @@ async function chatGpt(inf) {
                 ret['msg'] = `CHAT GPT AI: OK`;
                 ret['res'] = res.response;
             } else {
-                infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'chatGptOra.ai' }
+                infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'del', 'key': 'chatGptOra.ai' }
                 retConfigStorage = await configStorage(infConfigStorage)
                 let infNotification =
                 {

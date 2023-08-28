@@ -1,4 +1,5 @@
 await import('./resources/@functions.js');
+const p = new Error()
 console.log('onStartNodeJS');
 
 // *************************
@@ -13,7 +14,7 @@ async function client(inf) {
             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
 
-        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
+        const infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
             return ret

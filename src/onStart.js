@@ -38,7 +38,7 @@ if (typeof window !== 'undefined') { // CHROME
                 ret['ret'] = true;
                 ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_2') {
-                const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
+                const infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
                 const retConfigStorage = await configStorage(infConfigStorage)
                 if (!retConfigStorage.ret) { return ret }
                 const wsHost = retConfigStorage.res.ws1
@@ -56,7 +56,7 @@ if (typeof window !== 'undefined') { // CHROME
                     'buttons': [],
                 };
                 const retNotification = await notification(infNotification)
-                const infFile = { 'action': 'read', 'file': `D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
+                const infFile = { 'p': p, 'action': 'read', 'file': `D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
                 let par
                 const retFile = await file(infFile)
                 if (retFile.ret) {
@@ -132,7 +132,7 @@ async function client(inf) {
             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
 
-        const infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
+        const infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
             return ret
@@ -176,28 +176,15 @@ async function client(inf) {
         ret['msg'] = regexE({ 'e': e }).res
     }
 }
-//client()
-
-
+client()
 
 // const infSniffer = {  'arrUrl': ['*.vtt*'] }
 // const retSniffer = await sniffer(infSniffer)
 // console.log(retSniffer)
 
 // let infExcel, retExcel // CQPT    KQRE
-// infExcel = { 'action': 'get', 'tab': 'YARE', 'col': 'A', 'lin': 1 }
-// //infExcel = { 'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
+// infExcel = { 'p': p, 'action': 'get', 'tab': 'YARE', 'col': 'A', 'lin': 1 }
+// //infExcel = { 'p': p,'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
 // retExcel = await excel(infExcel)
 // console.log(retExcel)
 
-
-
-// let infFile, retFile; const p = new Error()
-// infFile = { 'p': p, 'action': 'inf' }
-// infFile = { 'p': p, 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
-// infFile = { 'p': p, 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
-// infFile = { 'p': p, 'action': 'read', 'path': './1_PASTA/aaa.txt' }
-// infFile = { 'p': p, 'action': 'del', 'path': './1_PASTA/aaa.txt' }
-// infFile = { 'p': p, 'action': 'list', 'path': '../', 'max': 10 }
-// retFile = await file(infFile);
-// console.log(retFile)
