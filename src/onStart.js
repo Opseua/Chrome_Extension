@@ -1,4 +1,5 @@
 await import('./resources/@functions.js');
+const p = new Error()
 console.log('onStart');
 
 if (typeof window !== 'undefined') { // CHROME
@@ -176,10 +177,6 @@ async function client(inf) {
     }
 }
 //client()
-function orderObj(o) {
-    return Object.fromEntries(Object.entries(o).sort((a, b) => a[0].localeCompare(b[0])));
-}
-
 
 
 
@@ -192,3 +189,15 @@ function orderObj(o) {
 // //infExcel = { 'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
 // retExcel = await excel(infExcel)
 // console.log(retExcel)
+
+
+
+// let infFile, retFile; const p = new Error()
+// infFile = { 'p': p, 'action': 'inf' }
+// infFile = { 'p': p, 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
+// infFile = { 'p': p, 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
+// infFile = { 'p': p, 'action': 'read', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'p': p, 'action': 'del', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'p': p, 'action': 'list', 'path': '../', 'max': 10 }
+// retFile = await file(infFile);
+// console.log(retFile)

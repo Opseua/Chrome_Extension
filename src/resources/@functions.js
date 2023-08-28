@@ -21,20 +21,20 @@
 // retApi = await api(infApi);
 // console.log(retApi)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
-// let infFile, retFile
-// infFile = { 'p': new Error(), 'action': 'inf' }
-// infFile = { 'p': new Error(), 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
-// infFile = { 'p': new Error(), 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
-// infFile = { 'p': new Error(), 'action': 'read', 'path': './1_PASTA/aaa.txt' }
-// infFile = { 'p': new Error(), 'action': 'del', 'path': './1_PASTA/aaa.txt' }
-// infFile = { 'p': new Error(), 'action': 'list', 'path': '../', 'max': 10 }
+// let infFile, retFile; const p = new Error()
+// infFile = { 'p': p, 'action': 'inf' }
+// infFile = { 'p': p, 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
+// infFile = { 'p': p, 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
+// infFile = { 'p': p, 'action': 'read', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'p': p, 'action': 'del', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'p': p, 'action': 'list', 'path': '../', 'max': 10 }
 // retFile = await file(infFile);
 // console.log(retFile)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
-// let infConfigStorage, retConfigStorage
-// infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-// infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-// infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
+// let infConfigStorage, retConfigStorage; const p = new Error()
+// infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+// infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
+// infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
 // retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -  
@@ -457,9 +457,7 @@ const gO = new Proxy(data, {
 });
 function gOAdd(listener) { listeners.add(listener) }; function gORem(listener) { listeners.delete(listener) }
 async function globalChanged(i) {
-    if (i.alert !== false) {
-        //console.log('globalObject ALTERADO →', i)
-    }
+    // if (i.alert !== false) { console.log('globalObject ALTERADO →', i)}
 }
 // ############### ###############
 
@@ -477,6 +475,10 @@ function regexE(inf) {
     return ret
 };
 
+function orderObj(o) {
+    return Object.fromEntries(Object.entries(o).sort((a, b) => a[0].localeCompare(b[0])));
+}
+
 // ############### CLEAR CONSOLE ###############
 console.clear(); let messageCount = 0; const clearConsole = console.log;
 console.log = async function () {
@@ -490,7 +492,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage;
     window['dateHour'] = dateHour; window['regex'] = regex; window['random'] = random;
     window['regexE'] = regexE; window['gO'] = gO; window['gOAdd'] = gOAdd;
-    window['gORem'] = gORem;
+    window['gORem'] = gORem; window['orderObj'] = orderObj;
     // ## resources
     window['chatGpt'] = chatGpt; window['clipboard'] = clipboard; window['excel'] = excel;
     window['getCookies'] = getCookies; window['notification'] = notification; window['promptChrome'] = promptChrome;
@@ -504,7 +506,7 @@ if (typeof window !== 'undefined') { // CHROME
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage; global['dateHour'] = dateHour;
     global['regex'] = regex; global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
-    global['gOAdd'] = gOAdd; global['gORem'] = gORem;
+    global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj;
     // ## resources
     global['chatGpt'] = chatGpt; global['clipboard'] = clipboard; global['excel'] = excel;
     global['getCookies'] = getCookies; global['notification'] = notification; global['promptChrome'] = promptChrome;
