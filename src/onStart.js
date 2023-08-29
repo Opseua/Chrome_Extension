@@ -1,6 +1,6 @@
 await import('./resources/@functions.js');
-const p = new Error()
-console.log('onStart');
+let c = JSON.stringify(new Error().stack).replace(/\/\//, '').match(/\/(.*?).js/)[1] + '.js';
+c = c.replace(new RegExp(`${g.p}/`, 'gi'), ""); const p = g.p
 
 if (typeof window !== 'undefined') { // CHROME
     await chromeActions({ 'action': 'badge', 'inf': { 'text': '' } })
@@ -38,7 +38,8 @@ if (typeof window !== 'undefined') { // CHROME
                 ret['ret'] = true;
                 ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_2') {
-                const infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
+                g['c'] = c;
+                const infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
                 const retConfigStorage = await configStorage(infConfigStorage)
                 if (!retConfigStorage.ret) { return ret }
                 const wsHost = retConfigStorage.res.ws1
@@ -55,8 +56,8 @@ if (typeof window !== 'undefined') { // CHROME
                     'iconUrl': "./src/media/icon_3.png",
                     'buttons': [],
                 };
-                const retNotification = await notification(infNotification)
-                const infFile = { 'p': p, 'action': 'read', 'file': `D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
+                const retNotification = await notification(infNotification); g['c'] = c;
+                const infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'read', 'file': `D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
                 let par
                 const retFile = await file(infFile)
                 if (retFile.ret) {
@@ -131,8 +132,8 @@ async function client(inf) {
         } else { // NODEJS
             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
         }
-
-        const infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
+        g['c'] = c
+        const infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
         const retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) {
             return ret
@@ -182,9 +183,19 @@ client()
 // const retSniffer = await sniffer(infSniffer)
 // console.log(retSniffer)
 
-// let infExcel, retExcel // CQPT    KQRE
-// infExcel = { 'p': p, 'action': 'get', 'tab': 'YARE', 'col': 'A', 'lin': 1 }
-// //infExcel = { 'p': p,'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
+// let infExcel, retExcel ; g['c'] = c // CQPT    KQRE
+// infExcel = { 'p': '$[p]', 'c': '$[c]', 'action': 'get', 'tab': 'YARE', 'col': 'A', 'lin': 1 }
+// infExcel = { 'p': '$[p]', 'c': '$[c]', 'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
 // retExcel = await excel(infExcel)
 // console.log(retExcel)
+
+let infFile, retFile; g['c'] = c;
+infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'inf' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'read', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'del', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'list', 'path': '../', 'max': 10 }
+// retFile = await file(infFile);
+// console.log(retFile)
 

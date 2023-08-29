@@ -1,5 +1,7 @@
+let p; if (typeof window !== 'undefined') p = chrome.runtime.getURL('').slice(0, -1);
+else { const { default: a } = await import('app-root-path'); p = a.path.replace(/\\/g, '/'); p = p.charAt(0).toUpperCase() + p.slice(1) }
+
 // await import('./@functions.js');
-const p = new Error()
 
 // let infApi, retApi
 // infApi = {                                    // ########## TYPE → text
@@ -21,35 +23,33 @@ const p = new Error()
 // };
 // retApi = await api(infApi);
 // console.log(retApi)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
-// let infFile, retFile; const p = new Error()
-// infFile = { 'p': p, 'action': 'inf' }
-// infFile = { 'p': p, 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
-// infFile = { 'p': p, 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
-// infFile = { 'p': p, 'action': 'read', 'path': './1_PASTA/aaa.txt' }
-// infFile = { 'p': p, 'action': 'del', 'path': './1_PASTA/aaa.txt' }
-// infFile = { 'p': p, 'action': 'list', 'path': '../', 'max': 10 }
-// retFile = await file(infFile);
-// console.log(retFile)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
-// let infConfigStorage, retConfigStorage; const p = new Error()
-// infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-// infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-// infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
+// let infFile, retFile; g['c'] = c; g['a'] = 'OLAAAAA'
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'inf' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'read', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'del', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'list', 'path': '../', 'max': 10 }
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
+// let infConfigStorage, retConfigStorage; g['c'] = c; g['a'] = 'OLAAAAA'
+// infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+// infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
+// infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
 // retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -  
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // const RetDateHour = dateHour()
 // console.log(RetDateHour)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // const infRandom = { 'min': 3, 'max': 10, 'await': true }
 // const retRandom = await random(infRandom)
 // console.log(retRandom)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // for (let i = 0; i < 10; i++) {
 //     console.log(`Iteração ${i + 1}`);
 // }
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // let i = 0; const loop = ['A', 'B', 'C', 'D', 'E'];
 // async function runLoop() {
 //   while (i < loop.length) { i++; console.log(loop[i - 1]);
@@ -58,14 +58,21 @@ const p = new Error()
 //     const retRandom = await random(infRandom)
 //   }; console.log('Loop concluído!');
 // } ; runLoop();
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // const infRegex = { 'pattern': 'UM(.*?)TRES', 'text': 'UMDOISTRES' }
 // const infRegex = { 'simple': true, 'pattern': '*DOIS*', 'text': 'UMDOISTRES' }
 // const retRegex = regex(infRegex)
 // console.log(retRegex)
-// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # - 
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // await new Promise(resolve => setTimeout(resolve, (2500)));
 // globalObject.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
+// infGlobal['var1'] = 'LUA'; infGlobal['var2'] = 'SOL'
+// const json = `{ "nasa": "Tanto a $[var1] quanto o $[var2] são redondos" }`;
+// const infJsonInterpret = { 'json': json, 'vars': infGlobal }
+// let retJsonInterpret = await jsonInterpret(infJsonInterpret)
+// if (retJsonInterpret.ret) { retJsonInterpret = JSON.parse(retJsonInterpret.res) }
+// console.log(retJsonInterpret)
 
 // ## resources
 await import('./chatGpt.js'); await import('./clipboard.js'); await import('./excel.js');
@@ -107,12 +114,17 @@ async function api(inf) {
     return ret
 }
 //######################################## ############# #########
+
 async function file(inf) {
     // const url = chrome.runtime.getURL('src/config.json'); console.log(url)
     let ret = { 'ret': false };
     let _fs, _path, _appRoot
     try {
+        if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { // PASSAR NO jsonInterpret
+            let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji };
+        }
         if (!inf.p || inf.p == '') { ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'p' \n\n`; }
+        else if (!inf.c || inf.c == '') { ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'c' \n\n`; }
         else {
             if (!inf.action || !['write', 'read', 'del', 'inf', 'pathChromeNode', 'relative', 'list'].includes(inf.action)) {
                 ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
@@ -121,11 +133,7 @@ async function file(inf) {
                     ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'path' \n\n`;
                 }
                 else {
-                    if (typeof window == 'undefined') { // FS , PATH, APP-ROOT-PATH
-                        _fs = await import('fs'); _path = await import('path');
-                        const { default: appRoot } = await import('app-root-path'); _appRoot = appRoot.path.replace(/\\/g, '/')
-                        _appRoot = _appRoot.charAt(0).toUpperCase() + _appRoot.slice(1)
-                    }
+                    if (typeof window == 'undefined') { _fs = await import('fs'); _path = await import('path'); } // FS, PATH, APP-ROOT-PATH
                     if (inf.action == 'write') { // #### WRITE
                         if (typeof inf.rewrite !== 'boolean') {
                             ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`;
@@ -135,7 +143,7 @@ async function file(inf) {
                             let infFile, retFile, path, retFetch = ''; let text = inf.text
                             if (inf.path.includes(':')) { path = [inf.path]; if (typeof window !== 'undefined') { path = path.split(':/')[1] } }
                             else {
-                                infFile = { 'p': inf.p, 'action': 'relative', 'relative': inf.path };
+                                infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': inf.path };
                                 retFile = await file(infFile); path = retFile.res
                             }
                             if (typeof window !== 'undefined') { // CHROME
@@ -144,7 +152,7 @@ async function file(inf) {
                                 } else { path = path[1] }
                                 if (inf.rewrite) {
                                     try {
-                                        infFile = { 'p': inf.p, 'action': 'read', 'path': path }; retFile = await file(infFile);
+                                        infFile = { 'p': inf.p, 'c': inf.c, 'action': 'read', 'path': path }; retFile = await file(infFile);
                                         if (retFile.ret) { retFetch = retFile.res }; text = `${retFetch}${text}`
                                     } catch (e) { }
                                 }; const blob = new Blob([text], { type: 'text/plain' });
@@ -167,7 +175,7 @@ async function file(inf) {
                     } else if (inf.action == 'read') { // #### READ
                         let infFile, retFile, path; if (inf.path.includes(':')) { path = [inf.path] }
                         else {
-                            infFile = { 'p': inf.p, 'action': 'relative', 'relative': inf.path };
+                            infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': inf.path };
                             retFile = await file(infFile); path = retFile.res
                         }; let retFetch
                         if (typeof window !== 'undefined') { // CHROME
@@ -179,19 +187,22 @@ async function file(inf) {
                     } else if (inf.action == 'del' && typeof window == 'undefined') { // #### DEL
                         let infFile, retFile, path; if (inf.path.includes(':')) { path = [inf.path] }
                         else {
-                            infFile = { 'p': inf.p, 'action': 'relative', 'relative': inf.path };
+                            infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': inf.path };
                             retFile = await file(infFile); path = retFile.res
                         }; _fs.unlinkSync(path[0]); ret['ret'] = true; ret['msg'] = `FILE DEL: OK`;
                     } else if (inf.action == 'inf') { // #### INF (get current path full)
-                        let pathProject, pathCurrent
-                        pathProject = typeof window === 'undefined' ? _appRoot : chrome.runtime.getURL('').slice(0, -1);
-                        pathCurrent = JSON.stringify(inf.p.stack).replace(/\/\//, '').match(/\/(.*?).js/)[1] + '.js';
-                        pathCurrent = pathCurrent.replace(new RegExp(`${pathProject}/`, 'gi'), "");
-                        if (typeof window == 'undefined') { ret['res'] = [pathCurrent, pathProject] } else { // NODEJS
-                            ret['res'] = [pathCurrent, pathProject, 'D:/Downloads/Google Chrome%'] // CHROME
+                        if (typeof window == 'undefined') { ret['res'] = [inf.c, inf.p] } else { // NODEJS
+                            ret['res'] = [inf.c, inf.p, 'D:/Downloads/Google Chrome%'] // CHROME
                         }; ret['ret'] = true; ret['msg'] = `FILE INF: OK`
+                        // let pathProject, pathCurrent
+                        // pathProject = typeof window === 'undefined' ? _appRoot : chrome.runtime.getURL('').slice(0, -1);
+                        // pathCurrent = JSON.stringify(inf.p.stack).replace(/\/\//, '').match(/\/(.*?).js/)[1] + '.js';
+                        // pathCurrent = pathCurrent.replace(new RegExp(`${pathProject}/`, 'gi'), "");
+                        // if (typeof window == 'undefined') { ret['res'] = [pathCurrent, pathProject] } else { // NODEJS
+                        //     ret['res'] = [pathCurrent, pathProject, 'D:/Downloads/Google Chrome%'] // CHROME
+                        // }; ret['ret'] = true; ret['msg'] = `FILE INF: OK`
                     } else if (inf.action == 'relative') { // #### RELATIVE
-                        const infFile = { 'p': inf.p, 'action': 'inf' }; const retFile = await file(infFile);
+                        const infFile = { 'p': inf.p, 'c': inf.c, 'action': 'inf' }; const retFile = await file(infFile);
                         if (!inf.relative || inf.relative == '') {
                             ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'relative' \n\n`;
                         } else {
@@ -215,7 +226,7 @@ async function file(inf) {
                             let infFile, retFile, path
                             if (inf.path.includes(':')) { path = [inf.path] }
                             else {
-                                infFile = { 'p': inf.p, 'action': 'relative', 'relative': inf.path };
+                                infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': inf.path };
                                 retFile = await file(infFile); path = retFile.res
                             }; let retFilesList = { 'path': path[0], 'max': inf.max }
                             function formatBytes(b, d = 2) {
@@ -300,7 +311,7 @@ async function configStorage(inf) {
                                     ret['msg'] = `\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length === 0) {
                                     async function checkConfig() {
-                                        const infFile = { 'p': inf.p, 'action': 'read', 'path': inf.path }
+                                        const infFile = { 'p': inf.p, 'c': inf.c, 'action': 'read', 'path': inf.path }
                                         const retFile = await file(infFile); const config = JSON.parse(retFile.res);
                                         if (config[inf.key]) {
                                             const data = {}; data[inf.key] = config[inf.key];
@@ -336,7 +347,7 @@ async function configStorage(inf) {
                     }
                 }
             } else { // ################## NODE
-                const infFile = { 'p': inf.p, 'action': 'relative', 'relative': './src/config.json' }
+                const infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': './src/config.json' }
                 const retFile = await file(infFile); if (!retFile.ret) { return }; const path = retFile.res
                 const _fs = await import('fs'); const configFile = _fs.readFileSync(path[0]);
                 const config = JSON.parse(configFile);
@@ -389,7 +400,7 @@ function dateHour() { // NAO POR COMO 'async'!!!
             'yea': String(date1.getFullYear()), 'hou': String(date1.getHours()).padStart(2, '0'),
             'min': String(date1.getMinutes()).padStart(2, '0'), 'sec': String(date1.getSeconds()).padStart(2, '0'),
             'mil': String(date2.toString().slice(-3)), 'tim': String(date2.toString().slice(0, -3))
-        }; // manter o 'String' para forcar o '0' (zero) na frente → '001' 
+        }; // manter o 'String' para forcar o '0' (zero) na frente → '001'
     }
     catch (e) {
         ret['msg'] = regexE({ 'e': e }).res;
@@ -480,6 +491,27 @@ function orderObj(o) {
     return Object.fromEntries(Object.entries(o).sort((a, b) => a[0].localeCompare(b[0])));
 }
 
+async function jsonInterpret(inf) {
+    let ret = { 'ret': false };
+    try {
+        const json = JSON.stringify(inf.json)
+        const res = json.replace(/\$\[(.*?)\]/g, (match, p1) => g[p1])
+        ret['ret'] = true;
+        ret['msg'] = `JSON INTERPRET: OK`;
+        ret['res'] = res;
+    } catch (e) {
+        ret['msg'] = regexE({ 'e': e }).res
+    }
+    if (!ret.ret) { console.log(ret.msg) }
+    return ret
+}
+
+if (typeof window !== 'undefined') { // CHROME
+    window['jsonInterpret'] = jsonInterpret;
+} else { // NODEJS
+    global['jsonInterpret'] = jsonInterpret;
+}
+
 // ############### CLEAR CONSOLE ###############
 // console.clear(); let messageCount = 0; const clearConsole = console.log;
 // console.log = async function () {
@@ -489,11 +521,12 @@ function orderObj(o) {
 // ############### ###############
 
 if (typeof window !== 'undefined') { // CHROME
+    window['g'] = {}; g['p'] = p;
     // ## functions
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage;
     window['dateHour'] = dateHour; window['regex'] = regex; window['random'] = random;
     window['regexE'] = regexE; window['gO'] = gO; window['gOAdd'] = gOAdd;
-    window['gORem'] = gORem; window['orderObj'] = orderObj;
+    window['gORem'] = gORem; window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret;
     // ## resources
     window['chatGpt'] = chatGpt; window['clipboard'] = clipboard; window['excel'] = excel;
     window['getCookies'] = getCookies; window['notification'] = notification; window['promptChrome'] = promptChrome;
@@ -504,10 +537,11 @@ if (typeof window !== 'undefined') { // CHROME
     window['command1'] = command1; window['command2'] = command2; window['oneFormaMTPE'] = oneFormaMTPE;
     window['peroptyxSearch2_0'] = peroptyxSearch2_0; window['peroptyxQIDC'] = peroptyxQIDC;
 } else { // NODEJS
+    global['g'] = {}; g['p'] = p;
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage; global['dateHour'] = dateHour;
     global['regex'] = regex; global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
-    global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj;
+    global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj; global['jsonInterpret'] = jsonInterpret;
     // ## resources
     global['chatGpt'] = chatGpt; global['clipboard'] = clipboard; global['excel'] = excel;
     global['getCookies'] = getCookies; global['notification'] = notification; global['promptChrome'] = promptChrome;
