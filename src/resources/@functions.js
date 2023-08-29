@@ -1,5 +1,25 @@
+
+
+
 let p; if (typeof window !== 'undefined') p = chrome.runtime.getURL('').slice(0, -1);
 else { const { default: a } = await import('app-root-path'); p = a.path.replace(/\\/g, '/'); p = p.charAt(0).toUpperCase() + p.slice(1) }
+
+let fs, path, pp, cc
+if (typeof window == 'undefined') { fs = await import('fs'); path = await import('path') }
+function pathCurrent() {
+    let e = JSON.stringify(new Error().stack)
+    if (typeof window !== 'undefined') {
+        pp = chrome.runtime.getURL('').slice(0, -1);
+        const text = e; const pattern = new RegExp(`at ${pp}/(.*?)\\.js`)
+        const res = text.match(pattern); cc = res[1]; return { 'c': cc, 'p': pp }
+    } else {
+        function w(c) {
+            while (true) { if (['package.json'].some(file => fs.existsSync(path.join(c, file)))) { return c }; const p = path.dirname(c); if (p === c) { return null } c = p }
+        }; let x = JSON.stringify(new Error().stack).match(/ file:\/\/\/(.*?)\.js:/)[1];
+        let z = x.charAt(0).toUpperCase() + x.slice(1); x = w(z); z = z.replace(`${x}/`, ''); return { 'c': z, 'p': x }
+    }
+
+}
 
 // await import('./@functions.js');
 
@@ -31,6 +51,8 @@ else { const { default: a } = await import('app-root-path'); p = a.path.replace(
 // infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'read', 'path': './1_PASTA/aaa.txt' }
 // infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'del', 'path': './1_PASTA/aaa.txt' }
 // infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'list', 'path': '../', 'max': 10 }
+// retFile = await file(infFile)
+// console.log(retFile)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // let infConfigStorage, retConfigStorage; g['c'] = c; g['a'] = 'OLAAAAA'
 // infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
@@ -520,8 +542,31 @@ if (typeof window !== 'undefined') { // CHROME
 // };
 // ############### ###############
 
+export function minhaFuncao(filePath) {
+    const content = 'Conteúdo do arquivo a ser escrito.';
+    fs.writeFile(filePath, content, (err) => {
+        if (err) {
+            console.error('ERR')
+        }
+        console.log('OK');
+    });
+}
+
+function minhaFuncao2(filePath) {
+    const content = 'Conteúdo do arquivo a ser escrito.';
+    console.log(process.cwd())
+    fs.writeFile(filePath, content, (err) => {
+        if (err) {
+            console.error('ERR')
+        }
+        console.log('OK');
+    });
+}
+
+
+
 if (typeof window !== 'undefined') { // CHROME
-    window['g'] = {}; g['p'] = p;
+    window['g'] = {}; g['p'] = p; window['pathCurrent'] = pathCurrent;
     // ## functions
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage;
     window['dateHour'] = dateHour; window['regex'] = regex; window['random'] = random;
@@ -537,7 +582,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['command1'] = command1; window['command2'] = command2; window['oneFormaMTPE'] = oneFormaMTPE;
     window['peroptyxSearch2_0'] = peroptyxSearch2_0; window['peroptyxQIDC'] = peroptyxQIDC;
 } else { // NODEJS
-    global['g'] = {}; g['p'] = p;
+    global['g'] = {}; g['p'] = p; global['pathCurrent'] = pathCurrent; global['minhaFuncao2'] = minhaFuncao2;
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage; global['dateHour'] = dateHour;
     global['regex'] = regex; global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
@@ -552,4 +597,3 @@ if (typeof window !== 'undefined') { // CHROME
     global['command1'] = command1; global['command2'] = command2; global['oneFormaMTPE'] = oneFormaMTPE;
     global['peroptyxSearch2_0'] = peroptyxSearch2_0; global['peroptyxQIDC'] = peroptyxQIDC;
 }
-
