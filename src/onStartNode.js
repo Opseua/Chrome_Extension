@@ -1,5 +1,4 @@
 await import('./resources/@functions.js');
-const p = new Error()
 console.log('onStartNodeJS');
 
 // *************************
@@ -7,22 +6,17 @@ console.log('onStartNodeJS');
 async function client(inf) {
     let ret = { 'ret': false };
     try {
-        let WebS;
-        if (typeof window !== 'undefined') { // CHROME
-            WebS = window.WebSocket;
-        } else { // NODEJS
-            const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
-        }
+        let WebS; ret['ret'] = true;
+        if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
+        else { const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket } // NODEJS
 
-        const infConfigStorage = { 'p': p, 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
-        const retConfigStorage = await configStorage(infConfigStorage)
-        if (!retConfigStorage.ret) {
-            return ret
-        }
-        const wsHost = retConfigStorage.res.ws1
-        const portWebSocket = retConfigStorage.res.portWebSocket;
-        const device2 = retConfigStorage.res.device2.name
-        const securityPass = retConfigStorage.res.securityPass
+        const infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'webSocket' }
+        let retConfigStorage = await configStorage(infConfigStorage)
+        if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
+        const wsHost = retConfigStorage.ws1
+        const portWebSocket = retConfigStorage.portWebSocket;
+        const device2 = retConfigStorage.device2.name
+        const securityPass = retConfigStorage.securityPass
 
         let ws1;
         async function web1() {
@@ -56,6 +50,14 @@ async function client(inf) {
 
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
+    }
+
+    if (!ret.ret) {
+        console.log(ret.msg)
+        if (typeof window !== 'undefined') { // CHROME
+            const infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'webSocket' }
+            const retConfigStorage = await configStorage(infConfigStorage)
+        }
     }
 }
 client()

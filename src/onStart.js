@@ -1,235 +1,218 @@
 await import('./resources/@functions.js');
 console.log('onStart')
-// let c = JSON.stringify(new Error().stack).replace(/\/\//, '').match(/\/(.*?).js/)[1] + '.js';
-// c = c.replace(new RegExp(`${g.p}/`, 'gi'), ""); const p = g.p
 
-// if (typeof window !== 'undefined') { // CHROME
-//     await chromeActions({ 'action': 'badge', 'inf': { 'text': '' } })
-//     // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
-//     chrome.downloads.onChanged.addListener(async function (...inf) {
-//         if (inf[0].state && inf[0].state.current === "complete") {
-//             chrome.downloads.search({ id: inf.id }, async function (inf) {
-//                 if (inf.length > 0) {
-//                     const downloadItem = inf[0];
-//                     if (downloadItem.byExtensionName === 'BOT' && !downloadItem.filename.includes('[KEEP]')) {
-//                         // console.log(`EVENTO: download do BOT concluído\n`, downloadItem)
-//                         setTimeout(function () {
-//                             chrome.downloads.erase({ id: downloadItem.id });
-//                             console.log('DOWNLOAD REMOVIDO DA LISTA');
-//                             URL.revokeObjectURL(downloadItem.url);
-//                         }, 5000);
-//                     }
-//                 }
-//             });
-//         }
-//     });
-//     // ######################### CLICK NO ICONE
-//     chrome.browserAction.onClicked.addListener(async function (...inf) {
-//         console.log('ON START: ICONE PRESSIONADO');
-//         //chrome.browserAction.setPopup({popup: "./popup.html"});
-//     });
-//     // ######################### ATALHO PRESSIONADO
-//     chrome.commands.onCommand.addListener(async function (...inf) {
-//         let ret = { 'ret': false };
-//         try {
-//             //console.log('ON START: ATALHO PRESSIONADO')
-//             const infShortcutPressed = { 'shortcut': inf[0] }
-//             if (infShortcutPressed.shortcut == 'atalho_1') {
-//                 command1()
-//                 ret['ret'] = true;
-//                 ret['msg'] = `SHORTCUT PRESSED: OK`;
-//             } else if (infShortcutPressed.shortcut == 'atalho_2') {
-//                 g['c'] = c;
-//                 const infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
-//                 const retConfigStorage = await configStorage(infConfigStorage)
-//                 if (!retConfigStorage.ret) { return ret }
-//                 const wsHost = retConfigStorage.res.ws1
-//                 const portWebSocket = retConfigStorage.res.portWebSocket;
-//                 const device1 = retConfigStorage.res.device1.name
-//                 const device2 = retConfigStorage.res.device2.name
-//                 const securityPass = retConfigStorage.res.securityPass
-//                 const infNotification =
-//                 {
-//                     'duration': 4,
-//                     'type': 'basic',
-//                     'title': `AGUARDE...`,
-//                     'message': `Alternando sniffer`,
-//                     'iconUrl': "./src/media/icon_3.png",
-//                     'buttons': [],
-//                 };
-//                 const retNotification = await notification(infNotification); g['c'] = c;
-//                 const infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'read', 'file': `D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
-//                 let par
-//                 const retFile = await file(infFile)
-//                 if (retFile.ret) {
-//                     par = 'taskkill /IM "nodeSniffer.exe" /F'
-//                 } else {
-//                     par = '\"D:/ARQUIVOS/WINDOWS/PORTABLE_NodeJS/nodeSniffer.exe\" \"D:/ARQUIVOS/PROJETOS/Sniffer_Python/src/sniffer.js\"'
-//                 }
-//                 const infApi = {
-//                     url: `http://${wsHost}:${portWebSocket}/${device2}`,
-//                     method: 'POST', headers: { 'accept-language': 'application/json' },
-//                     body: {
-//                         "fun": {
-//                             "securityPass": securityPass, "funRet": { "ret": false, },
-//                             "funRun": { "name": "commandLine", "par": { "background": false, "command": par } }
-//                         }
-//                     }
-//                 };
-//                 const retApi = await api(infApi);
-//                 if (!gO.inf.sniffer) {
-//                     // const infNotification =
-//                     // {
-//                     //     'duration': 2,
-//                     //     'type': 'basic',
-//                     //     'title': `RODANDO`,
-//                     //     'message': `OneForma | Peroptyx`,
-//                     //     'iconUrl': "./src/media/icon_3.png",
-//                     //     'buttons': [],
-//                     // };
-//                     // const retNotification = await notification(infNotification)
-//                     // command2();
-//                     // gO.inf = { 'sniffer': 1 }
-//                 } else {
-//                     //gO.inf = { 'sniffer': 2 }
-//                     // const infNotification =
-//                     // {
-//                     //     'duration': 2,
-//                     //     'type': 'basic',
-//                     //     'title': `PAROU`,
-//                     //     'message': `OneForma | Peroptyx`,
-//                     //     'iconUrl': "./src/media/icon_3.png",
-//                     //     'buttons': [],
-//                     // };
-//                     // const retNotification = await notification(infNotification)
-//                     // gO.inf = { 'sniffer': 0 }
-//                 }
-//                 ret['ret'] = true;
-//                 ret['msg'] = `SHORTCUT PRESSED: OK`;
-//             } else if (infShortcutPressed.shortcut == 'atalho_3') {
-//                 command3()
-//                 ret['ret'] = true;
-//                 ret['msg'] = `SHORTCUT PRESSED: OK`;
-//             } else {
-//                 ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n`;
-//             }
-//         } catch (e) {
-//             ret['msg'] = regexE({ 'e': e }).res
-//         }
+if (typeof window !== 'undefined') { // CHROME
+    await chromeActions({ 'action': 'badge', 'inf': { 'text': '' } })
+    // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
+    chrome.downloads.onChanged.addListener(async function (...inf) {
+        if (inf[0].state && inf[0].state.current === "complete") {
+            chrome.downloads.search({ id: inf.id }, async function (inf) {
+                if (inf.length > 0) {
+                    const downloadItem = inf[0];
+                    if (downloadItem.byExtensionName === 'BOT' && !downloadItem.filename.includes('[KEEP]')) {
+                        // console.log(`EVENTO: download do BOT concluído\n`, downloadItem)
+                        setTimeout(function () {
+                            chrome.downloads.erase({ id: downloadItem.id });
+                            console.log('DOWNLOAD REMOVIDO DA LISTA');
+                            URL.revokeObjectURL(downloadItem.url);
+                        }, 5000);
+                    }
+                }
+            });
+        }
+    });
+    // ######################### CLICK NO ICONE
+    chrome.browserAction.onClicked.addListener(async function (...inf) {
+        console.log('ON START: ICONE PRESSIONADO');
+        //chrome.browserAction.setPopup({popup: "./popup.html"});
+    });
+    // ######################### ATALHO PRESSIONADO
+    chrome.commands.onCommand.addListener(async function (...inf) {
+        let ret = { 'ret': false };
+        try {
+            //console.log('ON START: ATALHO PRESSIONADO')
+            const infShortcutPressed = { 'shortcut': inf[0] }
+            if (infShortcutPressed.shortcut == 'atalho_1') {
+                command1()
+                ret['ret'] = true;
+                ret['msg'] = `SHORTCUT PRESSED: OK`;
+            } else if (infShortcutPressed.shortcut == 'atalho_2') {
+                const infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'webSocket' }
+                let retConfigStorage = await configStorage(infConfigStorage)
+                if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
+                const wsHost = retConfigStorage.ws1
+                const portWebSocket = retConfigStorage.portWebSocket;
+                const device1 = retConfigStorage.device1.name
+                const device2 = retConfigStorage.device2.name
+                const securityPass = retConfigStorage.securityPass
+                const infNotification =
+                {
+                    'duration': 4,
+                    'type': 'basic',
+                    'title': `AGUARDE...`,
+                    'message': `Alternando sniffer`,
+                    'iconUrl': "./src/media/icon_3.png",
+                    'buttons': [],
+                };
+                let par
+                const retNotification = await notification(infNotification);
+                const infFile = { 'action': 'read', 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
+                const retFile = await file(infFile)
+                if (retFile.ret) {
+                    par = `del "${letter}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\log\\state.txt" && taskkill /IM "nodeSniffer.exe" /F`
+                   // par = `del "${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt" && taskkill /IM "nodeSniffer.exe" /F`
+                } else {
+                    par = `\"${letter}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_PROGRAM.exe\"`
+                }
+                const infApi = {
+                    url: `http://${wsHost}:${portWebSocket}/${device2}`,
+                    method: 'POST', headers: { 'accept-language': 'application/json' },
+                    body: {
+                        "fun": {
+                            "securityPass": securityPass, "funRet": { "ret": true, },
+                            "funRun": { "name": "commandLine", "par": { "background": false, "command": par } }
+                        }
+                    }
+                };
+                const retApi = await api(infApi);
+                if (!gO.inf.sniffer) {
+                    // const infNotification =
+                    // {
+                    //     'duration': 2,
+                    //     'type': 'basic',
+                    //     'title': `RODANDO`,
+                    //     'message': `OneForma | Peroptyx`,
+                    //     'iconUrl': "./src/media/icon_3.png",
+                    //     'buttons': [],
+                    // };
+                    // const retNotification = await notification(infNotification)
+                    // command2();
+                    // gO.inf = { 'sniffer': 1 }
+                } else {
+                    //gO.inf = { 'sniffer': 2 }
+                    // const infNotification =
+                    // {
+                    //     'duration': 2,
+                    //     'type': 'basic',
+                    //     'title': `PAROU`,
+                    //     'message': `OneForma | Peroptyx`,
+                    //     'iconUrl': "./src/media/icon_3.png",
+                    //     'buttons': [],
+                    // };
+                    // const retNotification = await notification(infNotification)
+                    // gO.inf = { 'sniffer': 0 }
+                }
+                ret['ret'] = true;
+                ret['msg'] = `SHORTCUT PRESSED: OK`;
+            } else if (infShortcutPressed.shortcut == 'atalho_3') {
+                command3()
+                ret['ret'] = true;
+                ret['msg'] = `SHORTCUT PRESSED: OK`;
+            } else {
+                ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n`;
+            }
+        } catch (e) {
+            ret['msg'] = regexE({ 'e': e }).res
+        }
 
-//         if (!ret.ret) { console.log(ret.msg) }
-//         return ret
-//     });
-// }
+        if (!ret.ret) {
+            console.log(ret.msg)
+            if (typeof window !== 'undefined') { // CHROME
+                const infConfigStorage = { 'path': './src/config.json', 'action': 'del', 'key': 'webSocket' }
+                const retConfigStorage = await configStorage(infConfigStorage)
+            }
+        }
+        return ret
+    });
+}
 
-// // *************************
+// *************************
 
-// async function client(inf) {
-//     let ret = { 'ret': false };
-//     try {
-//         let WebS;
-//         if (typeof window !== 'undefined') { // CHROME
-//             WebS = window.WebSocket;
-//         } else { // NODEJS
-//             const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket;
-//         }
-//         g['c'] = c
-//         const infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'get', 'key': 'webSocket' }
-//         const retConfigStorage = await configStorage(infConfigStorage)
-//         if (!retConfigStorage.ret) {
-//             return ret
-//         }
-//         const wsHost = retConfigStorage.res.ws1
-//         const portWebSocket = retConfigStorage.res.portWebSocket;
-//         const device1 = retConfigStorage.res.device1.name
-//         const securityPass = retConfigStorage.res.securityPass
+async function client(inf) {
+    let ret = { 'ret': false };
+    try {
+        let WebS; ret['ret'] = true;
+        if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
+        else { const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket } // NODEJS
 
-//         let ws1;
-//         async function web1() {
-//             let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
-//             ws1.onerror = (e) => { };
-//             ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
-//             ws1.onclose = async (event) => {
-//                 console.log(`ON START: RECONEXAO EM 10 SEGUNDOS - WS1`);
-//                 await new Promise(r => setTimeout(r, 10000)); web1()
-//             }
-//             ws1.onmessage = async (event) => {
-//                 let data, fun
-//                 try {
-//                     data = JSON.parse(event.data);
-//                     if (data.fun) { fun = true }
-//                 } catch (e) { }
-//                 if (fun) {
-//                     let infWebSocketRet
-//                     if (data.retWs && data.retWs.res) {
-//                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
-//                     } else {
-//                         infWebSocketRet = { 'data': event.data }
-//                     }
-//                     const retWebSocketRet = webSocketRet(infWebSocketRet)
-//                 } else {
-//                     console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`)
-//                 }
-//             }
-//         }
-//         web1()
+        const infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'webSocket' }
+        let retConfigStorage = await configStorage(infConfigStorage)
+        if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
+        const wsHost = retConfigStorage.ws1
+        const portWebSocket = retConfigStorage.portWebSocket;
+        const device1 = retConfigStorage.device1.name
+        const securityPass = retConfigStorage.securityPass
 
-//     } catch (e) {
-//         ret['msg'] = regexE({ 'e': e }).res
-//     }
-// }
-// client()
+        let ws1;
+        async function web1() {
+            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
+            ws1.onerror = (e) => { };
+            ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
+            ws1.onclose = async (event) => {
+                console.log(`ON START: RECONEXAO EM 10 SEGUNDOS - WS1`);
+                await new Promise(r => setTimeout(r, 10000)); web1()
+            }
+            ws1.onmessage = async (event) => {
+                let data, fun
+                try {
+                    data = JSON.parse(event.data);
+                    if (data.fun) { fun = true }
+                } catch (e) { }
+                if (fun) {
+                    let infWebSocketRet
+                    if (data.retWs && data.retWs.res) {
+                        infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
+                    } else {
+                        infWebSocketRet = { 'data': event.data }
+                    }
+                    const retWebSocketRet = webSocketRet(infWebSocketRet)
+                } else {
+                    console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`)
+                }
+            }
+        }
+        web1()
 
-// // const infSniffer = {  'arrUrl': ['*.vtt*'] }
-// // const retSniffer = await sniffer(infSniffer)
-// // console.log(retSniffer)
+    } catch (e) {
+        ret['msg'] = regexE({ 'e': e }).res
+    }
 
-// // let infExcel, retExcel ; g['c'] = c // CQPT    KQRE
-// // infExcel = { 'p': '$[p]', 'c': '$[c]', 'action': 'get', 'tab': 'YARE', 'col': 'A', 'lin': 1 }
-// // infExcel = { 'p': '$[p]', 'c': '$[c]', 'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
-// // retExcel = await excel(infExcel)
-// // console.log(retExcel)
+    if (!ret.ret) {
+        console.log(ret.msg)
+        if (typeof window !== 'undefined') { // CHROME
+            const infConfigStorage = { 'path': './src/config.json', 'action': 'del', 'key': 'webSocket' }
+            const retConfigStorage = await configStorage(infConfigStorage)
+        }
+    }
+}
+client()
 
-// let infFile, retFile; g['c'] = c;
-// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'inf' }
-// // infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
-// // infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
-// // infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'read', 'path': './1_PASTA/aaa.txt' }
-// // infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'del', 'path': './1_PASTA/aaa.txt' }
-// // infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'list', 'path': '../', 'max': 10 }
-// // retFile = await file(infFile);
-// // console.log(retFile)
+// const infSniffer = {  'arrUrl': ['*.vtt*'] }
+// const retSniffer = await sniffer(infSniffer)
+// console.log(retSniffer)
 
-// // import { getCurrentModulePath } from './resources/@functions.js';
-// // const caminho = getCurrentModulePath();
-// // console.log('Caminho atual:', caminho);
+// let infExcel, retExcel ; // CQPT    KQRE
+// infExcel = { 'action': 'get', 'tab': 'YARE', 'col': 'A', 'lin': 1 }
+// infExcel = { 'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
+// retExcel = await excel(infExcel)
+// console.log(retExcel)
 
-// let fs, path
-// if (typeof window == 'undefined') { fs = await import('fs'); path = await import('path') }
-// import { getCurrentModulePath } from './resources/@functions.js';
-// const caminho = getCurrentModulePath();
-// console.log(caminho)
+let infConfigStorage, retConfigStorage;
+//infConfigStorage = { 'path': './src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+//infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
+// infConfigStorage = { 'path': './src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
+// retConfigStorage = await configStorage(infConfigStorage)
+// console.log(retConfigStorage)
 
-// console.log('START 1')
-// const retPathCurrent = pathCurrent()
-// console.log(1, retPathCurrent.c);
-// g['pp'] = retPathCurrent.p;
-// g['cc'] = retPathCurrent.c;
-// console.log(2, g.cc)
-
-
-
-// console.log('START 2')
-// const retPathCurrent = pathCurrent()
-// console.log(1, retPathCurrent.c);
-// g['pp'] = retPathCurrent.p;
-// g['cc'] = retPathCurrent.c;
-
-// const pp = (() => pathCurrent())();
-// console.log(pp);
-
-const cachedPath2 = pathCurrent;
-// const result2 = cachedPath2();
-// console.log(result2)
-console.log(cachedPath2)
+let infFile, retFile;
+infFile = { 'action': 'inf' }
+infFile = { 'action': 'relative', 'path': './PASTA/ola.txt' }
+// infFile = { 'action': 'write', 'path': './PASTA/ola.txt', 'rewrite': false, 'text': '1234\n' }
+infFile = { 'action': 'read', 'path': 'D:/Área de Trabalho/SRT.txt' }
+// infFile = { 'action': 'del', 'path': 'D:/Área de Trabalho/ola.txt' }
+// infFile = { 'action': 'list', 'path': 'D:/Área de Trabalho', 'max': 10 }
+// retFile = await file(infFile);
+// console.log(retFile)
+// console.log(p);
+// console.log(letter);
 

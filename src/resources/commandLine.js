@@ -3,7 +3,7 @@
 // console.log(retCommandLine)
 
 let run
-if (typeof window == 'undefined') { // CHROME
+if (typeof window == 'undefined') {
     const { exec } = await import('child_process');
     run = exec;
 }
@@ -13,11 +13,10 @@ async function commandLine(inf) {
 
     let command;
     if (inf.background) {
-        command = `"D:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/4_BACKGROUND.exe" ${inf.command}`;
+        command = `"${letter}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/4_BACKGROUND.exe" ${inf.command}`;
     } else {
         command = `${inf.command}`;
     }
-
     const retorno = new Promise((resolve, reject) => {
         run(command, { maxBuffer: 1024 * 5000 }, (err, stdout, stderr) => {
             if (err) {

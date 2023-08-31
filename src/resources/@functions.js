@@ -1,25 +1,11 @@
 
-
-
-let p; if (typeof window !== 'undefined') p = chrome.runtime.getURL('').slice(0, -1);
-else { const { default: a } = await import('app-root-path'); p = a.path.replace(/\\/g, '/'); p = p.charAt(0).toUpperCase() + p.slice(1) }
-
-let fs, path, pp, cc
-if (typeof window == 'undefined') { fs = await import('fs'); path = await import('path') }
-function pathCurrent() {
-    let e = JSON.stringify(new Error().stack)
-    if (typeof window !== 'undefined') {
-        pp = chrome.runtime.getURL('').slice(0, -1);
-        const text = e; const pattern = new RegExp(`at ${pp}/(.*?)\\.js`)
-        const res = text.match(pattern); cc = res[1]; return { 'c': cc, 'p': pp }
-    } else {
-        function w(c) {
-            while (true) { if (['package.json'].some(file => fs.existsSync(path.join(c, file)))) { return c }; const p = path.dirname(c); if (p === c) { return null } c = p }
-        }; let x = JSON.stringify(new Error().stack).match(/ file:\/\/\/(.*?)\.js:/)[1];
-        let z = x.charAt(0).toUpperCase() + x.slice(1); x = w(z); z = z.replace(`${x}/`, ''); return { 'c': z, 'p': x }
+let _fs, _path, p, letter = 'src/config.json'
+async function getLetterPath() {
+    if (typeof window !== 'undefined') { letter = await fetch(`${chrome.runtime.getURL('')}${letter}`); letter = JSON.parse(await letter.text()).letter }
+    else {
+        _fs = await import('fs'); _path = await import('path'); letter = `${import.meta.url.charAt(8).toUpperCase()}`
     }
-
-}
+}; await getLetterPath()
 
 // await import('./@functions.js');
 
@@ -44,20 +30,20 @@ function pathCurrent() {
 // retApi = await api(infApi);
 // console.log(retApi)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
-// let infFile, retFile; g['c'] = c; g['a'] = 'OLAAAAA'
-// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'inf' }
-// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
-// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
-// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'read', 'path': './1_PASTA/aaa.txt' }
-// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'del', 'path': './1_PASTA/aaa.txt' }
-// infFile = { 'p': '$[p]', 'c': '$[c]', 'action': 'list', 'path': '../', 'max': 10 }
+// let infFile, retFile;
+// infFile = { 'action': 'inf' }
+// infFile = { 'action': 'relative', 'relative': './1_PASTA/aaa.txt' }
+// infFile = { 'action': 'write', 'path': './1_PASTA/aaa.txt', 'rewrite': true, 'text': '1234\n' }
+// infFile = { 'action': 'read', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'action': 'del', 'path': './1_PASTA/aaa.txt' }
+// infFile = { 'action': 'list', 'path': '../', 'max': 10 }
 // retFile = await file(infFile)
 // console.log(retFile)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
-// let infConfigStorage, retConfigStorage; g['c'] = c; g['a'] = 'OLAAAAA'
-// infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-// infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-// infConfigStorage = { 'p': '$[p]', 'c': '$[c]', 'path': '/src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
+// let infConfigStorage, retConfigStorage; 
+// infConfigStorage = { 'path': './src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+// infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
+// infConfigStorage = { 'path': './src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
 // retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
@@ -138,143 +124,137 @@ async function api(inf) {
 //######################################## ############# #########
 
 async function file(inf) {
-    // const url = chrome.runtime.getURL('src/config.json'); console.log(url)
     let ret = { 'ret': false };
-    let _fs, _path, _appRoot
     try {
         if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { // PASSAR NO jsonInterpret
             let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji };
         }
-        if (!inf.p || inf.p == '') { ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'p' \n\n`; }
-        else if (!inf.c || inf.c == '') { ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'c' \n\n`; }
-        else {
-            if (!inf.action || !['write', 'read', 'del', 'inf', 'pathChromeNode', 'relative', 'list'].includes(inf.action)) {
-                ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
-            } else {
-                if ((!inf.path || inf.path == '') && ['write', 'read', 'del', 'list'].includes(inf.action)) {
-                    ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'path' \n\n`;
-                }
-                else {
-                    if (typeof window == 'undefined') { _fs = await import('fs'); _path = await import('path'); } // FS, PATH, APP-ROOT-PATH
-                    if (inf.action == 'write') { // #### WRITE
-                        if (typeof inf.rewrite !== 'boolean') {
-                            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`;
-                        } else if (!inf.text || inf.text == '') {
-                            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'text' \n\n`;
-                        } else {
-                            let infFile, retFile, path, retFetch = ''; let text = inf.text
-                            if (inf.path.includes(':')) { path = [inf.path]; if (typeof window !== 'undefined') { path = path.split(':/')[1] } }
-                            else {
-                                infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': inf.path };
-                                retFile = await file(infFile); path = retFile.res
-                            }
-                            if (typeof window !== 'undefined') { // CHROME
-                                if (path[1].includes('%/')) { path = path[1].split('%/')[1] } else if (path[1].includes(':')) {
-                                    path = path[1].split(':/')[1];
-                                } else { path = path[1] }
-                                if (inf.rewrite) {
-                                    try {
-                                        infFile = { 'p': inf.p, 'c': inf.c, 'action': 'read', 'path': path }; retFile = await file(infFile);
-                                        if (retFile.ret) { retFetch = retFile.res }; text = `${retFetch}${text}`
-                                    } catch (e) { }
-                                }; const blob = new Blob([text], { type: 'text/plain' });
-                                const downloadOptions = {
-                                    url: URL.createObjectURL(blob), filename: path,
-                                    saveAs: false, // PERGUNTAR AO USUARIO ONDE SALVAR
-                                    conflictAction: 'overwrite' // 'overwrite' LIMPA | 'uniquify' (ADICIONA (1), (2), (3)... NO FINAL)
-                                }; chrome.downloads.download(downloadOptions);
-                            } else { // NODEJS
-                                path = path[0]
-                                async function createFolder(f) {
-                                    const p = _path.normalize(f); const d = p.split(_path.sep); let cF = '';
-                                    for (let directory of d) {
-                                        cF += directory + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF); }
-                                    }; return true;
-                                }; const folderPath = _path.dirname(path); await createFolder(folderPath);
-                                await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' }); // 'w' limpa | 'a' adiciona
-                            }; ret['ret'] = true; ret['msg'] = `FILE WRITE: OK`;
-                        }
-                    } else if (inf.action == 'read') { // #### READ
-                        let infFile, retFile, path; if (inf.path.includes(':')) { path = [inf.path] }
-                        else {
-                            infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': inf.path };
-                            retFile = await file(infFile); path = retFile.res
-                        }; let retFetch
-                        if (typeof window !== 'undefined') { // CHROME
-                            try { retFetch = await fetch(`file:///${path[1].replace('%', '')}`) }
-                            catch (e) { retFetch = await fetch(`${path[0]}`) }
-                            retFetch = await retFetch.text()
-                        } else { retFetch = _fs.readFileSync(path[0], 'utf8'); }; // NODEJS
-                        ret['ret'] = true; ret['msg'] = `FILE READ: OK`; ret['res'] = retFetch;
-                    } else if (inf.action == 'del' && typeof window == 'undefined') { // #### DEL
-                        let infFile, retFile, path; if (inf.path.includes(':')) { path = [inf.path] }
-                        else {
-                            infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': inf.path };
-                            retFile = await file(infFile); path = retFile.res
-                        }; _fs.unlinkSync(path[0]); ret['ret'] = true; ret['msg'] = `FILE DEL: OK`;
-                    } else if (inf.action == 'inf') { // #### INF (get current path full)
-                        if (typeof window == 'undefined') { ret['res'] = [inf.c, inf.p] } else { // NODEJS
-                            ret['res'] = [inf.c, inf.p, 'D:/Downloads/Google Chrome%'] // CHROME
-                        }; ret['ret'] = true; ret['msg'] = `FILE INF: OK`
-                        // let pathProject, pathCurrent
-                        // pathProject = typeof window === 'undefined' ? _appRoot : chrome.runtime.getURL('').slice(0, -1);
-                        // pathCurrent = JSON.stringify(inf.p.stack).replace(/\/\//, '').match(/\/(.*?).js/)[1] + '.js';
-                        // pathCurrent = pathCurrent.replace(new RegExp(`${pathProject}/`, 'gi'), "");
-                        // if (typeof window == 'undefined') { ret['res'] = [pathCurrent, pathProject] } else { // NODEJS
-                        //     ret['res'] = [pathCurrent, pathProject, 'D:/Downloads/Google Chrome%'] // CHROME
-                        // }; ret['ret'] = true; ret['msg'] = `FILE INF: OK`
-                    } else if (inf.action == 'relative') { // #### RELATIVE
-                        const infFile = { 'p': inf.p, 'c': inf.c, 'action': 'inf' }; const retFile = await file(infFile);
-                        if (!inf.relative || inf.relative == '') {
-                            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'relative' \n\n`;
-                        } else {
-                            let relative, pathFull, relativeParts, retRelative; relative = inf.relative
-                            function runPath(p, par) {
-                                if (p.startsWith('./')) { p = p.slice(2) } else if (relative.startsWith('/')) { p = p.slice(1) }
-                                pathFull = retFile.res[par].split('/'); relativeParts = p.split('/');
-                                while (pathFull.length > 0 && relativeParts[0] === '..') { pathFull.pop(); relativeParts.shift(); }
-                                retRelative = pathFull.concat(relativeParts).join('/')
-                                if (retRelative.endsWith('/.')) { retRelative = retRelative.slice(0, -2); }
-                                else if (retRelative.endsWith('.') || retRelative.endsWith('/')) { retRelative = retRelative.slice(0, -1); }
-                                return retRelative
-                            }; ret['ret'] = true; ret['msg'] = `FILE RELATIVE: OK`
-                            if (typeof window == 'undefined') { ret['res'] = [runPath(inf.relative, 1)] } else // NODEJS
-                            { ret['res'] = [runPath(inf.relative, 1), runPath(inf.relative, 2)] } // CHROME
-                        }
-                    } else if (inf.action == 'list' && typeof window == 'undefined') { // #### LIST
-                        if (!inf.max || inf.max == '') {
-                            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'max' \n\n`;
-                        } else {
-                            let infFile, retFile, path
-                            if (inf.path.includes(':')) { path = [inf.path] }
-                            else {
-                                infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': inf.path };
-                                retFile = await file(infFile); path = retFile.res
-                            }; let retFilesList = { 'path': path[0], 'max': inf.max }
-                            function formatBytes(b, d = 2) {
-                                if (b === 0) return '0 Bytes'; const i = Math.floor(Math.log(b) / Math.log(1024));
-                                return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i];
-                            }; let iFilesList = 0
-                            async function filesList(inf, files = []) {
-                                try {
-                                    for (const file of _fs.readdirSync(inf.path)) {
-                                        if (iFilesList >= inf.max) { break }; const name = `${inf.path}/${file}`;
-                                        try {
-                                            if (_fs.statSync(name).isDirectory()) { filesList({ 'max': inf.max, 'path': name }, files) }
-                                            else {
-                                                iFilesList++; const stats = _fs.statSync(name)
-                                                files.push({
-                                                    'ret': true, 'file': file, 'path': name,
-                                                    'size': formatBytes(stats.size), 'edit': stats.mtime
-                                                });
-                                            }
-                                        } catch (e) { iFilesList++; files.push({ 'ret': false, 'file': file, 'path': name, 'e': JSON.stringify(e) }) }
-                                    }; return files;
-                                } catch (e) { iFilesList++; files.push({ 'ret': false, 'e': JSON.stringify(e) }) }
-                            }; retFilesList = await filesList(retFilesList)
-                            ret['ret'] = true; ret['msg'] = `FILE LIST: OK`; ret['res'] = retFilesList;
-                        }
+        if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list'].includes(inf.action)) {
+            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
+        } else {
+            if (inf.action == 'write') { // ########################## WRITE
+                if (typeof inf.rewrite !== 'boolean') {
+                    ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`;
+                } else if (!inf.text || inf.text == '') {
+                    ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'text' \n\n`;
+                } else {
+                    let infFile, retFile, path, retFetch = ''; let text = inf.text
+                    if (inf.path.includes(':')) {
+                        path = [inf.path];
+                        if (typeof window !== 'undefined') { path = [path[0].split(':/')[1]] }
                     }
+                    else { infFile = { 'action': 'relative', 'path': inf.path }; retFile = await file(infFile); path = retFile.res }
+                    if (typeof window !== 'undefined') { // CHROME
+                        if (path[0].includes('%/')) { path = path[0].split('%/')[1] } else if (path[0].includes(':')) { path = path[0].split(':/')[1] }
+                        else { path = path[0] }
+                        if (inf.rewrite) {
+                            try {
+                                infFile = { 'action': 'read', 'path': path }; retFile = await file(infFile);
+                                if (retFile.ret) { retFetch = retFile.res }; text = `${retFetch}${text}`
+                            } catch (e) { }
+                        }; const blob = new Blob([text], { type: 'text/plain' });
+                        const downloadOptions = {
+                            url: URL.createObjectURL(blob), filename: path,
+                            saveAs: false, // PERGUNTAR AO USUARIO ONDE SALVAR
+                            conflictAction: 'overwrite' // 'overwrite' LIMPA | 'uniquify' (ADICIONA (1), (2), (3)... NO FINAL)
+                        }; chrome.downloads.download(downloadOptions);
+                    } else { // NODEJS
+                        path = path[0]
+                        async function createFolder(f) {
+                            const p = _path.normalize(f); const d = p.split(_path.sep); let cF = '';
+                            for (let directory of d) {
+                                cF += directory + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF); }
+                            }; return true;
+                        }; const folderPath = _path.dirname(path); await createFolder(folderPath);
+                        await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' }); // 'w' limpa | 'a' adiciona
+                    }; ret['ret'] = true; ret['msg'] = `FILE WRITE: OK`;
+                }
+            } else if (inf.action == 'read') { // ########################## READ
+                let infFile, retFile, path; if (inf.path.includes(':')) { path = [inf.path] }
+                else {
+                    infFile = { 'action': 'relative', 'path': inf.path };
+                    retFile = await file(infFile); path = retFile.res
+                }; let retFetch
+                if (typeof window !== 'undefined') { // CHROME
+                    if (inf.chrome) {
+                        retFetch = await fetch(`${path[1]}`)
+                    } else {
+                        retFetch = await fetch(`file:///${path[0].replace('%', '')}`)
+                    }
+                    // try {
+                    //     if (inf.chrome) { throw new Error('CONSULTAR DO CHROME INTERNO') };
+                    //     retFetch = await fetch(`file:///${path[0].replace('%', '')}`)
+                    // } catch (e) { retFetch = await fetch(`${path[1]}`) }
+                    retFetch = await retFetch.text()
+                } else { retFetch = _fs.readFileSync(path[0], 'utf8'); }; // NODEJS
+                ret['ret'] = true; ret['msg'] = `FILE READ: OK`; ret['res'] = retFetch;
+            } else if (inf.action == 'del' && typeof window == 'undefined') { // ########################## DEL
+                let infFile, retFile, path; if (inf.path.includes(':')) { path = [inf.path] }
+                else {
+                    infFile = { 'action': 'relative', 'path': inf.path };
+                    retFile = await file(infFile); path = retFile.res
+                }; _fs.unlinkSync(path[0]); ret['ret'] = true; ret['msg'] = `FILE DEL: OK`;
+            } else if (inf.action == 'inf') { // ########################## INF
+                let p, c, pc, e = JSON.stringify(new Error().stack)
+                if (typeof window !== 'undefined') { // CHROME
+                    p = chrome.runtime.getURL('').slice(0, -1);
+                    const text = e; const pattern = new RegExp(`at ${p}/(.*?)\\.js`)
+                    const res = text.match(pattern); c = res[1]; pc = [c, `${letter}:/Downloads/Google Chrome%`, p];
+                } else { // NODEJS
+                    function w(c) {
+                        while (true) { if (['package.json'].some(file => _fs.existsSync(_path.join(c, file)))) { return c }; p = _path.dirname(c); if (p === c) { return null } c = p }
+                    }; p = e.match(/ file:\/\/\/(.*?)\.js:/)[1]; c = p.charAt(0).toUpperCase() + p.slice(1); p = w(c);
+                    c = c.replace(`${p}/`, ''); pc = [c, p];
+                }; ret['ret'] = true; ret['msg'] = `FILE INF: OK`; ret['res'] = pc
+            } else if (inf.action == 'relative') { // ########################## RELATIVE
+                if (!inf.path || inf.path == '') {
+                    ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'path' \n\n`;
+                } else {
+                    let relative, pathFull, relativeParts, retRelative; relative = inf.path
+                    function runPath(pp, par) {
+                        if (pp.startsWith('./')) { pp = pp.slice(2) } else if (relative.startsWith('/')) { pp = pp.slice(1) }
+                        pathFull = p[par].split('/'); relativeParts = pp.split('/');
+                        while (pathFull.length > 0 && relativeParts[0] === '..') { pathFull.pop(); relativeParts.shift(); }
+                        retRelative = pathFull.concat(relativeParts).join('/')
+                        if (retRelative.endsWith('/.')) { retRelative = retRelative.slice(0, -2); }
+                        else if (retRelative.endsWith('.') || retRelative.endsWith('/')) { retRelative = retRelative.slice(0, -1); }
+                        return retRelative
+                    }; ret['ret'] = true; ret['msg'] = `FILE RELATIVE: OK`
+                    if (typeof window == 'undefined') { ret['res'] = [runPath(inf.path, 1)] } else // NODEJS
+                    { ret['res'] = [runPath(inf.path, 1), runPath(inf.path, 2)] } // CHROME
+                }
+            } else if (inf.action == 'list' && typeof window == 'undefined') { // ########################## LIST
+                if (!inf.max || inf.max == '') {
+                    ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'max' \n\n`;
+                } else {
+                    let infFile, retFile, path
+                    if (inf.path.includes(':')) { path = [inf.path] }
+                    else {
+                        infFile = { 'action': 'relative', 'path': inf.path };
+                        retFile = await file(infFile); path = retFile.res
+                    }; let retFilesList = { 'path': path[0], 'max': inf.max }
+                    function formatBytes(b, d = 2) {
+                        if (b === 0) return '0 Bytes'; const i = Math.floor(Math.log(b) / Math.log(1024));
+                        return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i];
+                    }; let iFilesList = 0
+                    async function filesList(inf, files = []) {
+                        try {
+                            for (const file of _fs.readdirSync(inf.path)) {
+                                if (iFilesList >= inf.max) { break }; const name = `${inf.path}/${file}`;
+                                try {
+                                    if (_fs.statSync(name).isDirectory()) { filesList({ 'max': inf.max, 'path': name }, files) }
+                                    else {
+                                        iFilesList++; const stats = _fs.statSync(name)
+                                        files.push({
+                                            'ret': true, 'file': file, 'path': name,
+                                            'size': formatBytes(stats.size), 'edit': stats.mtime
+                                        });
+                                    }
+                                } catch (e) { iFilesList++; files.push({ 'ret': false, 'file': file, 'path': name, 'e': JSON.stringify(e) }) }
+                            }; return files;
+                        } catch (e) { iFilesList++; files.push({ 'ret': false, 'e': JSON.stringify(e) }) }
+                    }; retFilesList = await filesList(retFilesList)
+                    ret['ret'] = true; ret['msg'] = `FILE LIST: OK`; ret['res'] = retFilesList;
                 }
             }
         }
@@ -289,23 +269,19 @@ async function configStorage(inf) {
     let ret = { 'ret': false };
     try {
         let run = false
-        if (!inf.p || inf.p == '') {
-            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'p' \n\n`;
+        if (!inf.path || inf.path == '') {
+            ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'path' do 'config.json' \n\n`;
         } else {
-            if (!inf.path || inf.path == '') {
-                ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'path' do 'config.json' \n\n`;
+            if (!inf.action || !['set', 'get', 'del'].includes(inf.action)) {
+                ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'action' \n\n`;
             } else {
-                if (!inf.action || !['set', 'get', 'del'].includes(inf.action)) {
-                    ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'action' \n\n`;
+                if ((!inf.key || inf.key == '')) {
+                    ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR A 'key' \n\n`;
                 } else {
-                    if ((!inf.key || inf.key == '')) {
-                        ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR A 'key' \n\n`;
+                    if (inf.action == 'set' && !inf.value) {
+                        ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'value' \n\n`;
                     } else {
-                        if (inf.action == 'set' && !inf.value) {
-                            ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'value' \n\n`;
-                        } else {
-                            run = true
-                        }
+                        run = true
                     }
                 }
             }
@@ -333,7 +309,7 @@ async function configStorage(inf) {
                                     ret['msg'] = `\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length === 0) {
                                     async function checkConfig() {
-                                        const infFile = { 'p': inf.p, 'c': inf.c, 'action': 'read', 'path': inf.path }
+                                        const infFile = { 'action': 'read', 'path': inf.path, 'chrome': true }
                                         const retFile = await file(infFile); const config = JSON.parse(retFile.res);
                                         if (config[inf.key]) {
                                             const data = {}; data[inf.key] = config[inf.key];
@@ -369,10 +345,9 @@ async function configStorage(inf) {
                     }
                 }
             } else { // ################## NODE
-                const infFile = { 'p': inf.p, 'c': inf.c, 'action': 'relative', 'relative': './src/config.json' }
+                const infFile = { 'action': 'relative', 'path': './src/config.json' }
                 const retFile = await file(infFile); if (!retFile.ret) { return }; const path = retFile.res
-                const _fs = await import('fs'); const configFile = _fs.readFileSync(path[0]);
-                const config = JSON.parse(configFile);
+                const configFile = _fs.readFileSync(path[0]); const config = JSON.parse(configFile);
                 if (inf.action == 'set') { // CONFIG: SET
                     try {
                         if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG SET \n INFORMAR A 'key' \n\n`; }
@@ -516,11 +491,8 @@ function orderObj(o) {
 async function jsonInterpret(inf) {
     let ret = { 'ret': false };
     try {
-        const json = JSON.stringify(inf.json)
-        const res = json.replace(/\$\[(.*?)\]/g, (match, p1) => g[p1])
-        ret['ret'] = true;
-        ret['msg'] = `JSON INTERPRET: OK`;
-        ret['res'] = res;
+        const json = JSON.stringify(inf.json); const res = json.replace(/\$\[(.*?)\]/g, (match, p1) => g[p1])
+        ret['ret'] = true; ret['msg'] = `JSON INTERPRET: OK`; ret['res'] = res;
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
@@ -542,31 +514,10 @@ if (typeof window !== 'undefined') { // CHROME
 // };
 // ############### ###############
 
-export function minhaFuncao(filePath) {
-    const content = 'Conteúdo do arquivo a ser escrito.';
-    fs.writeFile(filePath, content, (err) => {
-        if (err) {
-            console.error('ERR')
-        }
-        console.log('OK');
-    });
-}
-
-function minhaFuncao2(filePath) {
-    const content = 'Conteúdo do arquivo a ser escrito.';
-    console.log(process.cwd())
-    fs.writeFile(filePath, content, (err) => {
-        if (err) {
-            console.error('ERR')
-        }
-        console.log('OK');
-    });
-}
-
-
-
+let infFile, retFile
+retFile = await file({ 'action': 'inf' }); p = retFile.res
 if (typeof window !== 'undefined') { // CHROME
-    window['g'] = {}; g['p'] = p; window['pathCurrent'] = pathCurrent;
+    window['g'] = {}; window['p'] = p; window['letter'] = letter
     // ## functions
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage;
     window['dateHour'] = dateHour; window['regex'] = regex; window['random'] = random;
@@ -582,7 +533,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['command1'] = command1; window['command2'] = command2; window['oneFormaMTPE'] = oneFormaMTPE;
     window['peroptyxSearch2_0'] = peroptyxSearch2_0; window['peroptyxQIDC'] = peroptyxQIDC;
 } else { // NODEJS
-    global['g'] = {}; g['p'] = p; global['pathCurrent'] = pathCurrent; global['minhaFuncao2'] = minhaFuncao2;
+    global['g'] = {}; global['p'] = p; global['letter'] = letter
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage; global['dateHour'] = dateHour;
     global['regex'] = regex; global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
@@ -597,3 +548,6 @@ if (typeof window !== 'undefined') { // CHROME
     global['command1'] = command1; global['command2'] = command2; global['oneFormaMTPE'] = oneFormaMTPE;
     global['peroptyxSearch2_0'] = peroptyxSearch2_0; global['peroptyxQIDC'] = peroptyxQIDC;
 }
+
+
+
