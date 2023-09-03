@@ -2,9 +2,12 @@ await import('./resources/@functions.js');
 console.log('onStart')
 
 if (typeof window !== 'undefined') { // CHROME
+    const keys = ['webSocket', 'chatGptOra.ai', 'sniffer'];
+    for (const key of keys) {
+        const infConfigStorage = { 'action': 'del', 'key': key }; const retConfigStorage = await configStorage(infConfigStorage);
+    }
     await chromeActions({ 'action': 'badge', 'inf': { 'text': '' } })
-    // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
-    chrome.downloads.onChanged.addListener(async function (...inf) {
+    chrome.downloads.onChanged.addListener(async function (...inf) { // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
         if (inf[0].state && inf[0].state.current === "complete") {
             chrome.downloads.search({ id: inf.id }, async function (inf) {
                 if (inf.length > 0) {
@@ -12,8 +15,7 @@ if (typeof window !== 'undefined') { // CHROME
                     if (downloadItem.byExtensionName === 'BOT' && !downloadItem.filename.includes('[KEEP]')) {
                         // console.log(`EVENTO: download do BOT concluído\n`, downloadItem)
                         setTimeout(function () {
-                            chrome.downloads.erase({ id: downloadItem.id });
-                            console.log('DOWNLOAD REMOVIDO DA LISTA');
+                            chrome.downloads.erase({ id: downloadItem.id }); console.log('DOWNLOAD REMOVIDO DA LISTA');
                             URL.revokeObjectURL(downloadItem.url);
                         }, 5000);
                     }
@@ -21,29 +23,21 @@ if (typeof window !== 'undefined') { // CHROME
             });
         }
     });
-    // ######################### CLICK NO ICONE
-    chrome.browserAction.onClicked.addListener(async function (...inf) {
-        console.log('ON START: ICONE PRESSIONADO');
-        //chrome.browserAction.setPopup({popup: "./popup.html"});
+    chrome.browserAction.onClicked.addListener(async function (...inf) { // ######################### CLICK NO ICONE
+        console.log('ON START: ICONE PRESSIONADO'); //chrome.browserAction.setPopup({popup: "./popup.html"});
     });
-    // ######################### ATALHO PRESSIONADO
-    chrome.commands.onCommand.addListener(async function (...inf) {
+    chrome.commands.onCommand.addListener(async function (...inf) { // ######################### ATALHO PRESSIONADO
         let ret = { 'ret': false };
         try {
             //console.log('ON START: ATALHO PRESSIONADO')
             const infShortcutPressed = { 'shortcut': inf[0] }
-            if (infShortcutPressed.shortcut == 'atalho_1') {
-                command1()
-                ret['ret'] = true;
-                ret['msg'] = `SHORTCUT PRESSED: OK`;
-            } else if (infShortcutPressed.shortcut == 'atalho_2') {
+            if (infShortcutPressed.shortcut == 'atalho_1') { command1(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
+            else if (infShortcutPressed.shortcut == 'atalho_2') {
                 const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }
-                let retConfigStorage = await configStorage(infConfigStorage)
+                const retConfigStorage = await configStorage(infConfigStorage)
                 if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
-                const wsHost = retConfigStorage.ws1
-                const portWebSocket = retConfigStorage.portWebSocket;
-                const device1 = retConfigStorage.device1.name
-                const device2 = retConfigStorage.device2.name
+                const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
+                const device1 = retConfigStorage.device1.name; const device2 = retConfigStorage.device2.name
                 const securityPass = retConfigStorage.securityPass
                 const infNotification =
                 {
@@ -53,28 +47,21 @@ if (typeof window !== 'undefined') { // CHROME
                     'message': `Alternando sniffer`,
                     'iconUrl': "./src/media/icon_3.png",
                     'buttons': [],
-                };
-                let par
-                const retNotification = await notification(infNotification);
-                const infFile = { 'action': 'read', 'path': `${l}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
+                }; let par; const retNotification = await notification(infNotification);
+                const infFile = { 'action': 'read', 'path': `${conf[1]}:/ARQUIVOS/Projetos/Sniffer_Python/log/state.txt` };
                 const retFile = await file(infFile)
                 if (retFile.ret) {
                     par = `del "${l}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\log\\state.txt" && taskkill /IM "nodeSniffer.exe" /F`
-                    // par = `del "${l}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt" && taskkill /IM "nodeSniffer.exe" /F`
-                } else {
-                    par = `\"${l}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_PROGRAM.exe\"`
-                }
+                } else { par = `\"${l}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_PROGRAM.exe\"` }
                 const infApi = {
-                    url: `http://${wsHost}:${portWebSocket}/${device2}`,
-                    method: 'POST', headers: { 'accept-language': 'application/json' },
+                    url: `http://${wsHost}:${portWebSocket}/${device2}`, method: 'POST', headers: { 'accept-language': 'application/json' },
                     body: {
                         "fun": {
                             "securityPass": securityPass, "funRet": { "ret": true, },
                             "funRun": { "name": "commandLine", "par": { "background": false, "command": par } }
                         }
                     }
-                };
-                const retApi = await api(infApi);
+                }; const retApi = await api(infApi);
                 if (!gO.inf.sniffer) {
                     // const infNotification =
                     // {
@@ -101,16 +88,9 @@ if (typeof window !== 'undefined') { // CHROME
                     // };
                     // const retNotification = await notification(infNotification)
                     // gO.inf = { 'sniffer': 0 }
-                }
-                ret['ret'] = true;
-                ret['msg'] = `SHORTCUT PRESSED: OK`;
-            } else if (infShortcutPressed.shortcut == 'atalho_3') {
-                command3()
-                ret['ret'] = true;
-                ret['msg'] = `SHORTCUT PRESSED: OK`;
-            } else {
-                ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n`;
-            }
+                }; ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK`;
+            } else if (infShortcutPressed.shortcut == 'atalho_3') { command3(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
+            else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
         } catch (e) {
             ret['msg'] = regexE({ 'e': e }).res
         }
@@ -118,7 +98,7 @@ if (typeof window !== 'undefined') { // CHROME
         if (!ret.ret) {
             console.log(ret.msg)
             if (typeof window !== 'undefined') { // CHROME
-                const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }
+                const infConfigStorage = { 'action': 'del', 'key': 'webSocket' };
                 const retConfigStorage = await configStorage(infConfigStorage)
             }
         }
@@ -135,51 +115,35 @@ async function client(inf) {
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
         else { const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket } // NODEJS
 
-        const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }
-        let retConfigStorage = await configStorage(infConfigStorage)
+        const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
-        const wsHost = retConfigStorage.ws1
-        const portWebSocket = retConfigStorage.portWebSocket;
-        const device1 = retConfigStorage.device1.name
-        const securityPass = retConfigStorage.securityPass
+        const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
+        const device1 = retConfigStorage.device1.name; const securityPass = retConfigStorage.securityPass
 
         let ws1;
         async function web1() {
-            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
-            ws1.onerror = (e) => { };
-            ws1.onopen = () => {
-                console.log(`ON START: CONEXAO OK - WS1`);
-                setInterval(async () => {
-                    if (ws1.readyState === WebS.OPEN) {
-                        ws1.send('.');
-                    }
-                }, 60000);
-            }
+            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); let timeout
+            ws1.onerror = (e) => { clearTimeout(timeout) };
+            ws1.onopen = () => { clearTimeout(timeout); console.log(`ON START: CONEXAO OK - WS1`) }
             ws1.onclose = async (event) => {
-                console.log(`ON START: RECONEXAO EM 10 SEGUNDOS - WS1`);
+                clearTimeout(timeout); console.log(`ON START: RECONEXAO EM 10 SEGUNDOS - WS1`);
                 await new Promise(r => setTimeout(r, 10000)); web1()
             }
             ws1.onmessage = async (event) => {
-                let data, fun
-                try {
-                    data = JSON.parse(event.data);
-                    if (data.fun) { fun = true }
-                } catch (e) { }
+                let data, fun, infWebSocket
+                try { data = JSON.parse(event.data); if (data.fun) { fun = true }; if (data.infWebSocket) { infWebSocket = true } }
+                catch (e) { }
                 if (fun) {
                     let infWebSocketRet
                     if (data.retWs && data.retWs.res) {
                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
-                    } else {
-                        infWebSocketRet = { 'data': event.data }
-                    }
-                    const retWebSocketRet = webSocketRet(infWebSocketRet)
-                } else {
-                    console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`)
-                }
+                    } else { infWebSocketRet = { 'data': event.data } }; const retWebSocketRet = webSocketRet(infWebSocketRet)
+                } else if (infWebSocket) {
+                    if (data.infWebSocket.sec) { timeout = setTimeout(() => { ws1.send(data.infWebSocket.msg) }, data.infWebSocket.sec * 1000) }
+                } else { console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`) }
             }
         }
         web1()
-
     } catch (e) {
         ret['msg'] = regexE({ 'e': e }).res
     }
@@ -192,7 +156,7 @@ async function client(inf) {
         }
     }
 }
-// client()
+client()
 
 // const infSniffer = {  'arrUrl': ['*.vtt*'] }
 // const retSniffer = await sniffer(infSniffer)
@@ -208,8 +172,8 @@ let infConfigStorage, retConfigStorage;
 infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
 infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' }
 infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
-retConfigStorage = await configStorage(infConfigStorage)
-console.log(retConfigStorage)
+// retConfigStorage = await configStorage(infConfigStorage)
+// console.log(retConfigStorage)
 
 let infFile, retFile;
 infFile = { 'action': 'inf' }

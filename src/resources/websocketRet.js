@@ -30,7 +30,7 @@ async function webSocketRet(inf) {
         let WebS;
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
         else { const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket } // NODEJS
-        const infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'webSocket' }
+        const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }
         let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
         const data = JSON.parse(inf.data)
@@ -74,7 +74,7 @@ async function webSocketRet(inf) {
     if (!ret.ret) {
         console.log(ret.msg);
         if (typeof window !== 'undefined') { // CHROME
-            const infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'webSocket' }
+            const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }
             const retConfigStorage = await configStorage(infConfigStorage)
         }
     }

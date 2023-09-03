@@ -126,7 +126,7 @@ async function file(inf) {
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list'].includes(inf.action)) {
             ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
         } else {
-            if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf') {
+            if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {
                 ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'functionLocal' \n\n`;
             } else {
                 if (inf.action == 'write') { // ########################## WRITE
@@ -181,7 +181,7 @@ async function file(inf) {
                     }; _fs.unlinkSync(path); ret['ret'] = true; ret['msg'] = `FILE DEL: OK`;
                 } else if (inf.action == 'inf') { // ########################## INF
                     let jsonFile, functionLocal, file, e = JSON.stringify(new Error().stack).replace('at ', '')
-                    // [0] letra | [1] caminho do projeto atual | [2] path download/terminal | [3] arquivo atual
+                    // [0] config.json | [1] letra | [2] caminho do projeto atual | [3] path download/terminal | [4] arquivo atual
                     if (conf.length == 1) { // NOME DO PROJETO E TERMINAL
                         if (typeof window !== 'undefined') { // CHROME
                             functionLocal = chrome.runtime.getURL('').slice(0, -1)
@@ -487,11 +487,11 @@ if (typeof window !== 'undefined') { // CHROME
 }
 
 // ############### CLEAR CONSOLE ###############
-// console.clear(); let messageCount = 0; const clearConsole = console.log;
-// console.log = async function () {
-//     clearConsole.apply(console, arguments); messageCount++;
-//     if (messageCount >= 100) { console.clear(); messageCount = 0; console.log('CONSOLE LIMPO!') }
-// };
+console.clear(); let messageCount = 0; const clearConsole = console.log;
+console.log = async function () {
+    clearConsole.apply(console, arguments); messageCount++;
+    if (messageCount >= 100) { console.clear(); messageCount = 0; console.log('CONSOLE LIMPO!') }
+};
 // ############### ###############
 
 const infFile = { 'action': 'inf', 'functionLocal': false }; const retFile = await file(infFile);

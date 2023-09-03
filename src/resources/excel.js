@@ -9,7 +9,7 @@ async function excel(inf) {
     let ret = { 'ret': false };
     try {
         let clientRequestId, sessionId, transientEditSessionToken, infConfigStorage, retConfigStorage, lastRun
-        infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'excel' }
+        infConfigStorage = {  'action': 'get', 'key': 'excel' }
         retConfigStorage = await configStorage(infConfigStorage);
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
         if (retConfigStorage.ret) {
@@ -33,7 +33,7 @@ async function excel(inf) {
             retRegex = regex(infRegex)
             transientEditSessionToken = retRegex.res['1']
 
-            infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'excel', 'value': { 'clientRequestId': clientRequestId, 'sessionId': sessionId, 'transientEditSessionToken': transientEditSessionToken } }
+            infConfigStorage = {  'action': 'set', 'key': 'excel', 'value': { 'clientRequestId': clientRequestId, 'sessionId': sessionId, 'transientEditSessionToken': transientEditSessionToken } }
             retConfigStorage = await configStorage(infConfigStorage);
         }
 
@@ -94,7 +94,7 @@ async function excel(inf) {
                 ret['msg'] = `EXCEL: OK`;
                 ret['res'] = inf.inf;
             } else {
-                infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'excel' }
+                infConfigStorage = {  'action': 'del', 'key': 'excel' }
                 retConfigStorage = await configStorage(infConfigStorage)
                 ret['msg'] = `\n #### ERRO #### EXCEL \n NAO CONSEGUIU ENVIAR A INFORMACAO \n\n`;
                 let infNotification =
@@ -132,7 +132,7 @@ async function excel(inf) {
                 ret['msg'] = `EXCEL: OK`;
                 ret['res'] = res.Cells[0].Text;
             } else {
-                infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'excel' }
+                infConfigStorage = {  'action': 'del', 'key': 'excel' }
                 retConfigStorage = await configStorage(infConfigStorage)
                 ret['msg'] = `\n #### ERRO #### EXCEL \n NAO CONSEGUIU PEGAR A INFORMACAO \n\n`;
                 let infNotification =

@@ -10,7 +10,7 @@ async function chatGpt(inf) {
         let infConfigStorage, retConfigStorage
 
         if (inf.provider == 'ora.ai') {
-            infConfigStorage = { 'path': '/src/config.json', 'action': 'get', 'key': 'chatGptOra.ai' }
+            infConfigStorage = { 'action': 'get', 'key': 'chatGptOra.ai' }
             retConfigStorage = await configStorage(infConfigStorage)
             if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
             if (!retConfigStorage['cookie']) {
@@ -32,7 +32,7 @@ async function chatGpt(inf) {
                 const infGetCookies = { 'url': retTabSearch.res.url, 'cookieSearch': '__Secure-next-auth.session-token' }
                 const retGetCookies = await getCookies(infGetCookies)
                 if (!(retGetCookies.ret)) {
-                    infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'chatGptOra.ai' }
+                    infConfigStorage = { 'action': 'del', 'key': 'chatGptOra.ai' }
                     retConfigStorage = await configStorage(infConfigStorage)
                     if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
                     let infNotification =
@@ -48,7 +48,7 @@ async function chatGpt(inf) {
                     return ret
                 }
                 retConfigStorage['cookie'] = retGetCookies.res.concat;
-                infConfigStorage = { 'path': '/src/config.json', 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
+                infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
                 const retSETConfigStorage = await configStorage(infConfigStorage)
                 if (!retSETConfigStorage.ret) {
                     return ret
@@ -83,7 +83,7 @@ async function chatGpt(inf) {
                 ret['msg'] = `CHAT GPT AI: OK`;
                 ret['res'] = res.response;
             } else {
-                infConfigStorage = { 'path': '/src/config.json', 'action': 'del', 'key': 'chatGptOra.ai' }
+                infConfigStorage = { 'action': 'del', 'key': 'chatGptOra.ai' }
                 retConfigStorage = await configStorage(infConfigStorage)
                 let infNotification =
                 {
