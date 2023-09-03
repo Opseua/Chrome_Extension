@@ -1,6 +1,5 @@
 import('./src/onStart.js');
 
-
 // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
 // chrome.downloads.onChanged.addListener(async function (...inf) {
 //     if (inf[0].state && inf[0].state.current === "complete") {

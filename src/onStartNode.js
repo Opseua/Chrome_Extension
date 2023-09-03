@@ -10,7 +10,7 @@ async function client(inf) {
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
         else { const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket } // NODEJS
 
-        const infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'webSocket' }
+        const infConfigStorage = { 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/src/config.json`, 'action': 'get', 'key': 'webSocket' }
         let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
         const wsHost = retConfigStorage.ws1
@@ -22,7 +22,17 @@ async function client(inf) {
         async function web1() {
             let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device2}`);
             ws1.onerror = (e) => { };
-            ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
+            ws1.onopen = () => {
+                console.log(`ON START: CONEXAO OK - WS1`);
+                setInterval(async () => {
+                    if (ws1.readyState === WebS.OPEN) {
+                        ws1.send('.');
+                        let d = dateHour().res, n = `MES_${d.mon}/DIA_${d.day}/${d.tim} NODEJS`
+                        let infFile = { 'action': 'write', 'path': `log/WebSocket/${n}.txt`, 'rewrite': false, 'text': '.' }
+                        let retFile = await file(infFile)
+                    }
+                }, 60000);
+            };
             ws1.onclose = async (event) => {
                 console.log(`ON START: RECONEXAO EM 10 SEGUNDOS - WS1`);
                 await new Promise(r => setTimeout(r, 10000)); web1()
@@ -60,6 +70,5 @@ async function client(inf) {
         }
     }
 }
-client()
-
-
+//client()
+console.log('ONSTART', conf)

@@ -30,7 +30,6 @@ async function webSocketRet(inf) {
         let WebS;
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
         else { const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket } // NODEJS
-
         const infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'webSocket' }
         let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }

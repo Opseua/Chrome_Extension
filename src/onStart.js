@@ -37,7 +37,7 @@ if (typeof window !== 'undefined') { // CHROME
                 ret['ret'] = true;
                 ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_2') {
-                const infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'webSocket' }
+                const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }
                 let retConfigStorage = await configStorage(infConfigStorage)
                 if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
                 const wsHost = retConfigStorage.ws1
@@ -56,13 +56,13 @@ if (typeof window !== 'undefined') { // CHROME
                 };
                 let par
                 const retNotification = await notification(infNotification);
-                const infFile = { 'action': 'read', 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
+                const infFile = { 'action': 'read', 'path': `${l}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt` };
                 const retFile = await file(infFile)
                 if (retFile.ret) {
-                    par = `del "${letter}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\log\\state.txt" && taskkill /IM "nodeSniffer.exe" /F`
-                   // par = `del "${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt" && taskkill /IM "nodeSniffer.exe" /F`
+                    par = `del "${l}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\log\\state.txt" && taskkill /IM "nodeSniffer.exe" /F`
+                    // par = `del "${l}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/state.txt" && taskkill /IM "nodeSniffer.exe" /F`
                 } else {
-                    par = `\"${letter}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_PROGRAM.exe\"`
+                    par = `\"${l}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_PROGRAM.exe\"`
                 }
                 const infApi = {
                     url: `http://${wsHost}:${portWebSocket}/${device2}`,
@@ -118,7 +118,7 @@ if (typeof window !== 'undefined') { // CHROME
         if (!ret.ret) {
             console.log(ret.msg)
             if (typeof window !== 'undefined') { // CHROME
-                const infConfigStorage = { 'path': './src/config.json', 'action': 'del', 'key': 'webSocket' }
+                const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }
                 const retConfigStorage = await configStorage(infConfigStorage)
             }
         }
@@ -135,7 +135,7 @@ async function client(inf) {
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
         else { const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket } // NODEJS
 
-        const infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'webSocket' }
+        const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }
         let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
         const wsHost = retConfigStorage.ws1
@@ -147,7 +147,14 @@ async function client(inf) {
         async function web1() {
             let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
             ws1.onerror = (e) => { };
-            ws1.onopen = () => { console.log(`ON START: CONEXAO OK - WS1`) };
+            ws1.onopen = () => {
+                console.log(`ON START: CONEXAO OK - WS1`);
+                setInterval(async () => {
+                    if (ws1.readyState === WebS.OPEN) {
+                        ws1.send('.');
+                    }
+                }, 60000);
+            }
             ws1.onclose = async (event) => {
                 console.log(`ON START: RECONEXAO EM 10 SEGUNDOS - WS1`);
                 await new Promise(r => setTimeout(r, 10000)); web1()
@@ -180,12 +187,12 @@ async function client(inf) {
     if (!ret.ret) {
         console.log(ret.msg)
         if (typeof window !== 'undefined') { // CHROME
-            const infConfigStorage = { 'path': './src/config.json', 'action': 'del', 'key': 'webSocket' }
+            const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }
             const retConfigStorage = await configStorage(infConfigStorage)
         }
     }
 }
-client()
+// client()
 
 // const infSniffer = {  'arrUrl': ['*.vtt*'] }
 // const retSniffer = await sniffer(infSniffer)
@@ -198,21 +205,23 @@ client()
 // console.log(retExcel)
 
 let infConfigStorage, retConfigStorage;
-//infConfigStorage = { 'path': './src/config.json', 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-//infConfigStorage = { 'path': './src/config.json', 'action': 'get', 'key': 'NomeDaChave' }
-// infConfigStorage = { 'path': './src/config.json', 'action': 'del', 'key': 'NomeDaChave' }
-// retConfigStorage = await configStorage(infConfigStorage)
-// console.log(retConfigStorage)
+infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' }
+infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
+retConfigStorage = await configStorage(infConfigStorage)
+console.log(retConfigStorage)
 
 let infFile, retFile;
 infFile = { 'action': 'inf' }
-infFile = { 'action': 'relative', 'path': './PASTA/ola.txt' }
-// infFile = { 'action': 'write', 'path': './PASTA/ola.txt', 'rewrite': false, 'text': '1234\n' }
-infFile = { 'action': 'read', 'path': 'D:/Área de Trabalho/SRT.txt' }
-// infFile = { 'action': 'del', 'path': 'D:/Área de Trabalho/ola.txt' }
-// infFile = { 'action': 'list', 'path': 'D:/Área de Trabalho', 'max': 10 }
+infFile = { 'action': 'relative', 'functionLocal': false, 'path': './PASTA/ola.txt' }
+infFile = { 'action': 'read', 'functionLocal': true, 'path': './PASTA/ola.txt' }
+infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': false, 'text': '1234\n' }
+infFile = { 'action': 'del', 'functionLocal': true, 'path': './PASTA1/ola.txt' }
+infFile = { 'action': 'list', 'functionLocal': true, 'path': '.', 'max': 10 }
 // retFile = await file(infFile);
 // console.log(retFile)
-// console.log(p);
-// console.log(letter);
+
+
+
+
 
