@@ -31,9 +31,7 @@ async function peroptyxQIDC(inf) {
         }
         ret['ret'] = true;
         ret['msg'] = `PEROPTYX: OK`;
-    } catch (e) {
-        ret['msg'] = regexE({ 'e': e }).res
-    }
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
     if (!ret.ret) { console.log(ret.msg) }
     return ret
 }

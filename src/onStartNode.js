@@ -46,9 +46,7 @@ async function client(inf) {
             }
         }
         web1()
-    } catch (e) {
-        ret['msg'] = regexE({ 'e': e }).res
-    }
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
 
     if (!ret.ret) {
         console.log(ret.msg)

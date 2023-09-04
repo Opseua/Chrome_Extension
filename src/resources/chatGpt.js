@@ -91,9 +91,7 @@ async function chatGpt(inf) {
                 ret['ret'] = true;
             }
         }
-    } catch (e) {
-        ret['msg'] = regexE({ 'e': e }).res
-    }
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
     if (!ret.ret) { console.log(ret.msg) }
     return ret
 }

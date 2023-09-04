@@ -29,10 +29,8 @@ async function splitText(inf) {
         ret['msg'] = 'SPLIT TEXT: OK';
         ret['res'] = chunks;
 
-    } catch (e) {
-        ret['msg'] = regexE({ 'e': e }).res;
-    }
-    if(!ret.ret) { console.log(ret.msg) }
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 

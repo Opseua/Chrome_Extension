@@ -86,9 +86,7 @@ if (typeof window !== 'undefined') { // CHROME
                 }; ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_3') { command3(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
-        } catch (e) {
-            ret['msg'] = regexE({ 'e': e }).res
-        }
+        } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
 
         if (!ret.ret) {
             console.log(ret.msg)
@@ -139,9 +137,7 @@ async function client(inf) {
             }
         }
         web1()
-    } catch (e) {
-        ret['msg'] = regexE({ 'e': e }).res
-    }
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
 
     if (!ret.ret) {
         console.log(ret.msg)

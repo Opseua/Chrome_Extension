@@ -18,10 +18,7 @@ async function clipboard(inf) {
     document.body.removeChild(element);
     ret['ret'] = true;
     ret['msg'] = 'CLIPBOARD: OK';
-  } catch (e) {
-    ret['msg'] = regexE({ 'e': e }).res;
-  }
-
+  } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
   if (!ret.ret) { console.log(ret.msg) }
   return ret
 }

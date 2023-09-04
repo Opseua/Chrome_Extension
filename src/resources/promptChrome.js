@@ -13,10 +13,8 @@ async function promptChrome(inf) {
             ret['msg'] = 'PROMPT CHROME: OK';
             ret['res'] = retPrompt;
         }
-    } catch (e) {
-        ret['msg'] = regexE({ 'e': e }).res;
-    }
-    if(!ret.ret) { console.log(ret.msg) }
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
+    if (!ret.ret) { console.log(ret.msg) }
     return ret
 }
 

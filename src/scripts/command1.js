@@ -4,10 +4,7 @@ async function command1(inf) {
     const retPromptChrome = promptChrome(`NOME DO COMANDO`);
     ret['ret'] = true;
     ret['msg'] = `COMMAND 1: OK`;
-  } catch (e) {
-    ret['msg'] = regexE({ 'e': e }).res
-  }
-
+  } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
   if (!ret.ret) { console.log(ret.msg) }
   return ret
 }
