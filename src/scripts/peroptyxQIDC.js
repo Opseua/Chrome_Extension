@@ -15,24 +15,18 @@ async function peroptyxQIDC(inf) {
         if (retSniffer.targetLocalIds.length == 1) {
             infNotification =
             {
-                'duration': 4,
-                'type': 'basic',
+                'duration': 4, 'iconUrl': './src/media/notification_3.png',
                 'title': `BLIND`,
                 'message': `${retSniffer.tasks[0].taskData.query}`,
-                'iconUrl': "./src/media/notification_3.png",
-                'buttons': [],
-            };
+            }
             retNotification = await notification(infNotification)
         } else {
             infNotification =
             {
-                'duration': 2,
-                'type': 'basic',
+                'duration': 2, 'iconUrl': './src/media/notification_1.png',
                 'title': `NÃO BLIND`,
                 'message': `${retSniffer.tasks[0].taskData.query}`,
-                'iconUrl': "./src/media/notification_1.png",
-                'buttons': [],
-            };
+            }
             retNotification = await notification(infNotification)
         }
         ret['ret'] = true;

@@ -13,13 +13,10 @@ async function peroptyxSearch2_0(inf) {
         if (!retSniffer.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
             infNotification =
             {
-                'duration': 1,
-                'type': 'basic',
+                'duration': 1, 'iconUrl': './src/media/notification_3.png',
                 'title': `NÃO TEM A RESPOSTA`,
                 'message': `Avaliar manualmente`,
-                'iconUrl': "./src/media/notification_3.png",
-                'buttons': [],
-            };
+            }
             retNotification = await notification(infNotification)
         }
         else {
@@ -52,13 +49,10 @@ async function peroptyxSearch2_0(inf) {
                         not = false
                         infNotification =
                         {
-                            'duration': 1,
-                            'type': 'basic',
+                            'duration': 1, 'iconUrl': './src/media/icon_4.png',
                             'title': `AGUARDE...`,
-                            'message': `Traduzindo e alterando o comentário`,
-                            'iconUrl': "./src/media/icon_4.png",
-                            'buttons': [],
-                        };
+                            'message': `Avaliar manualTraduzindo e alterando o comentário`,
+                        }
                         retNotification = await notification(infNotification)
                     }
 
@@ -97,13 +91,10 @@ async function peroptyxSearch2_0(inf) {
 
             infNotification =
             {
-                'duration': 2,
-                'type': 'basic',
+                'duration': 2, 'iconUrl': './src/media/notification_1.png',
                 'title': `CONCLUÍDO: na área de transferência`,
-                'message': JSON.stringify(res, null, 2),
-                'iconUrl': "./src/media/notification_1.png",
-                'buttons': [],
-            };
+                'message': `${JSON.stringify(res, null, 2)}`,
+            }
             retNotification = await notification(infNotification)
 
             infClipboard = { 'value': JSON.stringify(res, null, 2) }

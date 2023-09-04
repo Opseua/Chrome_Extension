@@ -34,25 +34,26 @@ if (typeof window !== 'undefined') { // CHROME
             if (infShortcutPressed.shortcut == 'atalho_1') { command1(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else if (infShortcutPressed.shortcut == 'atalho_2') {
                 const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }
-                const retConfigStorage = await configStorage(infConfigStorage)
+                let retConfigStorage = await configStorage(infConfigStorage)
                 if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
                 const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
                 const device1 = retConfigStorage.device1.name; const device2 = retConfigStorage.device2.name
                 const securityPass = retConfigStorage.securityPass
                 const infNotification =
                 {
-                    'duration': 4,
-                    'type': 'basic',
+                    'duration': 4, 'iconUrl': './src/media/icon_3.png',
                     'title': `AGUARDE...`,
                     'message': `Alternando sniffer`,
-                    'iconUrl': "./src/media/icon_3.png",
-                    'buttons': [],
                 }; let par; const retNotification = await notification(infNotification);
                 const infFile = { 'action': 'read', 'path': `${conf[1]}:/ARQUIVOS/Projetos/Sniffer_Python/log/state.txt` };
                 const retFile = await file(infFile)
+                par = `"${conf[1]}:\\ARQUIVOS\\WINDOWS\\BAT\\RUN_PORTABLE\\1_BACKGROUND.exe"`
                 if (retFile.ret) {
-                    par = `del "${l}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\log\\state.txt" && taskkill /IM "nodeSniffer.exe" /F`
-                } else { par = `\"${l}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_PROGRAM.exe\"` }
+                    par = `${par} "del "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\log\\state.txt" &&`
+                    par = `${par} taskkill /IM \"nodeSniffer.exe\" /F\"`
+                } else {
+                    par = `${par} "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\2_SCRIPT.bat"`
+                }
                 const infApi = {
                     url: `http://${wsHost}:${portWebSocket}/${device2}`, method: 'POST', headers: { 'accept-language': 'application/json' },
                     body: {
@@ -65,12 +66,9 @@ if (typeof window !== 'undefined') { // CHROME
                 if (!gO.inf.sniffer) {
                     // const infNotification =
                     // {
-                    //     'duration': 2,
-                    //     'type': 'basic',
+                    //      'duration': 2, 'iconUrl': './src/media/icon_3.png',
                     //     'title': `RODANDO`,
                     //     'message': `OneForma | Peroptyx`,
-                    //     'iconUrl': "./src/media/icon_3.png",
-                    //     'buttons': [],
                     // };
                     // const retNotification = await notification(infNotification)
                     // command2();
@@ -79,12 +77,9 @@ if (typeof window !== 'undefined') { // CHROME
                     //gO.inf = { 'sniffer': 2 }
                     // const infNotification =
                     // {
-                    //     'duration': 2,
-                    //     'type': 'basic',
+                    //      'duration': 2, 'iconUrl': './src/media/icon_3.png',
                     //     'title': `PAROU`,
                     //     'message': `OneForma | Peroptyx`,
-                    //     'iconUrl': "./src/media/icon_3.png",
-                    //     'buttons': [],
                     // };
                     // const retNotification = await notification(infNotification)
                     // gO.inf = { 'sniffer': 0 }

@@ -51,24 +51,18 @@ async function oneFormaMTPE(inf) {
             if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
                 infNotification =
                 {
-                    'duration': 2,
-                    'type': 'basic',
+                    'duration': 2, 'iconUrl': '/src/media/notification_2.png',
                     'title': `PULAR`,
-                    'message': `Mesmo texto`,
-                    'iconUrl': "./src/media/notification_2.png",
-                    'buttons': [],
+                    'message': 'Mesmo texto',
                 };
                 retNotification = await notification(infNotification)
             }
             else {
                 infNotification =
                 {
-                    'duration': 2,
-                    'type': 'basic',
+                    'duration': 2, 'iconUrl': './src/media/notification_1.png',
                     'title': `CONCLUÍDO`,
                     'message': `pt → ${retRegex1.res['1']}`,
-                    'iconUrl': "./src/media/notification_1.png",
-                    'buttons': [],
                 };
                 retNotification = await notification(infNotification)
 
@@ -77,24 +71,18 @@ async function oneFormaMTPE(inf) {
                 if ((firstA === firstA.toUpperCase()) && !(firstB === firstB.toUpperCase())) {
                     infNotification =
                     {
-                        'duration': 4,
-                        'type': 'basic',
+                        'duration': 4, 'iconUrl': './src/media/notification_3.png',
                         'title': `ALERTA`,
                         'message': `Conferir primeira letra!`,
-                        'iconUrl': "./src/media/notification_3.png",
-                        'buttons': [],
                     };
                     retNotification = await notification(infNotification)
                 } else if (!(firstA === firstA.toUpperCase()) && (firstB === firstB.toUpperCase())) {
                     infNotification =
                     {
-                        'duration': 4,
-                        'type': 'basic',
+                        'duration': 4, 'iconUrl': './src/media/notification_3.png',
                         'title': `ALERTA`,
                         'message': `Conferir primeira letra!`,
-                        'iconUrl': "./src/media/notification_3.png",
-                        'buttons': [],
-                    };
+                    }
                     retNotification = await notification(infNotification)
                 }
             }
@@ -102,13 +90,10 @@ async function oneFormaMTPE(inf) {
         } else {
             infNotification =
             {
-                'duration': 2,
-                'type': 'basic',
+                'duration': 4, 'iconUrl': './src/media/notification_3.png',
                 'title': `PULAR`,
                 'message': `Erro ao alterar texto`,
-                'iconUrl': "./src/media/notification_3.png",
-                'buttons': [],
-            };
+            }
             retNotification = await notification(infNotification)
         }
         ret['ret'] = true;
