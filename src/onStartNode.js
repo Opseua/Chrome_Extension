@@ -52,8 +52,7 @@ async function client(inf) {
         console.log(ret.msg)
         log(`ONSTART NODEJS: ${ret.msg}`)
         if (typeof window !== 'undefined') { // CHROME
-            const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }
-            const retConfigStorage = await configStorage(infConfigStorage)
+            const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }; const retConfigStorage = await configStorage(infConfigStorage)
         }
     }
 }

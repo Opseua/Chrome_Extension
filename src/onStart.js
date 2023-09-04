@@ -91,11 +91,9 @@ if (typeof window !== 'undefined') { // CHROME
         if (!ret.ret) {
             console.log(ret.msg)
             if (typeof window !== 'undefined') { // CHROME
-                const infConfigStorage = { 'action': 'del', 'key': 'webSocket' };
-                const retConfigStorage = await configStorage(infConfigStorage)
+                const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }; const retConfigStorage = await configStorage(infConfigStorage)
             }
-        }
-        return ret
+        }; return ret
     });
 }
 
@@ -142,8 +140,7 @@ async function client(inf) {
     if (!ret.ret) {
         console.log(ret.msg)
         if (typeof window !== 'undefined') { // CHROME
-            const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }
-            const retConfigStorage = await configStorage(infConfigStorage)
+            const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }; const retConfigStorage = await configStorage(infConfigStorage)
         }
     }
 }
