@@ -29,21 +29,16 @@ async function webSocketRet(inf) {
     try {
         let WebS;
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
-        else { const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket } // NODEJS
-        const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }
-        let retConfigStorage = await configStorage(infConfigStorage)
+        else { const { default: WebSocket } = await import('ws'); WebS = WebSocket } // NODEJS
+        const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
-        const data = JSON.parse(inf.data)
-        const wsHost = retConfigStorage.ws1
-        const portWebSocket = retConfigStorage.portWebSocket;
-        const device0Ret = retConfigStorage.device0.ret
-        const securityPass = retConfigStorage.securityPass
+        const data = JSON.parse(inf.data); const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
+        const device0Ret = retConfigStorage.device0.ret; const securityPass = retConfigStorage.securityPass
         if (data.fun && data.fun.securityPass && data.fun.securityPass == securityPass && data.fun.funRun && data.fun.funRun.name && data.fun.funRun.par) {
             function label(pro) { return typeof (typeof window !== 'undefined' ? window : global)[pro] === 'function' }
             const searchFun = label(data.fun.funRun.name)
-            if (!searchFun) {
-                ret['msg'] = `FUNCAO '${data.fun.funRun.name}' NAO EXITE`;
-            } else {
+            if (!searchFun) { ret['msg'] = `FUNCAO '${data.fun.funRun.name}' NAO EXITE` }
+            else {
                 let name
                 if (typeof window !== 'undefined') { // CHROME
                     name = window[data.fun.funRun.name];

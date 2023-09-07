@@ -3,9 +3,7 @@ console.log('onStart')
 
 if (typeof window !== 'undefined') { // CHROME
     const keys = ['webSocket', 'chatGptOra.ai', 'sniffer'];
-    for (const key of keys) {
-        const infConfigStorage = { 'action': 'del', 'key': key }; const retConfigStorage = await configStorage(infConfigStorage);
-    }
+    for (const key of keys) { const infConfigStorage = { 'action': 'del', 'key': key }; const retConfigStorage = await configStorage(infConfigStorage) }
     await chromeActions({ 'action': 'badge', 'inf': { 'text': '' } })
     chrome.downloads.onChanged.addListener(async function (...inf) { // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
         if (inf[0].state && inf[0].state.current === "complete") {
@@ -33,8 +31,7 @@ if (typeof window !== 'undefined') { // CHROME
             const infShortcutPressed = { 'shortcut': inf[0] }
             if (infShortcutPressed.shortcut == 'atalho_1') { command1(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else if (infShortcutPressed.shortcut == 'atalho_2') {
-                const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }
-                let retConfigStorage = await configStorage(infConfigStorage)
+                const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
                 if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
                 const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
                 const device1 = retConfigStorage.device1.name; const device2 = retConfigStorage.device2.name
@@ -51,9 +48,7 @@ if (typeof window !== 'undefined') { // CHROME
                 if (retFile.ret) {
                     par = `${par} "del "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\log\\state.txt" &&`
                     par = `${par} taskkill /IM \"nodeSniffer.exe\" /F\"`
-                } else {
-                    par = `${par} "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\2_SCRIPT.bat"`
-                }
+                } else { par = `${par} "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_BACKGROUND.exe"` }
                 const infApi = {
                     url: `http://${wsHost}:${portWebSocket}/${device2}`, method: 'POST', headers: { 'accept-language': 'application/json' },
                     body: {
@@ -104,7 +99,7 @@ async function client(inf) {
     try {
         let WebS; ret['ret'] = true;
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
-        else { const { default: WebSocket } = await import('isomorphic-ws'); WebS = WebSocket } // NODEJS
+        else { const { WebSocketServer } = await import('ws'); WebS = WebSocketServer } // NODEJS
 
         const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
@@ -113,24 +108,18 @@ async function client(inf) {
 
         let ws1;
         async function web1() {
-            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); let timeout
-            ws1.onerror = (e) => { clearTimeout(timeout) };
-            ws1.onopen = () => { clearTimeout(timeout); console.log(`ON START: CONEXAO OK - WS1`) }
-            ws1.onclose = async (event) => {
-                clearTimeout(timeout); console.log(`ON START: RECONEXAO EM 10 SEGUNDOS - WS1`);
-                await new Promise(r => setTimeout(r, 10000)); web1()
-            }
+            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
+            ws1.onerror = (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
+            ws1.onclose = async (event) => { console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`); await new Promise(r => setTimeout(r, 10000)); web1() }
             ws1.onmessage = async (event) => {
-                let data, fun, infWebSocket
-                try { data = JSON.parse(event.data); if (data.fun) { fun = true }; if (data.infWebSocket) { infWebSocket = true } }
+                let data, fun
+                try { data = JSON.parse(event.data); if (data.fun) { fun = true } }
                 catch (e) { }
                 if (fun) {
                     let infWebSocketRet
                     if (data.retWs && data.retWs.res) {
                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
                     } else { infWebSocketRet = { 'data': event.data } }; const retWebSocketRet = webSocketRet(infWebSocketRet)
-                } else if (infWebSocket) {
-                    if (data.infWebSocket.sec) { timeout = setTimeout(() => { ws1.send(data.infWebSocket.msg) }, data.infWebSocket.sec * 1000) }
                 } else { console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`) }
             }
         }

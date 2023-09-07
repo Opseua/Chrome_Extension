@@ -1,22 +1,13 @@
-// const infCommandLine = { 'background': true, 'command': 'notepad' } // 'background' 'false' → CODIGO FICA PRESO ATE TERMINAR O PROCESSO 
+// const infCommandLine = { 'command': 'notepad' }
 // const retCommandLine = await commandLine(infCommandLine)
 // console.log(retCommandLine)
 
 let run
-if (typeof window == 'undefined') {
-    const { exec } = await import('child_process');
-    run = exec;
-}
+if (typeof window == 'undefined') { const { exec } = await import('child_process'); run = exec }
 
 async function commandLine(inf) {
     let ret = { 'ret': false };
-
-    let command;
-    if (inf.background) {
-        command = `"${letter}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/4_BACKGROUND.exe" ${inf.command}`;
-    } else {
-        command = `${inf.command}`;
-    }
+    let command = `"${conf[1]}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/1_BACKGROUND.exe" ${inf.command}`;
     const retorno = new Promise((resolve, reject) => {
         run(command, { maxBuffer: 1024 * 5000 }, (err, stdout, stderr) => {
             if (err) {
@@ -26,7 +17,6 @@ async function commandLine(inf) {
             }
         });
     });
-
     return retorno
         .then((result) => {
             ret['ret'] = true;
