@@ -318,9 +318,15 @@ async function configStorage(inf) {
                     }
                 }
             } else { // ################## NODE
-                const infFile = { 'action': 'relative', 'path': conf[0], 'functionLocal': true }
-                const retFile = await file(infFile); if (!retFile.ret) { return }; const path = retFile.res
-                const configFile = _fs.readFileSync(path[0]); const config = JSON.parse(configFile);
+                let infFile, retFile, config, path, ret_Fs = false
+                if (inf.path && inf.path.includes(':')) { path = inf.path }
+                else {
+                    if (inf.path && typeof inf.functionLocal === 'boolean') {
+                        infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal }
+                    } else { infFile = { 'action': 'relative', 'path': conf[0], 'functionLocal': true } }
+                    retFile = await file(infFile); path = retFile.res[0]
+                }; try { await _fs.promises.access(path); ret_Fs = true } catch (e) { }
+                if (ret_Fs) { const configFile = _fs.readFileSync(path); config = JSON.parse(configFile) } else { config = {} }
                 if (inf.action == 'set') { // CONFIG: SET
                     try {
                         if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG SET \n INFORMAR A 'key' \n\n`; }
@@ -328,14 +334,15 @@ async function configStorage(inf) {
                             ret['msg'] = `\n #### ERRO #### CONFIG SET \n INFORMAR O 'value' \n\n`;
                         } else {
                             ret['ret'] = true; ret['msg'] = `CONFIG SET: OK`; config[inf.key] = inf.value;
-                            _fs.writeFileSync(path[0], JSON.stringify(config, null, 2));
+                            _fs.writeFileSync(path, JSON.stringify(config, null, 2));
                         }
                     } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
                 } else if (inf.action == 'get') { // #### CONFIG NODE: GET
                     try {
                         if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG GET \n INFORMAR A 'key' \n\n`; }
                         else {
-                            if (config[inf.key]) { ret['ret'] = true; ret['msg'] = `CONFIG GET: OK`; ret['res'] = config[inf.key]; }
+                            if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
+                            else if (config[inf.key]) { ret['ret'] = true; ret['msg'] = `CONFIG GET: OK`; ret['res'] = config[inf.key]; }
                             else { ret['msg'] = `\n #### ERRO #### CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                         }
                     } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
@@ -343,9 +350,10 @@ async function configStorage(inf) {
                     try {
                         if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG DEL \n INFORMAR A 'key' \n\n`; }
                         else {
-                            if (config[inf.key]) {
+                            if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
+                            else if (config[inf.key]) {
                                 ret['ret'] = true; ret['msg'] = `CONFIG DEL: OK`; delete config[inf.key];
-                                _fs.writeFileSync(path[0], JSON.stringify(config, null, 2));
+                                _fs.writeFileSync(path, JSON.stringify(config, null, 2));
                             } else { ret['msg'] = `\n #### ERRO #### CONFIG DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                         }
                     } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
@@ -358,13 +366,26 @@ async function configStorage(inf) {
 function dateHour() { // NAO POR COMO 'async'!!!
     let ret = { 'ret': false };
     try {
-        const date1 = new Date(); const date2 = Date.now(); ret['ret'] = true; ret['msg'] = `DATE HOUR: OK`;
+        const date1 = new Date(); const date2 = Date.now();
         ret['res'] = {
             'day': String(date1.getDate()).padStart(2, '0'), 'mon': String(date1.getMonth() + 1).padStart(2, '0'),
             'yea': String(date1.getFullYear()), 'hou': String(date1.getHours()).padStart(2, '0'),
             'min': String(date1.getMinutes()).padStart(2, '0'), 'sec': String(date1.getSeconds()).padStart(2, '0'),
-            'mil': String(date2.toString().slice(-3)), 'tim': String(date2.toString().slice(0, -3))
+            'mil': String(date2.toString().slice(-3)), 'tim': String(date2.toString().slice(0, -3)), 'timMil': String(date2.toString()),
+            'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][date1.getMonth()]
         }; // manter o 'String' para forcar o '0' (zero) na frente → '001'
+        ret['ret'] = true; ret['msg'] = `DATE HOUR: OK`
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret) { console.log(ret.msg) }; return ret
+}
+
+function secToHour(inf) { // NAO POR COMO 'async'!!!
+    let ret = { 'ret': false };
+    try {
+        const hou = Math.floor(inf / 3600).toString().padStart(2, "0");
+        const min = Math.floor((inf % 3600) / 60).toString().padStart(2, "0");
+        const sec = (inf % 60).toString().padStart(2, "0");
+        ret['res'] = String(`${hou}:${min}:${sec}`) // manter o 'String' para forcar o '0' (zero) na frente → '001'
+        ret['ret'] = true; ret['msg'] = `SEC TO HOUR: OK`
     } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
@@ -456,11 +477,11 @@ if (typeof window !== 'undefined') { // CHROME
 }
 
 // ############### CLEAR CONSOLE ###############
-console.clear(); let messageCount = 0; const clearConsole = console.log;
-console.log = async function () {
-    clearConsole.apply(console, arguments); messageCount++;
-    if (messageCount >= 100) { console.clear(); messageCount = 0; console.log('CONSOLE LIMPO!') }
-};
+// console.clear(); let messageCount = 0; const clearConsole = console.log;
+// console.log = async function () {
+//     clearConsole.apply(console, arguments); messageCount++;
+//     if (messageCount >= 100) { console.clear(); messageCount = 0; console.log('CONSOLE LIMPO!') }
+// };
 // ############### ###############
 
 const infFile = { 'action': 'inf', 'functionLocal': false }; const retFile = await file(infFile);
@@ -468,7 +489,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['g'] = {}; window['p'] = p; window['conf'] = retFile.res;
     // ## functions
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage;
-    window['dateHour'] = dateHour; window['regex'] = regex; window['random'] = random;
+    window['dateHour'] = dateHour; window['secToHour'] = secToHour; window['regex'] = regex; window['random'] = random;
     window['regexE'] = regexE; window['gO'] = gO; window['gOAdd'] = gOAdd;
     window['gORem'] = gORem; window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret;
     // ## resources
@@ -484,7 +505,7 @@ if (typeof window !== 'undefined') { // CHROME
     global['g'] = {}; global['p'] = p; global['conf'] = retFile.res;
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage; global['dateHour'] = dateHour;
-    global['regex'] = regex; global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
+    global['secToHour'] = secToHour; global['regex'] = regex; global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
     global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj; global['jsonInterpret'] = jsonInterpret;
     // ## resources
     global['chatGpt'] = chatGpt; global['clipboard'] = clipboard; global['excel'] = excel;

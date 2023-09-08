@@ -11,7 +11,7 @@ async function client(inf) {
 
         async function log(inf) {
             let infFile, retFile; const dH = dateHour().res
-            const folder = `MES_${dH.mon}`; const text = `DIA_${dH.day} ${dH.hou}:${dH.min}:${dH.sec}:${dH.mil} - ${inf}\n`
+            const folder = `MES_${dH.mon}_${dH.monNam}`; const text = `DIA_${dH.day} ${dH.hou}:${dH.min}:${dH.sec}:${dH.mil} - ${inf}\n`
             infFile = { 'action': 'write', 'functionLocal': true, 'path': `./log/WebSocket/${folder}/log.txt`, 'rewrite': true, 'text': text }
             retFile = await file(infFile);
         }; log('ONSTART NODEJS: START')
