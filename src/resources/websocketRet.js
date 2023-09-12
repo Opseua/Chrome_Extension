@@ -62,6 +62,7 @@ async function webSocketRet(inf) {
             }
         } else {
             ret['msg'] = `\n #### NAO RODAR ####  NAO RODAR \n\n ${inf.data} \n\n`;
+            retLog = await log({ 'folder': '###_JS_###', 'file': `MSG_WebSocket.txt`, 'text': inf.data })
         }
     } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
     if (!ret.ret) {

@@ -53,7 +53,7 @@ async function setTag(inf) {
         ret['ret'] = true;
         ret['msg'] = 'SET TAG: OK';
         ret['res'] = retSetTag;
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

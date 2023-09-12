@@ -165,7 +165,7 @@ async function tabSearch(inf) {
             }
         }
     }
-    if (!ret.ret) { console.log(ret.msg) }
+    if (!ret.ret && ret.msg) { console.log(ret.msg) }
     return ret
 }
 
