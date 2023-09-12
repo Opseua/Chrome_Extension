@@ -443,9 +443,10 @@ async function regexE(inf) {
         if (match && match.length == 3) { ret['res'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
         else { ret['res'] = `\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` };
         if (typeof window == 'undefined') {
-            let time = dateHour().res, path = `MES_${time.mon}_${time.monNam}/DIA_${time.day}/${time.hou}.${time.min}.${time.sec}.${time.mil}`
-            path = `${conf[1]}:/${conf[3]}/log/###_JS_###/${path}_regexE.txt`; _fs.mkdirSync(_path.dirname(path), { recursive: true })
-            _fs.writeFileSync(path, JSON.stringify(ret, null, 2), { flag: 'a' });
+            // let time = dateHour().res, path = `MES_${time.mon}_${time.monNam}/DIA_${time.day}/${time.hou}.${time.min}.${time.sec}.${time.mil}`
+            // path = `${conf[1]}:/${conf[3]}/log/###_JS_###/${path}_regexE.txt`; _fs.mkdirSync(_path.dirname(path), { recursive: true })
+            // _fs.writeFileSync(path, JSON.stringify(ret, null, 2), { flag: 'a' });
+            const retLog = await log({ 'folder': '###_JS_###', 'file': `_regexE.txt`, 'text': ret })
         }
     } catch (e) {
         const match = e.stack.match(/(\w+\.\w+):(\d+):\d+/);
@@ -468,12 +469,11 @@ async function jsonInterpret(inf) {
 async function log(inf) {
     let ret = { 'ret': false };
     try {
-        let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`, hou = `${time.hou}.${time.min}.${time.sec}`, pathOk
+        let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`, hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, pathOk
         pathOk = `log/${inf.folder}`; if (inf.file.includes('timeLastGet')) { pathOk = `${pathOk}/${inf.file}` }
-        else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }
-        infFile = { 'action': 'write', 'functionLocal': false, 'text': inf.text, 'rewrite': false, 'path': pathOk };
-        retFile = await file(infFile); ret['ret'] = true
-        ret['msg'] = `LOG: OK`; ret['res'] = `${conf[1]}:/${conf[3]}/${pathOk}`
+        else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }; ret['ret'] = true
+        const infFile = { 'action': 'write', 'functionLocal': false, 'text': inf.text, 'rewrite': false, 'path': pathOk };
+        const retFile = await file(infFile); ret['msg'] = `LOG: OK`; ret['res'] = `${conf[1]}:/${conf[3]}/${pathOk}`
     } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
