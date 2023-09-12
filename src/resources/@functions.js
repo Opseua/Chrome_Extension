@@ -151,11 +151,8 @@ async function file(inf) {
                                 conflictAction: 'overwrite' // 'overwrite' LIMPA | 'uniquify' (ADICIONA (1), (2), (3)... NO FINAL)
                             }; chrome.downloads.download(downloadOptions);
                         } else { // NODEJS
-                            async function createFolder(f) {
-                                const p = _path.normalize(f); const d = p.split(_path.sep); let cF = '';
-                                for (let dir of d) { cF += dir + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF) } }; return true;
-                            }; const folderPath = _path.dirname(path); await createFolder(folderPath);
-                            await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' }); // 'w' limpa | 'a' adiciona
+                            await _fs.promises.mkdir(_path.dirname(path), { recursive: true })
+                            await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' });
                         }; ret['ret'] = true; ret['msg'] = `FILE WRITE: OK`;
                     }
                 } else if (inf.action == 'read') { // ########################## READ
@@ -167,14 +164,14 @@ async function file(inf) {
                     if (typeof window !== 'undefined') { // CHROME
                         if (!inf.functionLocal) { path = `file:///${path}` }
                         retFetch = await fetch(path.replace('%', '')); retFetch = await retFetch.text()
-                    } else { retFetch = _fs.readFileSync(path, 'utf8'); }; // NODEJS
+                    } else { retFetch = await _fs.promises.readFile(path, 'utf8') } // NODEJS
                     ret['ret'] = true; ret['msg'] = `FILE READ: OK`; ret['res'] = retFetch;
                 } else if (inf.action == 'del' && typeof window == 'undefined') { // ########################## DEL
                     let infFile, retFile, path; if (inf.path.includes(':')) { path = inf.path }
                     else {
                         infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal }; retFile = await file(infFile);
                         path = retFile.res[0]
-                    }; _fs.unlinkSync(path); ret['ret'] = true; ret['msg'] = `FILE DEL: OK`;
+                    }; await _fs.promises.unlink(path); ret['ret'] = true; ret['msg'] = `FILE DEL: OK`;
                 } else if (inf.action == 'inf') { // ########################## INF
                     let jsonFile, functionLocal, file, e = JSON.stringify(new Error().stack).replace('at ', '')
                     // [0] config.json | [1] letra | [2] caminho do projeto atual | [3] path download/terminal | [4] arquivo atual
@@ -185,12 +182,13 @@ async function file(inf) {
                             const text = e; const pattern = new RegExp(`at ${functionLocal}/(.*?)\\.js`)
                             const res = text.match(pattern); file = res[1]; conf = [conf[0], jsonFile[0], functionLocal, jsonFile[1], file]
                         } else { // NODEJS
-                            function w(c) {
-                                while (true) { if (['package.json'].some(file => _fs.existsSync(_path.join(c, file)))) { return c }; const p = _path.dirname(c); if (p == c) { return null } c = p }
-                            };
-                            functionLocal = e.match(/ file:\/\/\/(.*?)\.js:/)[1]; file = functionLocal.charAt(0).toUpperCase() + functionLocal.slice(1); functionLocal = w(file);
-                            file = file.replace(`${functionLocal}/`, ''); jsonFile = JSON.parse(_fs.readFileSync(`${functionLocal}/${conf}`, 'utf8')).conf
-                            conf = [conf[0], jsonFile[0], functionLocal.replace(`${jsonFile[0]}:/`, ''), process.cwd().replace(/\\/g, '/').replace(`${jsonFile[0]}:/`, ''), file]
+                            functionLocal = e.match(/ file:\/\/\/(.*?)\.js:/)[1]; file = functionLocal.charAt(0).toUpperCase() + functionLocal.slice(1);
+                            async function getRoot(inf) {
+                                try { await _fs.promises.access(`${inf}/package.json`); return inf }
+                                catch { const p = inf.split('/').slice(0, -1).join('/'); return p == inf ? null : getRoot(p) }
+                            }; functionLocal = await getRoot(file);
+                            file = file.replace(`${functionLocal}/`, ''); jsonFile = await _fs.promises.readFile(`${functionLocal}/${conf}`, 'utf8'); jsonFile = JSON.parse(jsonFile).conf
+                            conf = [conf[0], jsonFile[0], functionLocal.replace(`${jsonFile[0]}:/`, ''), process.cwd().replace(/\\/g, '/').replace(`${jsonFile[0]}:/`, ''), `${file}.js`]
                         }
                     } else { // NOME DO ARQUIVO
                         const text = e; const pattern = new RegExp(`at.*?${typeof window !== 'undefined' ? conf[2] : conf[3]}(.*?)\\.js`)
@@ -268,8 +266,8 @@ async function configStorage(inf) {
                             const data = {}; data[inf.key] = inf.value;
                             chrome.storage.local.set(data, async () => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE \n ${chrome.runtime.lastError} \n\n`;
-                                } else { ret['ret'] = true; ret['msg'] = 'STORAGE: OK' }; resolve(ret);
+                                    ret['msg'] = `\n #### ERRO #### STORAGE SET \n ${chrome.runtime.lastError} \n\n`;
+                                } else { ret['ret'] = true; ret['msg'] = 'STORAGE SET: OK' }; resolve(ret);
                             });
                         });
                     }
@@ -279,7 +277,7 @@ async function configStorage(inf) {
                         return new Promise((resolve) => {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE \n ${chrome.runtime.lastError} \n\n`;
+                                    ret['msg'] = `\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length == 0) {
                                     async function checkConfig() {
                                         const infFile = { 'action': 'read', 'path': conf[0], 'functionLocal': true }
@@ -290,13 +288,13 @@ async function configStorage(inf) {
                                                 chrome.storage.local.set(data, async () => {
                                                     if (chrome.runtime.lastError) {
                                                         ret['msg'] = `\n #### ERRO #### STORAGE SET* \n ${chrome.runtime.lastError} \n\n`;
-                                                    } else { ret['ret'] = true; ret['msg'] = 'STORAGE: OK'; ret['res'] = config[inf.key] }
+                                                    } else { ret['ret'] = true; ret['msg'] = 'STORAGE GET: OK'; ret['res'] = config[inf.key] }
                                                     resolve(ret);
                                                 });
                                             })
-                                        } else { ret['msg'] = `\n #### ERRO #### STORAGE \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
+                                        } else { ret['msg'] = `\n #### ERRO #### STORAGE GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                                     }; await checkConfig()
-                                } else { ret['ret'] = true; ret['msg'] = 'STORAGE: OK'; ret['res'] = result[inf.key] }; resolve(ret);
+                                } else { ret['ret'] = true; ret['msg'] = 'STORAGE GET: OK'; ret['res'] = result[inf.key] }; resolve(ret);
                             });
                         });
                     }
@@ -306,12 +304,12 @@ async function configStorage(inf) {
                         return new Promise((resolve) => {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE \n ${chrome.runtime.lastError} \n\n`;
+                                    ret['msg'] = `\n #### ERRO #### STORAGE DEL \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length == 0) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
+                                    ret['msg'] = `\n #### ERRO #### STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                                 } else {
                                     chrome.storage.local.remove(inf.key, async () => { });
-                                    ret['ret'] = true; ret['msg'] = 'STORAGE: OK';
+                                    ret['ret'] = true; ret['msg'] = 'STORAGE DEL: OK';
                                 }; resolve(ret);
                             }); return
                         });
@@ -326,36 +324,30 @@ async function configStorage(inf) {
                     } else { infFile = { 'action': 'relative', 'path': conf[0], 'functionLocal': true } }
                     retFile = await file(infFile); path = retFile.res[0]
                 }; try { await _fs.promises.access(path); ret_Fs = true } catch (e) { }
-                if (ret_Fs) { const configFile = _fs.readFileSync(path); config = JSON.parse(configFile) } else { config = {} }
+                if (ret_Fs) { const configFile = await _fs.promises.readFile(path, 'utf8'); config = JSON.parse(configFile) } else { config = {} }
                 if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG \n INFORMAR A 'key' \n\n`; }
                 else if (inf.action == 'set') { // CONFIG: SET
                     if (!inf.value && !inf.value == false) {
                         ret['msg'] = `\n #### ERRO #### CONFIG \n INFORMAR O 'value' \n\n`;
                     } else {
-                        ret['ret'] = true; ret['msg'] = `CONFIG: OK`; config[inf.key] = inf.value;
-                        async function createFolder(f) {
-                            const p = _path.normalize(f); const d = p.split(_path.sep); let cF = '';
-                            for (let dir of d) { cF += dir + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF) } }; return true;
-                        }; const folderPath = _path.dirname(path); await createFolder(folderPath);
-                        _fs.writeFileSync(path, JSON.stringify(config, null, 2));
+                        ret['ret'] = true; ret['msg'] = `CONFIG SET: OK`; config[inf.key] = inf.value;
+                        infFile = { 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
+                        retFile = await file(infFile)
                     }
                 } else if (inf.action == 'get') { // #### CONFIG NODE: GET
-                    if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
+                    if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
                     else if (inf.key == '*' || (inf.key !== '*' && config[inf.key])) {
-                        ret['ret'] = true; ret['msg'] = `CONFIG: OK`;
+                        ret['ret'] = true; ret['msg'] = `CONFIG GET: OK`;
                         ret['res'] = inf.key == '*' ? config : config[inf.key]
                     }
-                    else { ret['msg'] = `\n #### ERRO #### CONFIG \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
+                    else { ret['msg'] = `\n #### ERRO #### CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                 } else if (inf.action == 'del') { // #### CONFIG NODE: DEL
-                    if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
+                    if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG DEL\n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
                     else if (config[inf.key]) {
-                        ret['ret'] = true; ret['msg'] = `CONFIG: OK`; delete config[inf.key];
-                        async function createFolder(f) {
-                            const p = _path.normalize(f); const d = p.split(_path.sep); let cF = '';
-                            for (let dir of d) { cF += dir + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF) } }; return true;
-                        }; const folderPath = _path.dirname(path); await createFolder(folderPath);
-                        _fs.writeFileSync(path, JSON.stringify(config, null, 2));
-                    } else { ret['msg'] = `\n #### ERRO #### CONFIG \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
+                        ret['ret'] = true; ret['msg'] = `CONFIG DEL: OK`; delete config[inf.key];
+                        infFile = { 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
+                        retFile = await file(infFile)
+                    } else { ret['msg'] = `\n #### ERRO #### CONFIG DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                 }
             }
         }
@@ -444,15 +436,16 @@ async function globalChanged(i) {
 }
 // ############### ###############
 
-function regexE(inf) {
+async function regexE(inf) {
     let ret = { 'ret': false };
     try {
         ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/); ret['ret'] = true;
         if (match && match.length == 3) { ret['res'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
         else { ret['res'] = `\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` };
         if (typeof window == 'undefined') {
-            let time = dateHour().res, txt = `MES_${time.mon}_${time.monNam}/DIA_${time.day}/${time.hou}.${time.min}.${time.sec}.${time.mil}`
-            _fs.writeFile(`${conf[1]}:/${conf[3]}/log/###_JS_###/${txt}_regexE.txt`, JSON.stringify(ret, null, 2), (e) => { })
+            let time = dateHour().res, path = `MES_${time.mon}_${time.monNam}/DIA_${time.day}/${time.hou}.${time.min}.${time.sec}.${time.mil}`
+            path = `${conf[1]}:/${conf[3]}/log/###_JS_###/${path}_regexE.txt`; _fs.mkdirSync(_path.dirname(path), { recursive: true })
+            _fs.writeFileSync(path, JSON.stringify(ret, null, 2), { flag: 'a' });
         }
     } catch (e) {
         const match = e.stack.match(/(\w+\.\w+):(\d+):\d+/);
@@ -472,10 +465,16 @@ async function jsonInterpret(inf) {
     } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
-    window['jsonInterpret'] = jsonInterpret;
-} else { // NODEJS
-    global['jsonInterpret'] = jsonInterpret;
+async function log(inf) {
+    let ret = { 'ret': false };
+    try {
+        let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`, hou = `${time.hou}.${time.min}.${time.sec}`, pathOk
+        pathOk = `log/${inf.folder}`; if (inf.file.includes('timeLastGet')) { pathOk = `${pathOk}/${inf.file}` }
+        else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }
+        infFile = { 'action': 'write', 'functionLocal': false, 'text': inf.text, 'rewrite': false, 'path': pathOk };
+        retFile = await file(infFile); ret['ret'] = true
+        ret['msg'] = `LOG: OK`; ret['res'] = `${conf[1]}:/${conf[3]}/${pathOk}`
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 // ############### CLEAR CONSOLE ###############
@@ -493,7 +492,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage;
     window['dateHour'] = dateHour; window['secToHour'] = secToHour; window['regex'] = regex; window['random'] = random;
     window['regexE'] = regexE; window['gO'] = gO; window['gOAdd'] = gOAdd;
-    window['gORem'] = gORem; window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret;
+    window['gORem'] = gORem; window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret; window['log'] = log;
     // ## resources
     window['chatGpt'] = chatGpt; window['clipboard'] = clipboard; window['excel'] = excel;
     window['getCookies'] = getCookies; window['notification'] = notification; window['promptChrome'] = promptChrome;
@@ -508,7 +507,7 @@ if (typeof window !== 'undefined') { // CHROME
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage; global['dateHour'] = dateHour;
     global['secToHour'] = secToHour; global['regex'] = regex; global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
-    global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj; global['jsonInterpret'] = jsonInterpret;
+    global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj; global['jsonInterpret'] = jsonInterpret; global['log'] = log;
     // ## resources
     global['chatGpt'] = chatGpt; global['clipboard'] = clipboard; global['excel'] = excel;
     global['getCookies'] = getCookies; global['notification'] = notification; global['promptChrome'] = promptChrome;
