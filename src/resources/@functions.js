@@ -86,7 +86,7 @@ await import('./tabSearch.js'); await import('./translate.js'); await import('./
 await import('./commandLine.js'); await import('./chromeActions.js');
 // ## scripts
 await import('../scripts/command1.js'); await import('../scripts/command2.js'); await import('../scripts/oneFormaMTPE.js');
-await import('../scripts/peroptyxSearch2_0.js'); await import('../scripts/peroptyxQIDC.js');
+await import('../scripts/peroptyx_SCH20.js'); await import('../scripts/peroptyx_QIDC.js');
 
 async function api(inf) {
     let ret = { 'ret': false };
@@ -95,7 +95,7 @@ async function api(inf) {
             const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
             if (inf.headers) { reqOpt['headers'] = inf.headers }
             if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
-                reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
+                reqOpt['body'] = typeof inf.body == 'object' ? JSON.stringify(inf.body) : inf.body
             }
             const req = UrlFetchApp.fetch(inf.url, reqOpt); const resHeaders = req.getAllHeaders();
             const resBody = req.getContentText(); ret['ret'] = true; ret['msg'] = 'API: OK';
@@ -104,7 +104,7 @@ async function api(inf) {
             const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
             if (inf.headers) { reqOpt['headers'] = inf.headers }
             if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
-                reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
+                reqOpt['body'] = typeof inf.body == 'object' ? JSON.stringify(inf.body) : inf.body
             }
             const req = await fetch(inf.url, reqOpt); const resHeaders = {};
             req.headers.forEach((value, name) => { resHeaders[name] = value })
@@ -131,7 +131,7 @@ async function file(inf) {
                     if (typeof inf.rewrite !== 'boolean') { ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`; }
                     else if (!inf.text || inf.text == '') { ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'text' \n\n`; }
                     else {
-                        let infFile, retFile, path, retFetch = ''; let text = inf.text
+                        let infFile, retFile, path, retFetch = ''; let text = typeof inf.text == 'object' ? JSON.stringify(inf.text) : inf.text
                         if (inf.path.includes(':')) { path = inf.path; if (typeof window !== 'undefined') { path = path.split(':/')[1] } }
                         else {
                             infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal && typeof window == 'undefined' ? true : false };
@@ -186,7 +186,7 @@ async function file(inf) {
                             const res = text.match(pattern); file = res[1]; conf = [conf[0], jsonFile[0], functionLocal, jsonFile[1], file]
                         } else { // NODEJS
                             function w(c) {
-                                while (true) { if (['package.json'].some(file => _fs.existsSync(_path.join(c, file)))) { return c }; const p = _path.dirname(c); if (p === c) { return null } c = p }
+                                while (true) { if (['package.json'].some(file => _fs.existsSync(_path.join(c, file)))) { return c }; const p = _path.dirname(c); if (p == c) { return null } c = p }
                             };
                             functionLocal = e.match(/ file:\/\/\/(.*?)\.js:/)[1]; file = functionLocal.charAt(0).toUpperCase() + functionLocal.slice(1); functionLocal = w(file);
                             file = file.replace(`${functionLocal}/`, ''); jsonFile = JSON.parse(_fs.readFileSync(`${functionLocal}/${conf}`, 'utf8')).conf
@@ -203,7 +203,7 @@ async function file(inf) {
                         function runPath(pp, par) {
                             if (pp.startsWith('./')) { pp = pp.slice(2) } else if (relative.startsWith('/')) { pp = pp.slice(1) }
                             pathFull = conf[par].split('/'); relativeParts = pp.split('/');
-                            while (pathFull.length > 0 && relativeParts[0] === '..') { pathFull.pop(); relativeParts.shift(); }
+                            while (pathFull.length > 0 && relativeParts[0] == '..') { pathFull.pop(); relativeParts.shift(); }
                             retRelative = pathFull.concat(relativeParts).join('/')
                             if (retRelative.endsWith('/.')) { retRelative = retRelative.slice(0, -2); }
                             else if (retRelative.endsWith('.') || retRelative.endsWith('/')) { retRelative = retRelative.slice(0, -1); }; return retRelative
@@ -219,7 +219,7 @@ async function file(inf) {
                             retFile = await file(infFile); path = retFile.res[0]
                         }; let retFilesList = { 'path': path, 'max': inf.max }
                         function formatBytes(b, d = 2) {
-                            if (b === 0) return '0 Bytes'; const i = Math.floor(Math.log(b) / Math.log(1024));
+                            if (b == 0) return '0 Bytes'; const i = Math.floor(Math.log(b) / Math.log(1024));
                             return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i];
                         }; let iFilesList = 0
                         async function filesList(inf, files = []) {
@@ -280,7 +280,7 @@ async function configStorage(inf) {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
                                     ret['msg'] = `\n #### ERRO #### STORAGE \n ${chrome.runtime.lastError} \n\n`;
-                                } else if (Object.keys(result).length === 0) {
+                                } else if (Object.keys(result).length == 0) {
                                     async function checkConfig() {
                                         const infFile = { 'action': 'read', 'path': conf[0], 'functionLocal': true }
                                         const retFile = await file(infFile); const config = JSON.parse(retFile.res);
@@ -307,7 +307,7 @@ async function configStorage(inf) {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
                                     ret['msg'] = `\n #### ERRO #### STORAGE \n ${chrome.runtime.lastError} \n\n`;
-                                } else if (Object.keys(result).length === 0) {
+                                } else if (Object.keys(result).length == 0) {
                                     ret['msg'] = `\n #### ERRO #### STORAGE \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                                 } else {
                                     chrome.storage.local.remove(inf.key, async () => { });
@@ -321,7 +321,7 @@ async function configStorage(inf) {
                 let infFile, retFile, config, path, ret_Fs = false
                 if (inf.path && inf.path.includes(':')) { path = inf.path }
                 else {
-                    if (inf.path && typeof inf.functionLocal === 'boolean') {
+                    if (inf.path && typeof inf.functionLocal == 'boolean') {
                         infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal }
                     } else { infFile = { 'action': 'relative', 'path': conf[0], 'functionLocal': true } }
                     retFile = await file(infFile); path = retFile.res[0]
@@ -447,9 +447,13 @@ async function globalChanged(i) {
 function regexE(inf) {
     let ret = { 'ret': false };
     try {
-        ret['ret'] = true; ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/);
-        if (match && match.length === 3) { ret['res'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
-        else { ret['res'] = `\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` }
+        ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/); ret['ret'] = true;
+        if (match && match.length == 3) { ret['res'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
+        else { ret['res'] = `\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` };
+        if (typeof window == 'undefined') {
+            let time = dateHour().res, txt = `MES_${time.mon}_${time.monNam}/DIA_${time.day}/${time.hou}.${time.min}.${time.sec}.${time.mil}`
+            _fs.writeFile(`${conf[1]}:/${conf[3]}/log/###_JS_###/${txt}_regexE.txt`, JSON.stringify(ret, null, 2), (e) => { })
+        }
     } catch (e) {
         const match = e.stack.match(/(\w+\.\w+):(\d+):\d+/);
         ret['msg'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${e.toString()} \n\n`
@@ -498,7 +502,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['commandLine'] = commandLine; window['chromeActions'] = chromeActions;
     // ## scripts
     window['command1'] = command1; window['command2'] = command2; window['oneFormaMTPE'] = oneFormaMTPE;
-    window['peroptyxSearch2_0'] = peroptyxSearch2_0; window['peroptyxQIDC'] = peroptyxQIDC;
+    window['peroptyx_SCH20'] = peroptyx_SCH20; window['peroptyx_QIDC'] = peroptyx_QIDC;
 } else { // NODEJS
     global['g'] = {}; global['p'] = p; global['conf'] = retFile.res;
     // ## functions
@@ -513,7 +517,7 @@ if (typeof window !== 'undefined') { // CHROME
     global['commandLine'] = commandLine; global['chromeActions'] = chromeActions;
     // ## scripts
     global['command1'] = command1; global['command2'] = command2; global['oneFormaMTPE'] = oneFormaMTPE;
-    global['peroptyxSearch2_0'] = peroptyxSearch2_0; global['peroptyxQIDC'] = peroptyxQIDC;
+    global['peroptyx_SCH20'] = peroptyx_SCH20; global['peroptyx_QIDC'] = peroptyx_QIDC;
 }
 
 

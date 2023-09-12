@@ -36,17 +36,17 @@ async function command2(inf) {
       } else if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': 'https://www.tryrating.com/api/survey*' })) {
         if (regex({ 'simple': true, 'text': JSON.stringify(retSniffer.res.res.body), 'pattern': '*Search 2.0*' })) {
           // Search 2.0
-          const infPeroptyxSearch2_0 = { 'sniffer': retSniffer.res.res.body }
-          const retPeroptyxSearch2_0 = await peroptyxSearch2_0(infPeroptyxSearch2_0)
-          if (retPeroptyxSearch2_0.ret) {
+          const infperoptyx_SCH20 = { 'sniffer': retSniffer.res.res.body }
+          const retperoptyx_SCH20 = await peroptyx_SCH20(infperoptyx_SCH20)
+          if (retperoptyx_SCH20.ret) {
             reRun = true
             ret['msg'] = `COMMAND 2: OK | Peroptyx`;
           }
         } else if (regex({ 'simple': true, 'text': JSON.stringify(retSniffer.res.res.body), 'pattern': '*Query Image Deserving Classification*' })) {
           // Query Image Deserving Classification
-          const infPeroptyxQIDC = { 'sniffer': retSniffer.res.res.body }
-          const retPeroptyxQIDC = await peroptyxQIDC(infPeroptyxQIDC)
-          if (retPeroptyxQIDC.ret) {
+          const infperoptyx_QIDC = { 'sniffer': retSniffer.res.res.body }
+          const retperoptyx_QIDC = await peroptyx_QIDC(infperoptyx_QIDC)
+          if (retperoptyx_QIDC.ret) {
             reRun = true
             ret['msg'] = `COMMAND 2: OK | Peroptyx`;
           }

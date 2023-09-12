@@ -1,15 +1,16 @@
-// peroptyxQIDC()
+// peroptyx_QIDC()
 
-async function peroptyxQIDC(inf) {
+async function peroptyx_QIDC(inf) {
     let ret = { 'ret': false };
     try {
-        let infNotification, retNotification, infClipboard, retClipboard
+        let infNotification, retNotification, infClipboard, retClipboard, retSniffer, retFile
         if (!inf.server) {
             const gOEve = async (i) => {
                 if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
             }; gOAdd(gOEve);
         }
-        const retSniffer = JSON.parse(inf.sniffer)
+        if (inf.logFile) { retFile = await file({ 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
+        else { retSniffer = JSON.parse(inf.sniffer) }
         infClipboard = { 'value': retSniffer.tasks[0].taskData.query }
         retClipboard = await clipboard(infClipboard)
         if (retSniffer.targetLocalIds.length == 1) {
@@ -27,7 +28,7 @@ async function peroptyxQIDC(inf) {
                 'title': `NÃO BLIND`,
                 'message': `${retSniffer.tasks[0].taskData.query}`,
             }
-            // retNotification = await notification(infNotification)
+            retNotification = await notification(infNotification)
         }
         ret['ret'] = true;
         ret['msg'] = `PEROPTYX: OK`;
@@ -35,7 +36,7 @@ async function peroptyxQIDC(inf) {
 }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['peroptyxQIDC'] = peroptyxQIDC;
+    window['peroptyx_QIDC'] = peroptyx_QIDC;
 } else { // NODEJS
-    global['peroptyxQIDC'] = peroptyxQIDC;
+    global['peroptyx_QIDC'] = peroptyx_QIDC;
 }

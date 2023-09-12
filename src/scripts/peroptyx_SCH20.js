@@ -1,15 +1,16 @@
-// peroptyxSearch2_0()
+// peroptyx_SCH20()
 
-async function peroptyxSearch2_0(inf) {
+async function peroptyx_SCH20(inf) {
     let ret = { 'ret': false };
     try {
-        let infNotification, retNotification, infClipboard, retClipboard
+        let infNotification, retNotification, infClipboard, retClipboard, retSniffer, retFile
         if (!inf.server) {
             const gOEve = async (i) => {
                 if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
             }; gOAdd(gOEve);
         }
-        const retSniffer = JSON.parse(inf.sniffer)
+        if (inf.logFile) { retFile = await file({ 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
+        else { retSniffer = JSON.parse(inf.sniffer) }
         if (!retSniffer.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
             infNotification =
             {
@@ -106,7 +107,7 @@ async function peroptyxSearch2_0(inf) {
 }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['peroptyxSearch2_0'] = peroptyxSearch2_0;
+    window['peroptyx_SCH20'] = peroptyx_SCH20;
 } else { // NODEJS
-    global['peroptyxSearch2_0'] = peroptyxSearch2_0;
+    global['peroptyx_SCH20'] = peroptyx_SCH20;
 }
