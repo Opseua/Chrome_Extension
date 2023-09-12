@@ -28,7 +28,6 @@ async function getCookies(inf) {
             ret['msg'] = 'GET COOKIES: OK';
             ret['res'] = { 'array': retCookies, 'concat': cookie };
         }
-
     } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 };
 

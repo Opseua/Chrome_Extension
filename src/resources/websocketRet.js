@@ -63,9 +63,7 @@ async function webSocketRet(inf) {
         } else {
             ret['msg'] = `\n #### NAO RODAR ####  NAO RODAR \n\n ${inf.data} \n\n`;
         }
-    } catch (e) {
-        ret['msg'] = regexE({ 'e': e }).res
-    }
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
     if (!ret.ret) {
         console.log(ret.msg);
         if (typeof window !== 'undefined') { // CHROME

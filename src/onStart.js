@@ -162,11 +162,3 @@ infFile = { 'action': 'list', 'functionLocal': true, 'path': '.', 'max': 10 }
 // retFile = await file(infFile);
 // console.log(retFile)
 
-
-const infNotification =
-{
-    'duration': 2, 'iconUrl': './src/media/icon_4.png',
-    'title': `TITULO`,
-    'message': 'Texto',
-};
-const retNotification = await notification(infNotification)

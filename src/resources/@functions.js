@@ -76,6 +76,8 @@ if (typeof window == 'undefined') { _fs = await import('fs'); _path = await impo
 // if (retJsonInterpret.ret) { retJsonInterpret = JSON.parse(retJsonInterpret.res) }
 // console.log(retJsonInterpret)
 
+// for (const nameKey in json.taskName) { console.log(nameKey) }
+
 // ## resources
 await import('./chatGpt.js'); await import('./clipboard.js'); await import('./excel.js');
 await import('./getCookies.js'); await import('./notification.js'); await import('./promptChrome.js');
@@ -151,9 +153,7 @@ async function file(inf) {
                         } else { // NODEJS
                             async function createFolder(f) {
                                 const p = _path.normalize(f); const d = p.split(_path.sep); let cF = '';
-                                for (let directory of d) {
-                                    cF += directory + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF); }
-                                }; return true;
+                                for (let dir of d) { cF += dir + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF) } }; return true;
                             }; const folderPath = _path.dirname(path); await createFolder(folderPath);
                             await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' }); // 'w' limpa | 'a' adiciona
                         }; ret['ret'] = true; ret['msg'] = `FILE WRITE: OK`;
@@ -268,8 +268,8 @@ async function configStorage(inf) {
                             const data = {}; data[inf.key] = inf.value;
                             chrome.storage.local.set(data, async () => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE SET \n ${chrome.runtime.lastError} \n\n`;
-                                } else { ret['ret'] = true; ret['msg'] = 'STORAGE SET: OK' }; resolve(ret);
+                                    ret['msg'] = `\n #### ERRO #### STORAGE \n ${chrome.runtime.lastError} \n\n`;
+                                } else { ret['ret'] = true; ret['msg'] = 'STORAGE: OK' }; resolve(ret);
                             });
                         });
                     }
@@ -279,7 +279,7 @@ async function configStorage(inf) {
                         return new Promise((resolve) => {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`;
+                                    ret['msg'] = `\n #### ERRO #### STORAGE \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length === 0) {
                                     async function checkConfig() {
                                         const infFile = { 'action': 'read', 'path': conf[0], 'functionLocal': true }
@@ -290,13 +290,13 @@ async function configStorage(inf) {
                                                 chrome.storage.local.set(data, async () => {
                                                     if (chrome.runtime.lastError) {
                                                         ret['msg'] = `\n #### ERRO #### STORAGE SET* \n ${chrome.runtime.lastError} \n\n`;
-                                                    } else { ret['ret'] = true; ret['msg'] = 'STORAGE GET: OK'; ret['res'] = config[inf.key] }
+                                                    } else { ret['ret'] = true; ret['msg'] = 'STORAGE: OK'; ret['res'] = config[inf.key] }
                                                     resolve(ret);
                                                 });
                                             })
-                                        } else { ret['msg'] = `\n #### ERRO #### STORAGE GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
+                                        } else { ret['msg'] = `\n #### ERRO #### STORAGE \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                                     }; await checkConfig()
-                                } else { ret['ret'] = true; ret['msg'] = 'STORAGE GET: OK'; ret['res'] = result[inf.key] }; resolve(ret);
+                                } else { ret['ret'] = true; ret['msg'] = 'STORAGE: OK'; ret['res'] = result[inf.key] }; resolve(ret);
                             });
                         });
                     }
@@ -306,12 +306,12 @@ async function configStorage(inf) {
                         return new Promise((resolve) => {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE DEL \n ${chrome.runtime.lastError} \n\n`;
+                                    ret['msg'] = `\n #### ERRO #### STORAGE \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length === 0) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
+                                    ret['msg'] = `\n #### ERRO #### STORAGE \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                                 } else {
                                     chrome.storage.local.remove(inf.key, async () => { });
-                                    ret['ret'] = true; ret['msg'] = 'STORAGE DEL: OK';
+                                    ret['ret'] = true; ret['msg'] = 'STORAGE: OK';
                                 }; resolve(ret);
                             }); return
                         });
@@ -327,36 +327,35 @@ async function configStorage(inf) {
                     retFile = await file(infFile); path = retFile.res[0]
                 }; try { await _fs.promises.access(path); ret_Fs = true } catch (e) { }
                 if (ret_Fs) { const configFile = _fs.readFileSync(path); config = JSON.parse(configFile) } else { config = {} }
-                if (inf.action == 'set') { // CONFIG: SET
-                    try {
-                        if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG SET \n INFORMAR A 'key' \n\n`; }
-                        else if (!inf.value && !inf.value == false) {
-                            ret['msg'] = `\n #### ERRO #### CONFIG SET \n INFORMAR O 'value' \n\n`;
-                        } else {
-                            ret['ret'] = true; ret['msg'] = `CONFIG SET: OK`; config[inf.key] = inf.value;
-                            _fs.writeFileSync(path, JSON.stringify(config, null, 2));
-                        }
-                    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
+                if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG \n INFORMAR A 'key' \n\n`; }
+                else if (inf.action == 'set') { // CONFIG: SET
+                    if (!inf.value && !inf.value == false) {
+                        ret['msg'] = `\n #### ERRO #### CONFIG \n INFORMAR O 'value' \n\n`;
+                    } else {
+                        ret['ret'] = true; ret['msg'] = `CONFIG: OK`; config[inf.key] = inf.value;
+                        async function createFolder(f) {
+                            const p = _path.normalize(f); const d = p.split(_path.sep); let cF = '';
+                            for (let dir of d) { cF += dir + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF) } }; return true;
+                        }; const folderPath = _path.dirname(path); await createFolder(folderPath);
+                        _fs.writeFileSync(path, JSON.stringify(config, null, 2));
+                    }
                 } else if (inf.action == 'get') { // #### CONFIG NODE: GET
-                    try {
-                        if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG GET \n INFORMAR A 'key' \n\n`; }
-                        else {
-                            if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
-                            else if (config[inf.key]) { ret['ret'] = true; ret['msg'] = `CONFIG GET: OK`; ret['res'] = config[inf.key]; }
-                            else { ret['msg'] = `\n #### ERRO #### CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
-                        }
-                    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
+                    if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
+                    else if (inf.key == '*' || (inf.key !== '*' && config[inf.key])) {
+                        ret['ret'] = true; ret['msg'] = `CONFIG: OK`;
+                        ret['res'] = inf.key == '*' ? config : config[inf.key]
+                    }
+                    else { ret['msg'] = `\n #### ERRO #### CONFIG \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                 } else if (inf.action == 'del') { // #### CONFIG NODE: DEL
-                    try {
-                        if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG DEL \n INFORMAR A 'key' \n\n`; }
-                        else {
-                            if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
-                            else if (config[inf.key]) {
-                                ret['ret'] = true; ret['msg'] = `CONFIG DEL: OK`; delete config[inf.key];
-                                _fs.writeFileSync(path, JSON.stringify(config, null, 2));
-                            } else { ret['msg'] = `\n #### ERRO #### CONFIG DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
-                        }
-                    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
+                    if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
+                    else if (config[inf.key]) {
+                        ret['ret'] = true; ret['msg'] = `CONFIG: OK`; delete config[inf.key];
+                        async function createFolder(f) {
+                            const p = _path.normalize(f); const d = p.split(_path.sep); let cF = '';
+                            for (let dir of d) { cF += dir + _path.sep; if (!_fs.existsSync(cF)) { await _fs.promises.mkdir(cF) } }; return true;
+                        }; const folderPath = _path.dirname(path); await createFolder(folderPath);
+                        _fs.writeFileSync(path, JSON.stringify(config, null, 2));
+                    } else { ret['msg'] = `\n #### ERRO #### CONFIG \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                 }
             }
         }
@@ -366,14 +365,13 @@ async function configStorage(inf) {
 function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
     let ret = { 'ret': false };
     try {
-        const date1 = new Date(); date1.setSeconds(new Date().getSeconds() + inf).setSeconds
-        const date2 = Date.now() + (inf * 1000);
+        const dt1 = new Date(); dt1.setSeconds(new Date().getSeconds() + inf).setSeconds; const dt2 = Date.now() + (inf * 1000);
         ret['res'] = {
-            'day': String(date1.getDate()).padStart(2, '0'), 'mon': String(date1.getMonth() + 1).padStart(2, '0'),
-            'yea': String(date1.getFullYear()), 'hou': String(date1.getHours()).padStart(2, '0'),
-            'min': String(date1.getMinutes()).padStart(2, '0'), 'sec': String(date1.getSeconds()).padStart(2, '0'),
-            'mil': String(date2.toString().slice(-3)), 'tim': String(date2.toString().slice(0, -3)), 'timMil': String(date2.toString()),
-            'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][date1.getMonth()]
+            'day': String(dt1.getDate()).padStart(2, '0'), 'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
+            'yea': String(dt1.getFullYear()), 'hou': String(dt1.getHours()).padStart(2, '0'),
+            'min': String(dt1.getMinutes()).padStart(2, '0'), 'sec': String(dt1.getSeconds()).padStart(2, '0'),
+            'mil': String(dt2.toString().slice(-3)), 'tim': String(dt2.toString().slice(0, -3)), 'timMil': String(dt2.toString()),
+            'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()]
         }; // manter o 'String' para forcar o '0' (zero) na frente → '001'
         ret['ret'] = true; ret['msg'] = `DATE HOUR: OK`
     } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret) { console.log(ret.msg) }; return ret
@@ -422,8 +420,7 @@ function regex(inf) {
                 else { ret['msg'] = `\n #### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`; }
             }
         }
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
-    return ret
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; return ret
 }
 
 async function random(inf) {
@@ -478,11 +475,11 @@ if (typeof window !== 'undefined') { // CHROME
 }
 
 // ############### CLEAR CONSOLE ###############
-// console.clear(); let messageCount = 0; const clearConsole = console.log;
-// console.log = async function () {
-//     clearConsole.apply(console, arguments); messageCount++;
-//     if (messageCount >= 100) { console.clear(); messageCount = 0; console.log('CONSOLE LIMPO!') }
-// };
+console.clear(); let messageCount = 0; const clearConsole = console.log;
+console.log = async function () {
+    clearConsole.apply(console, arguments); messageCount++;
+    if (messageCount >= 50) { console.clear(); messageCount = 0; console.log('CONSOLE LIMPO!') }
+};
 // ############### ###############
 
 const infFile = { 'action': 'inf', 'functionLocal': false }; const retFile = await file(infFile);

@@ -26,9 +26,7 @@ async function openTab(inf) {
                 });
             });
         });
-    } catch (e) {
-        return `\n #### ERRO #### SEARCH TAB \n ${regexE({ 'e': e }).res} \n\n`;
-    }
+    } catch (e) { return `\n #### ERRO #### SEARCH TAB \n ${regexE({ 'e': e }).res} \n\n` }
 }
 
 async function tabSearch(inf) {
@@ -154,9 +152,7 @@ async function tabSearch(inf) {
                 ret['msg'] = `\n #### ERRO #### SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
             }
         }
-    } catch (e) {
-        ret['msg'] = regexE({ 'e': e }).res;
-    }
+    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
     if (!ret.ret) {
         if (inf.openIfNotExist) {
             const retOpenTab = await openTab(inf)

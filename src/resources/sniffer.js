@@ -96,12 +96,9 @@ async function sniffer(inf) {
 
                 }
             }
-
         } catch (e) {
             ret['msg'] = regexE({ 'e': e }).res
-            ret['msg'] = `\n #### ERRO #### CONFIG SET \n INFORMAR A 'key' \n\n`;
-            console.log(ret.msg)
-            snifferOff()
+            ret['msg'] = `\n #### ERRO #### CONFIG SET \n INFORMAR A 'key' \n\n`; console.log(ret.msg); snifferOff()
         }
     });
 
