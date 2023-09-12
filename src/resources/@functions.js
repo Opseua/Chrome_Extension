@@ -441,13 +441,8 @@ async function regexE(inf) {
     try {
         ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/); ret['ret'] = true;
         if (match && match.length == 3) { ret['res'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
-        else { ret['res'] = `\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` };
-        if (typeof window == 'undefined') {
-            // let time = dateHour().res, path = `MES_${time.mon}_${time.monNam}/DIA_${time.day}/${time.hou}.${time.min}.${time.sec}.${time.mil}`
-            // path = `${conf[1]}:/${conf[3]}/log/###_JS_###/${path}_regexE.txt`; _fs.mkdirSync(_path.dirname(path), { recursive: true })
-            // _fs.writeFileSync(path, JSON.stringify(ret, null, 2), { flag: 'a' });
-            const retLog = await log({ 'folder': '###_JS_###', 'file': `_regexE.txt`, 'text': ret })
-        }
+        else { ret['res'] = `\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` }
+        if (typeof window == 'undefined') { const retLog = await log({ 'folder': '###_JS_###', 'file': `_regexE.txt`, 'text': ret }) }
     } catch (e) {
         const match = e.stack.match(/(\w+\.\w+):(\d+):\d+/);
         ret['msg'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${e.toString()} \n\n`
