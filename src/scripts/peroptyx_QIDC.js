@@ -1,7 +1,7 @@
 // peroptyx_QIDC()
 
 async function peroptyx_QIDC(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         let infNotification, retNotification, infClipboard, retClipboard, retSniffer, retFile
         if (!inf.server) {

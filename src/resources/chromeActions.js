@@ -3,7 +3,7 @@
 // console.log(retChromeActions)
 
 async function chromeActions(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         if (inf.action == 'badge') {
             const action = chrome.browserAction

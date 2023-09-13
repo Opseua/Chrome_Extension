@@ -1,5 +1,5 @@
 async function command1(inf) {
-  let ret = { 'ret': false };
+  let ret = { 'ret': false }
   try {
     const retPromptChrome = promptChrome(`NOME DO COMANDO`);
     ret['ret'] = true;

@@ -30,7 +30,7 @@ async function openTab(inf) {
 }
 
 async function tabSearch(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         let result = {};
         if (inf.search == 'ATIVA') { // ATIVA search

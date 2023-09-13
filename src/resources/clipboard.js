@@ -3,7 +3,7 @@
 // console.log(retClipboard)
 
 async function clipboard(inf) {
-  let ret = { 'ret': false };
+  let ret = { 'ret': false }
   try {
     let text = inf.value
     // OBJETO INDENTADO EM TEXTO BRUTO

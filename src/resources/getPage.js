@@ -3,7 +3,7 @@
 // console.log(retGetPage)
 
 async function getPage(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         function getContent(inf) {
             return new Promise((resolve) => {

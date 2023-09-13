@@ -2,7 +2,7 @@ await import('./resources/@functions.js');
 console.log('onStartNodeJS');
 
 async function client(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         let WebS;
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
@@ -17,12 +17,12 @@ async function client(inf) {
         let ws1;
         async function web1() {
             let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
-            ws1.onerror = (e) => {
-                (async () => { await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': 'ONSTART NODEJS: ONERROR' }) })()
-            };
-            ws1.onopen = () => {
+            ws1.onerror = async (e) => {
+                await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': 'ONSTART NODEJS: ONERROR' })
+            }
+            ws1.onopen = async () => {
                 console.log(`ON START: CONEXAO OK`);
-                (async () => { await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': 'ONSTART NODEJS: CONEXAO OK' }) })()
+                await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': 'ONSTART NODEJS: CONEXAO OK' })
             }
             ws1.onclose = async (event) => {
                 console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`);

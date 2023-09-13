@@ -6,7 +6,7 @@ let run
 if (typeof window == 'undefined') { const { exec } = await import('child_process'); run = exec }
 
 async function commandLine(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     let command = `"${conf[1]}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/1_BACKGROUND.exe" ${inf.command}`;
     const retorno = new Promise((resolve, reject) => {
         run(command, { maxBuffer: 1024 * 5000 }, (err, stdout, stderr) => {

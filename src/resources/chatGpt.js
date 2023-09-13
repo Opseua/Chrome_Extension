@@ -4,7 +4,7 @@ const p = new Error()
 // console.log(retChatGpt)
 
 async function chatGpt(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
 
         let infConfigStorage, retConfigStorage

@@ -3,7 +3,7 @@
 // console.log(retTranslate)
 
 async function translate(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         const infApi = {
             url: `https://translate.google.com/m?sl=${inf.source}&tl=${inf.target}&q=${encodeURIComponent(inf.text)}&hl=pt-BR`,

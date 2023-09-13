@@ -3,7 +3,7 @@
 // console.log(retGetCookies);
 
 async function getCookies(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         const cookiesPromise = new Promise((resolve) => {
             chrome.cookies.getAll({

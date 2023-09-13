@@ -25,7 +25,7 @@ if (typeof window !== 'undefined') { // CHROME
         console.log('ON START: ICONE PRESSIONADO'); //chrome.browserAction.setPopup({popup: "./popup.html"});
     });
     chrome.commands.onCommand.addListener(async function (...inf) { // ######################### ATALHO PRESSIONADO
-        let ret = { 'ret': false };
+        let ret = { 'ret': false }
         try {
             //console.log('ON START: ATALHO PRESSIONADO')
             const infShortcutPressed = { 'shortcut': inf[0] }
@@ -81,7 +81,7 @@ if (typeof window !== 'undefined') { // CHROME
 // *************************
 
 async function client(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         let WebS;
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
@@ -95,7 +95,7 @@ async function client(inf) {
         let ws1;
         async function web1() {
             let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
-            ws1.onerror = (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
+            ws1.onerror = async (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
             ws1.onclose = async (event) => { console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`); await new Promise(r => setTimeout(r, 10000)); web1() }
             ws1.onmessage = async (event) => {
                 let data, fun; try { data = JSON.parse(event.data); if (data.fun) { fun = true } } catch (e) { }

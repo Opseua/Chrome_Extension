@@ -1,5 +1,32 @@
+// {
+//     "fun": [
+//         {
+//             "securityPass": "####################",
+//             "funRet": { "retUrl": false, "funA": "ARRAY AQUI" },
+//             "funRun": {
+//                 "name": "notification",
+//                 "par": {
+//                     "title": "TITULO 1",
+//                     "message": "TEXTO"
+//                 }
+//             }
+//         },
+//         {
+//             "securityPass": "####################",
+//             "funRet": { "retUrl": false, "funA": "ARRAY AQUI" },
+//             "funRun": {
+//                 "name": "notification",
+//                 "par": {
+//                     "title": "TITULO 2",
+//                     "message": "TEXTO"
+//                 }
+//             }
+//         }
+//     ]
+// }
+
 async function webSocketRet(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         let WebS;
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME

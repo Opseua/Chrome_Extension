@@ -1,7 +1,7 @@
 // peroptyx_SCH20()
 
 async function peroptyx_SCH20(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         let infNotification, retNotification, infClipboard, retClipboard, retSniffer, retFile
         if (!inf.server) {

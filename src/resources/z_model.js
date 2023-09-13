@@ -1,5 +1,5 @@
 async function model(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         // CODIGO AQUI
         ret['ret'] = true;

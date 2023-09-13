@@ -91,7 +91,7 @@ await import('../scripts/command1.js'); await import('../scripts/command2.js'); 
 await import('../scripts/peroptyx_SCH20.js'); await import('../scripts/peroptyx_QIDC.js');
 
 async function api(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
             const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
@@ -118,7 +118,7 @@ async function api(inf) {
 //######################################## ############# #########
 
 async function file(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { // PASSAR NO jsonInterpret
             let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji };
@@ -247,7 +247,7 @@ async function file(inf) {
 }
 
 async function configStorage(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         let run = false
         if (!inf.action || !['set', 'get', 'del'].includes(inf.action)) {
@@ -357,7 +357,7 @@ async function configStorage(inf) {
 }
 
 function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         const dt1 = new Date(); dt1.setSeconds(new Date().getSeconds() + inf).setSeconds; const dt2 = Date.now() + (inf * 1000);
         ret['res'] = {
@@ -372,7 +372,7 @@ function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
 }
 
 function secToHour(inf) { // NAO POR COMO 'async'!!!
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         const hou = Math.floor(inf / 3600).toString().padStart(2, "0");
         const min = Math.floor((inf % 3600) / 60).toString().padStart(2, "0");
@@ -383,7 +383,7 @@ function secToHour(inf) { // NAO POR COMO 'async'!!!
 }
 
 function regex(inf) { // NAO POR COMO 'async'!!!
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         if (inf.pattern.includes('(.*?)')) {
             let res = {}; let ok = false; const patternSplit = inf.pattern.split('(.*?)');
@@ -418,7 +418,7 @@ function regex(inf) { // NAO POR COMO 'async'!!!
 }
 
 async function random(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         const min = inf.min; const max = inf.max; const message = inf.await ? true : false
         const number = Math.floor(Math.random() * (max - min + 1) + min) * 1000;
@@ -439,7 +439,7 @@ async function globalChanged(i) {
 // ############### ###############
 
 async function regexE(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/)
         if (match && match.length == 3) { ret['res'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
@@ -453,7 +453,7 @@ function orderObj(o) {
 }
 
 async function jsonInterpret(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         const json = JSON.stringify(inf.json); const res = json.replace(/\$\[(.*?)\]/g, (match, p1) => g[p1])
         ret['ret'] = true; ret['msg'] = `JSON INTERPRET: OK`; ret['res'] = res;
@@ -461,10 +461,10 @@ async function jsonInterpret(inf) {
 }
 
 async function log(inf) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false }
     try {
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`, hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, pathOk
-        let text = inf.text; pathOk = `log/${inf.folder}`; if (inf.file.includes('timeLastGet')) { pathOk = `${pathOk}/${inf.file}` }
+        let text = inf.text; pathOk = `log/${inf.folder}`; if (['timeLastGet.txt', 'reset.js'].includes(inf.file)) { pathOk = `${pathOk}/${inf.file}` }
         else if (inf.rewrite) { text = `${hou}\n${inf.text}\n\n`; pathOk = `${pathOk}/${mon}/${day}/${inf.file}` } else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }
         const infFile = { 'action': 'write', 'functionLocal': false, 'text': text, 'rewrite': inf.rewrite ? true : false, 'path': pathOk };
         const retFile = await file(infFile); ret['msg'] = `LOG: OK`; ret['res'] = `${conf[1]}:/${conf[3]}/${pathOk}`; ret['ret'] = true
@@ -488,15 +488,6 @@ if (typeof window !== 'undefined') { // CHROME
     window['regex'] = regex; window['random'] = random; window['regexE'] = regexE;
     window['gO'] = gO; window['gOAdd'] = gOAdd; window['gORem'] = gORem;
     window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret; window['log'] = log;
-    // // ## resources
-    // window['chatGpt'] = chatGpt; window['clipboard'] = clipboard; window['excel'] = excel;
-    // window['getCookies'] = getCookies; window['notification'] = notification; window['promptChrome'] = promptChrome;
-    // window['setTag'] = setTag; window['sniffer'] = sniffer; window['splitText'] = splitText;
-    // window['tabSearch'] = tabSearch; window['translate'] = translate; window['webSocketRet'] = webSocketRet;
-    // window['commandLine'] = commandLine; window['chromeActions'] = chromeActions;
-    // // ## scripts
-    // window['command1'] = command1; window['command2'] = command2; window['oneFormaMTPE'] = oneFormaMTPE;
-    // window['peroptyx_SCH20'] = peroptyx_SCH20; window['peroptyx_QIDC'] = peroptyx_QIDC;
 } else { // NODEJS
     global['g'] = {}; global['p'] = p; global['conf'] = retFile.res;
     // ## functions
@@ -505,15 +496,6 @@ if (typeof window !== 'undefined') { // CHROME
     global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
     global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj;
     global['jsonInterpret'] = jsonInterpret; global['log'] = log;
-    // // ## resources
-    // global['chatGpt'] = chatGpt; global['clipboard'] = clipboard; global['excel'] = excel;
-    // global['getCookies'] = getCookies; global['notification'] = notification; global['promptChrome'] = promptChrome;
-    // global['setTag'] = setTag; global['sniffer'] = sniffer; global['splitText'] = splitText;
-    // global['tabSearch'] = tabSearch; global['translate'] = translate; global['webSocketRet'] = webSocketRet;
-    // global['commandLine'] = commandLine; global['chromeActions'] = chromeActions;
-    // // ## scripts
-    // global['command1'] = command1; global['command2'] = command2; global['oneFormaMTPE'] = oneFormaMTPE;
-    // global['peroptyx_SCH20'] = peroptyx_SCH20; global['peroptyx_QIDC'] = peroptyx_QIDC;
 }
 
 
