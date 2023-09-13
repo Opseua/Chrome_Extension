@@ -29,7 +29,7 @@ async function splitText(inf) {
         ret['msg'] = 'SPLIT TEXT: OK';
         ret['res'] = chunks;
 
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

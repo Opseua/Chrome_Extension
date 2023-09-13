@@ -1,29 +1,3 @@
-const p = new Error()
-// const infWebSocketRet = { 'data': event.data }
-// const retWebSocketRet = webSocketRet(infWebSocketRet)
-
-// {
-// 	"fun": {
-// 		"securityPass": "######",
-// 		"funRet": {
-// 			"ret": false,
-// 			"url": "ws://xx.xxx.xxx.xx:xx/######_RET",
-// 			"inf": "ID DO RETORNO"
-// 		},
-// 		"funRun": {
-// 			"name": "notification",
-// 			"par": {
-// 				"duration": 1,
-// 				"type": "basic",
-// 				"title": "titulo",
-// 				"message": "texto",
-// 				"iconUrl": null,
-// 				"buttons": []
-// 			}
-// 		}
-// 	}
-// }
-
 async function webSocketRet(inf) {
     let ret = { 'ret': false };
     try {
@@ -32,41 +6,41 @@ async function webSocketRet(inf) {
         else { const { default: WebSocket } = await import('ws'); WebS = WebSocket } // NODEJS
         const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
-        const data = JSON.parse(inf.data); const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
+        const data = JSON.parse(inf.data);
+        const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
         const device0Ret = retConfigStorage.device0.ret; const securityPass = retConfigStorage.securityPass
-        if (data.fun && data.fun.securityPass && data.fun.securityPass == securityPass && data.fun.funRun && data.fun.funRun.name && data.fun.funRun.par) {
-            function label(pro) { return typeof (typeof window !== 'undefined' ? window : global)[pro] === 'function' }
-            const searchFun = label(data.fun.funRun.name)
-            if (!searchFun) { ret['msg'] = `FUNCAO '${data.fun.funRun.name}' NAO EXITE` }
-            else {
-                let name
-                if (typeof window !== 'undefined') { // CHROME
-                    name = window[data.fun.funRun.name];
-                } else { // NODEJS
-                    name = global[data.fun.funRun.name];
-                }
-                const infName = data.fun.funRun.par;
-                const retName = await name(infName);
-                ret['ret'] = true;
-                if (data.fun.funRet.ret) {
+
+        function label(f) { return typeof (typeof window !== 'undefined' ? window : global)[f] === 'function' }
+        await Promise.all(data.fun.map(async (value, index) => {
+            // --------------------------------------------------
+            if (value.securityPass !== securityPass) {
+                ret['msg'] = `\n #### SECURITYPASS INCORRETO #### \n\n ${JSON.stringify(data)} \n\n`;
+            } else if (!label(value.funRun.name)) {
+                ret['msg'] = `\n #### FUNCAO '${value.funRun.name}' NAO EXITE #### \n\n ${JSON.stringify(data)} \n\n`
+            } else {
+                let name; if (typeof window !== 'undefined') { name = window[value.funRun.name] } // CHROME
+                else { name = global[value.funRun.name] } // NODEJS
+                const infName = value.funRun.par
+                const retName = await name(infName)
+                if (value.funRet && value.funRet.retUrl) {
                     let wsRet
-                    if (!data.fun.funRet.url) { wsRet = `ws://${wsHost}:${portWebSocket}/${device0Ret}` }
-                    else { wsRet = `${data.fun.funRet.url}` }
-                    wsRet = new WebS(wsRet);
-                    wsRet.onerror = (e) => { console.error(`WEBSOCKET RET: ERRO WS`) };
+                    if (typeof value.funRet.retUrl === 'boolean') { wsRet = `ws://${wsHost}:${portWebSocket}/${device0Ret}` }
+                    else { wsRet = `${value.funRet.retUrl}` }
+                    wsRet = new WebS(wsRet)
+                    wsRet.onerror = (e) => { console.error(`WEBSOCKET RET: ERRO WS`) }
                     wsRet.onopen = () => {
-                        wsRet.send(JSON.stringify({ 'inf': data.fun.funRet.inf, 'retWs': retName, 'fun': data.fun.funRet.fun }));
+                        wsRet.send(JSON.stringify({ 'inf': value.funRet.retInf, 'retWs': retName, 'fun': value.funRet.fun }))
                         wsRet.close()
                     }
                 }
+                ret['ret'] = true;
             }
-        } else {
-            ret['msg'] = `\n #### NAO RODAR ####  NAO RODAR \n\n ${inf.data} \n\n`;
-            retLog = await log({ 'folder': '###_JS_###', 'file': `MSG_WebSocket.txt`, 'text': inf.data })
-        }
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }
+            // --------------------------------------------------
+        }))
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res; }
     if (!ret.ret) {
         console.log(ret.msg);
+        const retLog = await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': ret.msg })
         if (typeof window !== 'undefined') { // CHROME
             const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }; const retConfigStorage = await configStorage(infConfigStorage)
         }

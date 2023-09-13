@@ -24,14 +24,16 @@ async function commandLine(inf) {
             return ret;
         })
         .catch((e) => {
-            (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })()
-            console.log(ret.msg);
-            return ret;
+            (async () => {
+                const m = await regexE({ 'e': e }); ret['msg'] = m.res
+                console.log(ret.msg);
+                return ret;
+            })()
         });
 }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['commandLine'] = commandLine;
+    // window['commandLine'] = commandLine;
 } else { // NODEJS
     global['commandLine'] = commandLine;
 }

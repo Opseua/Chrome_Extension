@@ -75,6 +75,8 @@ if (typeof window == 'undefined') { _fs = await import('fs'); _path = await impo
 // let retJsonInterpret = await jsonInterpret(infJsonInterpret)
 // if (retJsonInterpret.ret) { retJsonInterpret = JSON.parse(retJsonInterpret.res) }
 // console.log(retJsonInterpret)
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
+// await log({ 'folder': '###_TESTE_###', 'file': `TESTE.txt`, 'text': 'INF AQUI' })
 
 // for (const nameKey in json.taskName) { console.log(nameKey) }
 
@@ -111,7 +113,7 @@ async function api(inf) {
             const resBody = await req.text(); ret['ret'] = true; ret['msg'] = 'API: OK';
             ret['res'] = { 'code': req.status, 'headers': resHeaders, 'body': resBody }
         }
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 //######################################## ############# #########
 
@@ -241,7 +243,7 @@ async function file(inf) {
                 }
             }
         }
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 async function configStorage(inf) {
@@ -330,9 +332,9 @@ async function configStorage(inf) {
                     if (!inf.value && !inf.value == false) {
                         ret['msg'] = `\n #### ERRO #### CONFIG \n INFORMAR O 'value' \n\n`;
                     } else {
-                        ret['ret'] = true; ret['msg'] = `CONFIG SET: OK`; config[inf.key] = inf.value;
+                        config[inf.key] = inf.value;
                         infFile = { 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
-                        retFile = await file(infFile)
+                        retFile = await file(infFile); ret['ret'] = true; ret['msg'] = `CONFIG SET: OK`
                     }
                 } else if (inf.action == 'get') { // #### CONFIG NODE: GET
                     if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
@@ -344,14 +346,14 @@ async function configStorage(inf) {
                 } else if (inf.action == 'del') { // #### CONFIG NODE: DEL
                     if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG DEL\n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
                     else if (config[inf.key]) {
-                        ret['ret'] = true; ret['msg'] = `CONFIG DEL: OK`; delete config[inf.key];
+                        delete config[inf.key]
                         infFile = { 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
-                        retFile = await file(infFile)
+                        retFile = await file(infFile); ret['ret'] = true; ret['msg'] = `CONFIG DEL: OK`
                     } else { ret['msg'] = `\n #### ERRO #### CONFIG DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                 }
             }
         }
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
@@ -366,7 +368,7 @@ function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
             'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()]
         }; // manter o 'String' para forcar o '0' (zero) na frente → '001'
         ret['ret'] = true; ret['msg'] = `DATE HOUR: OK`
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res; console.log(ret.msg); return ret })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 function secToHour(inf) { // NAO POR COMO 'async'!!!
@@ -377,10 +379,10 @@ function secToHour(inf) { // NAO POR COMO 'async'!!!
         const sec = (inf % 60).toString().padStart(2, "0");
         ret['res'] = String(`${hou}:${min}:${sec}`) // manter o 'String' para forcar o '0' (zero) na frente → '001'
         ret['ret'] = true; ret['msg'] = `SEC TO HOUR: OK`
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res; console.log(ret.msg); return ret })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
-function regex(inf) {
+function regex(inf) { // NAO POR COMO 'async'!!!
     let ret = { 'ret': false };
     try {
         if (inf.pattern.includes('(.*?)')) {
@@ -412,7 +414,7 @@ function regex(inf) {
                 else { ret['msg'] = `\n #### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`; }
             }
         }
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res; return ret })() }; return ret
 }
 
 async function random(inf) {
@@ -422,7 +424,7 @@ async function random(inf) {
         const number = Math.floor(Math.random() * (max - min + 1) + min) * 1000;
         if (message) { console.log(`AGUARDANDO: ${number / 1000} SEGUNDOS`); await new Promise(resolve => setTimeout(resolve, number)); }
         ret['ret'] = true; ret['msg'] = `RANDON: OK`; ret['res'] = number / 1000;
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 // ############### GLOBAL OBJECT ###############
@@ -439,10 +441,10 @@ async function globalChanged(i) {
 async function regexE(inf) {
     let ret = { 'ret': false };
     try {
-        ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/); ret['ret'] = true;
+        ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/)
         if (match && match.length == 3) { ret['res'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
         else { ret['res'] = `\n\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` }
-        if (typeof window == 'undefined') { const retLog = await log({ 'folder': '###_JS_###', 'file': `_regexE.txt`, 'text': ret }) }
+        if (typeof window == 'undefined') { const retLog = await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': ret }) }; ret['ret'] = true;
     } catch (e) { console.log(`\n\n #### ERRO REGEXe #### ${e} \n\n`) } return ret
 }
 
@@ -455,17 +457,17 @@ async function jsonInterpret(inf) {
     try {
         const json = JSON.stringify(inf.json); const res = json.replace(/\$\[(.*?)\]/g, (match, p1) => g[p1])
         ret['ret'] = true; ret['msg'] = `JSON INTERPRET: OK`; ret['res'] = res;
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 async function log(inf) {
     let ret = { 'ret': false };
     try {
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`, hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, pathOk
-        pathOk = `log/${inf.folder}`; if (inf.file.includes('timeLastGet')) { pathOk = `${pathOk}/${inf.file}` }
-        else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }; ret['ret'] = true;
-        const infFile = { 'action': 'write', 'functionLocal': false, 'text': inf.text, 'rewrite': false, 'path': pathOk };
-        const retFile = await file(infFile); ret['msg'] = `LOG: OK`; ret['res'] = `${conf[1]}:/${conf[3]}/${pathOk}`
+        let text = inf.text; pathOk = `log/${inf.folder}`; if (inf.file.includes('timeLastGet')) { pathOk = `${pathOk}/${inf.file}` }
+        else if (inf.rewrite) { text = `${hou}\n${inf.text}\n\n`; pathOk = `${pathOk}/${mon}/${day}/${inf.file}` } else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }
+        const infFile = { 'action': 'write', 'functionLocal': false, 'text': text, 'rewrite': inf.rewrite ? true : false, 'path': pathOk };
+        const retFile = await file(infFile); ret['msg'] = `LOG: OK`; ret['res'] = `${conf[1]}:/${conf[3]}/${pathOk}`; ret['ret'] = true
     } catch (e) { }; return ret
 }
 
@@ -482,33 +484,36 @@ if (typeof window !== 'undefined') { // CHROME
     window['g'] = {}; window['p'] = p; window['conf'] = retFile.res;
     // ## functions
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage;
-    window['dateHour'] = dateHour; window['secToHour'] = secToHour; window['regex'] = regex; window['random'] = random;
-    window['regexE'] = regexE; window['gO'] = gO; window['gOAdd'] = gOAdd;
-    window['gORem'] = gORem; window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret; window['log'] = log;
-    // ## resources
-    window['chatGpt'] = chatGpt; window['clipboard'] = clipboard; window['excel'] = excel;
-    window['getCookies'] = getCookies; window['notification'] = notification; window['promptChrome'] = promptChrome;
-    window['setTag'] = setTag; window['sniffer'] = sniffer; window['splitText'] = splitText;
-    window['tabSearch'] = tabSearch; window['translate'] = translate; window['webSocketRet'] = webSocketRet;
-    window['commandLine'] = commandLine; window['chromeActions'] = chromeActions;
-    // ## scripts
-    window['command1'] = command1; window['command2'] = command2; window['oneFormaMTPE'] = oneFormaMTPE;
-    window['peroptyx_SCH20'] = peroptyx_SCH20; window['peroptyx_QIDC'] = peroptyx_QIDC;
+    window['dateHour'] = dateHour; window['secToHour'] = secToHour;
+    window['regex'] = regex; window['random'] = random; window['regexE'] = regexE;
+    window['gO'] = gO; window['gOAdd'] = gOAdd; window['gORem'] = gORem;
+    window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret; window['log'] = log;
+    // // ## resources
+    // window['chatGpt'] = chatGpt; window['clipboard'] = clipboard; window['excel'] = excel;
+    // window['getCookies'] = getCookies; window['notification'] = notification; window['promptChrome'] = promptChrome;
+    // window['setTag'] = setTag; window['sniffer'] = sniffer; window['splitText'] = splitText;
+    // window['tabSearch'] = tabSearch; window['translate'] = translate; window['webSocketRet'] = webSocketRet;
+    // window['commandLine'] = commandLine; window['chromeActions'] = chromeActions;
+    // // ## scripts
+    // window['command1'] = command1; window['command2'] = command2; window['oneFormaMTPE'] = oneFormaMTPE;
+    // window['peroptyx_SCH20'] = peroptyx_SCH20; window['peroptyx_QIDC'] = peroptyx_QIDC;
 } else { // NODEJS
     global['g'] = {}; global['p'] = p; global['conf'] = retFile.res;
     // ## functions
-    global['api'] = api; global['file'] = file; global['configStorage'] = configStorage; global['dateHour'] = dateHour;
-    global['secToHour'] = secToHour; global['regex'] = regex; global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
-    global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj; global['jsonInterpret'] = jsonInterpret; global['log'] = log;
-    // ## resources
-    global['chatGpt'] = chatGpt; global['clipboard'] = clipboard; global['excel'] = excel;
-    global['getCookies'] = getCookies; global['notification'] = notification; global['promptChrome'] = promptChrome;
-    global['setTag'] = setTag; global['sniffer'] = sniffer; global['splitText'] = splitText;
-    global['tabSearch'] = tabSearch; global['translate'] = translate; global['webSocketRet'] = webSocketRet;
-    global['commandLine'] = commandLine; global['chromeActions'] = chromeActions;
-    // ## scripts
-    global['command1'] = command1; global['command2'] = command2; global['oneFormaMTPE'] = oneFormaMTPE;
-    global['peroptyx_SCH20'] = peroptyx_SCH20; global['peroptyx_QIDC'] = peroptyx_QIDC;
+    global['api'] = api; global['file'] = file; global['configStorage'] = configStorage;
+    global['dateHour'] = dateHour; global['secToHour'] = secToHour; global['regex'] = regex;
+    global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
+    global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj;
+    global['jsonInterpret'] = jsonInterpret; global['log'] = log;
+    // // ## resources
+    // global['chatGpt'] = chatGpt; global['clipboard'] = clipboard; global['excel'] = excel;
+    // global['getCookies'] = getCookies; global['notification'] = notification; global['promptChrome'] = promptChrome;
+    // global['setTag'] = setTag; global['sniffer'] = sniffer; global['splitText'] = splitText;
+    // global['tabSearch'] = tabSearch; global['translate'] = translate; global['webSocketRet'] = webSocketRet;
+    // global['commandLine'] = commandLine; global['chromeActions'] = chromeActions;
+    // // ## scripts
+    // global['command1'] = command1; global['command2'] = command2; global['oneFormaMTPE'] = oneFormaMTPE;
+    // global['peroptyx_SCH20'] = peroptyx_SCH20; global['peroptyx_QIDC'] = peroptyx_QIDC;
 }
 
 

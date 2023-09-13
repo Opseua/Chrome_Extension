@@ -50,39 +50,25 @@ if (typeof window !== 'undefined') { // CHROME
                     par = `${par} taskkill /IM \"nodeSniffer.exe\" /F\"`
                 } else { par = `${par} "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_BACKGROUND.exe"` }
                 const infApi = {
-                    url: `http://${wsHost}:${portWebSocket}/${device2}`, method: 'POST', headers: { 'accept-language': 'application/json' },
-                    body: {
-                        "fun": {
-                            "securityPass": securityPass, "funRet": { "ret": true, },
-                            "funRun": { "name": "commandLine", "par": { "background": false, "command": par } }
-                        }
+                    'url': `http://${wsHost}:${portWebSocket}/${device2}`, 'method': 'POST', 'headers': { 'accept-language': 'application/json' },
+                    'body': {
+                        "fun": [
+                            {
+                                "securityPass": securityPass, "funRet": { "retUrl": true },
+                                "funRun": {
+                                    "name": "commandLine",
+                                    "par": {
+                                        "command": par
+                                    }
+                                }
+                            }
+                        ]
                     }
                 }; const retApi = await api(infApi);
-                if (!gO.inf.sniffer) {
-                    // const infNotification =
-                    // {
-                    //      'duration': 2, 'iconUrl': './src/media/icon_3.png',
-                    //     'title': `RODANDO`,
-                    //     'message': `OneForma | Peroptyx`,
-                    // };
-                    // const retNotification = await notification(infNotification)
-                    // command2();
-                    // gO.inf = { 'sniffer': 1 }
-                } else {
-                    //gO.inf = { 'sniffer': 2 }
-                    // const infNotification =
-                    // {
-                    //      'duration': 2, 'iconUrl': './src/media/icon_3.png',
-                    //     'title': `PAROU`,
-                    //     'message': `OneForma | Peroptyx`,
-                    // };
-                    // const retNotification = await notification(infNotification)
-                    // gO.inf = { 'sniffer': 0 }
-                }; ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK`;
+                ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_3') { command3(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
-        } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }
-
+        } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
         if (!ret.ret) {
             console.log(ret.msg)
             if (typeof window !== 'undefined') { // CHROME
@@ -97,7 +83,7 @@ if (typeof window !== 'undefined') { // CHROME
 async function client(inf) {
     let ret = { 'ret': false };
     try {
-        let WebS; ret['ret'] = true;
+        let WebS;
         if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
         else { const { WebSocketServer } = await import('ws'); WebS = WebSocketServer } // NODEJS
 
@@ -112,20 +98,20 @@ async function client(inf) {
             ws1.onerror = (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
             ws1.onclose = async (event) => { console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`); await new Promise(r => setTimeout(r, 10000)); web1() }
             ws1.onmessage = async (event) => {
-                let data, fun
-                try { data = JSON.parse(event.data); if (data.fun) { fun = true } }
-                catch (e) { }
+                let data, fun; try { data = JSON.parse(event.data); if (data.fun) { fun = true } } catch (e) { }
                 if (fun) {
                     let infWebSocketRet
                     if (data.retWs && data.retWs.res) {
                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
                     } else { infWebSocketRet = { 'data': event.data } }; const retWebSocketRet = webSocketRet(infWebSocketRet)
-                } else { console.log(`MENSAGEM DO WEBSCKET\n\n${event.data}\n\n`) }
+                } else {
+                    const msg = `\n\n MENSAGEM DO WEBSCKET \n\n ${event.data} \n\n`; console.log(msg)
+                }
             }
         }
         web1()
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }
-
+        ret['ret'] = true;
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
     if (!ret.ret) {
         console.log(ret.msg)
         if (typeof window !== 'undefined') { // CHROME

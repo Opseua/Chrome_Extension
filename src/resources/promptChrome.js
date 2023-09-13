@@ -13,11 +13,11 @@ async function promptChrome(inf) {
             ret['msg'] = 'PROMPT CHROME: OK';
             ret['res'] = retPrompt;
         }
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME
     window['promptChrome'] = promptChrome;
 } else { // NODEJS
-    global['promptChrome'] = promptChrome;
+    // global['promptChrome'] = promptChrome;
 }

@@ -1,7 +1,6 @@
 async function command2(inf) {
   let ret = { 'ret': false };
   try {
-    ret['ret'] = true;
     let reRun = false
     let infSniffer, retSniffer
     const gOEve = async (i) => {
@@ -55,8 +54,8 @@ async function command2(inf) {
       if (gO.inf.sniffer == 1 && reRun) { await run() } else { chrome.browserAction.setBadgeText({ text: '' }); }
     }
     await run()
-
-  } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    ret['ret'] = true;
+  } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

@@ -152,7 +152,7 @@ async function tabSearch(inf) {
                 ret['msg'] = `\n #### ERRO #### SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
             }
         }
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
     if (!ret.ret) {
         if (inf.openIfNotExist) {
             const retOpenTab = await openTab(inf)
@@ -172,5 +172,5 @@ async function tabSearch(inf) {
 if (typeof window !== 'undefined') { // CHROME
     window['tabSearch'] = tabSearch;
 } else { // NODEJS
-    global['tabSearch'] = tabSearch;
+    // global['tabSearch'] = tabSearch;
 }

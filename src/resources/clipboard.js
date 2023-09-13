@@ -18,11 +18,11 @@ async function clipboard(inf) {
     document.body.removeChild(element);
     ret['ret'] = true;
     ret['msg'] = 'CLIPBOARD: OK';
-  } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+  } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME
   window['clipboard'] = clipboard;
 } else { // NODEJS
-  global['clipboard'] = clipboard;
+  // global['clipboard'] = clipboard;
 }

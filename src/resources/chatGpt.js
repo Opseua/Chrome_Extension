@@ -91,11 +91,11 @@ async function chatGpt(inf) {
                 ret['ret'] = true;
             }
         }
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME
     window['chatGpt'] = chatGpt;
 } else { // NODEJS
-    global['chatGpt'] = chatGpt;
+    // global['chatGpt'] = chatGpt;
 }
