@@ -64,7 +64,7 @@ async function webSocketRet(inf) {
             ret['msg'] = `\n #### NAO RODAR ####  NAO RODAR \n\n ${inf.data} \n\n`;
             retLog = await log({ 'folder': '###_JS_###', 'file': `MSG_WebSocket.txt`, 'text': inf.data })
         }
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }
     if (!ret.ret) {
         console.log(ret.msg);
         if (typeof window !== 'undefined') { // CHROME

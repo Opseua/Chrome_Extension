@@ -111,7 +111,7 @@ async function api(inf) {
             const resBody = await req.text(); ret['ret'] = true; ret['msg'] = 'API: OK';
             ret['res'] = { 'code': req.status, 'headers': resHeaders, 'body': resBody }
         }
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 //######################################## ############# #########
 
@@ -241,7 +241,7 @@ async function file(inf) {
                 }
             }
         }
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 async function configStorage(inf) {
@@ -351,7 +351,7 @@ async function configStorage(inf) {
                 }
             }
         }
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
@@ -366,7 +366,7 @@ function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
             'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()]
         }; // manter o 'String' para forcar o '0' (zero) na frente → '001'
         ret['ret'] = true; ret['msg'] = `DATE HOUR: OK`
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 function secToHour(inf) { // NAO POR COMO 'async'!!!
@@ -377,7 +377,7 @@ function secToHour(inf) { // NAO POR COMO 'async'!!!
         const sec = (inf % 60).toString().padStart(2, "0");
         ret['res'] = String(`${hou}:${min}:${sec}`) // manter o 'String' para forcar o '0' (zero) na frente → '001'
         ret['ret'] = true; ret['msg'] = `SEC TO HOUR: OK`
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 function regex(inf) {
@@ -412,7 +412,7 @@ function regex(inf) {
                 else { ret['msg'] = `\n #### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`; }
             }
         }
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; return ret
 }
 
 async function random(inf) {
@@ -422,7 +422,7 @@ async function random(inf) {
         const number = Math.floor(Math.random() * (max - min + 1) + min) * 1000;
         if (message) { console.log(`AGUARDANDO: ${number / 1000} SEGUNDOS`); await new Promise(resolve => setTimeout(resolve, number)); }
         ret['ret'] = true; ret['msg'] = `RANDON: OK`; ret['res'] = number / 1000;
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 // ############### GLOBAL OBJECT ###############
@@ -441,12 +441,9 @@ async function regexE(inf) {
     try {
         ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/); ret['ret'] = true;
         if (match && match.length == 3) { ret['res'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
-        else { ret['res'] = `\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` }
+        else { ret['res'] = `\n\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` }
         if (typeof window == 'undefined') { const retLog = await log({ 'folder': '###_JS_###', 'file': `_regexE.txt`, 'text': ret }) }
-    } catch (e) {
-        const match = e.stack.match(/(\w+\.\w+):(\d+):\d+/);
-        ret['msg'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${e.toString()} \n\n`
-    } if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
+    } catch (e) { console.log(`\n\n #### ERRO REGEXe #### ${e} \n\n`) } return ret
 }
 
 function orderObj(o) {
@@ -458,7 +455,7 @@ async function jsonInterpret(inf) {
     try {
         const json = JSON.stringify(inf.json); const res = json.replace(/\$\[(.*?)\]/g, (match, p1) => g[p1])
         ret['ret'] = true; ret['msg'] = `JSON INTERPRET: OK`; ret['res'] = res;
-    } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 async function log(inf) {

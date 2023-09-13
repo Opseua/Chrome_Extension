@@ -56,7 +56,7 @@ async function command2(inf) {
     }
     await run()
 
-  } catch (e) { ret['msg'] = regexE({ 'e': e }).res }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; return ret
+  } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

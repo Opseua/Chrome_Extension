@@ -24,7 +24,7 @@ async function commandLine(inf) {
             return ret;
         })
         .catch((e) => {
-            ret['msg'] = `\n #### ERRO #### COMMAND LINE \n ${e} \n\n`;
+            (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })()
             console.log(ret.msg);
             return ret;
         });
