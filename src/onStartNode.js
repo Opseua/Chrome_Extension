@@ -4,8 +4,7 @@ console.log('onStartNodeJS');
 async function client(inf) {
     let ret = { 'ret': false }
     try {
-        let WebS;
-        if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
+        let WebS; if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
         else { const { default: WebSocket } = await import('ws'); WebS = WebSocket } // NODEJS
         await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': 'ONSTART NODEJS: START' })
 
@@ -14,26 +13,19 @@ async function client(inf) {
         const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
         const device1 = retConfigStorage.device2.name; const securityPass = retConfigStorage.securityPass
 
-        let ws1;
-        async function web1() {
-            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
-            ws1.onerror = async (e) => {
+        let ws1; async function web1() {
+            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); ws1.onerror = async (e) => {
                 await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': 'ONSTART NODEJS: ONERROR' })
-            }
-            ws1.onopen = async () => {
+            }; ws1.onopen = async () => {
                 console.log(`ON START: CONEXAO OK`);
                 await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': 'ONSTART NODEJS: CONEXAO OK' })
-            }
-            ws1.onclose = async (event) => {
+            }; ws1.onclose = async (event) => {
                 console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`);
                 await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': 'ONSTART NODEJS: RECONEXAO EM 10 SEGUNDOS' })
                 await new Promise(r => setTimeout(r, 10000)); web1()
-            }
-            ws1.onmessage = async (event) => {
-                let data, fun; try { data = JSON.parse(event.data); if (data.fun) { fun = true } } catch (e) { }
-                if (fun) {
-                    let infWebSocketRet
-                    if (data.retWs && data.retWs.res) {
+            }; ws1.onmessage = async (event) => {
+                let data, fun; try { data = JSON.parse(event.data); if (data.fun) { fun = true } } catch (e) { }; if (fun) {
+                    let infWebSocketRet; if (data.retWs && data.retWs.res) {
                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
                     } else { infWebSocketRet = { 'data': event.data } }; const retWebSocketRet = webSocketRet(infWebSocketRet)
                 } else {
@@ -41,9 +33,7 @@ async function client(inf) {
                     await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': msg })
                 }
             }
-        }
-        web1()
-        ret['ret'] = true;
+        }; web1(); ret['ret'] = true;
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
     if (!ret.ret) {
         console.log(ret.msg)

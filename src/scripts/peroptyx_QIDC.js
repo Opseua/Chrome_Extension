@@ -4,7 +4,7 @@ async function peroptyx_QIDC(inf) {
     let ret = { 'ret': false }
     try {
         let infNotification, retNotification, infClipboard, retClipboard, retSniffer, retFile
-        if (!inf.server) {
+        if (inf.snifferChrome) {
             const gOEve = async (i) => {
                 if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
             }; gOAdd(gOEve);
