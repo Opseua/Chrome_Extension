@@ -24,15 +24,14 @@ if (typeof window == 'undefined') { _fs = await import('fs'); _path = await impo
 // retApi = await api(infApi);
 // console.log(retApi)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
-// let infFile, retFile;
+// let infFile, retFile
 // infFile = { 'action': 'inf' }
-// infFile = { 'action': 'relative', 'functionLocal': false, 'path': './PASTA/ola.txt' }
+// infFile = { 'action': 'write', 'functionLocal': true, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
 // infFile = { 'action': 'read', 'functionLocal': true, 'path': './PASTA/ola.txt' }
-// infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': false, 'text': '1234\n' }
-// infFile = { 'action': 'del', 'functionLocal': true, 'path': './PASTA1/ola.txt' }
-// infFile = { 'action': 'list', 'functionLocal': true, 'path': '.', 'max': 10 }
-// retFile = await file(infFile)
-// console.log(retFile)
+// infFile = { 'action': 'list', 'functionLocal': true, 'path': './PASTA/', 'max': 10 }
+// infFile = { 'action': 'change', 'functionLocal': true, 'path': './PASTA/', 'pathNew': './PASTA2/' }
+// infFile = { 'action': 'del', 'functionLocal': true, 'path': './PASTA2/' }
+// retFile = await file(infFile); console.log(retFile)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // let infConfigStorage, retConfigStorage; 
 // infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
@@ -88,7 +87,7 @@ await import('./tabSearch.js'); await import('./translate.js'); await import('./
 await import('./commandLine.js'); await import('./chromeActions.js');
 // ## scripts
 await import('../scripts/command1.js'); await import('../scripts/command2.js'); await import('../scripts/oneFormaMTPE.js');
-await import('../scripts/peroptyx_SCH20.js'); await import('../scripts/peroptyx_QIDC.js');
+await import('../scripts/peroptyx_Search20.js'); await import('../scripts/peroptyx_QueryImageDeservingClassification.js');
 
 async function api(inf) {
     let ret = { 'ret': false }
@@ -97,7 +96,7 @@ async function api(inf) {
             const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
             if (inf.headers) { reqOpt['headers'] = inf.headers }
             if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
-                reqOpt['body'] = typeof inf.body == 'object' ? JSON.stringify(inf.body) : inf.body
+                reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
             }
             const req = UrlFetchApp.fetch(inf.url, reqOpt); const resHeaders = req.getAllHeaders();
             const resBody = req.getContentText(); ret['ret'] = true; ret['msg'] = 'API: OK';
@@ -106,7 +105,7 @@ async function api(inf) {
             const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
             if (inf.headers) { reqOpt['headers'] = inf.headers }
             if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
-                reqOpt['body'] = typeof inf.body == 'object' ? JSON.stringify(inf.body) : inf.body
+                reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
             }
             const req = await fetch(inf.url, reqOpt); const resHeaders = {};
             req.headers.forEach((value, name) => { resHeaders[name] = value })
@@ -124,17 +123,17 @@ async function file(inf) {
             let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji };
         }
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change'].includes(inf.action)) {
-            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
+            ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
         } else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {
-            ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'functionLocal' \n\n`
-        } else if (inf.action !== 'inf' && (!inf.path || inf.path == '')) { ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'path' \n\n` }
+            ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'functionLocal' \n\n`
+        } else if (inf.action !== 'inf' && (!inf.path || inf.path == '')) { ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'path' \n\n` }
         else {
             let infFile, retFile, path, retFetch = '', text, jsonFile, functionLocal, fileOk, e, relative, pathFull, relativeParts, retRelative, pathOld, pathNew
             if (inf.action == 'write') { // ########################## WRITE
-                if (typeof inf.rewrite !== 'boolean') { ret['msg'] = `\n #### ERRO #### FILE WRITE \n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`; }
-                else if (!inf.text || inf.text == '') { ret['msg'] = `\n #### ERRO #### FILE WRITE \n INFORMAR O 'text' \n\n`; }
+                if (typeof inf.rewrite !== 'boolean') { ret['msg'] = `\n\n #### ERRO #### FILE WRITE \n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`; }
+                else if (!inf.text || inf.text == '') { ret['msg'] = `\n\n #### ERRO #### FILE WRITE \n INFORMAR O 'text' \n\n`; }
                 else {
-                    text = typeof inf.text == 'object' ? JSON.stringify(inf.text) : inf.text
+                    text = typeof inf.text === 'object' ? JSON.stringify(inf.text) : inf.text
                     if (inf.path.includes(':')) { path = inf.path; if (typeof window !== 'undefined') { path = path.split(':/')[1] } }
                     else {
                         infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal && typeof window == 'undefined' ? true : false };
@@ -155,7 +154,7 @@ async function file(inf) {
                         }; chrome.downloads.download(downloadOptions);
                     } else { // NODEJS
                         await _fs.promises.mkdir(_path.dirname(path), { recursive: true })
-                        await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' });
+                        await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' })
                     }; ret['ret'] = true; ret['msg'] = `FILE WRITE: OK`;
                 }
             } else if (inf.action == 'read') { // ########################## READ
@@ -171,7 +170,14 @@ async function file(inf) {
                 if (inf.path.includes(':')) { path = inf.path } else {
                     infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal }; retFile = await file(infFile);
                     path = retFile.res[0]
-                }; await _fs.promises.unlink(path); ret['ret'] = true; ret['msg'] = `FILE DEL: OK`;
+                }; async function delP(inf) {
+                    try {
+                        const s = await _fs.promises.stat(inf); if (s.isDirectory()) {
+                            const as = await _fs.promises.readdir(inf)
+                            for (const a of as) { const c = _path.join(inf, a); await delP(c) }; await _fs.promises.rmdir(inf)
+                        } else { await _fs.promises.unlink(inf) }; ret['ret'] = true; ret['msg'] = `FILE DEL: OK`;
+                    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = `\n\n #### ERRO #### FILE DEL \n ${m.res} \n\n` }
+                }; await delP(path)
             } else if (inf.action == 'inf') { // ########################## INF
                 e = JSON.stringify(new Error().stack).replace('at ', '')
                 // [0] config.json | [1] letra | [2] caminho do projeto atual | [3] path download/terminal | [4] arquivo atual
@@ -205,7 +211,7 @@ async function file(inf) {
                 }; ret['ret'] = true; ret['msg'] = `FILE RELATIVE: OK`
                 ret['res'] = [`${typeof window !== 'undefined' && inf.functionLocal ? '' : `${conf[1]}:/`}${runPath(inf.path, inf.functionLocal ? 2 : 3)}`]
             } else if (inf.action == 'list' && typeof window == 'undefined') { // ########################## LIST
-                if (!inf.max || inf.max == '') { ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'max' \n\n`; }
+                if (!inf.max || inf.max == '') { ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'max' \n\n`; }
                 else {
                     if (inf.path.includes(':')) { path = inf.path } else {
                         infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal };
@@ -229,11 +235,17 @@ async function file(inf) {
                     }; retFilesList = await filesList(retFilesList); ret['ret'] = true; ret['msg'] = `FILE LIST: OK`; ret['res'] = retFilesList;
                 }
             } else if (inf.action == 'change') {
-                if (!inf.pathNew || inf.pathNew == '') { ret['msg'] = `\n #### ERRO #### FILE \n INFORMAR O 'pathNew' \n\n`; } else {
-                    infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal && typeof window == 'undefined' ? true : false };
-                    retFile = await file(infFile); pathOld = retFile.res[0]
-                    infFile = { 'action': 'relative', 'path': inf.pathNew, 'functionLocal': inf.functionLocal && typeof window == 'undefined' ? true : false };
-                    retFile = await file(infFile); pathNew = retFile.res[0]; await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true })
+                if (!inf.pathNew || inf.pathNew == '') { ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'pathNew' \n\n`; } else {
+
+                    if (inf.path.includes(':')) { pathOld = inf.path } else {
+                        infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal };
+                        retFile = await file(infFile); pathOld = retFile.res[0]
+                    }
+                    if (inf.pathNew.includes(':')) { pathNew = inf.pathNew } else {
+                        infFile = { 'action': 'relative', 'path': inf.pathNew, 'functionLocal': inf.functionLocal };
+                        retFile = await file(infFile); pathNew = retFile.res[0]
+                    }
+                    await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true })
                     await _fs.promises.rename(pathOld, pathNew); ret['ret'] = true; ret['msg'] = `FILE CHANGE: OK`
                 }
             }
@@ -246,11 +258,11 @@ async function configStorage(inf) {
     try {
         let run = false
         if (!inf.action || !['set', 'get', 'del'].includes(inf.action)) {
-            ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'action' \n\n`;
+            ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'action' \n\n`;
         } else {
-            if ((!inf.key || inf.key == '')) { ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR A 'key' \n\n`; }
+            if ((!inf.key || inf.key == '')) { ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR A 'key' \n\n`; }
             else {
-                if (inf.action == 'set' && !inf.value) { ret['msg'] = `\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'value' \n\n`; }
+                if (inf.action == 'set' && !inf.value) { ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'value' \n\n`; }
                 else { run = true }
             }
         }
@@ -263,7 +275,7 @@ async function configStorage(inf) {
                             const data = {}; data[inf.key] = inf.value;
                             chrome.storage.local.set(data, async () => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE SET \n ${chrome.runtime.lastError} \n\n`;
+                                    ret['msg'] = `\n\n #### ERRO #### STORAGE SET \n ${chrome.runtime.lastError} \n\n`;
                                 } else { ret['ret'] = true; ret['msg'] = 'STORAGE SET: OK' }; resolve(ret);
                             });
                         });
@@ -274,7 +286,7 @@ async function configStorage(inf) {
                         return new Promise((resolve) => {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`;
+                                    ret['msg'] = `\n\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length == 0) {
                                     async function checkConfig() {
                                         const infFile = { 'action': 'read', 'path': conf[0], 'functionLocal': true }
@@ -284,12 +296,12 @@ async function configStorage(inf) {
                                             return new Promise((resolve) => {
                                                 chrome.storage.local.set(data, async () => {
                                                     if (chrome.runtime.lastError) {
-                                                        ret['msg'] = `\n #### ERRO #### STORAGE SET* \n ${chrome.runtime.lastError} \n\n`;
+                                                        ret['msg'] = `\n\n #### ERRO #### STORAGE SET* \n ${chrome.runtime.lastError} \n\n`;
                                                     } else { ret['ret'] = true; ret['msg'] = 'STORAGE GET: OK'; ret['res'] = config[inf.key] }
                                                     resolve(ret);
                                                 });
                                             })
-                                        } else { ret['msg'] = `\n #### ERRO #### STORAGE GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
+                                        } else { ret['msg'] = `\n\n #### ERRO #### STORAGE GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                                     }; await checkConfig()
                                 } else { ret['ret'] = true; ret['msg'] = 'STORAGE GET: OK'; ret['res'] = result[inf.key] }; resolve(ret);
                             });
@@ -301,9 +313,9 @@ async function configStorage(inf) {
                         return new Promise((resolve) => {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE DEL \n ${chrome.runtime.lastError} \n\n`;
+                                    ret['msg'] = `\n\n #### ERRO #### STORAGE DEL \n ${chrome.runtime.lastError} \n\n`;
                                 } else if (Object.keys(result).length == 0) {
-                                    ret['msg'] = `\n #### ERRO #### STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
+                                    ret['msg'] = `\n\n #### ERRO #### STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                                 } else {
                                     chrome.storage.local.remove(inf.key, async () => { });
                                     ret['ret'] = true; ret['msg'] = 'STORAGE DEL: OK';
@@ -322,29 +334,29 @@ async function configStorage(inf) {
                     retFile = await file(infFile); path = retFile.res[0]
                 }; try { await _fs.promises.access(path); ret_Fs = true } catch (e) { }
                 if (ret_Fs) { const configFile = await _fs.promises.readFile(path, 'utf8'); config = JSON.parse(configFile) } else { config = {} }
-                if (!inf.key || inf.key == '') { ret['msg'] = `\n #### ERRO #### CONFIG \n INFORMAR A 'key' \n\n`; }
+                if (!inf.key || inf.key == '') { ret['msg'] = `\n\n #### ERRO #### CONFIG \n INFORMAR A 'key' \n\n`; }
                 else if (inf.action == 'set') { // CONFIG: SET
                     if (!inf.value && !inf.value == false) {
-                        ret['msg'] = `\n #### ERRO #### CONFIG \n INFORMAR O 'value' \n\n`;
+                        ret['msg'] = `\n\n #### ERRO #### CONFIG \n INFORMAR O 'value' \n\n`;
                     } else {
                         config[inf.key] = inf.value;
                         infFile = { 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
                         retFile = await file(infFile); ret['ret'] = true; ret['msg'] = `CONFIG SET: OK`
                     }
                 } else if (inf.action == 'get') { // #### CONFIG NODE: GET
-                    if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
+                    if (!ret_Fs) { ret['msg'] = `\n\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
                     else if (inf.key == '*' || (inf.key !== '*' && config[inf.key])) {
                         ret['ret'] = true; ret['msg'] = `CONFIG GET: OK`;
                         ret['res'] = inf.key == '*' ? config : config[inf.key]
                     }
-                    else { ret['msg'] = `\n #### ERRO #### CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
+                    else { ret['msg'] = `\n\n #### ERRO #### CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                 } else if (inf.action == 'del') { // #### CONFIG NODE: DEL
-                    if (!ret_Fs) { ret['msg'] = `\n #### ERRO #### CONFIG DEL\n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
+                    if (!ret_Fs) { ret['msg'] = `\n\n #### ERRO #### CONFIG DEL\n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
                     else if (config[inf.key]) {
                         delete config[inf.key]
                         infFile = { 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
                         retFile = await file(infFile); ret['ret'] = true; ret['msg'] = `CONFIG DEL: OK`
-                    } else { ret['msg'] = `\n #### ERRO #### CONFIG DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
+                    } else { ret['msg'] = `\n\n #### ERRO #### CONFIG DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                 }
             }
         }
@@ -406,7 +418,7 @@ function regex(inf) { // NAO POR COMO 'async'!!!
             const result = new RegExp(`^${pattern}$`).test(inf.text);
             if (inf.simple) { if (result) { return true } else { return false } } else {
                 if (result) { ret['msg'] = `REGEX: OK`; ret['res'] = 'TEXTO POSSUI O PADRAO'; ret['ret'] = true; }
-                else { ret['msg'] = `\n #### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`; }
+                else { ret['msg'] = `\n\n #### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`; }
             }
         }
     } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res; return ret })() }; return ret
@@ -437,7 +449,7 @@ async function regexE(inf) {
     let ret = { 'ret': false }
     try {
         ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/)
-        if (match && match.length == 3) { ret['res'] = `\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
+        if (match && match.length == 3) { ret['res'] = `\n\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
         else { ret['res'] = `\n\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` }
         if (typeof window == 'undefined') { const retLog = await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': ret }) }; ret['ret'] = true;
     } catch (e) { console.log(`\n\n #### ERRO REGEXe #### ${e} \n\n`) } return ret
@@ -460,7 +472,9 @@ async function log(inf) {
     try {
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`, hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, pathOk
         let text = inf.text; pathOk = `log/${inf.folder}`; if (['timeLastGet.txt', 'reset.js'].includes(inf.file)) { pathOk = `${pathOk}/${inf.file}` }
-        else if (inf.rewrite) { text = `${hou}\n${inf.text}\n\n`; pathOk = `${pathOk}/${mon}/${day}/${inf.file}` } else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }
+        else if (inf.rewrite) {
+            text = typeof inf.text === 'object' ? `${hou}\n${JSON.stringify(inf.text)}\n\n` : `${hou}\n${inf.text}\n\n`; pathOk = `${pathOk}/${mon}/${day}/${inf.file}`
+        } else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }
         const infFile = { 'action': 'write', 'functionLocal': false, 'text': text, 'rewrite': inf.rewrite ? true : false, 'path': pathOk };
         const retFile = await file(infFile); ret['msg'] = `LOG: OK`; ret['res'] = `${conf[1]}:/${conf[3]}/${pathOk}`; ret['ret'] = true
     } catch (e) { }; return ret

@@ -1,6 +1,6 @@
-// peroptyx_SCH20()
+// peroptyx_Search20()
 
-async function peroptyx_SCH20(inf) {
+async function peroptyx_Search20(inf) {
     let ret = { 'ret': false }
     try {
         let infNotification, retNotification, infClipboard, retClipboard, retSniffer, retFile
@@ -107,7 +107,7 @@ async function peroptyx_SCH20(inf) {
 }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['peroptyx_SCH20'] = peroptyx_SCH20;
+    window['peroptyx_Search20'] = peroptyx_Search20;
 } else { // NODEJS
-    global['peroptyx_SCH20'] = peroptyx_SCH20;
+    global['peroptyx_Search20'] = peroptyx_Search20;
 }

@@ -1,6 +1,6 @@
-// peroptyx_QIDC()
+// peroptyx_QueryImageDeservingClassification()
 
-async function peroptyx_QIDC(inf) {
+async function peroptyx_QueryImageDeservingClassification(inf) {
     let ret = { 'ret': false }
     try {
         let infNotification, retNotification, infClipboard, retClipboard, retSniffer, retFile
@@ -36,7 +36,7 @@ async function peroptyx_QIDC(inf) {
 }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['peroptyx_QIDC'] = peroptyx_QIDC;
+    window['peroptyx_QueryImageDeservingClassification'] = peroptyx_QueryImageDeservingClassification;
 } else { // NODEJS
-    global['peroptyx_QIDC'] = peroptyx_QIDC;
+    global['peroptyx_QueryImageDeservingClassification'] = peroptyx_QueryImageDeservingClassification;
 }

@@ -98,7 +98,7 @@ async function client(inf) {
         }
     }
 }
-//client()
+client()
 
 // const infSniffer = {  'arrUrl': ['*.vtt*'] }
 // const retSniffer = await sniffer(infSniffer)
@@ -117,13 +117,13 @@ infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
 // retConfigStorage = await configStorage(infConfigStorage)
 // console.log(retConfigStorage)
 
-let infFile, retFile;
+let infFile, retFile
 infFile = { 'action': 'inf' }
-infFile = { 'action': 'relative', 'functionLocal': true, 'path': './PASTA/ola.txt' }
-infFile = { 'action': 'read', 'functionLocal': true, 'path': './SRT.txt' }
 infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
-// infFile = { 'action': 'del', 'functionLocal': true, 'path': './PASTA1/ola.txt' }
-// infFile = { 'action': 'list', 'functionLocal': true, 'path': '.', 'max': 10 }
-retFile = await file(infFile);
-console.log(retFile)
+infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
+infFile = { 'action': 'list', 'functionLocal': false, 'path': './PASTA/', 'max': 10 }
+infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pathNew': './PASTA2/' }
+infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
+// retFile = await file(infFile); console.log(retFile)
+
 
