@@ -76,6 +76,9 @@ if (typeof window == 'undefined') { _fs = await import('fs'); _path = await impo
 // console.log(retJsonInterpret)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // await log({ 'folder': '###_TESTE_###', 'file': `TESTE.txt`, 'text': 'INF AQUI' })
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
+// const objeto = { 'chave1': { 'chave2': { 'chave3': 'VALOR' } } };
+// const infHasKey = { 'key': 'chave3', 'obj': objeto }; const retHaskey = hasKey(infHasKey); console.log(retHaskey)
 
 // for (const nameKey in json.taskName) { console.log(nameKey) }
 
@@ -86,7 +89,7 @@ await import('./setTag.js'); await import('./sniffer.js'); await import('./split
 await import('./tabSearch.js'); await import('./translate.js'); await import('./webSocketRet.js');
 await import('./commandLine.js'); await import('./chromeActions.js');
 // ## scripts
-await import('../scripts/command1.js'); await import('../scripts/command2.js'); await import('../scripts/oneFormaMTPE.js');
+await import('../scripts/command1.js'); await import('../scripts/command2.js'); await import('../scripts/oneForma_MTPE.js');
 await import('../scripts/peroptyx_Search20.js'); await import('../scripts/peroptyx_QueryImageDeservingClassification.js');
 
 async function api(inf) {
@@ -95,34 +98,27 @@ async function api(inf) {
         if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
             const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
             if (inf.headers) { reqOpt['headers'] = inf.headers }
-            if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
-                reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
-            }
+            if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) { reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body }
             const req = UrlFetchApp.fetch(inf.url, reqOpt); const resHeaders = req.getAllHeaders();
             const resBody = req.getContentText(); ret['ret'] = true; ret['msg'] = 'API: OK';
             ret['res'] = { 'code': req.getResponseCode(), 'headers': resHeaders, 'body': resBody }
         } else { // ######################################### NODEJS ou CHROME
             const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
-            if (inf.headers) { reqOpt['headers'] = inf.headers }
-            if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
+            if (inf.headers) { reqOpt['headers'] = inf.headers }; if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
                 reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
             }
-            const req = await fetch(inf.url, reqOpt); const resHeaders = {};
-            req.headers.forEach((value, name) => { resHeaders[name] = value })
-            const resBody = await req.text(); ret['ret'] = true; ret['msg'] = 'API: OK';
-            ret['res'] = { 'code': req.status, 'headers': resHeaders, 'body': resBody }
+            const req = await fetch(inf.url, reqOpt); const resHeaders = {}; req.headers.forEach((value, name) => { resHeaders[name] = value })
+            const resBody = await req.text(); ret['ret'] = true; ret['msg'] = 'API: OK'; ret['res'] = { 'code': req.status, 'headers': resHeaders, 'body': resBody }
         }
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
-//######################################## ############# #########
 
 async function file(inf) {
     let ret = { 'ret': false }
     try {
         if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { // PASSAR NO jsonInterpret
             let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji };
-        }
-        if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change'].includes(inf.action)) {
+        } if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change'].includes(inf.action)) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
         } else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'functionLocal' \n\n`
@@ -141,8 +137,7 @@ async function file(inf) {
                     }
                     if (typeof window !== 'undefined') { // CHROME
                         if (path.includes('%/')) { path = path.split('%/')[1] } else if (path.includes(':')) { path = path.split(':/')[1] }
-                        else { path = path }
-                        if (inf.rewrite) {
+                        else { path = path }; if (inf.rewrite) {
                             try {
                                 infFile = { 'action': 'read', 'path': path, 'functionLocal': inf.functionLocal && typeof window == 'undefined' ? true : false };
                                 retFile = await file(infFile); if (retFile.ret) { retFetch = retFile.res }; text = `${retFetch}${text}`
@@ -153,17 +148,14 @@ async function file(inf) {
                             conflictAction: 'overwrite' // 'overwrite' LIMPA | 'uniquify' (ADICIONA (1), (2), (3)... NO FINAL)
                         }; chrome.downloads.download(downloadOptions);
                     } else { // NODEJS
-                        await _fs.promises.mkdir(_path.dirname(path), { recursive: true })
-                        await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' })
+                        await _fs.promises.mkdir(_path.dirname(path), { recursive: true }); await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' })
                     }; ret['ret'] = true; ret['msg'] = `FILE WRITE: OK`;
                 }
             } else if (inf.action == 'read') { // ########################## READ
                 if (inf.path.includes(':')) { path = inf.path } else {
-                    infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal };
-                    retFile = await file(infFile); path = retFile.res[0]
+                    infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal }; retFile = await file(infFile); path = retFile.res[0]
                 }; if (typeof window !== 'undefined') { // CHROME
-                    if (!inf.functionLocal) { path = `file:///${path}` }
-                    retFetch = await fetch(path.replace('%', '')); retFetch = await retFetch.text()
+                    if (!inf.functionLocal) { path = `file:///${path}` }; retFetch = await fetch(path.replace('%', '')); retFetch = await retFetch.text()
                 } else { retFetch = await _fs.promises.readFile(path, 'utf8') } // NODEJS
                 ret['ret'] = true; ret['msg'] = `FILE READ: OK`; ret['res'] = retFetch;
             } else if (inf.action == 'del' && typeof window == 'undefined') { // ########################## DEL
@@ -205,8 +197,7 @@ async function file(inf) {
                     if (pp.startsWith('./')) { pp = pp.slice(2) } else if (relative.startsWith('/')) { pp = pp.slice(1) }
                     pathFull = conf[par].split('/'); relativeParts = pp.split('/');
                     while (pathFull.length > 0 && relativeParts[0] == '..') { pathFull.pop(); relativeParts.shift(); }
-                    retRelative = pathFull.concat(relativeParts).join('/')
-                    if (retRelative.endsWith('/.')) { retRelative = retRelative.slice(0, -2); }
+                    retRelative = pathFull.concat(relativeParts).join('/'); if (retRelative.endsWith('/.')) { retRelative = retRelative.slice(0, -2); }
                     else if (retRelative.endsWith('.') || retRelative.endsWith('/')) { retRelative = retRelative.slice(0, -1); }; return retRelative
                 }; ret['ret'] = true; ret['msg'] = `FILE RELATIVE: OK`
                 ret['res'] = [`${typeof window !== 'undefined' && inf.functionLocal ? '' : `${conf[1]}:/`}${runPath(inf.path, inf.functionLocal ? 2 : 3)}`]
@@ -236,16 +227,13 @@ async function file(inf) {
                 }
             } else if (inf.action == 'change') {
                 if (!inf.pathNew || inf.pathNew == '') { ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'pathNew' \n\n`; } else {
-
                     if (inf.path.includes(':')) { pathOld = inf.path } else {
                         infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal };
                         retFile = await file(infFile); pathOld = retFile.res[0]
-                    }
-                    if (inf.pathNew.includes(':')) { pathNew = inf.pathNew } else {
+                    }; if (inf.pathNew.includes(':')) { pathNew = inf.pathNew } else {
                         infFile = { 'action': 'relative', 'path': inf.pathNew, 'functionLocal': inf.functionLocal };
                         retFile = await file(infFile); pathNew = retFile.res[0]
-                    }
-                    await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true })
+                    }; await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true })
                     await _fs.promises.rename(pathOld, pathNew); ret['ret'] = true; ret['msg'] = `FILE CHANGE: OK`
                 }
             }
@@ -256,24 +244,18 @@ async function file(inf) {
 async function configStorage(inf) {
     let ret = { 'ret': false }
     try {
-        let run = false
-        if (!inf.action || !['set', 'get', 'del'].includes(inf.action)) {
+        let run = false; if (!inf.action || !['set', 'get', 'del'].includes(inf.action)) {
             ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'action' \n\n`;
         } else {
             if ((!inf.key || inf.key == '')) { ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR A 'key' \n\n`; }
-            else {
-                if (inf.action == 'set' && !inf.value) { ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'value' \n\n`; }
-                else { run = true }
-            }
+            else { if (inf.action == 'set' && !inf.value) { ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'value' \n\n` } else { run = true } }
         }
         if (run) {
             if (typeof window !== 'undefined') { // CHROME
                 if (inf.action == 'set') { // #### STORAGE: SET
-                    await storageSet(inf)
-                    async function storageSet(inf) {
+                    await storageSet(inf); async function storageSet(inf) {
                         return new Promise((resolve) => {
-                            const data = {}; data[inf.key] = inf.value;
-                            chrome.storage.local.set(data, async () => {
+                            const data = {}; data[inf.key] = inf.value; chrome.storage.local.set(data, async () => {
                                 if (chrome.runtime.lastError) {
                                     ret['msg'] = `\n\n #### ERRO #### STORAGE SET \n ${chrome.runtime.lastError} \n\n`;
                                 } else { ret['ret'] = true; ret['msg'] = 'STORAGE SET: OK' }; resolve(ret);
@@ -281,8 +263,7 @@ async function configStorage(inf) {
                         });
                     }
                 } else if (inf.action == 'get') { // #### STORAGE: GET
-                    await storageGet(inf)
-                    async function storageGet(inf) {
+                    await storageGet(inf); async function storageGet(inf) {
                         return new Promise((resolve) => {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
@@ -292,8 +273,7 @@ async function configStorage(inf) {
                                         const infFile = { 'action': 'read', 'path': conf[0], 'functionLocal': true }
                                         const retFile = await file(infFile); const config = JSON.parse(retFile.res);
                                         if (config[inf.key]) {
-                                            const data = {}; data[inf.key] = config[inf.key];
-                                            return new Promise((resolve) => {
+                                            const data = {}; data[inf.key] = config[inf.key]; return new Promise((resolve) => {
                                                 chrome.storage.local.set(data, async () => {
                                                     if (chrome.runtime.lastError) {
                                                         ret['msg'] = `\n\n #### ERRO #### STORAGE SET* \n ${chrome.runtime.lastError} \n\n`;
@@ -308,8 +288,7 @@ async function configStorage(inf) {
                         });
                     }
                 } else if (inf.action == 'del') { // #### STORAGE: DEL
-                    await storageDel(inf)
-                    async function storageDel(inf) {
+                    await storageDel(inf); async function storageDel(inf) {
                         return new Promise((resolve) => {
                             chrome.storage.local.get(inf.key, async (result) => {
                                 if (chrome.runtime.lastError) {
@@ -317,16 +296,14 @@ async function configStorage(inf) {
                                 } else if (Object.keys(result).length == 0) {
                                     ret['msg'] = `\n\n #### ERRO #### STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                                 } else {
-                                    chrome.storage.local.remove(inf.key, async () => { });
-                                    ret['ret'] = true; ret['msg'] = 'STORAGE DEL: OK';
+                                    chrome.storage.local.remove(inf.key, async () => { }); ret['ret'] = true; ret['msg'] = 'STORAGE DEL: OK';
                                 }; resolve(ret);
                             }); return
                         });
                     }
                 }
             } else { // ################## NODE
-                let infFile, retFile, config, path, ret_Fs = false
-                if (inf.path && inf.path.includes(':')) { path = inf.path }
+                let infFile, retFile, config, path, ret_Fs = false; if (inf.path && inf.path.includes(':')) { path = inf.path }
                 else {
                     if (inf.path && typeof inf.functionLocal == 'boolean') {
                         infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal }
@@ -336,9 +313,8 @@ async function configStorage(inf) {
                 if (ret_Fs) { const configFile = await _fs.promises.readFile(path, 'utf8'); config = JSON.parse(configFile) } else { config = {} }
                 if (!inf.key || inf.key == '') { ret['msg'] = `\n\n #### ERRO #### CONFIG \n INFORMAR A 'key' \n\n`; }
                 else if (inf.action == 'set') { // CONFIG: SET
-                    if (!inf.value && !inf.value == false) {
-                        ret['msg'] = `\n\n #### ERRO #### CONFIG \n INFORMAR O 'value' \n\n`;
-                    } else {
+                    if (!inf.value && !inf.value == false) { ret['msg'] = `\n\n #### ERRO #### CONFIG \n INFORMAR O 'value' \n\n` }
+                    else {
                         config[inf.key] = inf.value;
                         infFile = { 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
                         retFile = await file(infFile); ret['ret'] = true; ret['msg'] = `CONFIG SET: OK`
@@ -346,10 +322,8 @@ async function configStorage(inf) {
                 } else if (inf.action == 'get') { // #### CONFIG NODE: GET
                     if (!ret_Fs) { ret['msg'] = `\n\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
                     else if (inf.key == '*' || (inf.key !== '*' && config[inf.key])) {
-                        ret['ret'] = true; ret['msg'] = `CONFIG GET: OK`;
-                        ret['res'] = inf.key == '*' ? config : config[inf.key]
-                    }
-                    else { ret['msg'] = `\n\n #### ERRO #### CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
+                        ret['ret'] = true; ret['msg'] = `CONFIG GET: OK`; ret['res'] = inf.key == '*' ? config : config[inf.key]
+                    } else { ret['msg'] = `\n\n #### ERRO #### CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`; }
                 } else if (inf.action == 'del') { // #### CONFIG NODE: DEL
                     if (!ret_Fs) { ret['msg'] = `\n\n #### ERRO #### CONFIG DEL\n ARQUIVO '${path}' NAO ENCONTRADO \n\n`; }
                     else if (config[inf.key]) {
@@ -480,6 +454,17 @@ async function log(inf) {
     } catch (e) { }; return ret
 }
 
+function hasKey(inf) { // NAO POR COMO 'async'!!!
+    let ret = { 'ret': false }
+    try {
+        function hk(key, obj) {
+            if (obj.hasOwnProperty(key)) { return true }; for (let prop in obj) {
+                if (typeof obj[prop] === 'object' && obj[prop] !== null) { if (hk(key, obj[prop])) { return true } }
+            }; return false
+        }; ret['msg'] = `HAS KEY: OK`; ret['res'] = hk(inf.key, inf.obj); ret['ret'] = true
+    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res; console.log(ret.msg); return ret })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
+}
+
 // ############### CLEAR CONSOLE ###############
 console.clear(); let messageCount = 0; const clearConsole = console.log;
 console.log = async function () {
@@ -496,7 +481,7 @@ if (typeof window !== 'undefined') { // CHROME
     window['dateHour'] = dateHour; window['secToHour'] = secToHour;
     window['regex'] = regex; window['random'] = random; window['regexE'] = regexE;
     window['gO'] = gO; window['gOAdd'] = gOAdd; window['gORem'] = gORem;
-    window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret; window['log'] = log;
+    window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret; window['log'] = log; window['hasKey'] = hasKey;
 } else { // NODEJS
     global['g'] = {}; global['p'] = p; global['conf'] = retFile.res;
     // ## functions
@@ -504,7 +489,7 @@ if (typeof window !== 'undefined') { // CHROME
     global['dateHour'] = dateHour; global['secToHour'] = secToHour; global['regex'] = regex;
     global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
     global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj;
-    global['jsonInterpret'] = jsonInterpret; global['log'] = log;
+    global['jsonInterpret'] = jsonInterpret; global['log'] = log; global['hasKey'] = hasKey;
 }
 
 

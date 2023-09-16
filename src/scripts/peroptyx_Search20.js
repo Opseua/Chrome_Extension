@@ -17,34 +17,22 @@ async function peroptyx_Search20(inf) {
                 'duration': 1, 'iconUrl': './src/media/notification_3.png',
                 'title': `NÃO TEM A RESPOSTA`,
                 'message': `Avaliar manualmente`,
-            }
-            retNotification = await notification(infNotification)
+            }; retNotification = await notification(infNotification)
         }
         else {
             const resultList = retSniffer.tasks[0].taskData.resultSet.resultList;
-            const testQuestionInformation = retSniffer.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer
-            let not = true
+            const testQuestionInformation = retSniffer.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer; let not = true
             const res = await Promise.all(resultList.map(async (v, index) => {
-                const idTask = [v.surveyKeys['193']];
-                let resultado = null
-                try { resultado = index + 1 } catch (e) { }
-                let nome = null
-                try { nome = v.value.name } catch (e) { }
-                let endereco = null
-                try { endereco = v.value.address[0] } catch (e) { }
-                let fechado = null
-                try { fechado = testQuestionInformation['Closed-DNE'][idTask].closed_dne.value ? 'SIM' : 'NAO' } catch (e) { }
-                let relevance = null
-                try { relevance = testQuestionInformation.Relevance[idTask].Relevance[0].label } catch (e) { }
-                let nameAccurracy = null
-                try { nameAccurracy = testQuestionInformation.Data[idTask].Name[0].value } catch (e) { }
-                let addressAccurracy = null
-                try { addressAccurracy = testQuestionInformation.Data[idTask].Address[0].value } catch (e) { }
-                let pinAccurracy = null
-                try { pinAccurracy = testQuestionInformation.Data[idTask].Pin[0].value } catch (e) { }
-                let comentario = null
-                try { comentario = resultList[index].comments } catch (e) { }
-                let comentario1, comentario2
+                const idTask = [v.surveyKeys['193']]; let resultado = null
+                try { resultado = index + 1 } catch (e) { }; let nome = null
+                try { nome = v.value.name } catch (e) { }; let endereco = null
+                try { endereco = v.value.address[0] } catch (e) { }; let fechado = null
+                try { fechado = testQuestionInformation['Closed-DNE'][idTask].closed_dne.value ? 'SIM' : 'NAO' } catch (e) { }; let relevance = null
+                try { relevance = testQuestionInformation.Relevance[idTask].Relevance[0].label } catch (e) { }; let nameAccurracy = null
+                try { nameAccurracy = testQuestionInformation.Data[idTask].Name[0].value } catch (e) { }; let addressAccurracy = null
+                try { addressAccurracy = testQuestionInformation.Data[idTask].Address[0].value } catch (e) { }; let pinAccurracy = null
+                try { pinAccurracy = testQuestionInformation.Data[idTask].Pin[0].value } catch (e) { }; let comentario = null
+                try { comentario = resultList[index].comments } catch (e) { }; let comentario1, comentario2
                 if (comentario) {
                     if (not) {
                         not = false
@@ -53,13 +41,11 @@ async function peroptyx_Search20(inf) {
                             'duration': 1, 'iconUrl': './src/media/icon_4.png',
                             'title': `AGUARDE...`,
                             'message': `Avaliar manualTraduzindo e alterando o comentário`,
-                        }
-                        retNotification = await notification(infNotification)
+                        }; retNotification = await notification(infNotification)
                     }
 
                     const infTranslate1 = { 'source': 'auto', 'target': 'pt', 'text': comentario };
-                    const retTranslate1 = await translate(infTranslate1)
-                    comentario1 = retTranslate1.res
+                    const retTranslate1 = await translate(infTranslate1); comentario1 = retTranslate1.res
 
                     // infTranslate2 = { 'source': 'auto', 'target': 'en', 'text': comentario };
                     // retTranslate2 = await translate(infTranslate2)
@@ -67,10 +53,7 @@ async function peroptyx_Search20(inf) {
 
                     const infChatGpt = { 'provider': 'ora.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING:\n\n ${comentario}` }
                     const retChatGpt = await chatGpt(infChatGpt)
-                    if (!retChatGpt.ret) {
-                        return ret
-                    }
-                    comentario2 = retChatGpt.res.replace(/\n/g, ' ').replace(/\\"/g, "'");
+                    if (!retChatGpt.ret) { return ret }; comentario2 = retChatGpt.res.replace(/\n/g, ' ').replace(/\\"/g, "'");
                 }
 
                 return {
@@ -95,19 +78,17 @@ async function peroptyx_Search20(inf) {
                 'duration': 2, 'iconUrl': './src/media/notification_1.png',
                 'title': `CONCLUÍDO: na área de transferência`,
                 'message': `${JSON.stringify(res, null, 2)}`,
-            }
-            retNotification = await notification(infNotification)
+            }; retNotification = await notification(infNotification)
 
             infClipboard = { 'value': JSON.stringify(res, null, 2) }
             retClipboard = await clipboard(infClipboard)
         }
-        ret['ret'] = true;
-        ret['msg'] = `PEROPTYX: OK`;
+        ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME
     window['peroptyx_Search20'] = peroptyx_Search20;
 } else { // NODEJS
-    global['peroptyx_Search20'] = peroptyx_Search20;
+    // global['peroptyx_Search20'] = peroptyx_Search20;
 }

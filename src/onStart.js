@@ -126,4 +126,3 @@ infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pat
 infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 // retFile = await file(infFile); console.log(retFile)
 
-

@@ -25,8 +25,8 @@ async function command2(inf) {
         if (regex({ 'simple': true, 'text': JSON.stringify(retSniffer.res.res.body), 'pattern': '*MTPE_New_PortugueseBrazilToEnglish*' })) {
           // MTPE_New_PortugueseBrazilToEnglish
           const infOneFormaMPTE = { 'sniffer': retSniffer.res.res.body }
-          const retOneFormaMTPE = await oneFormaMTPE(infOneFormaMPTE)
-          if (retOneFormaMTPE.ret) {
+          const retoneForma_MTPE = await oneForma_MTPE(infOneFormaMPTE)
+          if (retoneForma_MTPE.ret) {
             reRun = true
             ret['msg'] = `COMMAND 2: OK | OneForma`;
           }
@@ -61,5 +61,5 @@ async function command2(inf) {
 if (typeof window !== 'undefined') { // CHROME
   window['command2'] = command2;
 } else { // NODEJS
-  global['command2'] = command2;
+ // global['command2'] = command2;
 }

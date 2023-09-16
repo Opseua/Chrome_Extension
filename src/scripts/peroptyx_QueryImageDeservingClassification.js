@@ -19,8 +19,7 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
                 'duration': 4, 'iconUrl': './src/media/notification_3.png',
                 'title': `BLIND`,
                 'message': `${retSniffer.tasks[0].taskData.query}`,
-            }
-            retNotification = await notification(infNotification)
+            }; retNotification = await notification(infNotification)
         } else {
             infNotification =
             {
@@ -30,13 +29,12 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             }
             // retNotification = await notification(infNotification)
         }
-        ret['ret'] = true;
-        ret['msg'] = `PEROPTYX: OK`;
+        ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME
     window['peroptyx_QueryImageDeservingClassification'] = peroptyx_QueryImageDeservingClassification;
 } else { // NODEJS
-    global['peroptyx_QueryImageDeservingClassification'] = peroptyx_QueryImageDeservingClassification;
+    // global['peroptyx_QueryImageDeservingClassification'] = peroptyx_QueryImageDeservingClassification;
 }

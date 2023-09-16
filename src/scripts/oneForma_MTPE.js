@@ -1,4 +1,4 @@
-async function oneFormaMTPE(inf) {
+async function oneForma_MTPE(inf) {
     let ret = { 'ret': false }
     try {
         let infRegex1, infRegex2, retRegex1, retRegex2, infNotification, retNotification
@@ -102,7 +102,7 @@ async function oneFormaMTPE(inf) {
 }
 
 if (typeof window !== 'undefined') { // CHROME
-    window['oneFormaMTPE'] = oneFormaMTPE;
+    window['oneForma_MTPE'] = oneForma_MTPE;
 } else { // NODEJS
-    global['oneFormaMTPE'] = oneFormaMTPE;
+   // global['oneForma_MTPE'] = oneForma_MTPE;
 }
