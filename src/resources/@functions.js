@@ -445,7 +445,7 @@ async function log(inf) {
     let ret = { 'ret': false }
     try {
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`, hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, pathOk
-        let text = inf.text; pathOk = `log/${inf.folder}`; if (['timeLastGet.txt', 'reset.js'].includes(inf.file)) { pathOk = `${pathOk}/${inf.file}` }
+        let text = inf.text; pathOk = `log/${inf.folder}`; if (['reg.txt', 'reset.js'].includes(inf.file)) { pathOk = `${pathOk}/${inf.file}` }
         else if (inf.rewrite) {
             text = typeof inf.text === 'object' ? `${hou}\n${JSON.stringify(inf.text)}\n\n` : `${hou}\n${inf.text}\n\n`; pathOk = `${pathOk}/${mon}/${day}/${inf.file}`
         } else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }
@@ -461,7 +461,7 @@ function hasKey(inf) { // NAO POR COMO 'async'!!!
             if (obj.hasOwnProperty(key)) { return true }; for (let prop in obj) {
                 if (typeof obj[prop] === 'object' && obj[prop] !== null) { if (hk(key, obj[prop])) { return true } }
             }; return false
-        }; ret['msg'] = `HAS KEY: OK`; ret['res'] = hk(inf.key, inf.obj); ret['ret'] = true
+        }; ret['msg'] = `HAS KEY: OK`; ret['res'] = hk(inf.key, typeof inf.obj === 'object' ? inf.obj : JSON.parse(inf.obj)); ret['ret'] = true
     } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res; console.log(ret.msg); return ret })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
