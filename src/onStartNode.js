@@ -4,17 +4,13 @@ console.log('onStartNodeJS');
 async function client(inf) {
     let ret = { 'ret': false }
     try {
-        let WebS; if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
-        else { const { default: WebSocket } = await import('ws'); WebS = WebSocket } // NODEJS
         await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': 'ONSTART NODEJS: START' })
-
         const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
         const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
         const device1 = retConfigStorage.device2.name; const securityPass = retConfigStorage.securityPass
-
         let ws1; async function web1() {
-            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); ws1.onerror = async (e) => { };
+            let ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); ws1.onerror = async (e) => { };
             ws1.onopen = async () => {
                 console.log(`ON START: CONEXAO OK`);
                 await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': 'ONSTART NODEJS: CONEXAO OK' })

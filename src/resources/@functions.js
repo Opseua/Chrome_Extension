@@ -1,7 +1,7 @@
-let _fs, _path, _cheerio, _clipboard, _WebS, p, conf = ['src/config.json']
+let _fs, _path, _cheerio, _clipboard, _WebS, _http, p, conf = ['src/config.json']
 if (typeof window !== 'undefined') { _WebS = window.WebSocket } else { // ← CHROME     ↓ NODEJS
     _fs = await import('fs'); _path = await import('path'); _cheerio = await import('cheerio'); const { default: clipboard } = await import('clipboardy');
-    _clipboard = clipboard; const { default: WebSocket } = await import('ws'); _WebS = WebSocket
+    _clipboard = clipboard; const { default: WebSocket } = await import('ws'); _WebS = WebSocket; const { default: http } = await import('http'); _http = http
 }
 
 // await import('./@functions.js');
@@ -581,6 +581,7 @@ if (typeof window !== 'undefined') { // CHROME
 } else { // NODEJS
     global['g'] = {}; global['p'] = p; global['conf'] = retFile.res
     global['_WebS'] = _WebS; global['_fs'] = _fs; global['_path'] = _path; global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
+    global['_http'] = _http; const { WebSocketServer } = await import('ws'); global['_WebSServer'] = WebSocketServer;
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage;
     global['dateHour'] = dateHour; global['secToHour'] = secToHour; global['regex'] = regex;
