@@ -129,13 +129,3 @@ infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 // console.log(retChatGpt)
 
 
-
-const title = 'A1A2A3A4A5A6A7A8A9B1B2B3B4B5B6B7B8B9Laaaaaaaaaaaaaaaa'
-const text = 'A1A2A3A4A5A6A7A8A9B1B2B3B4B5B6B7B8B9L'
-const infNotification =
-{
-    'duration': 3, 'icon': './src/media/icon_4.png',
-    'adaptTitle': true, 'title': title,
-    'text': text,
-};
-const retNotification = await notification(infNotification)
