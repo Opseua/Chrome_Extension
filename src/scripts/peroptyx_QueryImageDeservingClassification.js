@@ -3,7 +3,7 @@
 async function peroptyx_QueryImageDeservingClassification(inf) {
     let ret = { 'ret': false }
     try {
-        let infNotification, retNotification, infClipboard, retClipboard, retSniffer, retFile
+        let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
             const gOEve = async (i) => {
                 if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
@@ -11,8 +11,7 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
         }
         if (inf.logFile) { retFile = await file({ 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
         else { retSniffer = JSON.parse(inf.sniffer) }
-        infClipboard = { 'value': retSniffer.tasks[0].taskData.query }
-        retClipboard = await clipboard(infClipboard)
+         await clipboard({ 'value': retSniffer.tasks[0].taskData.query })
         if (retSniffer.targetLocalIds.length == 1) {
             infNotification =
             {

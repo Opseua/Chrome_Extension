@@ -128,4 +128,3 @@ infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 // const retChatGpt = await chatGpt(infChatGpt)
 // console.log(retChatGpt)
 
-

@@ -3,7 +3,7 @@
 async function peroptyx_Search20(inf) {
     let ret = { 'ret': false }
     try {
-        let infNotification, retNotification, infClipboard, retClipboard, retSniffer, retFile
+        let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
             const gOEve = async (i) => {
                 if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
@@ -80,8 +80,7 @@ async function peroptyx_Search20(inf) {
                 'text': `${JSON.stringify(res, null, 2)}`,
             }; retNotification = await notification(infNotification)
 
-            infClipboard = { 'value': JSON.stringify(res, null, 2) }
-            retClipboard = await clipboard(infClipboard)
+            await clipboard({ 'value': JSON.stringify(res, null, 2) })
         }
         ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret

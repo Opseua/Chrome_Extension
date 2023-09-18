@@ -45,8 +45,7 @@ async function oneForma_MTPE(inf) {
                 msg = `${msg}\n${clipboardText}`
             }
 
-            const infClipboard = { 'value': clipboardText };
-            const retClipboard = await clipboard(infClipboard)
+            await clipboard({ 'value': clipboardText })
 
             if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
                 infNotification =
@@ -98,11 +97,11 @@ async function oneForma_MTPE(inf) {
         }
         ret['ret'] = true;
         ret['msg'] = `ONEFORMA: OK`;
-} catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME
     window['oneForma_MTPE'] = oneForma_MTPE;
 } else { // NODEJS
-   // global['oneForma_MTPE'] = oneForma_MTPE;
+    // global['oneForma_MTPE'] = oneForma_MTPE;
 }
