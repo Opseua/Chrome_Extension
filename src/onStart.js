@@ -68,16 +68,13 @@ if (typeof window !== 'undefined') { // CHROME
 async function client(inf) {
     let ret = { 'ret': false }
     try {
-        let WebS; if (typeof window !== 'undefined') { WebS = window.WebSocket } // CHROME
-        else { const { WebSocketServer } = await import('ws'); WebS = WebSocketServer } // NODEJS
-
         const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
         const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
         const device1 = retConfigStorage.device1.name; const securityPass = retConfigStorage.securityPass
 
         let ws1; async function web1() {
-            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
+            let ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
             ws1.onerror = async (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
             ws1.onclose = async (event) => { console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`); await new Promise(r => setTimeout(r, 10000)); web1() }
             ws1.onmessage = async (event) => {

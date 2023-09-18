@@ -1,5 +1,8 @@
-let _fs, _path, p, _cheerio, conf = ['src/config.json']
-if (typeof window == 'undefined') { _fs = await import('fs'); _path = await import('path'); _cheerio = await import('cheerio') }
+let _fs, _path, _cheerio, _clipboard, _WebS, p, conf = ['src/config.json']
+if (typeof window !== 'undefined') { _WebS = window.WebSocket } else { // ← CHROME     ↓ NODEJS
+    _fs = await import('fs'); _path = await import('path'); _cheerio = await import('cheerio'); const { default: clipboard } = await import('clipboardy');
+    _clipboard = clipboard; const { default: WebSocket } = await import('ws'); _WebS = WebSocket
+}
 
 // await import('./@functions.js');
 
@@ -92,7 +95,7 @@ if (typeof window == 'undefined') { _fs = await import('fs'); _path = await impo
 await import('./chatGpt.js'); await import('./excel.js'); await import('./getCookies.js');
 await import('./notification.js'); await import('./promptChrome.js'); await import('./setTag.js');
 await import('./sniffer.js'); await import('./splitText.js'); await import('./tabSearch.js');
-await import('./webSocketRet.js'); await import('./commandLine.js'); await import('./chromeActions.js');
+await import('./commandLine.js'); await import('./chromeActions.js');
 // ## scripts
 await import('../scripts/command1.js'); await import('../scripts/command2.js'); await import('../scripts/oneForma_MTPE.js');
 await import('../scripts/peroptyx_Search20.js'); await import('../scripts/peroptyx_QueryImageDeservingClassification.js');
@@ -480,9 +483,8 @@ async function clipboard(inf) {
             if (typeof window !== 'undefined') { // CHROME
                 const element = document.createElement('textarea'); element.value = text; document.body.appendChild(element);
                 element.select(); document.execCommand('copy'); document.body.removeChild(element);
-            } else { // NODEJS
-                const { default: clipboard } = await import('clipboardy'); clipboard.writeSync(text); // console.log(clipboard.readSync())
-            }; ret['ret'] = true; ret['msg'] = 'CLIPBOARD: OK';
+            } else { _clipboard.writeSync(text); /*console.log(clipboard.readSync())*/ } // NODEJS
+            ret['ret'] = true; ret['msg'] = 'CLIPBOARD: OK';
         }
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
@@ -501,6 +503,62 @@ async function translate(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
+async function webSocketRet(inf) {
+
+    // {
+    //     "fun": [{
+    //         "securityPass": "####################",
+    //         "funRet": { "retUrl": false, "funA": "ARRAY AQUI" },
+    //         "funRun": {
+    //             "name": "notification", "par": { "title": "TITULO 1", "text": "TEXTO" }
+    //         }
+    //     },
+    //     {
+    //         "securityPass": "####################",
+    //         "funRet": { "retUrl": false, "funA": "ARRAY AQUI" },
+    //         "funRun": {
+    //             "name": "notification", "par": { "title": "TITULO 1", "text": "TEXTO" }
+    //         }
+    //     }]
+    // }
+
+    let ret = { 'ret': false }
+    try {
+        const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
+        if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
+        const data = JSON.parse(inf.data); const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
+        const device0Ret = retConfigStorage.device0.ret; const securityPass = retConfigStorage.securityPass
+        function label(f) { return typeof (typeof window !== 'undefined' ? window : global)[f] === 'function' }
+        await Promise.all(data.fun.map(async (value, index) => {
+            // --------------------------------------------------
+            if (value.securityPass !== securityPass) { ret['msg'] = `\n #### SECURITYPASS INCORRETO #### \n\n ${JSON.stringify(data)} \n\n` }
+            else if (!label(value.funRun.name)) { ret['msg'] = `\n #### FUNCAO '${value.funRun.name}' NAO EXITE #### \n\n ${JSON.stringify(data)} \n\n` }
+            else {
+                let name; if (typeof window !== 'undefined') { name = window[value.funRun.name] } // CHROME
+                else { name = global[value.funRun.name] } // NODEJS
+                const infName = value.funRun.par; const retName = await name(infName)
+                if (value.funRet && value.funRet.retUrl) {
+                    let wsRet; if (typeof value.funRet.retUrl === 'boolean') { wsRet = `ws://${wsHost}:${portWebSocket}/${device0Ret}` }
+                    else { wsRet = `${value.funRet.retUrl}` }
+                    wsRet = new _WebS(wsRet); wsRet.onerror = (e) => { console.error(`WEBSOCKET RET: ERRO WS`) }
+                    wsRet.onopen = () => {
+                        wsRet.send(JSON.stringify({ 'inf': value.funRet.retInf, 'retWs': retName, 'fun': value.funRet.fun }))
+                        wsRet.close()
+                    }
+                }; ret['ret'] = true;
+            }
+            // --------------------------------------------------
+        }))
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res; }
+    if (!ret.ret) {
+        console.log(ret.msg);
+        const retLog = await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': ret.msg })
+        if (typeof window !== 'undefined') { // CHROME
+            const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }; const retConfigStorage = await configStorage(infConfigStorage)
+        }
+    }; return ret
+}
+
 // ############### CLEAR CONSOLE ###############
 console.clear(); let messageCount = 0; const clearConsole = console.log;
 console.log = async function () {
@@ -512,21 +570,24 @@ console.log = async function () {
 const infFile = { 'action': 'inf', 'functionLocal': false }; const retFile = await file(infFile);
 if (typeof window !== 'undefined') { // CHROME
     window['g'] = {}; window['p'] = p; window['conf'] = retFile.res;
+    window['_WebS'] = _WebS
     // ## functions
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage;
     window['dateHour'] = dateHour; window['secToHour'] = secToHour;
     window['regex'] = regex; window['random'] = random; window['regexE'] = regexE;
     window['gO'] = gO; window['gOAdd'] = gOAdd; window['gORem'] = gORem; window['orderObj'] = orderObj;
     window['jsonInterpret'] = jsonInterpret; window['log'] = log; window['hasKey'] = hasKey; window['clipboard'] = clipboard;
-    window['translate'] = translate;
+    window['translate'] = translate; window['webSocketRet'] = webSocketRet;
 } else { // NODEJS
-    global['g'] = {}; global['p'] = p; global['conf'] = retFile.res;
+    global['g'] = {}; global['p'] = p; global['conf'] = retFile.res
+    global['_WebS'] = _WebS; global['_fs'] = _fs; global['_path'] = _path; global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage;
     global['dateHour'] = dateHour; global['secToHour'] = secToHour; global['regex'] = regex;
     global['random'] = random; global['regexE'] = regexE; global['gO'] = gO; global['gOAdd'] = gOAdd;
     global['gORem'] = gORem; global['orderObj'] = orderObj; global['jsonInterpret'] = jsonInterpret;
     global['log'] = log; global['hasKey'] = hasKey; global['clipboard'] = clipboard; global['translate'] = translate;
+    global['webSocketRet'] = webSocketRet;
 }
 
 
