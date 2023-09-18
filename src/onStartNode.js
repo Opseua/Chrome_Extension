@@ -14,9 +14,8 @@ async function client(inf) {
         const device1 = retConfigStorage.device2.name; const securityPass = retConfigStorage.securityPass
 
         let ws1; async function web1() {
-            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); ws1.onerror = async (e) => {
-                await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': 'ONSTART NODEJS: ONERROR' })
-            }; ws1.onopen = async () => {
+            let ws1 = new WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); ws1.onerror = async (e) => { };
+            ws1.onopen = async () => {
                 console.log(`ON START: CONEXAO OK`);
                 await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': 'ONSTART NODEJS: CONEXAO OK' })
             }; ws1.onclose = async (event) => {
