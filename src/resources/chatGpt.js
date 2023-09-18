@@ -16,9 +16,9 @@ async function chatGpt(inf) {
                 if (!retTabSearch.ret) {
                     let infNotification =
                     {
-                        'duration': 5, 'iconUrl': './src/media/notification_3.png',
+                        'duration': 5, 'icon': './src/media/notification_3.png',
                         'title': `ERRO AO ABRIR CHATGPT`,
-                        'message': `Não foi possível abrir a aba`,
+                        'text': `Não foi possível abrir a aba`,
                     };
                     const retNotification = await notification(infNotification); return ret
                 }
@@ -29,9 +29,9 @@ async function chatGpt(inf) {
                     if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
                     let infNotification =
                     {
-                        'duration': 5, 'iconUrl': './src/media/notification_3.png',
+                        'duration': 5, 'icon': './src/media/notification_3.png',
                         'title': `ERRO AO PEGAR COOKIE CHATGPT`,
-                        'message': `Verificar se a aba abriu e se está logado`,
+                        'text': `Verificar se a aba abriu e se está logado`,
                     };
                     const retNotification = await notification(infNotification); return ret
                 }
@@ -70,9 +70,9 @@ async function chatGpt(inf) {
                 retConfigStorage = await configStorage(infConfigStorage)
                 let infNotification =
                 {
-                    'duration': 5, 'iconUrl': './src/media/notification_3.png',
+                    'duration': 5, 'icon': './src/media/notification_3.png',
                     'title': `ERRO AO PESQUISAR NO CHATGPT`,
-                    'message': res.error.message,
+                    'text': res.error.message,
                 };
                 const retNotification = await notification(infNotification)
                 ret['msg'] = `\n #### ERRO #### CHAT GPT ORA AI \n ${res.error.message} \n\n`;
@@ -100,9 +100,9 @@ async function chatGpt(inf) {
                 retConfigStorage = await configStorage(infConfigStorage)
                 let infNotification =
                 {
-                    'duration': 5, 'iconUrl': './src/media/notification_3.png',
+                    'duration': 5, 'icon': './src/media/notification_3.png',
                     'title': `ERRO AO PESQUISAR NO CHATGPT`,
-                    'message': res.error.message,
+                    'text': res.error.message,
                 };
                 const retNotification = await notification(infNotification)
                 ret['msg'] = `\n #### ERRO #### CHAT GPT OPEN AI \n ${res.error.message} \n\n`;

@@ -98,9 +98,9 @@ async function excel(inf) {
                 ret['msg'] = `\n #### ERRO #### EXCEL \n NAO CONSEGUIU ENVIAR A INFORMACAO \n\n`;
                 let infNotification =
                 {
-                    'duration': 2, 'iconUrl': './src/media/notification_3.png',
+                    'duration': 2, 'icon': './src/media/notification_3.png',
                     'title': `#### ERRO #### EXCEL`,
-                    'message': 'Não conseguiu enviar a informação',
+                    'text': 'Não conseguiu enviar a informação',
                 };
                 const retNotification = await notification(infNotification)
             }
@@ -133,9 +133,9 @@ async function excel(inf) {
                 ret['msg'] = `\n #### ERRO #### EXCEL \n NAO CONSEGUIU PEGAR A INFORMACAO \n\n`;
                 let infNotification =
                 {
-                    'duration': 2, 'iconUrl': './src/media/notification_3.png',
+                    'duration': 2, 'icon': './src/media/notification_3.png',
                     'title': `#### ERRO #### EXCEL`,
-                    'message': 'Não conseguiu pegar a informação',
+                    'text': 'Não conseguiu pegar a informação',
                 };
                 const retNotification = await notification(infNotification)
             }

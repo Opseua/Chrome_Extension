@@ -14,9 +14,9 @@ async function peroptyx_Search20(inf) {
         if (!retSniffer.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
             infNotification =
             {
-                'duration': 1, 'iconUrl': './src/media/notification_3.png',
+                'duration': 1, 'icon': './src/media/notification_3.png',
                 'title': `NÃO TEM A RESPOSTA`,
-                'message': `Avaliar manualmente`,
+                'text': `Avaliar manualmente`,
             }; retNotification = await notification(infNotification)
         }
         else {
@@ -38,9 +38,9 @@ async function peroptyx_Search20(inf) {
                         not = false
                         infNotification =
                         {
-                            'duration': 1, 'iconUrl': './src/media/icon_4.png',
+                            'duration': 1, 'icon': './src/media/icon_4.png',
                             'title': `AGUARDE...`,
-                            'message': `Avaliar manualTraduzindo e alterando o comentário`,
+                            'text': `Avaliar manualTraduzindo e alterando o comentário`,
                         }; retNotification = await notification(infNotification)
                     }
 
@@ -75,9 +75,9 @@ async function peroptyx_Search20(inf) {
 
             infNotification =
             {
-                'duration': 2, 'iconUrl': './src/media/notification_1.png',
+                'duration': 2, 'icon': './src/media/notification_1.png',
                 'title': `CONCLUÍDO: na área de transferência`,
-                'message': `${JSON.stringify(res, null, 2)}`,
+                'text': `${JSON.stringify(res, null, 2)}`,
             }; retNotification = await notification(infNotification)
 
             infClipboard = { 'value': JSON.stringify(res, null, 2) }

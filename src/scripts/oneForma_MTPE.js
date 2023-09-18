@@ -51,18 +51,18 @@ async function oneForma_MTPE(inf) {
             if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
                 infNotification =
                 {
-                    'duration': 2, 'iconUrl': '/src/media/notification_2.png',
+                    'duration': 2, 'icon': '/src/media/notification_2.png',
                     'title': `PULAR`,
-                    'message': 'Mesmo texto',
+                    'text': 'Mesmo texto',
                 };
                 retNotification = await notification(infNotification)
             }
             else {
                 infNotification =
                 {
-                    'duration': 2, 'iconUrl': './src/media/notification_1.png',
+                    'duration': 2, 'icon': './src/media/notification_1.png',
                     'title': `CONCLUÍDO`,
-                    'message': `pt → ${retRegex1.res['1']}`,
+                    'text': `pt → ${retRegex1.res['1']}`,
                 };
                 retNotification = await notification(infNotification)
 
@@ -71,17 +71,17 @@ async function oneForma_MTPE(inf) {
                 if ((firstA === firstA.toUpperCase()) && !(firstB === firstB.toUpperCase())) {
                     infNotification =
                     {
-                        'duration': 4, 'iconUrl': './src/media/notification_3.png',
+                        'duration': 4, 'icon': './src/media/notification_3.png',
                         'title': `ALERTA`,
-                        'message': `Conferir primeira letra!`,
+                        'text': `Conferir primeira letra!`,
                     };
                     retNotification = await notification(infNotification)
                 } else if (!(firstA === firstA.toUpperCase()) && (firstB === firstB.toUpperCase())) {
                     infNotification =
                     {
-                        'duration': 4, 'iconUrl': './src/media/notification_3.png',
+                        'duration': 4, 'icon': './src/media/notification_3.png',
                         'title': `ALERTA`,
-                        'message': `Conferir primeira letra!`,
+                        'text': `Conferir primeira letra!`,
                     }
                     retNotification = await notification(infNotification)
                 }
@@ -90,9 +90,9 @@ async function oneForma_MTPE(inf) {
         } else {
             infNotification =
             {
-                'duration': 4, 'iconUrl': './src/media/notification_3.png',
+                'duration': 4, 'icon': './src/media/notification_3.png',
                 'title': `PULAR`,
-                'message': `Erro ao alterar texto`,
+                'text': `Erro ao alterar texto`,
             }
             retNotification = await notification(infNotification)
         }

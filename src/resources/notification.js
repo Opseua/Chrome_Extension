@@ -1,8 +1,8 @@
 // const infNotification =
 // {
-//     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': 'BOTAO 2' }], 'duration': 2, 'iconUrl': './src/media/icon_4.png',
+//     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': 'BOTAO 2' }], 'duration': 2, 'icon': './src/media/icon_4.png',
 //     'title': `TITULO`,
-//     'message': 'Texto',
+//     'text': 'Texto',
 // };
 // const retNotification = await notification(infNotification)
 // console.log(retNotification)
@@ -11,29 +11,33 @@ async function notification(infOk) {
     let ret = { 'ret': false }
     try {
         let inf
-        if (!infOk) { inf = {} } else { inf = infOk };
+        if (!infOk) { inf = {} } else {
+            inf = infOk
+            if (inf.adaptTitle) {inf.title = inf.title.substring(0, 37)}
+            if (inf.adaptTitle) {inf.title = inf.title.substring(0, 37)}
+        };
         {
             let imgBase64
-            if (!inf.iconUrl || inf.iconUrl.length > 1) {
-                const imgSrc = !inf.iconUrl ? './src/media/icon_3.png' : inf.iconUrl;
+            if (!inf.icon || inf.icon.length > 1) {
+                const imgSrc = !inf.icon ? './src/media/icon_3.png' : inf.icon;
                 const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
                 imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)));
-            } else { imgBase64 = inf.iconUrl }
+            } else { imgBase64 = inf.icon }
             const json =
             {
                 duration: ((!inf.duration) || !(inf.duration > 0)) ? 5 : inf.duration,
                 type: 'basic',
-                iconUrl: `data:image/png;base64,${imgBase64}`,
+                icon: `data:image/png;base64,${imgBase64}`,
                 title: ((!inf.title) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`,
-                message: ((!inf.message) || (inf.message == '')) ? `MESSAGE VAZIO` : `${inf.message}`,
+                text: ((!inf.text) || (inf.text == '')) ? `TEXT VAZIO` : `${inf.text}`,
                 buttons: inf.buttons || [],
             };
             const not =
             {
                 type: json.type,
-                iconUrl: json.iconUrl,
+                iconUrl: json.icon,
                 title: json.title,
-                message: json.message.substring(0, 128),
+                message: json.text.substring(0, 128),
                 buttons: json.buttons,
             };
             chrome.notifications.create(not, (notificationId) => {

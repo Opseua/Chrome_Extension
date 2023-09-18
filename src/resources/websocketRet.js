@@ -7,7 +7,7 @@
 //                 "name": "notification",
 //                 "par": {
 //                     "title": "TITULO 1",
-//                     "message": "TEXTO"
+//                     "text": "TEXTO"
 //                 }
 //             }
 //         },
@@ -18,7 +18,7 @@
 //                 "name": "notification",
 //                 "par": {
 //                     "title": "TITULO 2",
-//                     "message": "TEXTO"
+//                     "text": "TEXTO"
 //                 }
 //             }
 //         }

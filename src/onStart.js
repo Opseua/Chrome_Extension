@@ -33,8 +33,8 @@ if (typeof window !== 'undefined') { // CHROME
                 const securityPass = retConfigStorage.securityPass
                 const infNotification =
                 {
-                    'duration': 4, 'iconUrl': './src/media/icon_3.png',
-                    'title': `AGUARDE...`, 'message': `Alternando sniffer`,
+                    'duration': 4, 'icon': './src/media/icon_3.png',
+                    'title': `AGUARDE...`, 'text': `Alternando sniffer`,
                 }; let par; const retNotification = await notification(infNotification);
                 const infFile = { 'action': 'read', 'path': `${conf[1]}:/ARQUIVOS/Projetos/Sniffer_Python/log/state.txt` };
                 const retFile = await file(infFile); par = `"${conf[1]}:\\ARQUIVOS\\WINDOWS\\BAT\\RUN_PORTABLE\\1_BACKGROUND.exe"`
@@ -127,3 +127,15 @@ infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 // const infChatGpt = { 'provider': 'open.ai', 'input': `Qual a idade de Luciano Hulk?` }
 // const retChatGpt = await chatGpt(infChatGpt)
 // console.log(retChatGpt)
+
+
+
+const title = 'A1A2A3A4A5A6A7A8A9B1B2B3B4B5B6B7B8B9Laaaaaaaaaaaaaaaa'
+const text = 'A1A2A3A4A5A6A7A8A9B1B2B3B4B5B6B7B8B9L'
+const infNotification =
+{
+    'duration': 3, 'icon': './src/media/icon_4.png',
+    'adaptTitle': true, 'title': title,
+    'text': text,
+};
+const retNotification = await notification(infNotification)

@@ -16,16 +16,16 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
         if (retSniffer.targetLocalIds.length == 1) {
             infNotification =
             {
-                'duration': 4, 'iconUrl': './src/media/notification_3.png',
+                'duration': 4, 'icon': './src/media/notification_3.png',
                 'title': `BLIND`,
-                'message': `${retSniffer.tasks[0].taskData.query}`,
+                'text': `${retSniffer.tasks[0].taskData.query}`,
             }; retNotification = await notification(infNotification)
         } else {
             infNotification =
             {
-                'duration': 2, 'iconUrl': './src/media/notification_1.png',
+                'duration': 2, 'icon': './src/media/notification_1.png',
                 'title': `NÃO BLIND`,
-                'message': `${retSniffer.tasks[0].taskData.query}`,
+                'text': `${retSniffer.tasks[0].taskData.query}`,
             }
             // retNotification = await notification(infNotification)
         }
