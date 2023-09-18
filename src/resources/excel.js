@@ -1,4 +1,3 @@
-const p = new Error()
 // let infExcel, retExcel // CQPT    KQRE
 // infExcel = { 'action': 'get', 'tab': 'KQRE', 'col': 'A', 'lin': 1 }
 // infExcel = { 'action': 'set', 'tab': 'KQRE', 'col': 'A', 'lin': 1, 'value': `VALOR` }

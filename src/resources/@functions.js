@@ -5,21 +5,22 @@ if (typeof window == 'undefined') { _fs = await import('fs'); _path = await impo
 
 // let infApi, retApi
 // infApi = {                                    // ########## TYPE → text
-//     url: `https://ntfy.sh/`,
-//     method: 'PUT',
-//     headers: { 'content-type': 'text/plain;charset=UTF-8' },
-//     body: '{"topic":"OPSEUA","message":"a"}'
+//     'method': 'PUT', 'url': `https://ntfy.sh/`,
+//     'headers': { 'content-type': 'text/plain;charset=UTF-8' },
+//     'body': '{"topic":"OPSEUA","message":"a"}'
 // };
 // infApi = {                                    // ########## TYPE → json
-//     headers: { 'accept-language': 'application/json' },
-//     body: { 'Chave': 'aaaaaaaaaaa', 'Valor': 'bbbbbbbbb' }
+//     'method': 'PUT', 'url': `https://ntfy.sh/`,
+//     'headers': { 'accept-language': 'application/json' },
+//     'body': { 'Chave': 'aaaaaaaaaaa', 'Valor': 'bbbbbbbbb' }
 // };
 // const formData = new URLSearchParams();       // ########## TYPE → x-www-form-urlencoded
 // formData.append('grant_type', 'client_credentials');
 // formData.append('resource', 'https://graph.microsoft.com');
 // infApi = {
-//     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-//     body: formData.toString()
+//     'method': 'PUT', 'url': `https://ntfy.sh/`,
+//     'headers': { 'Content-Type': 'application/x-www-form-urlencoded' },
+//     'body': formData.toString()
 // };
 // retApi = await api(infApi);
 // console.log(retApi)
@@ -75,7 +76,7 @@ if (typeof window == 'undefined') { _fs = await import('fs'); _path = await impo
 // if (retJsonInterpret.ret) { retJsonInterpret = JSON.parse(retJsonInterpret.res) }
 // console.log(retJsonInterpret)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
-// await log({ 'folder': '###_TESTE_###', 'file': `TESTE.txt`, 'text': 'INF AQUI' })
+// await log({ 'folder': '###_TESTE_###', 'path': `TESTE.txt`, 'text': 'INF AQUI' })
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // const objeto = { 'chave1': { 'chave2': { 'chave3': 'VALOR' } } };
 // const infHasKey = { 'key': 'chave3', 'obj': objeto }; const retHaskey = hasKey(infHasKey); console.log(retHaskey)
@@ -374,6 +375,7 @@ function regex(inf) { // NAO POR COMO 'async'!!!
             const result2 = inf.text.match(`(?<=${split1})(.+)(?=${split2})`);
             const result3 = inf.text.match(`${split1}([\\s\\S]*?)${split2}`);
             const result4 = inf.text.match(`(?<=${split1})([\\s\\S]+)(?=${split2})`);
+            res['0'] = `res.['1'] → [-|<] | res.['2'] → [-|>] | res.['3'] → [^|<] | res.['4'] → [^|>]`
             if (result1 && result1.length > 0) { res['1'] = result1[1]; ok = true }
             // SEM QUEBRA DE LINHA ATE A PRIMEIRA OCORRENCIA
             else { res['1'] = `[-|<] PADRAO '${inf.pattern}' NAO ENCONTRADO` }
@@ -425,7 +427,7 @@ async function regexE(inf) {
         ret['msg'] = `REGEX E: OK`; const match = inf.e.stack.match(/(\w+\.\w+):(\d+):\d+/)
         if (match && match.length == 3) { ret['res'] = `\n\n #### ERRO #### ${match[1]} [${match[2]}] \n ${inf.e.toString()} \n\n` }
         else { ret['res'] = `\n\n #### ERRO #### NAO IDENTIFICADO [NAO IDENTIFICADA] \n ${inf.e.toString()} \n\n` }
-        if (typeof window == 'undefined') { const retLog = await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': ret }) }; ret['ret'] = true;
+        if (typeof window == 'undefined') { const retLog = await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': ret }) }; ret['ret'] = true;
     } catch (e) { console.log(`\n\n #### ERRO REGEXe #### ${e} \n\n`) } return ret
 }
 
@@ -445,10 +447,10 @@ async function log(inf) {
     let ret = { 'ret': false }
     try {
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`, hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, pathOk
-        let text = inf.text; pathOk = `log/${inf.folder}`; if (['reg.txt', 'reset.js'].includes(inf.file)) { pathOk = `${pathOk}/${inf.file}` }
+        let text = inf.text; pathOk = `log/${inf.folder}`; if (['reg.txt', 'reset.js'].includes(inf.path)) { pathOk = `${pathOk}/${inf.path}` }
         else if (inf.rewrite) {
-            text = typeof inf.text === 'object' ? `${hou}\n${JSON.stringify(inf.text)}\n\n` : `${hou}\n${inf.text}\n\n`; pathOk = `${pathOk}/${mon}/${day}/${inf.file}`
-        } else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.file}` }
+            text = typeof inf.text === 'object' ? `${hou}\n${JSON.stringify(inf.text)}\n\n` : `${hou}\n${inf.text}\n\n`; pathOk = `${pathOk}/${mon}/${day}/${inf.path}`
+        } else { pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.path}` }
         const infFile = { 'action': 'write', 'functionLocal': false, 'text': text, 'rewrite': inf.rewrite ? true : false, 'path': pathOk };
         const retFile = await file(infFile); ret['msg'] = `LOG: OK`; ret['res'] = `${conf[1]}:/${conf[3]}/${pathOk}`; ret['ret'] = true
     } catch (e) { }; return ret

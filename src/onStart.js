@@ -126,3 +126,6 @@ infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pat
 infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 // retFile = await file(infFile); console.log(retFile)
 
+const infChatGpt = { 'provider': 'open.ai', 'input': `Qual a idade de Saturno?` }
+const retChatGpt = await chatGpt(infChatGpt)
+console.log(retChatGpt)

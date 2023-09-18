@@ -67,7 +67,7 @@ async function webSocketRet(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res; }
     if (!ret.ret) {
         console.log(ret.msg);
-        const retLog = await log({ 'folder': 'JavaScript', 'rewrite': true, 'file': `log.txt`, 'text': ret.msg })
+        const retLog = await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': ret.msg })
         if (typeof window !== 'undefined') { // CHROME
             const infConfigStorage = { 'action': 'del', 'key': 'webSocket' }; const retConfigStorage = await configStorage(infConfigStorage)
         }
