@@ -30,8 +30,8 @@ async function notification(infOk) {
         {
             type: json.type,
             iconUrl: json.icon,
-            title: json.title.substring(0, 87),
-            message: json.text.substring(0, 348),
+            title: json.title.substring(0, 88),   // máximo [considerando tudo 'i'] + 1 caractere
+            message: json.text.substring(0, 349), // máximo [considerando tudo 'i'] + 1 caractere
             buttons: json.buttons,
         };
         chrome.notifications.create(not, (notificationId) => {

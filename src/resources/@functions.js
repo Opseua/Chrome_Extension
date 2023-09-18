@@ -80,15 +80,17 @@ if (typeof window == 'undefined') { _fs = await import('fs'); _path = await impo
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // const objeto = { 'chave1': { 'chave2': { 'chave3': 'VALOR' } } };
 // const infHasKey = { 'key': 'chave3', 'obj': objeto }; const retHaskey = hasKey(infHasKey); console.log(retHaskey)
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
+// const infClipboard = { 'value': `Esse é o texto` }; const retClipboard = await clipboard(infClipboard);
+// console.log(retClipboard)
 
 // for (const nameKey in json.taskName) { console.log(nameKey) }
 
 // ## resources
-await import('./chatGpt.js'); await import('./clipboard.js'); await import('./excel.js');
-await import('./getCookies.js'); await import('./notification.js'); await import('./promptChrome.js');
-await import('./setTag.js'); await import('./sniffer.js'); await import('./splitText.js');
-await import('./tabSearch.js'); await import('./translate.js'); await import('./webSocketRet.js');
-await import('./commandLine.js'); await import('./chromeActions.js');
+await import('./chatGpt.js'); await import('./excel.js'); await import('./getCookies.js');
+await import('./notification.js'); await import('./promptChrome.js'); await import('./setTag.js');
+await import('./sniffer.js'); await import('./splitText.js'); await import('./tabSearch.js');
+await import('./translate.js'); await import('./webSocketRet.js'); await import('./commandLine.js'); await import('./chromeActions.js');
 // ## scripts
 await import('../scripts/command1.js'); await import('../scripts/command2.js'); await import('../scripts/oneForma_MTPE.js');
 await import('../scripts/peroptyx_Search20.js'); await import('../scripts/peroptyx_QueryImageDeservingClassification.js');
@@ -467,6 +469,22 @@ function hasKey(inf) { // NAO POR COMO 'async'!!!
     } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res; console.log(ret.msg); return ret })() }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
+async function clipboard(inf) {
+    let ret = { 'ret': false }
+    try {
+        if (inf.value == null || inf.value == '') { ret['msg'] = `\n\n #### ERRO #### CLIPBOARD \n INFORMAR O 'value' \n\n` }
+        else {
+            let text = inf.value; if (typeof text === 'object') { text = JSON.stringify(text, null, 2) }  // OBJETO INDENTADO EM TEXTO BRUTO
+            if (typeof window !== 'undefined') { // CHROME
+                const element = document.createElement('textarea'); element.value = text; document.body.appendChild(element);
+                element.select(); document.execCommand('copy'); document.body.removeChild(element);
+            } else { // NODEJS
+                const { default: clipboard } = await import('clipboardy'); clipboard.writeSync(text); // console.log(clipboard.readSync())
+            }; ret['ret'] = true; ret['msg'] = 'CLIPBOARD: OK';
+        }
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
+}
+
 // ############### CLEAR CONSOLE ###############
 console.clear(); let messageCount = 0; const clearConsole = console.log;
 console.log = async function () {
@@ -482,16 +500,16 @@ if (typeof window !== 'undefined') { // CHROME
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage;
     window['dateHour'] = dateHour; window['secToHour'] = secToHour;
     window['regex'] = regex; window['random'] = random; window['regexE'] = regexE;
-    window['gO'] = gO; window['gOAdd'] = gOAdd; window['gORem'] = gORem;
-    window['orderObj'] = orderObj; window['jsonInterpret'] = jsonInterpret; window['log'] = log; window['hasKey'] = hasKey;
+    window['gO'] = gO; window['gOAdd'] = gOAdd; window['gORem'] = gORem; window['orderObj'] = orderObj;
+    window['jsonInterpret'] = jsonInterpret; window['log'] = log; window['hasKey'] = hasKey; window['clipboard'] = clipboard;
 } else { // NODEJS
     global['g'] = {}; global['p'] = p; global['conf'] = retFile.res;
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage;
     global['dateHour'] = dateHour; global['secToHour'] = secToHour; global['regex'] = regex;
-    global['random'] = random; global['regexE'] = regexE; global['gO'] = gO;
-    global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj;
-    global['jsonInterpret'] = jsonInterpret; global['log'] = log; global['hasKey'] = hasKey;
+    global['random'] = random; global['regexE'] = regexE; global['gO'] = gO; global['gOAdd'] = gOAdd;
+    global['gORem'] = gORem; global['orderObj'] = orderObj; global['jsonInterpret'] = jsonInterpret;
+    global['log'] = log; global['hasKey'] = hasKey; global['clipboard'] = clipboard;
 }
 
 
