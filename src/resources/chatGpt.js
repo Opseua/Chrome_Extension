@@ -96,6 +96,8 @@ async function chatGpt(inf) {
                 ret['ret'] = true;
                 ret['msg'] = `CHAT GPT OPEN AI: OK`;
             } else {
+                infConfigStorage = { 'action': 'del', 'key': 'chatGptOpenAi' }
+                retConfigStorage = await configStorage(infConfigStorage)
                 let infNotification =
                 {
                     'duration': 5, 'iconUrl': './src/media/notification_3.png',

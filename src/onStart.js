@@ -2,7 +2,7 @@ await import('./resources/@functions.js');
 console.log('onStart')
 
 if (typeof window !== 'undefined') { // CHROME
-    const keys = ['webSocket', 'chatGptOra.ai', 'sniffer'];
+    const keys = ['webSocket', 'chatGptOra.ai', 'chatGptOpenAi', 'sniffer'];
     for (const key of keys) { const infConfigStorage = { 'action': 'del', 'key': key }; const retConfigStorage = await configStorage(infConfigStorage) }
     await chromeActions({ 'action': 'badge', 'inf': { 'text': '' } })
     chrome.downloads.onChanged.addListener(async function (...inf) { // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
@@ -45,13 +45,11 @@ if (typeof window !== 'undefined') { // CHROME
                 const infApi = {
                     'url': `http://${wsHost}:${portWebSocket}/${device2}`, 'method': 'POST', 'headers': { 'accept-language': 'application/json' },
                     'body': {
-                        "fun": [
-                            {
-                                "securityPass": securityPass, "funRet": { "retUrl": true }, "funRun": {
-                                    "name": "commandLine", "par": { "command": par }
-                                }
+                        "fun": [{
+                            "securityPass": securityPass, "funRet": { "retUrl": false }, "funRun": {
+                                "name": "commandLine", "par": { "command": par }
                             }
-                        ]
+                        }]
                     }
                 }; const retApi = await api(infApi); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_3') { command3(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
@@ -126,6 +124,6 @@ infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pat
 infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 // retFile = await file(infFile); console.log(retFile)
 
-const infChatGpt = { 'provider': 'open.ai', 'input': `Qual a idade de Saturno?` }
-const retChatGpt = await chatGpt(infChatGpt)
-console.log(retChatGpt)
+// const infChatGpt = { 'provider': 'open.ai', 'input': `Qual a idade de Luciano Hulk?` }
+// const retChatGpt = await chatGpt(infChatGpt)
+// console.log(retChatGpt)
