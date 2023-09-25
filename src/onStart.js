@@ -73,17 +73,23 @@ async function client(inf) {
         const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
         const device1 = retConfigStorage.device1.name; const securityPass = retConfigStorage.securityPass
 
-        let ws1; async function web1() {
-            let ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
+        async function web1() {
+            let ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); if (typeof window !== 'undefined') { window['ws1'] = ws1 } else { global['ws1'] = ws1 }
             ws1.onerror = async (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
             ws1.onclose = async (event) => { console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`); await new Promise(r => setTimeout(r, 10000)); web1() }
             ws1.onmessage = async (event) => {
-                let data, fun; try { data = JSON.parse(event.data); if (data.fun) { fun = true } } catch (e) { }; if (fun) {
+                let data, fun, other; try { data = JSON.parse(event.data); if (data.fun) { fun = true } else if (data.other) { other = true } } catch (e) { }; if (fun) {
                     let infWebSocketRet; if (data.retWs && data.retWs.res) {
                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
                     } else { infWebSocketRet = { 'data': event.data } }; const retWebSocketRet = webSocketRet(infWebSocketRet)
-                } else { const msg = `\n\n MENSAGEM DO WEBSCKET \n\n ${event.data} \n\n`; console.log(msg) }
+                } else if (other) {
+                    // other
+                    console.log(data.other)
+                } else {
+                    const msg = `\n\n MENSAGEM DO WEBSCKET \n\n ${event.data} \n\n`; console.log(msg)
+                }
             }
+
         }; web1(); ret['ret'] = true
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
     if (!ret.ret) {
@@ -114,14 +120,13 @@ infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
 
 let infFile, retFile
 infFile = { 'action': 'inf' }
-infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
-infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
-infFile = { 'action': 'list', 'functionLocal': false, 'path': './PASTA/', 'max': 10 }
-infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pathNew': './PASTA2/' }
-infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
-// retFile = await file(infFile); console.log(retFile)
+// infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
+// infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
+// infFile = { 'action': 'list', 'functionLocal': false, 'path': './PASTA/', 'max': 10 }
+// infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pathNew': './PASTA2/' }
+// infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
+//retFile = await file(infFile); console.log(retFile)
 
-// const infChatGpt = { 'provider': 'open.ai', 'input': `Qual a idade de Luciano Hulk?` }
-// const retChatGpt = await chatGpt(infChatGpt)
-// console.log(retChatGpt)
-
+const infChatGpt = { 'provider': 'ora.ai', 'input': `Qual a idade de Saturno?` }
+const retChatGpt = await chatGpt(infChatGpt)
+console.log(retChatGpt)

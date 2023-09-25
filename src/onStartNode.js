@@ -9,8 +9,9 @@ async function client(inf) {
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
         const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
         const device1 = retConfigStorage.device2.name; const securityPass = retConfigStorage.securityPass
-        let ws1; async function web1() {
-            let ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); ws1.onerror = async (e) => { };
+        async function web1() {
+            let ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); if (typeof window !== 'undefined') { window['ws1'] = ws1 } else { global['ws1'] = ws1 }
+            ws1.onerror = async (e) => { };
             ws1.onopen = async () => {
                 console.log(`ON START: CONEXAO OK`);
                 await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': 'ONSTART NODEJS: CONEXAO OK' })

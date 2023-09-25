@@ -51,7 +51,7 @@ async function peroptyx_Search20(inf) {
                     // retTranslate2 = await translate(infTranslate2)
                     // comentario2 = retTranslate2.res
 
-                    const infChatGpt = { 'provider': 'open.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING:\n\n ${comentario}` }
+                    const infChatGpt = { 'provider': 'ora.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING:\n\n ${comentario}` }
                     const retChatGpt = await chatGpt(infChatGpt)
                     if (!retChatGpt.ret) { return ret }; comentario2 = retChatGpt.res.replace(/\n/g, ' ').replace(/\\"/g, "'");
                 }

@@ -15,7 +15,7 @@ async function command2(inf) {
       if (!retSniffer.res || !gO.inf.sniffer == 1) { return ret }
 
       // #### OneForma
-      if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': arrUrl[8] })) {
+      if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': arrUrl[9] })) {
         if (regex({ 'simple': true, 'text': JSON.stringify(retSniffer.res.res.body), 'pattern': '*MTPE_New_PortugueseBrazilToEnglish*' })) {
           // MTPE_New_PortugueseBrazilToEnglish
           const infOneFormaMPTE = { 'sniffer': retSniffer.res.res.body }
@@ -26,7 +26,7 @@ async function command2(inf) {
           }
         }
         // #### Peroptyx
-      } else if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': arrUrl[6] })) {
+      } else if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': arrUrl[7] })) {
         if (regex({ 'simple': true, 'text': JSON.stringify(retSniffer.res.res.body), 'pattern': '*Search 2.0*' })) {
           // Search 2.0
           const infPeroptyx_Search20 = { 'sniffer': retSniffer.res.res.body }

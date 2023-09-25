@@ -28,6 +28,7 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             }
             // retNotification = await notification(infNotification)
         }
+        ws1.send(JSON.stringify({ "name": "google", "par": { "search": retSniffer.tasks[0].taskData.query } }))
         ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
