@@ -1,5 +1,5 @@
 await import('./resources/@functions.js');
-console.log('onStart')
+console.log('onStart'); let ws1; if (typeof window !== 'undefined') { window['ws1'] = ws1 } else { global['ws1'] = ws1 }
 
 if (typeof window !== 'undefined') { // CHROME
     const keys = ['webSocket', 'chatGptOra.ai', 'chatGptOpenAi', 'sniffer'];
@@ -74,7 +74,7 @@ async function client(inf) {
         const device1 = retConfigStorage.device1.name; const securityPass = retConfigStorage.securityPass
 
         async function web1() {
-            let ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); if (typeof window !== 'undefined') { window['ws1'] = ws1 } else { global['ws1'] = ws1 }
+            ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
             ws1.onerror = async (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
             ws1.onclose = async (event) => { console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`); await new Promise(r => setTimeout(r, 10000)); web1() }
             ws1.onmessage = async (event) => {
@@ -127,6 +127,19 @@ infFile = { 'action': 'inf' }
 // infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 //retFile = await file(infFile); console.log(retFile)
 
-const infChatGpt = { 'provider': 'ora.ai', 'input': `Qual a idade de Saturno?` }
-const retChatGpt = await chatGpt(infChatGpt)
-console.log(retChatGpt)
+
+// await new Promise(resolve => setTimeout(resolve, 2000));
+// ws1.send(JSON.stringify({ "name": "google", "par": { "search": "quanto é 1+1" } }))
+
+
+// const infChatGpt = { 'provider': 'binjie', 'input': `Qual a idade de Saturno?` }
+// const retChatGpt = await chatGpt(infChatGpt)
+// console.log(retChatGpt)
+
+let infChatGpt = { 'provider': 'aichatos', 'input': `Qual a idade de Marte?` }
+let retChatGpt = await chatGpt(infChatGpt)
+console.log(retChatGpt.res)
+
+infChatGpt = { 'provider': 'railway', 'input': `Qual a idade de Marte?` }
+retChatGpt = await chatGpt(infChatGpt)
+console.log(retChatGpt.res)

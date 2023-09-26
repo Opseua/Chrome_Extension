@@ -1,5 +1,5 @@
 await import('./resources/@functions.js');
-console.log('onStartNodeJS');
+console.log('onStartNodeJS'); let ws1; if (typeof window !== 'undefined') { window['ws1'] = ws1 } else { global['ws1'] = ws1 }
 
 async function client(inf) {
     let ret = { 'ret': false }
@@ -10,8 +10,7 @@ async function client(inf) {
         const wsHost = retConfigStorage.ws1; const portWebSocket = retConfigStorage.portWebSocket;
         const device1 = retConfigStorage.device2.name; const securityPass = retConfigStorage.securityPass
         async function web1() {
-            let ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); if (typeof window !== 'undefined') { window['ws1'] = ws1 } else { global['ws1'] = ws1 }
-            ws1.onerror = async (e) => { };
+            ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`); ws1.onerror = async (e) => { }
             ws1.onopen = async () => {
                 console.log(`ON START: CONEXAO OK`);
                 await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': 'ONSTART NODEJS: CONEXAO OK' })
