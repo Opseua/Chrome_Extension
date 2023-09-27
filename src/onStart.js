@@ -132,14 +132,6 @@ infFile = { 'action': 'inf' }
 // ws1.send(JSON.stringify({ "name": "google", "par": { "search": "quanto é 1+1" } }))
 
 
-// const infChatGpt = { 'provider': 'binjie', 'input': `Qual a idade de Saturno?` }
-// const retChatGpt = await chatGpt(infChatGpt)
-// console.log(retChatGpt)
-
-let infChatGpt = { 'provider': 'aichatos', 'input': `Qual a idade de Marte?` }
+let infChatGpt = { 'provider': 'ec2', 'input': `Qual a idade de Saturno?` }
 let retChatGpt = await chatGpt(infChatGpt)
-console.log(retChatGpt.res)
-
-infChatGpt = { 'provider': 'railway', 'input': `Qual a idade de Marte?` }
-retChatGpt = await chatGpt(infChatGpt)
-console.log(retChatGpt.res)
+console.log(retChatGpt)

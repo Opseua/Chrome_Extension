@@ -88,13 +88,16 @@ if (typeof window !== 'undefined') { _WebS = window.WebSocket } else { // ← CH
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
 // const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
 // const retTranslate = await translate(infTranslate);console.log(retTranslate)
+// - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
+// let infChatGpt = { 'provider': 'railway', 'input': `Qual a idade de Marte?` }
+// let retChatGpt = await chatGpt(infChatGpt)
+// console.log(retChatGpt.res)
 
 // for (const nameKey in json.taskName) { console.log(nameKey) }
 
 // ## resources
-await import('./excel.js'); await import('./getCookies.js');
-await import('./notification.js'); await import('./promptChrome.js'); await import('./setTag.js');
-await import('./sniffer.js'); await import('./splitText.js'); await import('./tabSearch.js');
+await import('./excel.js'); await import('./getCookies.js'); await import('./notification.js'); await import('./promptChrome.js');
+await import('./setTag.js'); await import('./sniffer.js'); await import('./splitText.js'); await import('./tabSearch.js');
 await import('./commandLine.js'); await import('./chromeActions.js');
 // ## scripts
 await import('../scripts/command1.js'); await import('../scripts/command2.js'); await import('../scripts/oneForma_MTPE.js');
@@ -559,7 +562,7 @@ async function webSocketRet(inf) {
     }; return ret
 }
 
-async function chatGpt(inf) {
+async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
     let ret = { 'ret': false }
     try {
         let infConfigStorage, retConfigStorage
@@ -682,16 +685,34 @@ async function chatGpt(inf) {
                 }; await notification(infNotification)
                 ret['msg'] = `\n #### ERRO #### CHAT GPT OPEN AI \n \n\n`; ret['res'] = 'res.error.message';
             }
+        } else if (inf.provider == 'ec2') {
+            infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; retConfigStorage = await configStorage(infConfigStorage)
+            if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
+            const infApi = {
+                'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.portWebSocket}/chatgpt`,
+                'headers': {},
+                'body': { "prompt": inf.input, "network": inf.network ? true : false }
+            }; const retApi = await api(infApi); if (!retApi.ret) { return ret }
+            if (JSON.parse(retApi.res.body).ret) { ret['res'] = JSON.parse(retApi.res.body).res; ret['ret'] = true; ret['msg'] = `CHAT GPT OPEN AI: OK` }
+            else {
+                let infNotification =
+                {
+                    'duration': 5, 'icon': './src/media/notification_3.png',
+                    'title': `ERRO AO PESQUISAR NO CHATGPT`,
+                    'text': '',
+                }; await notification(infNotification)
+                ret['msg'] = `\n #### ERRO #### CHAT GPT OPEN AI \n \n\n`; ret['res'] = 'res.error.message';
+            }
         }
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 // ############### CLEAR CONSOLE ###############
-// console.clear(); let messageCount = 0; const clearConsole = console.log;
-// console.log = async function () {
-//     clearConsole.apply(console, arguments); messageCount++;
-//     if (messageCount >= 50) { console.clear(); messageCount = 0; console.log('CONSOLE LIMPO!') }
-// };
+console.clear(); let messageCount = 0; const clearConsole = console.log;
+console.log = async function () {
+    clearConsole.apply(console, arguments); messageCount++;
+    if (messageCount >= 50) { console.clear(); messageCount = 0; console.log('CONSOLE LIMPO!') }
+};
 // ############### ###############
 
 const infFile = { 'action': 'inf', 'functionLocal': false }; const retFile = await file(infFile);
