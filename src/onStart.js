@@ -1,5 +1,5 @@
 await import('./resources/@functions.js');
-console.log('onStart'); let ws1; if (typeof window !== 'undefined') { window['ws1'] = ws1 } else { global['ws1'] = ws1 }
+console.log('onStart');
 
 if (typeof window !== 'undefined') { // CHROME
     const keys = ['webSocket', 'chatGptOra.ai', 'chatGptOpenAi', 'sniffer'];
@@ -132,6 +132,9 @@ infFile = { 'action': 'inf' }
 // ws1.send(JSON.stringify({ "name": "google", "par": { "search": "quanto é 1+1" } }))
 
 
-let infChatGpt = { 'provider': 'ec2', 'input': `Qual a idade de Saturno?` }
-let retChatGpt = await chatGpt(infChatGpt)
-console.log(retChatGpt)
+// let infChatGpt = { 'provider': 'ec2', 'input': `Quanto é 8*36?` }
+// let retChatGpt = await chatGpt(infChatGpt)
+// console.log(retChatGpt)
+
+
+// background.js
