@@ -658,32 +658,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 }; await notification(infNotification); ret['msg'] = `\n #### ERRO #### CHAT GPT AI CHATOS \n \n\n`;
             }
         }
-        else if (inf.provider == 'railway') {
-            infConfigStorage = { 'action': 'get', 'key': 'chatGptRailway' }; retConfigStorage = await configStorage(infConfigStorage)
-            if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
-            const infApi = {
-                'method': 'POST', 'url': retConfigStorage.url,
-                'headers': {
-                    'accept': 'application/json, text/plain, */*', 'accept-language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,it;q=0.6',
-                    'content-type': 'application/json', 'dnt': '1', 'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
-                    'sec-ch-ua-mobile': '?0', 'sec-ch-ua-platform': '"Windows"', 'sec-fetch-dest': 'empty', 'sec-fetch-mode': 'cors',
-                    'sec-fetch-site': 'same-origin', 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'
-                },
-                'body': { "prompt": inf.input, "options": {} }
-            }; const retApi = await api(infApi); if (!retApi.ret) { return ret }
-            if (retApi.res.code == 200) {
-                const res = retApi.res.body.split('\n').filter(str => str.trim() !== '').map(jsonStr => JSON.parse(jsonStr));
-                ret['res'] = res[res.length - 1].text; ret['ret'] = true; ret['msg'] = `CHAT GPT RAILWAY: OK`
-            }
-            else {
-                let infNotification =
-                {
-                    'duration': 5, 'icon': './src/media/notification_3.png',
-                    'title': `ERRO AO PESQUISAR NO CHATGPT`,
-                    'text': '',
-                }; await notification(infNotification); ret['msg'] = `\n #### ERRO #### CHAT GPT RAILWAY \n \n\n`; ret['res'] = 'res.error.message';
-            }
-        } else if (inf.provider == 'ec2') {
+        else if (inf.provider == 'ec2') {
             infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; retConfigStorage = await configStorage(infConfigStorage)
             if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
             const infApi = {
