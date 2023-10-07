@@ -132,9 +132,8 @@ infFile = { 'action': 'inf' }
 // ws1.send(JSON.stringify({ "name": "google", "par": { "search": "quanto é 1+1" } }))
 
 
-// let infChatGpt = { 'provider': 'ec2', 'input': `Quanto é 8*36?` }
+// let infChatGpt = { 'provider': 'ec2', 'input': `Quanto é 1+1?` }
 // let retChatGpt = await chatGpt(infChatGpt)
 // console.log(retChatGpt)
 
 
-// background.js
