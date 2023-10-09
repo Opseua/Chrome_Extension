@@ -8,12 +8,12 @@ if (typeof window !== 'undefined') { _WebS = window.WebSocket } else { // ← CH
 
 // let infApi, retApi
 // infApi = {                                    // ########## TYPE → text
-//     'method': 'PUT', 'url': `https://ntfy.sh/`,
+//     'method': 'POST', 'url': `https://ntfy.sh/`,
 //     'headers': { 'content-type': 'text/plain;charset=UTF-8' },
 //     'body': '{"topic":"OPSEUA","message":"a"}'
 // };
 // infApi = {                                    // ########## TYPE → json
-//     'method': 'PUT', 'url': `https://ntfy.sh/`,
+//     'method': 'POST', 'url': `https://ntfy.sh/`,
 //     'headers': { 'accept-language': 'application/json' },
 //     'body': { 'Chave': 'aaaaaaaaaaa', 'Valor': 'bbbbbbbbb' }
 // };
@@ -21,7 +21,7 @@ if (typeof window !== 'undefined') { _WebS = window.WebSocket } else { // ← CH
 // formData.append('grant_type', 'client_credentials');
 // formData.append('resource', 'https://graph.microsoft.com');
 // infApi = {
-//     'method': 'PUT', 'url': `https://ntfy.sh/`,
+//     'method': 'POST', 'url': `https://ntfy.sh/`,
 //     'headers': { 'Content-Type': 'application/x-www-form-urlencoded' },
 //     'body': formData.toString()
 // };
@@ -621,7 +621,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
             const infApi = {
                 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`,
                 'headers': { 'Content-Type': 'application/json', 'Authorization': `Bearer ${retConfigStorage.Authorization}` },
-                'body': { "model": "gpt-3.5-turbo", "messages": [{ "role": "user", "content": inf.input }] }
+                'body': { 'model': 'gpt-3.5-turbo', 'messages': [{ 'role': 'user', 'content': inf.input }], 'temperature': 0.7 }
             }; const retApi = await api(infApi); if (!retApi.ret) { return ret }; const res = JSON.parse(retApi.res.body);
             if ('choices' in res) { ret['res'] = res.choices[0].message.content; ret['ret'] = true; ret['msg'] = `CHAT GPT OPEN AI: OK` }
             else {
