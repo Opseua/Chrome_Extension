@@ -37,3 +37,6 @@ async function client(inf) {
     }
 }
 client()
+
+let infChatGpt = { 'provider': 'open.ai', 'input': `Quanto é 1+1?` }
+let retChatGpt = await chatGpt(infChatGpt); console.log(retChatGpt)
