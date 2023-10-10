@@ -89,7 +89,7 @@ if (typeof window !== 'undefined') { _WebS = window.WebSocket } else { // ← CH
 // const infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
 // const retTranslate = await translate(infTranslate);console.log(retTranslate)
 // - # -         - # -     - # -     - # -     - # -     - # -     - # -     - # -
-// let infChatGpt = { 'provider': 'railway', 'input': `Qual a idade de Marte?` }
+// let infChatGpt = { 'provider': 'open.ai', 'input': `Qual a idade de Marte?` }
 // let retChatGpt = await chatGpt(infChatGpt)
 // console.log(retChatGpt.res)
 

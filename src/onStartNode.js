@@ -19,14 +19,12 @@ async function client(inf) {
                 await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': 'ONSTART NODEJS: RECONEXAO EM 10 SEGUNDOS' })
                 await new Promise(r => setTimeout(r, 10000)); web1()
             }; ws1.onmessage = async (event) => {
-                let data, fun; try { data = JSON.parse(event.data); if (data.fun) { fun = true } } catch (e) { }; if (fun) {
+                let data; try { data = JSON.parse(event.data) } catch (e) { }; if (data.fun) {
                     let infWebSocketRet; if (data.retWs && data.retWs.res) {
                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
                     } else { infWebSocketRet = { 'data': event.data } }; const retWebSocketRet = webSocketRet(infWebSocketRet)
-                } else {
-                    const msg = `\n\n MENSAGEM DO WEBSCKET \n\n ${event.data} \n\n`; console.log(msg)
-                    await log({ 'folder': 'JavaScript', 'rewrite': true, 'path': `log.txt`, 'text': msg })
-                }
+                } else if (data.other) { console.log(data.other) } // other
+                else { const msg = `\n\n MENSAGEM DO WEBSCKET \n\n ${event.data} \n\n`; console.log(msg) }
             }
         }; web1(); ret['ret'] = true;
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }

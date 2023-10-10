@@ -78,18 +78,13 @@ async function client(inf) {
             ws1.onerror = async (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
             ws1.onclose = async (event) => { console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`); await new Promise(r => setTimeout(r, 10000)); web1() }
             ws1.onmessage = async (event) => {
-                let data, fun, other; try { data = JSON.parse(event.data); if (data.fun) { fun = true } else if (data.other) { other = true } } catch (e) { }; if (fun) {
+                let data; try { data = JSON.parse(event.data) } catch (e) { }; if (data.fun) {
                     let infWebSocketRet; if (data.retWs && data.retWs.res) {
                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
                     } else { infWebSocketRet = { 'data': event.data } }; const retWebSocketRet = webSocketRet(infWebSocketRet)
-                } else if (other) {
-                    // other
-                    console.log(data.other)
-                } else {
-                    const msg = `\n\n MENSAGEM DO WEBSCKET \n\n ${event.data} \n\n`; console.log(msg)
-                }
+                } else if (data.other) { console.log(data.other) } // other
+                else { const msg = `\n\n MENSAGEM DO WEBSCKET \n\n ${event.data} \n\n`; console.log(msg) }
             }
-
         }; web1(); ret['ret'] = true
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
     if (!ret.ret) {
@@ -105,35 +100,23 @@ client()
 // const retSniffer = await sniffer(infSniffer)
 // console.log(retSniffer)
 
-// let infExcel, retExcel ; // CQPT    KQRE
-// infExcel = { 'action': 'get', 'tab': 'YARE', 'col': 'A', 'lin': 1 }
-// infExcel = { 'action': 'set', 'tab': 'YARE', 'col': 'A',  'value': `VALOR` }
-// retExcel = await excel(infExcel)
-// console.log(retExcel)
-
 let infConfigStorage, retConfigStorage;
 infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
 infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' }
 infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
-// retConfigStorage = await configStorage(infConfigStorage)
-// console.log(retConfigStorage)
+// retConfigStorage = await configStorage(infConfigStorage); console.log(retConfigStorage)
 
 let infFile, retFile
 infFile = { 'action': 'inf' }
-// infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
-// infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
-// infFile = { 'action': 'list', 'functionLocal': false, 'path': './PASTA/', 'max': 10 }
-// infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pathNew': './PASTA2/' }
-// infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
+infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
+infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
+infFile = { 'action': 'list', 'functionLocal': false, 'path': './PASTA/', 'max': 10 }
+infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pathNew': './PASTA2/' }
+infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 //retFile = await file(infFile); console.log(retFile)
 
 
-// await new Promise(resolve => setTimeout(resolve, 2000));
-// ws1.send(JSON.stringify({ "name": "google", "par": { "search": "quanto é 1+1" } }))
-
-
-// let infChatGpt = { 'provider': 'open.ai', 'input': `Quanto é 1+1?` }
-// let retChatGpt = await chatGpt(infChatGpt)
-// console.log(retChatGpt)
+let infChatGpt = { 'provider': 'open.ai', 'input': `Quanto é 1+1?` }
+// let retChatGpt = await chatGpt(infChatGpt); console.log(retChatGpt)
 
 
