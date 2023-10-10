@@ -19,7 +19,7 @@ async function client(inf) {
                 await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': 'ONSTART NODEJS: RECONEXAO EM 10 SEGUNDOS' })
                 await new Promise(r => setTimeout(r, 10000)); web1()
             }; ws1.onmessage = async (event) => {
-                let data; try { data = JSON.parse(event.data) } catch (e) { }; if (data.fun) {
+                let data = {}; try { data = JSON.parse(event.data) } catch (e) { }; if (data.fun) {
                     let infWebSocketRet; if (data.retWs && data.retWs.res) {
                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
                     } else { infWebSocketRet = { 'data': event.data } }; const retWebSocketRet = webSocketRet(infWebSocketRet)
@@ -37,6 +37,3 @@ async function client(inf) {
     }
 }
 client()
-
-let infChatGpt = { 'provider': 'open.ai', 'input': `Quanto é 1+1?` }
-let retChatGpt = await chatGpt(infChatGpt); console.log(retChatGpt)

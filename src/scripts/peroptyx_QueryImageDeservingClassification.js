@@ -25,8 +25,7 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
                 'duration': 2, 'icon': './src/media/notification_1.png',
                 'title': `NÃO BLIND`,
                 'text': `${query}`,
-            }
-            // retNotification = await notification(infNotification)
+            }; // retNotification = await notification(infNotification)
         }
 
         let infChatGpt = {
