@@ -38,7 +38,7 @@ if (typeof window !== 'undefined') { // CHROME
                 }; let par; const retNotification = await notification(infNotification);
                 const infFile = { 'action': 'read', 'path': `${conf[1]}:/ARQUIVOS/Projetos/Sniffer_Python/log/state.txt` };
                 const retFile = await file(infFile); par = `"${conf[1]}:\\ARQUIVOS\\WINDOWS\\BAT\\RUN_PORTABLE\\1_BACKGROUND.exe"`
-                if (retFile.ret) {
+                if (retFile.res == 'ON') {
                     par = `${par} "del "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\log\\state.txt" &&`
                     par = `${par} taskkill /IM \"nodeSniffer.exe\" /F\"`
                 } else { par = `${par} "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_BACKGROUND.exe"` }
@@ -75,7 +75,12 @@ async function client(inf) {
 
         async function web1() {
             ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
-            ws1.onerror = async (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
+            ws1.onerror = async (e) => { }; ws1.onopen = () => {
+                console.log(`ON START: CONEXAO OK`)
+
+                aaaaa()
+
+            }
             ws1.onclose = async (event) => { console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`); await new Promise(r => setTimeout(r, 10000)); web1() }
             ws1.onmessage = async (event) => {
                 let data = {}; try { data = JSON.parse(event.data) } catch (e) { }; if (data.fun) {
@@ -106,18 +111,24 @@ infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' }
 infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
 // retConfigStorage = await configStorage(infConfigStorage); console.log(retConfigStorage)
 
-let infFile, retFile
-infFile = { 'action': 'inf' }
-infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
-infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
-infFile = { 'action': 'list', 'functionLocal': false, 'path': './PASTA/', 'max': 10 }
-infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pathNew': './PASTA2/' }
-infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
-//retFile = await file(infFile); console.log(retFile)
+// let infFile, retFile
+// infFile = { 'action': 'inf' }
+// infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
+// infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
+// // infFile = { 'action': 'list', 'functionLocal': false, 'path': './PASTA/', 'max': 10 }
+// // infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pathNew': './PASTA2/' }
+// // infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
+// retFile = await file(infFile); console.log(retFile)
 
 
 // let infChatGpt = { 'provider': 'open.ai', 'input': `Quanto é 1+1?` }
 // let retChatGpt = await chatGpt(infChatGpt); console.log(retChatGpt)
 
 
-
+async function aaaaa() {
+    let infFile, retFile
+    infFile = { 'action': 'inf' }
+    infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
+    infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
+    retFile = await file(infFile); console.log(retFile)
+}
