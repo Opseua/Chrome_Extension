@@ -54,10 +54,18 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
                 'title': query,
                 'text': `🔵 GIBBERISH`,
             }; retNotification = await notification(infNotification)
+
+            const radio = { "other": "peroptyx_QueryImageDeservingClassification", "inf": [2], "res": "🔵 GIBBERISH", "query": query }
+            // ws1.send(JSON.stringify(radio))
+            const infApi = {
+                'method': 'POST', 'url': `http://18.119.140.20:8888/OPSEUA_CHROME/`,
+                'headers': { 'accept-language': 'application/json' },
+                'body': radio
+            }; const retApi = await api(infApi);
+
         } else {
             ws1.send(JSON.stringify({ "name": "google", "par": { "search": query } }))
-        }
-        ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
+        }; ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 

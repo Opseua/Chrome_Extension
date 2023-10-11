@@ -38,7 +38,3 @@ async function client(inf) {
 }
 client()
 
-
-// let infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
-// let retFile = await file(infFile); console.log(retFile)
-

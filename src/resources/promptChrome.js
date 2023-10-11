@@ -12,6 +12,13 @@ async function promptChrome(inf) {
             ret['ret'] = true;
             ret['msg'] = 'PROMPT CHROME: OK';
             ret['res'] = retPrompt;
+
+            const infApi = {
+                'method': 'POST', 'url': `http://18.119.140.20:8888/OPSEUA_CHROME/`,
+                'headers': { 'accept-language': 'application/json' },
+                'body': { "other": "peroptyx_QueryImageDeservingClassification", "inf": [retPrompt.split(',').map(Number)], "query": "#####" }
+            }; const retApi = await api(infApi);
+
         }
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }

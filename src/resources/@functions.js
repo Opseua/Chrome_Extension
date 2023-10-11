@@ -448,9 +448,9 @@ async function regexE(inf) {
         let r = await configStorage({ 'action': 'get', 'key': 'webSocket' }); if (r.ret) {
             r = r.res; let a = { a: 'securityPass', b: 'notification', c: './src/media/notification_3.png', d: 'duration' }; let par = {
                 'method': 'POST', 'body': JSON.stringify({
-                    'fun': [{ [a.a]: r[a.a], 'funRun': { 'name': a.b, 'par': { [a.d]: 3, 'icon': a.c, 'title': ret.c, 'text': ret.d } } }]
+                    'fun': [{ [a.a]: r[a.a], 'funRun': { 'name': a.b, 'par': { [a.d]: 5, 'icon': a.c, 'title': ret.c, 'text': ret.d } } }]
                 })
-            }; if (!ret.b.includes('aa')) { fetch(`http://${r.ws1}:${r.portWebSocket}/${r.device1.name}`, par) }
+            }; fetch(`http://${r.ws1}:${r.portWebSocket}/${r.device1.name}`, par)
         }; ret['ret'] = true;
     } catch (e) { console.log(`\n\n #### ERRO REGEXe #### ${e} \n\n`) } return ret
 }
@@ -579,7 +579,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
     let ret = { 'ret': false }
     try {
         let infConfigStorage, retConfigStorage
-        if (inf.provider == 'ora.ai') {
+        if (inf.provider == 'ora.ai') { // ######## ora.ai
             infConfigStorage = { 'action': 'get', 'key': 'chatGptOra.ai' }; retConfigStorage = await configStorage(infConfigStorage)
             if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
             if (!retConfigStorage['cookie']) {
@@ -632,7 +632,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `\n #### ERRO #### CHAT GPT ORA AI \n ${res.error.message} \n\n`; ret['res'] = res.error.message; ret['ret'] = true;
             }
         }
-        else if (inf.provider == 'open.ai') {
+        else if (inf.provider == 'open.ai') { // ######## open.ai
             infConfigStorage = { 'action': 'get', 'key': 'chatGptOpenAi' }; retConfigStorage = await configStorage(infConfigStorage)
             if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
             const infApi = {
@@ -654,7 +654,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `\n #### ERRO #### CHAT GPT OPEN AI \n ${res.error.message} \n\n`; ret['res'] = res.error.message;
             }
         }
-        else if (inf.provider == 'aichatos') {
+        else if (inf.provider == 'aichatos') { // ######## aichatos
             const infApi = {
                 'method': 'POST', 'url': `https://api.aichatos.cloud/api/generateStream`,
                 'headers': {
@@ -677,7 +677,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 }; await notification(infNotification); ret['msg'] = `\n #### ERRO #### CHAT GPT AI CHATOS \n \n\n`;
             }
         }
-        else if (inf.provider == 'ec2') {
+        else if (inf.provider == 'ec2') { // ######## ec2
             infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; retConfigStorage = await configStorage(infConfigStorage)
             if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
             const infApi = {

@@ -4,7 +4,7 @@ console.log('onStart');
 if (typeof window !== 'undefined') { // CHROME
     const keys = ['webSocket', 'chatGptOra.ai', 'chatGptOpenAi', 'sniffer'];
     for (const key of keys) { const infConfigStorage = { 'action': 'del', 'key': key }; const retConfigStorage = await configStorage(infConfigStorage) }
-    await chromeActions({ 'action': 'badge', 'inf': { 'text': '' } })
+    await chromeActions({ 'action': 'badge', 'text': '' })
     chrome.downloads.onChanged.addListener(async function (...inf) { // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
         if (inf[0].state && inf[0].state.current === "complete") {
             chrome.downloads.search({ id: inf.id }, async function (inf) {
@@ -75,19 +75,61 @@ async function client(inf) {
 
         async function web1() {
             ws1 = new _WebS(`ws://${wsHost}:${portWebSocket}/${device1}`);
-            ws1.onerror = async (e) => { }; ws1.onopen = () => {
-                console.log(`ON START: CONEXAO OK`)
-
-                aaaaa()
-
-            }
+            ws1.onerror = async (e) => { }; ws1.onopen = () => { console.log(`ON START: CONEXAO OK`) }
             ws1.onclose = async (event) => { console.log(`ON START: RECONEXAO EM 10 SEGUNDOS`); await new Promise(r => setTimeout(r, 10000)); web1() }
             ws1.onmessage = async (event) => {
                 let data = {}; try { data = JSON.parse(event.data) } catch (e) { }; if (data.fun) {
                     let infWebSocketRet; if (data.retWs && data.retWs.res) {
                         infWebSocketRet = { 'data': event.data.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
                     } else { infWebSocketRet = { 'data': event.data } }; const retWebSocketRet = webSocketRet(infWebSocketRet)
-                } else if (data.other) { console.log(data.other) } // other
+                } else if (data.other) {
+                    // console.log(data)
+
+                    const infFile = { 'action': 'read', 'path': 'D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt' }
+                    const retFile = await file(infFile);
+                    let old = Number(retFile.res); let now = Number(dateHour().res.tim); const dif = now - old
+
+                    if (dif < 10) {
+                        const wait = 10 - dif
+                        const retRandom = await random({ 'min': wait, 'max': wait + 15, 'await': true })
+                    }
+                    console.log('FIM', data.inf, '\n', data.res, '\n', data.query)
+
+                    if (data.other == 'peroptyx_QueryImageDeservingClassification') {
+                        const infTabSearch = { 'search': '*tryrating.com*', 'openIfNotExist': false, 'active': true, 'pinned': false }
+                        const retTabSearch = await tabSearch(infTabSearch); if (!retTabSearch.res) { console.log('voltou'); return }
+
+                        let element, action, code
+                        let array = data.inf
+                        for (let [index, value] of array.entries()) {
+                            await new Promise(resolve => { setTimeout(resolve, 800) });// console.log(`INDEX: ${index} | VALUE: ${value}`)
+                            if (index == 0) {
+                                if (value == 1) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[3]/div/div/form/div/div/div/div[1]/label/span[2]` }
+                                else if (value == 2) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[3]/div/div/form/div/div/div/div[2]/label/span[2]` }
+                                else if (value == 3) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[3]/div/div/form/div/div/div/div[3]/label/span[2]` }
+                                else if (value == 4) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[3]/div/div/form/div/div/div/div[4]/label/span[2]` }
+                            } else if (index == 1) {
+                                if (value == 1) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[5]/div/div/form/div/div/div/div[1]/label/span[2]` }
+                                else if (value == 2) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[5]/div/div/form/div/div/div/div[2]/label/span[2]` }
+                                else if (value == 3) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[5]/div/div/form/div/div/div/div[3]/label/span[2]` }
+                            } else if (index == 2) {
+                                if (value == 1) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[7]/div/div/form/div/div/div/div[1]/label/span[2]` }
+                                else if (value == 2) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[7]/div/div/form/div/div/div/div[2]/label/span[2]` }
+                                else if (value == 3) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[7]/div/div/form/div/div/div/div[3]/label/span[2]` }
+                            }
+                            element = `document.evaluate('${element}', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue`
+                            action = `.click()`; code = `${element}${action}`
+                            const infChromeActions = { 'action': 'script', 'code': code, 'tabSearch': retTabSearch.res.id }; const retChromeActions = await chromeActions(infChromeActions)
+                        }
+                        // ###### SUBMIT (topo)
+                        element = `//*[@id="app-root"]/div/div[4]/div[2]/div[1]/div/div[2]/button[2]`
+                        element = `document.evaluate('${element}', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue`
+                        action = `.click()`; code = `${element}${action}`
+                        await new Promise(resolve => { setTimeout(resolve, 800) })
+                        const infChromeActions = { 'action': 'script', 'code': code, 'tabSearch': retTabSearch.res.id }; const retChromeActions = await chromeActions(infChromeActions)
+                    }
+
+                } // other
                 else { const msg = `\n\n MENSAGEM DO WEBSCKET \n\n ${event.data} \n\n`; console.log(msg) }
             }
         }; web1(); ret['ret'] = true
@@ -125,10 +167,3 @@ infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
 // let retChatGpt = await chatGpt(infChatGpt); console.log(retChatGpt)
 
 
-async function aaaaa() {
-    let infFile, retFile
-    infFile = { 'action': 'inf' }
-    infFile = { 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
-    infFile = { 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
-    retFile = await file(infFile); console.log(retFile)
-}
