@@ -834,17 +834,14 @@ async function splitText(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
-async function wsConnect(inf) {
-    let ret = { 'ret': false }; try {
-        async function logOk(inf) { if (typeof window == 'undefined') { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf }) } } // NODEJSt
-        await logOk('ONSTART: START'); wsUrl = inf; function wsRun(url) {
-            let ws = new _WebS(url); ws.onerror = async (e) => { }; ws.onopen = async () => { let a = `WS OK:\n${url}`; console.log(a); await logOk(a) }
-            ws.onclose = async (event) => {
-                let a = `WS RECONEXAO EM 5 SEGUNDOS:\n${url}`; console.log(a); await logOk(a); await new Promise(r => setTimeout(r, 5000)); wsRun(url)
-            }; ws.onmessage = async (event) => { listSend(url, event.data) }; wsArr.push({ url: url, ws: ws })
-        }; for (let i = 0; i < wsUrl.length; i++) { wsRun(wsUrl[i]) }; ret['ret'] = true
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
-}
+async function logWs(inf) { if (typeof window == 'undefined') { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf }) } } // NODEJS
+let wsCli = {}, wsArr = [], lis = {}; async function wsConnect(inf) { wsCli = wsRun(inf); await logWs('ONSTART: START') }; async function wsFun(inf) {
+    let ws = new _WebS(inf); ws.onmessage = (event) => { if (lis[inf] && typeof lis[inf] === 'function') { lis[inf](event.data) } }
+    ws.onerror = (e) => { }; ws.onopen = async () => { let a = `WS OK:\n${inf}`; console.log(a); await logWs(a) }
+    ws.onclose = async () => { let a = `WS RECONEXAO EM 5 SEGUNDOS:\n${inf}`; console.log(a); await logWs(a); await new Promise(r => setTimeout(r, 5000)); ws = wsFun(inf) }; return ws
+}; function wsRun(inf) { const wsB = []; inf.forEach((inf) => { const wsA = wsFun(inf); wsB.push(wsA) }); return wsB }; function wsSend(s, m) {
+    let ok = false; wsCli.forEach((wsC) => { if (wsC.inf === s) { wsC.send(m); ok = true } }); if (!ok) { let ws = new _WebS(s); ws.onopen = () => { ws.send(m); ws.close() } }
+}; function wsList(inf, listener) { lis[inf] = listener };
 
 // ############### CLEAR CONSOLE ###############
 console.clear(); let msgQtd = 0; const clearConsole = console.log;
@@ -852,17 +849,9 @@ console.log = async function () { clearConsole.apply(console, arguments); msgQtd
 // ###############               ###############
 
 const infFile = { 'action': 'inf', 'functionLocal': false }; const retFile = await file(infFile);
-let wsUrl = [], wsArr = [], list = {}; function wsList(s, o) { if (!list[s]) { list[s] = [] }; list[s].push(o) }
-async function wsSend(s, msg) {
-    try {
-        let m = typeof msg === 'object' ? JSON.stringify(msg) : msg; let find = false; for (let i = 0; i < wsArr.length; i++) {
-            if (wsArr[i].url == s) { find = true; wsArr[i].ws.send(m); break }
-        }; if (!find) { let ws = new _WebS(s); ws.onopen = () => { ws.send(m); ws.close() } }
-    } catch (e) { const m = await regexE({ 'e': e }); console.log(m) }
-}; async function listSend(s, m) { for (let i = 0; i < wsArr.length; i++) { if (wsArr[i].url === s && list[s]) { list[s].forEach((o) => { o(m) }) } } }
 if (typeof window !== 'undefined') { // CHROME
     window['gLet'] = gLet; window['conf'] = retFile.res; window['_WebS'] = _WebS;
-    window['wsUrl'] = wsUrl; window['wsArr'] = wsArr; window['list'] = list; window['wsList'] = wsList; window['wsSend'] = wsSend; window['listSend'] = listSend
+    window['wsList'] = wsList; window['wsSend'] = wsSend; window['wsArr'] = wsArr;
     // ## functions
     window['api'] = api; window['file'] = file; window['configStorage'] = configStorage; window['dateHour'] = dateHour; window['secToHour'] = secToHour; window['regex'] = regex;
     window['random'] = random; window['regexE'] = regexE; window['gO'] = gO; window['gOAdd'] = gOAdd; window['gORem'] = gORem; window['orderObj'] = orderObj;
@@ -874,7 +863,7 @@ if (typeof window !== 'undefined') { // CHROME
     global['gLet'] = gLet; global['conf'] = retFile.res;
     global['_WebS'] = _WebS; global['_fs'] = _fs; global['_path'] = _path; global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
     global['_http'] = _http; const { WebSocketServer } = await import('ws'); global['_WebSServer'] = WebSocketServer;
-    global['wsUrl'] = wsUrl; global['wsArr'] = wsArr; global['list'] = list; global['wsList'] = wsList; global['wsSend'] = wsSend; global['listSend'] = listSend;
+    global['wsList'] = wsList; global['wsSend'] = wsSend; global['wsArr'] = wsArr;
     // ## functions
     global['api'] = api; global['file'] = file; global['configStorage'] = configStorage; global['dateHour'] = dateHour; global['secToHour'] = secToHour; global['regex'] = regex;
     global['random'] = random; global['regexE'] = regexE; global['gO'] = gO; global['gOAdd'] = gOAdd; global['gORem'] = gORem; global['orderObj'] = orderObj;

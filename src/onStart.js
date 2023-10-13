@@ -42,7 +42,8 @@ async function run(inf) {
         const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }; const securityPass = retConfigStorage.securityPass;
         let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices; let dev1 = `${url}://${host}:${port}/${dev[1].name}`
-        await wsConnect([dev1,]); wsList(dev1, async (m) => {
+
+        wsArr = [dev1,]; wsConnect(wsArr); wsList(wsArr[0], async (m) => {
             let data = {}; try { data = JSON.parse(m) } catch (e) { }; if (data.fun) {
                 let infWebSocketRet; if (data.retWs && data.retWs.res) {
                     infWebSocketRet = { 'data': m.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
@@ -118,3 +119,6 @@ let infChatGpt = { 'provider': 'ora.ai', 'input': `Quanto é 1+1?` }
 // csr = await cs(['set', 'NomeDaChave123', 'valor aqui']); console.log(csr)
 // csr = await cs(['get', 'NomeDaChave123']); console.log(csr)
 
+// await new Promise(r => setTimeout(r, 5000))
+// wsSend('ws://18.119.140.20:8888/OPSEUA_CHROME22', '1')
+// wsSend(wsArr[0], 'aaaa')
