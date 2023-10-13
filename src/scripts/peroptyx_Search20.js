@@ -1,8 +1,7 @@
 // peroptyx_Search20()
 
 async function peroptyx_Search20(inf) {
-    let ret = { 'ret': false }
-    try {
+    let ret = { 'ret': false }; try {
         let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
             const gOEve = async (i) => {

@@ -5,8 +5,7 @@
 // console.log(retExcel)
 
 async function excel(inf) {
-    let ret = { 'ret': false }
-    try {
+    let ret = { 'ret': false }; try {
         let clientRequestId, sessionId, transientEditSessionToken, infConfigStorage, retConfigStorage, lastRun
         infConfigStorage = { 'action': 'get', 'key': 'excel' }
         retConfigStorage = await configStorage(infConfigStorage);

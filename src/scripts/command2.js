@@ -1,6 +1,5 @@
 async function command2(inf) {
-  let ret = { 'ret': false }
-  try {
+  let ret = { 'ret': false }; try {
     let reRun = false
     let infSniffer, retSniffer, infConfigStorage, retConfigStorage
     infConfigStorage = { 'action': 'get', 'key': 'sniffer' }; retConfigStorage = await configStorage(infConfigStorage)

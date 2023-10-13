@@ -1,8 +1,7 @@
 // peroptyx_QueryImageDeservingClassification()
 
 async function peroptyx_QueryImageDeservingClassification(inf) {
-    let ret = { 'ret': false }
-    try {
+    let ret = { 'ret': false }; try {
         let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
             const gOEve = async (i) => {
