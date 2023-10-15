@@ -38,7 +38,7 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             }; const retApi = await api(infApi);
         } else {
             // ws1.send(JSON.stringify({ "name": "google", "par": { "search": query } }))
-            wsSend(wsUrl[0], { "name": "google", "par": { "search": query } })
+            wsSend(gO.inf.wsArr[0], { "name": "google", "par": { "search": query } })
         }; ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }

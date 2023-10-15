@@ -1,3 +1,4 @@
+// await import('./resources/@functions.js'); console.log('onStartNode')
 await import('./resources/@functions.js'); console.log('onStart');
 
 if (typeof window !== 'undefined') { // CHROME
@@ -38,16 +39,17 @@ if (typeof window !== 'undefined') { // CHROME
 }
 // *************************
 async function run(inf) {
-    let ret = { 'ret': false }; try {
+    let ret = { 'ret': false };
+    try {
         const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }; const securityPass = retConfigStorage.securityPass;
         let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices; let dev1 = `${url}://${host}:${port}/${dev[1].name}`
 
-        wsArr = [dev1,]; wsConnect(wsArr); wsList(wsArr[0], async (m) => {
-            let data = {}; try { data = JSON.parse(m) } catch (e) { }; if (data.fun) {
+        gO.inf = { 'wsArr': [dev1,] }; await wsConnect(gO.inf.wsArr); wsList(gO.inf.wsArr[0], async (message) => {
+            let data = {}; try { data = JSON.parse(message) } catch (e) { }; if (data.fun) {
                 let infWebSocketRet; if (data.retWs && data.retWs.res) {
-                    infWebSocketRet = { 'data': m.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
-                } else { infWebSocketRet = { 'data': m } }; await webSocketRet(infWebSocketRet)
+                    infWebSocketRet = { 'data': message.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
+                } else { infWebSocketRet = { 'data': message } }; await webSocketRet(infWebSocketRet)
             } else if (data.other) { // other
                 // console.log('ther', data.other)
                 const infFile = { 'action': 'read', 'path': 'D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt' }
@@ -85,10 +87,18 @@ async function run(inf) {
                     const infChromeActions = { 'action': 'script', 'code': code, 'tabSearch': retTabSearch.res.id }; const retChromeActions = await chromeActions(infChromeActions)
                 }
 
-            } else { console.log(`\n\n MENSAGEM DO WEBSCKET \n\n ${m} \n\n`) }
-        }); ret['ret'] = true
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
-    if (!ret.ret) { console.log(ret.msg); if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) } }
+            } else { console.log(`\nMENSAGEM DO WEBSCKET\n\n${message}\n`) }
+        });
+
+        const infLog = { 'folder': '#_TESTE_#', 'path': `TESTE.txt`, 'text': 'INF AQUI' }
+        const retLog = await log(infLog);
+        console.log(retLog)
+
+        ret['ret'] = true
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {
+        console.log(ret.msg); if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) }
+        else { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': `ONSTART NODEJS: ${ret.msg}` }) } // ← NODEJS  ↑CHROME
+    }
 }
 run()
 
@@ -119,6 +129,6 @@ let infChatGpt = { 'provider': 'ora.ai', 'input': `Quanto é 1+1?` }
 // csr = await cs(['set', 'NomeDaChave123', 'valor aqui']); console.log(csr)
 // csr = await cs(['get', 'NomeDaChave123']); console.log(csr)
 
-// await new Promise(r => setTimeout(r, 5000))
-// wsSend('ws://18.119.140.20:8888/OPSEUA_CHROME22', '1')
-// wsSend(wsArr[0], 'aaaa')
+
+
+
