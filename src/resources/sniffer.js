@@ -6,9 +6,10 @@ async function sniffer(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false, 'res': { 'req': {}, 'res': {} } };
     if (typeof window == 'undefined') { // [ENCONTRAR DEVICE] NODEJS
-        const infDevAndFun = { 'name': 'sniffer', 'retUrl': inf.retUrl, 'par': { 'newReqSend': inf.newReqSend, 'arrUrl': inf.arrUrl } }
+        const infDevAndFun = { 'name': 'sniffer', 'retInf': inf.retInf, 'par': { 'newReqSend': inf.newReqSend, 'arrUrl': inf.arrUrl } }
         const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
-    }; return new Promise(resolve => {
+    };
+    return new Promise(resolve => {
         let lisOnBeforeRequest, lisOnBeforeSendHeaders, lisOnCompleted; function snifferOff(inf) {
             if (inf) { console.log('sniffer parou'); resolve({ 'ret': false }) } else { console.log('sniffer off'); resolve(ret) }
             chrome.webRequest.onBeforeRequest.removeListener(lisOnBeforeRequest); chrome.webRequest.onBeforeSendHeaders.removeListener(lisOnBeforeSendHeaders);
@@ -52,7 +53,7 @@ async function sniffer(inf) {
                 }
             }
         } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res; })() };
-        if (!ret.ret) { console.log(ret.msg) }; ret = { 'ret': ret.ret, 'msg': ret.msg, 'res': ret.res }; return ret
+        if (!ret.ret) { console.log(ret.msg) }; return ret
     });
 }
 

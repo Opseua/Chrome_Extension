@@ -25,9 +25,10 @@ async function tabSearch(inf) {
     let ret = { 'ret': false }; try {
         if (typeof window == 'undefined') { // [ENCONTRAR DEVICE] NODEJS
             const infDevAndFun = {
-                'name': 'tabSearch', 'retUrl': inf.retUrl, 'par': { 'search': inf.search, 'openIfNotExist': inf.openIfNotExist, 'active': inf.active, 'pinned': inf.pinned, 'url': inf.url }
+                'name': 'tabSearch', 'retInf': inf.retInf, 'par': { 'search': inf.search, 'openIfNotExist': inf.openIfNotExist, 'active': inf.active, 'pinned': inf.pinned, 'url': inf.url }
             }; const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
-        }; let result = {}; if (inf.search == 'ATIVA') { // ATIVA search
+        };
+        let result = {}; if (inf.search == 'ATIVA') { // ATIVA search
             result = await new Promise(resolve => {
                 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
                     if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {

@@ -49,10 +49,31 @@ await import('./wsConnect.js') // node chrome
 // await new Promise(resolve => setTimeout(resolve, (1500)));
 // gO.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
 // gOAdd(console.log('globalObject [import] ALTERADO →', gO.inf))
-const data = { inf: '' }; const listeners = new Set(); const gO = new Proxy(data, {
-    set(target, key, value) { target[key] = value; globalChanged(value); listeners.forEach(listener => listener(target)); return true }
-}); function gOAdd(listener) { listeners.add(listener) }; function gORem(listener) { listeners.delete(listener) }
-async function globalChanged(i) { if (i.alert !== false) {/* console.log('globalObject [export] ALTERADO →', i)*/ } }
+// ******
+// const data = { inf: '' }; const listeners = new Set(); const gO = new Proxy(data, {
+//     set(target, key, value) { target[key] = value; globalChanged(value); listeners.forEach(listener => listener(target)); return true }
+// }); function gOAdd(listener) { listeners.add(listener) }; function gORem(listener) { listeners.delete(listener) }
+// async function globalChanged(i) { if (i.alert) { console.log('globalObject [export] ALTERADO →', i) } }
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+// gOList(async function () {
+//     console.log('globalObject [import] ALTERADO →', gO.inf);
+// })
+// gO.inf['webSocket'] = {}
+// gO.inf.webSocket['wsArr'] = ['ws://127.0.0.1:8888/DEV1', 'ws://127.0.0.1:8888/DEV2', 'ws://127.0.0.1:8888/DEV3']
+// console.log(gO.inf)
+// ******
+const gOListener = []; const gOObj = {};
+function gOList(listener) { gOListener.push(listener) }
+function notificarListeners(prop, value) {
+    if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf) }; for (const listener of gOListener) { listener(prop, value); }
+}
+const gO = new Proxy(gOObj, { set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; } }); gO.inf = {}
+// *-*-*-*-*-*-*-*
+// const cs = await configStorage([''])
+// console.log(cs)
+
+
+
 // ############### ###############
 
 if (typeof window !== 'undefined') { // CHROME
@@ -61,49 +82,27 @@ if (typeof window !== 'undefined') { // CHROME
     // ## variaveis
     window['gLet'] = gLet; window['conf'] = conf;
     // ## global object
-    window['gO'] = gO; window['gOAdd'] = gOAdd; window['gORem'] = gORem;
+    window['gO'] = gO; window['gOList'] = gOList;
 } else { // NODEJS 
     // ## bibliotecas
+    const { WebSocketServer } = await import('ws'); global['_WebSServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
     global['_WebS'] = _WebS; global['_fs'] = _fs; global['_path'] = _path;
     global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
     global['_http'] = _http; global['_run'] = _run
     // ## variaveis
     global['gLet'] = gLet; global['conf'] = conf;
     // ## global object
-    global['gO'] = gO; global['gOAdd'] = gOAdd; global['gORem'] = gORem;
-
-    const { WebSocketServer } = await import('ws'); global['_WebSServer'] = WebSocketServer;
+    global['gO'] = gO; global['gOList'] = gOList;
 }
 
 // OBRIGATORIO FICAR APOS O EXPORT GLOBAL, NAO SUBIR!!!
 const infFile = { 'action': 'inf' };
-let retFile = await file(infFile);
+const retFile = await file(infFile);
 if (typeof window !== 'undefined') { // CHROME
-    conf = window['conf'] = retFile.res
+    window['conf'] = retFile.res
 } else { // NODEJS 
-    conf = global['conf'] = retFile.res
+    global['conf'] = retFile.res
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

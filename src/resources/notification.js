@@ -9,12 +9,14 @@
 async function notification(infOk) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
-        let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk }; if (typeof window == 'undefined') { // [ENCONTRAR DEVICE] NODEJS
+        let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
+        if (typeof window == 'undefined') { // [ENCONTRAR DEVICE] NODEJS
             const infDevAndFun = {
-                'name': 'notification', 'retUrl': inf.retUrl,
+                'name': 'notification', 'retInf': inf.retInf,
                 'par': { 'buttons': inf.buttons, 'duration': inf.duration, 'icon': inf.icon, 'title': inf.title, 'text': inf.text }
             }; const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
-        }; if (!inf.icon || inf.icon.length > 1) {
+        };
+        if (!inf.icon || inf.icon.length > 1) {
             const imgSrc = !inf.icon ? './src/media/icon_3.png' : inf.icon; const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer())
             imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)))
         } else { imgBase64 = inf.icon }; const json = {
@@ -30,7 +32,7 @@ async function notification(infOk) {
             }); setTimeout(() => { chrome.notifications.clear(notificationId) }, json.duration * 1000)
         }); ret['ret'] = true; ret['msg'] = 'NOTIFICATION: OK'
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) }; ret = { 'ret': ret.ret, 'msg': ret.msg, 'res': ret.res }; return ret
+    if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

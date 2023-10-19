@@ -37,19 +37,23 @@ if (typeof window !== 'undefined') { // CHROME
         if (!ret.ret) { console.log(ret.msg); if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) } }; return ret
     });
 }
+
 // *************************
 async function run(inf) {
     let ret = { 'ret': false };
     try {
         const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }; const securityPass = retConfigStorage.securityPass;
-        let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices; let dev1 = `${url}://${host}:${port}/${dev[1].name}`
+        let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices;
+        let devChrome = `${url}://${host}:${port}/${dev[1].name}`, devNodeJS = `${url}://${host}:${port}/${dev[2].name}`
 
-        gO.inf = { 'wsArr': [dev1,] }; await wsConnect(gO.inf.wsArr); wsList(gO.inf.wsArr[0], async (message) => {
-            let data = {}; try { data = JSON.parse(message) } catch (e) { }; if (data.fun) {
+        gO.inf['webSocket'] = {}; gO.inf.webSocket['wsArr'] = [devChrome, devNodeJS,];
+        await wsConnect(gO.inf.webSocket.wsArr);
+        wsList(gO.inf.webSocket.wsArr[0], async (nomeList, par1) => {
+            let data = {}; try { data = JSON.parse(par1) } catch (e) { }; if (data.fun) { // fun
                 let infWebSocketRet; if (data.retWs && data.retWs.res) {
-                    infWebSocketRet = { 'data': message.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`)) }
-                } else { infWebSocketRet = { 'data': message } }; await webSocketRet(infWebSocketRet)
+                    infWebSocketRet = { 'data': JSON.parse(par1.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`))) }
+                } else { infWebSocketRet = { 'data': data, 'wsOrigin': nomeList } }; await webSocketRet(infWebSocketRet)
             } else if (data.other) { // other
                 // console.log('ther', data.other)
                 const infFile = { 'action': 'read', 'path': 'D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt' }
@@ -78,21 +82,17 @@ async function run(inf) {
                             else if (value == 3) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[7]/div/div/form/div/div/div/div[3]/label/span[2]` }
                         }; element = `document.evaluate('${element}', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue`
                         action = `.click()`; code = `${element}${action}`
-                        const infChromeActions = { 'action': 'script', 'code': code, 'tabSearch': retTabSearch.res.id }; const retChromeActions = await chromeActions(infChromeActions)
+                        const infChromeActions = { 'action': 'script', 'code': code, 'search': retTabSearch.res.id }; const retChromeActions = await chromeActions(infChromeActions)
                     }
                     // ###### SUBMIT (topo)
                     element = `//*[@id="app-root"]/div/div[4]/div[2]/div[1]/div/div[2]/button[2]`
                     element = `document.evaluate('${element}', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue`
                     action = `.click()`; code = `${element}${action}`; await new Promise(resolve => { setTimeout(resolve, 800) })
-                    const infChromeActions = { 'action': 'script', 'code': code, 'tabSearch': retTabSearch.res.id }; const retChromeActions = await chromeActions(infChromeActions)
+                    const infChromeActions = { 'action': 'script', 'code': code, 'search': retTabSearch.res.id }; const retChromeActions = await chromeActions(infChromeActions)
                 }
 
-            } else { console.log(`\nMENSAGEM DO WEBSCKET\n\n${message}\n`) }
+            } else { console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`) }
         });
-
-        const infLog = { 'folder': '#_TESTE_#', 'path': `TESTE.txt`, 'text': 'INF AQUI' }
-        const retLog = await log(infLog);
-        console.log(retLog)
 
         ret['ret'] = true
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {
@@ -131,4 +131,77 @@ let infChatGpt = { 'provider': 'ora.ai', 'input': `Quanto é 1+1?` }
 
 
 
+let infChromeActions, retChromeActions
+// infChromeActions = {
+//     'search': '*https://ora.ai/signin*',
+//     'url': 'https://ora.ai/signin',
+//     'action': 'script',
+//     'code': `document.evaluate('//*[@id="__next"]/div/div/div[2]/div[2]/div/main/div/div/button/div', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click()`
+// }; retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
 
+// await new Promise(resolve => { setTimeout(resolve, 5000) })
+
+// infChromeActions = {
+//     'search': '*https://accounts.google.com/*',
+//     'url': 'https://accounts.google.com/',
+//     'action': 'script',
+//     'code': `document.evaluate('//*[@id="view_container"]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div/div/ul/li[1]/div', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click()`
+// }; retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
+
+
+// infChromeActions = {
+//     'search': '*https://ora.ai/voluntary-red-v53j/keep_session*',
+//     'url': 'https://ora.ai/voluntary-red-v53j/keep_session',
+//     'action': 'script',
+//     'code': `document.evaluate('//*[@id="__next"]/div/div/div[2]/div/div[2]/div/div/main/div/div/div[1]/div/div[2]/div/div/div/div/div[1]/div', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click()`
+// }; retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
+
+
+// function elementAction(inf) {
+//     if (inf.method == 'xpath') {
+//         var elemento = document.evaluate(inf.element, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+//         if (!elemento) { return false }
+//         else {
+//             if (inf.action == 'click') {
+//                 elemento.click()
+//             }
+//             else if (inf.action == 'input') {
+//                 elemento.value = inf.value
+//             }
+//             return true;
+//         }
+//     }
+// }
+// console.log(elementAction({
+//     'method': 'xpath', 'action': 'input', 'value': `Quanto é 2615*26?\n#\n#\n`,
+//     'element': `//*[@id="app"]/main/div/div/div[2]/form/div/textarea`
+// }))
+
+// console.log(elementAction({
+//     'method': 'xpath', 'action': 'click',
+//     'element': `//*[@id="headlessui-menu-button-:r15:"]/div/span`
+// }))
+
+async function exibirMensagem() {
+    const retDateHour = dateHour();
+
+    const infTabSearch = { 'search': '*ora.ai*', 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': 'https://ora.ai/voluntary-red-v53j/script-js' }
+    const retTabSearch = await tabSearch(infTabSearch); // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
+    chrome.tabs.reload(retTabSearch.res.id);
+    await new Promise(resolve => { setTimeout(resolve, 5000) })
+
+    const infGetCookies = { 'url': 'https://ora.ai/voluntary-red-v53j/script-js', 'cookieSearch': '__Secure-next-auth.session-token' }
+    const retGetCookies = await getCookies(infGetCookies);
+
+    infFile = { 'action': 'write', 'functionLocal': true, 'path': `./cookie/${retDateHour.res.tim}.txt`, 'rewrite': false, 'text': retGetCookies }
+    retFile = await file(infFile);
+
+    setTimeout(exibirMensagem, 3600000);
+}
+
+//exibirMensagem();
+
+
+
+// const retCommandLine = await commandLine({ 'command': 'notepad', 'retInf': false });
+// console.log(retCommandLine)

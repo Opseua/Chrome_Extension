@@ -6,7 +6,9 @@
 // console.log(retConfigStorage)
 
 async function configStorage(inf) {
-    await import('./@functions.js')
+    if (typeof window !== 'undefined') { // CHROME
+        if (!window.all) { await import('./@functions.js') }
+    } else { if (!global.all) { await import('./@functions.js') } }
     let ret = { 'ret': false }; try {
         if (inf instanceof Array && inf.length == 1) { // ### CS
             inf['path'] = `${conf[1]}:/${conf[2]}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
@@ -92,7 +94,7 @@ async function configStorage(inf) {
             }
         }
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) }; ret = { 'ret': ret.ret, 'msg': ret.msg, 'res': ret.res }; return ret
+    if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME
