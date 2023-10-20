@@ -6,12 +6,22 @@ async function regexE(inf) {
         else { ret['a'] = `NAO IDENTIFICADO [NAO IDENTIFICADA]` }; ret['b'] = inf.e.toString(); ret['res'] = `\n\n ${ret.a} \n ${ret.b} \n\n`
         ret['c'] = typeof window == 'undefined' ? 'ALERTA: NODEJS' : 'ALERTA: CHROME'; ret['d'] = `${ret.a}\n${ret.b.substring(0, 349).replace('\n\n ', '')}`
         if (typeof window == 'undefined') { const retLog = await log({ 'folder': 'JavaScript', 'path': `err.txt`, 'text': ret }) }
-        let r = await configStorage({ 'action': 'get', 'key': 'webSocket' }); if (r.ret) {
-            r = r.res; let a = { a: 'securityPass', b: 'notification', c: './src/media/notification_3.png', d: 'duration' }; let par = {
+        let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket' }); if (retConfigStorage.ret) {
+            retConfigStorage = retConfigStorage.res; let par = {
                 'method': 'POST', 'body': JSON.stringify({
-                    'fun': [{ [a.a]: r[a.a], 'funRun': { 'name': a.b, 'par': { [a.d]: 5, 'icon': a.c, 'title': ret.c, 'text': ret.d } } }]
+                    'fun': [{
+                        'securityPass': retConfigStorage.securityPass,
+                        'funRet': { 'retUrl': false, 'retInf': false },
+                        'funRun': {
+                            'name': 'notification',
+                            'par': {
+                                'duration': 5, 'icon': './src/media/notification_3.png',
+                                'title': ret.c, 'text': ret.d
+                            }
+                        }
+                    }]
                 })
-            }; fetch(`http://${r.ws1}:${r.portWebSocket}/${r.device1.name}`, par)
+            }; fetch(`http://${retConfigStorage.ws1}:${retConfigStorage.portWebSocket}/${retConfigStorage.device1.name}`, par)
         }; ret['ret'] = true;
     } catch (e) { console.log(`\n\n #### ERRO REGEXe #### ${e} \n\n`) }; return ret
 }

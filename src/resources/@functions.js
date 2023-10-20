@@ -46,15 +46,6 @@ await import('./webSocketRet.js') // node chrome
 await import('./wsConnect.js') // node chrome
 
 // ############### GLOBAL OBJECT ###############
-// await new Promise(resolve => setTimeout(resolve, (1500)));
-// gO.inf = { 'alert': true, 'function': 'Nome', 'res': 'AAAAA' };
-// gOAdd(console.log('globalObject [import] ALTERADO →', gO.inf))
-// ******
-// const data = { inf: '' }; const listeners = new Set(); const gO = new Proxy(data, {
-//     set(target, key, value) { target[key] = value; globalChanged(value); listeners.forEach(listener => listener(target)); return true }
-// }); function gOAdd(listener) { listeners.add(listener) }; function gORem(listener) { listeners.delete(listener) }
-// async function globalChanged(i) { if (i.alert) { console.log('globalObject [export] ALTERADO →', i) } }
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 // gOList(async function () {
 //     console.log('globalObject [import] ALTERADO →', gO.inf);
 // })
@@ -65,16 +56,20 @@ await import('./wsConnect.js') // node chrome
 const gOListener = []; const gOObj = {};
 function gOList(listener) { gOListener.push(listener) }
 function notificarListeners(prop, value) {
-    if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf) }; for (const listener of gOListener) { listener(prop, value); }
-}
-const gO = new Proxy(gOObj, { set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; } }); gO.inf = {}
+    if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf) };
+    for (const listener of gOListener) { listener(prop, value); }
+}; const gO = new Proxy(gOObj, {
+    set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; }
+}); gO.inf = {}
 // *-*-*-*-*-*-*-*
 // const cs = await configStorage([''])
 // console.log(cs)
-
-
-
-// ############### ###############
+// // ############### CLEAR CONSOLE ###############
+console.clear(); let msgQtd = 0; const clearConsole = console.log;
+console.log = async function () {
+    clearConsole.apply(console, arguments); msgQtd++;
+    if (msgQtd >= 50) { console.clear(); msgQtd = 0; console.log('CONSOLE LIMPO!') }
+} // // ###############               ###############
 
 if (typeof window !== 'undefined') { // CHROME
     // ## bibliotecas

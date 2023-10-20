@@ -30,7 +30,7 @@ async function webSocketRet(inf) {
                 else { name = global[value.funRun.name] } // NODEJS
                 let infName = value.funRun.par, retUrl = false;
                 if (value.funRet && value.funRet.retUrl) { retUrl = typeof value.funRet.retUrl === 'boolean' ? inf.wsOrigin : `${value.funRet.retUrl}` };
-                infName['retUrl'] = retUrl; infName['retInf'] = value.funRet.retInf; let retName = await name(infName); retName = JSON.stringify(retName)
+                infName['retUrl'] = retUrl; infName['retInf'] = value.funRet.retInf ? value.funRet.retInf : undefined; let retName = await name(infName); retName = JSON.stringify(retName)
                 if (retUrl && !retName.includes('"msg":"[ENC]')) {
                     retName = !value.funRun.par.devAndFun ? retName : retName.replace('"msg":"', '"msg":"[ENC] ')
                     const send = { 'retInf2': value.funRet.retInf ? value.funRet.retInf : undefined, 'retWs': JSON.parse(retName), 'fun': value.funRet.fun }; await wsSend(retUrl, send)
