@@ -4,12 +4,15 @@ await import('./resources/@functions.js'); console.log('onStart');
 if (typeof window !== 'undefined') { // CHROME
     const keys = ['webSocket', 'chatGptOra.ai', 'chatGptOpenAi', 'sniffer'];
     for (const key of keys) { const infConfigStorage = { 'action': 'del', 'key': key }; const retConfigStorage = await configStorage(infConfigStorage) }
-    await chromeActions({ 'action': 'badge', 'text': '' }); chrome.downloads.onChanged.addListener(async function (...inf) { // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
+    await chromeActions({ 'action': 'badge', 'text': '' });
+    chrome.downloads.onChanged.addListener(async function (...inf) { // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
         if (inf[0].state && inf[0].state.current === "complete") {
             chrome.downloads.search({ id: inf.id }, async function (inf) {
                 if (inf.length > 0) {
                     const d = inf[0]; if (d.byExtensionName === 'BOT' && !d.filename.includes('[KEEP]')) {
-                        setTimeout(function () { chrome.downloads.erase({ id: d.id }); console.log('DOWNLOAD REMOVIDO DA LISTA'); URL.revokeObjectURL(d.url) }, 5000);
+                        setTimeout(function () {
+                            chrome.downloads.erase({ id: d.id }); console.log('DOWNLOAD REMOVIDO DA LISTA'); URL.revokeObjectURL(d.url)
+                        }, 5000);
                     }
                 }
             });
@@ -34,7 +37,10 @@ if (typeof window !== 'undefined') { // CHROME
             } else if (infShortcutPressed.shortcut == 'atalho_3') { command3(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
         } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
-        if (!ret.ret) { console.log(ret.msg); if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) } }; return ret
+        if (!ret.ret) {
+            console.log(ret.msg);
+            if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) }
+        }; return ret
     });
 }
 
@@ -45,10 +51,11 @@ async function run(inf) {
         const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }; const securityPass = retConfigStorage.securityPass;
         let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices;
-        let devChrome = `${url}://${host}:${port}/${dev[1].name}`, devNodeJS = `${url}://${host}:${port}/${dev[2].name}`
-        gO.inf['webSocket'] = {}; gO.inf.webSocket['wsArr'] = [devChrome, devNodeJS,]; await wsConnect(gO.inf.webSocket.wsArr);
+        let devChrome = `${url}://${host}:${port}/${dev[1].name}`; let devNodeJS = `${url}://${host}:${port}/${dev[2].name}`
+        let devBlueStacks = `${url}://${host}:${port}/${dev[3].name}`
+        gO.inf['wsArr'] = [devChrome, devNodeJS, devBlueStacks,]; await wsConnect(gO.inf.wsArr);
 
-        wsList(gO.inf.webSocket.wsArr[0], async (nomeList, par1) => {
+        wsList(gO.inf.wsArr[0], async (nomeList, par1) => {
             let data = {}; try { data = JSON.parse(par1) } catch (e) { }; if (data.fun) { // fun
                 let infWebSocketRet; if (data.retWs && data.retWs.res) {
                     infWebSocketRet = { 'data': JSON.parse(par1.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`))) }
@@ -61,7 +68,7 @@ async function run(inf) {
                 if (dif < 15) { const wait = 15 - dif; const retRandom = await random({ 'min': wait, 'max': wait + 9, 'await': true }) }
                 console.log('FIM', data.inf, '\n', data.res, '\n', data.query)
 
-                if (data.other == 'peroptyx_QueryImageDeservingClassification') {
+                if (data.other == 'TryRating_QueryImageDeservingClassification') {
                     const infTabSearch = { 'search': '*tryrating.com*', 'openIfNotExist': false, 'active': true, 'pinned': false }
                     const retTabSearch = await tabSearch(infTabSearch); if (!retTabSearch.res) { console.log('voltou'); return }
                     let element, action, code, array = data.inf; for (let [index, value] of array.entries()) {

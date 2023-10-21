@@ -7,9 +7,9 @@ async function run(inf) {
         if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }; const securityPass = retConfigStorage.securityPass;
         let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices;
         let devChrome = `${url}://${host}:${port}/${dev[1].name}`, devNodeJS = `${url}://${host}:${port}/${dev[2].name}`
-        gO.inf['webSocket'] = {}; gO.inf.webSocket['wsArr'] = [devNodeJS, devChrome,]; await wsConnect(gO.inf.webSocket.wsArr);
+        gO.inf['wsArr'] = [devNodeJS, devChrome,]; await wsConnect(gO.inf.wsArr);
 
-        wsList(gO.inf.webSocket.wsArr[0], async (nomeList, par1) => {
+        wsList(gO.inf.wsArr[0], async (nomeList, par1) => {
             let data = {}; try { data = JSON.parse(par1) } catch (e) { }; if (data.fun) { // fun
                 let infWebSocketRet; if (data.retWs && data.retWs.res) {
                     infWebSocketRet = { 'data': JSON.parse(par1.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`))) }

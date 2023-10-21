@@ -5,7 +5,7 @@
 // let dev1 = `${url}://${host}:${port}/${dev[1].name}`
 
 
-// gO.inf = { 'wsArr': [dev1,] };
+// gO.inf['wsArr'] = [devChrome, devNodeJS,]
 // await wsConnect(gO.inf.wsArr);
 // wsList(gO.inf.wsArr[0], async (m) => {
 //     console.log('MENSAGEM RECEBIDA:', m)
@@ -62,7 +62,7 @@ async function ws(param, message) {
             const socket = new _WebS(server);
             socket.addEventListener('open', async (event) => {
                 let msgLog = `WS OK:\n${server}`;
-                console.log(msgLog);
+                console.log(msgLog.replace('\n', '').replace('ws://', ' '))
                 await logWs(msgLog);
                 activeSockets.set(server, socket);
                 resolve('');
@@ -74,7 +74,7 @@ async function ws(param, message) {
             socket.addEventListener('close', async (event) => {
                 activeSockets.delete(server);
                 let msgLog = `WS RECONEXAO EM 5 SEGUNDOS:\n${server}`;
-                console.log(msgLog);
+                console.log(msgLog.replace('\n', '').replace('ws://', ' '))
                 await logWs(msgLog);
                 setTimeout(() => {
                     connectToServer(server);
@@ -93,7 +93,7 @@ async function ws(param, message) {
             }
         }));
         await Promise.all(promises);
-        console.log('Todos os servidores estão conectados');
+        console.log('WS CONECTADO(s):', param.length);
     } else if (typeof param === 'string') { // enviar mensagem
         return new Promise(async (resolve) => {
             const socket = activeSockets.has(param) ? activeSockets.get(param) : new _WebS(param)
@@ -159,10 +159,12 @@ if (typeof window !== 'undefined') { // CHROME
     window['wsConnect'] = wsConnect;
     window['wsList'] = wsList;
     window['wsSend'] = wsSend;
+    window['acionarListener'] = acionarListener;
 } else { // NODEJS
     global['wsConnect'] = wsConnect;
     global['wsList'] = wsList;
     global['wsSend'] = wsSend;
+    global['acionarListener'] = acionarListener;
 }
 
 
