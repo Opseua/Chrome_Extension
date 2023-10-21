@@ -1,17 +1,10 @@
-// const infConfigStorage = { 'action': 'get', 'key': 'webSocket' };
-// let retConfigStorage = await configStorage(infConfigStorage)
-// if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res };
-// let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices;
-// let dev1 = `${url}://${host}:${port}/${dev[1].name}`
-
-
 // gO.inf['wsArr'] = [devChrome, devNodeJS,]
 // await wsConnect(gO.inf.wsArr);
-// wsList(gO.inf.wsArr[0], async (m) => {
+// wsList(devChrome, async (m) => {
 //     console.log('MENSAGEM RECEBIDA:', m)
 // })
 // await new Promise(resolve => { setTimeout(resolve, 2000) })
-// wsSend(dev1, 'Essa mensagem está sendo enviada')
+// wsSend(devChrome, 'Essa mensagem está sendo enviada')
 
 // wsList('listener1', async (nomeList, par1, par2) => {
 //     console.log('ACIONADO:', nomeList, '→', par1, par2);

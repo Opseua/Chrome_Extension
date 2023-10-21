@@ -24,9 +24,6 @@ if (typeof window !== 'undefined') { // CHROME
             const infShortcutPressed = { 'shortcut': inf[0] } //console.log('ON START: ATALHO PRESSIONADO')
             if (infShortcutPressed.shortcut == 'atalho_1') { command1(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else if (infShortcutPressed.shortcut == 'atalho_2') {
-                const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
-                if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }; const host = retConfigStorage.ws1;
-                const port = retConfigStorage.portWebSocket; const dev2 = retConfigStorage.device2.name; const securityPass = retConfigStorage.securityPass;
                 const infNotification = { 'duration': 4, 'icon': './src/media/icon_3.png', 'title': `AGUARDE...`, 'text': `Alternando sniffer` }
                 let par; const retNotification = await notification(infNotification);
                 const infFile = { 'action': 'read', 'path': `${conf[1]}:/ARQUIVOS/Projetos/Sniffer_Python/log/state.txt` };
@@ -37,10 +34,7 @@ if (typeof window !== 'undefined') { // CHROME
             } else if (infShortcutPressed.shortcut == 'atalho_3') { command3(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
         } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
-        if (!ret.ret) {
-            console.log(ret.msg);
-            if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) }
-        }; return ret
+        if (!ret.ret) { console.log(ret.msg) }; return ret
     });
 }
 
@@ -48,14 +42,9 @@ if (typeof window !== 'undefined') { // CHROME
 async function run(inf) {
     let ret = { 'ret': false };
     try {
-        const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
-        if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }; const securityPass = retConfigStorage.securityPass;
-        let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices;
-        let devChrome = `${url}://${host}:${port}/${dev[1].name}`; let devNodeJS = `${url}://${host}:${port}/${dev[2].name}`
-        let devBlueStacks = `${url}://${host}:${port}/${dev[3].name}`
         gO.inf['wsArr'] = [devChrome, devNodeJS, devBlueStacks,]; await wsConnect(gO.inf.wsArr);
 
-        wsList(gO.inf.wsArr[0], async (nomeList, par1) => {
+        wsList(devChrome, async (nomeList, par1) => {
             let data = {}; try { data = JSON.parse(par1) } catch (e) { }; if (data.fun) { // fun
                 let infWebSocketRet; if (data.retWs && data.retWs.res) {
                     infWebSocketRet = { 'data': JSON.parse(par1.replace(/"########"/g, JSON.stringify(`${data.retWs.res}\n`))) }
@@ -103,7 +92,7 @@ async function run(inf) {
         ret['ret'] = true
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {
         console.log(ret.msg); if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) }
-        else { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': `ONSTART NODEJS: ${ret.msg}` }) } // ← NODEJS  ↑CHROME
+        else { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': `ONSTART NODEJS: ${ret.msg}` }) } // ← NODEJS  ↑ CHROME
     }
 }
 run()
@@ -123,19 +112,8 @@ infFile = { 'action': 'change', 'functionLocal': false, 'path': './PASTA/', 'pat
 infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 // retFile = await file(infFile); console.log(retFile)
 
-// let csf = configStorage, cs
-// gLet = 'AAAAAAA'
-// cs = await csf([gLet]); gLet = cs.res
-// console.log('######', gLet)
-
 let infChatGpt = { 'provider': 'ora.ai', 'input': `Quanto é 1+1?` }
 // let retChatGpt = await chatGpt(infChatGpt); console.log(retChatGpt)
-
-// let cs = configStorage, csr
-// csr = await cs(['set', 'NomeDaChave123', 'valor aqui']); console.log(csr)
-// csr = await cs(['get', 'NomeDaChave123']); console.log(csr)
-
-
 
 let infChromeActions, retChromeActions
 // infChromeActions = {
@@ -188,7 +166,7 @@ let infChromeActions, retChromeActions
 //     'element': `//*[@id="headlessui-menu-button-:r15:"]/div/span`
 // }))
 
-async function exibirMensagem() {
+async function keepCookieLive() {
     const retDateHour = dateHour();
 
     const infTabSearch = { 'search': '*ora.ai*', 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': 'https://ora.ai/voluntary-red-v53j/script-js' }
@@ -199,13 +177,23 @@ async function exibirMensagem() {
     const infGetCookies = { 'url': 'https://ora.ai/voluntary-red-v53j/script-js', 'cookieSearch': '__Secure-next-auth.session-token' }
     const retGetCookies = await getCookies(infGetCookies);
 
-    infFile = { 'action': 'write', 'functionLocal': true, 'path': `./cookie/${retDateHour.res.tim}.txt`, 'rewrite': false, 'text': retGetCookies }
-    retFile = await file(infFile);
+    // infFile = { 'action': 'write', 'functionLocal': true, 'path': `./cookie/${retDateHour.res.tim}.txt`, 'rewrite': false, 'text': retGetCookies.res.concat }
+    // retFile = await file(infFile);
 
-    setTimeout(exibirMensagem, 3600000);
+    infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retGetCookies.res.concat }
+    retConfigStorage = await configStorage(infConfigStorage); console.log(retConfigStorage)
+
+    const send = {
+        "fun": [{
+            "securityPass": securityPass, "funRet": { "retUrl": true, "retInf": false },
+            "funRun": { "name": "configStorage", "par": infConfigStorage }
+        }]
+    }
+    wsSend(devChrome, send)
+
+    setTimeout(keepCookieLive, 3600000);
 }
-
-//exibirMensagem();
+keepCookieLive();
 
 
 

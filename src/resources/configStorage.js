@@ -5,6 +5,12 @@
 // retConfigStorage = await configStorage(infConfigStorage);
 // console.log(retConfigStorage)
 
+// let cs
+// cs = await csf(['']); cs = cs.res // ***** CS ***** GET VALOR DO 'reg.json'
+// console.log(cs)
+// cs = await csf([{ 'a': 'b' }]); cs = cs.res // ***** CS ***** SET VALOR NO 'reg.json'
+// console.log(cs)
+
 async function configStorage(inf) {
     if (typeof window !== 'undefined') { // CHROME
         if (!window.all) { await import('./@functions.js') }
@@ -99,6 +105,8 @@ async function configStorage(inf) {
 
 if (typeof window !== 'undefined') { // CHROME
     window['configStorage'] = configStorage;
+    window['csf'] = configStorage;
 } else { // NODEJS
     global['configStorage'] = configStorage;
+    global['csf'] = configStorage;
 }

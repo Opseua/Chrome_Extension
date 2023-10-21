@@ -1,7 +1,7 @@
 //await import('./@functions.js');
 //await new Promise(resolve => { setTimeout(resolve, 2000) })
 
-let _fs, _path, _cheerio, _clipboard, _WebS, _http, _run, gLet = {}, conf = ['src/config.json'];
+let _fs, _path, _cheerio, _clipboard, _WebS, _http, _run, cs, conf = ['src/config.json'];
 
 if (typeof window !== 'undefined') { // CHROME
     _WebS = window.WebSocket
@@ -47,14 +47,13 @@ await import('./webSocketRet.js') // node chrome
 await import('./wsConnect.js') // node chrome
 
 // ############## scripts
-await import('../scripts/command1.js') 
+await import('../scripts/command1.js')
 
 // ############### GLOBAL OBJECT ###############
 // gOList(async function () {
 //     console.log('globalObject [import] ALTERADO →', gO.inf);
 // })
-// gO.inf['webSocket'] = {}
-// gO.inf.webSocket['wsArr'] = ['ws://127.0.0.1:8888/DEV1', 'ws://127.0.0.1:8888/DEV2', 'ws://127.0.0.1:8888/DEV3']
+// gO.inf['wsArr'] = ['ws://127.0.0.1:8888/DEV1', 'ws://127.0.0.1:8888/DEV2', 'ws://127.0.0.1:8888/DEV3']
 // console.log(gO.inf)
 // ******
 const gOListener = []; const gOObj = {};
@@ -79,7 +78,8 @@ if (typeof window !== 'undefined') { // CHROME
     // ## bibliotecas
     window['_WebS'] = _WebS;
     // ## variaveis
-    window['gLet'] = gLet; window['conf'] = conf;
+    window['conf'] = conf;
+    window['cs'] = cs;
     // ## global object
     window['gO'] = gO; window['gOList'] = gOList;
 } else { // NODEJS 
@@ -89,18 +89,39 @@ if (typeof window !== 'undefined') { // CHROME
     global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
     global['_http'] = _http; global['_run'] = _run
     // ## variaveis
-    global['gLet'] = gLet; global['conf'] = conf;
+    global['conf'] = conf;
+    global['cs'] = cs;
     // ## global object
     global['gO'] = gO; global['gOList'] = gOList;
 }
 
 // OBRIGATORIO FICAR APOS O EXPORT GLOBAL, NAO SUBIR!!!
-const infFile = { 'action': 'inf' };
-const retFile = await file(infFile);
+const retFile = await file({ 'action': 'inf' });
+const confNew = retFile.ret ? retFile.res : ['NaoEncontrado']
+const retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
+const securityPass = retConfigStorage.res.securityPass
+const server = retConfigStorage.res.server['1']
+const url = server.url; const host = server.host; const port = server.port
+const devices = retConfigStorage.res.devices
+const devRet = `${url}://${host}:${port}/${devices[0].name}`
+const devChrome = `${url}://${host}:${port}/${devices[1].name}`
+const devNodeJS = `${url}://${host}:${port}/${devices[2].name}`
+const devBlueStacks = `${url}://${host}:${port}/${devices[3].name}`
+
 if (typeof window !== 'undefined') { // CHROME
-    window['conf'] = retFile.res
+    window['conf'] = confNew
+    window['securityPass'] = securityPass
+    window['devRet'] = devRet
+    window['devChrome'] = devChrome
+    window['devNodeJS'] = devNodeJS
+    window['devBlueStacks'] = devBlueStacks
 } else { // NODEJS 
-    global['conf'] = retFile.res
+    global['conf'] = confNew
+    global['securityPass'] = securityPass
+    global['devRet'] = devRet
+    global['devChrome'] = devChrome
+    global['devNodeJS'] = devNodeJS
+    global['devBlueStacks'] = devBlueStacks
 }
 
 
