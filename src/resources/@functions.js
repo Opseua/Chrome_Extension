@@ -53,7 +53,8 @@ await import('../scripts/command1.js')
 // gOList(async function () {
 //     console.log('globalObject [import] ALTERADO →', gO.inf);
 // })
-// gO.inf['wsArr'] = ['ws://127.0.0.1:8888/DEV1', 'ws://127.0.0.1:8888/DEV2', 'ws://127.0.0.1:8888/DEV3']
+// gO.inf['NovaChave'] = { 'a': 'b' }
+// gO.inf['NovaChave'] = ['a', 'b', 'c',]
 // console.log(gO.inf)
 // ******
 const gOListener = []; const gOObj = {};
@@ -88,14 +89,14 @@ if (typeof window !== 'undefined') { // CHROME
     global['_WebS'] = _WebS; global['_fs'] = _fs; global['_path'] = _path;
     global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
     global['_http'] = _http; global['_run'] = _run
-    // ## variaveis
+    // ## variáveis
     global['conf'] = conf;
     global['cs'] = cs;
     // ## global object
     global['gO'] = gO; global['gOList'] = gOList;
 }
 
-// OBRIGATORIO FICAR APOS O EXPORT GLOBAL, NAO SUBIR!!!
+// OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!)
 const retFile = await file({ 'action': 'inf' });
 const confNew = retFile.ret ? retFile.res : ['NaoEncontrado']
 const retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });

@@ -1,7 +1,6 @@
-// gO.inf['wsArr'] = [devChrome, devNodeJS,]
-// await wsConnect(gO.inf.wsArr);
-// wsList(devChrome, async (m) => {
-//     console.log('MENSAGEM RECEBIDA:', m)
+// await wsConnect([devChrome, devNodeJS,]);
+// wsList(devChrome, async (nomeList, par1) => {
+//     console.log('MENSAGEM RECEBIDA EM:', nomeList, '→', par1);
 // })
 // await new Promise(resolve => { setTimeout(resolve, 2000) })
 // wsSend(devChrome, 'Essa mensagem está sendo enviada')
@@ -16,77 +15,51 @@
 // acionarListener('listener1', 'INF1', 'INF2');
 // acionarListener('listener2', 'INF1', 'INF2'); 
 
-if (typeof window !== 'undefined') { // CHROME
-    if (!window.all) { await import('./@functions.js') }
-} else { if (!global.all) { await import('./@functions.js') } }
+if (typeof window !== 'undefined') { if (!window.all) { await import('./@functions.js') } } // CHROME
+else { if (!global.all) { await import('./@functions.js') } } // NODEJS
 
-async function wsConnect(inf) {
-    return await ws(inf);
-}
-async function wsSend(parametro, message) {
-    return await ws(parametro, message);
-}
+async function wsConnect(inf) { return await ws(inf); }
+async function wsSend(parametro, message) { return await ws(parametro, message); }
 const listeners = {};
 function wsList(nomeList, callback) {
-    if (!listeners[nomeList]) {
-        listeners[nomeList] = [];
-    }
-    listeners[nomeList].push(callback);
+    if (!listeners[nomeList]) { listeners[nomeList] = []; } listeners[nomeList].push(callback);
 }
 function acionarListener(nomeList, par1, par2) {
-    if (listeners[nomeList]) {
-        listeners[nomeList].forEach(async (callback) => {
-            await callback(nomeList, par1, par2);
-        });
-    }
+    if (listeners[nomeList]) { listeners[nomeList].forEach(async (callback) => { await callback(nomeList, par1, par2); }); }
 }
 async function logWs(inf) { // NODEJS
-    if (typeof window == 'undefined') {
-        await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf })
-    }
+    if (typeof window == 'undefined') { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf }) }
 }
 const activeSockets = new Map();
 async function ws(param, message) {
-    if (activeSockets.size == 0) {
-        await logWs('ONSTART NODEJS: START')
-    }
+    if (activeSockets.size == 0) { await logWs('ONSTART NODEJS: START') }
     async function connectToServer(server) {
         return new Promise(resolve => {
             const socket = new _WebS(server);
             socket.addEventListener('open', async (event) => {
                 let msgLog = `WS OK:\n${server}`;
-                console.log(msgLog.replace('\n', '').replace('ws://', ' '))
-                await logWs(msgLog);
-                activeSockets.set(server, socket);
-                resolve('');
+                console.log(msgLog.replace('\n', '').replace('ws://', ' ')); await logWs(msgLog);
+                activeSockets.set(server, socket); resolve('');
             });
             socket.addEventListener('message', (event) => {
-                // console.log('EVENTO, MENSAGEM RECEBIDA:', server);
-                acionarListener(server, event.data);
+                acionarListener(server, event.data);  // console.log('EVENTO, MENSAGEM RECEBIDA:', server);
             });
             socket.addEventListener('close', async (event) => {
                 activeSockets.delete(server);
                 let msgLog = `WS RECONEXAO EM 5 SEGUNDOS:\n${server}`;
-                console.log(msgLog.replace('\n', '').replace('ws://', ' '))
-                await logWs(msgLog);
-                setTimeout(() => {
-                    connectToServer(server);
-                }, 5000);
+                console.log(msgLog.replace('\n', '').replace('ws://', ' ')); await logWs(msgLog);
+                setTimeout(() => { connectToServer(server); }, 5000);
             });
         });
     }
     if (Array.isArray(param)) { // conectar servidores
         const promises = param.map(server => new Promise(resolve => {
-            if (!activeSockets.has(server)) {
-                connectToServer(server).then(() => {
-                    resolve('');
-                });
-            } else {
-                resolve('');
-            }
+            if (!activeSockets.has(server)) { connectToServer(server).then(() => { resolve(''); }); }
+            else { resolve(''); }
         }));
         await Promise.all(promises);
-        console.log('WS CONECTADO(s):', param.length);
+        let msgLog = `WS CONECTADO(s): ${param.length}`;
+        console.log(msgLog); await logWs(msgLog);
     } else if (typeof param === 'string') { // enviar mensagem
         return new Promise(async (resolve) => {
             const socket = activeSockets.has(param) ? activeSockets.get(param) : new _WebS(param)
@@ -98,55 +71,48 @@ async function ws(param, message) {
                     const awaitRet = retRegex.res ? retRegex.res['1'] : false
                     socket.send(messageNew);
                     if (!activeSockets.get(param)) {
-                        console.log('CONECTADO [NAO]: mensagem enviada')
-                    } else {
-                        console.log('CONECTADO [SIM]: mensagem enviada')
+                        // console.log('CONECTADO [NAO]: mensagem enviada')
+                    }
+                    else {
+                        // console.log('CONECTADO [SIM]: mensagem enviada')
                     }
                     if (!awaitRet) {
-                        if (!activeSockets.get(param)) {
-                            socket.close()
-                        }
+                        if (!activeSockets.get(param)) { socket.close() }
                         resolve(false)
                     } else {
-                        console.log('aguardando nova mensagem')
+                        console.log('aguardando nova mensagem');
                         let timer;
                         socket.onmessage = function (event) {
                             if (event.data.includes(awaitRet)) {
                                 if (!activeSockets.get(param)) {
                                     console.log('CONECTADO [NAO]: mensagem recebida')
-                                } else {
+                                }
+                                else {
                                     console.log('CONECTADO [SIM]: mensagem recebida')
                                 }
                                 clearTimeout(timer);
-                                if (!activeSockets.get(param)) {
-                                    socket.close()
-                                }
+                                if (!activeSockets.get(param)) { socket.close() }
                                 resolve(event.data.replace('[ENC]', '[ENC-OK]'))
                             }
                         };
                         timer = setTimeout(() => {
                             if (!activeSockets.get(param)) {
                                 console.log('CONECTADO [NAO]: mensagem expirou')
-                            } else {
+                            }
+                            else {
                                 console.log('CONECTADO [SIM]: mensagem expirou')
                             }
-                            if (!activeSockets.get(param)) {
-                                socket.close()
-                            }
+                            if (!activeSockets.get(param)) { socket.close() }
                             resolve(false)
                         }, 20000);
                     }
                     return;
-                } else {
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    tentativas++;
-                }
+                } else { await new Promise(resolve => setTimeout(resolve, 500)); tentativas++; }
             }
             resolve(false)
         })
     }
 }
-
 
 if (typeof window !== 'undefined') { // CHROME
     window['wsConnect'] = wsConnect;

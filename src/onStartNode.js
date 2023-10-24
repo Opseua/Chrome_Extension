@@ -3,7 +3,7 @@ await import('./resources/@functions.js'); console.log('onStartNode')
 async function run(inf) {
     let ret = { 'ret': false };
     try {
-        gO.inf['wsArr'] = [devNodeJS, devChrome,]; await wsConnect(gO.inf.wsArr);
+        await wsConnect([devNodeJS, devChrome,]);
 
         wsList(devNodeJS, async (nomeList, par1) => {
             let data = {}; try { data = JSON.parse(par1) } catch (e) { }; if (data.fun) { // fun
@@ -14,6 +14,8 @@ async function run(inf) {
                 console.log('other', data.other)
             } else { console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`) }
         });
+
+        wsSend(devChrome, { 'other': 'keepCookieLive' })
 
         ret['ret'] = true
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {

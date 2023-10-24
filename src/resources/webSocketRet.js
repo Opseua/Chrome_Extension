@@ -26,14 +26,16 @@ async function webSocketRet(inf) {
             else if (!label(value.funRun.name)) {
                 ret['msg'] = `\n #### FUNCAO '${value.funRun.name}' NAO EXITE #### \n\n ${JSON.stringify(data)} \n\n`
             } else {
-                let name; if (typeof window !== 'undefined') { name = window[value.funRun.name] } // CHROME
-                else { name = global[value.funRun.name] } // NODEJS
-                let infName = value.funRun.par, retUrl = false;
+                let nameFunc; if (typeof window !== 'undefined') { nameFunc = window[value.funRun.name] } // CHROME
+                else { nameFunc = global[value.funRun.name] } // NODEJS
+                let infNameFunc = value.funRun.par, retUrl = false;
                 if (value.funRet && value.funRet.retUrl) { retUrl = typeof value.funRet.retUrl === 'boolean' ? inf.wsOrigin : `${value.funRet.retUrl}` };
-                infName['retUrl'] = retUrl; infName['retInf'] = value.funRet.retInf ? value.funRet.retInf : undefined; let retName = await name(infName); retName = JSON.stringify(retName)
+                infNameFunc['retUrl'] = retUrl;
+                infNameFunc['retInf'] = value.funRet.retInf ? value.funRet.retInf : undefined; let retName = await nameFunc(infNameFunc); retName = JSON.stringify(retName)
                 if (retUrl && !retName.includes('"msg":"[ENC]')) {
                     retName = !value.funRun.par.devAndFun ? retName : retName.replace('"msg":"', '"msg":"[ENC] ')
-                    const send = { 'retInf2': value.funRet.retInf ? value.funRet.retInf : undefined, 'retWs': JSON.parse(retName), 'fun': value.funRet.fun }; await wsSend(retUrl, send)
+                    const send = { 'retInf2': value.funRet.retInf ? value.funRet.retInf : undefined, 'retWs': JSON.parse(retName), 'fun': value.funRet.fun };
+                    await wsSend(retUrl, send)
                 }; ret['ret'] = true
             } // --------------------------------------------------
         }))
