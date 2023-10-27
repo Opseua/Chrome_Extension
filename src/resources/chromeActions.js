@@ -15,12 +15,21 @@ async function chromeActions(inf) {
             const action = chrome.browserAction; if (inf.color) { action.setBadgeBackgroundColor({ 'color': inf.color }) } // [25, 255, 71, 255]
             if (inf.hasOwnProperty('text')) { action.setBadgeText({ 'text': inf.text }) }; ret['msg'] = `CHROME ACTIONS BADGE: OK`
         } else if (inf.action == 'script') {
-            const infTabSearch = { 'search': inf.search ? inf.search : 'ATIVA', 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': inf.url }
-            const retTabSearch = await tabSearch(infTabSearch); chrome.tabs.executeScript(retTabSearch.res.id, {
+            let code, element
+            if (inf.method == 'xpath') {
+                code, element = `document.evaluate('${inf.element}', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue`;
+                if (inf.execute == 'click') {
+                    code = `${element}.click()`
+                } else if (inf.execute == 'input') {
+                    code = `${element}.value(${inf.value})`
+                }
+            }
+            chrome.tabs.executeScript(inf.id, {
                 // XPATH
                 // code: `document.evaluate('//*[@id="app-root"]/div/div[4]/div[2]/div/p/a/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click()`
-                code: inf.code
-            }); ret['msg'] = `CHROME ACTIONS SCRIPT: OK`
+                code: code
+            });
+            ret['msg'] = `CHROME ACTIONS SCRIPT: OK`
         }; ret['ret'] = true;
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
     if (!ret.ret) { console.log(ret.msg) }; return ret

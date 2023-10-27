@@ -15,7 +15,9 @@ async function run(inf) {
             } else { console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`) }
         });
 
-        wsSend(devChrome, { 'other': 'keepCookieLive' })
+        async function keepCookieLive() {
+            await new Promise(resolve => { setTimeout(resolve, 15000) }); wsSend(devChrome, { 'other': 'keepCookieLive' })
+        }; keepCookieLive();
 
         ret['ret'] = true
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {

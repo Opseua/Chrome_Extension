@@ -2,7 +2,7 @@
 await import('./resources/@functions.js'); console.log('onStart');
 
 if (typeof window !== 'undefined') { // CHROME
-    const keys = ['webSocket', 'chatGptOra.aiAAAA', 'chatGptOpenAi', 'sniffer'];
+    const keys = ['webSocket', 'chatGptOra.aiAAAAA', 'chatGptOpenAi', 'sniffer'];
     for (const key of keys) { const infConfigStorage = { 'action': 'del', 'key': key }; const retConfigStorage = await configStorage(infConfigStorage) }
     await chromeActions({ 'action': 'badge', 'text': '' });
     chrome.downloads.onChanged.addListener(async function (...inf) { // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
@@ -24,7 +24,7 @@ if (typeof window !== 'undefined') { // CHROME
             const infShortcutPressed = { 'shortcut': inf[0] } //console.log('ON START: ATALHO PRESSIONADO')
             if (infShortcutPressed.shortcut == 'atalho_1') { command1(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else if (infShortcutPressed.shortcut == 'atalho_2') {
-                const infNotification = { 'duration': 4, 'icon': './src/media/icon_3.png', 'title': `AGUARDE...`, 'text': `Alternando sniffer` }
+                const infNotification = { 'duration': 3, 'icon': './src/media/icon_3.png', 'title': `AGUARDE...`, 'text': `Alternando sniffer` }
                 let par; const retNotification = await notification(infNotification);
                 const infFile = { 'action': 'read', 'path': `${conf[1]}:/ARQUIVOS/Projetos/Sniffer_Python/log/state.txt` };
                 const retFile = await file(infFile); par = `"${conf[1]}:\\ARQUIVOS\\WINDOWS\\BAT\\RUN_PORTABLE\\1_BACKGROUND.exe"`;
@@ -38,13 +38,32 @@ if (typeof window !== 'undefined') { // CHROME
     });
 }
 
-async function keepCookieLive() {
+async function keepCookieLive(inf) {
+    let infGetCookies, retGetCookies, infChromeActions, retChromeActions
     let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'chatGptOra.ai' }); retConfigStorage = retConfigStorage.res
-    const infTabSearch = { 'search': '*ora.ai*', 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': retConfigStorage.Referer }
-    const retTabSearch = await tabSearch(infTabSearch); chrome.tabs.reload(retTabSearch.res.id); await new Promise(resolve => { setTimeout(resolve, 5000) })
-    const infGetCookies = { 'url': retConfigStorage.Referer, 'cookieSearch': '__Secure-next-auth.session-token' }
-    const retGetCookies = await getCookies(infGetCookies); retConfigStorage['cookie'] = retGetCookies.res.concat
-    const infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
+    const retTabSearch = await tabSearch({ 'search': '*ora.ai*', 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': retConfigStorage.meu });
+    chrome.tabs.update(retTabSearch.res.id, { url: retConfigStorage.meu }); await new Promise(resolve => { setTimeout(resolve, 5000) })
+    retGetCookies = await getCookies({ 'url': retConfigStorage.meu, 'cookieSearch': '__Secure-next-auth.session-token' });
+    if (!retGetCookies.ret) {
+        infChromeActions = {
+            'id': retTabSearch.res.id, 'action': 'script', 'method': 'xpath', 'execute': 'click',
+            'element': `//*[@id="__next"]/div/div/div[2]/div/div[2]/div/div/main/div/div/div/div/div[3]/div/div/div[1]/div/button`
+        }; retChromeActions = await chromeActions(infChromeActions); await new Promise(resolve => { setTimeout(resolve, 1500) })
+        infChromeActions = {
+            'id': retTabSearch.res.id, 'action': 'script', 'method': 'xpath', 'execute': 'click',
+            'element': `//*[@id="radix-:r4:"]/div/div/div/a/button`
+        }; retChromeActions = await chromeActions(infChromeActions); await new Promise(resolve => { setTimeout(resolve, 1500) })
+        infChromeActions = {
+            'id': retTabSearch.res.id, 'action': 'script', 'method': 'xpath', 'execute': 'click',
+            'element': `//*[@id="__next"]/div/div/div[2]/div[2]/div/main/div/div/button`
+        }; retChromeActions = await chromeActions(infChromeActions); await new Promise(resolve => { setTimeout(resolve, 10000) })
+        infChromeActions = {
+            'id': retTabSearch.res.id, 'action': 'script', 'method': 'xpath', 'execute': 'click',
+            'element': `//*[@id="view_container"]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div/div/ul/li[1]/div/div[1]/div/div[2]/div[2]`
+        }; retChromeActions = await chromeActions(infChromeActions); await new Promise(resolve => { setTimeout(resolve, 10000) })
+        retGetCookies = await getCookies({ 'url': retConfigStorage.meu, 'cookieSearch': '__Secure-next-auth.session-token' });
+    }
+    retConfigStorage['cookie'] = retGetCookies.res.concat; infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
     retConfigStorage = await configStorage(infConfigStorage); const send = {
         "fun": [
             {
@@ -57,14 +76,14 @@ async function keepCookieLive() {
             }]
     }; wsSend(devNodeJS, send);
     //  setTimeout(keepCookieLive, 3600000);
-}; // keepCookieLive();
+};// keepCookieLive();
 
 // *************************
 async function run(inf) {
     let ret = { 'ret': false };
     try {
         await wsConnect([devChrome, devNodeJS, devBlueStacks,]);
-        
+
         wsList(devChrome, async (nomeList, par1) => {
             let data = {}; try { data = JSON.parse(par1) } catch (e) { }; if (data.fun) { // fun
                 let infWebSocketRet; if (data.retWs && data.retWs.res) {
