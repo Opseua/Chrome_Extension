@@ -40,7 +40,7 @@ async function webSocketRet(inf) {
             } // --------------------------------------------------
         }))
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {
-        console.log(ret.msg); const retLog = await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': ret.msg });
+        const retLog = await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': ret.msg });
         if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) } // CHROME
     }; return ret
 }

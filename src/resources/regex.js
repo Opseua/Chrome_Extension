@@ -26,7 +26,7 @@ function regex(inf) { // NAO POR COMO 'async'!!!
             }
         }
     } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res; })() };
-    ret = { 'ret': ret.ret, 'msg': ret.msg, 'res': ret.res }; return ret
+    return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

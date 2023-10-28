@@ -21,7 +21,7 @@ async function run(inf) {
 
         ret['ret'] = true
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {
-        console.log(ret.msg); if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined') {
             const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' })
         } else { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': `ONSTART NODEJS: ${ret.msg}` }) } // ← NODEJS  ↑ CHROME
     }

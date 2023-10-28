@@ -10,8 +10,7 @@ async function translate(inf) {
         const retRegex = regex({ 'pattern': 'class="result-container">(.*?)</div>', 'text': res }); if (!retRegex.ret) { return ret }; let d, $
         if (typeof window !== 'undefined') { d = new DOMParser().parseFromString(retRegex.res['3'], "text/html").documentElement.textContent } // CHROME
         else { $ = _cheerio.load(retRegex.res['3']); d = _cheerio.load($('body').html())('body').text() } ret['res'] = d; ret['ret'] = true; ret['msg'] = `TRANSLATE: OK` // NODEJS
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

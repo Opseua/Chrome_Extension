@@ -17,8 +17,7 @@ async function clipboard(inf) {
             } else { _clipboard.writeSync(text) }; // NODEJS
             ret['ret'] = true; ret['msg'] = 'CLIPBOARD: OK' 
         }
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

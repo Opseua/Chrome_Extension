@@ -9,8 +9,7 @@ async function splitText(inf) {
             if (currentChunk.length + word.length > maxLength) { chunks.push(currentChunk.trim()); currentChunk = '' }
             currentChunk += (currentChunk ? ' ' : '') + word; if (/\n/.test(word)) { chunks.push(currentChunk.trim()); currentChunk = '' }
         }; if (currentChunk) { chunks.push(currentChunk.trim()) }; ret['res'] = chunks; ret['ret'] = true; ret['msg'] = 'SPLIT TEXT: OK';
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

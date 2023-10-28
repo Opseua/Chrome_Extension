@@ -16,8 +16,7 @@ async function jsonInterpret(inf) {
     let ret = { 'ret': false }; try {
         const json = JSON.stringify(inf.json); const res = json.replace(/\$\[(.*?)\]/g, (match, p1) => infGlobal[p1])
         ret['ret'] = true; ret['msg'] = `JSON INTERPRET: OK`; ret['res'] = res;
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

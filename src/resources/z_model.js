@@ -4,9 +4,7 @@ async function model(inf) {
         ret['ret'] = true;
         ret['msg'] = `MODEL: OK`;
         ret['res'] = `resposta aqui`;
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) };
-    ret = { 'ret': ret.ret, 'msg': ret.msg, 'res': ret.res }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

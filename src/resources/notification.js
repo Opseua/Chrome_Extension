@@ -1,5 +1,5 @@
 // const infNotification = {
-//     'duration': 2, 'icon': './src/media/icon_4.png',
+//     'duration': 2, 'icon': './src/media/icon_4.png', 'retInf': false, 'retUrl': false,
 //     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': 'BOTAO 2' }],
 //     'title': `TITULO`, 'text': 'TEXTO',
 // };
@@ -31,8 +31,7 @@ async function notification(infOk) {
                 if (notifId === notificationId && btnIdx === 0) { alert('1') }; if (notifId === notificationId && btnIdx === 1) { alert('2') }
             }); setTimeout(() => { chrome.notifications.clear(notificationId) }, json.duration * 1000)
         }); ret['ret'] = true; ret['msg'] = 'NOTIFICATION: OK'
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

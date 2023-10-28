@@ -78,8 +78,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 await notification(infNotification); ret['msg'] = `\n #### ERRO #### CHAT GPT EC2 \n \n\n`; ret['res'] = 'res.error.message'
             }
         }
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

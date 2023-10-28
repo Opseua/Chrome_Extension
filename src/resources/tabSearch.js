@@ -80,8 +80,7 @@ async function tabSearch(inf) {
             const retOpenTab = await openTab(inf); if (retOpenTab.hasOwnProperty('id')) { ret['res'] = retOpenTab; ret['ret'] = true; ret['msg'] = `SEARCH TAB: OK` }
             else { ret['msg'] = retOpenTab }
         }
-    }; if (!ret.ret && ret.msg) { console.log(ret.msg) }; ret = { 'ret': ret.ret, 'msg': ret.msg, 'res': ret.res };
-    ret = { 'ret': ret.ret, 'msg': ret.msg, 'res': ret.res }; return ret
+    }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

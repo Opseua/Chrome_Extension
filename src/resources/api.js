@@ -33,8 +33,7 @@ async function api(inf) {
             }; const req = await fetch(inf.url, reqOpt); const resHeaders = {}; req.headers.forEach((value, name) => { resHeaders[name] = value })
             const resBody = await req.text(); ret['ret'] = true; ret['msg'] = 'API: OK'; ret['res'] = { 'code': req.status, 'headers': resHeaders, 'body': resBody }
         }
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res };
-    if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
 if (typeof window !== 'undefined') { // CHROME

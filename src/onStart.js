@@ -33,8 +33,7 @@ if (typeof window !== 'undefined') { // CHROME
                 ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_3') { command3(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
-        } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }
-        if (!ret.ret) { console.log(ret.msg) }; return ret
+        } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
     });
 }
 
@@ -135,7 +134,7 @@ async function run(inf) {
 
         ret['ret'] = true
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {
-        console.log(ret.msg); if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) }
+        if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) }
         else { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': `ONSTART NODEJS: ${ret.msg}` }) } // ← NODEJS  ↑ CHROME
     }
 }
@@ -202,9 +201,4 @@ let infChromeActions, retChromeActions
 //     'method': 'xpath', 'action': 'click',
 //     'element': `//*[@id="headlessui-menu-button-:r15:"]/div/span`
 // }))
-
-
-
-
-
 
