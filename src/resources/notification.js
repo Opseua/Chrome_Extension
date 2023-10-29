@@ -24,8 +24,8 @@ async function notification(infOk) {
             title: ((!inf.title) || (inf.title == '')) ? `TITULO VAZIO` : `${inf.title}`, text: ((!inf.text) || (inf.text == '')) ? `TEXT VAZIO` : `${inf.text}`,
             buttons: inf.buttons ? inf.buttons : [],
         }; const not = {
-            type: json.type, iconUrl: json.icon, title: json.title.substring(0, 88),   // máximo [considerando tudo 'i'] + 1 caractere
-            message: json.text.substring(0, 349), buttons: json.buttons // máximo [considerando tudo 'i'] + 1 caractere
+            type: json.type, iconUrl: json.icon, title: json.title.substring(0, 32),   // máximo [considerando tudo 'A']
+            message: json.text.substring(0, 128), buttons: json.buttons // máximo [considerando tudo 'A']
         }; chrome.notifications.create(not, (notificationId) => {
             chrome.notifications.onButtonClicked.addListener((notifId, btnIdx) => { // ALGUM BOTAO PRESSIONADO
                 if (notifId === notificationId && btnIdx === 0) { alert('1') }; if (notifId === notificationId && btnIdx === 1) { alert('2') }

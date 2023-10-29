@@ -58,8 +58,8 @@ async function ws(param, message) {
             else { resolve(''); }
         }));
         await Promise.all(promises);
-        let msgLog = `WS CONECTADO(s): ${param.length}`;
-        console.log(msgLog); await logWs(msgLog);
+        // let msgLog = `WS CONECTADO(s): ${param.length}`;
+        // console.log(msgLog); await logWs(msgLog);
     } else if (typeof param === 'string') { // enviar mensagem
         return new Promise(async (resolve) => {
             const socket = activeSockets.has(param) ? activeSockets.get(param) : new _WebS(param)

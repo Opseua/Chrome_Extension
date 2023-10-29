@@ -38,7 +38,7 @@ if (typeof window !== 'undefined') { // CHROME
 }
 
 async function keepCookieLive(inf) {
-    let infGetCookies, retGetCookies, infChromeActions, retChromeActions
+    let retGetCookies, infChromeActions, retChromeActions
     let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'chatGptOra.ai' }); retConfigStorage = retConfigStorage.res
     const retTabSearch = await tabSearch({ 'search': '*ora.ai*', 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': retConfigStorage.meu });
     chrome.tabs.update(retTabSearch.res.id, { url: retConfigStorage.meu }); await new Promise(resolve => { setTimeout(resolve, 5000) })
@@ -62,7 +62,7 @@ async function keepCookieLive(inf) {
         }; retChromeActions = await chromeActions(infChromeActions); await new Promise(resolve => { setTimeout(resolve, 10000) })
         retGetCookies = await getCookies({ 'url': retConfigStorage.meu, 'cookieSearch': '__Secure-next-auth.session-token' });
     }
-    retConfigStorage['cookie'] = retGetCookies.res.concat; infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
+    retConfigStorage['cookie'] = retGetCookies.res.concat; let infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
     retConfigStorage = await configStorage(infConfigStorage); const send = {
         "fun": [
             {
@@ -74,8 +74,7 @@ async function keepCookieLive(inf) {
                 "funRun": { "name": "log", "par": { 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
             }]
     }; wsSend(devNodeJS, send);
-    //  setTimeout(keepCookieLive, 3600000);
-};// keepCookieLive();
+};
 
 // *************************
 async function run(inf) {
@@ -157,48 +156,3 @@ infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 
 let infChatGpt = { 'provider': 'ora.ai', 'input': `Quanto é 1+1999?` }
 //let retChatGpt = await chatGpt(infChatGpt); console.log(retChatGpt)
-
-let infChromeActions, retChromeActions
-// infChromeActions = {
-//     'search': '*https://ora.ai/signin*',
-//     'url': 'https://ora.ai/signin',
-//     'action': 'script',
-//     'code': `document.evaluate('//*[@id="__next"]/div/div/div[2]/div[2]/div/main/div/div/button/div', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click()`
-// }; retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
-// await new Promise(resolve => { setTimeout(resolve, 5000) })
-// infChromeActions = {
-//     'search': '*https://accounts.google.com/*',
-//     'url': 'https://accounts.google.com/',
-//     'action': 'script',
-//     'code': `document.evaluate('//*[@id="view_container"]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div/div/ul/li[1]/div', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click()`
-// }; retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
-// infChromeActions = {
-//     'search': '*https://ora.ai/voluntary-red-v53j/keep_session*',
-//     'url': 'https://ora.ai/voluntary-red-v53j/keep_session',
-//     'action': 'script',
-//     'code': `document.evaluate('//*[@id="__next"]/div/div/div[2]/div/div[2]/div/div/main/div/div/div[1]/div/div[2]/div/div/div/div/div[1]/div', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click()`
-// }; retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
-// function elementAction(inf) {
-//     if (inf.method == 'xpath') {
-//         var elemento = document.evaluate(inf.element, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-//         if (!elemento) { return false }
-//         else {
-//             if (inf.action == 'click') {
-//                 elemento.click()
-//             }
-//             else if (inf.action == 'input') {
-//                 elemento.value = inf.value
-//             }
-//             return true;
-//         }
-//     }
-// }
-// console.log(elementAction({
-//     'method': 'xpath', 'action': 'input', 'value': `123`,
-//     'element': `//*[@id="app-root"]/div/div[4]/div[2]/div/form/div[1]/div/div/span/div/div/div[1]`
-// }))
-// console.log(elementAction({
-//     'method': 'xpath', 'action': 'click',
-//     'element': `//*[@id="headlessui-menu-button-:r15:"]/div/span`
-// }))
-
