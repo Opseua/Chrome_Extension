@@ -6,7 +6,7 @@ if (typeof window !== 'undefined') { // CHROME
     for (const key of keys) { const infConfigStorage = { 'action': 'del', 'key': key }; const retConfigStorage = await configStorage(infConfigStorage) }
     await chromeActions({ 'action': 'badge', 'text': '' });
     chrome.downloads.onChanged.addListener(async function (...inf) { // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
-        if (inf[0].state && inf[0].state.current === "complete") {
+        if (inf[0].state && inf[0].state.current === 'complete') {
             chrome.downloads.search({ id: inf.id }, async function (inf) {
                 if (inf.length > 0) {
                     const d = inf[0]; if (d.byExtensionName === 'BOT' && !d.filename.includes('[KEEP]')) {
@@ -18,7 +18,7 @@ if (typeof window !== 'undefined') { // CHROME
             });
         }
     }); chrome.browserAction.onClicked.addListener(async function (...inf) { // ######################### CLICK NO ICONE
-        console.log('ON START: ICONE PRESSIONADO'); //chrome.browserAction.setPopup({popup: "./popup.html"});
+        console.log('ON START: ICONE PRESSIONADO'); //chrome.browserAction.setPopup({popup: './popup.html'});
     }); chrome.commands.onCommand.addListener(async function (...inf) { // ######################### ATALHO PRESSIONADO
         let ret = { 'ret': false }; try {
             const infShortcutPressed = { 'shortcut': inf[0] } //console.log('ON START: ATALHO PRESSIONADO')
@@ -29,7 +29,8 @@ if (typeof window !== 'undefined') { // CHROME
                 const infFile = { 'action': 'read', 'path': `${conf[1]}:/ARQUIVOS/Projetos/Sniffer_Python/log/state.txt` };
                 const retFile = await file(infFile); par = `"${conf[1]}:\\ARQUIVOS\\WINDOWS\\BAT\\RUN_PORTABLE\\1_BACKGROUND.exe"`;
                 if (retFile.res == 'ON') { par = `${par} "taskkill /IM nodeSniffer.exe /F"` }
-                else { par = `${par} "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_BACKGROUND.exe"` }; await commandLine({ 'command': par })
+                else { par = `${par} "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_BACKGROUND.exe"` };
+                await commandLine({ 'command': par, 'retInf': false })
                 ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK`;
             } else if (infShortcutPressed.shortcut == 'atalho_3') { command3(); ret['ret'] = true; ret['msg'] = `SHORTCUT PRESSED: OK` }
             else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
@@ -64,14 +65,14 @@ async function keepCookieLive(inf) {
     }
     retConfigStorage['cookie'] = retGetCookies.res.concat; let infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
     retConfigStorage = await configStorage(infConfigStorage); const send = {
-        "fun": [
+        'fun': [
             {
-                "securityPass": securityPass, "funRet": { "retUrl": true, "retInf": false },
-                "funRun": { "name": "configStorage", "par": infConfigStorage }
+                'securityPass': securityPass, 'funRet': { 'retUrl': true, 'retInf': false },
+                'funRun': { 'name': 'configStorage', 'par': infConfigStorage }
             },
             {
-                "securityPass": securityPass, "funRet": { "retUrl": true, "retInf": false },
-                "funRun": { "name": "log", "par": { 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
+                'securityPass': securityPass, 'funRet': { 'retUrl': true, 'retInf': false },
+                'funRun': { 'name': 'log', 'par': { 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
             }]
     }; wsSend(devNodeJS, send);
 };
