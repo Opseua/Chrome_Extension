@@ -3,7 +3,8 @@
 
 function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
     (async () => { await import('./@functions.js') })()
-    let ret = { 'ret': false }; try {
+    let ret = { 'ret': false };
+    try {
         const dt1 = new Date(); dt1.setSeconds(new Date().getSeconds() + inf).setSeconds; const dt2 = Date.now() + (inf * 1000); ret['res'] = {
             'day': String(dt1.getDate()).padStart(2, '0'), 'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
             'yea': String(dt1.getFullYear()), 'hou': String(dt1.getHours()).padStart(2, '0'),
