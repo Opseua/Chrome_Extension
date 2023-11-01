@@ -12,7 +12,7 @@ async function regexE(inf) {
         ret['c'] = typeof window == 'undefined' ? 'ALERTA: NODEJS' : 'ALERTA: CHROME';
         ret['d'] = `${ret.a}\n${ret.b.substring(0, 128).replace('\n\n ', '')}`
         if (typeof window == 'undefined' && conf[3]) { // NODEJS
-            const dt1 = new Date(); dt1.setSeconds(new Date().getSeconds()).setSeconds; const dt2 = Date.now() + (1000);
+            const dt1 = new Date(); dt1.setSeconds(new Date().getSeconds()).setSeconds; const dt2 = Date.now();
             const dtRes = {
                 'day': String(dt1.getDate()).padStart(2, '0'), 'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
                 'yea': String(dt1.getFullYear()), 'hou': String(dt1.getHours()).padStart(2, '0'),
@@ -22,7 +22,7 @@ async function regexE(inf) {
             };
             let time = dtRes, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
             let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, text = ret
-            let path = `${conf[1]}:/${conf[3]}/log/JavaScript/${mon}/${day}_err1.txt`
+            let path = `${conf[1]}:/${conf[3]}/log/JavaScript/${mon}/${day}_err.txt`
             text = text = typeof text === 'object' ? `${hou}\n${JSON.stringify(text)}\n\n` : `${hou}\n${text}\n\n`
             await _fs.promises.mkdir(_path.dirname(path), { recursive: true });
             await _fs.promises.writeFile(path, text, { flag: 'a' })
