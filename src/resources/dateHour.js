@@ -1,7 +1,9 @@
-// const retDateHour = dateHour();
+// const retDateHour = dateHour() // dateHour(86400) + 1 DIA | dateHour(-43200) - 12 HORAS
 // console.log(retDateHour)
 
-function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
+// const timestamp = Math.floor(new Date().getTime() / 1000);
+
+function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
     (async () => { await import('./@functions.js') })()
     let ret = { 'ret': false };
     try {
@@ -11,7 +13,7 @@ function dateHour(inf = 0) { // NAO POR COMO 'async'!!!
             'min': String(dt1.getMinutes()).padStart(2, '0'), 'sec': String(dt1.getSeconds()).padStart(2, '0'),
             'mil': String(dt2.toString().slice(-3)), 'tim': String(dt2.toString().slice(0, -3)), 'timMil': String(dt2.toString()),
             'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()]
-        }; ret['ret'] = true; ret['msg'] = `DATE HOUR: OK`  // manter o 'String' para forcar o '0' (zero) na frente → '001'
+        }; ret['ret'] = true; ret['msg'] = `DATE HOUR: OK`  // manter o 'String' para forçar o '0' (zero) na frente → '001'
     } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; return ret
 }
 

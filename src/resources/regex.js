@@ -4,7 +4,7 @@
 // const retRegex = regex(infRegex);
 // console.log(retRegex)
 
-function regex(inf) { // NAO POR COMO 'async'!!!
+function regex(inf) { // NÃO POR COMO 'async'!!!
     (async () => { await import('./@functions.js') })()
     let ret = { 'ret': false }; try {
         if (inf.pattern.includes('(.*?)')) {

@@ -2,7 +2,7 @@
 // const retSecToHour = secToHour(infSecToHour)
 // console.log(retSecToHour)
 
-function secToHour(inf) { // NAO POR COMO 'async'!!!
+function secToHour(inf) { // NÃO POR COMO 'async'!!!
     (async () => { await import('./@functions.js') })()
     let ret = { 'ret': false }; try {
         const hou = Math.floor(inf / 3600).toString().padStart(2, "0"); const min = Math.floor((inf % 3600) / 60).toString().padStart(2, "0");

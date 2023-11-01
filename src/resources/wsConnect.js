@@ -35,79 +35,89 @@ async function ws(param, message) {
     if (activeSockets.size == 0) { await logWs('ONSTART NODEJS: START') }
     async function connectToServer(server) {
         return new Promise(resolve => {
-            const socket = new _WebS(server);
-            socket.addEventListener('open', async (event) => {
+            const webSocket = new _WebS(server);
+            webSocket.onopen = async (event) => {
                 let msgLog = `WS OK:\n${server}`;
                 console.log(msgLog.replace('\n', '').replace('ws://', ' ')); await logWs(msgLog);
-                activeSockets.set(server, socket); resolve('');
-            });
-            socket.addEventListener('message', (event) => {
+                activeSockets.set(server, webSocket); resolve('');
+            }
+            webSocket.onmessage = (event) => {
                 acionarListener(server, event.data);  // console.log('EVENTO, MENSAGEM RECEBIDA:', server);
-            });
-            socket.addEventListener('close', async (event) => {
+            }
+            webSocket.onclose = async (event) => {
                 activeSockets.delete(server);
                 let msgLog = `WS RECONEXAO EM 5 SEGUNDOS:\n${server}`;
                 console.log(msgLog.replace('\n', '').replace('ws://', ' ')); await logWs(msgLog);
                 setTimeout(() => { connectToServer(server); }, 5000);
-            });
+            }
+            webSocket.onerror = async (event) => {
+                let msgLog = `WS ERROR:\n${server}`;
+                // console.log(msgLog.replace('\n', '').replace('ws://', ' ')); await logWs(msgLog);
+            };
         });
     }
     if (Array.isArray(param)) { // conectar servidores
         const promises = param.map(server => new Promise(resolve => {
-            if (!activeSockets.has(server)) { connectToServer(server).then(() => { resolve(''); }); }
-            else { resolve(''); }
+            if (!activeSockets.has(server)) {
+                connectToServer(server).then(() => { resolve(''); });
+            } else {
+                resolve('');
+            }
         }));
         await Promise.all(promises);
         // let msgLog = `WS CONECTADO(s): ${param.length}`;
         // console.log(msgLog); await logWs(msgLog);
     } else if (typeof param === 'string') { // enviar mensagem
         return new Promise(async (resolve) => {
-            const socket = activeSockets.has(param) ? activeSockets.get(param) : new _WebS(param)
+            const webSocket = activeSockets.has(param) ? activeSockets.get(param) : new _WebS(param)
             let tentativas = 0, maxTentativas = 10;
             while (tentativas < maxTentativas) {
-                if (socket.readyState === _WebS.OPEN) {
+                if (webSocket.readyState === _WebS.OPEN) {
                     let messageNew = typeof message === 'object' ? JSON.stringify(message) : message
                     const retRegex = regex({ 'pattern': '"retInf":"(.*?)"', 'text': messageNew })
                     const awaitRet = retRegex.res ? retRegex.res['1'] : false
-                    socket.send(messageNew);
+                    webSocket.send(messageNew);
                     if (!activeSockets.get(param)) {
                         // console.log('CONECTADO [NAO]: mensagem enviada')
-                    }
-                    else {
+                    } else {
                         // console.log('CONECTADO [SIM]: mensagem enviada')
                     }
                     if (!awaitRet) {
-                        if (!activeSockets.get(param)) { socket.close() }
+                        if (!activeSockets.get(param)) {
+                            webSocket.close()
+                        }
                         resolve(false)
                     } else {
                         console.log('aguardando nova mensagem');
                         let timer;
-                        socket.onmessage = function (event) {
+                        webSocket.onmessage = function (event) {
                             if (event.data.includes(awaitRet)) {
                                 if (!activeSockets.get(param)) {
                                     console.log('CONECTADO [NAO]: mensagem recebida')
-                                }
-                                else {
+                                } else {
                                     console.log('CONECTADO [SIM]: mensagem recebida')
                                 }
                                 clearTimeout(timer);
-                                if (!activeSockets.get(param)) { socket.close() }
+                                if (!activeSockets.get(param)) {
+                                    webSocket.close()
+                                }
                                 resolve(event.data.replace('[ENC]', '[ENC-OK]'))
                             }
                         };
                         timer = setTimeout(() => {
                             if (!activeSockets.get(param)) {
                                 console.log('CONECTADO [NAO]: mensagem expirou')
-                            }
-                            else {
+                            } else {
                                 console.log('CONECTADO [SIM]: mensagem expirou')
                             }
-                            if (!activeSockets.get(param)) { socket.close() }
+                            if (!activeSockets.get(param)) { webSocket.close() }
                             resolve(false)
                         }, 20000);
                     }
                     return;
-                } else { await new Promise(resolve => setTimeout(resolve, 500)); tentativas++; }
+                } else {
+                    await new Promise(resolve => setTimeout(resolve, 500)); tentativas++;
+                }
             }
             resolve(false)
         })

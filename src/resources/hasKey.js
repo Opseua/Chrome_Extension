@@ -3,7 +3,7 @@
 // const retHaskey = hasKey(infHasKey);
 // console.log(retHaskey)
 
-function hasKey(inf) { // NAO POR COMO 'async'!!!
+function hasKey(inf) { // NÃO POR COMO 'async'!!!
     (async () => { await import('./@functions.js') })()
     let ret = { 'ret': false }; try {
         function hk(key, obj) {
