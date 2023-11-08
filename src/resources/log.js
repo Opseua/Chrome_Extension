@@ -5,7 +5,7 @@
 async function log(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
-        if (typeof window !== 'undefined') { // [ENCONTRAR DEVICE] NODEJS
+        if (typeof window !== 'undefined') { // [ENCAMINHAR PARA DEVICE → NODEJS]
             const infDevAndFun = { 'name': 'log', 'retInf': inf.retInf, 'par': { 'folder': inf.folder, 'path': inf.path, 'text': inf.text } };
             const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
         };

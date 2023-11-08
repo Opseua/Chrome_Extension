@@ -5,7 +5,7 @@
 async function getCookies(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
-        if (typeof window == 'undefined') { // [ENCONTRAR DEVICE] NODEJS
+        if (typeof window == 'undefined') { // [ENCAMINHAR PARA DEVICE → CHROME]
             const infDevAndFun = { 'name': 'getCookies', 'retInf': inf.retInf, 'par': { 'url': inf.url, 'cookieSearch': inf.cookieSearch } }
             const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
         };

@@ -5,7 +5,7 @@
 async function sniffer(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false, 'res': { 'req': {}, 'res': {} } };
-    if (typeof window == 'undefined') { // [ENCONTRAR DEVICE] NODEJS
+    if (typeof window == 'undefined') { // [ENCAMINHAR PARA DEVICE → CHROME]
         const infDevAndFun = { 'name': 'sniffer', 'retInf': inf.retInf, 'par': { 'newReqSend': inf.newReqSend, 'arrUrl': inf.arrUrl } }
         const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
     };

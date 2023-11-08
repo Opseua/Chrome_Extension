@@ -10,7 +10,7 @@ async function notification(infOk) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
-        if (typeof window == 'undefined') { // [ENCONTRAR DEVICE] NODEJS
+        if (typeof window == 'undefined') { // [ENCAMINHAR PARA DEVICE → CHROME]
             const infDevAndFun = {
                 'name': 'notification', 'retInf': inf.retInf,
                 'par': { 'buttons': inf.buttons, 'duration': inf.duration, 'icon': inf.icon, 'title': inf.title, 'text': inf.text }

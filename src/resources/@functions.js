@@ -1,5 +1,5 @@
-//await import('./@functions.js');
-//await new Promise(resolve => { setTimeout(resolve, 2000) })
+// await import('./@functions.js');
+// await new Promise(resolve => { setTimeout(resolve, 2000) })
 
 let _fs, _path, _cheerio, _clipboard, _WebS, _http, _run, cs, conf = ['src/config.json'];
 
@@ -18,33 +18,34 @@ if (typeof window !== 'undefined') { window['all'] = all; } else { global['all']
 // *****************************************************************************************
 
 // ############## functions
-await import('./api.js') // node chrome
-await import('./chatGpt.js') // node chrome
-await import('./chromeActions.js') // node chrome
-await import('./clipboard.js') // node chrome
-await import('./commandLine.js') // node chrome
-await import('./configStorage.js') // node chrome
-await import('./dateHour.js') // node chrome
-await import('./devAndFun.js') // node chrome
-await import('./file.js') // node chrome
-await import('./getCookies.js') // node chrome
-await import('./getPage.js') // node chrome
-await import('./hasKey.js') // node chrome
-await import('./jsonInterpret.js') // node chrome
-await import('./log.js') // node chrome
-await import('./notification.js') // node chrome
-await import('./orderObj.js') // node chrome
-await import('./promptChrome.js') // node chrome
-await import('./random.js') // node chrome
-await import('./regex.js') // node chrome
-await import('./regexE.js') // node chrome
-await import('./secToHour.js') // node chrome
-await import('./sniffer.js') // node chrome
-await import('./splitText.js') // node chrome
-await import('./tabSearch.js') // node chrome
-await import('./translate.js') // node chrome
-await import('./webSocketRet.js') // node chrome
-await import('./wsConnect.js') // node chrome
+await import('./api.js')
+await import('./chatGpt.js')
+await import('./chromeActions.js')
+await import('./clipboard.js')
+await import('./commandLine.js')
+await import('./configStorage.js')
+await import('./dateHour.js')
+await import('./devAndFun.js')
+await import('./file.js')
+await import('./getCookies.js')
+await import('./getPage.js')
+await import('./googleSheets.js')
+await import('./hasKey.js')
+await import('./jsonInterpret.js')
+await import('./log.js')
+await import('./notification.js')
+await import('./orderObj.js')
+await import('./promptChrome.js')
+await import('./random.js')
+await import('./regex.js')
+await import('./regexE.js')
+await import('./secToHour.js')
+await import('./sniffer.js')
+await import('./splitText.js')
+await import('./tabSearch.js')
+await import('./translate.js')
+await import('./webSocketRet.js')
+await import('./wsConnect.js')
 
 // ############## scripts
 await import('../scripts/command1.js')
@@ -70,9 +71,9 @@ function notificarListeners(prop, value) {
 // console.log(cs)
 // // ############### CLEAR CONSOLE ###############
 console.clear(); let msgQtd = 0; const clearConsole = console.log;
-console.log = async function () {
+console.log = function () {
     clearConsole.apply(console, arguments); msgQtd++;
-    if (msgQtd >= 50) { console.clear(); msgQtd = 0; console.log('CONSOLE LIMPO!') }
+    if (msgQtd >= 100) { console.clear(); msgQtd = 0; console.log('CONSOLE LIMPO!') }
 } // // ###############               ###############
 
 if (typeof window !== 'undefined') { // CHROME

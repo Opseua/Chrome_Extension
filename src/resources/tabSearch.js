@@ -23,7 +23,7 @@ async function openTab(inf) { // NAO USAR
 async function tabSearch(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
-        if (typeof window == 'undefined') { // [ENCONTRAR DEVICE] NODEJS
+        if (typeof window == 'undefined') { // [ENCAMINHAR PARA DEVICE → CHROME]
             const infDevAndFun = {
                 'name': 'tabSearch', 'retInf': inf.retInf, 'par': { 'search': inf.search, 'openIfNotExist': inf.openIfNotExist, 'active': inf.active, 'pinned': inf.pinned, 'url': inf.url }
             }; const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun

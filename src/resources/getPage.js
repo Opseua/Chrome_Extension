@@ -5,7 +5,7 @@
 async function getPage(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
-        if (typeof window == 'undefined') { // [ENCONTRAR DEVICE] NODEJS
+        if (typeof window == 'undefined') { // [ENCAMINHAR PARA DEVICE → CHROME]
             const infDevAndFun = { 'name': 'getPage', 'retInf': inf.retInf, 'par': { 'id': inf.id } };
             const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
         };

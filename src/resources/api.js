@@ -1,7 +1,7 @@
 // let infApi, retApi
 // infApi = { // ########## TYPE → json
 //     'method': 'POST', 'url': `https://ntfy.sh/`, 'headers': { 'accept-language': 'application/json' },
-//     'body': { 'Chave': 'aaa', 'Valor': 'bbb' }
+//     'body': { 'Chave1': 'Valor 1', 'Chave2': 'Valor 2' }
 // };
 // infApi = { // ########## TYPE → text
 //     'method': 'POST', 'url': `https://ntfy.sh/`, 'headers': { 'content-type': 'text/plain;charset=UTF-8' },
@@ -18,7 +18,8 @@
 
 async function api(inf) {
     await import('./@functions.js')
-    let ret = { 'ret': false }; try {
+    let ret = { 'ret': false };
+    try {
         if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
             const reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
             if (inf.headers) { reqOpt['headers'] = inf.headers }

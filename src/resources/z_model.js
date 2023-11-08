@@ -1,6 +1,11 @@
 async function model(inf) {
+    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
+        if (typeof window !== 'undefined') { // [ENCAMINHAR PARA DEVICE → NODEJS]
+            const infDevAndFun = { 'name': 'commandLine', 'retInf': inf.retInf, 'par': { 'command': inf.command } }
+            const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
+        };
         ret['ret'] = true;
         ret['msg'] = `MODEL: OK`;
         ret['res'] = `resposta aqui`;
