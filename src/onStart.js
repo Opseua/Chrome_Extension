@@ -1,5 +1,5 @@
-// await import('./resources/@functions.js'); console.log('onStartNode')
-await import('./resources/@functions.js'); console.log('onStart');
+await import('./resources/@functions.js');
+let time = dateHour().res; console.log('onStart', `${time.day}/${time.mon} ${time.hou}.${time.min}.${time.sec}`);
 
 if (typeof window !== 'undefined') { // CHROME
     const keys = ['webSocket', 'chatGptOra.aiAAAAA', 'chatGptOpenAi', 'sniffer'];
@@ -157,3 +157,24 @@ infFile = { 'action': 'del', 'functionLocal': false, 'path': './PASTA2/' }
 
 let infChatGpt = { 'provider': 'ora.ai', 'input': `Quanto é 1+1999?` }
 //let retChatGpt = await chatGpt(infChatGpt); console.log(retChatGpt)
+
+
+let infGoogleSheet
+infGoogleSheet = {
+    'action': 'get',
+    'id': '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8',
+    'tab': 'CNPJ_DO_DIA',
+    'range': 'E1:F1', // PERÍMETRO
+    'range': 'E1', // CÉLULA ÚNICA
+}
+// infGoogleSheet = {
+//     'action': 'send',
+//     'id': '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8',
+//     'tab': 'CNPJ_DO_DIA',
+//     'range': 'D', // ÚLTIMA LINHA EM BRANCO DA COLUNA 'D'
+//     'range': 'D22', // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
+//     'values': [['a', 'b', 'c']]
+// }
+// const retGoogleSheet = await googleSheets(infGoogleSheet)
+// console.log(retGoogleSheet)
+

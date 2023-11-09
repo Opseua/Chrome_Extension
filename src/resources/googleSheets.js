@@ -17,30 +17,36 @@
 // const retGoogleSheet = await googleSheets(infGoogleSheet)
 // console.log(retGoogleSheet)
 
-const { google } = await import('googleapis');
-const sheets = google.sheets('v4');
-const authClient = new google.auth.GoogleAuth({ keyFile: 'googleOAuth.json', scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
-const auth = await authClient.getClient();
+let _sheets, _authClient, _auth
+if (typeof window == 'undefined') { // NODEJS
+    const { google } = await import('googleapis');
+    _sheets = google.sheets('v4');
+    _authClient = new google.auth.GoogleAuth({ keyFile: 'src/googleOAuth.json', scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
+    _auth = await _authClient.getClient();
+};
 
 async function googleSheets(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (typeof window !== 'undefined') { // [ENCAMINHAR PARA DEVICE → NODEJS]
+            console.log('devFun')
             const infDevAndFun = {
                 'name': 'googleSheets', 'retInf': inf.retInf,
                 'par': { 'action': inf.action, 'id': inf.id, 'tab': inf.tab, 'range': inf.range, 'values': inf.values }
             }; const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
         };
+        console.log('googleSheets')
         const id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'
         const tab = inf.tab
         if (inf.action == 'get') { // GET
             const range = inf.range == 'last' ? 'A1:AA' : `${tab}!${inf.range}`
-            // const auth = await authClient.getClient();
-            const retSheet = await sheets.spreadsheets.values.get({ auth, 'spreadsheetId': id, range });
+            // const auth = await _authClient.getClient();
+            const retSheet = await _sheets.spreadsheets.values.get({ auth: _auth, 'spreadsheetId': id, range });
             ret['res'] = inf.range == 'last' ? retSheet.data.values.length + 1 : retSheet.data.values
             ret['ret'] = true;
             ret['msg'] = `GOOGLE SHEETS GET: OK`;
+            return ret
         } else if (inf.action == 'send') { // SEND
             const col = inf.range.replace(/[^a-zA-Z]/g, '')
             const values = { 'values': inf.values }
@@ -52,8 +58,8 @@ async function googleSheets(inf) {
                 lin = retNewGet.res
             }
             const range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
-            // const auth = await authClient.getClient();
-            const retSheet = await sheets.spreadsheets.values.update({ auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
+            // const auth = await _authClient.getClient();
+            const retSheet = await _sheets.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
             ret['ret'] = true;
             ret['msg'] = `GOOGLE SHEETS SEND: OK`;
         }

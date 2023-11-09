@@ -1,4 +1,5 @@
-await import('./resources/@functions.js'); console.log('onStartNode')
+await import('./resources/@functions.js');
+let time = dateHour().res; console.log('onStart', `${time.day}/${time.mon} ${time.hou}.${time.min}.${time.sec}`);
 
 async function run(inf) {
     let ret = { 'ret': false };
@@ -28,3 +29,6 @@ async function run(inf) {
 await run()
 
 
+// const infTabSearch = { 'search': '*google*', 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': 'https://www.google.com/', 'retInf': true }
+// const retTabSearch = await tabSearch(infTabSearch); // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
+// console.log(retTabSearch)

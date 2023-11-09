@@ -15,24 +15,35 @@ async function webSocketRet(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
         const infConfigStorage = { 'action': 'get', 'key': 'webSocket' }; let retConfigStorage = await configStorage(infConfigStorage)
-        if (!retConfigStorage.ret) { return ret } else { retConfigStorage = retConfigStorage.res }
+        if (!retConfigStorage.ret) {
+            return ret
+        } else { retConfigStorage = retConfigStorage.res }
         const data = inf.data; const securityPass = retConfigStorage.securityPass
         let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices; let dev0 = `${url}://${host}:${port}/${dev[0].name}`
         function label(f) { return typeof (typeof window !== 'undefined' ? window : global)[f] === 'function' }
         await Promise.all(data.fun.map(async (value, index) => { // --------------------------------------------------
             if (value.securityPass !== securityPass) {
                 ret['msg'] = `\n #### SECURITYPASS INCORRETO #### \n\n ${JSON.stringify(data)} \n\n`
-            }
-            else if (!label(value.funRun.name)) {
+            } else if (!label(value.funRun.name)) {
                 ret['msg'] = `\n #### FUNCAO '${value.funRun.name}' NAO EXITE #### \n\n ${JSON.stringify(data)} \n\n`
             } else {
-                let nameFunc; if (typeof window !== 'undefined') { nameFunc = window[value.funRun.name] } // CHROME
-                else { nameFunc = global[value.funRun.name] } // NODEJS
+                let nameFunc;
+                if (typeof window !== 'undefined') { // CHROME
+                    nameFunc = window[value.funRun.name]
+                } else { // NODEJS
+                    nameFunc = global[value.funRun.name]
+                }
                 let infNameFunc = value.funRun.par, retUrl = false;
-                if (value.funRet && value.funRet.retUrl) { retUrl = typeof value.funRet.retUrl === 'boolean' ? inf.wsOrigin : `${value.funRet.retUrl}` };
+                if (value.funRet && value.funRet.retUrl) {
+                    retUrl = typeof value.funRet.retUrl === 'boolean' ? inf.wsOrigin : `${value.funRet.retUrl}`
+                };
                 infNameFunc['retUrl'] = retUrl;
-                infNameFunc['retInf'] = value.funRet.retInf ? value.funRet.retInf : undefined; let retName = await nameFunc(infNameFunc); retName = JSON.stringify(retName)
+                infNameFunc['retInf'] = value.funRet.retInf ? value.funRet.retInf : undefined;
+                let retName = await nameFunc(infNameFunc);
+                retName = JSON.stringify(retName)
+                console.log('ret2SIM', value)
                 if (retUrl && !retName.includes('"msg":"[ENC]')) {
+                    
                     retName = !value.funRun.par.devAndFun ? retName : retName.replace('"msg":"', '"msg":"[ENC] ')
                     const send = { 'retInf2': value.funRet.retInf ? value.funRet.retInf : undefined, 'retWs': JSON.parse(retName), 'fun': value.funRet.fun };
                     await wsSend(retUrl, send)
