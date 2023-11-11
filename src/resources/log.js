@@ -5,7 +5,7 @@
 async function log(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
-        if (typeof window !== 'undefined') { // [ENCAMINHAR PARA DEVICE → NODEJS]
+        if (dev) { // [ENCAMINHAR PARA DEVICE → NODEJS]
             const infDevAndFun = { 'name': 'log', 'retInf': inf.retInf, 'par': { 'folder': inf.folder, 'path': inf.path, 'text': inf.text } };
             const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
         };
@@ -22,7 +22,7 @@ async function log(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['log'] = log;
 } else { // NODEJS
     global['log'] = log;

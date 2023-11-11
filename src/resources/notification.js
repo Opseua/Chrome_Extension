@@ -8,14 +8,17 @@
 
 async function notification(infOk) {
     await import('./@functions.js');
-    let ret = { 'ret': false }; try {
+    let ret = { 'ret': false };
+    try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
-        if (typeof window == 'undefined') { // [ENCAMINHAR PARA DEVICE → CHROME]
-            const infDevAndFun = {
-                'name': 'notification', 'retInf': inf.retInf,
-                'par': { 'buttons': inf.buttons, 'duration': inf.duration, 'icon': inf.icon, 'title': inf.title, 'text': inf.text }
-            }; const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
+
+        if (!dev) { // [ENCAMINHAR PARA DEVICE → CHROME]
+            const retInf = typeof inf.retInf === 'boolean' ? inf.retInf ? JSON.stringify(Date.now()) : false : inf.retInf ? inf.retInf : JSON.stringify(Date.now())
+            const infDevAndFun = { 'name': 'notification', 'retInf': retInf, 'par': inf };
+            const retDevAndFun = await newDevFun(infDevAndFun) // await devAndFun(infDevAndFun);
+            return retDevAndFun
         };
+
         if (!inf.icon || inf.icon.length > 1) {
             const imgSrc = !inf.icon ? './src/media/icon_3.png' : inf.icon; const imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer())
             imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)))
@@ -34,7 +37,7 @@ async function notification(infOk) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['notification'] = notification;
 } else { // NODEJS
     global['notification'] = notification;

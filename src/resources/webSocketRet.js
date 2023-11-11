@@ -20,7 +20,7 @@ async function webSocketRet(inf) {
         } else { retConfigStorage = retConfigStorage.res }
         const data = inf.data; const securityPass = retConfigStorage.securityPass
         let s = retConfigStorage.server['1'], url = s.url, host = s.host, port = s.port, dev = retConfigStorage.devices; let dev0 = `${url}://${host}:${port}/${dev[0].name}`
-        function label(f) { return typeof (typeof window !== 'undefined' ? window : global)[f] === 'function' }
+        function label(f) { return typeof (dev ? window : global)[f] === 'function' }
         await Promise.all(data.fun.map(async (value, index) => { // --------------------------------------------------
             if (value.securityPass !== securityPass) {
                 ret['msg'] = `\n #### SECURITYPASS INCORRETO #### \n\n ${JSON.stringify(data)} \n\n`
@@ -28,7 +28,7 @@ async function webSocketRet(inf) {
                 ret['msg'] = `\n #### FUNCAO '${value.funRun.name}' NAO EXITE #### \n\n ${JSON.stringify(data)} \n\n`
             } else {
                 let nameFunc;
-                if (typeof window !== 'undefined') { // CHROME
+                if (dev) { // CHROME
                     nameFunc = window[value.funRun.name]
                 } else { // NODEJS
                     nameFunc = global[value.funRun.name]
@@ -41,9 +41,7 @@ async function webSocketRet(inf) {
                 infNameFunc['retInf'] = value.funRet.retInf ? value.funRet.retInf : undefined;
                 let retName = await nameFunc(infNameFunc);
                 retName = JSON.stringify(retName)
-                console.log('ret2SIM', value)
                 if (retUrl && !retName.includes('"msg":"[ENC]')) {
-                    
                     retName = !value.funRun.par.devAndFun ? retName : retName.replace('"msg":"', '"msg":"[ENC] ')
                     const send = { 'retInf2': value.funRet.retInf ? value.funRet.retInf : undefined, 'retWs': JSON.parse(retName), 'fun': value.funRet.fun };
                     await wsSend(retUrl, send)
@@ -52,11 +50,11 @@ async function webSocketRet(inf) {
         }))
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {
         const retLog = await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': ret.msg });
-        if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) } // CHROME
+        if (dev) { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) } // CHROME
     }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['webSocketRet'] = webSocketRet;
 } else { // NODEJS
     global['webSocketRet'] = webSocketRet;

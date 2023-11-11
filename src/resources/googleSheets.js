@@ -18,7 +18,7 @@
 // console.log(retGoogleSheet)
 
 let _sheets, _authClient, _auth
-if (typeof window == 'undefined') { // NODEJS
+if (!dev) { // NODEJS
     const { google } = await import('googleapis');
     _sheets = google.sheets('v4');
     _authClient = new google.auth.GoogleAuth({ keyFile: 'src/googleOAuth.json', scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
@@ -29,7 +29,7 @@ async function googleSheets(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false };
     try {
-        if (typeof window !== 'undefined') { // [ENCAMINHAR PARA DEVICE → NODEJS]
+        if (dev) { // [ENCAMINHAR PARA DEVICE → NODEJS]
             console.log('devFun')
             const infDevAndFun = {
                 'name': 'googleSheets', 'retInf': inf.retInf,
@@ -66,7 +66,7 @@ async function googleSheets(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['googleSheets'] = googleSheets;
 } else { // NODEJS
     global['googleSheets'] = googleSheets;

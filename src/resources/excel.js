@@ -142,7 +142,7 @@ async function excel(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['excel'] = excel;
 } else { // NODEJS
     // global['excel'] = excel;

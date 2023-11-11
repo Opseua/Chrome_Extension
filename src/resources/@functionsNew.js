@@ -9,6 +9,7 @@ if (dev) { // CHROME
     global['dev'] = dev
 }
 
+
 if (dev) { // CHROME
     _WebS = window.WebSocket
 } else { // NODEJS
@@ -32,7 +33,7 @@ await import('./commandLine.js')
 await import('./configStorage.js')
 await import('./dateHour.js')
 await import('./devAndFun.js')
-await import('./file.js')
+await import('./fileNew.js')
 await import('./getCookies.js')
 await import('./getPage.js')
 await import('./googleSheets.js')
@@ -117,6 +118,12 @@ const devRet = `${url}://${host}:${port}/${devices[0].name}`
 const devChrome = `${url}://${host}:${port}/${devices[1].name}`
 const devNodeJS = `${url}://${host}:${port}/${devices[2].name}`
 const devBlueStacks = `${url}://${host}:${port}/${devices[3].name}`
+
+// if (dev) {
+//     window['dev'] = dev
+// } else {
+//     global['dev'] = dev
+// }
 
 if (dev) { // CHROME
     window['conf'] = confNew

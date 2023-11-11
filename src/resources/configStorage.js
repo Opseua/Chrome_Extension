@@ -12,7 +12,7 @@
 // console.log(cs)
 
 async function configStorage(inf) {
-    if (typeof window !== 'undefined') { // CHROME
+    if (dev) { // CHROME
         if (!window.all) { await import('./@functions.js') }
     } else { if (!global.all) { await import('./@functions.js') } }
     let ret = { 'ret': false }; try {
@@ -27,7 +27,7 @@ async function configStorage(inf) {
                 if ((!inf.key || inf.key == '')) { ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR A 'key' \n\n`; }
                 else { if (inf.action == 'set' && !inf.value) { ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'value' \n\n` } else { run = true } }
             }; if (run) {
-                if (typeof window !== 'undefined') { // CHROME
+                if (dev) { // CHROME
                     if (inf.action == 'set') { // #### STORAGE: SET
                         await storageSet(inf); async function storageSet(inf) {
                             return new Promise((resolve) => {
@@ -102,7 +102,7 @@ async function configStorage(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['configStorage'] = configStorage;
     window['csf'] = configStorage;
 } else { // NODEJS

@@ -8,9 +8,11 @@
 // retFile = await file(infFile); console.log(retFile)
 
 async function file(inf) {
-    if (dev) { // CHROME
+    if (typeof window !== 'undefined') { // CHROME
         if (!window.all) { await import('./@functions.js') }
-    } else { if (!global.all) { await import('./@functions.js') } }
+    } else {
+        if (!global.all) { await import('./@functions.js') }
+    }
     let ret = { 'ret': false }; try { // PASSAR NO jsonInterpret
         if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change'].includes(inf.action)) {

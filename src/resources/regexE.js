@@ -9,9 +9,9 @@ async function regexE(inf) {
             ret['a'] = `NAO IDENTIFICADO [NAO IDENTIFICADA]`
         };
         ret['b'] = inf.e.toString(); ret['res'] = `\n\n ${ret.a} \n ${ret.b} \n\n`
-        ret['c'] = typeof window == 'undefined' ? 'ALERTA: NODEJS' : 'ALERTA: CHROME';
+        ret['c'] = !dev ? 'ALERTA: NODEJS' : 'ALERTA: CHROME';
         ret['d'] = `${ret.a}\n${ret.b.substring(0, 128).replace('\n\n ', '')}`
-        if (typeof window == 'undefined' && conf[3]) { // NODEJS
+        if (!dev && conf[3]) { // NODEJS
             const dt1 = new Date(); dt1.setSeconds(new Date().getSeconds()).setSeconds; const dt2 = Date.now();
             const dtRes = {
                 'day': String(dt1.getDate()).padStart(2, '0'), 'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
@@ -46,7 +46,7 @@ async function regexE(inf) {
     } catch (e) { console.log(`\n\n #### ERRO REGEXe #### ${e} \n\n`) }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['regexE'] = regexE;
 } else { // NODEJS
     global['regexE'] = regexE;

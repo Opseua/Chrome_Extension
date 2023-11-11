@@ -11,7 +11,7 @@ function secToHour(inf) { // NÃO POR COMO 'async'!!!
     } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['secToHour'] = secToHour;
 } else { // NODEJS
     global['secToHour'] = secToHour;

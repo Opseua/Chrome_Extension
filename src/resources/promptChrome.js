@@ -5,7 +5,7 @@ async function promptChrome(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
         const title = (inf.title) ? `${inf.title} | Digite o comando:` : `Digite o comando:`;
-        if (typeof window == 'undefined') { // [ENCAMINHAR PARA DEVICE → CHROME]
+        if (!dev) { // [ENCAMINHAR PARA DEVICE → CHROME]
             const infDevAndFun = { 'name': 'promptChrome', 'retInf': inf.retInf, 'par': { 'title': inf.title } }
             const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
         };
@@ -22,7 +22,7 @@ async function promptChrome(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['promptChrome'] = promptChrome;
 } else { // NODEJS
     global['promptChrome'] = promptChrome;

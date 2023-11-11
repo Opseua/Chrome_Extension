@@ -5,7 +5,7 @@
 async function chromeActions(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false }; try {
-        if (typeof window == 'undefined') { // [ENCAMINHAR PARA DEVICE → CHROME]
+        if (!dev) { // [ENCAMINHAR PARA DEVICE → CHROME]
             const infDevAndFun = {
                 'name': 'chromeActions', 'retInf': inf.retInf,
                 'par': { 'action': inf.action, 'color': inf.color, 'text': inf.text, 'tabSearch': inf.tabSearch, 'url': inf.url, 'code': inf.code }
@@ -34,7 +34,7 @@ async function chromeActions(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['chromeActions'] = chromeActions;
 } else { // NODEJS
     global['chromeActions'] = chromeActions;

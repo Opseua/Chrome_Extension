@@ -15,7 +15,7 @@
 // acionarListener('listener1', 'INF1', 'INF2');
 // acionarListener('listener2', 'INF1', 'INF2'); 
 
-if (typeof window !== 'undefined') { if (!window.all) { await import('./@functions.js') } } // CHROME
+if (dev) { if (!window.all) { await import('./@functions.js') } } // CHROME
 else { if (!global.all) { await import('./@functions.js') } } // NODEJS
 
 async function wsConnect(inf) { return await ws(inf); }
@@ -28,7 +28,7 @@ function acionarListener(nomeList, par1, par2) {
     if (listeners[nomeList]) { listeners[nomeList].forEach(async (callback) => { await callback(nomeList, par1, par2); }); }
 }
 async function logWs(inf) { // NODEJS
-    if (typeof window == 'undefined') { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf }) }
+    if (!dev) { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf }) }
 }
 const activeSockets = new Map();
 async function ws(param, message) {
@@ -65,6 +65,7 @@ async function ws(param, message) {
             }
         }));
         await Promise.all(promises);
+        let time = dateHour().res; console.log('wsConnect', `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`);
         // let msgLog = `WS CONECTADO(s): ${param.length}`;
         // console.log(msgLog); await logWs(msgLog);
     } else if (typeof param === 'string') { // enviar mensagem
@@ -124,7 +125,7 @@ async function ws(param, message) {
     }
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['wsConnect'] = wsConnect;
     window['wsList'] = wsList;
     window['wsSend'] = wsSend;
@@ -168,7 +169,7 @@ if (typeof window !== 'undefined') { // CHROME
 //     let ret = { 'ret': false };
 //     try {
 //         async function logWs(inf) { // NODEJS
-//             if (typeof window == 'undefined') {
+//             if (!dev) {
 //                 await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf })
 //             }
 //         }
@@ -201,7 +202,7 @@ if (typeof window !== 'undefined') { // CHROME
 //             }
 //         };
 //         const wsList = (url, listener) => { listeners[url] = listener };
-//         if (typeof window !== 'undefined') { // CHROME
+//         if (dev) { // CHROME
 //             window['wsSend'] = wsSend; window['wsList'] = wsList;
 //         } else { // NODEJS
 //             global['wsSend'] = wsSend; global['wsList'] = wsList;
@@ -212,7 +213,7 @@ if (typeof window !== 'undefined') { // CHROME
 //     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 // }
 
-// if (typeof window !== 'undefined') { // CHROME
+// if (dev) { // CHROME
 //     window['wsConnect'] = wsConnect;
 // } else { // NODEJS
 //     global['wsConnect'] = wsConnect;

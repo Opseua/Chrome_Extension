@@ -43,7 +43,7 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['peroptyx_QueryImageDeservingClassification'] = peroptyx_QueryImageDeservingClassification;
 } else { // NODEJS
     // global['peroptyx_QueryImageDeservingClassification'] = peroptyx_QueryImageDeservingClassification;

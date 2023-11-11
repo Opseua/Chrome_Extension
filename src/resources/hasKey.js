@@ -14,7 +14,7 @@ function hasKey(inf) { // NÃO POR COMO 'async'!!!
     } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['hasKey'] = hasKey;
 } else { // NODEJS
     global['hasKey'] = hasKey;

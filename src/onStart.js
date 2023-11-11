@@ -1,7 +1,7 @@
 await import('./resources/@functions.js');
-let time = dateHour().res; console.log('onStart', `${time.day}/${time.mon} ${time.hou}.${time.min}.${time.sec}`);
+let time = dateHour().res; console.log('onStart', `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`);
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     const keys = ['webSocket', 'chatGptOra.aiAAAAA', 'chatGptOpenAi', 'sniffer'];
     for (const key of keys) { const infConfigStorage = { 'action': 'del', 'key': key }; const retConfigStorage = await configStorage(infConfigStorage) }
     await chromeActions({ 'action': 'badge', 'text': '' });
@@ -134,7 +134,7 @@ async function run(inf) {
 
         ret['ret'] = true
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) {
-        if (typeof window !== 'undefined') { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) }
+        if (dev) { const retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' }) }
         else { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': `ONSTART NODEJS: ${ret.msg}` }) } // ← NODEJS  ↑ CHROME
     }
 }

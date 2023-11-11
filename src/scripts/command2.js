@@ -51,7 +51,7 @@ async function command2(inf) {
   } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
   window['command2'] = command2;
 } else { // NODEJS
   // global['command2'] = command2;

@@ -74,7 +74,7 @@ function regex(inf) { // NÃO POR COMO 'async'!!!
     return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['regex'] = regex;
 } else { // NODEJS
     global['regex'] = regex;

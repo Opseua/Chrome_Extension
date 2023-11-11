@@ -99,7 +99,7 @@ async function oneForma_MTPE(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['oneForma_MTPE'] = oneForma_MTPE;
 } else { // NODEJS
     // global['oneForma_MTPE'] = oneForma_MTPE;

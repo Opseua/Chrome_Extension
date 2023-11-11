@@ -11,7 +11,7 @@ async function clipboard(inf) {
             if (typeof text === 'object') { // OBJETO INDENTADO EM TEXTO BRUTO
                 text = JSON.stringify(text, null, 2)
             }
-            if (typeof window !== 'undefined') { // CHROME
+            if (dev) { // CHROME
                 const element = document.createElement('textarea'); element.value = text; document.body.appendChild(element);
                 element.select(); document.execCommand('copy'); document.body.removeChild(element)
             } else { _clipboard.writeSync(text) }; // NODEJS
@@ -20,7 +20,7 @@ async function clipboard(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['clipboard'] = clipboard;
 } else { // NODEJS
     global['clipboard'] = clipboard;

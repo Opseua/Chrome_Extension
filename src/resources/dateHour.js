@@ -17,7 +17,7 @@ function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
     } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['dateHour'] = dateHour;
 } else { // NODEJS
     global['dateHour'] = dateHour;

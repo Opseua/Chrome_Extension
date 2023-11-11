@@ -2,7 +2,7 @@ async function model(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false };
     try {
-        if (typeof window !== 'undefined') { // [ENCAMINHAR PARA DEVICE → NODEJS]
+        if (dev) { // [ENCAMINHAR PARA DEVICE → NODEJS]
             const infDevAndFun = { 'name': 'commandLine', 'retInf': inf.retInf, 'par': { 'url': inf.url, 'command': inf.command } }
             const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
         };
@@ -12,7 +12,7 @@ async function model(inf) {
     } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (typeof window !== 'undefined') { // CHROME
+if (dev) { // CHROME
     window['model'] = model;
 } else { // NODEJS
     global['model'] = model;
