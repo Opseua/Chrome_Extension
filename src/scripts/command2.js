@@ -11,7 +11,7 @@ async function command2(inf) {
     } else {
       par = `${par} "${conf[1]}:\\ARQUIVOS\\PROJETOS\\Sniffer_Python\\src\\1_BACKGROUND.exe"`
     };
-    await commandLine({ 'command': par, 'retInf': false })
+    await commandLine({ 'command': par, 'retInf': true })
     ret['ret'] = true;
     ret['msg'] = `SHORTCUT PRESSED: OK`;
   } catch (e) {

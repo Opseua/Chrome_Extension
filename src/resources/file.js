@@ -12,8 +12,10 @@ async function file(inf) {
         if (!window.all) {
             await import('./@functions.js')
         }
-    } else {
-        if (!global.all) { await import('./@functions.js') }
+    } else { // NODEJS
+        if (!global.all) {
+            await import('./@functions.js')
+        }
     }
     let ret = { 'ret': false };
     try { // PASSAR NO jsonInterpret

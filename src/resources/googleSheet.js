@@ -1,4 +1,4 @@
-// let infGoogleSheet
+// let infGoogleSheet, retGoogleSheet
 // infGoogleSheet = {
 //     'action': 'get',
 //     'id': '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8',
@@ -14,25 +14,23 @@
 //     'range': 'D22', // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
 //     'values': [['a', 'b', 'c']]
 // }
-// let retGoogleSheet = await googleSheet(infGoogleSheet)
+// retGoogleSheet = await googleSheet(infGoogleSheet)
 // console.log(retGoogleSheet)
-
-let _sheet, _authClient, _auth
-if (!eng) { // NODEJS
-    const { google } = await import('googleapis');
-    _sheet = google.sheets('v4');
-    _authClient = new google.auth.GoogleAuth({ keyFile: 'src/googleOAuth.json', scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
-    _auth = await _authClient.getClient();
-};
 
 async function googleSheet(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false };
+
     try {
         if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'googleSheet', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
+        const pathOAuth = `${conf[1]}:/${conf[2]}/src/googleOAuth.json`
+        const { google } = await import('googleapis');
+        let _sheet = google.sheets('v4');
+        let _authClient = new google.auth.GoogleAuth({ keyFile: pathOAuth, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
+        let _auth = await _authClient.getClient();
         let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'
         let tab = inf.tab
         if (inf.action == 'get') { // GET

@@ -59,6 +59,7 @@ await import('../scripts/action_TryRating_QueryImageDeservingClassification.js')
 
 // ############## scripts
 await import('../scripts/command1.js')
+await import('../scripts/command2.js')
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 // ############### GLOBAL OBJECT [novo] ###############

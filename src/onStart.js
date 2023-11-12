@@ -78,7 +78,7 @@ run()
 
 
 
-
+// *************************
 if (eng) { // CHROME
     let keys = ['webSocket', 'chatGptOra.aiAAAAA', 'chatGptOpenAi', 'sniffer'];
     for (let key of keys) { let infConfigStorage = { 'action': 'del', 'key': key }; let retConfigStorage = await configStorage(infConfigStorage) }
@@ -106,5 +106,4 @@ if (eng) { // CHROME
         } catch (e) { let m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
     });
 }
-
 // *************************
