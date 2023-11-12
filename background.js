@@ -55,6 +55,10 @@ import('./src/onStart.js');
 //     });
 // }, 5000);
 
+chrome.browserAction.onClicked.addListener(async function (...inf) { // ######################### CLICK NO ICONE
+    console.log('ON START: ICONE PRESSIONADO'); //chrome.browserAction.setPopup({popup: './popup.html'});
+});
+
 // NAO POR NADA AQUI!
 
 // ***************** USAR O 'onStart.js' *****************

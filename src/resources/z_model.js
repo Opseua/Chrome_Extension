@@ -16,7 +16,8 @@ async function model(inf) {
         ret['ret'] = true;
 
     } catch (e) {
-        let m = await regexE({ 'e': e }); ret['msg'] = m.res
+        let m = await regexE({ 'e': e });
+        ret['msg'] = m.res
     };
     return ret
 }
