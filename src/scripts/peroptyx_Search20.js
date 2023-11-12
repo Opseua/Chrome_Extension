@@ -4,7 +4,7 @@ async function peroptyx_Search20(inf) {
     let ret = { 'ret': false }; try {
         let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
-            const gOEve = async (i) => {
+            let gOEve = async (i) => {
                 if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
             }; gOAdd(gOEve);
         }
@@ -19,10 +19,10 @@ async function peroptyx_Search20(inf) {
             }; retNotification = await notification(infNotification)
         }
         else {
-            const resultList = retSniffer.tasks[0].taskData.resultSet.resultList;
-            const testQuestionInformation = retSniffer.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer; let not = true
-            const res = await Promise.all(resultList.map(async (v, index) => {
-                const idTask = [v.surveyKeys['193']]; let resultado = null
+            let resultList = retSniffer.tasks[0].taskData.resultSet.resultList;
+            let testQuestionInformation = retSniffer.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer; let not = true
+            let res = await Promise.all(resultList.map(async (v, index) => {
+                let idTask = [v.surveyKeys['193']]; let resultado = null
                 try { resultado = index + 1 } catch (e) { }; let nome = null
                 try { nome = v.value.name } catch (e) { }; let endereco = null
                 try { endereco = v.value.address[0] } catch (e) { }; let fechado = null
@@ -43,15 +43,15 @@ async function peroptyx_Search20(inf) {
                         }; retNotification = await notification(infNotification)
                     }
 
-                    const infTranslate1 = { 'source': 'auto', 'target': 'pt', 'text': comentario };
-                    const retTranslate1 = await translate(infTranslate1); comentario1 = retTranslate1.res
+                    let infTranslate1 = { 'source': 'auto', 'target': 'pt', 'text': comentario };
+                    let retTranslate1 = await translate(infTranslate1); comentario1 = retTranslate1.res
 
                     // infTranslate2 = { 'source': 'auto', 'target': 'en', 'text': comentario };
                     // retTranslate2 = await translate(infTranslate2)
                     // comentario2 = retTranslate2.res
 
-                    const infChatGpt = { 'provider': 'open.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING:\n\n ${comentario}` }
-                    const retChatGpt = await chatGpt(infChatGpt)
+                    let infChatGpt = { 'provider': 'open.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING:\n\n ${comentario}` }
+                    let retChatGpt = await chatGpt(infChatGpt)
                     if (!retChatGpt.ret) { return ret }; comentario2 = retChatGpt.res.replace(/\n/g, ' ').replace(/\\"/g, "'");
                 }
 
@@ -82,10 +82,10 @@ async function peroptyx_Search20(inf) {
             await clipboard({ 'value': JSON.stringify(res, null, 2) })
         }
         ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { let m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
-if (dev) { // CHROME
+if (eng) { // CHROME
     window['peroptyx_Search20'] = peroptyx_Search20;
 } else { // NODEJS
     // global['peroptyx_Search20'] = peroptyx_Search20;

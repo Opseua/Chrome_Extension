@@ -1,26 +1,42 @@
-// const retDateHour = dateHour() // dateHour(86400) + 1 DIA | dateHour(-43200) - 12 HORAS
+// let retDateHour = dateHour() // dateHour(86400) + 1 DIA | dateHour(-43200) - 12 HORAS
 // console.log(retDateHour)
 
-// const timestamp = Math.floor(new Date().getTime() / 1000);
+// let timestamp = Math.floor(new Date().getTime() / 1000);
 
 function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
     (async () => { await import('./@functions.js') })()
     let ret = { 'ret': false };
     try {
-        const dt1 = new Date(); dt1.setSeconds(new Date().getSeconds() + inf).setSeconds; const dt2 = Date.now() + (inf * 1000); ret['res'] = {
-            'day': String(dt1.getDate()).padStart(2, '0'), 'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
-            'yea': String(dt1.getFullYear()), 'hou': String(dt1.getHours()).padStart(2, '0'),
-            'min': String(dt1.getMinutes()).padStart(2, '0'), 'sec': String(dt1.getSeconds()).padStart(2, '0'),
-            'mil': String(dt2.toString().slice(-3)), 'tim': String(dt2.toString().slice(0, -3)), 'timMil': String(dt2.toString()),
+        let dt1 = new Date();
+        dt1.setSeconds(new Date().getSeconds() + inf).setSeconds;
+        let dt2 = Date.now() + (inf * 1000);
+        ret['res'] = { // manter o 'String' para forçar o '0' (zero) na frente → '001'
+            'day': String(dt1.getDate()).padStart(2, '0'),
+            'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
+            'yea': String(dt1.getFullYear()),
+            'hou': String(dt1.getHours()).padStart(2, '0'),
+            'min': String(dt1.getMinutes()).padStart(2, '0'),
+            'sec': String(dt1.getSeconds()).padStart(2, '0'),
+            'mil': String(dt2.toString().slice(-3)),
+            'tim': String(dt2.toString().slice(0, -3)),
+            'timMil': String(dt2.toString()),
             'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()]
-        }; ret['ret'] = true; ret['msg'] = `DATE HOUR: OK`  // manter o 'String' para forçar o '0' (zero) na frente → '001'
-    } catch (e) { (async () => { const m = await regexE({ 'e': e }); ret['msg'] = m.res })() }; return ret
+        };
+        ret['msg'] = `DATE HOUR: OK`
+        ret['ret'] = true;
+    } catch (e) {
+        (async () => {
+            let m = await regexE({ 'e': e });
+            ret['msg'] = m.res
+        })()
+    };
+    return ret
 }
 
-if (dev) { // CHROME
-    window['dateHour'] = dateHour;
-} else { // NODEJS
-    global['dateHour'] = dateHour;
+if (typeof eng === 'boolean') {
+    if (eng) { // CHROME
+        window['dateHour'] = dateHour;
+    } else { // NODEJS
+        global['dateHour'] = dateHour;
+    }
 }
-
-

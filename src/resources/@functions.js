@@ -1,15 +1,18 @@
 // await import('./@functions.js');
 // await new Promise(resolve => { setTimeout(resolve, 2000) })
 
-let _fs, _path, _cheerio, _clipboard, _WebS, _http, _run, cs, conf = ['src/config.json'];
-let dev = typeof window !== 'undefined' ? true : false // ########### 'dev' true → CHROME | false → NODEJS
-if (dev) { // CHROME
-    window['dev'] = dev
-} else { // NODEJS
-    global['dev'] = dev
+// ###### true CHROME | false NODEJS
+if (typeof window !== 'undefined') {
+    window['eng'] = true
+    window['engName'] = 'CHROME'
+} else {
+    global['eng'] = false
+    global['engName'] = 'NODEJS'
 }
 
-if (dev) { // CHROME
+let _fs, _path, _cheerio, _clipboard, _WebS, _http, _run, cs, conf = ['src/config.json'];
+
+if (eng) { // CHROME
     _WebS = window.WebSocket
 } else { // NODEJS
     const { default: WebSocket } = await import('ws'); _WebS = WebSocket; _fs = await import('fs');
@@ -20,7 +23,7 @@ if (dev) { // CHROME
 }
 
 function all() { }; // ******************************************************** NAO USAR !!!
-if (dev) { window['all'] = all; } else { global['all'] = all }
+if (eng) { window['all'] = all; } else { global['all'] = all }
 // *****************************************************************************************
 
 // ############## functions
@@ -31,11 +34,11 @@ await import('./clipboard.js')
 await import('./commandLine.js')
 await import('./configStorage.js')
 await import('./dateHour.js')
-await import('./devAndFun.js')
+await import('./newDevFun.js')
 await import('./file.js')
 await import('./getCookies.js')
 await import('./getPage.js')
-await import('./googleSheets.js')
+await import('./googleSheet.js')
 await import('./hasKey.js')
 await import('./jsonInterpret.js')
 await import('./log.js')
@@ -50,10 +53,7 @@ await import('./sniffer.js')
 await import('./splitText.js')
 await import('./tabSearch.js')
 await import('./translate.js')
-await import('./webSocketRet.js')
 await import('./wsConnect.js')
-
-await import('./newDevFun.js')
 
 // ############## scripts
 await import('../scripts/command1.js')
@@ -66,25 +66,25 @@ await import('../scripts/command1.js')
 // gO.inf['NovaChave'] = ['a', 'b', 'c',]
 // console.log(gO.inf)
 // ******
-const gOListener = []; const gOObj = {};
+let gOListener = []; let gOObj = {};
 function gOList(listener) { gOListener.push(listener) }
 function notificarListeners(prop, value) {
     if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf) };
-    for (const listener of gOListener) { listener(prop, value); }
-}; const gO = new Proxy(gOObj, {
+    for (let listener of gOListener) { listener(prop, value); }
+}; let gO = new Proxy(gOObj, {
     set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; }
 }); gO.inf = {}
 // *-*-*-*-*-*-*-*
-// const cs = await configStorage([''])
+// let cs = await configStorage([''])
 // console.log(cs)
 // // ############### CLEAR CONSOLE ###############
-console.clear(); let msgQtd = 0; const clearConsole = console.log;
+console.clear(); let msgQtd = 0; let clearConsole = console.log;
 console.log = function () {
     clearConsole.apply(console, arguments); msgQtd++;
     if (msgQtd >= 100) { console.clear(); msgQtd = 0; console.log('CONSOLE LIMPO!') }
 } // // ###############               ###############
 
-if (dev) { // CHROME
+if (eng) { // CHROME
     // ## bibliotecas
     window['_WebS'] = _WebS;
     // ## variaveis
@@ -106,19 +106,21 @@ if (dev) { // CHROME
 }
 
 // OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!)
-const retFile = await file({ 'action': 'inf' });
-const confNew = retFile.ret ? retFile.res : ['NaoEncontrado']
-const retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
-const securityPass = retConfigStorage.res.securityPass
-const server = retConfigStorage.res.server['1']
-const url = server.url; const host = server.host; const port = server.port
-const devices = retConfigStorage.res.devices
-const devRet = `${url}://${host}:${port}/${devices[0].name}`
-const devChrome = `${url}://${host}:${port}/${devices[1].name}`
-const devNodeJS = `${url}://${host}:${port}/${devices[2].name}`
-const devBlueStacks = `${url}://${host}:${port}/${devices[3].name}`
+let retFile = await file({ 'action': 'inf' });
+let confNew = retFile.ret ? retFile.res : ['NaoEncontrado']
+let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
+let securityPass = retConfigStorage.res.securityPass
+let server = retConfigStorage.res.server['1']
+let url = server.url;
+let host = server.host;
+let port = server.port
+let devices = retConfigStorage.res.devices
+let devRet = `${url}://${host}:${port}/${devices[0].name}`
+let devChrome = `${url}://${host}:${port}/${devices[1].name}`
+let devNodeJS = `${url}://${host}:${port}/${devices[2].name}`
+let devBlueStacks = `${url}://${host}:${port}/${devices[3].name}`
 
-if (dev) { // CHROME
+if (eng) { // CHROME
     window['conf'] = confNew
     window['securityPass'] = securityPass
     window['devRet'] = devRet
@@ -133,6 +135,5 @@ if (dev) { // CHROME
     global['devNodeJS'] = devNodeJS
     global['devBlueStacks'] = devBlueStacks
 }
-
 
 

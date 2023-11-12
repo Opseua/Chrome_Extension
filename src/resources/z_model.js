@@ -2,18 +2,29 @@ async function model(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false };
     try {
-        if (dev) { // [ENCAMINHAR PARA DEVICE → NODEJS]
-            const infDevAndFun = { 'name': 'commandLine', 'retInf': inf.retInf, 'par': { 'url': inf.url, 'command': inf.command } }
-            const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
+
+        if (!`rodar no → CHROME ou NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
+            let infDevAndFun = { 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': inf.retInf } };
+            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
         };
-        ret['ret'] = true;
-        ret['msg'] = `MODEL: OK`;
+
+        let infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
+        let retTranslate = await translate(infTranslate); if (!retTranslate.ret) { return retTranslate } else { let = retTranslate.res }
+
         ret['res'] = `resposta aqui`;
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
+        ret['msg'] = `MODEL: OK`;
+        ret['ret'] = true;
+
+    } catch (e) {
+        let m = await regexE({ 'e': e }); ret['msg'] = m.res
+    };
+    return ret
 }
 
-if (dev) { // CHROME
-    window['model'] = model;
-} else { // NODEJS
-    global['model'] = model;
+if (typeof eng === 'boolean') {
+    if (eng) { // CHROME
+        window['model'] = model;
+    } else { // NODEJS
+        global['model'] = model;
+    }
 }

@@ -4,11 +4,11 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
     let ret = { 'ret': false }; try {
         let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
-            const gOEve = async (i) => {
+            let gOEve = async (i) => {
                 if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
             }; gOAdd(gOEve);
         }; if (inf.logFile) { retFile = await file({ 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
-        else { retSniffer = JSON.parse(inf.sniffer) }; const query = retSniffer.tasks[0].taskData.query; await clipboard({ 'value': query })
+        else { retSniffer = JSON.parse(inf.sniffer) }; let query = retSniffer.tasks[0].taskData.query; await clipboard({ 'value': query })
         if (retSniffer.targetLocalIds.length == 1) {
             infNotification = { 'duration': 4, 'icon': './src/media/notification_3.png', 'title': `BLIND`, 'text': `${query}` }
             retNotification = await notification(infNotification)
@@ -30,20 +30,20 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             infNotification = {
                 'duration': 3, 'icon': './src/media/notification_3.png', 'title': query, 'text': `🔵 GIBBERISH`
             }; retNotification = await notification(infNotification)
-            const radio = { "other": "peroptyx_QueryImageDeservingClassification", "inf": [2], "res": "🔵 GIBBERISH", "query": query }
+            let radio = { "other": "peroptyx_QueryImageDeservingClassification", "inf": [2], "res": "🔵 GIBBERISH", "query": query }
             // ws1.send(JSON.stringify(radio))
-            const infApi = {
+            let infApi = {
                 'method': 'POST', 'url': `http://18.119.140.20:8888/OPSEUA_CHROME/`,
                 'headers': { 'accept-language': 'application/json' }, 'body': radio
-            }; const retApi = await api(infApi);
+            }; let retApi = await api(infApi);
         } else {
             // ws1.send(JSON.stringify({ "name": "google", "par": { "search": query } }))
             wsSend(gO.inf.wsArr[0], { "name": "google", "par": { "search": query } })
         }; ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) { let m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
 }
 
-if (dev) { // CHROME
+if (eng) { // CHROME
     window['peroptyx_QueryImageDeservingClassification'] = peroptyx_QueryImageDeservingClassification;
 } else { // NODEJS
     // global['peroptyx_QueryImageDeservingClassification'] = peroptyx_QueryImageDeservingClassification;

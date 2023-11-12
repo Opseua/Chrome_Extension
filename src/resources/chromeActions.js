@@ -1,19 +1,24 @@
-// const infChromeActions = { 'action': 'badge', 'text': 'OLA' }
-// const retChromeActions = await chromeActions(infChromeActions);
+// let infChromeActions = { 'action': 'badge', 'text': 'OLA' }
+// let retChromeActions = await chromeActions(infChromeActions);
 // console.log(retChromeActions)
 
 async function chromeActions(inf) {
     await import('./@functions.js');
-    let ret = { 'ret': false }; try {
-        if (!dev) { // [ENCAMINHAR PARA DEVICE → CHROME]
-            const infDevAndFun = {
-                'name': 'chromeActions', 'retInf': inf.retInf,
-                'par': { 'action': inf.action, 'color': inf.color, 'text': inf.text, 'tabSearch': inf.tabSearch, 'url': inf.url, 'code': inf.code }
-            }; const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
+    let ret = { 'ret': false };
+    try {
+        if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
+            let infDevAndFun = { 'enc': true, 'data': { 'name': 'chromeActions', 'par': inf, 'retInf': inf.retInf } };
+            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
         };
         if (inf.action == 'badge') {
-            const action = chrome.browserAction; if (inf.color) { action.setBadgeBackgroundColor({ 'color': inf.color }) } // [25, 255, 71, 255]
-            if (inf.hasOwnProperty('text')) { action.setBadgeText({ 'text': inf.text }) }; ret['msg'] = `CHROME ACTIONS BADGE: OK`
+            let action = chrome.browserAction;
+            if (inf.color) {
+                action.setBadgeBackgroundColor({ 'color': inf.color })
+            } // [25, 255, 71, 255]
+            if (inf.hasOwnProperty('text')) {
+                action.setBadgeText({ 'text': inf.text })
+            };
+            ret['msg'] = `CHROME ACTIONS BADGE: OK`
         } else if (inf.action == 'script') {
             let code, element
             if (inf.method == 'xpath') {
@@ -30,12 +35,21 @@ async function chromeActions(inf) {
                 code: code
             });
             ret['msg'] = `CHROME ACTIONS SCRIPT: OK`
-        }; ret['ret'] = true;
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
+        };
+        ret['ret'] = true;
+    } catch (e) {
+        let m = await regexE({ 'e': e });
+        ret['msg'] = m.res
+    };
+    return ret
 }
 
-if (dev) { // CHROME
-    window['chromeActions'] = chromeActions;
-} else { // NODEJS
-    global['chromeActions'] = chromeActions;
+if (typeof eng === 'boolean') {
+    if (eng) { // CHROME
+        window['chromeActions'] = chromeActions;
+    } else { // NODEJS
+        global['chromeActions'] = chromeActions;
+    }
 }
+
+

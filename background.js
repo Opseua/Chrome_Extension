@@ -5,7 +5,7 @@ import('./src/onStart.js');
 //     if (inf[0].state && inf[0].state.current === "complete") {
 //         chrome.downloads.search({ id: inf.id }, async function (inf) {
 //             if (inf.length > 0) {
-//                 const downloadItem = inf[0];
+//                 let downloadItem = inf[0];
 //                 if (downloadItem.byExtensionName === 'BOT') {
 //                     console.log(`EVENTO: download do BOT concluído\n`, downloadItem)
 //                 }

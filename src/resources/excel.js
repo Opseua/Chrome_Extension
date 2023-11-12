@@ -15,8 +15,8 @@ async function excel(inf) {
             sessionId = retConfigStorage.sessionId
             transientEditSessionToken = retConfigStorage.transientEditSessionToken
         } else {
-            const infSniffer = { 'newReqSend': false, 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
-            const retSniffer = await sniffer(infSniffer)
+            let infSniffer = { 'newReqSend': false, 'arrUrl': ['https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=*'] }
+            let retSniffer = await sniffer(infSniffer)
             chrome.browserAction.setBadgeText({ text: '' });
 
             let infRegex = { 'pattern': 'ClientRequestId%22%3A%22(.*?)%22%2C%22InstantaneousType', 'text': retSniffer.res.req.url }
@@ -48,10 +48,10 @@ async function excel(inf) {
             lin = retExcel.res
 
             if (inf.inf && JSON.stringify(inf.inf).includes('sendGet\\":\\"send')) {
-                const infFile = { 'action': 'read', 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt'` }
-                const retFile = await file(infFile)
-                const infRegex = { 'pattern': `","lin":"(.*?)","id":"${JSON.parse(inf.inf).id}`, 'text': retFile.res }
-                const retRegex = regex(infRegex)
+                let infFile = { 'action': 'read', 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/log/arquivo.txt'` }
+                let retFile = await file(infFile)
+                let infRegex = { 'pattern': `","lin":"(.*?)","id":"${JSON.parse(inf.inf).id}`, 'text': retFile.res }
+                let retRegex = regex(infRegex)
                 if (retRegex.ret && Number(retRegex.res['1']) > 0) {
                     lin = retRegex.res['1']
                     col = 'N'
@@ -77,7 +77,7 @@ async function excel(inf) {
         let colNum = getColLin(col) - 1
 
         if (inf.action == 'set') {
-            const infApi = {
+            let infApi = {
                 url: `https://excel.officeapps.live.com/x/_vti_bin/EwaInternalWebService.json/SetRichTextCell?waccluster=BR2`,
                 method: 'POST',
                 headers: {
@@ -85,8 +85,8 @@ async function excel(inf) {
                 },
                 body: JSON.stringify({ 'context': { 'WorkbookMetadataParameter': { 'WorkbookMetadataState': { 'MetadataVersion': 1, 'ServerEventVersion': 0 } }, 'ClientRequestId': clientRequestId, 'InstantaneousType': 1, 'MakeInstantaneousChange': true, 'SessionId': decodeURIComponent(sessionId), 'TransientEditSessionToken': decodeURIComponent(transientEditSessionToken), 'PermissionFlags': 786431, 'Configurations': 5767952, 'CompleteResponseTimeout': 0, 'IsWindowHidden': false, 'IsWindowVisible': true, 'CollaborationParameter': { 'CollaborationState': { 'UserListVersion': linD, 'CollabStateId': 72 } }, 'MachineCluster': 'BR2', 'AjaxOptions': 0, 'ReturnSheetProcessedData': false, 'ActiveItemId': 'Sheet4', 'ViewportStateChange': { 'SheetViewportStateChanges': [{ 'SheetName': tab, 'SelectedRanges': { 'SheetName': tab, 'NamedObjectName': '', 'Ranges': [{ 'FirstRow': lin, 'FirstColumn': colNum, 'LastRow': lin, 'LastColumn': 0 }] }, 'ActiveCell': colLin }] }, 'MergeCount': { 'Current': 14, 'Pending': 14, 'SuspensionStartTimestamp': null }, 'ClientRevisions': { 'Min': 1, 'Max': 2, 'MaxFromBlockCache': 2 }, 'HasAnyNonOcsCoauthor': false, 'PaneType': 1, 'CellHtml': '', 'CellIfmt': 1, 'OriginalIfmt': 1 }, 'ewaControlId': 'm_excelWebRenderer_ewaCtl_m_ewa', 'currentObject': tab, 'isNamedItem': false, 'revision': 1, 'activeCell': { 'SheetName': tab, 'NamedObjectName': '', 'FirstRow': linT, 'FirstColumn': colNum }, 'formattedText': { 'Text': value, 'Fonts': null, 'TextRuns': null }, 'row': linT, 'column': 0, 'rowCount': 1, 'columnCount': 1, 'setCellRanges': { 'SheetName': tab, 'NamedObjectName': '', 'Ranges': [{ 'FirstRow': linT, 'FirstColumn': colNum, 'LastRow': linT, 'LastColumn': 0 }] }, 'comboKey': 0, 'allowedSetCellModes': 50, 'renderingOptions': 0, 'richValueParameter': { 'ParameterType': 5 }, 'colorScheme': null })
             };
-            const retApi = await api(infApi);
-            const res = JSON.parse(retApi.res.body)
+            let retApi = await api(infApi);
+            let res = JSON.parse(retApi.res.body)
             if (retApi.ret && res.d && res.d.Errors && res.d.Errors.length == 0) {
                 ret['ret'] = true;
                 ret['msg'] = `EXCEL: OK`;
@@ -101,7 +101,7 @@ async function excel(inf) {
                     'title': `#### ERRO #### EXCEL`,
                     'text': 'Não conseguiu enviar a informação',
                 };
-                const retNotification = await notification(infNotification)
+                let retNotification = await notification(infNotification)
             }
         } else if (inf.action == 'get') {
             let url
@@ -112,14 +112,14 @@ async function excel(inf) {
                 lin = lin - 6
                 url = `https://excel.officeapps.live.com/x/_vti_bin/DynamicGridContent.json/GetRangeContentJson?context=%7B%22WorkbookMetadataParameter%22%3A%7B%22WorkbookMetadataState%22%3A%7B%22MetadataVersion%22%3A0%2C%22ServerEventVersion%22%3A0%7D%7D%2C%22ClientRequestId%22%3A%22${clientRequestId}%22%2C%22InstantaneousType%22%3A0%2C%22MakeInstantaneousChange%22%3Afalse%2C%22SessionId%22%3A%22${sessionId}%22%2C%22TransientEditSessionToken%22%3A%22${transientEditSessionToken}%22%2C%22PermissionFlags%22%3A786431%2C%22Configurations%22%3A1573648%2C%22CompleteResponseTimeout%22%3A0%2C%22IsWindowHidden%22%3Afalse%2C%22IsWindowVisible%22%3Atrue%2C%22MachineCluster%22%3A%22BR2%22%2C%22AjaxOptions%22%3A0%2C%22ReturnSheetProcessedData%22%3Afalse%2C%22ActiveItemId%22%3A%22Sheet4%22%7D&ewaControlId=%22m_excelWebRenderer_ewaCtl_m_ewa%22&currentObject=%22${tab}%22&namedObjectViewData=%7B%22Mode%22%3A1%2C%22Settings%22%3A0%7D&row=${lin}&column=${colNum}&rowCount=1&columnCount=1&blockPosition=%7B%22X%22%3A0%2C%22Y%22%3A0%2C%22PaneType%22%3A1%7D&revision=0&previousRevision=-1&digest=%22%22&renderingOptions=24&colorScheme=%7B%22BackgroundColor%22%3A1579547%2C%22TextColor%22%3A15263459%2C%22LinkColor%22%3A15263459%7D&ecsSpreadsheetDigest=null&waccluster=BR2`
             }
-            const infApi = {
+            let infApi = {
                 'url': url,
                 method: 'GET',
                 headers: {
                     "content-type": "application/json; charset=UTF-8"
                 }
             };
-            const retApi = await api(infApi);
+            let retApi = await api(infApi);
             if ((retApi.ret) && (retApi.res.body.toString().includes(`GridBlockModelJson`))) {
                 let res = JSON.parse(retApi.res.body)
                 res = JSON.parse(res.d.Result.GridBlockModelJson)
@@ -136,21 +136,19 @@ async function excel(inf) {
                     'title': `#### ERRO #### EXCEL`,
                     'text': 'Não conseguiu pegar a informação',
                 };
-                const retNotification = await notification(infNotification)
+                let retNotification = await notification(infNotification)
             }
         }
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
+    } catch (e) { let m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
 }
 
-if (dev) { // CHROME
-    window['excel'] = excel;
-} else { // NODEJS
-    // global['excel'] = excel;
+if (typeof eng === 'boolean') {
+    if (eng) { // CHROME
+        window['excel'] = excel;
+    } else { // NODEJS
+        // global['excel'] = excel;
+    }
 }
-
-
-
-
 
 
 

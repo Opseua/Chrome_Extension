@@ -1,32 +1,47 @@
-// const infGetPage = { 'id': 182593371 };
-// const retGetPage = await getPage(infGetPage);
+// let infGetPage = { 'id': 182593371 };
+// let retGetPage = await getPage(infGetPage);
 // console.log(retGetPage)
 
 async function getPage(inf) {
     await import('./@functions.js');
-    let ret = { 'ret': false }; try {
-        if (!dev) { // [ENCAMINHAR PARA DEVICE → CHROME]
-            const infDevAndFun = { 'name': 'getPage', 'retInf': inf.retInf, 'par': { 'id': inf.id } };
-            const retDevAndFun = await devAndFun(infDevAndFun); return retDevAndFun
+    let ret = { 'ret': false };
+    try {
+        if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
+            let infDevAndFun = { 'enc': true, 'data': { 'name': 'getPage', 'par': inf, 'retInf': inf.retInf } };
+            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
         };
         function getContent(inf) {
             return new Promise((resolve) => {
                 chrome.pageCapture.saveAsMHTML({ 'tabId': inf.id }, function (data) {
                     if (data) {
-                        const blob = new Blob([data], { type: 'application/x-mimearchive' }); const reader = new FileReader();
+                        let blob = new Blob([data], { type: 'application/x-mimearchive' });
+                        let reader = new FileReader();
                         reader.onloadend = async function () {
                             ret['res'] = reader.result;
-                            ret['ret'] = true; ret['msg'] = `GET PAGE: OK`; resolve(true)
-                        }; reader.readAsText(blob)
-                    } else { ret['msg'] = `GET PAGE: 'data' é 'false'`; resolve(false) }
+                            ret['msg'] = `GET PAGE: OK`;
+                            ret['ret'] = true;
+                            resolve(true)
+                        };
+                        reader.readAsText(blob)
+                    } else {
+                        ret['msg'] = `GET PAGE: 'data' é 'false'`;
+                        resolve(false)
+                    }
                 });
             });
-        }; await getContent(inf)
-    } catch (e) { const m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
+        };
+        await getContent(inf)
+    } catch (e) {
+        let m = await regexE({ 'e': e });
+        ret['msg'] = m.res
+    };
+    return ret
 }
 
-if (dev) { // CHROME
-    window['getPage'] = getPage;
-} else { // NODEJS
-    global['getPage'] = getPage;
+if (typeof eng === 'boolean') {
+    if (eng) { // CHROME
+        window['getPage'] = getPage;
+    } else { // NODEJS
+        global['getPage'] = getPage;
+    }
 }
