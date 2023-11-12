@@ -84,7 +84,7 @@ async function run(inf) {
             let data = {}; try { data = JSON.parse(par1) } catch (e) { };
             if (data.fun) { // FUN
                 let infNewDevFun = { 'data': data, 'wsOrigin': nomeList }
-                let retNewDevFun = await newDevFun(infNewDevFun)
+                let retNewDevFun = await devFun(infNewDevFun)
             } else if (data.other) { // OTHER
                 // console.log('OTHER', data.other)
 

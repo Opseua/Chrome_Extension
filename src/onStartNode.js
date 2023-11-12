@@ -9,8 +9,8 @@ async function run(inf) {
         wsList(devNodeJS, async (nomeList, par1) => {
             let data = {}; try { data = JSON.parse(par1) } catch (e) { };
             if (data.fun) { // FUN
-                let infNewDevFun = { 'data': data, 'wsOrigin': nomeList }
-                let retNewDevFun = await newDevFun(infNewDevFun)
+                let infDevFun = { 'data': data, 'wsOrigin': nomeList }
+                let retDevFun = await devFun(infDevFun)
             } else if (data.other) { // OTHER
                 console.log('OTHER', data.other)
             } else {
@@ -37,4 +37,3 @@ async function run(inf) {
     }
 }
 await run()
-

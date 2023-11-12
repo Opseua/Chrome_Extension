@@ -8,7 +8,7 @@ async function log(inf) {
     try {
         if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'log', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
+            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
         let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, pathOk, rewrite = false

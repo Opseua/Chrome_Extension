@@ -8,7 +8,7 @@ async function chromeActions(inf) {
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'chromeActions', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
+            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
         if (inf.action == 'badge') {
             let action = chrome.browserAction;

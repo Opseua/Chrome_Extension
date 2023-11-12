@@ -8,7 +8,7 @@ async function getCookies(inf) {
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'getCookies', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
+            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
         let cookiesPromise = new Promise((resolve) => {
             chrome.cookies.getAll({ 'url': inf.url },

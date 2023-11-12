@@ -15,7 +15,7 @@ async function notification(infOk) {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': inf.retInf, } };
-            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
+            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
         if (!inf.icon || inf.icon.length > 1) {
             let imgSrc = !inf.icon ? './src/media/icon_3.png' : inf.icon;

@@ -31,7 +31,7 @@ async function googleSheet(inf) {
     try {
         if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'googleSheet', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
+            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
         let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'
         let tab = inf.tab

@@ -32,8 +32,8 @@ async function tabSearch(inf) {
     let ret = { 'ret': false };
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
+            let infDevAndFun = { 'enc': true, 'data': { 'name': 'tabSearch', 'par': inf, 'retInf': inf.retInf } };
+            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
         let result = {};
         if (inf.search == 'ATIVA') { // ATIVA search

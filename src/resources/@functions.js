@@ -34,7 +34,7 @@ await import('./clipboard.js')
 await import('./commandLine.js')
 await import('./configStorage.js')
 await import('./dateHour.js')
-await import('./newDevFun.js')
+await import('./devFun.js')
 await import('./file.js')
 await import('./getCookies.js')
 await import('./getPage.js')
@@ -58,25 +58,38 @@ await import('./wsConnect.js')
 // ############## scripts
 await import('../scripts/command1.js')
 
-// ############### GLOBAL OBJECT ###############
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+// ############### GLOBAL OBJECT [novo] ###############
 // gOList(async function () {
 //     console.log('globalObject [import] ALTERADO →', gO.inf);
 // })
 // gO.inf['NovaChave'] = { 'a': 'b' }
 // gO.inf['NovaChave'] = ['a', 'b', 'c',]
 // console.log(gO.inf)
-// ******
-let gOListener = []; let gOObj = {};
+// *-*-*-*-*-*-*-*
+const gOListener = []; const gOObj = {};
 function gOList(listener) { gOListener.push(listener) }
 function notificarListeners(prop, value) {
     if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf) };
-    for (let listener of gOListener) { listener(prop, value); }
-}; let gO = new Proxy(gOObj, {
+    for (const listener of gOListener) { listener(prop, value); }
+}; const gO = new Proxy(gOObj, {
     set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; }
 }); gO.inf = {}
-// *-*-*-*-*-*-*-*
+// ##########################################################
+
 // let cs = await configStorage([''])
 // console.log(cs)
+
+// ############### GLOBAL OBJECT [sniffer] ###############
+const data = { inf: '' }; const listeners = new Set();
+const gOSniffer = new Proxy(data, {
+    set(target, key, value) { target[key] = value; globalChanged(value); listeners.forEach(listener => listener(target)); return true }
+});
+function gOAddSniffer(listener) { listeners.add(listener) }; function gORemSniffer(listener) { listeners.delete(listener) }
+async function globalChanged(i) {
+    // if (i.alert !== false) { console.log('globalObject ALTERADO →', i)}
+}
+
 // // ############### CLEAR CONSOLE ###############
 console.clear(); let msgQtd = 0; let clearConsole = console.log;
 console.log = function () {
@@ -90,8 +103,12 @@ if (eng) { // CHROME
     // ## variaveis
     window['conf'] = conf;
     window['cs'] = cs;
-    // ## global object
+    // ## global object NOVO  
     window['gO'] = gO; window['gOList'] = gOList;
+    // ## global object SNIFFER CHROME  
+    window['gOSniffer'] = gOSniffer;
+    window['gOAddSniffer'] = gOAddSniffer;
+    window['gORemSniffer'] = gORemSniffer;
 } else { // NODEJS 
     // ## bibliotecas
     const { WebSocketServer } = await import('ws'); global['_WebSServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)

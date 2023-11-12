@@ -4,8 +4,8 @@ async function model(inf) {
     try {
 
         if (!`rodar no → CHROME ou NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
+            let infDevAndFun = { 'enc': true, 'data': { 'name': 'model', 'par': inf, 'retInf': inf.retInf } };
+            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
         let infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };

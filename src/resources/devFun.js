@@ -1,5 +1,5 @@
 
-async function newDevFun(inf) {
+async function devFun(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false };
     try {
@@ -24,7 +24,7 @@ async function newDevFun(inf) {
             } else { // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [SIM]
                 try {
                     retWsSend = JSON.parse(retWsSend)
-                    ret = retWsSend
+                    ret = retWsSend.retWs
                 } catch (e) {
                     ret['msg'] = `RESPOSTA DO WEBSOCKET NÃO É OBJETO`
                 };
@@ -60,8 +60,8 @@ async function newDevFun(inf) {
 
 if (typeof eng === 'boolean') {
     if (eng) { // CHROME
-        window['newDevFun'] = newDevFun;
+        window['devFun'] = devFun;
     } else { // NODEJS
-        global['newDevFun'] = newDevFun;
+        global['devFun'] = devFun;
     }
 }

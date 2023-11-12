@@ -6,8 +6,8 @@ async function sniffer(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false, 'res': { 'req': {}, 'res': {} } };
     if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-        let infDevAndFun = { 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': inf.retInf } };
-        let retDevAndFun = await newDevFun(infDevAndFun); return retDevAndFun
+        let infDevAndFun = { 'enc': true, 'data': { 'name': 'sniffer', 'par': inf, 'retInf': inf.retInf } };
+        let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
     };
     return new Promise(resolve => {
         let lisOnBeforeRequest, lisOnBeforeSendHeaders, lisOnCompleted;
@@ -23,15 +23,15 @@ async function sniffer(inf) {
             chrome.webRequest.onBeforeSendHeaders.removeListener(lisOnBeforeSendHeaders);
             chrome.webRequest.onCompleted.removeListener(lisOnCompleted);
         }; try {
-            gO.inf = { 'sniffer': 1 };
+            gOSniffer.inf = { 'sniffer': 1 };
             let gOEve = async (i) => {
                 if (i.inf.sniffer === 2) {
-                    gO.inf = { 'sniffer': 0 };
-                    gORem(gOEve);
+                    gOSniffer.inf = { 'sniffer': 0 };
+                    gORemSniffer(gOEve);
                     snifferOff(true)
                 }
             };
-            gOAdd(gOEve);
+            gOAddSniffer(gOEve);
             let filters = { urls: ["<all_urls>"] };
             lisOnBeforeRequest = function (infLis) { intercept(infLis, 'onBeforeRequest'); };
             lisOnBeforeSendHeaders = function (infLis) { intercept(infLis, 'onBeforeSendHeaders') }
