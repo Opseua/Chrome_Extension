@@ -1,10 +1,10 @@
 await import('./resources/@functions.js');
-let time = dateHour().res; console.log('onStart', `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`);
+let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, 'onStart');
 
 async function run(inf) {
     let ret = { 'ret': false };
     try {
-        await wsConnect([devChrome, devNodeJS, devBlueStacks,]);
+        await wsConnect([devChrome, devNodeJS,]);
 
         wsList(devChrome, async (nomeList, par1) => {
             let data = {}; try { data = JSON.parse(par1) } catch (e) { };

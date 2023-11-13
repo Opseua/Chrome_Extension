@@ -38,7 +38,8 @@ async function ws(url, message) {
             let webSocket = new _WebS(server);
             webSocket.onopen = async (event) => {
                 let msgLog = `WS OK:\n${server}`;
-                console.log(msgLog.replace('\n', '').replace('ws://', ' '));
+                let time = dateHour().res;
+                console.log(`${time.hou}:${time.min}:${time.sec} WS OK: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
                 await logWs(msgLog);
                 activeSockets.set(server, webSocket); resolve('');
             }
@@ -48,8 +49,9 @@ async function ws(url, message) {
             }
             webSocket.onclose = async (event) => {
                 activeSockets.delete(server);
-                let msgLog = `WS RECONEXAO EM 5 SEGUNDOS:\n${server}`;
-                console.log(msgLog.replace('\n', '').replace('ws://', ' '));
+                let msgLog = `WS RECONECTANDO:\n${server}`;
+                let time = dateHour().res;
+                console.log(`${time.hou}:${time.min}:${time.sec} WS RECONECTANDO: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
                 await logWs(msgLog);
                 setTimeout(() => { connectToServer(server); }, 5000);
             }
@@ -65,8 +67,6 @@ async function ws(url, message) {
             }
         }));
         await Promise.all(promises);
-        let time = dateHour().res;
-        console.log('wsConnect', `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`);
     } else if (typeof url === 'string') { // ENVIAR MENSAGEM
         return new Promise(async (resolve) => {
             let webSocket = activeSockets.has(url) ? activeSockets.get(url) : new _WebS(url)
@@ -75,8 +75,14 @@ async function ws(url, message) {
             while (tentativas < maxTentativas) {
                 if (webSocket.readyState === _WebS.OPEN) {
                     let messageNew = typeof message === 'object' ? JSON.stringify(message) : message
-                    let retRegex = regex({ 'pattern': '"retInf":"(.*?)"', 'text': messageNew })
-                    let awaitRet = retRegex.res ? retRegex.res['1'] : false
+                    let retInf = false
+                    if (messageNew.includes(`"retInf":true`) || regex({ 'simple': true, 'pattern': '*"retInf":"*', 'text': messageNew })) {
+                        retInf = JSON.stringify(Date.now())
+                        messageNew = messageNew.replace('"retInf":true', `"retInf":"${retInf}"`)
+                        let retRegexOK = regex({ 'pattern': '"retInf":"(.*?)"', 'text': messageNew })
+                        retInf = retRegexOK.res['1']
+                    }
+                    let awaitRet = messageNew.includes('retWs') ? false : retInf
                     webSocket.send(messageNew); // MOSTRAR URL DO WEBSOCKET ATUAL webSocket._url
                     // console.log(`CONECTADO [${connected}]: MENSAGEM ENVIADA`)
                     if (!awaitRet) {

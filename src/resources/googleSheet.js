@@ -20,7 +20,6 @@
 async function googleSheet(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false };
-
     try {
         if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'googleSheet', 'par': inf, 'retInf': inf.retInf } };

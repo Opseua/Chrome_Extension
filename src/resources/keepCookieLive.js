@@ -37,17 +37,18 @@ async function keepCookieLive(inf) {
             await new Promise(resolve => { setTimeout(resolve, 10000) })
             retGetCookies = await getCookies({ 'url': retConfigStorage.meu, 'cookieSearch': '__Secure-next-auth.session-token' });
         }
+        let time = dateHour().res;
         retConfigStorage['cookie'] = retGetCookies.res.concat;
+        retConfigStorage['dateHour'] = `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`;
         let infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
         retConfigStorage = await configStorage(infConfigStorage);
         let send = {
-            'fun': [{
-                'securityPass': securityPass, 'retInf': false, 'name': 'configStorage', 'par': infConfigStorage
-            },
-            {
-                'securityPass': securityPass, 'retInf': false, 'name': 'log', 'par': { 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` }
-            }]
-        }; wsSend(devNodeJS, send);
+            'fun': [
+                { 'securityPass': securityPass, 'retInf': false, 'name': 'configStorage', 'par': infConfigStorage },
+                { 'securityPass': securityPass, 'retInf': false, 'name': 'log', 'par': { 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
+            ]
+        };
+        wsSend(devNodeJS, send);
         ret['msg'] = `KEEP COOKIE LIVE: OK`;
         ret['ret'] = true;
     } catch (e) {

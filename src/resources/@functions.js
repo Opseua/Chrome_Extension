@@ -1,5 +1,13 @@
 // await import('./@functions.js');
+
 // await new Promise(resolve => { setTimeout(resolve, 2000) })
+
+// let array = ['A', 'B', 'C', 'D', 'E', 'F'];
+// for (let [index, value] of array.entries()) {
+//     console.log('INDEX', index, 'VALUE', value);
+//     await new Promise(resolve => setTimeout(resolve, 1000));
+// }
+// console.log('FIM');
 
 // ###### true CHROME | false NODEJS
 if (typeof window !== 'undefined') {
@@ -22,7 +30,7 @@ if (eng) { // CHROME
     const { exec } = await import('child_process'); _run = exec
 }
 
-function all() { }; // ******************************************************** NAO USAR !!!
+function all() { }; // ******************************************************** NÃO USAR !!!
 if (eng) { window['all'] = all; } else { global['all'] = all }
 // *****************************************************************************************
 
@@ -121,8 +129,12 @@ if (eng) { // CHROME
     // ## variáveis
     global['conf'] = conf;
     global['cs'] = cs;
-    // ## global object
+    // ## global object NOVO
     global['gO'] = gO; global['gOList'] = gOList;
+    // ## global object SNIFFER CHROME  
+    global['gOSniffer'] = gOSniffer;
+    global['gOAddSniffer'] = gOAddSniffer;
+    global['gORemSniffer'] = gORemSniffer;
 }
 
 // OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!)

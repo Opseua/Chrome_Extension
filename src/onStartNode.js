@@ -20,7 +20,7 @@ async function run(inf) {
         async function keepCookieLiveRun() {
             await new Promise(resolve => { setTimeout(resolve, 15000) }); wsSend(devChrome, { 'other': 'keepCookieLive' })
         };
-        keepCookieLiveRun();
+       // keepCookieLiveRun();
         ret['ret'] = true
     } catch (e) {
         let m = await regexE({ 'e': e });
