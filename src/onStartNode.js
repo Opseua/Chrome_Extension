@@ -1,5 +1,5 @@
 await import('./resources/@functions.js');
-let time = dateHour().res; console.log('onStart', `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`);
+let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, 'onStart');
 
 async function run(inf) {
     let ret = { 'ret': false };
@@ -20,7 +20,10 @@ async function run(inf) {
         async function keepCookieLiveRun() {
             await new Promise(resolve => { setTimeout(resolve, 15000) }); wsSend(devChrome, { 'other': 'keepCookieLive' })
         };
-       // keepCookieLiveRun();
+        keepCookieLiveRun();
+
+        console.log(aaa)
+
         ret['ret'] = true
     } catch (e) {
         let m = await regexE({ 'e': e });

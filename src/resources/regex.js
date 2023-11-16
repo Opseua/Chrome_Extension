@@ -1,6 +1,6 @@
 // let infRegex
-// infRegex = { 'pattern': 'UM(.*?)TRES', 'text': 'UMDOISTRES' }
-// infRegex = { 'simple': true, 'pattern': '*DOIS*', 'text': 'UMDOISTRES' }
+// infRegex = { 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES` }
+// infRegex = { 'simple': true, 'pattern': `*DOIS*`, 'text': `UMDOISTRES` }
 // let retRegex = regex(infRegex);
 // console.log(retRegex)
 

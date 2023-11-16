@@ -2,7 +2,6 @@ async function model(inf) {
     await import('./@functions.js');
     let ret = { 'ret': false };
     try {
-
         if (!`rodar no → CHROME ou NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'model', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
@@ -29,3 +28,11 @@ if (typeof eng === 'boolean') {
         global['model'] = model;
     }
 }
+
+async function run() {
+    let infModel, retModel
+    infModel = { 'nire': '35132685930', 'aut': 'ASP.NET_SessionId=wivpxhlq3b45tgtb12dcgk4t' }
+    retModel = await model(infModel)
+    console.log(retModel)
+}
+run()

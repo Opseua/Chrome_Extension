@@ -9,13 +9,19 @@
 // }
 // console.log('FIM');
 
+// [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
+let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
+
 // ###### true CHROME | false NODEJS
-if (typeof window !== 'undefined') {
+if (cng == 1) {
     window['eng'] = true
     window['engName'] = 'CHROME'
-} else {
+} else if (cng == 2) {
     global['eng'] = false
     global['engName'] = 'NODEJS'
+} else if (cng == 3) {
+    // global['eng'] = false
+    // global['engName'] = 'GOOGLE'
 }
 
 let _fs, _path, _cheerio, _clipboard, _WebS, _http, _run, cs, conf = ['src/config.json'];
@@ -68,6 +74,18 @@ await import('../scripts/action_TryRating_QueryImageDeservingClassification.js')
 // ############## scripts
 await import('../scripts/command1.js')
 await import('../scripts/command2.js')
+
+// ############## work
+// await import('../../../WebScraper/src/resources/button.js')
+// await import('../../../WebScraper/src/resources/imput.js')
+// await import('../../../WebScraper/src/resources/navigate.js')
+// await import('../../../WebScraper/src/resources/getTextElement.js')
+// await import('../../../WebScraper/src/resources/cookiesGetSet.js')
+// await import('../../../WebScraper/src/resources/awaitLoad.js')
+// await import('../../../WebScraper/src/resources/checkPage.js')
+// await import('../../../WebScraper/src/resources/sendData.js')
+// await import('../../../WebScraper/src/resources/apiNire.js')
+// await import('../../../WebScraper/src/resources/apiCnpj.js')
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 // ############### GLOBAL OBJECT [novo] ###############
