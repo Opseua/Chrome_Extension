@@ -76,16 +76,18 @@ await import('../scripts/command1.js')
 await import('../scripts/command2.js')
 
 // ############## work
-// await import('../../../WebScraper/src/resources/button.js')
-// await import('../../../WebScraper/src/resources/imput.js')
-// await import('../../../WebScraper/src/resources/navigate.js')
-// await import('../../../WebScraper/src/resources/getTextElement.js')
-// await import('../../../WebScraper/src/resources/cookiesGetSet.js')
-// await import('../../../WebScraper/src/resources/awaitLoad.js')
-// await import('../../../WebScraper/src/resources/checkPage.js')
-// await import('../../../WebScraper/src/resources/sendData.js')
-// await import('../../../WebScraper/src/resources/apiNire.js')
-// await import('../../../WebScraper/src/resources/apiCnpj.js')
+if (!eng) {
+    await import('../../../WebScraper/src/resources/button.js')
+    await import('../../../WebScraper/src/resources/imput.js')
+    await import('../../../WebScraper/src/resources/navigate.js')
+    await import('../../../WebScraper/src/resources/getTextElement.js')
+    await import('../../../WebScraper/src/resources/cookiesGetSet.js')
+    await import('../../../WebScraper/src/resources/awaitLoad.js')
+    await import('../../../WebScraper/src/resources/checkPage.js')
+    await import('../../../WebScraper/src/resources/sendData.js')
+    await import('../../../WebScraper/src/resources/apiNire.js')
+    await import('../../../WebScraper/src/resources/apiCnpj.js')
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 // ############### GLOBAL OBJECT [novo] ###############
@@ -96,12 +98,12 @@ await import('../scripts/command2.js')
 // gO.inf['NovaChave'] = ['a', 'b', 'c',]
 // console.log(gO.inf)
 // *-*-*-*-*-*-*-*
-const gOListener = []; const gOObj = {};
+let gOListener = []; let gOObj = {};
 function gOList(listener) { gOListener.push(listener) }
 function notificarListeners(prop, value) {
     if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf) };
-    for (const listener of gOListener) { listener(prop, value); }
-}; const gO = new Proxy(gOObj, {
+    for (let listener of gOListener) { listener(prop, value); }
+}; let gO = new Proxy(gOObj, {
     set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; }
 }); gO.inf = {}
 // ##########################################################
@@ -110,8 +112,8 @@ function notificarListeners(prop, value) {
 // console.log(cs)
 
 // ############### GLOBAL OBJECT [sniffer] ###############
-const data = { inf: '' }; const listeners = new Set();
-const gOSniffer = new Proxy(data, {
+let data = { inf: '' }; let listeners = new Set();
+let gOSniffer = new Proxy(data, {
     set(target, key, value) { target[key] = value; globalChanged(value); listeners.forEach(listener => listener(target)); return true }
 });
 function gOAddSniffer(listener) { listeners.add(listener) }; function gORemSniffer(listener) { listeners.delete(listener) }
@@ -119,6 +121,25 @@ async function globalChanged(i) {
     // if (i.alert !== false) { console.log('globalObject ALTERADO →', i)}
 }
 
+// ############### RATE LIMIT ###############
+function rateLimiter(inf) {
+    let max = inf.max; let sec = inf.sec * 1000; let old = []; function check() {
+        let now = Date.now(); let recent = old.filter(timestamp => timestamp >= now - sec);
+        if (recent.length < max) { old.push(now); return true; } else { return false }
+    }; return { check };
+}
+
+// let rate = rateLimiter({ 'max': 5, 'sec': 10 });
+// function testRate() {
+//     console.log(rate.check())
+//     console.log(rate.check())
+//     console.log(rate.check())
+//     console.log(rate.check())
+//     console.log(rate.check())
+//     console.log(rate.check())
+//     console.log(rate.check())
+// };
+// testRate();
 // // ############### CLEAR CONSOLE ###############
 console.clear(); let msgQtd = 0; let clearConsole = console.log;
 console.log = function () {
@@ -177,6 +198,7 @@ if (eng) { // CHROME
     window['devChrome'] = devChrome
     window['devNodeJS'] = devNodeJS
     window['devBlueStacks'] = devBlueStacks
+    window['rateLimiter'] = rateLimiter
 } else { // NODEJS 
     global['conf'] = confNew
     global['securityPass'] = securityPass
@@ -184,6 +206,7 @@ if (eng) { // CHROME
     global['devChrome'] = devChrome
     global['devNodeJS'] = devNodeJS
     global['devBlueStacks'] = devBlueStacks
+    global['rateLimiter'] = rateLimiter
 }
 
 

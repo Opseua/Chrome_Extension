@@ -23,9 +23,6 @@ async function run(inf) {
                 console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`)
             }
         });
-
-        console.log(aaa)
-
         ret['ret'] = true
     } catch (e) {
         let m = await regexE({ 'e': e });
