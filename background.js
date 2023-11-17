@@ -1,4 +1,4 @@
-import('./src/onStart.js');
+import('./src/server.js');
 
 // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
 // chrome.downloads.onChanged.addListener(async function (...inf) {
@@ -61,5 +61,5 @@ chrome.browserAction.onClicked.addListener(async function (...inf) { // ########
 
 // NAO POR NADA AQUI!
 
-// ***************** USAR O 'onStart.js' *****************
+// ***************** USAR O 'server.js' *****************
 

@@ -32,7 +32,7 @@ async function logWs(inf) { // NODEJS
 }
 let activeSockets = new Map();
 async function ws(url, message) {
-    if (activeSockets.size == 0) { await logWs('ONSTART NODEJS: START') }
+    if (activeSockets.size == 0) { await logWs('SERVER NODEJS: START') }
     async function connectToServer(server) {
         return new Promise(resolve => {
             let webSocket = new _WebS(server);
@@ -168,7 +168,7 @@ if (typeof eng === 'boolean') {
 //                 await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf })
 //             }
 //         }
-//         await logWs('ONSTART NODEJS: START'); let urls = inf; let listeners = {};
+//         await logWs('SERVER NODEJS: START'); let urls = inf; let listeners = {};
 //         let createWebSocket = (url) => {
 //             let ws = new _WebS(url); ws.onerror = (e) => { };
 //             ws.onopen = async () => {

@@ -1,5 +1,5 @@
 await import('./resources/@functions.js');
-let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, 'onStart');
+let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, 'server');
 
 async function run(inf) {
     let ret = { 'ret': false };
@@ -32,7 +32,7 @@ async function run(inf) {
         if (eng) { // CHROME
             let retConfigStorage = await configStorage({ 'action': 'del', 'key': 'webSocket' })
         } else { // NODEJS
-            await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': `ONSTART NODEJS: ${ret.msg}` })
+            await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': `SERVER NODEJS: ${ret.msg}` })
         }
     }
 }
