@@ -190,6 +190,7 @@ let devRet = `${url}://${host}:${port}/${devices[0].name}`
 let devChrome = `${url}://${host}:${port}/${devices[1].name}`
 let devNodeJS = `${url}://${host}:${port}/${devices[2].name}`
 let devBlueStacks = `${url}://${host}:${port}/${devices[3].name}`
+let devEC2 = `${url}://${host}:${port}/${devices[4].name}`
 
 if (eng) { // CHROME
     window['conf'] = confNew
@@ -198,6 +199,7 @@ if (eng) { // CHROME
     window['devChrome'] = devChrome
     window['devNodeJS'] = devNodeJS
     window['devBlueStacks'] = devBlueStacks
+    window['devEC2'] = devEC2
     window['rateLimiter'] = rateLimiter
 } else { // NODEJS 
     global['conf'] = confNew
@@ -206,6 +208,7 @@ if (eng) { // CHROME
     global['devChrome'] = devChrome
     global['devNodeJS'] = devNodeJS
     global['devBlueStacks'] = devBlueStacks
+    global['devEC2'] = devEC2
     global['rateLimiter'] = rateLimiter
 }
 
