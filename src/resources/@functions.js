@@ -24,7 +24,7 @@ if (cng == 1) {
     // global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebS, _http, _run, _crypto, cs, conf = ['src/config.json'];
+let _fs, _path, _cheerio, _clipboard, _WebS, _http, _exec, _crypto, cs, conf = ['src/config.json'];
 
 if (eng) { // CHROME
     _WebS = window.WebSocket
@@ -33,7 +33,7 @@ if (eng) { // CHROME
     _path = await import('path'); _cheerio = await import('cheerio');
     const { default: clipboard } = await import('clipboardy'); _clipboard = clipboard;
     const { default: http } = await import('http'); _http = http;
-    const { exec } = await import('child_process'); _run = exec
+    const { exec } = await import('child_process'); _exec = exec
     const { createHash } = await import('crypto'); _crypto = createHash
 }
 
@@ -165,7 +165,7 @@ if (eng) { // CHROME
     const { WebSocketServer } = await import('ws'); global['_WebSServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
     global['_WebS'] = _WebS; global['_fs'] = _fs; global['_path'] = _path;
     global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
-    global['_http'] = _http; global['_run'] = _run; global['_crypto'] = _crypto
+    global['_http'] = _http; global['_exec'] = _exec; global['_crypto'] = _crypto
     // ## variáveis
     global['conf'] = conf;
     global['cs'] = cs;

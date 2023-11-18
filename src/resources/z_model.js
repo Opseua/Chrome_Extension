@@ -8,7 +8,7 @@ async function model(inf) {
         };
 
         let infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
-        let retTranslate = await translate(infTranslate); if (!retTranslate.ret) { return retTranslate } else { let = retTranslate.res }
+        let retTranslate = await translate(infTranslate); if (!retTranslate.ret) { return retTranslate } else { retTranslate = retTranslate.res }
 
         ret['res'] = `resposta aqui`;
         ret['msg'] = `MODEL: OK`;
