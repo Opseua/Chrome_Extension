@@ -5,6 +5,7 @@
 // infFile = { 'action': 'list', 'functionLocal': true, 'path': './PASTA/', 'max': 10 }
 // infFile = { 'action': 'change', 'functionLocal': true, 'path': './PASTA/', 'pathNew': './PASTA2/' }
 // infFile = { 'action': 'del', 'functionLocal': true, 'path': './PASTA2/' }
+// infFile = { 'action': 'md5', 'functionLocal': true, 'path': './ARQUIVO.txt' }
 // retFile = await file(infFile); console.log(retFile)
 
 async function file(inf) {
@@ -20,7 +21,7 @@ async function file(inf) {
     let ret = { 'ret': false };
     try { // PASSAR NO jsonInterpret
         if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
-        if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change'].includes(inf.action)) {
+        if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5'].includes(inf.action)) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
         } else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'functionLocal' \n\n`
@@ -212,7 +213,12 @@ async function file(inf) {
                                     } else {
                                         iFilesList++;
                                         let stats = _fs.statSync(name)
-                                        files.push({ 'ret': true, 'file': fileOk, 'path': name, 'size': formatBytes(stats.size), 'edit': stats.mtime })
+                                        let infFile = { 'action': 'md5', 'functionLocal': inf.functionLocal, 'path': name }
+                                        let retFile = await file(infFile);
+                                        files.push({
+                                            'ret': true, 'file': fileOk, 'path': name, 'size': formatBytes(stats.size), 'edit': stats.mtime,
+                                            'md5': retFile.ret ? retFile.res : false
+                                        })
                                     }
                                 } catch (e) {
                                     iFilesList++;
@@ -249,6 +255,27 @@ async function file(inf) {
                     await _fs.promises.rename(pathOld, pathNew);
                     ret['msg'] = `FILE CHANGE: OK`
                     ret['ret'] = true;
+                }
+            } else if (inf.action == 'md5') { // ########################## READ
+                let md5
+                if (inf.path.includes(':')) {
+                    path = inf.path
+                } else {
+                    infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal };
+                    retFile = await file(infFile);
+                    path = retFile.res[0]
+                };
+                try {
+                    md5 = _crypto('md5');
+                    let fileContent = await _fs.promises.readFile(path);
+                    md5.update(fileContent);
+                    md5 = md5.digest('hex')
+                    ret['res'] = md5;
+                    ret['msg'] = `FILE MD5: OK`;
+                    ret['ret'] = true;
+                } catch (e) {
+                    md5 = false
+                    ret['msg'] = e;
                 }
             }
         }
