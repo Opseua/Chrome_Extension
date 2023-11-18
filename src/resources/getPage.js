@@ -1,5 +1,6 @@
-// let infGetPage = { 'id': 182593371 };
-// let retGetPage = await getPage(infGetPage);
+// let infGetPage, retGetPage
+// infGetPage = { 'id': 182593371 };
+// retGetPage = await getPage(infGetPage);
 // console.log(retGetPage)
 
 async function getPage(inf) {

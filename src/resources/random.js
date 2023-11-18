@@ -1,5 +1,6 @@
-// let infRandom = { 'min': 3, 'max': 10, 'await': true };
-// let retRandom = await random(infRandom);
+// let infRandom, retRandom
+// infRandom = { 'min': 3, 'max': 10, 'await': true };
+// retRandom = await random(infRandom);
 // console.log(retRandom)
 
 async function random(inf) {

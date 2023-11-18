@@ -1,5 +1,6 @@
-// let infLog = { 'folder': '#_TESTE_#', 'path': `TESTE.txt`, 'text': 'INF AQUI' }
-// let retLog = await log(infLog);
+// let infLog, retLog
+// infLog = { 'folder': '#_TESTE_#', 'path': `TESTE.txt`, 'text': `INF AQUI` }
+// retLog = await log(infLog);
 // console.log(retLog)
 
 async function log(inf) {

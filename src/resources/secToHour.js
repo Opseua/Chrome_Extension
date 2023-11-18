@@ -1,5 +1,6 @@
-// let infSecToHour = 65
-// let retSecToHour = secToHour(infSecToHour)
+// let infSecToHour, retSecToHour
+// infSecToHour = 65
+// retSecToHour = secToHour(infSecToHour)
 // console.log(retSecToHour)
 
 function secToHour(inf) { // NÃO POR COMO 'async'!!!

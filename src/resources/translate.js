@@ -1,5 +1,6 @@
-// let infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
-// let retTranslate = await translate(infTranslate);
+// let infTranslate, retTranslate
+// infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
+// retTranslate = await translate(infTranslate);
 // console.log(retTranslate)
 
 async function translate(inf) {

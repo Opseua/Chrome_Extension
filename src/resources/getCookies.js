@@ -1,5 +1,6 @@
-// let infGetCookies = { 'url': 'https://www.google.com/', 'cookieSearch': '__Secure-next-auth.session-token' }
-// let retGetCookies = await getCookies(infGetCookies);
+// let infGetCookies, retGetCookies
+// infGetCookies = { 'url': `https://www.google.com/`, 'cookieSearch': `__Secure-next-auth.session-token` }
+// retGetCookies = await getCookies(infGetCookies);
 // console.log(retGetCookies);
 
 async function getCookies(inf) {

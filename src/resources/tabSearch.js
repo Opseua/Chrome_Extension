@@ -1,5 +1,6 @@
-// let infTabSearch = { 'search': '*google*', 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': 'https://www.google.com/' } 
-// let retTabSearch = await tabSearch(infTabSearch); // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
+// let infTabSearch, retTabSearch
+// infTabSearch = { 'search': `*google*`, 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': `https://www.google.com/` }
+// retTabSearch = await tabSearch(infTabSearch); // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // console.log(retTabSearch)
 
 async function openTab(inf) { // NAO USAR

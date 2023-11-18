@@ -1,4 +1,5 @@
-// let retDateHour = dateHour() // dateHour(86400) + 1 DIA | dateHour(-43200) - 12 HORAS
+// let retDateHour
+// retDateHour = dateHour() // dateHour(86400) + 1 DIA | dateHour(-43200) - 12 HORAS
 // console.log(retDateHour)
 
 // let timestamp = Math.floor(new Date().getTime() / 1000);

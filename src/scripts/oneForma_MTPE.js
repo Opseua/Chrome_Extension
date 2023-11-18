@@ -1,4 +1,5 @@
 async function oneForma_MTPE(inf) {
+    await import('../resources/@functions.js');
     let ret = { 'ret': false };
     try {
         let infRegex1, infRegex2, retRegex1, retRegex2, infNotification, retNotification

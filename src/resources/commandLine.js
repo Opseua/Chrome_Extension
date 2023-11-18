@@ -1,4 +1,6 @@
-// let retCommandLine = await commandLine({ 'command': 'notepad' });
+// let infCommandLine, retCommandLine
+// infCommandLine = { 'awaitFinish': false, 'command': `notepad` }
+// retCommandLine = await commandLine(infCommandLine);
 // console.log(retCommandLine)
 
 async function commandLine(inf) {
@@ -6,7 +8,7 @@ async function commandLine(inf) {
     let ret = { 'ret': false };
     try {
         if (!`rodar no →  NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'executarComando', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'enc': true, 'data': { 'name': 'commandLine', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 

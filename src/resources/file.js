@@ -6,7 +6,8 @@
 // infFile = { 'action': 'change', 'functionLocal': true, 'path': './PASTA/', 'pathNew': './PASTA2/' }
 // infFile = { 'action': 'del', 'functionLocal': true, 'path': './PASTA2/' }
 // infFile = { 'action': 'md5', 'functionLocal': true, 'path': './ARQUIVO.txt' }
-// retFile = await file(infFile); console.log(retFile)
+// retFile = await file(infFile);
+// console.log(retFile)
 
 async function file(inf) {
     if (eng) { // CHROME

@@ -1,4 +1,5 @@
 async function command2(inf) {
+  await import('../resources/@functions.js');
   let ret = { 'ret': false };
   try {
     let reRun = false

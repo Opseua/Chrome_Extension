@@ -1,17 +1,17 @@
 // let infGoogleSheet, retGoogleSheet
 // infGoogleSheet = {
 //     'action': 'get',
-//     'id': '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8',
-//     'tab': 'RESULTADOS_CNPJ_NEW',
-//     'range': 'E1:F1', // PERÍMETRO
-//     'range': 'E1', // CÉLULA ÚNICA
+//     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
+//     'tab': `RESULTADOS_CNPJ_NEW`,
+//     'range': `E1:F1`, // PERÍMETRO
+//     'range': `E1`, // CÉLULA ÚNICA
 // }
 // infGoogleSheet = {
 //     'action': 'send',
-//     'id': '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8',
-//     'tab': 'RESULTADOS_CNPJ_NEW',
-//     'range': 'D', // ÚLTIMA LINHA EM BRANCO DA COLUNA 'D'
-//     'range': 'D22', // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
+//     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
+//     'tab': `RESULTADOS_CNPJ_NEW`,
+//     'range': `D`, // ÚLTIMA LINHA EM BRANCO DA COLUNA 'D'
+//     'range': `D22`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
 //     'values': [['a', 'b', 'c']]
 // }
 // retGoogleSheet = await googleSheet(infGoogleSheet)

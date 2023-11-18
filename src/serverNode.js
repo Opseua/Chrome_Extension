@@ -1,14 +1,10 @@
 await import('./resources/@functions.js');
-let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, 'server')
+let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, eng ? 'server' : 'serverNode');
 
 async function run(inf) {
     let ret = { 'ret': false };
     try {
         await wsConnect([conf[1] == 'D' ? devNodeJS : devEC2, devChrome,]);
-
-        let infFile, retFile
-        infFile = { 'action': 'write', 'functionLocal': false, 'path': './log/PASTA/ola.txt', 'rewrite': false, 'text': '1234\n' }
-        retFile = await file(infFile);
 
         wsList(conf[1] == 'D' ? devNodeJS : devEC2, async (nomeList, par1) => {
             let data = {}; try { data = JSON.parse(par1) } catch (e) { };

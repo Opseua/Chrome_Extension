@@ -1,5 +1,5 @@
 await import('./resources/@functions.js');
-let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, 'server');
+let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, eng ? 'server' : 'serverNode');
 
 async function run(inf) {
     let ret = { 'ret': false };

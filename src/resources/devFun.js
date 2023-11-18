@@ -3,7 +3,6 @@ async function devFun(inf) {
     let ret = { 'ret': false };
     try {
         if (inf.enc) { // ENCAMINHAR PARA O DEVICE CERTO
-            // let retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf ? JSON.stringify(Date.now()) : false : inf.data.retInf ? inf.data.retInf : JSON.stringify(Date.now())
             let retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf : inf.data.retInf ? inf.data.retInf : true
             let url = eng ? devNodeJS : devChrome
             let data = { 'securityPass': securityPass, 'retInf': retInf, 'name': inf.data.name, 'par': inf.data.par }
@@ -23,7 +22,7 @@ async function devFun(inf) {
                 ret['ret'] = true
             } else { // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [SIM]
                 try {
-                    retWsSend = JSON.parse(retWsSend.replace('"msg":"','"msg":"[ENC] '))
+                    retWsSend = JSON.parse(retWsSend.replace('"msg":"', '"msg":"[ENC] '))
                     ret = retWsSend.retWs
                 } catch (e) {
                     ret['msg'] = `RESPOSTA DO WEBSOCKET NÃO É OBJETO`

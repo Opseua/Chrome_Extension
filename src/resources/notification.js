@@ -1,12 +1,11 @@
-// let infNotification = {
-//     'duration': 2, 'icon': './src/media/icon_4.png', 'retInf': false, 
+// let infNotification, retNotification
+// infNotification = {
+//     'duration': 2, 'icon': './src/media/icon_4.png', 'retInf': false,
 //     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': 'BOTAO 2' }],
-//     'title': `TITULO`, 'text': 'TEXTO',
+//     'title': `TITULO`, 'text': `TEXTO`,
 // };
-// let retNotification = await notification(infNotification);
+// retNotification = await notification(infNotification);
 // console.log(retNotification)
-
-// if (!`rodar no → CHROME e NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
 
 async function notification(infOk) {
     await import('./@functions.js');

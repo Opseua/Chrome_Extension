@@ -1,4 +1,6 @@
-// let retClipboard = await clipboard({ 'value': `Esse é o texto` });
+// let infClipboard, retClipboard
+// infClipboard = { 'value': `Esse é o texto` }
+// retClipboard = await clipboard(infClipboard);
 // console.log(retClipboard)
 
 async function clipboard(inf) {

@@ -1,4 +1,6 @@
-// let retPromptChrome = await promptChrome({ 'title': `NOME DO COMANDO` })
+// let infPromptChrome, retPromptChrome
+// infPromptChrome = { 'title': `NOME DO COMANDO` }
+// retPromptChrome = await promptChrome(infPromptChrome)
 // console.log(retPromptChrome)
 
 async function promptChrome(inf) {

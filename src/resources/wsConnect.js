@@ -15,8 +15,16 @@
 // acionarListener('listener1', 'INF1', 'INF2');
 // acionarListener('listener2', 'INF1', 'INF2'); 
 
-if (eng) { if (!window.all) { await import('./@functions.js') } } // CHROME
-else { if (!global.all) { await import('./@functions.js') } } // NODEJS
+if (eng) { // CHROME
+    if (!window.all) {
+        await import('./@functions.js')
+    }
+}
+else { // NODEJS
+    if (!global.all) {
+        await import('./@functions.js')
+    }
+}
 
 async function wsConnect(inf) { return await ws(inf); }
 async function wsSend(parametro, message) { return await ws(parametro, message); }
@@ -30,6 +38,7 @@ function acionarListener(nomeList, par1, par2) {
 async function logWs(inf) { // NODEJS
     if (!eng) { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf }) }
 }
+
 let activeSockets = new Map();
 async function ws(url, message) {
     if (activeSockets.size == 0) { await logWs('SERVER NODEJS: START') }
@@ -140,76 +149,3 @@ if (typeof eng === 'boolean') {
         global['acionarListener'] = acionarListener;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// async function wsConnect(inf) {
-//     await import('./@functions.js');
-//     let ret = { 'ret': false };
-//     try {
-//         async function logWs(inf) { // NODEJS
-//             if (!eng) {
-//                 await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf })
-//             }
-//         }
-//         await logWs('SERVER NODEJS: START'); let urls = inf; let listeners = {};
-//         let createWebSocket = (url) => {
-//             let ws = new _WebS(url); ws.onerror = (e) => { };
-//             ws.onopen = async () => {
-//                 let msgLog = `WS OK:\n${url}`; console.log(msgLog); await logWs(msgLog);
-//             }
-//             ws.onmessage = (event) => {
-//                 let listener = listeners[url]; if (listener && typeof listener === 'function') { listener(event.data) }
-//             }
-//             ws.onclose = async () => {
-//                 let msgLog = `WS RECONEXAO EM 5 SEGUNDOS:\n${url}`;
-//                 console.log(msgLog); await logWs(msgLog);
-//                 await new Promise(resolve => setTimeout(resolve, (5000)));
-//                 createWebSocket(url)
-//             }
-//             return ws;
-//         };
-//         let webSockets = urls.map(createWebSocket);
-//         let wsSend = (url, message) => {
-//             message = typeof message === 'object' ? JSON.stringify(message) : message
-//             let ws = webSockets.find(ws => ws.url === url);
-//             if (ws) {
-//                 ws.send(message)
-//             } else {
-//                 let ws = new _WebS(url);
-//                 ws.onopen = async () => { ws.send(message); ws.close() }
-//             }
-//         };
-//         let wsList = (url, listener) => { listeners[url] = listener };
-//         if (eng) { // CHROME
-//             window['wsSend'] = wsSend; window['wsList'] = wsList;
-//         } else { // NODEJS
-//             global['wsSend'] = wsSend; global['wsList'] = wsList;
-//         }
-
-//         ret['ret'] = true;
-//         ret['res'] = `WSCONNECT: OK`;
-//     } catch (e) { let m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
-// }
-
-// if (eng) { // CHROME
-//     window['wsConnect'] = wsConnect;
-// } else { // NODEJS
-//     global['wsConnect'] = wsConnect;
-// }

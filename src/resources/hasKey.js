@@ -1,6 +1,7 @@
 // let objeto = { 'chave1': { 'chave2': { 'chave3': 'VALOR' } } };
-// let infHasKey = { 'key': 'chave3', 'obj': objeto };
-// let retHaskey = hasKey(infHasKey);
+// let infHasKey, retHaskey
+// infHasKey = { 'key': 'chave3', 'obj': objeto };
+// retHaskey = hasKey(infHasKey);
 // console.log(retHaskey)
 
 function hasKey(inf) { // NÃO POR COMO 'async'!!!

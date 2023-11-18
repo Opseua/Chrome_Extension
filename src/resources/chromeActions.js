@@ -1,5 +1,6 @@
-// let infChromeActions = { 'action': 'badge', 'text': 'OLA' }
-// let retChromeActions = await chromeActions(infChromeActions);
+// let infChromeActions, retChromeActions
+// infChromeActions = { 'action': 'badge', 'text': `OLA` }
+// retChromeActions = await chromeActions(infChromeActions);
 // console.log(retChromeActions)
 
 async function chromeActions(inf) {

@@ -1,5 +1,6 @@
-// let infSniffer = { 'newReqSend': false, 'arrUrl': ['*google*'] }
-// let retSniffer = await sniffer(infSniffer);
+// let infSniffer, retSniffer
+// infSniffer = { 'newReqSend': false, 'arrUrl': ['*google*'] }
+// retSniffer = await sniffer(infSniffer);
 // console.log(retSniffer)
 
 async function sniffer(inf) {

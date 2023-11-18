@@ -1,5 +1,6 @@
-// let infChatGpt = { 'provider': 'open.ai', 'input': `Qual a idade de Marte?` };
-// let retChatGpt = await chatGpt(infChatGpt);
+// let infChatGpt, retChatGpt
+// infChatGpt = { 'provider': 'open.ai', 'input': `Qual a idade de Marte?` };
+// retChatGpt = await chatGpt(infChatGpt);
 // console.log(retChatGpt)
 
 async function chatGpt(inf) { // https://chat.openai.com/api/auth/session

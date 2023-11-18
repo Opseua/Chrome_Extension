@@ -1,7 +1,7 @@
-// let infRegex
+// let infRegex, retRegex
 // infRegex = { 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES` }
 // infRegex = { 'simple': true, 'pattern': `*DOIS*`, 'text': `UMDOISTRES` }
-// let retRegex = regex(infRegex);
+// retRegex = regex(infRegex);
 // console.log(retRegex)
 
 function regex(inf) { // NÃO POR COMO 'async'!!!

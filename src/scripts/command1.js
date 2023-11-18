@@ -1,4 +1,5 @@
 async function command1(inf) {
+  await import('../resources/@functions.js');
   let ret = { 'ret': false };
   try {
     let retPromptChrome = promptChrome(`NOME DO COMANDO`);
