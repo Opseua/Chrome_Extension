@@ -1,10 +1,10 @@
 // let infApi, retApi
 // infApi = { // ########## TYPE → json
-//     'method': 'POST', 'url': `https://ntfy.sh/`, 'headers': { 'accept-language': 'application/json' },
+//     'method': 'POST', 'url': `https://ntfy.sh/`, 'headers': { 'Content-Type': 'application/json' },
 //     'body': { 'Chave1': 'Valor 1', 'Chave2': 'Valor 2' }
 // };
 // infApi = { // ########## TYPE → text
-//     'method': 'POST', 'url': `https://ntfy.sh/`, 'headers': { 'content-type': 'text/plain;charset=UTF-8' },
+//     'method': 'POST', 'url': `https://ntfy.sh/`, 'headers': { 'Content-Type': 'text/plain;charset=UTF-8' },
 //     'body': '{"topic":"OPSEUA","message":"a"}'
 // };
 // let formData = new URLSearchParams(); // ########## TYPE → x-www-form-urlencoded

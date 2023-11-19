@@ -52,6 +52,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 body: { "chatbotId": retConfigStorage['chatbotId'], "input": inf.input, "conversationId": retConfigStorage['conversationId'], "userId": retConfigStorage['userId'], "provider": "OPEN_AI", "config": false, "includeHistory": true }
             };
             retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }
+            console.log(retApi)
             let res = JSON.parse(retApi.body);
             if ('response' in res) {
                 ret['res'] = res.response;
@@ -68,8 +69,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `\n #### ERRO #### CHAT GPT ORA AI \n ${res.error.message} \n\n`;
                 ret['ret'] = true;
             }
-        }
-        else if (inf.provider == 'open.ai') { // ######## open.ai
+        } else if (inf.provider == 'open.ai') { // ######## open.ai
             infConfigStorage = { 'action': 'get', 'key': 'chatGptOpenAi' };
             retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             infApi = {
@@ -93,8 +93,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['res'] = res.error.message
                 ret['msg'] = `\n #### ERRO #### CHAT GPT OPEN AI \n ${res.error.message} \n\n`;
             }
-        }
-        else if (inf.provider == 'aichatos') { // ######## aichatos
+        } else if (inf.provider == 'aichatos') { // ######## aichatos
             infApi = {
                 'method': 'POST', 'url': `https://api.aichatos.cloud/api/generateStream`, 'headers': {
                     'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
@@ -115,8 +114,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 await notification(infNotification);
                 ret['msg'] = `\n #### ERRO #### CHAT GPT AI CHATOS \n \n\n`
             }
-        }
-        else if (inf.provider == 'ec2') { // ######## ec2
+        } else if (inf.provider == 'ec2') { // ######## ec2
             infConfigStorage = { 'action': 'get', 'key': 'webSocket' };
             retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             infApi = {
@@ -134,6 +132,17 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `\n #### ERRO #### CHAT GPT EC2 \n \n\n`;
                 ret['res'] = 'res.error.message'
             }
+        } else if (inf.provider == 'globalgpt') { // ######## globalgpt
+            infApi = {
+                'method': 'POST', 'url': `https://swiftmodel.azurewebsites.net/api/ChatTrigger`, 'headers': {
+                    'content-type': 'text/plain',
+                },
+                'body': { "name": [{ "role": "user", "content": inf.input }] }
+            };
+            retApi = await api(infApi); if (!retApi.ret || retApi.res.code !== 200) { return retApi } else { retApi = retApi.res }
+            ret['msg'] = `CHAT GPT AI [GLOBALGPT]: OK`
+            ret['res'] = JSON.parse(retApi.body).message.content;
+            ret['ret'] = true;
         }
     } catch (e) {
         let m = await regexE({ 'e': e });
