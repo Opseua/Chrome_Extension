@@ -7,7 +7,10 @@ async function run(inf) {
         await wsConnect([conf[1] == 'D' ? devNodeJS : devEC2, devChrome,]);
 
         wsList(conf[1] == 'D' ? devNodeJS : devEC2, async (nomeList, par1) => {
-            let data = {}; try { data = JSON.parse(par1) } catch (e) { };
+            let data = {};
+            try {
+                data = JSON.parse(par1)
+            } catch (e) { };
             if (data.fun) { // FUN
                 let infDevFun = { 'data': data, 'wsOrigin': nomeList }
                 let retDevFun = await devFun(infDevFun)
@@ -18,7 +21,8 @@ async function run(inf) {
             }
         });
         async function keepCookieLiveRun() {
-            await new Promise(resolve => { setTimeout(resolve, 15000) }); wsSend(devChrome, { 'other': 'keepCookieLive' })
+            await new Promise(resolve => { setTimeout(resolve, 15000) });
+            wsSend(devChrome, { 'other': 'keepCookieLive' })
         };
         keepCookieLiveRun();
         ret['ret'] = true

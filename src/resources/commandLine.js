@@ -14,7 +14,7 @@ async function commandLine(inf) {
 
         let command = inf.awaitFinish ? `${inf.command}` : `"${conf[1]}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/1_BACKGROUND.exe" ${inf.command}`
         await new Promise((resolve) => {
-            const child = _exec(command, async (error, stdout, stderr) => {
+            let child = _exec(command, async (error, stdout, stderr) => {
                 if (error) {
                     ret['msg'] = 'COMMAND LINE: ERRO';
                     if (stderr) {

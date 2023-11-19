@@ -24,16 +24,19 @@ if (cng == 1) {
     // global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebS, _http, _exec, _crypto, cs, conf = ['src/config.json'];
+let _fs, _path, _cheerio, _clipboard, _WebS, _http, _exec, _google, _crypto, cs, conf = ['src/config.json'];
 
 if (eng) { // CHROME
     _WebS = window.WebSocket
 } else { // NODEJS
-    const { default: WebSocket } = await import('ws'); _WebS = WebSocket; _fs = await import('fs');
-    _path = await import('path'); _cheerio = await import('cheerio');
+    _fs = await import('fs');
+    _path = await import('path');
+    _cheerio = await import('cheerio');
+    const { default: WebSocket } = await import('ws'); _WebS = WebSocket;
     const { default: clipboard } = await import('clipboardy'); _clipboard = clipboard;
     const { default: http } = await import('http'); _http = http;
     const { exec } = await import('child_process'); _exec = exec
+    const { google } = await import('googleapis'); _google = google
     const { createHash } = await import('crypto'); _crypto = createHash
 }
 
@@ -41,7 +44,7 @@ function all() { }; // ******************************************************** 
 if (eng) { window['all'] = all; } else { global['all'] = all }
 // *****************************************************************************************
 
-// ############## functions
+// ############## FUNCTIONS
 await import('./api.js')
 await import('./chatGpt.js')
 await import('./chromeActions.js')
@@ -70,13 +73,13 @@ await import('./splitText.js')
 await import('./tabSearch.js')
 await import('./translate.js')
 await import('./wsConnect.js')
-await import('../scripts/action_TryRating_QueryImageDeservingClassification.js')
 
-// ############## scripts
+// ############## SCRIPTS
 await import('../scripts/command1.js')
 await import('../scripts/command2.js')
+await import('../scripts/action_TryRating_QueryImageDeservingClassification.js')
 
-// ############## work
+// ############## WORK [NODEJS]
 if (!eng) {
     await import('../../../WebScraper/src/resources/button.js')
     await import('../../../WebScraper/src/resources/imput.js')
@@ -91,14 +94,14 @@ if (!eng) {
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-// ############### GLOBAL OBJECT [novo] ###############
+// ############### GLOBAL OBJECT [NOVO] ###############
 // gOList(async function () {
 //     console.log('globalObject [import] ALTERADO →', gO.inf);
 // })
 // gO.inf['NovaChave'] = { 'a': 'b' }
 // gO.inf['NovaChave'] = ['a', 'b', 'c',]
 // console.log(gO.inf)
-// *-*-*-*-*-*-*-*
+
 let gOListener = []; let gOObj = {};
 function gOList(listener) { gOListener.push(listener) }
 function notificarListeners(prop, value) {
@@ -112,7 +115,7 @@ function notificarListeners(prop, value) {
 // let cs = await configStorage([''])
 // console.log(cs)
 
-// ############### GLOBAL OBJECT [sniffer] ###############
+// ############### GLOBAL OBJECT [SNIFFER CHROME] ###############
 let data = { inf: '' }; let listeners = new Set();
 let gOSniffer = new Proxy(data, {
     set(target, key, value) { target[key] = value; globalChanged(value); listeners.forEach(listener => listener(target)); return true }
@@ -123,13 +126,6 @@ async function globalChanged(i) {
 }
 
 // ############### RATE LIMIT ###############
-function rateLimiter(inf) {
-    let max = inf.max; let sec = inf.sec * 1000; let old = []; function check() {
-        let now = Date.now(); let recent = old.filter(timestamp => timestamp >= now - sec);
-        if (recent.length < max) { old.push(now); return true; } else { return false }
-    }; return { check };
-}
-
 // let rate = rateLimiter({ 'max': 5, 'sec': 10 });
 // function testRate() {
 //     console.log(rate.check())
@@ -141,6 +137,13 @@ function rateLimiter(inf) {
 //     console.log(rate.check())
 // };
 // testRate();
+
+function rateLimiter(inf) {
+    let max = inf.max; let sec = inf.sec * 1000; let old = []; function check() {
+        let now = Date.now(); let recent = old.filter(timestamp => timestamp >= now - sec);
+        if (recent.length < max) { old.push(now); return true; } else { return false }
+    }; return { check };
+}
 // // ############### CLEAR CONSOLE ###############
 console.clear(); let msgQtd = 0; let clearConsole = console.log;
 console.log = function () {
@@ -149,29 +152,36 @@ console.log = function () {
 } // // ###############               ###############
 
 if (eng) { // CHROME
-    // ## bibliotecas
+    // ## BIBLIOTECAS
     window['_WebS'] = _WebS;
-    // ## variaveis
+    // ## VARIÁVEIS
     window['conf'] = conf;
     window['cs'] = cs;
-    // ## global object NOVO  
+    // ## GLOBAL OBJECT [NOVO]
     window['gO'] = gO; window['gOList'] = gOList;
-    // ## global object SNIFFER CHROME  
+    // ## GLOBAL OBJECT [SNIFFER CHROME] 
     window['gOSniffer'] = gOSniffer;
     window['gOAddSniffer'] = gOAddSniffer;
     window['gORemSniffer'] = gORemSniffer;
 } else { // NODEJS 
-    // ## bibliotecas
+    // ## BIBLIOTECAS
     const { WebSocketServer } = await import('ws'); global['_WebSServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
-    global['_WebS'] = _WebS; global['_fs'] = _fs; global['_path'] = _path;
-    global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
-    global['_http'] = _http; global['_exec'] = _exec; global['_crypto'] = _crypto
-    // ## variáveis
+    global['_WebS'] = _WebS;
+    global['_fs'] = _fs;
+    global['_path'] = _path;
+    global['_cheerio'] = _cheerio;
+    global['_clipboard'] = _clipboard;
+    global['_http'] = _http;
+    global['_exec'] = _exec;
+    global['_google'] = _google;
+    global['_crypto'] = _crypto
+    // ## VARIÁVEIS
     global['conf'] = conf;
     global['cs'] = cs;
-    // ## global object NOVO
-    global['gO'] = gO; global['gOList'] = gOList;
-    // ## global object SNIFFER CHROME  
+    // ## GLOBAL OBJECT [NOVO]
+    global['gO'] = gO;
+    global['gOList'] = gOList;
+    // ## GLOBAL OBJECT [SNIFFER CHROME]  
     global['gOSniffer'] = gOSniffer;
     global['gOAddSniffer'] = gOAddSniffer;
     global['gORemSniffer'] = gORemSniffer;

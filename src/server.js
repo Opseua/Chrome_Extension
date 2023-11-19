@@ -7,7 +7,10 @@ async function run(inf) {
         await wsConnect([devChrome, devNodeJS,]);
 
         wsList(devChrome, async (nomeList, par1) => {
-            let data = {}; try { data = JSON.parse(par1) } catch (e) { };
+            let data = {};
+            try {
+                data = JSON.parse(par1)
+            } catch (e) { };
             if (data.fun) { // FUN
                 let infDevFun = { 'data': data, 'wsOrigin': nomeList }
                 let retDevFun = await devFun(infDevFun)

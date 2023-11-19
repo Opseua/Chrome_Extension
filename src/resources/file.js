@@ -39,7 +39,9 @@ async function file(inf) {
                     text = typeof inf.text === 'object' ? JSON.stringify(inf.text) : inf.text
                     if (inf.path.includes(':')) {
                         path = inf.path;
-                        if (eng) { path = path.split(':/')[1] }
+                        if (eng) {
+                            path = path.split(':/')[1]
+                        }
                     } else {
                         infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal && !eng ? true : false };
                         retFile = await file(infFile);
@@ -122,7 +124,8 @@ async function file(inf) {
                     }
                 };
                 await delP(path)
-            } else if (inf.action == 'inf') { // INF [0] config.json | [1] letra | [2] caminho do projeto atual | [3] path download/terminal | [4] arquivo atual
+            } else if (inf.action == 'inf') { // ########################## INF
+                // [0] config.json | [1] letra | [2] caminho do projeto atual | [3] path download/terminal | [4] arquivo atual
                 e = JSON.stringify(new Error().stack).replace('at ', '').replace('run (', '');
                 if (conf.length == 1) { // NOME DO PROJETO E TERMINAL
                     if (eng) { // CHROME

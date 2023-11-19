@@ -27,11 +27,10 @@ async function googleSheet(inf) {
         };
         let infConfigStorage, retConfigStorage, makeNewToken = true
 
-        const { google } = await import('googleapis');
         let pathOAuth = `${conf[1]}:/${conf[2]}/src/googleOAuth.json`
-        let _authClient = new google.auth.GoogleAuth({ keyFile: pathOAuth, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
+        let _authClient = new _google.auth.GoogleAuth({ keyFile: pathOAuth, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
         let _auth = await _authClient.getClient();
-        let _sheet = google.sheets('v4');
+        let _sheet = _google.sheets('v4');
 
         infConfigStorage = { 'action': 'get', 'key': 'googleApi' }
         retConfigStorage = await configStorage(infConfigStorage);
@@ -46,12 +45,12 @@ async function googleSheet(inf) {
         if (makeNewToken) {
             console.log('ATUALIZANDO TOKEN')
             await _auth.authorize();
-            const date = new Date(_auth.credentials.expiry_date);
-            const day = ('0' + date.getDate()).slice(-2);
-            const mon = ('0' + (date.getMonth() + 1)).slice(-2);
-            const hou = ('0' + date.getHours()).slice(-2);
-            const min = ('0' + date.getMinutes()).slice(-2);
-            const sec = ('0' + date.getSeconds()).slice(-2);
+            let date = new Date(_auth.credentials.expiry_date);
+            let day = ('0' + date.getDate()).slice(-2);
+            let mon = ('0' + (date.getMonth() + 1)).slice(-2);
+            let hou = ('0' + date.getHours()).slice(-2);
+            let min = ('0' + date.getMinutes()).slice(-2);
+            let sec = ('0' + date.getSeconds()).slice(-2);
             let retToken = {
                 'tim': _auth.credentials.expiry_date,
                 'dateHor': `${day}/${mon} ${hou}:${min}:${sec}`,
@@ -107,16 +106,3 @@ if (typeof eng === 'boolean') {
     }
 }
 
-// const pathOAuth = "D:/ARQUIVOS/PROJETOS/Chrome_Extension/src/googleOAuth.json";
-// const { google } = await import('googleapis');
-// const authClient = new google.auth.GoogleAuth({
-//     keyFile: pathOAuth,
-//     scopes: ['https://www.googleapis.com/auth/spreadsheets']
-// });
-// const auth = await authClient.getClient();
-// await auth.authorize();
-// const accessToken = auth.credentials.access_token;
-// console.log('Access Token:', accessToken);
-// const expirationTime = auth.credentials.expiry_date;
-// const expirationDate = new Date(expirationTime);
-// console.log('Token expirará em:', expirationDate.toLocaleString());

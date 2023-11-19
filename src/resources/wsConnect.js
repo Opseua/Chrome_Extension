@@ -41,7 +41,7 @@ async function logWs(inf) { // NODEJS
 
 let activeSockets = new Map();
 async function ws(url, message) {
-    if (activeSockets.size == 0) { await logWs('SERVER NODEJS: START') }
+    if (activeSockets.size == 0) { await logWs('START') }
     async function connectToServer(server) {
         return new Promise(resolve => {
             let webSocket = new _WebS(server);
