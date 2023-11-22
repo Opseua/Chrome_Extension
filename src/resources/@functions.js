@@ -24,15 +24,15 @@ if (cng == 1) {
     // global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebS, _http, _exec, _google, _crypto, cs, conf = ['src/config.json'];
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, cs, conf = ['src/config.json'];
 
 if (eng) { // CHROME
-    _WebS = window.WebSocket
+    _WebSocket = window.WebSocket
 } else { // NODEJS
     _fs = await import('fs');
     _path = await import('path');
     _cheerio = await import('cheerio');
-    const { default: WebSocket } = await import('ws'); _WebS = WebSocket;
+    const { default: WebSocket } = await import('ws'); _WebSocket = WebSocket;
     const { default: clipboard } = await import('clipboardy'); _clipboard = clipboard;
     const { default: http } = await import('http'); _http = http;
     const { exec } = await import('child_process'); _exec = exec
@@ -153,7 +153,7 @@ console.log = function () {
 
 if (eng) { // CHROME
     // ## BIBLIOTECAS
-    window['_WebS'] = _WebS;
+    window['_WebSocket'] = _WebSocket;
     // ## VARIÁVEIS
     window['conf'] = conf;
     window['cs'] = cs;
@@ -165,8 +165,8 @@ if (eng) { // CHROME
     window['gORemSniffer'] = gORemSniffer;
 } else { // NODEJS 
     // ## BIBLIOTECAS
-    const { WebSocketServer } = await import('ws'); global['_WebSServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
-    global['_WebS'] = _WebS;
+    const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
+    global['_WebSocket'] = _WebSocket;
     global['_fs'] = _fs;
     global['_path'] = _path;
     global['_cheerio'] = _cheerio;
@@ -191,6 +191,16 @@ if (eng) { // CHROME
 let retFile = await file({ 'action': 'inf' });
 let confNew = retFile.ret ? retFile.res : ['NaoEncontrado']
 let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
+let max = retConfigStorage.res.max
+let secReconnect = retConfigStorage.res.secReconnect
+let secPing = retConfigStorage.res.secPing
+let par1 = retConfigStorage.res.par1
+let par2 = retConfigStorage.res.par2
+let par3 = retConfigStorage.res.par3
+let par4 = retConfigStorage.res.par4
+let par5 = retConfigStorage.res.par5
+let par6 = retConfigStorage.res.par6
+let par7 = retConfigStorage.res.par7
 let securityPass = retConfigStorage.res.securityPass
 let server = retConfigStorage.res.server['1']
 let url = server.url;
@@ -205,7 +215,18 @@ let devEC2 = `${url}://${host}:${port}/${devices[4].name}`
 
 if (eng) { // CHROME
     window['conf'] = confNew
+    window['max'] = max
+    window['secReconnect'] = secReconnect
+    window['secPing'] = secPing
+    window['par1'] = par1
+    window['par2'] = par2
+    window['par3'] = par3
+    window['par4'] = par4
+    window['par5'] = par5
+    window['par6'] = par6
+    window['par7'] = par7
     window['securityPass'] = securityPass
+    window['port'] = port
     window['devRet'] = devRet
     window['devChrome'] = devChrome
     window['devNodeJS'] = devNodeJS
@@ -214,7 +235,18 @@ if (eng) { // CHROME
     window['rateLimiter'] = rateLimiter
 } else { // NODEJS 
     global['conf'] = confNew
+    global['max'] = max
+    global['secReconnect'] = secReconnect
+    global['secPing'] = secPing
+    global['par1'] = par1
+    global['par2'] = par2
+    global['par3'] = par3
+    global['par4'] = par4
+    global['par5'] = par5
+    global['par6'] = par6
+    global['par7'] = par7
     global['securityPass'] = securityPass
+    global['port'] = port
     global['devRet'] = devRet
     global['devChrome'] = devChrome
     global['devNodeJS'] = devNodeJS
