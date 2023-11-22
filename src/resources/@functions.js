@@ -74,10 +74,12 @@ await import('./tabSearch.js')
 await import('./translate.js')
 await import('./wsConnect.js')
 
-// ############## SCRIPTS
-await import('../scripts/command1.js')
-await import('../scripts/command2.js')
-await import('../scripts/action_TryRating_QueryImageDeservingClassification.js')
+// ############## SCRIPTS [CHROME]
+if (eng) {
+    await import('../scripts/command1.js')
+    await import('../scripts/command2.js')
+    await import('../scripts/action_TryRating_QueryImageDeservingClassification.js')
+}
 
 // ############## WORK [NODEJS]
 if (!eng) {
@@ -191,7 +193,6 @@ if (eng) { // CHROME
 let retFile = await file({ 'action': 'inf' });
 let confNew = retFile.ret ? retFile.res : ['NaoEncontrado']
 let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
-let max = retConfigStorage.res.max
 let secReconnect = retConfigStorage.res.secReconnect
 let secPing = retConfigStorage.res.secPing
 let par1 = retConfigStorage.res.par1
@@ -215,7 +216,6 @@ let devEC2 = `${url}://${host}:${port}/${devices[4].name}`
 
 if (eng) { // CHROME
     window['conf'] = confNew
-    window['max'] = max
     window['secReconnect'] = secReconnect
     window['secPing'] = secPing
     window['par1'] = par1
@@ -235,7 +235,6 @@ if (eng) { // CHROME
     window['rateLimiter'] = rateLimiter
 } else { // NODEJS 
     global['conf'] = confNew
-    global['max'] = max
     global['secReconnect'] = secReconnect
     global['secPing'] = secPing
     global['par1'] = par1
