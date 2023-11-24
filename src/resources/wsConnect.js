@@ -43,18 +43,21 @@ let pingsTimeouts = {};
 async function wsConnect(inf) {
     if (!loopIsRunning) { // ENVIAR 'ping' PARA O SERVIDOR
         loopIsRunning = true
+        let time
         setInterval(async () => {
-            // for (let [key, value] of activeSockets.entries()) {
-            //     value.send(par6);
-            //     const pingTimeout = setTimeout(async () => {
-            //         let msgLog = `WS pong EXPIROU:\n${key}`;
-            //         let time = dateHour().res;
-            //         console.log(`${time.hou}:${time.min}:${time.sec} WS pong EXPIROU: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
-            //         value.close()
-            //         await logWs(msgLog);
-            //     }, 2000);
-            //     pingsTimeouts[key] = pingTimeout;
-            // }
+            for (let [key, value] of activeSockets.entries()) {
+                value.send(par6);
+                time = dateHour().res;
+                console.log(`${time.hou}:${time.min}:${time.sec} ENVIADO PING:\n${key}`)
+                let pingTimeout = setTimeout(async () => {
+                    let msgLog = `WS pong EXPIROU:\n${key}`;
+                    time = dateHour().res;
+                    console.log(`${time.hou}:${time.min}:${time.sec} WS pong EXPIROU: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
+                    value.close()
+                    await logWs(msgLog);
+                }, 2000);
+                pingsTimeouts[key] = pingTimeout;
+            }
         }, (secPing * 1000)); // secPing
     }
     return await ws(inf);
@@ -78,7 +81,8 @@ async function ws(url, message) {
                 webSocket.onmessage = (event) => {
                     if (event.data == par7) { // RECEBIDO 'pong' DO SERVIDOR
                         clearTimeout(pingsTimeouts[server]);
-                        // console.log(`RECEBIDO pong:`, server);
+                        let time = dateHour().res;
+                        console.log(`${time.hou}:${time.min}:${time.sec} RECEBIDO PONG:\n${server}`)
                     } else { // OUTRO TIPO DE MENSAGEM RECEBIDA
                         acionarListener(server, event.data);
                         // console.log('RECEBIDA MENSAGEM:', server);
