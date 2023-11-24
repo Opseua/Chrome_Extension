@@ -1,5 +1,6 @@
 // let infCommandLine, retCommandLine
 // infCommandLine = { 'awaitFinish': false, 'command': `notepad` }
+// infCommandLine = { 'awaitFinish': false, 'command': `"!letra!:/ARQUIVOS/PROJETOS/WebScraper/src/1_BACKGROUND.exe"` }
 // retCommandLine = await commandLine(infCommandLine);
 // console.log(retCommandLine)
 
@@ -12,7 +13,7 @@ async function commandLine(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        let command = inf.awaitFinish ? `${inf.command}` : `"${conf[1]}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/1_BACKGROUND.exe" ${inf.command}`
+        let command = inf.awaitFinish ? `${inf.command.replaceAll('!letra!', conf[1])}` : `"${conf[1]}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/1_BACKGROUND.exe" ${inf.command.replaceAll('!letra!', conf[1])}`
         await new Promise((resolve) => {
             let child = _exec(command, async (error, stdout, stderr) => {
                 if (error) {

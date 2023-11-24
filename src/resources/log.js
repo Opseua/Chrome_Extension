@@ -24,9 +24,9 @@ async function log(inf) {
         if (rewrite) {
             text = typeof text === 'object' ? `${hou}\n${JSON.stringify(inf.text)}\n\n` : `${hou}\n${inf.text}\n\n`
         }
-        let infFile = { 'action': 'write', 'functionLocal': false, 'text': text, 'rewrite': rewrite, 'path': pathOk };
+        let infFile = { 'action': 'write', 'functionLocal': inf.functionLocal ? true : false, 'text': text, 'rewrite': rewrite, 'path': pathOk };
         let retFile = await file(infFile);
-        let res = `${conf[1]}:/${conf[3]}/${pathOk}`;
+        let res = `${conf[1]}:/${inf.functionLocal ? conf[2] : conf[3]}/${pathOk}`;
         ret['res'] = res.replace('%', '');
         ret['msg'] = `LOG: OK`;
         ret['ret'] = true
