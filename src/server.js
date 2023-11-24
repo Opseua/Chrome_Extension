@@ -1,12 +1,31 @@
 await import('./resources/@functions.js');
-let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, eng ? 'server' : 'serverNode');
 
-async function run(inf) {
+async function server(inf) {
     let ret = { 'ret': false };
     try {
-        await wsConnect([devChrome, devNodeJS,]);
+        let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, eng ? 'server' : 'serverNode');
 
-        wsList(devChrome, async (nomeList, par1) => {
+        // DEV - [LOC] LOCAL
+        let dev1 = devChromeLocal
+        let dev2 = conf[1] == 'D' ? devNodeJSLocal : devEC2Local
+        // DEV - [WEB] WEB
+        let dev3 = devChromeWeb
+        let dev4 = conf[1] == 'D' ? devNodeJSWeb : devEC2Web
+
+        // CONNECT [LOC-WEB]
+        await wsConnect([dev1, dev2, dev3, dev4,])
+
+        // LIST - [LOC] LOCAL
+        wsList(dev1, async (nomeList, par1) => {
+            runLis(nomeList, par1)
+        });
+        // LIST - [WEB] WEB
+        wsList(dev3, async (nomeList, par1) => {
+            runLis(nomeList, par1)
+        });
+
+        // RUN LIS
+        async function runLis(nomeList, par1) {
             let data = {};
             try {
                 data = JSON.parse(par1)
@@ -25,7 +44,8 @@ async function run(inf) {
             } else {
                 console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`)
             }
-        });
+        }
+
         ret['ret'] = true
     } catch (e) {
         let m = await regexE({ 'e': e });
@@ -39,15 +59,7 @@ async function run(inf) {
         }
     }
 }
-run()
-
-
-
-
-
-
-
-
+await server()
 
 
 

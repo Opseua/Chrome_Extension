@@ -20,7 +20,7 @@ async function promptChrome(inf) {
                 "other": "TryRating_QueryImageDeservingClassification",
                 "inf": [retPrompt.split(',').map(Number)], "query": "#####"
             }
-            acionarListener(devChrome, send)
+            acionarListener(devChromeWeb, send)
             ret['res'] = retPrompt;
             ret['msg'] = 'PROMPT CHROME: OK'
             ret['ret'] = true;

@@ -95,6 +95,9 @@ if (!eng) {
     await import('../../../WebScraper/src/resources/apiCnpj.js')
 }
 
+// ############## SERVER
+await import('../serverNode.js')
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 // ############### GLOBAL OBJECT [NOVO] ###############
 // gOList(async function () {
@@ -203,16 +206,22 @@ let par5 = retConfigStorage.res.par5
 let par6 = retConfigStorage.res.par6
 let par7 = retConfigStorage.res.par7
 let securityPass = retConfigStorage.res.securityPass
-let server = retConfigStorage.res.server['1']
-let url = server.url;
-let host = server.host;
-let port = server.port
+let serverWeb = retConfigStorage.res.server['1']
+let serverLocal = retConfigStorage.res.server['2']
+let url = serverWeb.url;
+let hostWeb = serverWeb.host;
+let portWeb = serverWeb.port
+let hostLocal = serverLocal.host;
+let portLocal = serverLocal.port
 let devices = retConfigStorage.res.devices
-let devRet = `${url}://${host}:${port}/${devices[0].name}`
-let devChrome = `${url}://${host}:${port}/${devices[1].name}`
-let devNodeJS = `${url}://${host}:${port}/${devices[2].name}`
-let devBlueStacks = `${url}://${host}:${port}/${devices[3].name}`
-let devEC2 = `${url}://${host}:${port}/${devices[4].name}`
+let devChromeWeb = `${url}://${hostWeb}:${portWeb}/${devices[0].name}`
+let devChromeLocal = `${url}://${hostLocal}:${portLocal}/${devices[0].name}`
+let devNodeJSWeb = `${url}://${hostWeb}:${portWeb}/${devices[1].name}`
+let devNodeJSLocal = `${url}://${hostLocal}:${portLocal}/${devices[1].name}`
+let devBlueStacksWeb = `${url}://${hostWeb}:${portWeb}/${devices[2].name}`
+let devBlueStacksLocal = `${url}://${hostLocal}:${portLocal}/${devices[2].name}`
+let devEC2Web = `${url}://${hostWeb}:${portWeb}/${devices[3].name}`
+let devEC2Local = `${url}://${hostLocal}:${portLocal}/${devices[3].name}`
 
 if (eng) { // CHROME
     window['conf'] = confNew
@@ -226,12 +235,15 @@ if (eng) { // CHROME
     window['par6'] = par6
     window['par7'] = par7
     window['securityPass'] = securityPass
-    window['port'] = port
-    window['devRet'] = devRet
-    window['devChrome'] = devChrome
-    window['devNodeJS'] = devNodeJS
-    window['devBlueStacks'] = devBlueStacks
-    window['devEC2'] = devEC2
+    window['port'] = portWeb
+    window['devChromeWeb'] = devChromeWeb
+    window['devChromeLocal'] = devChromeLocal
+    window['devNodeJSWeb'] = devNodeJSWeb
+    window['devNodeJSLocal'] = devNodeJSLocal
+    window['devBlueStacksWeb'] = devBlueStacksWeb
+    window['devBlueStacksLocal'] = devBlueStacksLocal
+    window['devEC2Web'] = devEC2Web
+    window['devEC2Local'] = devEC2Local
     window['rateLimiter'] = rateLimiter
 } else { // NODEJS 
     global['conf'] = confNew
@@ -245,12 +257,15 @@ if (eng) { // CHROME
     global['par6'] = par6
     global['par7'] = par7
     global['securityPass'] = securityPass
-    global['port'] = port
-    global['devRet'] = devRet
-    global['devChrome'] = devChrome
-    global['devNodeJS'] = devNodeJS
-    global['devBlueStacks'] = devBlueStacks
-    global['devEC2'] = devEC2
+    global['port'] = portWeb
+    global['devChromeWeb'] = devChromeWeb
+    global['devChromeLocal'] = devChromeLocal
+    global['devNodeJSWeb'] = devNodeJSWeb
+    global['devNodeJSLocal'] = devNodeJSLocal
+    global['devBlueStacksWeb'] = devBlueStacksWeb
+    global['devBlueStacksLocal'] = devBlueStacksLocal
+    global['devEC2Web'] = devEC2Web
+    global['devEC2Local'] = devEC2Local
     global['rateLimiter'] = rateLimiter
 }
 

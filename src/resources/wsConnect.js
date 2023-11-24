@@ -40,65 +40,65 @@ async function logWs(inf) { // NODEJS
 
 let loopIsRunning = false
 let pingsTimeouts = {};
-let activeSockets = new Map();
 async function wsConnect(inf) {
     if (!loopIsRunning) { // ENVIAR 'ping' PARA O SERVIDOR
         loopIsRunning = true
-        setInterval(() => {
-            const pingPromises = Array.from(activeSockets.entries()).map(([key, value]) => {
-                return new Promise(resolve => {
-                    value.send(par6);
-                    const pingTimeout = setTimeout(async () => {
-                        value.close()
-                        resolve(true);
-                        let msgLog = `NÃO RESPONDEU pong:\n${key}`;
-                        let time = dateHour().res;
-                        console.log(`${time.hou}:${time.min}:${time.sec} WS NÃO RESPONDEU pong: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
-                        await logWs(msgLog);
-                    }, 2000);
-                    pingsTimeouts[key] = pingTimeout;
-                });
-            });
-        }, (secPing * 1000));
+        setInterval(async () => {
+            // for (let [key, value] of activeSockets.entries()) {
+            //     value.send(par6);
+            //     const pingTimeout = setTimeout(async () => {
+            //         let msgLog = `WS pong EXPIROU:\n${key}`;
+            //         let time = dateHour().res;
+            //         console.log(`${time.hou}:${time.min}:${time.sec} WS pong EXPIROU: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
+            //         value.close()
+            //         await logWs(msgLog);
+            //     }, 2000);
+            //     pingsTimeouts[key] = pingTimeout;
+            // }
+        }, (secPing * 1000)); // secPing
     }
     return await ws(inf);
 }
 
+let activeSockets = new Map();
 async function ws(url, message) {
     if (activeSockets.size == 0) { await logWs('START') }
     async function connectToServer(server) {
         return new Promise(resolve => {
-            let webSocket = new _WebSocket(server);
-            webSocket.onopen = async (event) => {
-                let msgLog = `WS OK:\n${server}`;
-                let time = dateHour().res;
-                console.log(`${time.hou}:${time.min}:${time.sec} WS OK: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
-                await logWs(msgLog);
-                activeSockets.set(server, webSocket);
-                resolve('');
-            }
-            webSocket.onmessage = (event) => {
-                if (event.data == par7) { // RECEBIDO 'pong' DO SERVIDOR
-                    clearTimeout(pingsTimeouts[server]);
-                    // console.log(`RECEBIDO pong:`, server);
-                } else { // OUTRO TIPO DE MENSAGEM RECEBIDA
-                    acionarListener(server, event.data);
-                    // console.log('RECEBIDA MENSAGEM:', server);
+            if (!activeSockets.has(server)) {
+                let webSocket = new _WebSocket(server);
+                webSocket.onopen = async (event) => {
+                    let msgLog = `WS OK:\n${server}`;
+                    let time = dateHour().res;
+                    console.log(`${time.hou}:${time.min}:${time.sec} ${msgLog.replace('ws://', '')}`);
+                    await logWs(msgLog);
+                    activeSockets.set(server, webSocket);
+                    resolve('');
                 }
+                webSocket.onmessage = (event) => {
+                    if (event.data == par7) { // RECEBIDO 'pong' DO SERVIDOR
+                        clearTimeout(pingsTimeouts[server]);
+                        // console.log(`RECEBIDO pong:`, server);
+                    } else { // OUTRO TIPO DE MENSAGEM RECEBIDA
+                        acionarListener(server, event.data);
+                        // console.log('RECEBIDA MENSAGEM:', server);
+                    }
+                }
+                webSocket.onclose = async (event) => {
+                    clearTimeout(pingsTimeouts[server]);
+                    activeSockets.delete(server);
+                    let msgLog = `WS RECONECTANDO:\n${server}`;
+                    let time = dateHour().res;
+                    console.log(`${time.hou}:${time.min}:${time.sec} ${msgLog.replace('ws://', '')}`);
+                    await logWs(msgLog);
+                    setTimeout(async () => { await connectToServer(server); }, (secReconnect * 1000));
+                }
+                webSocket.onerror = async (event) => { };
             }
-            webSocket.onclose = async (event) => {
-                clearTimeout(pingsTimeouts[server]);
-                activeSockets.delete(server);
-                let msgLog = `WS RECONECTANDO:\n${server}`;
-                let time = dateHour().res;
-                console.log(`${time.hou}:${time.min}:${time.sec} WS RECONECTANDO: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
-                await logWs(msgLog);
-                setTimeout(() => { connectToServer(server); }, (secReconnect * 1000));
-            }
-            webSocket.onerror = async (event) => { };
+
         });
     }
-    if (Array.isArray(url)) { // conectar servidores
+    if (Array.isArray(url)) { // CONECTAR SERVIDORES
         let promises = url.map(server => new Promise(resolve => {
             if (!activeSockets.has(server)) {
                 connectToServer(server).then(() => { resolve(''); });

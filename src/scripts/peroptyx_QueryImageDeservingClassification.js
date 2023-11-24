@@ -35,7 +35,7 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             let radio = { "other": "peroptyx_QueryImageDeservingClassification", "inf": [2], "res": "🔵 GIBBERISH", "query": query }
             // ws1.send(JSON.stringify(radio))
             let infApi = {
-                'method': 'POST', 'url': `http://18.119.140.20:8888/OPSEUA_CHROME/`,
+                'method': 'POST', 'url': `http://127.0.0.1:8888/O_CHROME/`,
                 'headers': { 'accept-language': 'application/json' }, 'body': radio
             }; let retApi = await api(infApi);
         } else {

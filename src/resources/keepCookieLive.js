@@ -48,7 +48,7 @@ async function keepCookieLive(inf) {
                 { 'securityPass': securityPass, 'retInf': false, 'name': 'log', 'par': { 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
             ]
         };
-        wsSend(devNodeJS, send);
+        wsSend(devNodeJSLocal, send);
         ret['msg'] = `KEEP COOKIE LIVE: OK`;
         ret['ret'] = true;
     } catch (e) {
