@@ -10,7 +10,7 @@
 //     'action': 'send',
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
 //     'tab': `RESULTADOS_CNPJ_NEW`,
-//     'range': `D`, // ÚLTIMA LINHA EM BRANCO DA COLUNA 'D'
+//     'range': `D*`, // ÚLTIMA LINHA EM BRANCO DA COLUNA 'D'
 //     'range': `D22`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
 //     'values': [['a', 'b', 'c']]
 // }
@@ -61,7 +61,7 @@ async function googleSheet(inf) {
         }
 
         let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'
-        let tab = inf.tab
+        let tab = inf && inf.tab ? inf.tab : 'RESULTADOS_CNPJ_2'
         if (inf.action == 'get') { // GET
             let range = inf.range
             if (range.includes('last*')) {
@@ -69,9 +69,8 @@ async function googleSheet(inf) {
                 range = `${range}1:${range}${range}`
             }
             range = range == 'last' ? `${tab}!A1:AA` : `${tab}!${range}`
-            // let auth = await _authClient.getClient();
             let retSheet = await _sheet.spreadsheets.values.get({ auth: _auth, 'spreadsheetId': id, range });
-            ret['res'] = inf.range.includes('last') ? retSheet.data.values.length + 1 : retSheet.data.values
+            ret['res'] = inf.range.includes('last') ? retSheet.data.values ? retSheet.data.values.length + 1 : 1 : retSheet.data.values
             ret['ret'] = true;
             ret['msg'] = `GOOGLE SHEET GET: OK`;
             return ret
@@ -82,11 +81,10 @@ async function googleSheet(inf) {
             if (/[0-9]/.test(inf.range)) {
                 lin = inf.range.replace(/[^0-9]/g, '')
             } else {
-                let retNewGet = await googleSheet({ 'action': 'get', 'id': id, 'tab': 'RESULTADOS_CNPJ_NEW', 'range': inf.range.includes('*') ? `last*${inf.range}` : 'last' })
+                let retNewGet = await googleSheet({ 'action': 'get', 'id': id, 'tab': tab, 'range': inf.range.includes('*') ? `last*${inf.range}` : 'last' })
                 lin = retNewGet.res
             }
             let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
-            // let auth = await _authClient.getClient();
             let retSheet = await _sheet.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
             ret['msg'] = `GOOGLE SHEET SEND: OK`;
             ret['ret'] = true;

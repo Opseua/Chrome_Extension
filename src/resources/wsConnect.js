@@ -48,7 +48,7 @@ async function wsConnect(inf) {
             for (let [key, value] of activeSockets.entries()) {
                 value.send(par6);
                 time = dateHour().res;
-                console.log(`${time.hou}:${time.min}:${time.sec} ENVIADO PING:\n${key}`)
+                // console.log(`${time.hou}:${time.min}:${time.sec} ENVIADO PING:\n${key.replace('ws://', ' ')}`)
                 let pingTimeout = setTimeout(async () => {
                     let msgLog = `WS pong EXPIROU:\n${key}`;
                     time = dateHour().res;
@@ -82,7 +82,7 @@ async function ws(url, message) {
                     if (event.data == par7) { // RECEBIDO 'pong' DO SERVIDOR
                         clearTimeout(pingsTimeouts[server]);
                         let time = dateHour().res;
-                        console.log(`${time.hou}:${time.min}:${time.sec} RECEBIDO PONG:\n${server}`)
+                        // console.log(`${time.hou}:${time.min}:${time.sec} RECEBIDO PONG:\n${server.replace('ws://', ' ')}`)
                     } else { // OUTRO TIPO DE MENSAGEM RECEBIDA
                         acionarListener(server, event.data);
                         // console.log('RECEBIDA MENSAGEM:', server);
