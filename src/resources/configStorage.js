@@ -1,7 +1,7 @@
 // let infConfigStorage, retConfigStorage;
-// infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-// infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' }
-// infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' }
+// infConfigStorage = { 'action': 'set', 'functionLocal': false, 'key': 'NomeDaChave', 'value': 'Valor da chave' } // 'functionLocal' SOMENTE NO NODEJS
+// infConfigStorage = { 'action': 'get', 'functionLocal': false, 'key': 'NomeDaChave' } // 'functionLocal' SOMENTE NO NODEJS
+// infConfigStorage = { 'action': 'del', 'functionLocal': false, 'key': 'NomeDaChave' } // 'functionLocal' SOMENTE NO NODEJS
 // retConfigStorage = await configStorage(infConfigStorage);
 // console.log(retConfigStorage)
 
@@ -68,7 +68,7 @@ async function configStorage(inf) {
                                         ret['msg'] = `\n\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`
                                     } else if (Object.keys(result).length == 0) {
                                         async function checkConfig() {
-                                            let infFile = { 'action': 'read', 'path': conf[0], 'functionLocal': true }
+                                            let infFile = { 'action': 'read', 'path': inf.path ? path : conf[0], 'functionLocal': true }
                                             let retFile = await file(infFile);
                                             let config = JSON.parse(retFile.res);
                                             if (config[inf.key]) {
@@ -126,8 +126,8 @@ async function configStorage(inf) {
                     if (inf.path && inf.path.includes(':')) {
                         path = inf.path
                     } else {
-                        if (inf.path && typeof inf.functionLocal == 'boolean') {
-                            infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal }
+                        if (typeof inf.functionLocal == 'boolean' && !inf.functionLocal) {
+                            infFile = { 'action': 'relative', 'path': './src/config.json', 'functionLocal': false }
                         } else {
                             infFile = { 'action': 'relative', 'path': conf[0], 'functionLocal': true }
                         };

@@ -46,7 +46,7 @@ async function server(inf) {
             }
         }
         ret['ret'] = true
-        ret['msg'] = `SERVER NODE: OK`
+        ret['msg'] = `SERVER: OK`
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

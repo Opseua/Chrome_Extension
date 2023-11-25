@@ -9,6 +9,15 @@
 // }
 // console.log('FIM');
 
+// let qtd = 0, stop = false
+// while (!stop) {
+//     qtd++;
+//     await new Promise(resolve => { setTimeout(resolve, 1000) })
+//     console.log(qtd)
+//     if (qtd === 3) { return }
+// }
+// console.log('FIM')
+
 // [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
 let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
 
@@ -24,7 +33,7 @@ if (cng == 1) {
     // global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, cs, conf = ['src/config.json'];
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, cs, conf = ['src/config.json'];
 
 if (eng) { // CHROME
     _WebSocket = window.WebSocket
@@ -38,13 +47,14 @@ if (eng) { // CHROME
     const { exec } = await import('child_process'); _exec = exec
     const { google } = await import('googleapis'); _google = google
     const { createHash } = await import('crypto'); _crypto = createHash
+    _puppeteer = await import('puppeteer');
 }
 
 function all() { }; // ******************************************************** NÃO USAR !!!
 if (eng) { window['all'] = all; } else { global['all'] = all }
 // *****************************************************************************************
 
-// ############## FUNCTIONS
+// ############## RESOURCES
 await import('./api.js')
 await import('./chatGpt.js')
 await import('./chromeActions.js')
@@ -82,22 +92,17 @@ if (eng) {
     await import('../scripts/action_TryRating_QueryImageDeservingClassification.js')
 }
 
-// ############## WORK [NODEJS]
-if (!eng) {
-    await import('../../../WebScraper/src/resources/button.js')
-    await import('../../../WebScraper/src/resources/imput.js')
-    await import('../../../WebScraper/src/resources/navigate.js')
-    await import('../../../WebScraper/src/resources/getTextElement.js')
-    await import('../../../WebScraper/src/resources/cookiesGetSet.js')
-    await import('../../../WebScraper/src/resources/awaitLoad.js')
-    await import('../../../WebScraper/src/resources/checkPage.js')
-    await import('../../../WebScraper/src/resources/sendData.js')
-    await import('../../../WebScraper/src/resources/apiNire.js')
-    await import('../../../WebScraper/src/resources/apiCnpj.js')
-}
-
-// ############## SERVER
+// ############## SERVER [NODEJS]
 await import('../serverNode.js')
+
+// ############## @EXPORT WORK [NODEJS]
+if (!eng) {
+    // WebScraper
+    await import('../../../WebScraper/src/resources/@export.js')
+
+    // URA_Reversa
+    await import('../../../URA_Reversa/src/resources/@export.js')
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 // ############### GLOBAL OBJECT [NOVO] ###############
@@ -181,6 +186,7 @@ if (eng) { // CHROME
     global['_exec'] = _exec;
     global['_google'] = _google;
     global['_crypto'] = _crypto
+    global['_puppeteer'] = _puppeteer
     // ## VARIÁVEIS
     global['conf'] = conf;
     global['cs'] = cs;

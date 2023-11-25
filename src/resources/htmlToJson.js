@@ -50,17 +50,17 @@ async function htmlToJson(inf) {
             let rowData = {};
             // Se ainda não tiver os nomes das colunas, obtenha-os do primeiro objeto
             if (index === 0 && columnNames.length === 0) {
-                columns.each((colIndex, column) => {
+                columns.each((colInd, column) => {
                     columnNames.push($(column).text().trim());
                 });
             } else {
                 // Adiciona os dados usando os nomes reais das colunas
-                columns.each((colIndex, column) => {
+                columns.each((colInd, column) => {
                     let columnName
                     if (inf.randomCol) {
-                        columnName = 'colIndex' + colIndex; // NOME DAS COLUNAS 'col0', 'col1', 'col2'...
+                        columnName = 'colInd' + colInd; // NOME DAS COLUNAS 'col0', 'col1', 'col2'...
                     } else {
-                        columnName = columnNames[colIndex]; // NOME REAL DAS COLUNAS
+                        columnName = columnNames[colInd]; // NOME REAL DAS COLUNAS
                     }
                     rowData[columnName] = $(column).text().trim();
                 });

@@ -1,5 +1,6 @@
 // let infFile, retFile
 // infFile = { 'action': 'inf' }
+// infFile = { 'action': 'relative', 'functionLocal': false, 'path': './PASTA/ola.txt' }
 // infFile = { 'action': 'write', 'functionLocal': true, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
 // infFile = { 'action': 'read', 'functionLocal': true, 'path': './PASTA/ola.txt' }
 // infFile = { 'action': 'list', 'functionLocal': true, 'path': './PASTA/', 'max': 10 }
