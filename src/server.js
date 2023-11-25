@@ -45,8 +45,8 @@ async function server(inf) {
                 console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`)
             }
         }
-
         ret['ret'] = true
+        ret['msg'] = `SERVER NODE: OK`
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res
