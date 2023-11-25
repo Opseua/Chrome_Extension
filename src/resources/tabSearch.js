@@ -151,7 +151,11 @@ async function tabSearch(inf) {
             } else { ret['msg'] = retOpenTab }
         }
     };
-    return ret
+    return {
+        ...(ret.ret && { ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 }
 
 if (typeof eng === 'boolean') {

@@ -74,7 +74,11 @@ async function htmlToJson(inf) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res
     };
-    return ret
+    return {
+        ...(ret.ret && { ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 }
 
 if (typeof eng === 'boolean') {

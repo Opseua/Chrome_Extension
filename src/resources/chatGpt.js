@@ -148,7 +148,11 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res
     };
-    return ret
+    return {
+        ...(ret.ret && { ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 }
 
 if (typeof eng === 'boolean') {

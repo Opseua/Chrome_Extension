@@ -31,7 +31,11 @@ function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
             ret['msg'] = m.res
         })()
     };
-    return ret
+    return {
+        ...(ret.ret && { ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 }
 
 if (typeof eng === 'boolean') {

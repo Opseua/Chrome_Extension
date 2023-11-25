@@ -57,7 +57,11 @@ async function regexE(inf) {
     } catch (e) {
         console.log(`\n\n### ERRO REGEXe ###\n\n${e}\n\n`)
     };
-    return ret
+    return {
+        ...(ret.ret && { ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 }
 
 if (typeof eng === 'boolean') {

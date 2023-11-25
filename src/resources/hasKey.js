@@ -30,7 +30,11 @@ function hasKey(inf) { // NÃO POR COMO 'async'!!!
             ret['msg'] = m.res
         })()
     };
-    return ret
+    return {
+        ...(ret.ret && { ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 }
 
 if (typeof eng === 'boolean') {
