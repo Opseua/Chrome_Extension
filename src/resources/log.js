@@ -25,7 +25,7 @@ async function log(inf) {
         }
         let infFile = { 'action': 'write', 'functionLocal': inf.functionLocal ? true : false, 'text': text, 'rewrite': rewrite, 'path': pathOk };
         let retFile = await file(infFile);
-        let res = `${conf[1]}:/${inf.functionLocal ? conf[2] : conf[3]}/${pathOk}`;
+        let res = `${letter}:/${inf.functionLocal ? conf[2] : conf[3]}/${pathOk}`;
         ret['res'] = res.replace('%', '');
         ret['msg'] = `LOG: OK`;
         ret['ret'] = true

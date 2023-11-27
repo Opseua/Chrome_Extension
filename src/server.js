@@ -4,22 +4,22 @@ async function server(inf) {
     try {
         let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, eng ? 'server' : 'serverNode');
 
-        // DEV - [LOC] LOCAL
-        let dev1 = devChromeLocal
-        let dev2 = conf[1] == 'D' ? devNodeJSLocal : devEC2Local
-        // DEV - [WEB] WEB
-        let dev3 = devChromeWeb
-        let dev4 = conf[1] == 'D' ? devNodeJSWeb : devEC2Web
+        // DEV - [WEB] WEB {IMPAR}
+        let dev1 = devChromeWeb
+        let dev3 = letter == 'D' ? devNodeJSWeb : devEC2Web
+        // DEV - [LOC] LOCAL {PAR}
+        let dev2 = devChromeLocal
+        let dev4 = letter == 'D' ? devNodeJSLocal : devEC2Local
 
-        // CONNECT [LOC-WEB]
+        // CONNECT [WEB-LOC]
         await wsConnect([dev1, dev2, dev3, dev4,])
 
-        // LIST - [LOC] LOCAL
+        // LIST - [WEB] WEB
         wsList(dev1, async (nomeList, par1) => {
             runLis(nomeList, par1)
         });
-        // LIST - [WEB] WEB
-        wsList(dev3, async (nomeList, par1) => {
+        // LIST - [LOC] LOCAL
+        wsList(dev2, async (nomeList, par1) => {
             runLis(nomeList, par1)
         });
 
@@ -44,7 +44,6 @@ async function server(inf) {
                 console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`)
             }
         }
-
         ret['ret'] = true
     } catch (e) {
         let m = await regexE({ 'e': e });

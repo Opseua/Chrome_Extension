@@ -3,6 +3,7 @@ async function regexE(inf) {
     try {
         let errorOk = { 'file': 'NÃO IDENTIFICADO', 'line': 'NÃO IDENTIFICADA', 'e': inf.e.stack };
         let match = inf.e.stack.match(/(?:at\s.*\()?(.*):(\d+):(\d+)\)?/);
+        console.log(inf.e.stack)
         if (match && match.length >= 4) {
             let file = match[1].split('(')[1]
             errorOk['file'] = file.substring(file.lastIndexOf('/') + 1).replace('.js', '') + '.js'
@@ -30,7 +31,7 @@ async function regexE(inf) {
             };
             let time = dtRes, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
             let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, text = errorOk
-            let path = `${conf[1]}:/${conf[3]}/log/JavaScript/${mon}/${day}_err.txt`
+            let path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}_err.txt`
             text = text = typeof text === 'object' ? `${hou}\n${JSON.stringify(text)}\n\n` : `${hou}\n${text}\n\n`
             await _fs.promises.mkdir(_path.dirname(path), { recursive: true });
             await _fs.promises.writeFile(path, text, { flag: 'a' })

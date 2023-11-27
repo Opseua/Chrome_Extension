@@ -22,7 +22,7 @@ if (cng == 1) {
     global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, cs, conf = ['src/config.json'];
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, cs, conf = ['src/config.json'];
 
 if (eng) { // CHROME
     _WebSocket = window.WebSocket
@@ -36,6 +36,8 @@ if (eng) { // CHROME
     const { exec } = await import('child_process'); _exec = exec
     const { google } = await import('googleapis'); _google = google
     const { createHash } = await import('crypto'); _crypto = createHash
+    _puppeteer = await import('puppeteer');
+    _net = await import('net');
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -122,6 +124,8 @@ if (eng) { // CHROME
     global['_exec'] = _exec;
     global['_google'] = _google;
     global['_crypto'] = _crypto
+    global['_puppeteer'] = _puppeteer
+    global['_net'] = _net
     // ## VARIÁVEIS
     global['conf'] = conf;
     global['cs'] = cs;

@@ -177,7 +177,7 @@ async function file(inf) {
                     };
                     return retRelative
                 };
-                ret['res'] = [`${eng && inf.functionLocal ? '' : `${conf[1]}:/`}${runPath(inf.path, inf.functionLocal ? 2 : 3)}`]
+                ret['res'] = [`${eng && inf.functionLocal ? '' : `${letter}:/`}${runPath(inf.path, inf.functionLocal ? 2 : 3)}`]
                 ret['msg'] = `FILE RELATIVE: OK`
                 ret['ret'] = true;
             } else if (inf.action == 'list' && !eng) { // ########################## LIST
@@ -311,3 +311,10 @@ if (eng) { // CHROME
 // NÃO COMENTAR! NECESSÁRIO PARA DEFINIR A CONF
 let retFile = await file({ 'action': 'inf' });
 conf = retFile.res;
+
+// NÃO COMENTAR! NECESSÁRIO PARA DEFINIR A LETRA
+if (eng) { // CHROME
+    window['letter'] = conf[1];
+} else { // NODEJS
+    global['letter'] = conf[1];
+}

@@ -19,6 +19,7 @@ if (eng) { window['all2'] = all2; } else { global['all2'] = all2 }
 // IMPORTAR BIBLIOTECAS
 if (!(eng ? window.all1 : global.all1)) { await import('./@functions.js'); }
 
+// FUNÇÕES DESSE PROJETO
 await import('./api.js')
 await import('./chatGpt.js')
 await import('./chromeActions.js')
@@ -51,3 +52,7 @@ await import('./translate.js')
 await import('./wsConnect.js')
 
 await import('../serverNode.js')
+
+// SCRIPTS DESSE PROJETO
+await import('../scripts/command1.js')
+await import('../scripts/command2.js')

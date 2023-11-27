@@ -15,7 +15,7 @@ async function configStorage(inf) {
     let ret = { 'ret': false };
     try {
         if (inf instanceof Array && inf.length == 1) { // ### CS
-            inf['path'] = `${conf[1]}:/${conf[2]}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
+            inf['path'] = `${letter}:/${conf[2]}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
                 rf = await file({ 'action': 'read', 'path': inf.path }); if (!rf.ret) { dt = {} } else { dt = JSON.parse(rf.res).dt }
             } else { dt = typeof inf[0] === 'object' ? inf[0] : { 'key': inf[0] } };
             if (!rf.ret) { rf = await file({ 'action': 'write', 'path': inf.path, 'rewrite': false, 'text': JSON.stringify({ 'dt': dt }, null, 2) }) }

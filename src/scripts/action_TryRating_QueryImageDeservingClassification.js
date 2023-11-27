@@ -7,7 +7,7 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
         let data = inf
-        let infFile = { 'action': 'read', 'path': `${conf[1]}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt` }
+        let infFile = { 'action': 'read', 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt` }
         let retFile = await file(infFile);
         let old = Number(retFile.res);
         let now = Number(dateHour().res.tim);
