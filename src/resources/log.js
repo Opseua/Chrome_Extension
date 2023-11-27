@@ -1,5 +1,7 @@
 // let infLog, retLog
-// infLog = { 'folder': '#_TESTE_#', 'path': `TESTE.txt`, 'text': `INF AQUI` }
+// infLog = { 'folder': '#_NomeDaPasta_#', 'path': `TESTE.txt`, 'text': `INF AQUI` } // CRIAR UMA PASTA DO DIA E UM ARQUIVO DIFERENTE
+// infLog = { 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI` } // ESCREVE NO MESMO ARQUIVO
+// infLog = { 'folder': 'JavaScript', 'path': `err.txt`, 'text': `INF AQUI` } // ESCREVE NO MESMO ARQUIVO
 // retLog = await log(infLog);
 // console.log(retLog)
 
@@ -12,10 +14,12 @@ async function log(inf) {
         };
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
         let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, pathOk, rewrite = false
-        let text = inf.text; pathOk = `log/${inf.folder}`;
+        let text = inf.text;
+        // NOME DA PASTA
+        pathOk = `log/${inf.folder}`;
         if (['reg.txt', 'reg1.txt', 'reg2.txt', 'reset.js'].includes(inf.path)) {
             pathOk = `${pathOk}/${inf.path}`
-        } else if (['log.txt'].includes(inf.path)) {
+        } else if (['log.txt', 'err.txt'].includes(inf.path)) {
             pathOk = `${pathOk}/${mon}/${day}_${inf.path}`; rewrite = true
         } else {
             pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.path}`

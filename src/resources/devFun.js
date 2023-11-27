@@ -1,6 +1,7 @@
 async function devFun(inf) {
     let ret = { 'ret': false };
     try {
+        let infLog, retLog
         if (inf.enc) { // ENCAMINHAR PARA O DEVICE CERTO
             let retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf : inf.data.retInf ? inf.data.retInf : true
             let url = eng ? devNodeJSLocal : devChromeLocal
@@ -33,8 +34,14 @@ async function devFun(inf) {
             await Promise.all(data.fun.map(async (value, index) => { // --------------------------------------------------
                 if (value.securityPass !== securityPass) {
                     ret['msg'] = `\n #### SECURITYPASS INCORRETO #### \n\n ${JSON.stringify(data)} \n\n`
+                    console.log(ret.msg)
+                    infLog = { 'folder': 'JavaScript', 'path': `err.txt`, 'text': ret.msg }
+                    retLog = await log(infLog);
                 } else if (!label(value.name)) {
                     ret['msg'] = `\n #### FUNÇÃO '${value.name}' NÃO EXITE #### \n\n ${JSON.stringify(data)} \n\n`
+                    console.log(ret.msg)
+                    infLog = { 'folder': 'JavaScript', 'path': `err.txt`, 'text': ret.msg }
+                    retLog = await log(infLog);
                 } else {
                     let name = eng ? window[value.name] : global[value.name] // CHROME ← : → NODEJS
                     let infName = value.par

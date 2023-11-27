@@ -51,8 +51,14 @@ await import('./tabSearch.js')
 await import('./translate.js')
 await import('./wsConnect.js')
 
+// SERVER NODE
 await import('../serverNode.js')
 
 // SCRIPTS DESSE PROJETO
 await import('../scripts/command1.js')
 await import('../scripts/command2.js')
+
+// ### WORD [NECESSÁRIO PARA CHAMAR A 'sendData']
+if (!eng) {
+    await import('../../../WebScraper/src/resources/sendData.js')
+}

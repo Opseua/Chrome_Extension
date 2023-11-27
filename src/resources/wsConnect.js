@@ -54,7 +54,7 @@ async function wsConnect(inf) {
 
 let activeSockets = new Map();
 async function ws(url, message) {
-    if (activeSockets.size == 0) { await logWs('START') }
+    if (activeSockets.size == 0) { await logWs('WS: START') }
     async function connectToServer(server) {
         return new Promise(resolve => {
             if (!activeSockets.has(server)) {
