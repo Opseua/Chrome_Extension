@@ -3,33 +3,7 @@
 // retTabSearch = await tabSearch(infTabSearch); // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // console.log(retTabSearch)
 
-async function openTab(inf) { // NAO USAR
-    try {
-        let active = inf.active ? true : false;
-        let pinned = inf.pinned ? true : false;
-        let url = inf.url ? inf.url : 'https://www.google.com';
-        return await new Promise((resolve, reject) => {
-            chrome.tabs.create({ 'url': url, 'active': active, 'pinned': pinned }, function (novaAba) {
-                chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
-                    if (tabId === novaAba.id && changeInfo.status === 'complete') {
-                        chrome.tabs.get(novaAba.id, function (tab) {
-                            chrome.tabs.onUpdated.removeListener(listener)
-                            resolve({ 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned })
-                        })
-                    }
-                })
-            })
-        })
-    } catch (e) {
-        (async () => {
-            let m = await regexE({ 'e': e });
-            return `\n #### ERRO #### SEARCH TAB \n ${m.res}`
-        })()
-    }
-};
-
 async function tabSearch(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -152,16 +126,40 @@ async function tabSearch(inf) {
         }
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['tabSearch'] = tabSearch;
-    } else { // NODEJS
-        global['tabSearch'] = tabSearch;
+async function openTab(inf) { // NAO USAR
+    try {
+        let active = inf.active ? true : false;
+        let pinned = inf.pinned ? true : false;
+        let url = inf.url ? inf.url : 'https://www.google.com';
+        return await new Promise((resolve, reject) => {
+            chrome.tabs.create({ 'url': url, 'active': active, 'pinned': pinned }, function (novaAba) {
+                chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+                    if (tabId === novaAba.id && changeInfo.status === 'complete') {
+                        chrome.tabs.get(novaAba.id, function (tab) {
+                            chrome.tabs.onUpdated.removeListener(listener)
+                            resolve({ 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned })
+                        })
+                    }
+                })
+            })
+        })
+    } catch (e) {
+        (async () => {
+            let m = await regexE({ 'e': e });
+            return `\n #### ERRO #### SEARCH TAB \n ${m.res}`
+        })()
     }
+};
+
+if (eng) { // CHROME
+    window['tabSearch'] = tabSearch;
+} else { // NODEJS
+    global['tabSearch'] = tabSearch;
 }
+

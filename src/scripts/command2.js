@@ -1,5 +1,5 @@
+
 async function command2(inf) {
-  await import('../resources/@functions.js');
   let ret = { 'ret': false };
   try {
     let infNotification = {
@@ -16,13 +16,15 @@ async function command2(inf) {
     let m = await regexE({ 'e': e });
     ret['msg'] = m.res
   };
-  return ret
+  return {
+    ...({ ret: ret.ret }),
+    ...(ret.msg && { msg: ret.msg }),
+    ...(ret.res && { res: ret.res }),
+  };
 }
 
-if (typeof eng === 'boolean') {
-  if (eng) { // CHROME
-    window['command2'] = command2;
-  } else { // NODEJS
-    global['command2'] = command2;
-  }
+if (eng) { // CHROME
+  window['command2'] = command2;
+} else { // NODEJS
+  global['command2'] = command2;
 }

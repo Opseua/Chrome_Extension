@@ -4,7 +4,6 @@
 // console.log(retSecToHour)
 
 function secToHour(inf) { // NÃO POR COMO 'async'!!!
-    (async () => { await import('./@functions.js') })()
     let ret = { 'ret': false };
     try {
         let hou = Math.floor(inf / 3600).toString().padStart(2, "0");
@@ -20,16 +19,14 @@ function secToHour(inf) { // NÃO POR COMO 'async'!!!
         })()
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['secToHour'] = secToHour;
-    } else { // NODEJS
-        global['secToHour'] = secToHour;
-    }
+if (eng) { // CHROME
+    window['secToHour'] = secToHour;
+} else { // NODEJS
+    global['secToHour'] = secToHour;
 }

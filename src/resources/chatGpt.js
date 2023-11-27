@@ -4,7 +4,6 @@
 // console.log(retChatGpt)
 
 async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         let infConfigStorage, retConfigStorage, retApi, infNotification, infApi
@@ -35,7 +34,12 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                     infNotification = {
                         'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO PEGAR COOKIE CHATGPT`, 'text': `Verificar se a aba abriu e se está logado`
                     };
-                    await notification(infNotification); return ret
+                    await notification(infNotification);
+                    return {
+                        ...({ ret: ret.ret }),
+                        ...(ret.msg && { msg: ret.msg }),
+                        ...(ret.res && { res: ret.res }),
+                    };
                 };
                 retConfigStorage['cookie'] = retGetCookies.res.concat;
                 infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
@@ -149,16 +153,14 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['chatGpt'] = chatGpt;
-    } else { // NODEJS
-        global['chatGpt'] = chatGpt;
-    }
+if (eng) { // CHROME
+    window['chatGpt'] = chatGpt;
+} else { // NODEJS
+    global['chatGpt'] = chatGpt;
 }

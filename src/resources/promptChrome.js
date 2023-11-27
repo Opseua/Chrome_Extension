@@ -4,7 +4,6 @@
 // console.log(retPromptChrome)
 
 async function promptChrome(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         let title = (inf.title) ? `${inf.title} | Digite o comando:` : `Digite o comando:`;
@@ -30,16 +29,14 @@ async function promptChrome(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['promptChrome'] = promptChrome;
-    } else { // NODEJS
-        global['promptChrome'] = promptChrome;
-    }
+if (eng) { // CHROME
+    window['promptChrome'] = promptChrome;
+} else { // NODEJS
+    global['promptChrome'] = promptChrome;
 }

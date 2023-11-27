@@ -17,7 +17,6 @@
 // console.log(retApi)
 
 async function api(inf) {
-    await import('./@functions.js')
     let ret = { 'ret': false };
     try {
         if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
@@ -62,16 +61,14 @@ async function api(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['api'] = api;
-    } else { // NODEJS
-        global['api'] = api;
-    }
+if (eng) { // CHROME
+    window['api'] = api;
+} else { // NODEJS
+    global['api'] = api;
 }

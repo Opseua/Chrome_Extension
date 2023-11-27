@@ -1,10 +1,7 @@
-// await import('./resources/@functions.js'); // TESTES [REMOVER COMENTÁRIO]
-
 async function serverNode(inf) {
-    await import('./resources/@functions.js'); // TESTES [INSERIR COMENTÁRIO]
     let ret = { 'ret': false };
     try {
-        let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, eng ? 'server' : 'serverNode');
+        let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `serverNode [Chrome_Extension]`, '\n');
 
         // DEV - [LOC] LOCAL
         let dev1 = devChromeLocal
@@ -60,12 +57,9 @@ async function serverNode(inf) {
         }
     }
 }
-// await serverNode()
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['serverNode'] = serverNode;
-    } else { // NODEJS
-        global['serverNode'] = serverNode;
-    }
+if (eng) { // CHROME
+    window['serverNode'] = serverNode;
+} else { // NODEJS
+    global['serverNode'] = serverNode;
 }

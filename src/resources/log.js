@@ -4,7 +4,6 @@
 // console.log(retLog)
 
 async function log(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -35,16 +34,14 @@ async function log(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['log'] = log;
-    } else { // NODEJS
-        global['log'] = log;
-    }
+if (eng) { // CHROME
+    window['log'] = log;
+} else { // NODEJS
+    global['log'] = log;
 }

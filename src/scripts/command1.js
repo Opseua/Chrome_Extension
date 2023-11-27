@@ -1,5 +1,5 @@
+
 async function command1(inf) {
-  await import('../resources/@functions.js');
   let ret = { 'ret': false };
   try {
     let retPromptChrome = promptChrome(`NOME DO COMANDO`);
@@ -9,13 +9,15 @@ async function command1(inf) {
     let m = await regexE({ 'e': e });
     ret['msg'] = m.res
   };
-  return ret
+  return {
+    ...({ ret: ret.ret }),
+    ...(ret.msg && { msg: ret.msg }),
+    ...(ret.res && { res: ret.res }),
+  };
 }
 
-if (typeof eng === 'boolean') {
-  if (eng) { // CHROME
-    window['command1'] = command1;
-  } else { // NODEJS
-    global['command1'] = command1;
-  }
+if (eng) { // CHROME
+  window['command1'] = command1;
+} else { // NODEJS
+  global['command1'] = command1;
 }

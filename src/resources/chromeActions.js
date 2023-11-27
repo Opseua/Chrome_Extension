@@ -4,7 +4,6 @@
 // console.log(retChromeActions)
 
 async function chromeActions(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -43,18 +42,17 @@ async function chromeActions(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['chromeActions'] = chromeActions;
-    } else { // NODEJS
-        global['chromeActions'] = chromeActions;
-    }
+if (eng) { // CHROME
+    window['chromeActions'] = chromeActions;
+} else { // NODEJS
+    global['chromeActions'] = chromeActions;
 }
+
 
 

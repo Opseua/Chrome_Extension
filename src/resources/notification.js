@@ -8,7 +8,6 @@
 // console.log(retNotification)
 
 async function notification(infOk) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
@@ -51,16 +50,14 @@ async function notification(infOk) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['notification'] = notification;
-    } else { // NODEJS
-        global['notification'] = notification;
-    }
+if (eng) { // CHROME
+    window['notification'] = notification;
+} else { // NODEJS
+    global['notification'] = notification;
 }

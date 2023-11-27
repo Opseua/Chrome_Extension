@@ -12,11 +12,6 @@
 // console.log(cs)
 
 async function configStorage(inf) {
-    if (eng) { // CHROME
-        if (!window.all) { await import('./@functions.js') }
-    } else {
-        if (!global.all) { await import('./@functions.js') }
-    }
     let ret = { 'ret': false };
     try {
         if (inf instanceof Array && inf.length == 1) { // ### CS
@@ -126,11 +121,7 @@ async function configStorage(inf) {
                     if (inf.path && inf.path.includes(':')) {
                         path = inf.path
                     } else {
-                        if (typeof inf.functionLocal == 'boolean' && !inf.functionLocal) {
-                            infFile = { 'action': 'relative', 'path': './src/config.json', 'functionLocal': false }
-                        } else {
-                            infFile = { 'action': 'relative', 'path': conf[0], 'functionLocal': true }
-                        };
+                        infFile = { 'action': 'relative', 'path': conf[0], 'functionLocal': typeof inf.functionLocal == 'boolean' && !inf.functionLocal ? false : true }
                         retFile = await file(infFile);
                         path = retFile.res[0]
                     };
@@ -192,22 +183,94 @@ async function configStorage(inf) {
             }
         }
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        // let m = await regexE({ 'e': e });
+        // ret['msg'] = m.res
+        console.log(e)
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['configStorage'] = configStorage;
-        window['csf'] = configStorage;
-    } else { // NODEJS
-        global['configStorage'] = configStorage;
-        global['csf'] = configStorage;
-    }
+if (eng) { // CHROME
+    window['configStorage'] = configStorage;
+    window['csf'] = configStorage;
+} else { // NODEJS
+    global['configStorage'] = configStorage;
+    global['csf'] = configStorage;
 }
+
+// NÃO COMENTAR! NECESSÁRIO PARA DEFINIR AS VARIÁVEIS GLOBAIS
+let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
+let secReconnect = retConfigStorage.res.secReconnect
+let secPing = retConfigStorage.res.secPing
+let par1 = retConfigStorage.res.par1
+let par2 = retConfigStorage.res.par2
+let par3 = retConfigStorage.res.par3
+let par4 = retConfigStorage.res.par4
+let par5 = retConfigStorage.res.par5
+let par6 = retConfigStorage.res.par6
+let par7 = retConfigStorage.res.par7
+let securityPass = retConfigStorage.res.securityPass
+let serverWeb = retConfigStorage.res.server['1']
+let serverLocal = retConfigStorage.res.server['2']
+let url = serverWeb.url;
+let hostWeb = serverWeb.host;
+let portWeb = serverWeb.port
+let hostLocal = serverLocal.host;
+let portLocal = serverLocal.port
+let devices = retConfigStorage.res.devices
+let devChromeWeb = `${url}://${hostWeb}:${portWeb}/${devices[0].name}`
+let devChromeLocal = `${url}://${hostLocal}:${portLocal}/${devices[0].name}`
+let devNodeJSWeb = `${url}://${hostWeb}:${portWeb}/${devices[1].name}`
+let devNodeJSLocal = `${url}://${hostLocal}:${portLocal}/${devices[1].name}`
+let devBlueStacksWeb = `${url}://${hostWeb}:${portWeb}/${devices[2].name}`
+let devBlueStacksLocal = `${url}://${hostLocal}:${portLocal}/${devices[2].name}`
+let devEC2Web = `${url}://${hostWeb}:${portWeb}/${devices[3].name}`
+let devEC2Local = `${url}://${hostLocal}:${portLocal}/${devices[3].name}`
+
+if (eng) { // CHROME
+    window['secReconnect'] = secReconnect
+    window['secPing'] = secPing
+    window['par1'] = par1
+    window['par2'] = par2
+    window['par3'] = par3
+    window['par4'] = par4
+    window['par5'] = par5
+    window['par6'] = par6
+    window['par7'] = par7
+    window['securityPass'] = securityPass
+    window['port'] = portWeb
+    window['devChromeWeb'] = devChromeWeb
+    window['devChromeLocal'] = devChromeLocal
+    window['devNodeJSWeb'] = devNodeJSWeb
+    window['devNodeJSLocal'] = devNodeJSLocal
+    window['devBlueStacksWeb'] = devBlueStacksWeb
+    window['devBlueStacksLocal'] = devBlueStacksLocal
+    window['devEC2Web'] = devEC2Web
+    window['devEC2Local'] = devEC2Local
+} else { // NODEJS
+    global['secReconnect'] = secReconnect
+    global['secPing'] = secPing
+    global['par1'] = par1
+    global['par2'] = par2
+    global['par3'] = par3
+    global['par4'] = par4
+    global['par5'] = par5
+    global['par6'] = par6
+    global['par7'] = par7
+    global['securityPass'] = securityPass
+    global['port'] = portWeb
+    global['devChromeWeb'] = devChromeWeb
+    global['devChromeLocal'] = devChromeLocal
+    global['devNodeJSWeb'] = devNodeJSWeb
+    global['devNodeJSLocal'] = devNodeJSLocal
+    global['devBlueStacksWeb'] = devBlueStacksWeb
+    global['devBlueStacksLocal'] = devBlueStacksLocal
+    global['devEC2Web'] = devEC2Web
+    global['devEC2Local'] = devEC2Local
+}
+
+

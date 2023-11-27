@@ -1,5 +1,4 @@
 async function regexE(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         let errorOk = { 'file': 'NÃO IDENTIFICADO', 'line': 'NÃO IDENTIFICADA', 'e': inf.e.stack };
@@ -58,16 +57,14 @@ async function regexE(inf) {
         console.log(`\n\n### ERRO REGEXe ###\n\n${e}\n\n`)
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['regexE'] = regexE;
-    } else { // NODEJS
-        global['regexE'] = regexE;
-    }
+if (eng) { // CHROME
+    window['regexE'] = regexE;
+} else { // NODEJS
+    global['regexE'] = regexE;
 }

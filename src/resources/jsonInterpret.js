@@ -12,7 +12,6 @@
 // console.log(retJsonInterpret)
 
 async function jsonInterpret(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         let json = JSON.stringify(inf.json);
@@ -25,16 +24,14 @@ async function jsonInterpret(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['jsonInterpret'] = jsonInterpret;
-    } else { // NODEJS
-        global['jsonInterpret'] = jsonInterpret;
-    }
+if (eng) { // CHROME
+    window['jsonInterpret'] = jsonInterpret;
+} else { // NODEJS
+    global['jsonInterpret'] = jsonInterpret;
 }

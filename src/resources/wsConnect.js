@@ -15,17 +15,6 @@
 // acionarListener('listener1', 'INF1', 'INF2');
 // acionarListener('listener2', 'INF1', 'INF2'); 
 
-if (eng) { // CHROME
-    if (!window.all) {
-        await import('./@functions.js')
-    }
-}
-else { // NODEJS
-    if (!global.all) {
-        await import('./@functions.js')
-    }
-}
-
 async function wsSend(parametro, message) { return await ws(parametro, message); }
 let listeners = {};
 function wsList(nomeList, callback) {
@@ -171,16 +160,15 @@ async function ws(url, message) {
     }
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['wsConnect'] = wsConnect;
-        window['wsList'] = wsList;
-        window['wsSend'] = wsSend;
-        window['acionarListener'] = acionarListener;
-    } else { // NODEJS
-        global['wsConnect'] = wsConnect;
-        global['wsList'] = wsList;
-        global['wsSend'] = wsSend;
-        global['acionarListener'] = acionarListener;
-    }
+if (eng) { // CHROME
+    window['wsConnect'] = wsConnect;
+    window['wsList'] = wsList;
+    window['wsSend'] = wsSend;
+    window['acionarListener'] = acionarListener;
+} else { // NODEJS
+    global['wsConnect'] = wsConnect;
+    global['wsList'] = wsList;
+    global['wsSend'] = wsSend;
+    global['acionarListener'] = acionarListener;
 }
+

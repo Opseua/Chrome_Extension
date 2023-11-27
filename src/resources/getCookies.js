@@ -4,7 +4,6 @@
 // console.log(retGetCookies);
 
 async function getCookies(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -36,16 +35,14 @@ async function getCookies(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
-};
+}
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['getCookies'] = getCookies;
-    } else { // NODEJS
-        global['getCookies'] = getCookies;
-    }
+if (eng) { // CHROME
+    window['getCookies'] = getCookies;
+} else { // NODEJS
+    global['getCookies'] = getCookies;
 }

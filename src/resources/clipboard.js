@@ -4,7 +4,6 @@
 // console.log(retClipboard)
 
 async function clipboard(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (inf.value == null || inf.value == '') {
@@ -30,16 +29,14 @@ async function clipboard(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['clipboard'] = clipboard;
-    } else { // NODEJS
-        global['clipboard'] = clipboard;
-    }
+if (eng) { // CHROME
+    window['clipboard'] = clipboard;
+} else { // NODEJS
+    global['clipboard'] = clipboard;
 }

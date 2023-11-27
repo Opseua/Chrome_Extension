@@ -1,5 +1,4 @@
-await import('./resources/@functions.js');
-
+await import('./resources/@export.js');
 async function server(inf) {
     let ret = { 'ret': false };
     try {
@@ -45,8 +44,8 @@ async function server(inf) {
                 console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`)
             }
         }
+
         ret['ret'] = true
-        ret['msg'] = `SERVER: OK`
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res
@@ -114,7 +113,15 @@ if (eng) { // CHROME
             } else if (infShortcutPressed.shortcut == 'atalho_2') {
                 command2();
             } else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
-        } catch (e) { let m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
+        } catch (e) {
+            let m = await regexE({ 'e': e });
+            ret['msg'] = m.res
+        };
+        return {
+            ...({ ret: ret.ret }),
+            ...(ret.msg && { msg: ret.msg }),
+            ...(ret.res && { res: ret.res }),
+        };
     });
 }
 // *************************

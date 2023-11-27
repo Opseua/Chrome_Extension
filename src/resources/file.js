@@ -7,23 +7,15 @@
 // infFile = { 'action': 'change', 'functionLocal': true, 'path': './PASTA/', 'pathNew': './PASTA2/' }
 // infFile = { 'action': 'del', 'functionLocal': true, 'path': './PASTA2/' }
 // infFile = { 'action': 'md5', 'functionLocal': true, 'path': './ARQUIVO.txt' }
+// infFile = { 'action': 'exist', 'functionLocal': true, 'path': './PASTA/ola.txt' }
 // retFile = await file(infFile);
 // console.log(retFile)
 
 async function file(inf) {
-    if (eng) { // CHROME
-        if (!window.all) {
-            await import('./@functions.js')
-        }
-    } else { // NODEJS
-        if (!global.all) {
-            await import('./@functions.js')
-        }
-    }
     let ret = { 'ret': false };
     try { // PASSAR NO jsonInterpret
         if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
-        if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5'].includes(inf.action)) {
+        if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'exist'].includes(inf.action)) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
         } else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'functionLocal' \n\n`
@@ -149,10 +141,10 @@ async function file(inf) {
                                 let p = inf.split('/').slice(0, -1).join('/');
                                 return p == inf ? null : getRoot(p)
                             }
-                        }; functionLocal = await getRoot(fileOk);
-                        fileOk = fileOk.replace(`${functionLocal}/`, ''); jsonFile = await _fs.promises.readFile(`${functionLocal}/${conf}`, 'utf8');
-                        jsonFile = JSON.parse(jsonFile).conf
-                        conf = [conf[0], jsonFile[0], functionLocal.split(':/')[1], process.cwd().replace(/\\/g, '/').split(':/')[1], `${fileOk}.js`]
+                        };
+                        functionLocal = await getRoot(fileOk);
+                        fileOk = fileOk.replace(`${functionLocal}/`, '');
+                        conf = [conf[0], process.cwd().slice(0, 1), functionLocal.split(':/')[1], process.cwd().replace(/\\/g, '/').split(':/')[1], `${fileOk}.js`]
                     }
                 } else { // NOME DO ARQUIVO
                     text = e;
@@ -282,6 +274,21 @@ async function file(inf) {
                     md5 = false
                     ret['msg'] = e;
                 }
+            } else if (inf.action == 'exist') { // ########################## EXIST
+                if (inf.path.includes(':')) {
+                    path = inf.path
+                } else {
+                    infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal };
+                    retFile = await file(infFile);
+                    path = retFile.res[0]
+                };
+                try {
+                    await _fs.promises.access(path);
+                    ret['msg'] = `FILE EXIST: O ARQUIVO EXISTE '${path}'`;
+                    ret['ret'] = true;
+                } catch (e) {
+                    ret['msg'] = `FILE EXIST: O ARQUIVO NÃO EXISTE '${path}'`;
+                }
             }
         }
     } catch (e) {
@@ -289,16 +296,18 @@ async function file(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['file'] = file;
-    } else { // NODEJS
-        global['file'] = file;
-    }
+if (eng) { // CHROME
+    window['file'] = file;
+} else { // NODEJS
+    global['file'] = file;
 }
+
+// NÃO COMENTAR! NECESSÁRIO PARA DEFINIR A CONF
+let retFile = await file({ 'action': 'inf' });
+conf = retFile.res;

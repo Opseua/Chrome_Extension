@@ -4,7 +4,6 @@
 // console.log(retRandom)
 
 async function random(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         let min = inf.min;
@@ -23,16 +22,14 @@ async function random(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['random'] = random;
-    } else { // NODEJS
-        global['random'] = random;
-    }
+if (eng) { // CHROME
+    window['random'] = random;
+} else { // NODEJS
+    global['random'] = random;
 }

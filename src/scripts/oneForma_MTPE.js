@@ -1,5 +1,5 @@
+
 async function oneForma_MTPE(inf) {
-    await import('../resources/@functions.js');
     let ret = { 'ret': false };
     try {
         let infRegex1, infRegex2, retRegex1, retRegex2, infNotification, retNotification
@@ -8,7 +8,11 @@ async function oneForma_MTPE(inf) {
                 gORem(gOEve);
                 chrome.browserAction.setBadgeText({ text: '' });
                 ret = { 'ret': false };
-                return ret
+                return {
+                    ...({ ret: ret.ret }),
+                    ...(ret.msg && { msg: ret.msg }),
+                    ...(ret.res && { res: ret.res }),
+                };
             }
         };
         gOAdd(gOEve);
@@ -25,10 +29,22 @@ async function oneForma_MTPE(inf) {
             infRegex2 = { 'simple': true, 'pattern': '>(.*?)<', 'text': retRegex2.res['1'] }
             retRegex2 = regex(infRegex2)
 
-            if (!gO.inf.sniffer == 1) { return ret }
+            if (!gO.inf.sniffer == 1) {
+                return {
+                    ...({ ret: ret.ret }),
+                    ...(ret.msg && { msg: ret.msg }),
+                    ...(ret.res && { res: ret.res }),
+                };
+            }
             let infChatGpt = { 'provider': 'open.ai', 'input': `REWRITE THE SENTENCE IN ENGLISH, WHICH WAS IN PORTUGUESE AND WAS TRANSLATED, KEEPING THE SAME MEANING AND LEAVING THE MOST LIKE THE ORIGINAL\n\nPORTUGUESE:\n${retRegex1.res['1']}\n\nENGLISH:\n${retRegex2.res['1']}` }
             let retChatGpt = await chatGpt(infChatGpt)
-            if (!retChatGpt.res || !gO.inf.sniffer == 1) { return ret }
+            if (!retChatGpt.res || !gO.inf.sniffer == 1) {
+                return {
+                    ...({ ret: ret.ret }),
+                    ...(ret.msg && { msg: ret.msg }),
+                    ...(ret.res && { res: ret.res }),
+                };
+            }
 
             let clipboardText
             if (!retRegex2.res['1'].endsWith('.') && retChatGpt.res.endsWith('.')) {
@@ -102,7 +118,15 @@ async function oneForma_MTPE(inf) {
         }
         ret['ret'] = true;
         ret['msg'] = `ONEFORMA: OK`;
-    } catch (e) { let m = await regexE({ 'e': e }); ret['msg'] = m.res }; return ret
+    } catch (e) {
+        let m = await regexE({ 'e': e });
+        ret['msg'] = m.res
+    };
+    return {
+        ...({ ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 }
 
 if (eng) { // CHROME

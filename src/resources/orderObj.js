@@ -4,7 +4,6 @@
 // console.log(retOrderObj)
 
 async function orderObj(inf) {
-    await import('./@functions.js')
     let ret = { 'ret': false };
     try {
         ret['res'] = Object.fromEntries(Object.entries(inf).sort((a, b) => a[0].localeCompare(b[0])))
@@ -15,16 +14,14 @@ async function orderObj(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['orderObj'] = orderObj;
-    } else { // NODEJS
-        global['orderObj'] = orderObj;
-    }
+if (eng) { // CHROME
+    window['orderObj'] = orderObj;
+} else { // NODEJS
+    global['orderObj'] = orderObj;
 }

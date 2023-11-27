@@ -4,7 +4,6 @@
 // console.log(retSniffer)
 
 async function sniffer(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false, 'res': { 'req': {}, 'res': {} } };
     if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
         let infDevAndFun = { 'enc': true, 'data': { 'name': 'sniffer', 'par': inf, 'retInf': inf.retInf } };
@@ -114,14 +113,16 @@ async function sniffer(inf) {
                 ret['msg'] = m.res;
             })()
         };
-        return ret
+        return {
+            ...({ ret: ret.ret }),
+            ...(ret.msg && { msg: ret.msg }),
+            ...(ret.res && { res: ret.res }),
+        };
     });
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['sniffer'] = sniffer;
-    } else { // NODEJS
-        global['sniffer'] = sniffer;
-    }
+if (eng) { // CHROME
+    window['sniffer'] = sniffer;
+} else { // NODEJS
+    global['sniffer'] = sniffer;
 }

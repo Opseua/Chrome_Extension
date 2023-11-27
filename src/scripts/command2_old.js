@@ -1,5 +1,5 @@
+
 async function command2(inf) {
-  await import('../resources/@functions.js');
   let ret = { 'ret': false };
   try {
     let reRun = false
@@ -12,7 +12,11 @@ async function command2(inf) {
         gORem(gOEve);
         chrome.browserAction.setBadgeText({ text: '' });
         reRun = false;
-        return ret
+        return {
+          ...({ ret: ret.ret }),
+          ...(ret.msg && { msg: ret.msg }),
+          ...(ret.res && { res: ret.res }),
+        };
       }
     }; gOAdd(gOEve);
     async function run() {
@@ -20,7 +24,11 @@ async function command2(inf) {
       infSniffer = { 'newReqSend': true, 'arrUrl': arrUrl }
       retSniffer = await sniffer(infSniffer)
       if (!retSniffer.res || !gO.inf.sniffer == 1) {
-        return ret
+        return {
+          ...({ ret: ret.ret }),
+          ...(ret.msg && { msg: ret.msg }),
+          ...(ret.res && { res: ret.res }),
+        };
       }
 
       // #### OneForma
@@ -66,13 +74,15 @@ async function command2(inf) {
     let m = await regexE({ 'e': e });
     ret['msg'] = m.res
   };
-  return ret
+  return {
+    ...({ ret: ret.ret }),
+    ...(ret.msg && { msg: ret.msg }),
+    ...(ret.res && { res: ret.res }),
+  };
 }
 
-if (typeof eng === 'boolean') {
-  if (eng) { // CHROME
-    window['command2'] = command2;
-  } else { // NODEJS
-    global['command2'] = command2;
-  }
+if (eng) { // CHROME
+  window['command2'] = command2;
+} else { // NODEJS
+  global['command2'] = command2;
 }

@@ -1,13 +1,18 @@
-// peroptyx_Search20()
 
 async function peroptyx_Search20(inf) {
-    await import('../resources/@functions.js');
     let ret = { 'ret': false };
     try {
         let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
             let gOEve = async (i) => {
-                if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
+                if (i.inf.sniffer === 2) {
+                    gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false };
+                    return {
+                        ...({ ret: ret.ret }),
+                        ...(ret.msg && { msg: ret.msg }),
+                        ...(ret.res && { res: ret.res }),
+                    };
+                }
             }; gOAdd(gOEve);
         }
         if (inf.logFile) { retFile = await file({ 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
@@ -54,7 +59,13 @@ async function peroptyx_Search20(inf) {
 
                     let infChatGpt = { 'provider': 'open.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING:\n\n ${comentario}` }
                     let retChatGpt = await chatGpt(infChatGpt)
-                    if (!retChatGpt.ret) { return ret }; comentario2 = retChatGpt.res.replace(/\n/g, ' ').replace(/\\"/g, "'");
+                    if (!retChatGpt.ret) {
+                        return {
+                            ...({ ret: ret.ret }),
+                            ...(ret.msg && { msg: ret.msg }),
+                            ...(ret.res && { res: ret.res }),
+                        };
+                    }; comentario2 = retChatGpt.res.replace(/\n/g, ' ').replace(/\\"/g, "'");
                 }
 
                 return {
@@ -84,7 +95,15 @@ async function peroptyx_Search20(inf) {
             await clipboard({ 'value': JSON.stringify(res, null, 2) })
         }
         ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
-    } catch (e) { let m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) {
+        let m = await regexE({ 'e': e });
+        ret['msg'] = m.res
+    };
+    return {
+        ...({ ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 }
 
 if (eng) { // CHROME

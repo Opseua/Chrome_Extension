@@ -5,7 +5,6 @@
 // console.log(retHaskey)
 
 function hasKey(inf) { // NÃO POR COMO 'async'!!!
-    (async () => { await import('./@functions.js') })()
     let ret = { 'ret': false };
     try {
         function hk(key, obj) {
@@ -31,16 +30,15 @@ function hasKey(inf) { // NÃO POR COMO 'async'!!!
         })()
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['hasKey'] = hasKey;
-    } else { // NODEJS
-        global['hasKey'] = hasKey;
-    }
+if (eng) { // CHROME
+    window['hasKey'] = hasKey;
+} else { // NODEJS
+    global['hasKey'] = hasKey;
 }
+

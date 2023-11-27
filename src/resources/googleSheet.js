@@ -18,7 +18,6 @@
 // console.log(retGoogleSheet)
 
 async function googleSheet(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -71,9 +70,8 @@ async function googleSheet(inf) {
             range = range == 'last' ? `${tab}!A1:AA` : `${tab}!${range}`
             let retSheet = await _sheet.spreadsheets.values.get({ auth: _auth, 'spreadsheetId': id, range });
             ret['res'] = inf.range.includes('last') ? retSheet.data.values ? retSheet.data.values.length + 1 : 1 : retSheet.data.values
-            ret['ret'] = true;
             ret['msg'] = `GOOGLE SHEET GET: OK`;
-            return ret
+            ret['ret'] = true;
         } else if (inf.action == 'send') { // SEND
             let col = inf.range.replace(/[^a-zA-Z]/g, '')
             let values = { 'values': inf.values }
@@ -94,17 +92,16 @@ async function googleSheet(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['googleSheet'] = googleSheet;
-    } else { // NODEJS
-        global['googleSheet'] = googleSheet;
-    }
+if (eng) { // CHROME
+    window['googleSheet'] = googleSheet;
+} else { // NODEJS
+    global['googleSheet'] = googleSheet;
 }
+
 

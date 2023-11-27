@@ -1,5 +1,4 @@
 async function devFun(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (inf.enc) { // ENCAMINHAR PARA O DEVICE CERTO
@@ -61,16 +60,13 @@ async function devFun(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
-
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['devFun'] = devFun;
-    } else { // NODEJS
-        global['devFun'] = devFun;
-    }
+if (eng) { // CHROME
+    window['devFun'] = devFun;
+} else { // NODEJS
+    global['devFun'] = devFun;
 }

@@ -1,13 +1,18 @@
-// peroptyx_QueryImageDeservingClassification()
 
 async function peroptyx_QueryImageDeservingClassification(inf) {
-    await import('../resources/@functions.js');
     let ret = { 'ret': false };
     try {
         let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
             let gOEve = async (i) => {
-                if (i.inf.sniffer === 2) { gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false }; return ret }
+                if (i.inf.sniffer === 2) {
+                    gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false };
+                    return {
+                        ...({ ret: ret.ret }),
+                        ...(ret.msg && { msg: ret.msg }),
+                        ...(ret.res && { res: ret.res }),
+                    };
+                }
             }; gOAdd(gOEve);
         }; if (inf.logFile) { retFile = await file({ 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
         else { retSniffer = JSON.parse(inf.sniffer) }; let query = retSniffer.tasks[0].taskData.query; await clipboard({ 'value': query })
@@ -42,7 +47,15 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             // ws1.send(JSON.stringify({ "name": "google", "par": { "search": query } }))
             wsSend(gO.inf.wsArr[0], { "name": "google", "par": { "search": query } })
         }; ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
-    } catch (e) { let m = await regexE({ 'e': e }); ret['msg'] = m.res }; if (!ret.ret) { console.log(ret.msg) }; return ret
+    } catch (e) {
+        let m = await regexE({ 'e': e });
+        ret['msg'] = m.res
+    };
+    return {
+        ...({ ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 }
 
 if (eng) { // CHROME

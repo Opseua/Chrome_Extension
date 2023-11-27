@@ -4,7 +4,6 @@
 // console.log(retTranslate)
 
 async function translate(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         let infApi = {
@@ -16,7 +15,11 @@ async function translate(inf) {
         let res = retApi.body;
         let retRegex = regex({ 'pattern': 'class="result-container">(.*?)</div>', 'text': res });
         if (!retRegex.ret) {
-            return ret
+            return {
+                ...({ ret: ret.ret }),
+                ...(ret.msg && { msg: ret.msg }),
+                ...(ret.res && { res: ret.res }),
+            };
         };
         let dom, $
         if (eng) { // CHROME
@@ -33,16 +36,14 @@ async function translate(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['translate'] = translate;
-    } else { // NODEJS
-        global['translate'] = translate;
-    }
+if (eng) { // CHROME
+    window['translate'] = translate;
+} else { // NODEJS
+    global['translate'] = translate;
 }

@@ -5,7 +5,6 @@
 // console.log(retRegex)
 
 function regex(inf) { // NÃO POR COMO 'async'!!!
-    (async () => { await import('./@functions.js') })()
     let ret = { 'ret': false };
     try {
         if (inf.pattern.includes('(.*?)')) {
@@ -77,16 +76,14 @@ function regex(inf) { // NÃO POR COMO 'async'!!!
         })()
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['regex'] = regex;
-    } else { // NODEJS
-        global['regex'] = regex;
-    }
+if (eng) { // CHROME
+    window['regex'] = regex;
+} else { // NODEJS
+    global['regex'] = regex;
 }

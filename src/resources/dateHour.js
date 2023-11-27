@@ -5,7 +5,6 @@
 // let timestamp = Math.floor(new Date().getTime() / 1000);
 
 function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
-    (async () => { await import('./@functions.js') })()
     let ret = { 'ret': false };
     try {
         let dt1 = new Date();
@@ -32,16 +31,14 @@ function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
         })()
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['dateHour'] = dateHour;
-    } else { // NODEJS
-        global['dateHour'] = dateHour;
-    }
+if (eng) { // CHROME
+    window['dateHour'] = dateHour;
+} else { // NODEJS
+    global['dateHour'] = dateHour;
 }

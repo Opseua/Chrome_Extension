@@ -4,7 +4,6 @@
 // console.log(retGetPage)
 
 async function getPage(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -37,16 +36,14 @@ async function getPage(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['getPage'] = getPage;
-    } else { // NODEJS
-        global['getPage'] = getPage;
-    }
+if (eng) { // CHROME
+    window['getPage'] = getPage;
+} else { // NODEJS
+    global['getPage'] = getPage;
 }

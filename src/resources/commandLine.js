@@ -5,7 +5,6 @@
 // console.log(retCommandLine)
 
 async function commandLine(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (!`rodar no →  NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -39,16 +38,14 @@ async function commandLine(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['commandLine'] = commandLine;
-    } else { // NODEJS
-        global['commandLine'] = commandLine;
-    }
+if (eng) { // CHROME
+    window['commandLine'] = commandLine;
+} else { // NODEJS
+    global['commandLine'] = commandLine;
 }

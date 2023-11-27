@@ -1,5 +1,5 @@
+
 async function action_TryRating_QueryImageDeservingClassification(inf) {
-    await import('./@functions.js');
     let ret = { 'ret': false };
     try {
         if (!`rodar no → CHROME `.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -7,7 +7,7 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
         let data = inf
-        let infFile = { 'action': 'read', 'path': 'D:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt' }
+        let infFile = { 'action': 'read', 'path': `${conf[1]}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt` }
         let retFile = await file(infFile);
         let old = Number(retFile.res);
         let now = Number(dateHour().res.tim);
@@ -60,19 +60,18 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['action_TryRating_QueryImageDeservingClassification'] = action_TryRating_QueryImageDeservingClassification;
-    } else { // NODEJS
-        global['action_TryRating_QueryImageDeservingClassification'] = action_TryRating_QueryImageDeservingClassification;
-    }
+if (eng) { // CHROME
+    window['action_TryRating_QueryImageDeservingClassification'] = action_TryRating_QueryImageDeservingClassification;
+} else { // NODEJS
+    global['action_TryRating_QueryImageDeservingClassification'] = action_TryRating_QueryImageDeservingClassification;
 }
+
 
 
 
