@@ -5,6 +5,7 @@ async function keepCookieLive(inf) {
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'keepCookieLive', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
+
         let retGetCookies, infChromeActions, retChromeActions
         let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'chatGptOra.ai' });
         retConfigStorage = retConfigStorage.res

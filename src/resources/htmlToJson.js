@@ -1,4 +1,4 @@
-// let infHtmlToJson, retHtmlToJson
+// let infHtmlToJson, retHtmlToJson // 'logFun': true,
 // infHtmlToJson = {
 //     'randomCol': false,
 //     'html': `
@@ -69,6 +69,12 @@ async function htmlToJson(inf) {
         ret['ret'] = true;
         ret['msg'] = `HTML TO JSON: OK`;
         ret['res'] = JSON.stringify(tableData);
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

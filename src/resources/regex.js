@@ -1,4 +1,4 @@
-// let infRegex, retRegex
+// let infRegex, retRegex // 'logFun': true,
 // infRegex = { 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES` }
 // infRegex = { 'simple': true, 'pattern': `*DOIS*`, 'text': `UMDOISTRES` }
 // retRegex = regex(infRegex);
@@ -68,6 +68,14 @@ function regex(inf) { // NÃO POR COMO 'async'!!!
                     ret['msg'] = `\n\n #### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
                 }
             }
+        }
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            (async () => {
+                let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+                infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            })()
         }
     } catch (e) {
         (async () => {

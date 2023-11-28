@@ -17,7 +17,9 @@ if (eng) { window['all2'] = all2; } else { global['all2'] = all2 }
 // *****************************************************************************************
 
 // IMPORTAR BIBLIOTECAS
-if (!(eng ? window.all1 : global.all1)) { await import('./@functions.js'); }
+if (!(eng ? window.all1 : global.all1)) {
+    await import('./@functions.js');
+}
 
 // FUNÇÕES DESSE PROJETO
 await import('./api.js')

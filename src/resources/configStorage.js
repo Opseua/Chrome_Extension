@@ -1,7 +1,7 @@
-// let infConfigStorage, retConfigStorage;
-// infConfigStorage = { 'action': 'set', 'functionLocal': false, 'key': 'NomeDaChave', 'value': 'Valor da chave' } // 'functionLocal' SOMENTE NO NODEJS
-// infConfigStorage = { 'action': 'get', 'functionLocal': false, 'key': 'NomeDaChave' } // 'functionLocal' SOMENTE NO NODEJS
-// infConfigStorage = { 'action': 'del', 'functionLocal': false, 'key': 'NomeDaChave' } // 'functionLocal' SOMENTE NO NODEJS
+// let infConfigStorage, retConfigStorage; // 'logFun': true, 'functionLocal': false,
+// infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' } // 'functionLocal' SOMENTE NO NODEJS
+// infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' } // 'functionLocal' SOMENTE NO NODEJS
+// infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' } // 'functionLocal' SOMENTE NO NODEJS
 // retConfigStorage = await configStorage(infConfigStorage);
 // console.log(retConfigStorage)
 
@@ -181,6 +181,12 @@ async function configStorage(inf) {
                     }
                 }
             }
+        }
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
         // let m = await regexE({ 'e': e });

@@ -1,4 +1,4 @@
-// let infTranslate, retTranslate
+// let infTranslate, retTranslate // 'logFun': true,
 // infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
 // retTranslate = await translate(infTranslate);
 // console.log(retTranslate)
@@ -31,6 +31,12 @@ async function translate(inf) {
         ret['res'] = dom;
         ret['msg'] = `TRANSLATE: OK`
         ret['ret'] = true;
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

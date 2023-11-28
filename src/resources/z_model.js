@@ -39,3 +39,44 @@ async function run() {
     console.log(retModel)
 }
 await run()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function runNew() {
+    try {
+        function teste1() {
+            console.log(aaa)
+        }
+        teste1()
+
+        async function teste2() {
+            console.log(bbb)
+        }
+        await teste2()
+    } catch (err) {
+        errs(err);
+    }
+};
+
+const errs = (e) => {
+    console.error('ERRO FIM:', e);
+};
+if (typeof window !== 'undefined') {
+    window.addEventListener('error', errs);
+    window.addEventListener('unhandledrejection', errs);
+} else {
+    process.on('uncaughtException', errs);
+    process.on('unhandledRejection', errs);
+}
+runNew();

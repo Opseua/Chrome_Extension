@@ -5,10 +5,11 @@
 // global['infGlobal'] = infGlobal;
 // *****************************************************************************
 
+// let infJsonInterpret, retJsonInterpret, json // 'logFun': true,
 // infGlobal['var1'] = 'LUA'; infGlobal['var2'] = 'SOL';
-// let json = `{ "nasa": "Tanto a $[var1] quanto o $[var2] são redondos" }`;
-// let infJsonInterpret = { 'json': json, 'vars': infGlobal };
-// let retJsonInterpret = await jsonInterpret(infJsonInterpret)
+// json = `{ "nasa": "Tanto a $[var1] quanto o $[var2] são redondos" }`;
+// infJsonInterpret = { 'json': json, 'vars': infGlobal };
+// retJsonInterpret = await jsonInterpret(infJsonInterpret)
 // console.log(retJsonInterpret)
 
 async function jsonInterpret(inf) {
@@ -19,6 +20,12 @@ async function jsonInterpret(inf) {
         ret['res'] = res;
         ret['msg'] = `JSON INTERPRET: OK`;
         ret['ret'] = true;
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

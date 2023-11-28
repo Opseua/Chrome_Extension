@@ -1,4 +1,4 @@
-// let infFile, retFile
+// let infFile, retFile // 'logFun': true,
 // infFile = { 'action': 'inf' }
 // infFile = { 'action': 'relative', 'functionLocal': false, 'path': './PASTA/ola.txt' }
 // infFile = { 'action': 'write', 'functionLocal': true, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
@@ -13,7 +13,8 @@
 
 async function file(inf) {
     let ret = { 'ret': false };
-    try { // PASSAR NO jsonInterpret
+    try {
+        // PASSAR NO jsonInterpret
         if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'exist'].includes(inf.action)) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
@@ -36,16 +37,39 @@ async function file(inf) {
                             path = path.split(':/')[1]
                         }
                     } else {
-                        infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal && !eng ? true : false };
-                        retFile = await file(infFile);
-                        path = retFile.res[0]
+                        if (!inf.logFun) {
+                            infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal && !eng ? true : false };
+                            retFile = await file(infFile);
+                            path = retFile.res[0]
+                        } else {
+                            // LOG FUN
+                            let funE = inf.logFun; let fun = funE.split('.js'); let logText = inf.text, retFile
+                            if (!(fun.length > 1)) {
+                                fun = `#_naoIdentificado`;
+                                logText['e'] = funE
+                            } else {
+                                fun = fun[0];
+                                fun = fun.substring(fun.lastIndexOf('/') + 1)
+                            }
+                            let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
+                            let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`
+                            path = `##_FILE-FUN_${fun}`;
+                            path = `log/${path}/${mon}/${day}/${hou}_INF_RET.txt`
+                            inf['path'] = path
+                            text = typeof logText === 'object' ? JSON.stringify(logText) : logText
+                            infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal && !eng ? true : false };
+                            retFile = await file(infFile);
+                            path = retFile.res[0]
+                        }
                     };
                     if (eng) { // CHROME
                         if (path.includes('%/')) {
                             path = path.split('%/')[1]
                         } else if (path.includes(':')) {
                             path = path.split(':/')[1]
-                        } else { path = path };
+                        } else {
+                            path = path
+                        };
                         if (inf.rewrite) {
                             try {
                                 infFile = { 'action': 'read', 'path': path, 'functionLocal': inf.functionLocal && !eng ? true : false };
@@ -57,11 +81,16 @@ async function file(inf) {
                             } catch (e) { }
                         };
                         let blob = new Blob([text], { type: 'text/plain' });
+                        // REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
+                        path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '')
                         let downloadOptions = { // 'overwrite' LIMPA | 'uniquify' (ADICIONA (1), (2), (3)... NO FINAL)
                             url: URL.createObjectURL(blob), filename: path, saveAs: false, conflictAction: 'overwrite'
                         };
                         chrome.downloads.download(downloadOptions)
                     } else { // NODEJS
+                        // REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
+                        let pathLetter = path.charAt(0)
+                        path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`)
                         await _fs.promises.mkdir(_path.dirname(path), { recursive: true });
                         await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' })
                     };
@@ -80,14 +109,26 @@ async function file(inf) {
                     if (!inf.functionLocal) {
                         path = `file:///${path}`
                     };
-                    retFetch = await fetch(path.replace('%', ''));
+                    path = path.replace('%', '')
+                    retFetch = await fetch(path);
                     retFetch = await retFetch.text()
+                    if (!retFetch.includes('Copyright 2012 The Chromium Authors')) {
+                        ret['res'] = retFetch;
+                        ret['msg'] = `FILE READ: OK`;
+                        ret['ret'] = true;
+                    } else {
+                        ret['msg'] = `NÃO ENCONTRADO '${path}'`;
+                    }
                 } else { // NODEJS
-                    retFetch = await _fs.promises.readFile(path, 'utf8')
+                    try {
+                        retFetch = await _fs.promises.readFile(path, 'utf8')
+                        ret['res'] = retFetch;
+                        ret['msg'] = `FILE READ: OK`;
+                        ret['ret'] = true;
+                    } catch (e) {
+                        ret['msg'] = `NÃO ENCONTRADO '${path}'`;
+                    }
                 };
-                ret['res'] = retFetch;
-                ret['msg'] = `FILE READ: OK`;
-                ret['ret'] = true;
             } else if (inf.action == 'del' && !eng) { // ########################## DEL
                 if (inf.path.includes(':')) {
                     path = inf.path
@@ -291,6 +332,12 @@ async function file(inf) {
                 }
             }
         }
+
+        // ### LOG FUN ### [AQUI É NECESSÁRIO INSERIR A CHAVE 'stop' PARA NÃO FICAR EM LOOP INFINITO!!!]
+        // if (inf.logFun && !inf.stop) {
+        //     let infFile = { 'stop': true, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        //     infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        // }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

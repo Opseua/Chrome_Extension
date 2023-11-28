@@ -1,4 +1,4 @@
-// let infGoogleSheet, retGoogleSheet
+// let infGoogleSheet, retGoogleSheet // 'logFun': true,
 // infGoogleSheet = {
 //     'action': 'get',
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
@@ -24,8 +24,8 @@ async function googleSheet(inf) {
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'googleSheet', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
-        let infConfigStorage, retConfigStorage, makeNewToken = true
 
+        let infConfigStorage, retConfigStorage, makeNewToken = true
         let pathOAuth = `${letter}:/${conf[2]}/src/googleOAuth.json`
         let _authClient = new _google.auth.GoogleAuth({ keyFile: pathOAuth, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
         let _auth = await _authClient.getClient();
@@ -68,10 +68,14 @@ async function googleSheet(inf) {
                 range = `${range}1:${range}${range}`
             }
             range = range == 'last' ? `${tab}!A1:AA` : `${tab}!${range}`
-            let retSheet = await _sheet.spreadsheets.values.get({ auth: _auth, 'spreadsheetId': id, range });
-            ret['res'] = inf.range.includes('last') ? retSheet.data.values ? retSheet.data.values.length + 1 : 1 : retSheet.data.values
-            ret['msg'] = `GOOGLE SHEET GET: OK`;
-            ret['ret'] = true;
+            try {
+                let retSheet = await _sheet.spreadsheets.values.get({ auth: _auth, 'spreadsheetId': id, range });
+                ret['res'] = inf.range.includes('last') ? retSheet.data.values ? retSheet.data.values.length + 1 : 1 : retSheet.data.values
+                ret['msg'] = `GOOGLE SHEET GET: OK`;
+                ret['ret'] = true;
+            } catch (e) {
+                ret['msg'] = `NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
+            }
         } else if (inf.action == 'send') { // SEND
             let col = inf.range.replace(/[^a-zA-Z]/g, '')
             let values = { 'values': inf.values }
@@ -82,10 +86,20 @@ async function googleSheet(inf) {
                 let retNewGet = await googleSheet({ 'action': 'get', 'id': id, 'tab': tab, 'range': inf.range.includes('*') ? `last*${inf.range}` : 'last' })
                 lin = retNewGet.res
             }
-            let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
-            let retSheet = await _sheet.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
-            ret['msg'] = `GOOGLE SHEET SEND: OK`;
-            ret['ret'] = true;
+            try {
+                let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
+                let retSheet = await _sheet.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
+                ret['msg'] = `GOOGLE SHEET SEND: OK`;
+                ret['ret'] = true;
+            } catch (e) {
+                ret['msg'] = `NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
+            }
+        }
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
         let m = await regexE({ 'e': e });

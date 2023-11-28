@@ -52,7 +52,7 @@ async function regexE(inf) {
                 }]
             })
         };
-        fetch(`http://${devChromeWeb.split('://')[1]}`, par)
+        await fetch(`http://${devChromeWeb.split('://')[1]}`, par)
         ret['msg'] = `\n\n### ERRO ###\n\n→ ${errorOk.file} [${errorOk.line}]\n${errorOk.e}`;
     } catch (e) {
         console.log(`\n\n### ERRO REGEXe ###\n\n${e}\n\n`)

@@ -1,4 +1,4 @@
-// let infGetCookies, retGetCookies
+// let infGetCookies, retGetCookies // 'logFun': true,
 // infGetCookies = { 'url': `https://www.google.com/`, 'cookieSearch': `__Secure-next-auth.session-token` }
 // retGetCookies = await getCookies(infGetCookies);
 // console.log(retGetCookies);
@@ -10,6 +10,7 @@ async function getCookies(inf) {
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'getCookies', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
+
         let cookiesPromise = new Promise((resolve) => {
             chrome.cookies.getAll({ 'url': inf.url },
                 cookies => {
@@ -29,6 +30,12 @@ async function getCookies(inf) {
             ret['res'] = { 'array': retCookies, 'concat': cookie };
             ret['msg'] = 'GET COOKIES: OK'
             ret['ret'] = true;
+        }
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
         let m = await regexE({ 'e': e });

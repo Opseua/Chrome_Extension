@@ -1,4 +1,4 @@
-// let infRandom, retRandom
+// let infRandom, retRandom // 'logFun': true,
 // infRandom = { 'min': 3, 'max': 10, 'await': true };
 // retRandom = await random(infRandom);
 // console.log(retRandom)
@@ -17,6 +17,12 @@ async function random(inf) {
         ret['res'] = number / 1000;
         ret['msg'] = `RANDON: OK`;
         ret['ret'] = true;
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

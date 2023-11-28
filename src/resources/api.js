@@ -1,16 +1,25 @@
-// let infApi, retApi
+// let infApi, retApi // 'logFun': true,
 // infApi = { // ########## TYPE → json
-//     'method': 'POST', 'url': `https://ntfy.sh/`, 'headers': { 'Content-Type': 'application/json' },
+//     'method': 'POST', 'url': `https://ntfy.sh/`,
+//     'headers': {
+//         'Content-Type': 'application/json'
+//     },
 //     'body': { 'Chave1': 'Valor 1', 'Chave2': 'Valor 2' }
 // };
 // infApi = { // ########## TYPE → text
-//     'method': 'POST', 'url': `https://ntfy.sh/`, 'headers': { 'Content-Type': 'text/plain;charset=UTF-8' },
+//     'method': 'POST', 'url': `https://ntfy.sh/`,
+//     'headers': {
+//         'Content-Type': 'text/plain;charset=UTF-8'
+//     },
 //     'body': '{"topic":"OPSEUA","message":"a"}'
 // };
 // let formData = new URLSearchParams(); // ########## TYPE → x-www-form-urlencoded
 // formData.append('grant_type', 'client_credentials');
 // formData.append('resource', 'https://graph.microsoft.com'); infApi = {
-//     'method': 'POST', 'url': `https://ntfy.sh/`, 'headers': { 'Content-Type': 'application/x-www-form-urlencoded' },
+//     'method': 'POST', 'url': `https://ntfy.sh/`,
+//     'headers': {
+//         'Content-Type': 'application/x-www-form-urlencoded'
+//     },
 //     'body': formData.toString()
 // };
 // retApi = await api(infApi);
@@ -54,6 +63,12 @@ async function api(inf) {
                 'code': req.status,
                 'headers': resHeaders,
                 'body': resBody
+            }
+
+            // ### LOG FUN ###
+            if (inf.logFun) {
+                let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+                infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
             }
         }
     } catch (e) {

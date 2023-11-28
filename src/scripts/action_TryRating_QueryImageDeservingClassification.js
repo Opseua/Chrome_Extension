@@ -6,6 +6,7 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'action_TryRating_QueryImageDeservingClassification', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
+
         let data = inf
         let infFile = { 'action': 'read', 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt` }
         let retFile = await file(infFile);

@@ -1,4 +1,4 @@
-// let infChromeActions, retChromeActions
+// let infChromeActions, retChromeActions // 'logFun': true,
 // infChromeActions = { 'action': 'badge', 'text': `OLA` }
 // retChromeActions = await chromeActions(infChromeActions);
 // console.log(retChromeActions)
@@ -10,6 +10,7 @@ async function chromeActions(inf) {
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'chromeActions', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
+
         if (inf.action == 'badge') {
             let action = chrome.browserAction;
             if (inf.color) {
@@ -37,6 +38,12 @@ async function chromeActions(inf) {
             ret['msg'] = `CHROME ACTIONS SCRIPT: OK`
         };
         ret['ret'] = true;
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

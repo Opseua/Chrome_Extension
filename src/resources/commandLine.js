@@ -1,6 +1,6 @@
-// let infCommandLine, retCommandLine
-// infCommandLine = { 'awaitFinish': false, 'command': `notepad` }
-// infCommandLine = { 'awaitFinish': false, 'command': `"!letter!:/ARQUIVOS/PROJETOS/WebScraper/src/1_BACKGROUND.exe"` }
+// let infCommandLine, retCommandLine // 'logFun': true, 'awaitFinish': false,
+// infCommandLine = { 'command': `notepad` }
+// infCommandLine = { 'command': `"!letter!:/ARQUIVOS/PROJETOS/WebScraper/src/1_BACKGROUND.exe"` }
 // retCommandLine = await commandLine(infCommandLine);
 // console.log(retCommandLine)
 
@@ -26,6 +26,12 @@ async function commandLine(inf) {
                         ret['res'] = stdout;
                     }
                     ret['ret'] = true;
+                }
+
+                // ### LOG FUN ###
+                if (inf.logFun) {
+                    let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+                    infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
                 }
                 resolve();
                 return;

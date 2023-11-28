@@ -1,4 +1,4 @@
-// let infNotification, retNotification
+// let infNotification, retNotification // 'logFun': true,
 // infNotification = {
 //     'duration': 2, 'icon': './src/media/icon_4.png', 'retInf': false,
 //     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': 'BOTAO 2' }],
@@ -15,6 +15,7 @@ async function notification(infOk) {
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': inf.retInf, } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
+
         if (!inf.icon || inf.icon.length > 1) {
             let imgSrc = !inf.icon ? './src/media/icon_3.png' : inf.icon;
             let imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer())
@@ -45,6 +46,12 @@ async function notification(infOk) {
         });
         ret['msg'] = 'NOTIFICATION: OK'
         ret['ret'] = true;
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

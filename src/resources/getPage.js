@@ -1,4 +1,4 @@
-// let infGetPage, retGetPage
+// let infGetPage, retGetPage // 'logFun': true,
 // infGetPage = { 'id': 182593371 };
 // retGetPage = await getPage(infGetPage);
 // console.log(retGetPage)
@@ -10,6 +10,7 @@ async function getPage(inf) {
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'getPage', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
+
         function getContent(inf) {
             return new Promise((resolve) => {
                 chrome.pageCapture.saveAsMHTML({ 'tabId': inf.id }, function (data) {
@@ -31,6 +32,12 @@ async function getPage(inf) {
             });
         };
         await getContent(inf)
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

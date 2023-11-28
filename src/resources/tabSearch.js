@@ -10,6 +10,7 @@ async function tabSearch(inf) {
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'tabSearch', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
+
         let result = {};
         if (inf.search == 'ATIVA') { // ATIVA search
             result = await new Promise(resolve => {

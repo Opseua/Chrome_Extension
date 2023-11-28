@@ -1,4 +1,4 @@
-// let infPromptChrome, retPromptChrome
+// let infPromptChrome, retPromptChrome // 'logFun': true,
 // infPromptChrome = { 'title': `NOME DO COMANDO` }
 // retPromptChrome = await promptChrome(infPromptChrome)
 // console.log(retPromptChrome)
@@ -11,6 +11,7 @@ async function promptChrome(inf) {
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'promptChrome', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
+
         let retPrompt = prompt(`${title}`);
         if (!retPrompt) {
             ret['msg'] = `\n #### ERRO #### PROMPT CHROME \n EM BRANCO \n\n`
@@ -23,6 +24,12 @@ async function promptChrome(inf) {
             ret['res'] = retPrompt;
             ret['msg'] = 'PROMPT CHROME: OK'
             ret['ret'] = true;
+        }
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
         let m = await regexE({ 'e': e });
