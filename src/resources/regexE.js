@@ -31,7 +31,10 @@ async function regexE(inf) {
             };
             let time = dtRes, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
             let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, text = errorOk
-            let path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}_err.txt`
+            // NO MESMO ARQUIVO
+            // let path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}_err.txt`
+            // ARQUIVO DIFERENTE DENTRO DE OUTRA PASTA
+            let path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}/${hou}_err.txt`
             text = text = typeof text === 'object' ? `${hou}\n${JSON.stringify(text)}\n\n` : `${hou}\n${text}\n\n`
             await _fs.promises.mkdir(_path.dirname(path), { recursive: true });
             await _fs.promises.writeFile(path, text, { flag: 'a' })

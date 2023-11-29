@@ -189,9 +189,8 @@ async function configStorage(inf) {
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
-        // let m = await regexE({ 'e': e });
-        // ret['msg'] = m.res
-        console.log(e)
+        let m = await regexE({ 'e': e });
+        ret['msg'] = m.res
     };
     return {
         ...({ ret: ret.ret }),
