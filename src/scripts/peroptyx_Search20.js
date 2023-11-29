@@ -7,11 +7,7 @@ async function peroptyx_Search20(inf) {
             let gOEve = async (i) => {
                 if (i.inf.sniffer === 2) {
                     gORem(gOEve); chrome.browserAction.setBadgeText({ text: '' }); ret = { 'ret': false };
-                    return {
-                        ...({ ret: ret.ret }),
-                        ...(ret.msg && { msg: ret.msg }),
-                        ...(ret.res && { res: ret.res }),
-                    };
+                    return ret
                 }
             }; gOAdd(gOEve);
         }
@@ -60,11 +56,7 @@ async function peroptyx_Search20(inf) {
                     let infChatGpt = { 'provider': 'open.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING:\n\n ${comentario}` }
                     let retChatGpt = await chatGpt(infChatGpt)
                     if (!retChatGpt.ret) {
-                        return {
-                            ...({ ret: ret.ret }),
-                            ...(ret.msg && { msg: ret.msg }),
-                            ...(ret.res && { res: ret.res }),
-                        };
+                        return ret
                     }; comentario2 = retChatGpt.res.replace(/\n/g, ' ').replace(/\\"/g, "'");
                 }
 

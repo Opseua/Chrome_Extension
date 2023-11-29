@@ -56,7 +56,7 @@ async function file(inf) {
                             path = `##_FILE-FUN_${fun}`;
                             path = `log/${path}/${mon}/${day}/${hou}_INF_RET.txt`
                             inf['path'] = path
-                            text = typeof logText === 'object' ? JSON.stringify(logText) : logText
+                            text = typeof logText === 'object' ? JSON.stringify(logText, null, 2) : logText
                             infFile = { 'action': 'relative', 'path': inf.path, 'functionLocal': inf.functionLocal && !eng ? true : false };
                             retFile = await file(infFile);
                             path = retFile.res[0]

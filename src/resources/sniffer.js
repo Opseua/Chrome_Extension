@@ -116,11 +116,7 @@ async function sniffer(inf) {
                     ret['msg'] = m.res;
                 })()
             };
-            return {
-                ...({ ret: ret.ret }),
-                ...(ret.msg && { msg: ret.msg }),
-                ...(ret.res && { res: ret.res }),
-            };
+            return ret
         });
         ret = resSniffer
 

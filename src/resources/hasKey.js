@@ -1,6 +1,6 @@
 // let objeto = { 'chave1': { 'chave2': { 'chave3': 'VALOR' } } }; // 'logFun': true,
 // let infHasKey, retHaskey
-// infHasKey = { 'key': 'chave3', 'obj': objeto };
+// infHasKey = { 'simple': true, 'key': 'chave3', 'obj': objeto };
 // retHaskey = hasKey(infHasKey);
 // console.log(retHaskey)
 
@@ -20,9 +20,15 @@ function hasKey(inf) { // NÃO POR COMO 'async'!!!
             };
             return false
         };
-        ret['res'] = hk(inf.key, typeof inf.obj === 'object' ? inf.obj : JSON.parse(inf.obj));
-        ret['msg'] = `HAS KEY: OK`;
-        ret['ret'] = true
+        if (inf.simple) {
+            let res = hk(inf.key, typeof inf.obj === 'object' ? inf.obj : JSON.parse(inf.obj))
+            return res ? true : false
+        } else {
+            let res = hk(inf.key, typeof inf.obj === 'object' ? inf.obj : JSON.parse(inf.obj))
+            ret['res'] = res ? true : false
+            ret['msg'] = `HAS KEY: OK`;
+            ret['ret'] = true
+        }
 
         // ### LOG FUN ###
         if (inf.logFun) {

@@ -35,11 +35,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                         'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO PEGAR COOKIE CHATGPT`, 'text': `Verificar se a aba abriu e se está logado`
                     };
                     await notification(infNotification);
-                    return {
-                        ...({ ret: ret.ret }),
-                        ...(ret.msg && { msg: ret.msg }),
-                        ...(ret.res && { res: ret.res }),
-                    };
+                    return ret
                 };
                 retConfigStorage['cookie'] = retGetCookies.res.concat;
                 infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }

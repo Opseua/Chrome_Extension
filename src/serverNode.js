@@ -11,16 +11,27 @@ async function serverNode(inf) {
         let dev4 = letter == 'D' ? devNodeJSLocal : devEC2Local
 
         // CONNECT [WEB-LOC]
-        await wsConnect([dev1, dev2, dev3, dev4,])
+        // ### EC2
+        if (letter !== 'D') {
+            await wsConnect([dev1, dev3,])
 
-        // LIST - [WEB] WEB
-        wsList(dev3, async (nomeList, par1) => {
-            runLis(nomeList, par1)
-        });
-        // LIST - [LOC] LOCAL
-        wsList(dev4, async (nomeList, par1) => {
-            runLis(nomeList, par1)
-        });
+            // LIST - [WEB] WEB
+            wsList(dev3, async (nomeList, par1) => {
+                runLis(nomeList, par1)
+            });
+        } else {
+            // NOTEBOOK
+            await wsConnect([dev1, dev2, dev3, dev4,])
+
+            // LIST - [WEB] WEB
+            wsList(dev3, async (nomeList, par1) => {
+                runLis(nomeList, par1)
+            });
+            // LIST - [LOC] LOCAL
+            wsList(dev4, async (nomeList, par1) => {
+                runLis(nomeList, par1)
+            });
+        }
 
         // RUN LIS
         async function runLis(nomeList, par1) {

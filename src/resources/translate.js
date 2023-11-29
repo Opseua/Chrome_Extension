@@ -15,11 +15,7 @@ async function translate(inf) {
         let res = retApi.body;
         let retRegex = regex({ 'pattern': 'class="result-container">(.*?)</div>', 'text': res });
         if (!retRegex.ret) {
-            return {
-                ...({ ret: ret.ret }),
-                ...(ret.msg && { msg: ret.msg }),
-                ...(ret.res && { res: ret.res }),
-            };
+            return ret
         };
         let dom, $
         if (eng) { // CHROME

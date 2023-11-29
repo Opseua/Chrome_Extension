@@ -12,11 +12,7 @@ async function command2(inf) {
         gORem(gOEve);
         chrome.browserAction.setBadgeText({ text: '' });
         reRun = false;
-        return {
-          ...({ ret: ret.ret }),
-          ...(ret.msg && { msg: ret.msg }),
-          ...(ret.res && { res: ret.res }),
-        };
+        return ret
       }
     }; gOAdd(gOEve);
     async function run() {
@@ -24,11 +20,7 @@ async function command2(inf) {
       infSniffer = { 'newReqSend': true, 'arrUrl': arrUrl }
       retSniffer = await sniffer(infSniffer)
       if (!retSniffer.res || !gO.inf.sniffer == 1) {
-        return {
-          ...({ ret: ret.ret }),
-          ...(ret.msg && { msg: ret.msg }),
-          ...(ret.res && { res: ret.res }),
-        };
+        return ret
       }
 
       // #### OneForma

@@ -8,11 +8,7 @@ async function oneForma_MTPE(inf) {
                 gORem(gOEve);
                 chrome.browserAction.setBadgeText({ text: '' });
                 ret = { 'ret': false };
-                return {
-                    ...({ ret: ret.ret }),
-                    ...(ret.msg && { msg: ret.msg }),
-                    ...(ret.res && { res: ret.res }),
-                };
+                return ret
             }
         };
         gOAdd(gOEve);
@@ -30,20 +26,12 @@ async function oneForma_MTPE(inf) {
             retRegex2 = regex(infRegex2)
 
             if (!gO.inf.sniffer == 1) {
-                return {
-                    ...({ ret: ret.ret }),
-                    ...(ret.msg && { msg: ret.msg }),
-                    ...(ret.res && { res: ret.res }),
-                };
+                return ret
             }
             let infChatGpt = { 'provider': 'open.ai', 'input': `REWRITE THE SENTENCE IN ENGLISH, WHICH WAS IN PORTUGUESE AND WAS TRANSLATED, KEEPING THE SAME MEANING AND LEAVING THE MOST LIKE THE ORIGINAL\n\nPORTUGUESE:\n${retRegex1.res['1']}\n\nENGLISH:\n${retRegex2.res['1']}` }
             let retChatGpt = await chatGpt(infChatGpt)
             if (!retChatGpt.res || !gO.inf.sniffer == 1) {
-                return {
-                    ...({ ret: ret.ret }),
-                    ...(ret.msg && { msg: ret.msg }),
-                    ...(ret.res && { res: ret.res }),
-                };
+                return ret
             }
 
             let clipboardText
