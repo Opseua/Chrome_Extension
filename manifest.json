@@ -94,12 +94,10 @@
     "48": "./src/media/icon_3.png",
     "128": "./src/media/icon_3.png"
   },
-  "browser_action": {
-    
-  },
+  "browser_action": {},
   "background": {
     "scripts": [
-      "./background.js"
+      "./src/scripts/background.js"
     ],
     "persistent": true
   },
