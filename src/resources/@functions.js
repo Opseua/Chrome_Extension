@@ -1,5 +1,7 @@
 // await new Promise(resolve => { setTimeout(resolve, 2000) })
 
+// process.exit();
+
 // let array = ['A', 'B', 'C', 'D', 'E', 'F'];
 // for (let [index, value] of array.entries()) {
 //     console.log('INDEX', index, 'VALUE', value);

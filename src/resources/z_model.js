@@ -43,18 +43,10 @@ await run()
 
 
 
-
-
-
-
-
-
-
-
-
-
 async function runNew() {
+    let ret = { 'ret': false };
     try {
+        ret['msg'] = `MODEL: OK`;
         function teste1() {
             console.log(aaa)
         }
@@ -67,6 +59,11 @@ async function runNew() {
     } catch (err) {
         errs(err);
     }
+    return {
+        ...({ ret: ret.ret }),
+        ...(ret.msg && { msg: ret.msg }),
+        ...(ret.res && { res: ret.res }),
+    };
 };
 
 const errs = (e) => {
@@ -80,3 +77,9 @@ if (typeof window !== 'undefined') {
     process.on('unhandledRejection', errs);
 }
 runNew();
+
+
+
+function teste() {
+    console.log(aaaaaaa)
+}

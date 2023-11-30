@@ -1,161 +1,123 @@
 // let infApi, retApi // 'logFun': true,
-// infApi = { // ########## TYPE → json
-//     'method': 'POST', 'url': `https://ntfy.sh/`,
+// infApi = { // ###### → json/object
+//     'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
 //     'headers': {
 //         'Content-Type': 'application/json'
 //     },
-//     'body': { 'Chave1': 'Valor 1', 'Chave2': 'Valor 2' }
+//     'body': {
+//         'aaa': 'bbbb',
+//     }
 // };
-// infApi = { // ########## TYPE → text
-//     'method': 'POST', 'url': `https://ntfy.sh/`,
+// infApi = { // ###### → text
+//     'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
 //     'headers': {
 //         'Content-Type': 'text/plain;charset=UTF-8'
 //     },
-//     'body': `ESSE É O VALOR`
+//     'body': `Esse é o texto`
 // };
-// infApi = { // ########## TYPE → urlencoded
-//     'method': 'POST', 'url': `https://ntfy.sh/`,
+// infApi = { // ###### → x-www-form-urlencoded
+//     'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
 //     'headers': {
 //         'Content-Type': 'application/x-www-form-urlencoded'
 //     },
-//     'body': { 'Chave1': 'Valor 1', 'Chave2': 'Valor 2' }
+//     'body': {
+//         'Chave': 'Valor',
+//     }
 // };
 // retApi = await api(infApi);
-// console.log(retApi.ret)
-
-// async function api(inf) {
-//     let ret = { 'ret': false };
-//     try {
-//         if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
-//             let reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'muteHttpExceptions': true, 'validateHttpsCertificates': true, };
-//             if (inf.headers) {
-//                 reqOpt['headers'] = inf.headers
-//             }
-//             if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
-//                 reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
-//             }
-//             let req = UrlFetchApp.fetch(inf.url, reqOpt);
-//             let resHeaders = req.getAllHeaders();
-//             let resBody = req.getContentText();
-//             ret['ret'] = true;
-//             ret['msg'] = 'API: OK';
-//             ret['res'] = {
-//                 'code': req.getResponseCode(),
-//                 'headers': resHeaders,
-//                 'body': resBody
-//             }
-//         } else { // ######################################### NODEJS ou CHROME
-//             let reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
-//             if (inf.headers) {
-//                 reqOpt['headers'] = inf.headers
-//             };
-//             if ((inf.body) && (inf.method == 'POST' || inf.method == 'PUT')) {
-//                 if (JSON.stringify(inf.headers).includes('x-www-form-urlencoded')) {
-//                     // x-www-form-urlencoded
-//                     reqOpt['body'] = new URLSearchParams(inf.body).toString();
-//                 } else {
-//                     // application/json | text/plain;charset=UTF-8
-//                     reqOpt['body'] = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
-//                 }
-//             };
-
-//             console.log(reqOpt)
-//             return ret
-
-//             let req = await fetch(inf.url, reqOpt);
-//             let resHeaders = {};
-//             req.headers.forEach((value, name) => { resHeaders[name] = value })
-//             let resBody = await req.text();
-//             ret['ret'] = true;
-//             ret['msg'] = 'API: OK';
-//             ret['res'] = {
-//                 'code': req.status,
-//                 'headers': resHeaders,
-//                 'body': resBody
-//             }
-
-//             // ### LOG FUN ###
-//             if (inf.logFun) {
-//                 let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-//                 infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
-//             }
-//         }
-//     } catch (e) {
-//         let m = await regexE({ 'e': e });
-//         ret['msg'] = m.res
-//     };
-//     return {
-//         ...({ ret: ret.ret }),
-//         ...(ret.msg && { msg: ret.msg }),
-//         ...(ret.res && { res: ret.res }),
-//     };
-// }
-
-// if (eng) { // CHROME
-//     window['api'] = api;
-// } else { // NODEJS
-//     global['api'] = api;
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// console.log(retApi)
 
 async function api(inf) {
     let ret = { 'ret': false };
     try {
-        if (typeof UrlFetchApp !== 'undefined') { // ################ GOOGLE APP SCRIPT
-            // Código para Google Apps Script (GAS)
-        } else { // ######################################### NODEJS ou CHROME
-            let reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true };
+        let req, resCode, resHeaders, resBody, body = false
+        let reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, };
 
-            // Adicionar cabeçalho Content-Type para 'x-www-form-urlencoded'
-            if (inf.method === 'POST' || inf.method === 'PUT') {
-                reqOpt.headers = {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    ...inf.headers
-                };
+        // HEADERS
+        reqOpt['headers'] = {}
+        if (inf.headers && Object.keys(inf.headers).length > 0) {
+            reqOpt.headers = inf.headers
+        };
+
+        // BODY
+        if ((inf.body) && (reqOpt.method == 'POST' || reqOpt.method == 'PUT')) {
+            if (!JSON.stringify(reqOpt.headers).includes('x-www-form-urlencoded')) {
+                // ###### → json/object | text
+                body = typeof inf.body === 'object' ? JSON.stringify(inf.body) : inf.body
             } else {
-                reqOpt.headers = inf.headers;
-            }
-
-            // Formatar dados no corpo da requisição se existirem
-            if (inf.body && (inf.method === 'POST' || inf.method === 'PUT')) {
-                reqOpt.body = new URLSearchParams(inf.body).toString();
-            }
-
-            let req = await fetch(inf.url, reqOpt);
-            let resHeaders = {};
-            req.headers.forEach((value, name) => { resHeaders[name] = value })
-            let resBody = await req.text();
-            ret['ret'] = true;
-            ret['msg'] = 'API: OK';
-            ret['res'] = {
-                'code': req.status,
-                'headers': resHeaders,
-                'body': resBody
-            }
-
-            // ### LOG FUN ###
-            if (inf.logFun) {
-                let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-                infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+                // ###### → x-www-form-urlencoded
+                if (!typeof inf.body === 'object' || !Object.keys(inf.body).length > 0) {
+                    ret['msg'] = `\n\n #### ERRO #### API \n 'body' NÃO É OBJETO [x-www-form-urlencoded] \n\n`
+                    return ret
+                }
+                body = []
+                for (var key in inf.body) {
+                    if (inf.body.hasOwnProperty(key)) {
+                        body.push(encodeURIComponent(key) + '=' + encodeURIComponent(inf.body[key]));
+                    }
+                }
+                body = body.join('&');
             }
         }
+
+        // ################ GOOGLE APP SCRIPT
+        if (typeof UrlFetchApp !== 'undefined') {
+            reqOpt['muteHttpExceptions'] = true
+            reqOpt['validateHttpsCertificates'] = true
+            if (body) {
+                reqOpt['payload'] = body
+            }
+
+            req = UrlFetchApp.fetch(inf.url, reqOpt);
+            resCode = req.getResponseCode()
+            resHeaders = req.getAllHeaders();
+            resBody = req.getContentText();
+        } else {
+            // ################ CHROME | NODEJS
+            // TEMPO LIMITE [PADRÃO 5 SEGUNDOS]
+            let max = inf.max ? inf.max * 1000 : 5000;
+            let controller = new AbortController();
+            let signal = controller.signal;
+            reqOpt['signal'] = signal
+            if (body) {
+                reqOpt['body'] = body
+                let encoder = new TextEncoder();
+                let length = encoder.encode(reqOpt.body).length;
+                reqOpt.headers['Content-Length'] = length
+            }
+            let timeoutId = setTimeout(() => {
+                // CANCELAR A REQUISIÇÃO SE O TEMPO FOR ATINGIDO
+                ret['msg'] = 'API: TEMPO MÁXIMO ATINGIDO';
+                controller.abort();
+            }, max);
+
+            req = await fetch(inf.url, reqOpt);
+            // LIMPAR O TIMER SE A RESPOSTA FOR RECEBIDA ANTES DO TEMPO
+            clearTimeout(timeoutId);
+            resCode = req.status
+            resHeaders = {};
+            req.headers.forEach((value, name) => { resHeaders[name] = value })
+            resBody = await req.text();
+        }
+
+        ret['ret'] = true;
+        ret['msg'] = 'API: OK';
+        ret['res'] = {
+            'code': resCode,
+            'headers': resHeaders,
+            'body': resBody
+        }
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        if (e.name !== 'AbortError') {
+            let m = await regexE({ 'e': e });
+            ret['msg'] = m.res
+        }
     };
     return {
         ...({ ret: ret.ret }),
