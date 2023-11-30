@@ -74,8 +74,8 @@ async function api(inf) {
             resBody = req.getContentText();
         } else {
             // ################ CHROME | NODEJS
-            // TEMPO LIMITE [PADRÃO 5 SEGUNDOS]
-            let max = inf.max ? inf.max * 1000 : 5000;
+            // TEMPO LIMITE [PADRÃO 10 SEGUNDOS]
+            let max = inf.max ? inf.max * 1000 : 10000;
             let controller = new AbortController();
             let signal = controller.signal;
             reqOpt['signal'] = signal
@@ -115,8 +115,8 @@ async function api(inf) {
         }
     } catch (e) {
         if (e.name !== 'AbortError') {
-            let m = await regexE({ 'e': e });
-            ret['msg'] = m.res
+            let retRegexE = await regexE({ 'inf': inf, 'e': e });
+            ret['msg'] = retRegexE.res
         }
     };
     return {

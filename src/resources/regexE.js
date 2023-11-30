@@ -34,7 +34,7 @@ async function regexE(inf) {
             line = file[1]
             file = file[0]
         }
-        let errorOk = { 'cng': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE', 'cngNumber': cng, 'file': file, 'line': line, 'e': inf.e.stack };
+        let errorOk = { 'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE', 'file': file, 'line': line, 'inf': inf.inf, 'e': inf.e.stack, };
 
         console.log(`\n\n### ERRO ###\n→ ${errorOk.file} [${errorOk.line}]\n\n${errorOk.e}\n\n`)
 
@@ -57,11 +57,28 @@ async function regexE(inf) {
             };
             let time = dtRes, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
             let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, text = errorOk
+            text = text = typeof text === 'object' ? `${hou}\n${JSON.stringify(text)}\n\n` : `${hou}\n${text}\n\n`
             // NO MESMO ARQUIVO
             // let path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}_err.txt`
             // ARQUIVO DIFERENTE DENTRO DE OUTRA PASTA
             let path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}/${hou}_ERR_${errorOk.file.replace(/[<>:"\\|?*]/g, '').replace('.js', '')}.txt`
-            text = text = typeof text === 'object' ? `${hou}\n${JSON.stringify(text)}\n\n` : `${hou}\n${text}\n\n`
+
+            if (typeof errorOk === 'object') {
+                let raw = '';
+                let obj = errorOk
+                let concat = inf.concat ? inf.concat : `\n\n#######\n\n`
+                for (let chave in obj) {
+                    if (typeof obj[chave] === 'object') {
+                        for (let subChave in obj[chave]) {
+                            raw += obj[chave][subChave] + concat;
+                        }
+                    } else {
+                        raw += obj[chave] + concat;
+                    }
+                }
+                text = `${text}\n\n${raw}`
+            }
+
             await _fs.promises.mkdir(_path.dirname(path), { recursive: true });
             await _fs.promises.writeFile(path, text, { flag: 'a' })
         }
@@ -70,20 +87,20 @@ async function regexE(inf) {
         let reqOpt = { 'method': 'POST', };
         let body = JSON.stringify({
             'fun': [{
-                'securityPass': errorOk.cngNumber == 3 ? 'AAAAAAAAAAAAAAAA' : securityPass,
+                'securityPass': errorOk.cng == 3 ? 'AAAAAAAAAAAAAAAA' : securityPass,
                 'retInf': false,
                 'name': 'notification',
                 'par': {
                     'duration': 5, 'icon': './src/media/notification_3.png',
-                    'title': `### ERRO ${errorOk.cng} ###`,
+                    'title': `### ERRO ${errorOk.cngName} ###`,
                     'text': `→ ${errorOk.file} [${errorOk.line}]\n${errorOk.e.substring(0, 128)}`
                 }
             }]
         })
         try {
-            let url = errorOk.cngNumber == 3 ? 'http://AAAA.20:8888/OAAAAAAAA' : `http://${devChromeWeb.split('://')[1]}`
+            let url = errorOk.cng == 3 ? 'http://AAAA.20:8888/OAAAAAAAA' : `http://${devChromeWeb.split('://')[1]}`
             // GOGOLE
-            if (errorOk.cngNumber == 3) {
+            if (errorOk.cng == 3) {
                 reqOpt['payload'] = body
                 UrlFetchApp.fetch(url, reqOpt)
                 Browser.msgBox(`### ERRO ### → ${errorOk.file}[${errorOk.line}]`, `${errorOk.e.substring(0, 128)}`, Browser.Buttons.OK);

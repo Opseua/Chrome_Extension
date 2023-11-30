@@ -1,4 +1,4 @@
-// let infLog, retLog // 'logFun': true, 'functionLocal': true,
+// let infLog, retLog // 'logFun': true, 'functionLocal': true, 'raw': true,
 // // → [Chrome_Extension]/log/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
 // infLog = { 'folder': '#_PASTA_#', 'path': `ARQUIVO.txt`, 'text': `INF AQUI` }
 // // (ESCREVE NO MESMO ARQUIVO) → [Chrome_Extension]/log/#_PASTA_#/log.txt
@@ -30,7 +30,7 @@ async function log(inf) {
         if (rewrite) {
             text = typeof text === 'object' ? `${hou}\n${JSON.stringify(inf.text)}\n\n` : `${hou}\n${inf.text}\n\n`
         }
-        infFile = { 'action': 'write', 'functionLocal': inf.functionLocal ? true : false, 'text': text, 'rewrite': rewrite, 'path': pathOk.replace(/:/g, '') };
+        infFile = { 'action': 'write', 'raw': inf.raw ? true : false, 'functionLocal': inf.functionLocal ? true : false, 'text': text, 'rewrite': rewrite, 'path': pathOk.replace(/:/g, '') };
         retFile = await file(infFile);
         let res = `${letter}:/${inf.functionLocal ? conf[2] : conf[3]}/${pathOk}`;
         ret['res'] = res.replace('%', '');
@@ -39,7 +39,7 @@ async function log(inf) {
 
         // ### LOG FUN ###
         if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            let infFile = { 'action': 'write', 'raw': inf.raw ? true : false, 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {

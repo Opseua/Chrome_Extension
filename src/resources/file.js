@@ -1,4 +1,4 @@
-// let infFile, retFile // 'logFun': true,
+// let infFile, retFile // 'logFun': true, 'raw': true,
 // infFile = { 'action': 'inf' }
 // infFile = { 'action': 'relative', 'functionLocal': false, 'path': './PASTA/ola.txt' }
 // infFile = { 'action': 'write', 'functionLocal': true, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
@@ -30,7 +30,13 @@ async function file(inf) {
                 } else if (!inf.text || inf.text == '') {
                     ret['msg'] = `\n\n #### ERRO #### FILE WRITE \n INFORMAR O 'text' \n\n`;
                 } else {
-                    text = typeof inf.text === 'object' ? JSON.stringify(inf.text) : inf.text
+                    if (inf.raw && typeof inf.text === 'object') {
+                        let infRawText = { 'obj': inf.text }
+                        let retRawText = await rawtext(infRawText)
+                        text = retRawText && retRawText !== '' ? retRawText : text
+                    } else {
+                        text = typeof inf.text === 'object' ? JSON.stringify(inf.text) : inf.text
+                    }
                     if (inf.path.includes(':')) {
                         path = inf.path;
                         if (eng) {
@@ -94,6 +100,7 @@ async function file(inf) {
                         await _fs.promises.mkdir(_path.dirname(path), { recursive: true });
                         await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' })
                     };
+                    ret['res'] = path
                     ret['msg'] = `FILE WRITE: OK`
                     ret['ret'] = true;
                 }

@@ -9,6 +9,11 @@
 // }
 // console.log('FIM');
 
+// // ## LOG ## retApi
+// let err = `[leadChangeStatus] LOG retApi`
+// infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+// retLog = await log(infLog);
+
 // [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
 let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
 // ###### true CHROME / GOOGLE | false NODEJS
@@ -24,7 +29,7 @@ if (cng == 1) {
     global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, cs, conf = ['src/config.json'];
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, cs, conf = ['src/config.json'];
 
 if (eng) { // CHROME
     _WebSocket = window.WebSocket
@@ -40,6 +45,7 @@ if (eng) { // CHROME
     const { createHash } = await import('crypto'); _crypto = createHash
     _puppeteer = await import('puppeteer');
     _net = await import('net');
+    _util = await import('util');
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -128,6 +134,7 @@ if (eng) { // CHROME
     global['_crypto'] = _crypto
     global['_puppeteer'] = _puppeteer
     global['_net'] = _net
+    global['_util'] = _util
     // ## VARIÁVEIS
     global['conf'] = conf;
     global['cs'] = cs;
