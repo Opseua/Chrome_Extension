@@ -47,8 +47,8 @@ async function server(inf) {
 
         ret['ret'] = true
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     };
     if (!ret.ret) {
         if (eng) { // CHROME
@@ -59,6 +59,15 @@ async function server(inf) {
     }
 }
 await server()
+
+
+
+
+
+
+
+
+
 
 
 
@@ -114,8 +123,8 @@ if (eng) { // CHROME
                 command2();
             } else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
         } catch (e) {
-            let m = await regexE({ 'e': e });
-            ret['msg'] = m.res
+            let retRegexE = await regexE({ 'inf': inf, 'e': e });
+            ret['msg'] = retRegexE.res
         };
         return {
             ...({ ret: ret.ret }),

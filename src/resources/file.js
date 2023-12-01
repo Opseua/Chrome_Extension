@@ -30,10 +30,10 @@ async function file(inf) {
                 } else if (!inf.text || inf.text == '') {
                     ret['msg'] = `\n\n #### ERRO #### FILE WRITE \n INFORMAR O 'text' \n\n`;
                 } else {
-                    if (inf.raw && typeof inf.text === 'object') {
+                    if (inf.raw) {
                         let infRawText = { 'obj': inf.text }
                         let retRawText = await rawtext(infRawText)
-                        text = retRawText && retRawText !== '' ? retRawText : text
+                        text = retRawText
                     } else {
                         text = typeof inf.text === 'object' ? JSON.stringify(inf.text) : inf.text
                     }
@@ -160,8 +160,8 @@ async function file(inf) {
                         ret['msg'] = `FILE DEL: OK`;
                         ret['ret'] = true;
                     } catch (e) {
-                        let m = await regexE({ 'e': e });
-                        ret['msg'] = `\n\n #### ERRO #### FILE DEL \n ${m.res} \n\n`
+                        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+                        ret['msg'] = retRegexE.res
                     }
                 };
                 await delP(path)
@@ -346,8 +346,8 @@ async function file(inf) {
         //     infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         // }
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     };
     return {
         ...({ ret: ret.ret }),

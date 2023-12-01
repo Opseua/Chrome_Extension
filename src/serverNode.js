@@ -58,8 +58,8 @@ async function serverNode(inf) {
         ret['ret'] = true
         ret['msg'] = `SERVER NODE: OK`
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     };
     if (!ret.ret) {
         if (eng) { // CHROME

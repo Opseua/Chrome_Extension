@@ -26,8 +26,8 @@ function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
         ret['ret'] = true;
     } catch (e) {
         (async () => {
-            let m = await regexE({ 'e': e });
-            ret['msg'] = m.res
+            let retRegexE = await regexE({ 'inf': inf, 'e': e });
+            ret['msg'] = retRegexE.res
         })()
     };
     return {

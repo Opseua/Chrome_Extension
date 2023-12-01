@@ -44,8 +44,8 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             wsSend(gO.inf.wsArr[0], { "name": "google", "par": { "search": query } })
         }; ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     };
     return {
         ...({ ret: ret.ret }),

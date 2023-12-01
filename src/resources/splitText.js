@@ -28,8 +28,8 @@ async function splitText(inf) {
         ret['msg'] = 'SPLIT TEXT: OK';
         ret['ret'] = true;
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     };
     return {
         ...({ ret: ret.ret }),

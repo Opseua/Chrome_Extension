@@ -51,8 +51,8 @@ async function wsConnect(inf) {
             }, (secPing * 1000)); // secPing
         }
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     }
     return await ws(inf);
 }
@@ -165,8 +165,8 @@ async function ws(url, message) {
             })
         }
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     }
 }
 

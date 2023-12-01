@@ -24,19 +24,23 @@
 async function rawtext(inf) {
     let ret = ''
     try {
-        let raw = '';
         let obj = inf.obj
-        let concat = inf.concat ? inf.concat : `\n\n#######\n\n`
-        for (let chave in obj) {
-            if (typeof obj[chave] === 'object') {
-                for (let subChave in obj[chave]) {
-                    raw += obj[chave][subChave] + concat;
+        if ((/<!.* html>.*<\/html>/s.test(obj) || !(typeof obj === 'object'))) {
+            return obj
+        } else {
+            let raw = '';
+            let concat = inf.concat ? inf.concat : `\n\n######################################################################\n\n`
+            for (let chave in obj) {
+                if (typeof obj[chave] === 'object') {
+                    for (let subChave in obj[chave]) {
+                        raw += obj[chave][subChave] + concat;
+                    }
+                } else {
+                    raw += obj[chave] + concat;
                 }
-            } else {
-                raw += obj[chave] + concat;
             }
+            ret = `${JSON.stringify(obj)}\n\n\n\n${raw}`
         }
-        ret = raw
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e });
     };

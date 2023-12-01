@@ -95,3 +95,4 @@ if (eng) { // CHROME
 } else { // NODEJS
     global['regex'] = regex;
 }
+

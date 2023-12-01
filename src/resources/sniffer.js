@@ -112,8 +112,8 @@ async function sniffer(inf) {
 
             } catch (e) {
                 (async () => {
-                    let m = await regexE({ 'e': e });
-                    ret['msg'] = m.res;
+                    let retRegexE = await regexE({ 'inf': inf, 'e': e });
+                    ret['msg'] = retRegexE.res
                 })()
             };
             return ret
@@ -126,8 +126,8 @@ async function sniffer(inf) {
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     }
     return {
         ...({ ret: ret.ret }),
