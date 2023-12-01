@@ -20,7 +20,8 @@ function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
             'mil': String(dt2.toString().slice(-3)),
             'tim': String(dt2.toString().slice(0, -3)),
             'timMil': String(dt2.toString()),
-            'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()]
+            'dayNam': ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'][dt1.getDay()],
+            'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()],
         };
         ret['msg'] = `DATE HOUR: OK`
         ret['ret'] = true;
