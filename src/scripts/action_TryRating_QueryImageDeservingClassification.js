@@ -1,6 +1,7 @@
-
+let e = import.meta.url;
 async function action_TryRating_QueryImageDeservingClassification(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         if (!`rodar no → CHROME `.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'action_TryRating_QueryImageDeservingClassification', 'par': inf, 'retInf': inf.retInf } };
@@ -8,7 +9,7 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
         };
 
         let data = inf
-        let infFile = { 'action': 'read', 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt` }
+        let infFile = { 'e': e, 'action': 'read', 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/TryRating/reg.txt` }
         let retFile = await file(infFile);
         let old = Number(retFile.res);
         let now = Number(dateHour().res.tim);
@@ -51,7 +52,7 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
         await new Promise(resolve => { setTimeout(resolve, 800) })
         let infChromeActions = { 'action': 'script', 'code': code, 'search': retTabSearch.res.id };
         let retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { return retChromeActions }
-        wsSend(nomeList, { 'other': 'OK: TryRating_QueryImageDeservingClassification' })
+        wsSend({ 'e': e, 'url': nomeList, 'message': { 'other': 'OK: TryRating_QueryImageDeservingClassification' } })
 
         ret['msg'] = `action_TryRating_QueryImageDeservingClassification: OK`;
         ret['ret'] = true;

@@ -1,4 +1,4 @@
-import('../server.js');
+import('../client.js');
 
 // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
 // chrome.downloads.onChanged.addListener(async function (...inf) {

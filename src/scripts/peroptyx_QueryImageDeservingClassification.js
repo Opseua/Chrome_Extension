@@ -1,6 +1,7 @@
-
+let e = import.meta.url;
 async function peroptyx_QueryImageDeservingClassification(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
@@ -10,7 +11,7 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
                     return ret
                 }
             }; gOAdd(gOEve);
-        }; if (inf.logFile) { retFile = await file({ 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
+        }; if (inf.logFile) { retFile = await file({ 'e': e, 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
         else { retSniffer = JSON.parse(inf.sniffer) }; let query = retSniffer.tasks[0].taskData.query; await clipboard({ 'value': query })
         if (retSniffer.targetLocalIds.length == 1) {
             infNotification = { 'duration': 4, 'icon': './src/media/notification_3.png', 'title': `BLIND`, 'text': `${query}` }
@@ -41,7 +42,8 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             }; let retApi = await api(infApi);
         } else {
             // ws1.send(JSON.stringify({ "name": "google", "par": { "search": query } }))
-            wsSend(gO.inf.wsArr[0], { "name": "google", "par": { "search": query } })
+            wsSend({ 'e': e, 'url': gO.inf.wsArr[0], 'message': { "name": "google", "par": { "search": query } } })
+
         }; ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e });

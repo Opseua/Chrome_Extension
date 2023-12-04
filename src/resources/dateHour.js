@@ -4,8 +4,10 @@
 
 // let timestamp = Math.floor(new Date().getTime() / 1000);
 
+let e = import.meta.url;
 function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         let dt1 = new Date();
         dt1.setSeconds(new Date().getSeconds() + inf).setSeconds;

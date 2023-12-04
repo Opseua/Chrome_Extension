@@ -1,5 +1,7 @@
+let e = import.meta.url;
 async function keepCookieLive(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'keepCookieLive', 'par': inf, 'retInf': inf.retInf } };
@@ -7,7 +9,7 @@ async function keepCookieLive(inf) {
         };
 
         let retGetCookies, infChromeActions, retChromeActions
-        let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'chatGptOra.ai' });
+        let retConfigStorage = await configStorage({ 'e': e, 'action': 'get', 'key': 'chatGptOra.ai' });
         retConfigStorage = retConfigStorage.res
         // ATUALIZAR A PÁGINA DO ora.ai
         let retTabSearch = await tabSearch({ 'search': '*ora.ai*', 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': retConfigStorage.meu });
@@ -40,15 +42,15 @@ async function keepCookieLive(inf) {
         let time = dateHour().res;
         retConfigStorage['cookie'] = retGetCookies.res.concat;
         retConfigStorage['dateHour'] = `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`;
-        let infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
+        let infConfigStorage = { 'e': e, 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
         retConfigStorage = await configStorage(infConfigStorage);
         let send = {
             'fun': [
                 { 'securityPass': securityPass, 'retInf': false, 'name': 'configStorage', 'par': infConfigStorage },
-                { 'securityPass': securityPass, 'retInf': false, 'name': 'log', 'par': { 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
+                { 'securityPass': securityPass, 'retInf': false, 'name': 'log', 'par': { 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
             ]
         };
-        wsSend(devNodeJSLocal, send);
+        wsSend({ 'e': e, 'url': devNodeJSLocal, 'message': send });
         ret['msg'] = `KEEP COOKIE LIVE: OK`;
         ret['ret'] = true;
     } catch (e) {

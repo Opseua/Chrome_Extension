@@ -3,8 +3,10 @@
 // retSplitText = await splitText(infSplitText);
 // console.log(retSplitText)
 
+let e = import.meta.url;
 async function splitText(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         let text = inf.text.replace(/\n/g, '\\n');
         let maxLength = inf.maxLength;
@@ -27,6 +29,12 @@ async function splitText(inf) {
         ret['res'] = chunks;
         ret['msg'] = 'SPLIT TEXT: OK';
         ret['ret'] = true;
+
+        // ### LOG FUN ###
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e });
         ret['msg'] = retRegexE.res

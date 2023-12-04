@@ -1,3 +1,6 @@
+// console.clear();
+// console.clear();
+
 // [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
 let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
 // ###### true CHROME / GOOGLE | false NODEJS
@@ -22,6 +25,7 @@ if (!(eng ? window.all1 : global.all1)) {
 }
 
 // FUNÇÕES DESSE PROJETO
+await import('./regexE.js') // MANTER COMO PRIMEIRO IMPORT
 await import('./api.js')
 await import('./chatGpt.js')
 await import('./chromeActions.js')
@@ -34,6 +38,7 @@ await import('./devFun.js')
 await import('./file.js')
 await import('./getCookies.js')
 await import('./getPage.js')
+// await import('./getPath.js') // IMPORTADA PELA @functions
 await import('./googleSheet.js')
 await import('./hasKey.js')
 await import('./htmlToJson.js')
@@ -46,16 +51,12 @@ await import('./promptChrome.js')
 await import('./random.js')
 await import('./rawText.js')
 await import('./regex.js')
-await import('./regexE.js')
 await import('./secToHour.js')
 await import('./sniffer.js')
 await import('./splitText.js')
 await import('./tabSearch.js')
 await import('./translate.js')
 await import('./wsConnect.js')
-
-// SERVER NODE
-await import('../serverNode.js')
 
 // SCRIPTS DESSE PROJETO
 await import('../scripts/command1.js')

@@ -4,10 +4,13 @@
 // retCommandLine = await commandLine(infCommandLine);
 // console.log(retCommandLine)
 
+let e = import.meta.url;
 async function commandLine(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         if (!`rodar no →  NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
+            console.log('enc')
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'commandLine', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
@@ -29,8 +32,8 @@ async function commandLine(inf) {
                 }
 
                 // ### LOG FUN ###
-                if (inf.logFun) {
-                    let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+                if (inf && inf.logFun) {
+                    let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
                     infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
                 }
                 resolve();

@@ -3,8 +3,10 @@
 // retPromptChrome = await promptChrome(infPromptChrome)
 // console.log(retPromptChrome)
 
+let e = import.meta.url;
 async function promptChrome(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         let title = (inf.title) ? `${inf.title} | Digite o comando:` : `Digite o comando:`;
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -27,8 +29,8 @@ async function promptChrome(inf) {
         }
 
         // ### LOG FUN ###
-        if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {

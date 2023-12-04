@@ -7,8 +7,10 @@
 // retNotification = await notification(infNotification);
 // console.log(retNotification)
 
+let e = import.meta.url;
 async function notification(infOk) {
     let ret = { 'ret': false };
+    e = infOk && infOk.e ? inf.e : e
     try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -48,8 +50,8 @@ async function notification(infOk) {
         ret['ret'] = true;
 
         // ### LOG FUN ###
-        if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {

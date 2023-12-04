@@ -12,8 +12,10 @@
 // retJsonInterpret = await jsonInterpret(infJsonInterpret)
 // console.log(retJsonInterpret)
 
+let e = import.meta.url;
 async function jsonInterpret(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         let json = JSON.stringify(inf.json);
         let res = json.replace(/\$\[(.*?)\]/g, (match, p1) => infGlobal[p1])
@@ -22,8 +24,8 @@ async function jsonInterpret(inf) {
         ret['ret'] = true;
 
         // ### LOG FUN ###
-        if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {

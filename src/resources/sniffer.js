@@ -3,8 +3,10 @@
 // retSniffer = await sniffer(infSniffer);
 // console.log(retSniffer)
 
+let e = import.meta.url;
 async function sniffer(inf) {
     let ret = { 'ret': false, 'res': { 'req': {}, 'res': {} } };
+    e = inf && inf.e ? inf.e : e
     if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
         let infDevAndFun = { 'enc': true, 'data': { 'name': 'sniffer', 'par': inf, 'retInf': inf.retInf } };
         let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
@@ -121,14 +123,14 @@ async function sniffer(inf) {
         ret = resSniffer
 
         // ### LOG FUN ###
-        if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e });
         ret['msg'] = retRegexE.res
-    }
+    };
     return {
         ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),

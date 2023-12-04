@@ -1,6 +1,9 @@
 // await import('./resources/@export.js'); // TESTES
+
+let e = import.meta.url;
 async function model(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         // if (!`rodar no → CHROME ou NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
         //     let infDevAndFun = { 'enc': true, 'data': { 'name': 'model', 'par': inf, 'retInf': inf.retInf } };
@@ -39,47 +42,3 @@ async function run() {
     console.log(retModel)
 }
 await run()
-
-
-
-
-async function runNew() {
-    let ret = { 'ret': false };
-    try {
-        ret['msg'] = `MODEL: OK`;
-        function teste1() {
-            console.log(aaa)
-        }
-        teste1()
-
-        async function teste2() {
-            console.log(bbb)
-        }
-        await teste2()
-    } catch (err) {
-        errs(err);
-    }
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-};
-
-const errs = (e) => {
-    console.error('ERRO FIM:', e);
-};
-if (typeof window !== 'undefined') {
-    window.addEventListener('error', errs);
-    window.addEventListener('unhandledrejection', errs);
-} else {
-    process.on('uncaughtException', errs);
-    process.on('unhandledRejection', errs);
-}
-runNew();
-
-
-
-function teste() {
-    console.log(aaaaaaa)
-}

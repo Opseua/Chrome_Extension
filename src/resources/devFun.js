@@ -1,14 +1,17 @@
+let e = import.meta.url;
 async function devFun(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         let infLog, retLog
         if (inf.enc) { // ENCAMINHAR PARA O DEVICE CERTO
             let retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf : inf.data.retInf ? inf.data.retInf : true
             let url = eng ? devNodeJSLocal : devChromeLocal
             let data = { 'securityPass': securityPass, 'retInf': retInf, 'name': inf.data.name, 'par': inf.data.par }
+            data.par['e'] = inf.e
             delete data.par.retInf // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO
             let send = { "fun": [data] }
-            let retWsSend = await wsSend(url, send);
+            let retWsSend = await wsSend({ 'e': e, 'url': url, 'message': send });
             if (!retWsSend.ret) {
                 return retWsSend
             } else {
@@ -35,12 +38,12 @@ async function devFun(inf) {
                 if (value.securityPass !== securityPass) {
                     ret['msg'] = `\n #### SECURITYPASS INCORRETO #### \n\n ${JSON.stringify(data)} \n\n`
                     console.log(ret.msg)
-                    infLog = { 'folder': 'JavaScript', 'path': `err.txt`, 'text': ret.msg }
+                    infLog = { 'e': e, 'folder': 'JavaScript', 'path': `err.txt`, 'text': ret.msg }
                     retLog = await log(infLog);
                 } else if (!label(value.name)) {
                     ret['msg'] = `\n #### FUNÇÃO '${value.name}' NÃO EXITE #### \n\n ${JSON.stringify(data)} \n\n`
                     console.log(ret.msg)
-                    infLog = { 'folder': 'JavaScript', 'path': `err.txt`, 'text': ret.msg }
+                    infLog = { 'e': e, 'folder': 'JavaScript', 'path': `err.txt`, 'text': ret.msg }
                     retLog = await log(infLog);
                 } else {
                     let name = eng ? window[value.name] : global[value.name] // CHROME ← : → NODEJS
@@ -51,7 +54,7 @@ async function devFun(inf) {
                     if (retInf) { // RESPOSTA NECESSÁRIA [SIM] (ENVIAR O RET DE VOLTA)
                         let url = inf.wsOrigin
                         let send = { 'retInf': retInf, 'retWs': retName.retWs ? retName.retWs : retName };
-                        let retWsSend = await wsSend(url, send);
+                        let retWsSend = await wsSend({ 'e': e, 'url': url, 'message': send });
                         if (!retWsSend.ret) {
                             return retWsSend
                         } else {

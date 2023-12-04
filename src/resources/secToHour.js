@@ -3,8 +3,10 @@
 // retSecToHour = secToHour(infSecToHour)
 // console.log(retSecToHour)
 
+let e = import.meta.url;
 function secToHour(inf) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         let hou = Math.floor(inf / 3600).toString().padStart(2, "0");
         let min = Math.floor((inf % 3600) / 60).toString().padStart(2, "0");

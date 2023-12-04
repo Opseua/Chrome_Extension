@@ -4,7 +4,7 @@ async function command2(inf) {
   try {
     let reRun = false
     let infSniffer, retSniffer, infConfigStorage, retConfigStorage
-    infConfigStorage = { 'action': 'get', 'key': 'sniffer' };
+    infConfigStorage = { 'e': e, 'action': 'get', 'key': 'sniffer' };
     retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
     let arrUrl = retConfigStorage.arrUrl
     let gOEve = async (i) => {

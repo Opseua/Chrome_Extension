@@ -11,7 +11,7 @@
 
 // // ## LOG ## retApi
 // let err = `[leadChangeStatus] LOG retApi`
-// infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+// infLog = {'e':e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
 // retLog = await log(infLog);
 
 // [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
@@ -20,16 +20,21 @@ let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined'
 if (cng == 1) {
     window['eng'] = true
     window['engName'] = 'CHROME'
-    window['engName'] = 'CHROME'
+    window['cng'] = 1
 } else if (cng == 2) {
     global['eng'] = false
     global['engName'] = 'NODEJS'
+    global['cng'] = 2
 } else if (cng == 3) {
     global['eng'] = true
     global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, cs, conf = ['src/config.json'];
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, cs
+
+// DEFINIR O 'conf' E O 'letter'
+await import('./getPath.js')
+let retGetPath = await getPath(); if (!retGetPath.ret) { console.log('ERRO getPath', retGetPath) }
 
 if (eng) { // CHROME
     _WebSocket = window.WebSocket
@@ -100,17 +105,18 @@ function rateLimiter(inf) {
     }; return { check };
 }
 // // ############### CLEAR CONSOLE ###############
-console.clear(); let msgQtd = 0; let clearConsole = console.log;
+//console.clear();
+let msgQtd = 0; let clearConsole = console.log;
 console.log = function () {
     clearConsole.apply(console, arguments); msgQtd++;
     if (msgQtd >= 100) { console.clear(); msgQtd = 0; console.log('CONSOLE LIMPO!') }
-} // // ###############               ###############
+}
+// // ###############               ###############
 
 if (eng) { // CHROME
     // ## BIBLIOTECAS
     window['_WebSocket'] = _WebSocket;
     // ## VARIÁVEIS
-    window['conf'] = conf;
     window['cs'] = cs;
     // ## GLOBAL OBJECT [NOVO]
     window['gO'] = gO; window['gOList'] = gOList;
@@ -118,8 +124,9 @@ if (eng) { // CHROME
     window['gOSniffer'] = gOSniffer;
     window['gOAddSniffer'] = gOAddSniffer;
     window['gORemSniffer'] = gORemSniffer;
-    // ## RATE LIMITER 
+    // ## FUNÇÕES
     window['rateLimiter'] = rateLimiter
+    window['getPath'] = getPath;
 } else { // NODEJS 
     // ## BIBLIOTECAS
     const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
@@ -136,7 +143,6 @@ if (eng) { // CHROME
     global['_net'] = _net
     global['_util'] = _util
     // ## VARIÁVEIS
-    global['conf'] = conf;
     global['cs'] = cs;
     // ## GLOBAL OBJECT [NOVO]
     global['gO'] = gO;
@@ -145,8 +151,9 @@ if (eng) { // CHROME
     global['gOSniffer'] = gOSniffer;
     global['gOAddSniffer'] = gOAddSniffer;
     global['gORemSniffer'] = gORemSniffer;
-    // ## RATE LIMITER 
+    // ## FUNÇÕES
     global['rateLimiter'] = rateLimiter
+    global['getPath'] = getPath;
 }
 
 // OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!)
@@ -157,3 +164,46 @@ if (eng) { window['all1'] = all1; } else { global['all1'] = all1 }
 // NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'
 if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 
+//  *************************** NÃO APAGAR ***************************
+// let matches = new Error().stack.match(/\:\/\/(.*?)\.js\:/g).map(match => match.slice(1, -1))
+// matches = matches[matches.length - 1]
+
+// async function runNew() {
+//     let ret = { 'ret': false };
+//     try {
+//         ret['msg'] = `MODEL: OK`;
+//         function teste1() {
+//             console.log(aaa)
+//         }
+//         teste1()
+
+//         async function teste2() {
+//             console.log(bbb)
+//         }
+//         await teste2()
+//     } catch (err) {
+//         errs(err);
+//     };
+//     return {
+//         ...({ ret: ret.ret }),
+//         ...(ret.msg && { msg: ret.msg }),
+//         ...(ret.res && { res: ret.res }),
+//     };
+// };
+
+// const errs = (e) => {
+//     console.error('ERRO FIM:', e);
+// };
+// if (typeof window !== 'undefined') {
+//     window.addEventListener('error', errs);
+//     window.addEventListener('unhandledrejection', errs);
+// } else {
+//     process.on('uncaughtException', errs);
+//     process.on('unhandledRejection', errs);
+// }
+// runNew();
+
+// function teste() {
+//     console.log(aaaaaaa)
+// }
+// teste()

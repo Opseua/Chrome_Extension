@@ -6,37 +6,24 @@
 async function regexE(inf) {
     let ret = { 'ret': false };
     try {
+        let retGetPath = await getPath({ 'e': inf.e })
+
         // IDENTIFICAR ENGINE
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
 
         // NOME E LINHA DO ARQUIVO
-        let matches = inf.e.stack.match(/\((.*?)\)/g).map(match => match.slice(1, -1));
-        let file = `NÃO IDENTIFICADO`, line = `NÃO IDENTIFICADA`
-        if (matches instanceof Array) {
-            for (let [index, value] of matches.entries()) {
-                if (cng == 1) {
-                    file = value.split('/')
-                    file = file[file.length - 1]
-                    break
-                } else if (cng == 2) {
-                    console.log(value)
-                    if (value.includes('.js')) {
-                        file = value.split('/')
-                        file = file[file.length - 1]
-                        break
-                    }
-                } else {
-                    file = value
-                    break
-                }
-            }
-            file = file.split(':')
-            line = file[1]
-            file = file[0]
+        let file = `NÃO IDENTIFICADO`, line = `NÃO IDENTIFICADA`, projectFile = `[?]`
+        if (retGetPath.ret) {
+            file = conf[4]
+            line = conf[5]
+            projectFile = `[${conf[6]}]\n→ ${conf[4]}`
         }
-        let errorOk = { 'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE', 'file': file, 'line': line, 'inf': inf.inf, 'e': inf.e.stack, };
+        let errorOk = {
+            'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE',
+            'file': file, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'e': inf.e.stack,
+        };
 
-        console.log(`\n\n### ERRO ###\n→ ${errorOk.file} [${errorOk.line}]\n\n${errorOk.e}\n\n`)
+        console.log(`\n\n### ERRO ###\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n\n\n`)
 
         // LOG DE ERROS [NODEJS]
         if (errorOk.cng == 2 && conf && conf[3]) {
@@ -61,7 +48,12 @@ async function regexE(inf) {
             // NO MESMO ARQUIVO
             // let path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}_err.txt`
             // ARQUIVO DIFERENTE DENTRO DE OUTRA PASTA
-            let path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}/${hou}_ERR_${errorOk.file.replace(/[<>:"\\|?*]/g, '').replace('.js', '')}.txt`
+
+            let path = errorOk.file
+            if (path.includes('/')) {
+                path = path.substring(path.lastIndexOf('/') + 1);
+            }
+            path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}/${hou}_ERR_${path.replace(/[<>:"\\|?*]/g, '').replace('.js', '')}.txt`
 
             if (typeof errorOk === 'object') {
                 let raw = '';
@@ -87,23 +79,23 @@ async function regexE(inf) {
         let reqOpt = { 'method': 'POST', };
         let body = JSON.stringify({
             'fun': [{
-                'securityPass': errorOk.cng == 3 ? 'AAAAAAAAAAAAAAAA' : securityPass,
+                'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : securityPass,
                 'retInf': false,
                 'name': 'notification',
                 'par': {
                     'duration': 5, 'icon': './src/media/notification_3.png',
                     'title': `### ERRO ${errorOk.cngName} ###`,
-                    'text': `→ ${errorOk.file} [${errorOk.line}]\n${errorOk.e.substring(0, 128)}`
+                    'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e.substring(0, 128)}`
                 }
             }]
         })
         try {
-            let url = errorOk.cng == 3 ? 'http://AAAA.20:8888/OAAAAAAAA' : `http://${devChromeWeb.split('://')[1]}`
+            let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:8888/AAAAAAAA' : `http://${letter == 'D' ? devChromeLocal.split('://')[1] : devChromeWeb.split('://')[1]}`
             // GOGOLE
             if (errorOk.cng == 3) {
                 reqOpt['payload'] = body
                 UrlFetchApp.fetch(url, reqOpt)
-                Browser.msgBox(`### ERRO ### → ${errorOk.file}[${errorOk.line}]`, `${errorOk.e.substring(0, 128)}`, Browser.Buttons.OK);
+                Browser.msgBox(`### ERRO ### → ${errorOk.projectFile}[${errorOk.line}]`, `${errorOk.e.substring(0, 128)}`, Browser.Buttons.OK);
             } else {
                 // CHROME | GOOGLE
                 reqOpt['body'] = body
@@ -112,8 +104,8 @@ async function regexE(inf) {
         } catch (e) {
             console.log(`\n\n### ERRO REGEXe [FETCH] ###\n\n${e}\n\n`)
         }
-        ret['res'] = { 'file': errorOk.file, 'line': errorOk.line, 'e': errorOk.e, }
-        ret['msg'] = `\n\n### ERRO ###\n\n→ ${errorOk.file} [${errorOk.line}]\n${errorOk.e}`;
+        ret['res'] = { 'file': errorOk.file, 'line': errorOk.line, 'projectFile': errorOk.projectFile, 'e': errorOk.e, }
+        ret['msg'] = `\n\n### ERRO ###\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
     } catch (e) {
         console.log(`\n\n### ERRO REGEXe ###\n\n${e.stack}\n\n`)
     };

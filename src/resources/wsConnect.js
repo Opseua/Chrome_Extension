@@ -1,9 +1,9 @@
-// await wsConnect([devChrome, devNodeJS,]);
+// await wsConnect({ 'e': e, 'url': [dev1, dev2, dev3, dev4,] })
 // wsList(devChrome, async (nomeList, par1) => {
 //     console.log('MENSAGEM RECEBIDA EM:', nomeList, '→', par1);
 // })
 // await new Promise(resolve => { setTimeout(resolve, 2000) })
-// wsSend(devChrome, 'Essa mensagem está sendo enviada')
+// wsSend({ 'e': e, 'url': dev1, 'message': `Essa mensagem está sendo enviada` })
 
 // wsList('listener1', async (nomeList, par1, par2) => {
 //     console.log('ACIONADO:', nomeList, '→', par1, par2);
@@ -15,7 +15,7 @@
 // acionarListener('listener1', 'INF1', 'INF2');
 // acionarListener('listener2', 'INF1', 'INF2'); 
 
-async function wsSend(parametro, message) { return await ws(parametro, message); }
+async function wsSend(inf) { return await ws({ 'e': inf.e, 'url': inf.url, 'message': inf.message }) }
 let listeners = {};
 function wsList(nomeList, callback) {
     if (!listeners[nomeList]) { listeners[nomeList] = []; } listeners[nomeList].push(callback);
@@ -24,7 +24,9 @@ function acionarListener(nomeList, par1, par2) {
     if (listeners[nomeList]) { listeners[nomeList].forEach(async (callback) => { await callback(nomeList, par1, par2); }); }
 }
 async function logWs(inf) { // NODEJS
-    if (!eng) { await log({ 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf }) }
+    if (!eng) {
+        let retLog = await log({ 'e': inf.e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf.msg })
+    }
 }
 
 let loopIsRunning = false
@@ -44,7 +46,7 @@ async function wsConnect(inf) {
                         time = dateHour().res;
                         console.log(`${time.hou}:${time.min}:${time.sec} WS pong EXPIROU: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
                         value.close()
-                        await logWs(msgLog);
+                        await logWs({ 'e': inf.e, 'msg': msgLog });
                     }, 2000);
                     pingsTimeouts[key] = pingTimeout;
                 }
@@ -58,9 +60,15 @@ async function wsConnect(inf) {
 }
 
 let activeSockets = new Map();
-async function ws(url, message) {
+async function ws(inf) {
+    let url = inf.url
+    let message = inf.message
+    let e = inf.e
     try {
-        if (activeSockets.size == 0) { await logWs('WS: START') }
+        if (activeSockets.size == 0) {
+            let msgLog = `WS: START`;
+            await logWs({ 'e': e, 'msg': msgLog })
+        }
         async function connectToServer(server) {
             return new Promise(resolve => {
                 if (!activeSockets.has(server)) {
@@ -69,7 +77,7 @@ async function ws(url, message) {
                         let msgLog = `WS OK:\n${server}`;
                         let time = dateHour().res;
                         console.log(`${time.hou}:${time.min}:${time.sec} ${msgLog.replace('ws://', '')}`);
-                        await logWs(msgLog);
+                        await logWs({ 'e': e, 'msg': msgLog })
                         activeSockets.set(server, webSocket);
                         resolve('');
                     }
@@ -89,7 +97,7 @@ async function ws(url, message) {
                         let msgLog = `WS RECONECTANDO:\n${server}`;
                         let time = dateHour().res;
                         console.log(`${time.hou}:${time.min}:${time.sec} ${msgLog.replace('ws://', '')}`);
-                        await logWs(msgLog);
+                        await logWs({ 'e': e, 'msg': msgLog })
                         setTimeout(async () => { await connectToServer(server); }, (secReconnect * 1000));
                     }
                     webSocket.onerror = async (event) => { };
@@ -97,8 +105,8 @@ async function ws(url, message) {
 
             });
         }
-        if (Array.isArray(url)) { // CONECTAR SERVIDORES
-            let promises = url.map(server => new Promise(resolve => {
+        if (Array.isArray(inf.url)) { // CONECTAR SERVIDORES
+            let promises = inf.url.map(server => new Promise(resolve => {
                 if (!activeSockets.has(server)) {
                     connectToServer(server).then(() => { resolve(''); });
                 } else {
@@ -106,14 +114,14 @@ async function ws(url, message) {
                 }
             }));
             await Promise.all(promises);
-        } else if (typeof url === 'string') { // ENVIAR MENSAGEM
+        } else if (typeof inf.url === 'string') { // ENVIAR MENSAGEM
             return new Promise(async (resolve) => {
-                let webSocket = activeSockets.has(url) ? activeSockets.get(url) : new _WebSocket(url)
-                let connected = activeSockets.has(url) ? true : false
+                let webSocket = activeSockets.has(inf.url) ? activeSockets.get(inf.url) : new _WebSocket(inf.url)
+                let connected = activeSockets.has(inf.url) ? true : false
                 let tentativas = 0, maxTentativas = 10;
                 while (tentativas < maxTentativas) {
                     if (webSocket.readyState === _WebSocket.OPEN) {
-                        let messageNew = typeof message === 'object' ? JSON.stringify(message) : message
+                        let messageNew = typeof inf.message === 'object' ? JSON.stringify(inf.message) : inf.message
                         let retInf = false
                         if (messageNew.includes(`"retInf":true`) || regex({ 'simple': true, 'pattern': '*"retInf":"*', 'text': messageNew })) {
                             retInf = JSON.stringify(Date.now())

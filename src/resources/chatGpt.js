@@ -3,12 +3,14 @@
 // retChatGpt = await chatGpt(infChatGpt);
 // console.log(retChatGpt)
 
+let e = import.meta.url;
 async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         let infConfigStorage, retConfigStorage, retApi, infNotification, infApi
         if (inf.provider == 'ora.ai') { // ######## ora.ai
-            infConfigStorage = { 'action': 'get', 'key': 'chatGptOra.ai' };
+            infConfigStorage = { 'e': e, 'action': 'get', 'key': 'chatGptOra.ai' };
             retConfigStorage = await configStorage(infConfigStorage)
             if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             if (!retConfigStorage['cookie']) {
@@ -23,7 +25,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 let retGetCookies = await getCookies(infGetCookies)
                 if (!(retGetCookies.ret)) {
                     if (eng) { // CHROME
-                        infConfigStorage = { 'action': 'del', 'key': 'chatGptOra.ai' };
+                        infConfigStorage = { 'e': e, 'action': 'del', 'key': 'chatGptOra.ai' };
                         retConfigStorage = await configStorage(infConfigStorage)
                     };
                     if (!retConfigStorage.ret) {
@@ -38,7 +40,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                     return ret
                 };
                 retConfigStorage['cookie'] = retGetCookies.res.concat;
-                infConfigStorage = { 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
+                infConfigStorage = { 'e': e, 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
                 let retSETConfigStorage = await configStorage(infConfigStorage); if (!retSETConfigStorage.ret) { return retSETConfigStorage }
             };
             infApi = {
@@ -60,7 +62,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['ret'] = true;
             } else { // CHROME
                 if (eng) {
-                    infConfigStorage = { 'action': 'del', 'key': 'chatGptOra.ai' };
+                    infConfigStorage = { 'e': e, 'action': 'del', 'key': 'chatGptOra.ai' };
                     retConfigStorage = await configStorage(infConfigStorage)
                 };
                 infNotification = { 'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
@@ -70,7 +72,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['ret'] = true;
             }
         } else if (inf.provider == 'open.ai') { // ######## open.ai
-            infConfigStorage = { 'action': 'get', 'key': 'chatGptOpenAi' };
+            infConfigStorage = { 'e': e, 'action': 'get', 'key': 'chatGptOpenAi' };
             retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             infApi = {
                 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`,
@@ -85,7 +87,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['ret'] = true;
             } else { // CHROME
                 if (eng) {
-                    infConfigStorage = { 'action': 'del', 'key': 'chatGptOpenAi' };
+                    infConfigStorage = { 'e': e, 'action': 'del', 'key': 'chatGptOpenAi' };
                     retConfigStorage = await configStorage(infConfigStorage)
                 }
                 infNotification = { 'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
@@ -115,7 +117,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `\n #### ERRO #### CHAT GPT AI CHATOS \n \n\n`
             }
         } else if (inf.provider == 'ec2') { // ######## ec2
-            infConfigStorage = { 'action': 'get', 'key': 'webSocket' };
+            infConfigStorage = { 'e': e, 'action': 'get', 'key': 'webSocket' };
             retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             infApi = {
                 'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.portWebSocket}/chatgpt`,
@@ -143,6 +145,12 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
             ret['msg'] = `CHAT GPT AI [GLOBALGPT]: OK`
             ret['res'] = JSON.parse(retApi.body).message.content;
             ret['ret'] = true;
+        }
+
+        // ### LOG FUN ###
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e });

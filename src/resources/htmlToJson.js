@@ -34,8 +34,10 @@
 // retHtmlToJson = await htmlToJson(infHtmlToJson)
 // console.log(retHtmlToJson)
 
+let e = import.meta.url;
 async function htmlToJson(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         if (!`rodar no →  NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'htmlToJson', 'par': inf, 'retInf': inf.retInf } };
@@ -71,8 +73,8 @@ async function htmlToJson(inf) {
         ret['res'] = JSON.stringify(tableData);
 
         // ### LOG FUN ###
-        if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {

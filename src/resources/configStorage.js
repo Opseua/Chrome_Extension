@@ -1,7 +1,7 @@
-// let infConfigStorage, retConfigStorage; // 'logFun': true, 'functionLocal': false,
-// infConfigStorage = { 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave' } // 'functionLocal' SOMENTE NO NODEJS
-// infConfigStorage = { 'action': 'get', 'key': 'NomeDaChave' } // 'functionLocal' SOMENTE NO NODEJS
-// infConfigStorage = { 'action': 'del', 'key': 'NomeDaChave' } // 'functionLocal' SOMENTE NO NODEJS
+// let infConfigStorage, retConfigStorage; // 'logFun': true, 'functionLocal': false, SOMENTE NO NODEJS
+// infConfigStorage = { 'e': e, 'action': 'set', 'functionLocal': false, 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+// infConfigStorage = { 'e': e, 'action': 'get', 'functionLocal': false, 'key': 'NomeDaChave' }
+// infConfigStorage = { 'e': e, 'action': 'del', 'functionLocal': false, 'key': 'NomeDaChave' }
 // retConfigStorage = await configStorage(infConfigStorage);
 // console.log(retConfigStorage)
 
@@ -11,14 +11,22 @@
 // cs = await csf([{ 'a': 'b' }]); cs = cs.res // ***** CS ***** SET VALOR NO 'reg.json'
 // console.log(cs)
 
+let e = import.meta.url;
 async function configStorage(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
+        let confKeep = conf
+        if (!eng && inf && inf.e) {
+            let regex = e.match(/(file:\/\/\/.*?PROJETOS\/[^\/]+)/)
+            regex = regex ? confKeep[3] = regex[1].replace('file:///', '').split(':/')[1] : false
+        }
+
         if (inf instanceof Array && inf.length == 1) { // ### CS
-            inf['path'] = `${letter}:/${conf[2]}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
-                rf = await file({ 'action': 'read', 'path': inf.path }); if (!rf.ret) { dt = {} } else { dt = JSON.parse(rf.res).dt }
+            inf['path'] = `${letter}:/${confKeep[2]}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
+                rf = await file({ 'e': e, 'action': 'read', 'path': inf.path }); if (!rf.ret) { dt = {} } else { dt = JSON.parse(rf.res).dt }
             } else { dt = typeof inf[0] === 'object' ? inf[0] : { 'key': inf[0] } };
-            if (!rf.ret) { rf = await file({ 'action': 'write', 'path': inf.path, 'rewrite': false, 'text': JSON.stringify({ 'dt': dt }, null, 2) }) }
+            if (!rf.ret) { rf = await file({ 'e': e, 'action': 'write', 'path': inf.path, 'rewrite': false, 'text': JSON.stringify({ 'dt': dt }, null, 2) }) }
             ret['res'] = dt; ret['ret'] = true; ret['msg'] = 'CS: OK'
         } else {
             let run = false;
@@ -63,7 +71,7 @@ async function configStorage(inf) {
                                         ret['msg'] = `\n\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`
                                     } else if (Object.keys(result).length == 0) {
                                         async function checkConfig() {
-                                            let infFile = { 'action': 'read', 'path': inf.path ? path : conf[0], 'functionLocal': true }
+                                            let infFile = { 'e': e, 'action': 'read', 'path': inf.path ? path : confKeep[0], 'functionLocal': true }
                                             let retFile = await file(infFile);
                                             let config = JSON.parse(retFile.res);
                                             if (config[inf.key]) {
@@ -121,7 +129,7 @@ async function configStorage(inf) {
                     if (inf.path && inf.path.includes(':')) {
                         path = inf.path
                     } else {
-                        infFile = { 'action': 'relative', 'path': conf[0], 'functionLocal': typeof inf.functionLocal == 'boolean' && !inf.functionLocal ? false : true }
+                        infFile = { 'e': e, 'action': 'relative', 'path': confKeep[0], 'functionLocal': typeof inf.functionLocal == 'boolean' && !inf.functionLocal ? false : true }
                         retFile = await file(infFile);
                         path = retFile.res[0]
                     };
@@ -150,7 +158,7 @@ async function configStorage(inf) {
                                 config[inf.key] = inf.value
                             };
                             if (!ret.msg) {
-                                infFile = { 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
+                                infFile = { 'e': e, 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
                                 retFile = await file(infFile);
                                 ret['msg'] = `CONFIG SET: OK`
                                 ret['ret'] = true;
@@ -171,7 +179,7 @@ async function configStorage(inf) {
                             ret['msg'] = `\n\n #### ERRO #### CONFIG DEL\n ARQUIVO '${path}' NAO ENCONTRADO \n\n`
                         } else if (config[inf.key]) {
                             delete config[inf.key];
-                            infFile = { 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
+                            infFile = { 'e': e, 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
                             retFile = await file(infFile);
                             ret['msg'] = `CONFIG DEL: OK`
                             ret['ret'] = true;
@@ -184,8 +192,8 @@ async function configStorage(inf) {
         }
 
         // ### LOG FUN ###
-        if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
@@ -207,7 +215,7 @@ if (eng) { // CHROME
     global['csf'] = configStorage;
 }
 
-// NÃO COMENTAR! NECESSÁRIO PARA DEFINIR AS VARIÁVEIS GLOBAIS
+// // NÃO COMENTAR! NECESSÁRIO PARA DEFINIR AS VARIÁVEIS GLOBAIS
 let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
 let secReconnect = retConfigStorage.res.secReconnect
 let secPing = retConfigStorage.res.secPing

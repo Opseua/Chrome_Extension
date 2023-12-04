@@ -18,8 +18,10 @@
 // retGoogleSheet = await googleSheet(infGoogleSheet)
 // console.log(retGoogleSheet)
 
+let e = import.meta.url;
 async function googleSheet(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'googleSheet', 'par': inf, 'retInf': inf.retInf } };
@@ -32,7 +34,7 @@ async function googleSheet(inf) {
         let _auth = await _authClient.getClient();
         let _sheet = _google.sheets('v4');
 
-        infConfigStorage = { 'action': 'get', 'key': 'googleApi' }
+        infConfigStorage = { 'e': e, 'action': 'get', 'key': 'googleApi' }
         retConfigStorage = await configStorage(infConfigStorage);
         if (retConfigStorage.ret) {
             let timestamp = Math.floor(new Date().getTime());
@@ -56,7 +58,7 @@ async function googleSheet(inf) {
                 'dateHor': `${day}/${mon} ${hou}:${min}:${sec}`,
                 // 'token': _auth.credentials.access_token
             };
-            infConfigStorage = { 'action': 'set', 'key': 'googleApi', 'value': retToken }
+            infConfigStorage = { 'e': e, 'action': 'set', 'key': 'googleApi', 'value': retToken }
             retConfigStorage = await configStorage(infConfigStorage);
         }
 
@@ -104,8 +106,8 @@ async function googleSheet(inf) {
         }
 
         // ### LOG FUN ###
-        if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {

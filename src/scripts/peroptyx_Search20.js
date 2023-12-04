@@ -1,6 +1,7 @@
-
+let e = import.meta.url;
 async function peroptyx_Search20(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         let infNotification, retNotification, retSniffer, retFile
         if (inf.snifferChrome) {
@@ -11,7 +12,7 @@ async function peroptyx_Search20(inf) {
                 }
             }; gOAdd(gOEve);
         }
-        if (inf.logFile) { retFile = await file({ 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
+        if (inf.logFile) { retFile = await file({ 'e': e, 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
         else { retSniffer = JSON.parse(inf.sniffer) }
         if (!retSniffer.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
             infNotification =

@@ -4,8 +4,10 @@
 // retRegex = regex(infRegex);
 // console.log(retRegex)
 
+let e = import.meta.url;
 function regex(inf) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         if (inf.pattern.includes('(.*?)')) {
             let res = {}; let ok = false;
@@ -71,9 +73,9 @@ function regex(inf) { // NÃO POR COMO 'async'!!!
         }
 
         // ### LOG FUN ###
-        if (inf.logFun) {
+        if (inf && inf.logFun) {
             (async () => {
-                let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+                let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
                 infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
             })()
         }

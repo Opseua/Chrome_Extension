@@ -3,8 +3,10 @@
 // retClipboard = await clipboard(infClipboard);
 // console.log(retClipboard)
 
+let e = import.meta.url;
 async function clipboard(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         if (inf.value == null || inf.value == '') {
             ret['msg'] = `\n\n #### ERRO #### CLIPBOARD \n INFORMAR O 'value' \n\n`
@@ -25,8 +27,8 @@ async function clipboard(inf) {
             ret['ret'] = true;
 
             // ### LOG FUN ###
-            if (inf.logFun) {
-                let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            if (inf && inf.logFun) {
+                let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
                 infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
             }
         }

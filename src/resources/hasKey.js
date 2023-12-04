@@ -4,8 +4,10 @@
 // retHaskey = hasKey(infHasKey);
 // console.log(retHaskey)
 
+let e = import.meta.url;
 function hasKey(inf) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e
     try {
         function hk(key, obj) {
             if (obj.hasOwnProperty(key)) {
@@ -31,9 +33,9 @@ function hasKey(inf) { // NÃO POR COMO 'async'!!!
         }
 
         // ### LOG FUN ###
-        if (inf.logFun) {
+        if (inf && inf.logFun) {
             (async () => {
-                let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+                let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
                 infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
             })()
         }
