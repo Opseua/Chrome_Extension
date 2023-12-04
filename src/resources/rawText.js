@@ -50,7 +50,7 @@ async function rawtext(inf) {
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
     };
     return ret
 }

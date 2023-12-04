@@ -118,6 +118,7 @@ if (eng) { // CHROME
     window['_WebSocket'] = _WebSocket;
     // ## VARIÁVEIS
     window['cs'] = cs;
+    window['catchGlobal'] = true;
     // ## GLOBAL OBJECT [NOVO]
     window['gO'] = gO; window['gOList'] = gOList;
     // ## GLOBAL OBJECT [SNIFFER CHROME] 
@@ -144,6 +145,7 @@ if (eng) { // CHROME
     global['_util'] = _util
     // ## VARIÁVEIS
     global['cs'] = cs;
+    global['catchGlobal'] = true;
     // ## GLOBAL OBJECT [NOVO]
     global['gO'] = gO;
     global['gOList'] = gOList;

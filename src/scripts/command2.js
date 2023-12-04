@@ -13,7 +13,7 @@ async function command2(inf) {
     ret['ret'] = true;
     ret['msg'] = `SHORTCUT PRESSED: OK`;
   } catch (e) {
-    let retRegexE = await regexE({ 'inf': inf, 'e': e });
+    let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
     ret['msg'] = retRegexE.res
   };
   return {

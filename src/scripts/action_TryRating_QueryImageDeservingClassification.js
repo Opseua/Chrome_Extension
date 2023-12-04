@@ -1,7 +1,11 @@
 let e = import.meta.url;
 async function action_TryRating_QueryImageDeservingClassification(inf) {
-    let ret = { 'ret': false };
-    e = inf && inf.e ? inf.e : e
+    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    if (catchGlobal) {
+        const errs = async (err, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': err, 'inf': inf, 'catchGlobal': true }) } }
+        if (typeof window !== 'undefined') { window.addEventListener('error', (err) => errs(err, ret)); window.addEventListener('unhandledrejection', (err) => errs(err, ret)) }
+        else { process.on('uncaughtException', (err) => errs(err, ret)); process.on('unhandledRejection', (err) => errs(err, ret)) }
+    }
     try {
         if (!`rodar no → CHROME `.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             let infDevAndFun = { 'enc': true, 'data': { 'name': 'action_TryRating_QueryImageDeservingClassification', 'par': inf, 'retInf': inf.retInf } };
@@ -58,7 +62,7 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
         ret['ret'] = true;
 
     } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

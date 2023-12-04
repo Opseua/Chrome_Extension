@@ -6,8 +6,7 @@
 
 let e = import.meta.url;
 function regex(inf) { // NÃO POR COMO 'async'!!!
-    let ret = { 'ret': false };
-    e = inf && inf.e ? inf.e : e
+    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         if (inf.pattern.includes('(.*?)')) {
             let res = {}; let ok = false;
@@ -81,7 +80,7 @@ function regex(inf) { // NÃO POR COMO 'async'!!!
         }
     } catch (e) {
         (async () => {
-            let retRegexE = await regexE({ 'inf': inf, 'e': e });
+            let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
             ret['msg'] = retRegexE.res
         })()
     };

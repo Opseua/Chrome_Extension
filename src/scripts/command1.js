@@ -6,7 +6,7 @@ async function command1(inf) {
     ret['msg'] = `COMMAND 1: OK`;
     ret['ret'] = true;
   } catch (e) {
-    let retRegexE = await regexE({ 'inf': inf, 'e': e });
+    let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
     ret['msg'] = retRegexE.res
   };
   return {

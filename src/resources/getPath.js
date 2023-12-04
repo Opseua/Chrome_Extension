@@ -4,8 +4,7 @@
 
 let e = import.meta.url;
 async function getPath(inf) {
-    let ret = { 'ret': false };
-    e = inf && inf.e ? inf.e : e
+    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         let newError, newErrorOk, matchesNew = [], resultado = [], resultadoOk = [], conf
         newError = new Error()

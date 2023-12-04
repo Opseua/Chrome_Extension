@@ -107,7 +107,7 @@ async function oneForma_MTPE(inf) {
         ret['ret'] = true;
         ret['msg'] = `ONEFORMA: OK`;
     } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

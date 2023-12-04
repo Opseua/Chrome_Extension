@@ -63,7 +63,7 @@ async function command2(inf) {
     await run()
     ret['ret'] = true;
   } catch (e) {
-    let retRegexE = await regexE({ 'inf': inf, 'e': e });
+    let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
     ret['msg'] = retRegexE.res
   };
   return {

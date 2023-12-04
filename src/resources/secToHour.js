@@ -5,8 +5,12 @@
 
 let e = import.meta.url;
 function secToHour(inf) { // NÃO POR COMO 'async'!!!
-    let ret = { 'ret': false };
-    e = inf && inf.e ? inf.e : e
+    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    if (catchGlobal) {
+        const errs = async (err, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': err, 'inf': inf, 'catchGlobal': true }) } }
+        if (typeof window !== 'undefined') { window.addEventListener('error', (err) => errs(err, ret)); window.addEventListener('unhandledrejection', (err) => errs(err, ret)) }
+        else { process.on('uncaughtException', (err) => errs(err, ret)); process.on('unhandledRejection', (err) => errs(err, ret)) }
+    }
     try {
         let hou = Math.floor(inf / 3600).toString().padStart(2, "0");
         let min = Math.floor((inf % 3600) / 60).toString().padStart(2, "0");
@@ -16,7 +20,7 @@ function secToHour(inf) { // NÃO POR COMO 'async'!!!
         ret['ret'] = true;
     } catch (e) {
         (async () => {
-            let retRegexE = await regexE({ 'inf': inf, 'e': e });
+            let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
             ret['msg'] = retRegexE.res
         })()
     };

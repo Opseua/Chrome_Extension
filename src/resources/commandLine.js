@@ -6,8 +6,12 @@
 
 let e = import.meta.url;
 async function commandLine(inf) {
-    let ret = { 'ret': false };
-    e = inf && inf.e ? inf.e : e
+    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    if (catchGlobal) {
+        const errs = async (err, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': err, 'inf': inf, 'catchGlobal': true }) } }
+        if (typeof window !== 'undefined') { window.addEventListener('error', (err) => errs(err, ret)); window.addEventListener('unhandledrejection', (err) => errs(err, ret)) }
+        else { process.on('uncaughtException', (err) => errs(err, ret)); process.on('unhandledRejection', (err) => errs(err, ret)) }
+    }
     try {
         if (!`rodar no →  NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
             console.log('enc')
@@ -43,7 +47,7 @@ async function commandLine(inf) {
             child.stderr.on('data', (data) => { });
         });
     } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

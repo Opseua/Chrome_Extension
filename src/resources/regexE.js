@@ -20,10 +20,10 @@ async function regexE(inf) {
         }
         let errorOk = {
             'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE',
-            'file': file, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'e': inf.e.stack,
+            'file': file, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'catchGlobal': inf.catchGlobal, 'e': inf.e.stack,
         };
 
-        console.log(`\n\n### ERRO ###\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n\n\n`)
+        console.log(`\n\n### ERRO ### [catchGlobal ${inf.catchGlobal}]\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n\n\n`)
 
         // LOG DE ERROS [NODEJS]
         if (errorOk.cng == 2 && conf && conf[3]) {
@@ -105,7 +105,7 @@ async function regexE(inf) {
             console.log(`\n\n### ERRO REGEXe [FETCH] ###\n\n${e}\n\n`)
         }
         ret['res'] = { 'file': errorOk.file, 'line': errorOk.line, 'projectFile': errorOk.projectFile, 'e': errorOk.e, }
-        ret['msg'] = `\n\n### ERRO ###\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
+        ret['msg'] = `\n\n### ERRO ### [catchGlobal ${inf.catchGlobal}]\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
     } catch (e) {
         console.log(`\n\n### ERRO REGEXe ###\n\n${e.stack}\n\n`)
     };
