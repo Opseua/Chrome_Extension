@@ -77,7 +77,7 @@ async function file(inf) {
                 } else {
                     if (inf.raw) {
                         let infRawText = { 'obj': inf.text }
-                        let retRawText = await rawtext(infRawText)
+                        let retRawText = await rawText(infRawText)
                         text = retRawText
                     } else {
                         text = typeof inf.text === 'object' ? JSON.stringify(inf.text) : inf.text
@@ -348,7 +348,7 @@ async function file(inf) {
                 // } else {
                 //     if (inf.raw) {
                 //         let infRawText = { 'obj': inf.text }
-                //         let retRawText = await rawtext(infRawText)
+                //         let retRawText = await rawText(infRawText)
                 //         text = retRawText
                 //     } else {
                 //         text = typeof inf.text === 'object' ? JSON.stringify(inf.text) : inf.text

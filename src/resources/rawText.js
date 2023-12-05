@@ -18,11 +18,11 @@
 //     }
 // };
 // infRawText = { 'obj': obj }
-// retRawText = await rawtext(infRawText)
+// retRawText = await rawText(infRawText)
 // console.log(retRawText)
 
 let e = import.meta.url;
-async function rawtext(inf) {
+async function rawText(inf) {
     e = inf && inf.e ? inf.e : e
     let ret = ''
     try {
@@ -56,7 +56,7 @@ async function rawtext(inf) {
 }
 
 if (eng) { // CHROME
-    window['rawtext'] = rawtext;
+    window['rawText'] = rawText;
 } else { // NODEJS
-    global['rawtext'] = rawtext;
+    global['rawText'] = rawText;
 }

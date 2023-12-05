@@ -114,7 +114,7 @@ console.log = function () {
 // // ###############               ###############
 
 if (eng) { // CHROME
-    // ## BIBLIOTECAS
+    // ## BIBLIOTECAS / NATIVO
     window['_WebSocket'] = _WebSocket;
     // ## VARIÁVEIS
     window['cs'] = cs;
@@ -129,7 +129,7 @@ if (eng) { // CHROME
     window['rateLimiter'] = rateLimiter
     window['getPath'] = getPath;
 } else { // NODEJS 
-    // ## BIBLIOTECAS
+    // ## BIBLIOTECAS / NATIVO
     const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
     global['_WebSocket'] = _WebSocket;
     global['_fs'] = _fs;

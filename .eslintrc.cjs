@@ -1,26 +1,94 @@
+// ************** VARIÁVEIS NÃO DECLARADAS [globais] **************
+let arrGlobal = [
+    'window', 'global',
+    'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'acionarListener', 'nomeList', 'gORem', 'gOAdd', 'wsList',
+    'csf',
+
+    // CHROME
+    // ## BIBLIOTECAS / NATIVO
+    '_WebSocket', 'chrome',
+    // ## VARIÁVEIS
+    'cs', 'catchGlobal',
+    // ## GLOBAL OBJECT [NOVO]
+    'gO', 'gOList',
+    // ## GLOBAL OBJECT [SNIFFER CHROME]
+    'gOSniffer', 'gOAddSniffer', 'gORemSniffer',
+    // ## FUNÇÕES
+    'rateLimiter', 'getPath',
+
+    // NODEJS
+    // ## BIBLIOTECAS / NATIVO
+    '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto',
+    '_puppeteer', '_net', '_util', 'process', 'Buffer',
+    // ## VARIÁVEIS
+    'cs', 'catchGlobal',
+    // ## GLOBAL OBJECT [NOVO]
+    'gO', 'gOList',
+    // ## GLOBAL OBJECT [SNIFFER CHROME]
+    'gOSniffer', 'gOAddSniffer', 'gORemSniffer',
+    // ## FUNÇÕES
+    'rateLimiter', 'getPath',
+
+    // GOOGLE
+    // ## BIBLIOTECAS / NATIVO
+    'UrlFetchApp', 'Browser',
+
+    // [Chrome_Extension]
+    // @export.js
+    'regexE', 'api', 'chatGpt', 'chromeActions', 'clipboard', 'file', 'commandLine', 'configStorage', 'dateHour', 'devFun',
+    'getCookies', 'getPage', 'getPath', 'googleSheet', 'hasKey', 'htmlToJson', 'jsonInterpret', 'log', 'keepCookieLive',
+    'notification', 'orderObj', 'promptChrome', 'random', 'rawText', 'regex', 'secToHour', 'sniffer', 'splitText',
+    'tabSearch', 'translate', 'wsConnect',
+    // scripts
+    'oneForma_MTPE', 'peroptyx_QueryImageDeservingClassification', 'peroptyx_Search20',
+    'action_TryRating_QueryImageDeservingClassification', 'background', 'command1', 'command2', 'command2_old',
+    // variáveis / funções
+    'secReconnect', 'secPing', 'par1', 'par2', 'par3', 'par4', 'par5', 'par6', 'par7', 'securityPass', 'port', 'devChromeWeb',
+    'devChromeLocal', 'devNodeJSWeb', 'devNodeJSLocal', 'devBlueStacksWeb', 'devBlueStacksLocal', 'devEC2Web', 'devEC2Local',
+    'devBlueStacks', 'wsSend', 'fileWrite',
+
+    // [Sniffer_Python]
+    // @export.js
+    'EWOQ', 'TryRating', 'TryRating_DrivingNavigation3DMaps', 'TryRating_QueryImageDeservingClassification',
+    'TryRating_Search20',
+
+    // [URA_Reversa]
+    // @export.js
+    'leadChangeStatus', 'leadGet', 'leads', 'login',
+
+    // [WebScraper]
+    // @export.js
+    'apiCnpj', 'apiNire', 'awaitLoad', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement',
+    'imput', 'navigate', 'sendData',
+
+];
+
+// ************** VARIÁVEIS NÃO USADAS **************
+let arrUnused = [
+    // [infNomeFuncao] [infNomeFuncao]
+    'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',
+    // (for)
+    'index', 'value',
+    // (time)
+    'time', 'time1', 'time2', 'hour',
+
+    // outros
+    'dev1', 'dev2', 'dev3', 'dev4', 'lin',
+    'browser',
+    'tipo',
+    'element',
+    'cookies',
+
+
+];
+
+let arrGlobalObj = {};
+for (let variavel of arrGlobal) { arrGlobalObj[variavel] = true; }
+
 module.exports = {
-    'env': {
-        'browser': true,
-        'es2021': true
-    },
-    'extends': 'eslint:recommended',
-    'overrides': [
-        {
-            'env': {
-                'node': true
-            },
-            'files': [
-                '.eslintrc.{js,cjs}'
-            ],
-            'parserOptions': {
-                'sourceType': 'script'
-            }
-        }
-    ],
-    'parserOptions': {
-        'ecmaVersion': 'latest',
-        'sourceType': 'module'
-    },
+    'env': { 'browser': true, 'es2021': true }, 'extends': 'eslint:recommended',
+    'overrides': [{ 'env': { 'node': true }, 'files': ['.eslintrc.{js,cjs}'], 'parserOptions': { 'sourceType': 'script' } }],
+    'parserOptions': { 'ecmaVersion': 'latest', 'sourceType': 'module' },
     'rules': {
         'no-extra-semi': 'off', // PONTO E VÍRGULA
         'no-undef': 'error', // VARIÁVEL NÃO DEFINIDA
@@ -28,178 +96,7 @@ module.exports = {
         'no-useless-escape': 'off', // ESCAPE DO REGEX
         'no-empty': 'off', // CHAVE VAZIA → { }
         'no-regex-spaces': 'off', // ESPAÇO NO REGEX
-        'no-unused-vars': ['error', {
-            'varsIgnorePattern': "^(" + [
-                'ret.*?',
-                'inf.*?',
-                'gO',
-                'catchGlobal',
-                'browser',
-                'tipo',
-                'element',
-                'cookies',
-                'lin',
-                'index',
-                'time',
-                'time2',
-                'dev1',
-                'dev2',
-                'dev3',
-                'dev4',
-                'value'
-                // Adicione outras variáveis aqui
-            ].join('|') + ")$"
-        }]
-    },
-    'globals': {
-        'value': true,
-        'index': true,
-        'Buffer': true,
-        '_net': true,
-        'TryRating': true,
-        'EWOQ': true,
-        'csf': true,
-        'cs': true,
-        '_WebSocketServer': true,
-        '_http': true,
-        'wsList': true,
-        'gOAdd': true,
-        'gORem': true,
-        'nomeList': true,
-        '_WebSocket': true,
-        'gOAddSniffer': true,
-        'gORemSniffer': true,
-        'gOSniffer': true,
-        'Browser': true,
-        'acionarListener': true,
-        'infGlobal': true,
-        '_cheerio': true,
-        '_google': true,
-        'cng': true,
-        'fileWrite': true,
-        '_crypto': true,
-        '_path': true,
-        'rawtext': true,
-        'wsSend': true,
-        'secReconnect': true,
-        'secPing': true,
-        'par1': true,
-        'par2': true,
-        'par3': true,
-        'par4': true,
-        'par5': true,
-        'par6': true,
-        'par7': true,
-        'securityPass': true,
-        'port': true,
-        'devChromeWeb': true,
-        'devNodeJSLocal': true,
-        'devChromeLocal': true,
-        'devNodeJSWeb': true,
-        'devBlueStacks': true,
-        'devBlueStacksWeb': true,
-        'devBlueStacksLocal': true,
-        'devEC2Web': true,
-        'devEC2Local': true,
-        '_fs': true,
-        'conf': true,
-        '_exec': true,
-        'letter': true,
-        '_clipboard': true,
-        'engName': true,
-        'chrome': true,
-        'UrlFetchApp': true,
-        'buttonElement': true,
-        '_puppeteer': true,
-        'eng': true,
-        'global': true,
-        'gO': true,
-        'catchGlobal': true,
-        'process': true,
-        'rateLimiter': true,
-        'z_model': true,
-        '@export': true,
-        '@functions': true,
-        'api': true,
-        'chatGpt': true,
-        'chromeActions': true,
-        'clipboard': true,
-        'commandLine': true,
-        'configStorage': true,
-        'dateHour': true,
-        'devFun': true,
-        'file': true,
-        'getCookies': true,
-        'getPage': true,
-        'getPath': true,
-        'googleSheet': true,
-        'hasKey': true,
-        'htmlToJson': true,
-        'jsonInterpret': true,
-        'keepCookieLive': true,
-        'log': true,
-        'notification': true,
-        'orderObj': true,
-        'promptChrome': true,
-        'random': true,
-        'rawText': true,
-        'regex': true,
-        'regexE': true,
-        'secToHour': true,
-        'sniffer': true,
-        'splitText': true,
-        'tabSearch': true,
-        'translate': true,
-        'wsConnect': true,
-        'peroptyx_Search20': true,
-        'action_TryRating_QueryImageDeservingClassification': true,
-        'background': true,
-        'command1': true,
-        'command2': true,
-        'command2_old': true,
-        'oneForma_MTPE': true,
-        'peroptyx_QueryImageDeservingClassification': true,
-        'TryRating_Search20': true,
-        '@EWOQ': true,
-        '@TryRating': true,
-        'TryRating_DrivingNavigation3DMaps': true,
-        'TryRating_QueryImageDeservingClassification': true,
-        'login': true,
-        'leadChangeStatus': true,
-        'leadGet': true,
-        'leads': true,
-        'navigate': true,
-        'sendData': true,
-        'apiCnpj': true,
-        'apiNire': true,
-        'awaitLoad': true,
-        'button': true,
-        'checkPage': true,
-        'cookiesGetSet': true,
-        'getTextElement': true,
-        'imput': true,
-        'infApiCnpj': true,
-        'retApiCnpj': true,
-        'infApiNire': true,
-        'retApiNire': true,
-        'infAwaitLoad': true,
-        'retAwaitLoad': true,
-        'infButton': true,
-        'retButton': true,
-        'infCheckPage': true,
-        'retCheckPage': true,
-        'infCookiesGetSet': true,
-        'infApretCookiesGetSetiCnpj': true,
-        'infGetTextElement': true,
-        'retGetTextElement': true,
-        'infImput': true,
-        'retImput': true,
-        'infNavigate': true,
-        'retNavigate': true,
-        'infSendData': true,
-        'retSendData': true,
-        'retRegexE': true,
-
-
-    }
+        'no-unused-vars': ['error', { 'varsIgnorePattern': "^(" + arrUnused.join('|') + ")$" }]
+    }, 'globals': arrGlobalObj,
+    'ignorePatterns': ['*teste*.js', '*Teste*.js', '*TESTE*.js',] // ARQUIVOS IGNORADOS
 }
