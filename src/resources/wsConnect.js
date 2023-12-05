@@ -54,7 +54,6 @@ async function wsConnect(inf) {
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
-        ret['msg'] = retRegexE.res
     }
     return await ws(inf);
 }
@@ -64,6 +63,7 @@ async function ws(inf) {
     let url = inf.url
     let message = inf.message
     let e = inf.e
+    let time
     try {
         if (activeSockets.size == 0) {
             let msgLog = `WS: START`;
@@ -73,9 +73,9 @@ async function ws(inf) {
             return new Promise(resolve => {
                 if (!activeSockets.has(server)) {
                     let webSocket = new _WebSocket(server);
-                    webSocket.onopen = async (event) => {
+                    webSocket.onopen = async () => {
                         let msgLog = `WS OK:\n${server}`;
-                        let time = dateHour().res;
+                        time = dateHour().res;
                         console.log(`${time.hou}:${time.min}:${time.sec} ${msgLog.replace('ws://', '')}`);
                         await logWs({ 'e': e, 'msg': msgLog })
                         activeSockets.set(server, webSocket);
@@ -84,14 +84,14 @@ async function ws(inf) {
                     webSocket.onmessage = (event) => {
                         if (event.data == par7) { // RECEBIDO 'pong' DO SERVIDOR
                             clearTimeout(pingsTimeouts[server]);
-                            let time = dateHour().res;
+                            time = dateHour().res;
                             // console.log(`${time.hou}:${time.min}:${time.sec} RECEBIDO PONG:\n${server.replace('ws://', ' ')}`)
                         } else { // OUTRO TIPO DE MENSAGEM RECEBIDA
                             acionarListener(server, event.data);
                             // console.log('RECEBIDA MENSAGEM:', server);
                         }
                     }
-                    webSocket.onclose = async (event) => {
+                    webSocket.onclose = async () => {
                         clearTimeout(pingsTimeouts[server]);
                         activeSockets.delete(server);
                         let msgLog = `WS RECONECTANDO:\n${server}`;
@@ -100,13 +100,13 @@ async function ws(inf) {
                         await logWs({ 'e': e, 'msg': msgLog })
                         setTimeout(async () => { await connectToServer(server); }, (secReconnect * 1000));
                     }
-                    webSocket.onerror = async (event) => { };
+                    webSocket.onerror = async () => { };
                 }
 
             });
         }
-        if (Array.isArray(inf.url)) { // CONECTAR SERVIDORES
-            let promises = inf.url.map(server => new Promise(resolve => {
+        if (Array.isArray(url)) { // CONECTAR SERVIDORES
+            let promises = url.map(server => new Promise(resolve => {
                 if (!activeSockets.has(server)) {
                     connectToServer(server).then(() => { resolve(''); });
                 } else {
@@ -114,14 +114,14 @@ async function ws(inf) {
                 }
             }));
             await Promise.all(promises);
-        } else if (typeof inf.url === 'string') { // ENVIAR MENSAGEM
-            return new Promise(async (resolve) => {
-                let webSocket = activeSockets.has(inf.url) ? activeSockets.get(inf.url) : new _WebSocket(inf.url)
-                let connected = activeSockets.has(inf.url) ? true : false
+        } else if (typeof url === 'string') { // ENVIAR MENSAGEM
+            return new Promise((resolve) => {
+                let webSocket = activeSockets.has(url) ? activeSockets.get(url) : new _WebSocket(url)
+                let connected = activeSockets.has(url) ? true : false
                 let tentativas = 0, maxTentativas = 10;
                 while (tentativas < maxTentativas) {
                     if (webSocket.readyState === _WebSocket.OPEN) {
-                        let messageNew = typeof inf.message === 'object' ? JSON.stringify(inf.message) : inf.message
+                        let messageNew = typeof message === 'object' ? JSON.stringify(message) : message
                         let retInf = false
                         if (messageNew.includes(`"retInf":true`) || regex({ 'simple': true, 'pattern': '*"retInf":"*', 'text': messageNew })) {
                             retInf = JSON.stringify(Date.now())
@@ -165,7 +165,6 @@ async function ws(inf) {
                         }
                         return;
                     } else {
-                        await new Promise(resolve => setTimeout(resolve, 500));
                         tentativas++;
                     }
                 }
@@ -174,7 +173,6 @@ async function ws(inf) {
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
-        ret['msg'] = retRegexE.res
     }
 }
 

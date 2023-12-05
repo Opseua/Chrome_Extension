@@ -7,9 +7,9 @@ let e = import.meta.url;
 async function chromeActions(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        const errs = async (err, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': err, 'inf': inf, 'catchGlobal': true }) } }
-        if (typeof window !== 'undefined') { window.addEventListener('error', (err) => errs(err, ret)); window.addEventListener('unhandledrejection', (err) => errs(err, ret)) }
-        else { process.on('uncaughtException', (err) => errs(err, ret)); process.on('unhandledRejection', (err) => errs(err, ret)) }
+        const errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } }
+        if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
+        else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -22,7 +22,8 @@ async function chromeActions(inf) {
             if (inf.color) {
                 action.setBadgeBackgroundColor({ 'color': inf.color })
             } // [25, 255, 71, 255]
-            if (inf.hasOwnProperty('text')) {
+            // if (inf.hasOwnProperty('text')) {
+            if ('text' in inf) {
                 action.setBadgeText({ 'text': inf.text })
             };
             ret['msg'] = `CHROME ACTIONS BADGE: OK`

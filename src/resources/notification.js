@@ -10,7 +10,7 @@
 let e = import.meta.url;
 async function notification(infOk) {
     let ret = { 'ret': false };
-    e = infOk && infOk.e ? inf.e : e
+    e = infOk && infOk.e ? infOk.e : e
     try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -55,7 +55,7 @@ async function notification(infOk) {
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+        let retRegexE = await regexE({ 'inf': infOk, 'e': e, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

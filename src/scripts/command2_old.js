@@ -1,6 +1,6 @@
-
+let e = import.meta.url;
 async function command2(inf) {
-  let ret = { 'ret': false };
+  let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
   try {
     let reRun = false
     let infSniffer, retSniffer, infConfigStorage, retConfigStorage

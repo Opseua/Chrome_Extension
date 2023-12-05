@@ -35,7 +35,6 @@ await import('./commandLine.js')
 await import('./configStorage.js')
 await import('./dateHour.js')
 await import('./devFun.js')
-await import('./file.js')
 await import('./getCookies.js')
 await import('./getPage.js')
 // await import('./getPath.js') // IMPORTADA PELA @functions

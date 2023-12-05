@@ -7,9 +7,9 @@ let e = import.meta.url;
 async function tabSearch(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        const errs = async (err, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': err, 'inf': inf, 'catchGlobal': true }) } }
-        if (typeof window !== 'undefined') { window.addEventListener('error', (err) => errs(err, ret)); window.addEventListener('unhandledrejection', (err) => errs(err, ret)) }
-        else { process.on('uncaughtException', (err) => errs(err, ret)); process.on('unhandledRejection', (err) => errs(err, ret)) }
+        const errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } }
+        if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
+        else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
@@ -42,7 +42,8 @@ async function tabSearch(inf) {
                 })
             })
         };
-        if (result.hasOwnProperty('res')) { // ATIVA ret
+        // if (result.hasOwnProperty('res')) { // ATIVA ret
+        if ('res' in result) { // ATIVA ret
             if (inf.search == 'ATIVA') {
                 ret['res'] = {
                     'id': result.res.id,
@@ -101,7 +102,8 @@ async function tabSearch(inf) {
                     }
                 }
             };
-            if (ret.hasOwnProperty('res')) {
+            // if (ret.hasOwnProperty('res')) {
+            if ('res' in ret) {
                 ret['msg'] = `SEARCH TAB: OK`
                 ret['ret'] = true;
             } else {
@@ -131,7 +133,8 @@ async function tabSearch(inf) {
     if (!ret.ret) {
         if (inf.openIfNotExist) {
             let retOpenTab = await openTab(inf);
-            if (retOpenTab.hasOwnProperty('id')) {
+            //if (retOpenTab.hasOwnProperty('id')) {
+            if ('id' in retOpenTab) {
                 ret['res'] = retOpenTab;
                 ret['msg'] = `SEARCH TAB: OK`
                 ret['ret'] = true;
@@ -150,7 +153,7 @@ async function openTab(inf) { // NAO USAR
         let active = inf.active ? true : false;
         let pinned = inf.pinned ? true : false;
         let url = inf.url ? inf.url : 'https://www.google.com';
-        return await new Promise((resolve, reject) => {
+        return await new Promise((resolve) => {
             chrome.tabs.create({ 'url': url, 'active': active, 'pinned': pinned }, function (novaAba) {
                 chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
                     if (tabId === novaAba.id && changeInfo.status === 'complete') {
@@ -165,7 +168,6 @@ async function openTab(inf) { // NAO USAR
     } catch (e) {
         (async () => {
             let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
-            ret['msg'] = retRegexE.res
         })()
     }
 };

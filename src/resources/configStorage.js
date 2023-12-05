@@ -15,15 +15,15 @@ let e = import.meta.url;
 async function configStorage(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        const errs = async (err, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': err, 'inf': inf, 'catchGlobal': true }) } }
-        if (typeof window !== 'undefined') { window.addEventListener('error', (err) => errs(err, ret)); window.addEventListener('unhandledrejection', (err) => errs(err, ret)) }
-        else { process.on('uncaughtException', (err) => errs(err, ret)); process.on('unhandledRejection', (err) => errs(err, ret)) }
+        const errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } }
+        if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
+        else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
         let confKeep = conf
         if (!eng && inf && inf.e) {
             let regex = e.match(/(file:\/\/\/.*?PROJETOS\/[^\/]+)/)
-            regex = regex ? confKeep[3] = regex[1].replace('file:///', '').split(':/')[1] : false
+            if (regex) { confKeep[3] = regex[1].replace('file:///', '').split(':/')[1] }
         }
 
         if (inf instanceof Array && inf.length == 1) { // ### CS
@@ -75,7 +75,7 @@ async function configStorage(inf) {
                                         ret['msg'] = `\n\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`
                                     } else if (Object.keys(result).length == 0) {
                                         async function checkConfig() {
-                                            let infFile = { 'e': e, 'action': 'read', 'path': inf.path ? path : confKeep[0], 'functionLocal': true }
+                                            let infFile = { 'e': e, 'action': 'read', 'path': inf.path ? inf.path : confKeep[0], 'functionLocal': true }
                                             let retFile = await file(infFile);
                                             let config = JSON.parse(retFile.res);
                                             if (config[inf.key]) {
@@ -133,7 +133,7 @@ async function configStorage(inf) {
                     if (inf.path && inf.path.includes(':')) {
                         path = inf.path
                     } else {
-                        infFile = { 'e': e, 'action': 'relative', 'path': confKeep[0], 'functionLocal': typeof inf.functionLocal == 'boolean' && !inf.functionLocal ? false : true }
+                        infFile = { 'e': e, 'action': 'relative', 'path': inf.path ? inf.path : confKeep[0], 'functionLocal': typeof inf.functionLocal == 'boolean' && !inf.functionLocal ? false : true }
                         retFile = await file(infFile);
                         path = retFile.res[0]
                     };

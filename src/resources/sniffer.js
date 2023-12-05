@@ -55,12 +55,14 @@ async function sniffer(inf) {
                     sendPri = { 'arrUrl': ['https://ntfy.sh/'] }
                 };
                 async function intercept(infOk, eventType) {
-                    if (!!sendPri.arrUrl.find(infRegex => regex({ 'simple': true, 'pattern': infRegex, 'text': infOk.url }))) {
+                    if (sendPri.arrUrl.find(infRegex => regex({ 'simple': true, 'pattern': infRegex, 'text': infOk.url }))) {
                         if (eventType == 'onBeforeRequest') {
-                            if (infOk.requestBody && infOk.requestBody.raw && infOk.requestBody.raw[0].hasOwnProperty('bytes')) {
+                            // if (infOk.requestBody && infOk.requestBody.raw && infOk.requestBody.raw[0].hasOwnProperty('bytes')) {
+                            if (infOk.requestBody && infOk.requestBody.raw && 'bytes' in infOk.requestBody.raw[0]) {
                                 ret.res.req['requestBodyType'] = 'binary';
                                 ret.res.req['requestBody'] = new TextDecoder("utf-8").decode(new Uint8Array(infOk.requestBody.raw[0].bytes));
-                            } else if (infOk.requestBody && infOk.requestBody.formData && infOk.requestBody.hasOwnProperty('formData')) {
+                                //} else if (infOk.requestBody && infOk.requestBody.formData && infOk.requestBody.hasOwnProperty('formData')) {
+                            } else if (infOk.requestBody && infOk.requestBody.formData && 'formData' in infOk.requestBody) {
                                 ret.res.req['requestBodyType'] = 'formData';
                                 ret.res.req['requestBody'] = infOk.requestBody.formData;
                             };

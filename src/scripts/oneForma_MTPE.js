@@ -43,7 +43,6 @@ async function oneForma_MTPE(inf) {
                 clipboardText = retChatGpt.res
             }
             if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
-                let msg = `${retRegex2.res['1']}\n${clipboardText}`
                 let infTranslate = { 'source': 'pt', 'target': 'en', 'text': clipboardText };
                 let retTranslate = await translate(infTranslate)
                 if (!retRegex2.res['1'].endsWith('.') && retTranslate.res.endsWith('.')) {
@@ -53,7 +52,6 @@ async function oneForma_MTPE(inf) {
                 } else {
                     clipboardText = retTranslate.res
                 }
-                msg = `${msg}\n${clipboardText}`
             }
 
             await clipboard({ 'value': clipboardText })

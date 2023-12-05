@@ -13,15 +13,15 @@ let e = import.meta.url;
 async function file(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        const errs = async (err, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': err, 'inf': inf, 'catchGlobal': true }) } }
-        if (typeof window !== 'undefined') { window.addEventListener('error', (err) => errs(err, ret)); window.addEventListener('unhandledrejection', (err) => errs(err, ret)) }
-        else { process.on('uncaughtException', (err) => errs(err, ret)); process.on('unhandledRejection', (err) => errs(err, ret)) }
+        const errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } }
+        if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
+        else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
         let confKeep = conf
         if (!eng && inf && inf.e) {
             let regex = e.match(/(file:\/\/\/.*?PROJETOS\/[^\/]+)/)
-            regex = regex ? confKeep[3] = regex[1].replace('file:///', '').split(':/')[1] : false
+            if (regex) { confKeep[3] = regex[1].replace('file:///', '').split(':/')[1] }
         }
 
         // PASSAR NO jsonInterpret
@@ -34,6 +34,11 @@ async function file(inf) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'path' \n\n`
         } else {
             let infFile, retFile, path, retFetch = '', text, jsonFile, functionLocal, fileOk, e, relative, pathFull, md5, relativeParts, retRelative, pathOld, pathNew
+
+            // SUBSTITUIR '!letter!' PELA LETRA DA UNIDADE
+            if (inf.path) {
+                inf.path = inf.path.replace(/!letter!/g, letter)
+            }
 
             async function fileRelative(inf) {
                 let resNew = { 'ret': false }
@@ -113,9 +118,7 @@ async function file(inf) {
                             path = path.split('%/')[1]
                         } else if (path.includes(':')) {
                             path = path.split(':/')[1]
-                        } else {
-                            path = path
-                        };
+                        }
                         if (inf.rewrite) {
                             try {
                                 infFile = { 'path': path, 'functionLocal': inf.functionLocal && !eng ? true : false };

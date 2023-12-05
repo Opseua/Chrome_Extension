@@ -55,7 +55,7 @@ import('../client.js');
 //     });
 // }, 5000);
 
-chrome.browserAction.onClicked.addListener(async function (...inf) { // ######################### CLICK NO ICONE
+chrome.browserAction.onClicked.addListener(async function () { // ######################### CLICK NO ICONE
     console.log('ON START: ICONE PRESSIONADO'); //chrome.browserAction.setPopup({popup: './popup.html'});
 });
 

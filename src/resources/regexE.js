@@ -6,7 +6,12 @@
 async function regexE(inf) {
     let ret = { 'ret': false };
     try {
+        let confKeep = conf
         let retGetPath = await getPath({ 'e': inf.e })
+        confKeep[2] = retGetPath.res[2]
+        confKeep[4] = retGetPath.res[4]
+        confKeep[5] = retGetPath.res[5]
+        confKeep[6] = retGetPath.res[6]
 
         // IDENTIFICAR ENGINE
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
@@ -14,9 +19,9 @@ async function regexE(inf) {
         // NOME E LINHA DO ARQUIVO
         let file = `NÃO IDENTIFICADO`, line = `NÃO IDENTIFICADA`, projectFile = `[?]`
         if (retGetPath.ret) {
-            file = conf[4]
-            line = conf[5]
-            projectFile = `[${conf[6]}]\n→ ${conf[4]}`
+            file = confKeep[4]
+            line = confKeep[5]
+            projectFile = `[${confKeep[6]}]\n→ ${confKeep[4]}`
         }
         let errorOk = {
             'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE',
@@ -26,7 +31,7 @@ async function regexE(inf) {
         console.log(`\n\n### ERRO ### [catchGlobal ${inf.catchGlobal}]\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n\n\n`)
 
         // LOG DE ERROS [NODEJS]
-        if (errorOk.cng == 2 && conf && conf[3]) {
+        if (errorOk.cng == 2 && conf && confKeep[3]) {
             let dt1 = new Date();
             dt1.setSeconds(new Date().getSeconds()).setSeconds;
             let dt2 = Date.now();
@@ -46,14 +51,14 @@ async function regexE(inf) {
             let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, text = errorOk
             text = text = typeof text === 'object' ? `${hou}\n${JSON.stringify(text)}\n\n` : `${hou}\n${text}\n\n`
             // NO MESMO ARQUIVO
-            // let path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}_err.txt`
+            // let path = `${letter}:/${confKeep[3]}/log/JavaScript/${mon}/${day}_err.txt`
             // ARQUIVO DIFERENTE DENTRO DE OUTRA PASTA
 
             let path = errorOk.file
             if (path.includes('/')) {
                 path = path.substring(path.lastIndexOf('/') + 1);
             }
-            path = `${letter}:/${conf[3]}/log/JavaScript/${mon}/${day}/${hou}_ERR_${path.replace(/[<>:"\\|?*]/g, '').replace('.js', '')}.txt`
+            path = `${letter}:/${confKeep[3]}/log/JavaScript/${mon}/${day}/${hou}_ERR_${path.replace(/[<>:"\\|?*]/g, '').replace('.js', '')}.txt`
 
             if (typeof errorOk === 'object') {
                 let raw = '';

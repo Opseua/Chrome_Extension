@@ -82,7 +82,7 @@ let gOSniffer = new Proxy(data, {
 });
 function gOAddSniffer(listener) { listeners.add(listener) }; function gORemSniffer(listener) { listeners.delete(listener) }
 async function globalChanged(i) {
-    // if (i.alert !== false) { console.log('globalObject ALTERADO →', i)}
+    if (i.alert !== false) { console.log('globalObject ALTERADO →', i) }
 }
 
 // ############### RATE LIMIT ###############

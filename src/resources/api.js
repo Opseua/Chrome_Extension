@@ -31,9 +31,9 @@ let e = import.meta.url;
 async function api(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        const errs = async (err, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': err, 'inf': inf, 'catchGlobal': true }) } }
-        if (typeof window !== 'undefined') { window.addEventListener('error', (err) => errs(err, ret)); window.addEventListener('unhandledrejection', (err) => errs(err, ret)) }
-        else { process.on('uncaughtException', (err) => errs(err, ret)); process.on('unhandledRejection', (err) => errs(err, ret)) }
+        const errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } }
+        if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
+        else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
         let req, resCode, resHeaders, resBody, body = false
@@ -58,7 +58,8 @@ async function api(inf) {
                 }
                 body = []
                 for (var key in inf.body) {
-                    if (inf.body.hasOwnProperty(key)) {
+                    // if (inf.body.hasOwnProperty(key)) {
+                    if (key in inf.body) {
                         body.push(encodeURIComponent(key) + '=' + encodeURIComponent(inf.body[key]));
                     }
                 }
