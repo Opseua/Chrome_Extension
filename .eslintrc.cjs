@@ -1,8 +1,7 @@
 // ************** VARIÁVEIS NÃO DECLARADAS [globais] **************
 let arrGlobal = [
     'window', 'global',
-    'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'acionarListener', 'nomeList', 'gORem', 'gOAdd', 'wsList',
-    'csf',
+    'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'acionarListener', 'nomeList', 'gORem', 'gOAdd', 'wsList', 'csf',
 
     // CHROME
     // ## BIBLIOTECAS / NATIVO
@@ -86,7 +85,7 @@ let arrGlobalObj = {};
 for (let variavel of arrGlobal) { arrGlobalObj[variavel] = true; }
 
 module.exports = {
-    'env': { 'browser': true, 'es2021': true }, 'extends': 'eslint:recommended',
+    'env': { 'browser': true, 'node': true, 'es2021': true }, 'extends': 'eslint:recommended',
     'overrides': [{ 'env': { 'node': true }, 'files': ['.eslintrc.{js,cjs}'], 'parserOptions': { 'sourceType': 'script' } }],
     'parserOptions': { 'ecmaVersion': 'latest', 'sourceType': 'module' },
     'rules': {
@@ -96,6 +95,7 @@ module.exports = {
         'no-useless-escape': 'off', // ESCAPE DO REGEX
         'no-empty': 'off', // CHAVE VAZIA → { }
         'no-regex-spaces': 'off', // ESPAÇO NO REGEX
+        'no-unreachable': 'off', // CÓDIGO APÓS O RETURN
         'no-unused-vars': ['error', { 'varsIgnorePattern': "^(" + arrUnused.join('|') + ")$" }]
     }, 'globals': arrGlobalObj,
     'ignorePatterns': ['*teste*.js', '*Teste*.js', '*TESTE*.js',] // ARQUIVOS IGNORADOS

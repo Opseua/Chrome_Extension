@@ -81,6 +81,7 @@ async function getPath(inf) {
         }
     } catch (e) {
         console.log(`\n\n### ERRO GET PATH ###\n\n${e.stack}\n\n`)
+        console.log(inf.e)
     };
     return {
         ...({ ret: ret.ret }),

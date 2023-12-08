@@ -4,6 +4,7 @@
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
 //     'tab': `RESULTADOS_CNPJ_NEW`,
 //     'range': `E1:F1`, // PERÍMETRO
+//     'range': `E:E`, // COLUNA
 //     'range': `E1`, // CÉLULA ÚNICA
 // }
 // infGoogleSheet = {
@@ -105,7 +106,11 @@ async function googleSheet(inf) {
                 ret['msg'] = `GOOGLE SHEET SEND: OK`;
                 ret['ret'] = true;
             } catch (e) {
-                ret['msg'] = `NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
+                if (JSON.stringify(e).includes(`You are trying to edit a protected`)) {
+                    ret['msg'] = `RANGE PROTEGIDO`;
+                } else {
+                    ret['msg'] = `NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
+                }
             }
         }
 
