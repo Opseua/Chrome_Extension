@@ -8,10 +8,6 @@ async function regexE(inf) {
     try {
         let confKeep = conf
         let retGetPath = await getPath({ 'e': inf.e })
-        confKeep[2] = retGetPath.res[2]
-        confKeep[4] = retGetPath.res[4]
-        confKeep[5] = retGetPath.res[5]
-        confKeep[6] = retGetPath.res[6]
 
         // IDENTIFICAR ENGINE
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
@@ -19,6 +15,10 @@ async function regexE(inf) {
         // NOME E LINHA DO ARQUIVO
         let file = `NÃO IDENTIFICADO`, line = `NÃO IDENTIFICADA`, projectFile = `[?]`
         if (retGetPath.ret) {
+            confKeep[2] = retGetPath.res[2]
+            confKeep[4] = retGetPath.res[4]
+            confKeep[5] = retGetPath.res[5]
+            confKeep[6] = retGetPath.res[6]
             file = confKeep[4]
             line = confKeep[5]
             projectFile = `[${confKeep[6]}]\n→ ${confKeep[4]}`

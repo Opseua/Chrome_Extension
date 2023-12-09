@@ -2,7 +2,7 @@
 // infGoogleSheet = {
 //     'action': 'get',
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
-//     'tab': `RESULTADOS_CNPJ_NEW`,
+//     'tab': `RESULTADOS`,
 //     'range': `E1:F1`, // PERÍMETRO
 //     'range': `E:E`, // COLUNA
 //     'range': `E1`, // CÉLULA ÚNICA
@@ -10,7 +10,7 @@
 // infGoogleSheet = {
 //     'action': 'send',
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
-//     'tab': `RESULTADOS_CNPJ_NEW`,
+//     'tab': `RESULTADOS`,
 //     'range': `D*`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'D' ATÉ 'DD']
 //     'range': `D**`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'D' ATÉ 'D']
 //     'range': `D22`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
@@ -68,7 +68,7 @@ async function googleSheet(inf) {
         }
 
         let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'
-        let tab = inf && inf.tab ? inf.tab : 'RESULTADOS_CNPJ_2'
+        let tab = inf && inf.tab ? inf.tab : 'RESULTADOS'
         if (inf.action == 'get') { // GET
             let range = inf.range
             // ÚLTIMA LINHA EM BRANCO DA [COLUNA]
