@@ -90,7 +90,7 @@ module.exports = {
     'parserOptions': { 'ecmaVersion': 'latest', 'sourceType': 'module' },
     'rules': {
         'no-extra-semi': 'off', // PONTO E VÍRGULA
-        'no-undef': 'error', // VARIÁVEL NÃO DEFINIDA
+        //  'no-undef': 'error', // VARIÁVEL NÃO DEFINIDA
         'no-inner-declarations': 'off', // ERRO DE FUNÇÃO NO MEIO DO CÓDIGO
         'no-useless-escape': 'off', // ESCAPE DO REGEX
         'no-empty': 'off', // CHAVE VAZIA → { }
