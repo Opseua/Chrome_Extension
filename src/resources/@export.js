@@ -38,7 +38,7 @@ await import('./devFun.js')
 await import('./getCookies.js')
 await import('./getPage.js')
 // await import('./getPath.js') // IMPORTADA PELA @functions
-await import('./googleSheet.js')
+await import('./googleSheets.js')
 await import('./hasKey.js')
 await import('./htmlToJson.js')
 await import('./jsonInterpret.js')

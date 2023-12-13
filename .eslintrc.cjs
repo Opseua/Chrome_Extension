@@ -35,7 +35,7 @@ let arrGlobal = [
     // [Chrome_Extension]
     // @export.js
     'regexE', 'api', 'chatGpt', 'chromeActions', 'clipboard', 'file', 'commandLine', 'configStorage', 'dateHour', 'devFun',
-    'getCookies', 'getPage', 'getPath', 'googleSheet', 'hasKey', 'htmlToJson', 'jsonInterpret', 'log', 'keepCookieLive',
+    'getCookies', 'getPage', 'getPath', 'googleSheets', 'hasKey', 'htmlToJson', 'jsonInterpret', 'log', 'keepCookieLive',
     'notification', 'orderObj', 'promptChrome', 'random', 'rawText', 'regex', 'secToHour', 'sniffer', 'splitText',
     'tabSearch', 'translate', 'wsConnect',
     // scripts

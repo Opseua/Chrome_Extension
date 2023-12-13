@@ -1,5 +1,5 @@
-// let infGoogleSheet, retGoogleSheet // 'logFun': true,
-// infGoogleSheet = {
+// let infGoogleSheets, retGoogleSheets // 'logFun': true,
+// infGoogleSheets = {
 //     'action': 'get',
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
 //     'tab': `RESULTADOS`,
@@ -7,7 +7,7 @@
 //     'range': `E:E`, // COLUNA
 //     'range': `E1`, // CÉLULA ÚNICA
 // }
-// infGoogleSheet = {
+// infGoogleSheets = {
 //     'action': 'send',
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
 //     'tab': `RESULTADOS`,
@@ -16,11 +16,11 @@
 //     'range': `D22`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
 //     'values': [['a', 'b', 'c']]
 // }
-// retGoogleSheet = await googleSheet(infGoogleSheet)
-// console.log(retGoogleSheet)
+// retGoogleSheets = await googleSheets(infGoogleSheets)
+// console.log(retGoogleSheets)
 
 let e = import.meta.url;
-async function googleSheet(inf) {
+async function googleSheets(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     // if (catchGlobal) {
     //     const errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
@@ -29,7 +29,7 @@ async function googleSheet(inf) {
     // }
     try {
         if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'googleSheet', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'enc': true, 'data': { 'name': 'googleSheets', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
@@ -37,7 +37,7 @@ async function googleSheet(inf) {
         let pathOAuth = `${letter}:/${conf[2]}/src/googleOAuth.json`
         let _authClient = new _google.auth.GoogleAuth({ keyFile: pathOAuth, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
         let _auth = await _authClient.getClient();
-        let _sheet = _google.sheets('v4');
+        let _sheets = _google.sheets('v4');
 
         infConfigStorage = { 'e': e, 'action': 'get', 'key': 'googleApi' }
         retConfigStorage = await configStorage(infConfigStorage);
@@ -82,7 +82,7 @@ async function googleSheet(inf) {
             }
             range = range == 'last' ? `${tab}!A1:AA` : `${tab}!${range}`
             try {
-                let retSheet = await _sheet.spreadsheets.values.get({ auth: _auth, 'spreadsheetId': id, range });
+                let retSheet = await _sheets.spreadsheets.values.get({ auth: _auth, 'spreadsheetId': id, range });
                 ret['res'] = inf.range.includes('last') ? retSheet.data.values ? retSheet.data.values.length + 1 : 1 : retSheet.data.values
                 ret['msg'] = `GOOGLE SHEET GET: OK`;
                 ret['ret'] = true;
@@ -97,12 +97,12 @@ async function googleSheet(inf) {
                 lin = inf.range.replace(/[^0-9]/g, '')
             } else {
                 let range = inf.range.includes('**') ? `last**${inf.range}` : inf.range.includes('*') ? `last*${inf.range}` : 'last'
-                let retNewGet = await googleSheet({ 'action': 'get', 'id': id, 'tab': tab, 'range': range })
+                let retNewGet = await googleSheets({ 'action': 'get', 'id': id, 'tab': tab, 'range': range })
                 lin = retNewGet.res
             }
             let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
             try {
-                let retSheet = await _sheet.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
+                let retSheet = await _sheets.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
                 ret['msg'] = `GOOGLE SHEET SEND: OK`;
                 ret['ret'] = true;
             } catch (e) {
@@ -131,9 +131,9 @@ async function googleSheet(inf) {
 }
 
 if (eng) { // CHROME
-    window['googleSheet'] = googleSheet;
+    window['googleSheets'] = googleSheets;
 } else { // NODEJS
-    global['googleSheet'] = googleSheet;
+    global['googleSheets'] = googleSheets;
 }
 
 
