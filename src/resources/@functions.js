@@ -30,7 +30,7 @@ if (cng == 1) {
     global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, cs
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, cs
 
 // DEFINIR O 'conf' E O 'letter'
 await import('./getPath.js')
@@ -51,6 +51,7 @@ if (eng) { // CHROME
     _puppeteer = await import('puppeteer');
     _net = await import('net');
     _util = await import('util');
+    const { default: getFolderSize } = await import('get-folder-size'); _getFolderSize = getFolderSize
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -143,6 +144,7 @@ if (eng) { // CHROME
     global['_puppeteer'] = _puppeteer
     global['_net'] = _net
     global['_util'] = _util
+    global['_getFolderSize'] = _getFolderSize
     // ## VARIÁVEIS
     global['cs'] = cs;
     global['catchGlobal'] = true;
