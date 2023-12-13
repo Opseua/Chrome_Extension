@@ -175,7 +175,8 @@ async function file(inf) {
                     }
                 } else { // NODEJS
                     try {
-                        retFetch = await _fs.promises.readFile(path, 'utf8')
+                        let encoding = path.match(/\.(jpg|jpeg|png|ico)$/) ? undefined : 'utf8';
+                        retFetch = await _fs.promises.readFile(path, encoding);
                         resNew['ret'] = true;
                         resNew['msg'] = `FILE READ: OK`;
                         resNew['res'] = retFetch;
@@ -229,75 +230,81 @@ async function file(inf) {
 
             async function fileList(inf) {
                 let resNew = { 'ret': false }
-                if (!inf.max || inf.max == '') {
-                    resNew['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'max' \n\n`;
-                } else {
-                    if (inf.path.includes(':')) {
-                        path = inf.path
+                try {
+                    if (!inf.max || inf.max == '') {
+                        resNew['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'max' \n\n`;
                     } else {
-                        infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal };
-                        retFile = await fileRelative(infFile)
-                        path = retFile.res[0]
-                    };
-                    infFilesList = { 'path': path, 'max': inf.max, 'onlyRoot': inf.onlyRoot };
-                    function formatBytes(b, d = 2) {
-                        if (b == 0) return '0 Bytes'; let i = Math.floor(Math.log(b) / Math.log(1024));
-                        return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i];
-                    };
-                    let iFilesList = 0;
-                    async function filesList(inf, files = []) {
-                        try {
-                            for (let fileOk of _fs.readdirSync(inf.path)) {
-                                if (iFilesList >= inf.max) {
-                                    break
-                                };
-                                let name = `${inf.path}/${fileOk}`;
-                                name = name.replace('//', '/')
-                                try {
-                                    function getStatus(name) {
-                                        let stats = _fs.statSync(name)
-                                        stats['atime'] = new Date(stats.atime.getTime() - (3 * 60 * 60 * 1000));
-                                        stats['mtime'] = new Date(stats.mtime.getTime() - (3 * 60 * 60 * 1000));
-                                        stats['ctime'] = new Date(stats.ctime.getTime() - (3 * 60 * 60 * 1000));
-                                        stats['birthtime'] = new Date(stats.birthtime.getTime() - (3 * 60 * 60 * 1000));
-                                        return stats
-                                    }
-                                    if (_fs.statSync(name).isDirectory()) {
-                                        if (!inf.onlyRoot) {
-                                            filesList({ 'max': inf.max, 'path': name }, files)
-                                        } else {
-                                            iFilesList++;
-                                            let sizeFolder = await _getFolderSize.loose(name);
-                                            let stats = getStatus(name)
-                                            files.push({ 'ret': true, 'path': name, 'size': formatBytes(sizeFolder), 'edit': stats.mtime, })
-                                        }
-                                    } else {
-                                        iFilesList++;
-                                        let stats = getStatus(name)
-                                        let infFile = { 'action': 'md5', 'functionLocal': inf.functionLocal, 'path': name }
-                                        let retFile = await file(infFile);
-                                        files.push({
-                                            'ret': true, 'file': fileOk, 'path': name, 'size': formatBytes(stats.size), 'edit': stats.mtime,
-                                            'md5': retFile.ret ? retFile.res : false
-                                        })
-                                    }
-                                } catch (e) {
-                                    iFilesList++;
-                                    files.push({ 'ret': false, ...(inf.onlyRoot ? {} : { 'file': fileOk }), 'path': name, 'e': JSON.stringify(e) });
-                                }
-                            };
-                            return files;
-                        } catch (e) {
-                            iFilesList++;
-                            files.push({ 'ret': false, 'e': JSON.stringify(e) })
+                        if (inf.path.includes(':')) {
+                            path = inf.path
+                        } else {
+                            infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal };
+                            retFile = await fileRelative(infFile)
+                            path = retFile.res[0]
+                        };
+                        function getStatus(name) {
+                            let status = _fs.statSync(name)
+                            status['atime'] = new Date(status.atime.getTime() - (3 * 60 * 60 * 1000));
+                            status['mtime'] = new Date(status.mtime.getTime() - (3 * 60 * 60 * 1000));
+                            status['ctime'] = new Date(status.ctime.getTime() - (3 * 60 * 60 * 1000));
+                            status['birthtime'] = new Date(status.birthtime.getTime() - (3 * 60 * 60 * 1000));
+                            return status
                         }
-                    };
-                    retFilesList = await filesList(infFilesList);
-                    resNew['ret'] = true;
-                    resNew['msg'] = `FILE LIST: OK`;
-                    resNew['res'] = retFilesList;
+                        function formatBytes(b, d = 2) {
+                            if (b == 0) return '0 Bytes'; let i = Math.floor(Math.log(b) / Math.log(1024));
+                            return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i];
+                        };
+                        let entries = await _fs.promises.readdir(path), result = [], count = 0, md5 = false, isFolder, stats, sizeFolder, entryObject
+                        for (let entry of entries) {
+                            if (count >= inf.max) {
+                                break;
+                            }
+                            let fullPath = _path.join(path, entry);
+                            try {
+                                count++;
+                                isFolder = _fs.statSync(fullPath).isDirectory()
+                                stats = getStatus(fullPath)
+                                sizeFolder = letter !== 'C' ? await _getFolderSize.loose(fullPath) : false;
+                                if (!isFolder && letter !== 'C') {
+                                    let infFile = { 'action': 'md5', 'path': fullPath }
+                                    let retFile = await file(infFile);
+                                    md5 = retFile.res
+                                }
+                                entryObject = {
+                                    'ret': true,
+                                    'isFolder': isFolder,
+                                    'name': entry,
+                                    'path': fullPath.replace(/\\/g, '/'),
+                                    'edit': stats.mtime,
+                                    'size': sizeFolder ? formatBytes(sizeFolder) : false,
+                                    ...(isFolder ? {} : { 'md5': md5 }),
+                                };
+                                result.push(entryObject);
+                            } catch (e) {
+                                result.push({
+                                    'ret': false,
+                                    'name': entry,
+                                    'path': fullPath.replace(/\\/g, '/'),
+                                });
+                            }
+                        }
+                        let retOrder = result.sort((a, b) => {
+                            if (a.isFolder && !b.isFolder) {
+                                return -1;
+                            } else if (!a.isFolder && b.isFolder) {
+                                return 1;
+                            } else {
+                                return a.name.localeCompare(b.name);
+                            }
+                        })
+                        resNew['ret'] = true;
+                        resNew['msg'] = `FILE LIST: OK`;
+                        resNew['res'] = retOrder;
+                    }
+                } catch (e) {
+                    resNew['msg'] = `FILE LIST: ERRO → AO LISTAR '${path}'`;
                 }
                 return resNew
+
             }
 
             async function fileChange(inf) {
