@@ -263,7 +263,7 @@ async function file(inf) {
                                 count++;
                                 isFolder = _fs.statSync(fullPath).isDirectory()
                                 stats = getStatus(fullPath)
-                                sizeFolder = letter !== 'C' ? await _getFolderSize.loose(fullPath) : false;
+                                sizeFolder = isFolder ? false : await _getFolderSize.loose(fullPath);
                                 if (!isFolder && letter !== 'C') {
                                     let infFile = { 'action': 'md5', 'path': fullPath }
                                     let retFile = await file(infFile);
