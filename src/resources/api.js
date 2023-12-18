@@ -81,8 +81,8 @@ async function api(inf) {
             resBody = req.getContentText();
         } else {
             // ################ CHROME | NODEJS
-            // TEMPO LIMITE [PADRÃO 10 SEGUNDOS]
-            let max = inf.max ? inf.max * 1000 : 10000;
+            // TEMPO LIMITE [PADRÃO 20 SEGUNDOS]
+            let max = inf.max ? inf.max * 1000 : 20000;
             let controller = new AbortController();
             let signal = controller.signal;
             reqOpt['signal'] = signal

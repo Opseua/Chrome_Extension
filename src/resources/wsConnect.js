@@ -52,19 +52,19 @@ async function wsConnect(inf) {
                 }
             }, (secPing * 1000)); // secPing
         }
+        return await ws(inf);
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
     }
-    return await ws(inf);
 }
 
 let activeSockets = new Map();
 async function ws(inf) {
-    let url = inf.url
-    let message = inf.message
-    let e = inf.e
-    let time
     try {
+        let url = inf.url
+        let message = inf.message
+        let e = inf.e
+        let time
         if (activeSockets.size == 0) {
             let msgLog = `WS: START`;
             await logWs({ 'e': e, 'msg': msgLog })
