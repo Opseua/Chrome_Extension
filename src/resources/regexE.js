@@ -23,8 +23,30 @@ async function regexE(inf) {
             line = confKeep[5]
             projectFile = `[${confKeep[6]}]\n→ ${confKeep[4]}`
         }
+
+        // IDENTIFICAR O 'devMaster'
+        let retFetch, devMaster
+        if (cng == 1) { // CHROME
+            try {
+                retFetch = await fetch(chrome.runtime.getURL('src/config.json'));
+                retFetch = await retFetch.text()
+                retFetch = JSON.parse(retFetch)
+                devMaster = retFetch.webSocket.devices[0].master
+            } catch (e) {
+                devMaster = `???`
+            }
+        } else if (cng == 2) { // NODEJS
+            try {
+                retFetch = await _fs.promises.readFile(`${confKeep[1]}://${confKeep[2]}/${confKeep[0]}`, 'utf8');
+                retFetch = JSON.parse(retFetch)
+                devMaster = retFetch.webSocket.devices[0].master
+            } catch (e) {
+                devMaster = `???`
+            }
+        };
+
         let errorOk = {
-            'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE',
+            'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': devMaster,
             'file': file, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'catchGlobal': inf.catchGlobal, 'e': inf.e.stack,
         };
 
@@ -89,20 +111,20 @@ async function regexE(inf) {
                 'name': 'notification',
                 'par': {
                     'duration': 5, 'icon': './src/media/notification_3.png',
-                    'title': `### ERRO ${errorOk.cngName} ###`,
+                    'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`,
                     'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e.substring(0, 128)}`
                 }
             }]
         })
         try {
-            let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:8888/AAAAAAAA' : `http://${letter == 'D' ? devChromeLocal.split('://')[1] : devChromeWeb.split('://')[1]}`
-            // GOGOLE
+            let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:8888/AAAAAAAA' : `http://${devSend.split('://')[1]}`
+            // GOOGLE
             if (errorOk.cng == 3) {
                 reqOpt['payload'] = body
                 UrlFetchApp.fetch(url, reqOpt)
                 Browser.msgBox(`### ERRO ### → ${errorOk.projectFile}[${errorOk.line}]`, `${errorOk.e.substring(0, 128)}`, Browser.Buttons.OK);
             } else {
-                // CHROME | GOOGLE
+                // CHROME | NODEJS
                 reqOpt['body'] = body
                 await fetch(url, reqOpt)
             }

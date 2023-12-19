@@ -55,8 +55,12 @@ async function getPath(inf) {
         }
         conf = [
             'src/config.json',
-            resultadoOk[0], `${resultadoOk[1]}/${resultadoOk[2]}`, `${resultadoOk[1]}/${resultadoOk[3]}`, resultadoOk[4], resultadoOk[5],
-            resultado[1][1] == 'chrome-extension' ? 'Chrome_Extension' : resultado[1][2]
+            resultadoOk[0], // D
+            `${resultadoOk[1]}/${resultadoOk[2]}`, // ARQUIVOS/PROJETOS/Chrome_Extension
+            `${resultadoOk[1]}/${resultadoOk[3]}`, // ARQUIVOS/PROJETOS/WebScraper
+            resultadoOk[4], // src/server.js
+            resultadoOk[5], // 99
+            resultado[1][1] == 'chrome-extension' ? 'Chrome_Extension' : resultado[1][2] // Chrome_Extension | WebScraper
         ]
         if (cng == 1) {
             conf[3] = resultadoOk[3]

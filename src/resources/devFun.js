@@ -10,7 +10,7 @@ async function devFun(inf) {
         let infLog, retLog
         if (inf.enc) { // ENCAMINHAR PARA O DEVICE CERTO
             let retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf : inf.data.retInf ? inf.data.retInf : true
-            let url = eng ? devNodeJSLocal : devChromeLocal
+            let url = devSend
             let data = { 'securityPass': securityPass, 'retInf': retInf, 'name': inf.data.name, 'par': inf.data.par }
             data.par['e'] = inf.e
             delete data.par.retInf // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO

@@ -1,5 +1,5 @@
 // await wsConnect({ 'e': e, 'url': [dev1, dev2, dev3, dev4,] })
-// wsList(devChrome, async (nomeList, par1) => {
+// wsList(devSend, async (nomeList, par1) => {
 //     console.log('MENSAGEM RECEBIDA EM:', nomeList, '→', par1);
 // })
 // await new Promise(resolve => { setTimeout(resolve, 2000) })

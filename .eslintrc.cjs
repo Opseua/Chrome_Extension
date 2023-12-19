@@ -42,9 +42,8 @@ let arrGlobal = [
     'oneForma_MTPE', 'peroptyx_QueryImageDeservingClassification', 'peroptyx_Search20',
     'action_TryRating_QueryImageDeservingClassification', 'background', 'command1', 'command2', 'command2_old',
     // variáveis / funções
-    'secReconnect', 'secPing', 'par1', 'par2', 'par3', 'par4', 'par5', 'par6', 'par7', 'par8', 'par9', 'securityPass', 'port', 'devChromeWeb',
-    'devChromeLocal', 'devNodeJSWeb', 'devNodeJSLocal', 'devBlueStacksWeb', 'devBlueStacksLocal', 'devEC2Web', 'devEC2Local',
-    'devBlueStacks', 'wsSend', 'fileWrite',
+    'secReconnect', 'secPing', 'par1', 'par2', 'par3', 'par4', 'par5', 'par6', 'par7', 'par8', 'par9', 'securityPass', 'port',
+    'devSend', 'devGet', 'wsSend', 'fileWrite',
 
     // [Sniffer_Python]
     // @export.js

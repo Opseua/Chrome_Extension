@@ -241,14 +241,18 @@ let portWeb = serverWeb.port
 let hostLocal = serverLocal.host;
 let portLocal = serverLocal.port
 let devices = retConfigStorage.res.devices
-let devChromeWeb = `${url}://${hostWeb}:${portWeb}/${devices[0].name}`
-let devChromeLocal = `${url}://${hostLocal}:${portLocal}/${devices[0].name}`
-let devNodeJSWeb = `${url}://${hostWeb}:${portWeb}/${devices[1].name}`
-let devNodeJSLocal = `${url}://${hostLocal}:${portLocal}/${devices[1].name}`
-let devBlueStacksWeb = `${url}://${hostWeb}:${portWeb}/${devices[2].name}`
-let devBlueStacksLocal = `${url}://${hostLocal}:${portLocal}/${devices[2].name}`
-let devEC2Web = `${url}://${hostWeb}:${portWeb}/${devices[3].name}`
-let devEC2Local = `${url}://${hostLocal}:${portLocal}/${devices[3].name}`
+let urlHostPortWeb = `${url}://${hostWeb}:${portWeb}`
+let urlHostPortLocal = `${url}://${hostLocal}:${portLocal}`
+let devMaster = devices[0].master
+
+let devSend, devGet
+if (eng) { // CHROME | Send → NodeJS | Get → Chrome 
+    devSend = `${letter == 'D' ? urlHostPortLocal : urlHostPortWeb}/${devMaster}_${devices[2].name}`
+    devGet = [`${urlHostPortWeb}/${devices[1].name}`, `${urlHostPortLocal}/${devices[1].name}`]
+} else { // NODEJS | Send → Chrome | Get → NodeJS
+    devSend = `${letter == 'D' ? urlHostPortLocal : urlHostPortWeb}/${devices[1].name}`
+    devGet = [`${urlHostPortWeb}/${devMaster}_${devices[2].name}`, `${urlHostPortLocal}/${devMaster}_${devices[2].name}`,]
+}
 
 if (eng) { // CHROME
     window['secReconnect'] = secReconnect
@@ -264,14 +268,9 @@ if (eng) { // CHROME
     window['par9'] = par9
     window['securityPass'] = securityPass
     window['port'] = portWeb
-    window['devChromeWeb'] = devChromeWeb
-    window['devChromeLocal'] = devChromeLocal
-    window['devNodeJSWeb'] = devNodeJSWeb
-    window['devNodeJSLocal'] = devNodeJSLocal
-    window['devBlueStacksWeb'] = devBlueStacksWeb
-    window['devBlueStacksLocal'] = devBlueStacksLocal
-    window['devEC2Web'] = devEC2Web
-    window['devEC2Local'] = devEC2Local
+    window['devMaster'] = devMaster
+    window['devSend'] = devSend
+    window['devGet'] = devGet
 } else { // NODEJS
     global['secReconnect'] = secReconnect
     global['secPing'] = secPing
@@ -286,14 +285,10 @@ if (eng) { // CHROME
     global['par9'] = par9
     global['securityPass'] = securityPass
     global['port'] = portWeb
-    global['devChromeWeb'] = devChromeWeb
-    global['devChromeLocal'] = devChromeLocal
-    global['devNodeJSWeb'] = devNodeJSWeb
-    global['devNodeJSLocal'] = devNodeJSLocal
-    global['devBlueStacksWeb'] = devBlueStacksWeb
-    global['devBlueStacksLocal'] = devBlueStacksLocal
-    global['devEC2Web'] = devEC2Web
-    global['devEC2Local'] = devEC2Local
+    global['devMaster'] = devMaster
+    global['devSend'] = devSend
+    global['devGet'] = devGet
 }
+
 
 

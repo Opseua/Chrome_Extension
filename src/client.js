@@ -10,55 +10,52 @@ async function client(inf) {
     try {
         let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, 'client [Chrome_Extension]');
 
-        // DEV - [WEB] WEB {IMPAR}
-        let dev1 = devChromeWeb
-        let dev3 = letter == 'D' ? devNodeJSWeb : devEC2Web
-        // DEV - [LOC] LOCAL {PAR}
-        let dev2 = devChromeLocal
-        let dev4 = letter == 'D' ? devNodeJSLocal : devEC2Local
+        // DEV - SEND
+        let dev1 = devSend
+        // DEV - GET [WEB|LOC]
+        let dev2 = devGet[0]
+        let dev3 = devGet[1]
 
-        // [WEB-LOC]
-        if (letter == 'D') {
-            // CONNECT - NOTEBOOK
-            await wsConnect({ 'e': e, 'url': [dev1, dev2, dev3, dev4,] })
+        // CONNECT
+        await wsConnect({ 'e': e, 'url': [dev1, dev2, dev3,] })
 
-            // LIST - [WEB] WEB
-            wsList(dev1, async (nomeList, par1) => {
-                runLis(nomeList, par1)
-            });
-            // LIST - [LOC] LOCAL
+        // LISTENER SOMENTE SE NÃO FOR 'Sniffer_Python'
+        let retGetPath
+        retGetPath = await getPath({ 'e': new Error() })
+        if (retGetPath?.res[6] !== 'Sniffer_Python') {
+            // LIST - [WEB]
             wsList(dev2, async (nomeList, par1) => {
                 runLis(nomeList, par1)
             });
-        } else {
-            // ### CONNECT - EC2
-            await wsConnect({ 'e': e, 'url': [dev1, dev3,] })
 
-            // LIST - [WEB] WEB
-            wsList(dev3, async (nomeList, par1) => {
-                runLis(nomeList, par1)
-            });
-        }
+            // LISTENER SOMENTE SE NÃO FOR [EC2]
+            if (retGetPath?.res[1] !== 'C') {
+                // LIST - [LOC]
+                wsList(dev3, async (nomeList, par1) => {
+                    runLis(nomeList, par1)
+                });
+            }
 
-        // RUN LIS
-        async function runLis(nomeList, par1) {
-            let data = {};
-            try {
-                data = JSON.parse(par1)
-            } catch (e) { };
-            if (data.fun) { // FUN
-                let infDevFun = { 'data': data, 'wsOrigin': nomeList }
-                let retDevFun = await devFun(infDevFun)
-            } else if (data.other) { // OTHER
-                // console.log('OTHER', data.other)
-                if (data.other == 'keepCookieLive') {
-                    await keepCookieLive();
-                    wsSend({ 'e': e, 'url': nomeList, 'message': { 'other': 'OK: keepCookieLive' } })
-                } else if (data.other == 'TryRating_QueryImageDeservingClassification') {
-                    await action_TryRating_QueryImageDeservingClassification()
+            // RUN LIS
+            async function runLis(nomeList, par1) {
+                let data = {};
+                try {
+                    data = JSON.parse(par1)
+                } catch (e) { };
+                if (data.fun) { // FUN
+                    let infDevFun = { 'data': data, 'wsOrigin': nomeList }
+                    let retDevFun = await devFun(infDevFun)
+                } else if (data.other) { // OTHER
+                    // console.log('OTHER', data.other)
+                    if (data.other == 'keepCookieLive') {
+                        await keepCookieLive();
+                        wsSend({ 'e': e, 'url': nomeList, 'message': { 'other': 'OK: keepCookieLive' } })
+                    } else if (data.other == 'TryRating_QueryImageDeservingClassification') {
+                        await action_TryRating_QueryImageDeservingClassification()
+                    }
+                } else {
+                    console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`)
                 }
-            } else {
-                console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`)
             }
         }
 
