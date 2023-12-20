@@ -1,9 +1,9 @@
 // let infFile, retFile // 'logFun': true, 'raw': true,
-// infFile = { 'e': e, 'action': 'relative', 'functionLocal': false, 'path': './PASTA/ola.txt' }
-// infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'path': './PASTA/ola.txt', 'rewrite': true, 'text': '1234\n' }
-// infFile = { 'e': e, 'action': 'read', 'functionLocal': false, 'path': './PASTA/ola.txt' }
-// infFile = { 'e': e, 'action': 'md5', 'functionLocal': false, 'path': './PASTA/ola.txt' }
-// infFile = { 'e': e, 'action': 'change', 'functionLocal': false, 'path': './PASTA/ola.txt', 'pathNew': './PASTA/ola2.txt' }
+// infFile = { 'e': e, 'action': 'relative', 'functionLocal': false, 'path': './PASTA/arquivo.txt' }
+// infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'path': './PASTA/arquivo.txt', 'rewrite': true, 'text': '1234\n' }
+// infFile = { 'e': e, 'action': 'read', 'functionLocal': false, 'path': './PASTA/arquivo.txt' }
+// infFile = { 'e': e, 'action': 'md5', 'functionLocal': false, 'path': './PASTA/arquivo.txt' }
+// infFile = { 'e': e, 'action': 'change', 'functionLocal': false, 'path': './PASTA/arquivo.txt', 'pathNew': './PASTA/arquivo2.txt' }
 // infFile = { 'e': e, 'action': 'list', 'functionLocal': false, 'path': './PASTA', 'max': 10 }
 // infFile = { 'e': e, 'action': 'del', 'functionLocal': false, 'path': './PASTA' }
 // retFile = await file(infFile);
@@ -33,7 +33,7 @@ async function file(inf) {
         } else if (inf.action !== 'inf' && (!inf.path || inf.path == '')) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'path' \n\n`
         } else {
-            let infFile, retFile, path, retFetch = '', text, relative, pathFull, md5, relativeParts, retRelative, pathOld, pathNew, infFilesList, retFilesList
+            let infFile, retFile, retFetch = '', text, relative, pathFull, md5, relativeParts, retRelative, infFilesList, retFilesList
 
             // SUBSTITUIR '!letter!' PELA LETRA DA UNIDADE
             if (inf.path) {
@@ -69,7 +69,7 @@ async function file(inf) {
             }
 
             async function fileWrite(inf) {
-                let resNew = { 'ret': false }
+                let resNew = { 'ret': false }, path
                 if (typeof inf.rewrite !== 'boolean') {
                     resNew['msg'] = `\n\n #### ERRO #### FILE WRITE NEW \n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`;
                 } else if (!inf.text || inf.text == '') {
@@ -151,7 +151,7 @@ async function file(inf) {
             }
 
             async function fileRead(inf) {
-                let resNew = { 'ret': false }
+                let resNew = { 'ret': false }, path
                 if (inf.path.includes(':')) {
                     path = inf.path
                 } else {
@@ -188,7 +188,7 @@ async function file(inf) {
             }
 
             async function fileDel(inf) {
-                let resNew = { 'ret': false }
+                let resNew = { 'ret': false }, path
                 if (inf.path.includes(':')) {
                     path = inf.path
                 } else {
@@ -229,7 +229,7 @@ async function file(inf) {
             }
 
             async function fileList(inf) {
-                let resNew = { 'ret': false }
+                let resNew = { 'ret': false }, path
                 try {
                     if (!inf.max || inf.max == '') {
                         resNew['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'max' \n\n`;
@@ -308,7 +308,7 @@ async function file(inf) {
             }
 
             async function fileChange(inf) {
-                let resNew = { 'ret': false }
+                let resNew = { 'ret': false }, pathOld, pathNew
                 if (!inf.pathNew || inf.pathNew == '') {
                     resNew['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'pathNew' \n\n`;
                 } else {
@@ -338,7 +338,7 @@ async function file(inf) {
             }
 
             async function fileMd5(inf) {
-                let resNew = { 'ret': false }
+                let resNew = { 'ret': false }, path
                 if (inf.path.includes(':')) {
                     path = inf.path
                 } else {
