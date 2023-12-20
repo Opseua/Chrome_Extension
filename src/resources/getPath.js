@@ -14,26 +14,32 @@ async function getPath(inf) {
             inf.e.stack = eOk
         }
 
-        // JS PURO [stack]
+        // NECESSÁRIO PARA PEGAR O PATH DA FUNCTION [NÃO APAGAR!!!]
+        let splitE = inf.e.stack.split('\n');
+        if (splitE.length == 3) {
+            splitE = inf.e.stack.replace(splitE[2], new Error().stack.split('\n')[1])
+            inf['e'] = { 'stack': splitE }
+        }
+
+        // JS PURO [Chrome/NodeJS]
         let stackCallerFile = 'NÃO IDENTIFICADO', stackCallerLine = 'NÃO IDENTIFICADA'
         let stackErrorFile = stackCallerFile, stackErrorLine = stackCallerLine
+        let stack = inf.e.stack.split('\n');
+        stackErrorFile = (stack[1]?.match(/:(.*?).js/) || [])[1]?.replace('///', '') + '.js' || stackCallerFile;
+        stackErrorLine = Number((stack[1]?.match(/.js:(.*?):/) || [])[1]) || stackCallerLine;
+        for (let index = stack.length - 1; index >= 0; index--) {
+            let value = stack[index];
+            if (value.includes('.js')) {
+                stackCallerFile = (value.match(/:(.*?).js/) || [])[1]?.replace('///', '') + '.js' || stackCallerFile;
+                stackCallerLine = Number((value.match(/.js:(.*?):/) || [])[1]) || stackCallerLine;
+                break;
+            }
+        }
 
+        // BIBLIOTECA [NodeJS]
         let traceCallerFile = 'NÃO IDENTIFICADO', traceCallerLine = 'NÃO IDENTIFICADA'
         let traceErrorFile = traceCallerFile, traceErrorLine = traceCallerLine
-        if (eng) { // CHROME
-            let stack = inf.e.stack.split('\n');
-            stackErrorFile = (stack[1]?.match(/:(.*?).js/) || [])[1]?.replace('///', '') + '.js' || stackCallerFile;
-            stackErrorLine = Number((stack[1]?.match(/.js:(.*?):/) || [])[1]) || stackCallerLine;
-            for (let index = stack.length - 1; index >= 0; index--) {
-                let value = stack[index];
-                if (value.includes('.js')) {
-                    stackCallerFile = (value.match(/:(.*?).js/) || [])[1]?.replace('///', '') + '.js' || stackCallerFile;
-                    stackCallerLine = Number((value.match(/.js:(.*?):/) || [])[1]) || stackCallerLine;
-                    break;
-                }
-            }
-        } else { // NODEJS
-            // BIBLIOTECA [trace]
+        if (!eng) {
             let trace = _stackTrace.parse(inf.e);
             if (trace.length > 0) {
                 traceErrorFile = trace[0]?.getFileName()?.replace('file:///', '') || traceCallerFile;
@@ -57,6 +63,9 @@ async function getPath(inf) {
                 // BIBLIOTECA
                 [traceErrorFile, traceErrorLine],
                 [traceCallerFile, traceCallerLine],
+                // JS PURO
+                [stackErrorFile, stackErrorLine],
+                [stackCallerFile, stackCallerLine],
             ]
         }
 
@@ -96,13 +105,15 @@ async function getPath(inf) {
         conf = [
             'src/config.json',
             resultadoOk[0], // D
-            `${resultadoOk[1]}/${resultadoOk[2]}`, // ARQUIVOS/PROJETOS/Chrome_Extension | chrome-extension://afelhdjampgfmchfcnbginicjcmjhhma
-            `${resultadoOk[1]}/${resultadoOk[3]}`, // ARQUIVOS/PROJETOS/Sniffer_Python | Downloads/Google Chrome%
+            `${resultadoOk[1]}/${resultadoOk[3]}`, // ARQUIVOS/PROJETOS/Chrome_Extension | chrome-extension://afelhdjampgfmchfcnbginicjcmjhhma
+            `${resultadoOk[1]}/${resultadoOk[2]}`, // ARQUIVOS/PROJETOS/Sniffer_Python | Downloads/Google Chrome%
             resultadoOk[4], resultadoOk[5],
-            cng == 1 ? 'Chrome_Extension' : resultado[1][2]
+            resultado[0][2]
         ]
         if (cng == 1) {
             conf[3] = resultadoOk[3]
+            conf[2] = conf[2].replace(resultadoOk[3], resultadoOk[2])
+            conf[6] = 'Chrome_Extension'
         }
 
         ret['res'] = conf
