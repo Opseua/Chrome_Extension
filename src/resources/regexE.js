@@ -20,7 +20,6 @@ async function regexE(inf) {
         let file = confKeep[4]
         let line = confKeep[5]
         let projectFile = `[${confKeep[6]}]\n→ ${confKeep[4]}`
-        // console.log(confKeep)
 
         // IDENTIFICAR O 'devMaster'
         let retFetch, devMaster

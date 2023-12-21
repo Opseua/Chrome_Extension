@@ -68,7 +68,7 @@ let arrUnused = [
     // (for)
     'index', 'value', 'event',
     // (time)
-    'time', 'time1', 'time2', 'hour',
+    'time', 'time1', 'time2', 'hour', 'timeout',
 
     // outros
     'dev1', 'dev2', 'dev3', 'dev4', 'lin',
@@ -76,6 +76,7 @@ let arrUnused = [
     'tipo',
     'element',
     'cookies',
+    '_stackTrace',
 
 
 ];

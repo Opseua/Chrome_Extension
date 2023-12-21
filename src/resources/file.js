@@ -26,7 +26,7 @@ async function file(inf) {
 
         // PASSAR NO jsonInterpret
         if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
-        if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'exist',].includes(inf.action)) {
+        if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder',].includes(inf.action)) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
         } else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'functionLocal' \n\n`
@@ -62,9 +62,10 @@ async function file(inf) {
                     };
                     return retRelative
                 };
+                let res = [`${eng && inf.functionLocal ? '' : `${letter}:/`}${runPath(inf.path, inf.functionLocal ? 2 : 3)}`]
                 resNew['ret'] = true;
                 resNew['msg'] = `FILE RELATIVE: OK`
-                resNew['res'] = [`${eng && inf.functionLocal ? '' : `${letter}:/`}${runPath(inf.path, inf.functionLocal ? 2 : 3)}`]
+                resNew['res'] = res
                 return resNew
             }
 
@@ -143,9 +144,10 @@ async function file(inf) {
                         await _fs.promises.mkdir(_path.dirname(path), { recursive: true });
                         await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' })
                     };
+                    let res = path
                     resNew['ret'] = true;
                     resNew['msg'] = `FILE WRITE: OK`
-                    resNew['res'] = path
+                    resNew['res'] = res
                 }
                 return resNew
             }
@@ -167,9 +169,10 @@ async function file(inf) {
                     retFetch = await fetch(path);
                     retFetch = await retFetch.text()
                     if (!retFetch.includes('Copyright 2012 The Chromium Authors')) {
+                        let res = retFetch
                         resNew['ret'] = true;
                         resNew['msg'] = `FILE READ: OK`;
-                        resNew['res'] = retFetch;
+                        resNew['res'] = res;
                     } else {
                         resNew['msg'] = `FILE READ: ERRO → ARQUIVO NÃO ENCONTRADO '${path}'`;
                     }
@@ -177,9 +180,10 @@ async function file(inf) {
                     try {
                         let encoding = path.match(/\.(jpg|jpeg|png|ico)$/) ? undefined : 'utf8';
                         retFetch = await _fs.promises.readFile(path, encoding);
+                        let res = retFetch
                         resNew['ret'] = true;
                         resNew['msg'] = `FILE READ: OK`;
-                        resNew['res'] = retFetch;
+                        resNew['res'] = res;
                     } catch (e) {
                         resNew['msg'] = `FILE READ: ERRO → ARQUIVO NÃO ENCONTRADO '${path}'`;
                     }
@@ -296,15 +300,15 @@ async function file(inf) {
                                 return a.name.localeCompare(b.name);
                             }
                         })
+                        let res = retOrder
                         resNew['ret'] = true;
                         resNew['msg'] = `FILE LIST: OK`;
-                        resNew['res'] = retOrder;
+                        resNew['res'] = res;
                     }
                 } catch (e) {
                     resNew['msg'] = `FILE LIST: ERRO → AO LISTAR '${path}'`;
                 }
                 return resNew
-
             }
 
             async function fileChange(inf) {
@@ -351,11 +355,48 @@ async function file(inf) {
                     let fileContent = await _fs.promises.readFile(path);
                     md5.update(fileContent);
                     md5 = md5.digest('hex')
+                    let res = md5
                     resNew['ret'] = true;
                     resNew['msg'] = `FILE MD5: OK`;
-                    resNew['res'] = md5;
+                    resNew['res'] = res;
                 } catch (e) {
                     resNew['msg'] = e;
+                }
+                return resNew
+            }
+
+            async function fileIsFolder(inf) {
+                let resNew = { 'ret': false }, path
+                try {
+                    if (inf.path.includes(':')) {
+                        path = inf.path
+                    } else {
+                        infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal };
+                        retFile = await fileRelative(infFile)
+                        path = retFile.res[0]
+                    };
+                    let res = _fs.statSync(path).isDirectory()
+                    resNew['ret'] = true;
+                    if (!inf.listRead) {
+                        resNew['msg'] = `FILE IS FOLDER: OK`;
+                        resNew['res'] = res
+                    } else {
+                        // USADO SOMENTE NO 'ARQUIVOS WEB' DO SEVIDOR
+                        if (res) {
+                            // É PASTA [LISTAR]
+                            infFile = { 'e': e, 'action': 'list', 'functionLocal': false, 'path': path, 'max': 100 }
+                            retFile = await fileList(infFile)
+                            resNew = retFile
+                        } else {
+                            // É ARQUIVO [LER]
+                            resNew['msg'] = `FILE IS FOLDER: OK`;
+                            infFile = { 'path': path, 'functionLocal': inf.functionLocal && !eng ? true : false };
+                            retFile = await fileRead(infFile)
+                            resNew = retFile
+                        }
+                    }
+                } catch (e) {
+                    resNew['msg'] = `FILE IS FOLDER: ERRO → AO CHECAR '${path}'`;
                 }
                 return resNew
             }
@@ -387,6 +428,10 @@ async function file(inf) {
             } else if (inf.action == 'md5' && !eng) { // ########################## READ
                 // *
                 return await fileMd5(inf)
+                // *
+            } else if (inf.action == 'isFolder' && !eng) { // ########################## IS FOLDER
+                // *
+                return await fileIsFolder(inf)
                 // *
             }
         }

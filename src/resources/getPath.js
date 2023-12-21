@@ -36,20 +36,20 @@ async function getPath(inf) {
             }
         }
 
-        // BIBLIOTECA [NodeJS]
-        let traceCallerFile = 'NÃO IDENTIFICADO', traceCallerLine = 'NÃO IDENTIFICADA'
-        let traceErrorFile = traceCallerFile, traceErrorLine = traceCallerLine
-        if (!eng) {
-            let trace = _stackTrace.parse(inf.e);
-            if (trace.length > 0) {
-                traceErrorFile = trace[0]?.getFileName()?.replace('file:///', '') || traceCallerFile;
-                traceErrorLine = Number(trace[0]?.getLineNumber()) || traceCallerLine;
-                if (trace.length > 1) {
-                    traceCallerFile = trace[trace.length - 1]?.getFileName()?.replace('file:///', '') || traceCallerFile;
-                    traceCallerLine = Number(trace[trace.length - 1]?.getLineNumber()) || traceCallerLine;
-                }
-            }
-        }
+        // // BIBLIOTECA [NodeJS]
+        // let traceCallerFile = 'NÃO IDENTIFICADO', traceCallerLine = 'NÃO IDENTIFICADA'
+        // let traceErrorFile = traceCallerFile, traceErrorLine = traceCallerLine
+        // if (!eng) {
+        //     let trace = _stackTrace.parse(inf.e);
+        //     if (trace.length > 0) {
+        //         traceErrorFile = trace[0]?.getFileName()?.replace('file:///', '') || traceCallerFile;
+        //         traceErrorLine = Number(trace[0]?.getLineNumber()) || traceCallerLine;
+        //         if (trace.length > 1) {
+        //             traceCallerFile = trace[trace.length - 1]?.getFileName()?.replace('file:///', '') || traceCallerFile;
+        //             traceCallerLine = Number(trace[trace.length - 1]?.getLineNumber()) || traceCallerLine;
+        //         }
+        //     }
+        // }
 
         let matchesNew = [], resultado = [], resultadoOk = [], conf
         if (eng) { // CHROME
@@ -60,9 +60,9 @@ async function getPath(inf) {
             ]
         } else { // NODEJS
             matchesNew = [
-                // BIBLIOTECA
-                [traceErrorFile, traceErrorLine],
-                [traceCallerFile, traceCallerLine],
+                // // BIBLIOTECA
+                // [traceErrorFile, traceErrorLine],
+                // [traceCallerFile, traceCallerLine],
                 // JS PURO
                 [stackErrorFile, stackErrorLine],
                 [stackCallerFile, stackCallerLine],
