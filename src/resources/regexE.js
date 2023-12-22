@@ -104,7 +104,7 @@ async function regexE(inf) {
                 'retInf': false,
                 'name': 'notification',
                 'par': {
-                    'duration': 5, 'icon': './src/media/notification_3.png',
+                    'duration': 5, 'icon': './src/scripts/media/notification_3.png',
                     'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`,
                     'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e.substring(0, 128)}`
                 }
@@ -287,7 +287,7 @@ if (eng) { // CHROME
 //                 'retInf': false,
 //                 'name': 'notification',
 //                 'par': {
-//                     'duration': 5, 'icon': './src/media/notification_3.png',
+//                     'duration': 5, 'icon': './src/scripts/media/notification_3.png',
 //                     'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`,
 //                     'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e.substring(0, 128)}`
 //                 }

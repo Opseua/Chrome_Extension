@@ -89,10 +89,10 @@
     "runtime"
   ],
   "icons": {
-    "16": "./src/media/icon_3.png",
-    "32": "./src/media/icon_3.png",
-    "48": "./src/media/icon_3.png",
-    "128": "./src/media/icon_3.png"
+    "16": "./src/scripts/media/icon_3.png",
+    "32": "./src/scripts/media/icon_3.png",
+    "48": "./src/scripts/media/icon_3.png",
+    "128": "./src/scripts/media/icon_3.png"
   },
   "browser_action": {},
   "background": {

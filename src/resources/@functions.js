@@ -10,7 +10,7 @@
 // console.log('FIM');
 
 // // ## LOG ## retApi
-// let err = `[leadChangeStatus] LOG retApi`
+// let err = `$ [leadChangeStatus] LOG retApi`
 // infLog = {'e':e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
 // retLog = await log(infLog);
 
@@ -253,7 +253,7 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 // // console.log('FIM');
 
 // // // ## LOG ## retApi
-// // let err = `[leadChangeStatus] LOG retApi`
+// // let err = `$ [leadChangeStatus] LOG retApi`
 // // infLog = {'e':e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
 // // retLog = await log(infLog);
 

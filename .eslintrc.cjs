@@ -42,13 +42,13 @@ let arrGlobal = [
     'oneForma_MTPE', 'peroptyx_QueryImageDeservingClassification', 'peroptyx_Search20',
     'action_TryRating_QueryImageDeservingClassification', 'background', 'command1', 'command2', 'command2_old',
     // variáveis / funções
-    'secReconnect', 'secPing', 'par1', 'par2', 'par3', 'par4', 'par5', 'par6', 'par7', 'par8', 'par9', 'securityPass', 'port',
+    'secReconnect', 'secPing', 'par1', 'par2', 'par3', 'par4', 'par5', 'par6', 'par7', 'par8', 'securityPass', 'portWeb', 'portLocal',
     'devSend', 'devGet', 'wsSend', 'fileWrite',
 
     // [Sniffer_Python]
     // @export.js
     'EWOQ', 'TryRating', 'TryRating_DrivingNavigation3DMaps', 'TryRating_QueryImageDeservingClassification',
-    'TryRating_Search20',
+    'TryRating_Search20', 'performTask',
 
     // [URA_Reversa]
     // @export.js

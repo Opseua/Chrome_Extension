@@ -21,7 +21,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 let infTabSearch = { 'search': retConfigStorage['Referer'], 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': retConfigStorage['Referer'], }
                 let retTabSearch = await tabSearch(infTabSearch);
                 if (!retTabSearch.ret) {
-                    infNotification = { 'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO ABRIR CHATGPT`, 'text': `Não foi possível abrir a aba` }
+                    infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO ABRIR CHATGPT`, 'text': `Não foi possível abrir a aba` }
                     await notification(infNotification);
                     return retTabSearch
                 };
@@ -38,7 +38,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                         retConfigStorage = retConfigStorage.res
                     };
                     infNotification = {
-                        'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO PEGAR COOKIE CHATGPT`, 'text': `Verificar se a aba abriu e se está logado`
+                        'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PEGAR COOKIE CHATGPT`, 'text': `Verificar se a aba abriu e se está logado`
                     };
                     await notification(infNotification);
                     return ret
@@ -69,7 +69,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                     infConfigStorage = { 'e': e, 'action': 'del', 'key': 'chatGptOra.ai' };
                     retConfigStorage = await configStorage(infConfigStorage)
                 };
-                infNotification = { 'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
+                infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
                 await notification(infNotification);
                 ret['res'] = res.error.message;
                 ret['msg'] = `\n #### ERRO #### CHAT GPT ORA AI \n ${res.error.message} \n\n`;
@@ -94,7 +94,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                     infConfigStorage = { 'e': e, 'action': 'del', 'key': 'chatGptOpenAi' };
                     retConfigStorage = await configStorage(infConfigStorage)
                 }
-                infNotification = { 'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
+                infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
                 await notification(infNotification);
                 ret['res'] = res.error.message
                 ret['msg'] = `\n #### ERRO #### CHAT GPT OPEN AI \n ${res.error.message} \n\n`;
@@ -116,7 +116,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `CHAT GPT AI CHATOS: OK`
                 ret['ret'] = true;
             } else {
-                infNotification = { 'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
+                infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
                 await notification(infNotification);
                 ret['msg'] = `\n #### ERRO #### CHAT GPT AI CHATOS \n \n\n`
             }
@@ -133,7 +133,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `CHAT GPT EC2: OK`
                 ret['ret'] = true;
             } else {
-                infNotification = { 'duration': 5, 'icon': './src/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
+                infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
                 await notification(infNotification);
                 ret['msg'] = `\n #### ERRO #### CHAT GPT EC2 \n \n\n`;
                 ret['res'] = 'res.error.message'

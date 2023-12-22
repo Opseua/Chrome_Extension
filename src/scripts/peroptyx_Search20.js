@@ -22,7 +22,7 @@ async function peroptyx_Search20(inf) {
         if (!('testQuestionInformation' in retSniffer.tasks[0].taskData)) {
             infNotification =
             {
-                'duration': 2, 'icon': './src/media/notification_3.png',
+                'duration': 2, 'icon': './src/scripts/media/notification_3.png',
                 'title': `NÃO TEM A RESPOSTA`,
                 'text': `Avaliar manualmente`,
             }; retNotification = await notification(infNotification)
@@ -46,7 +46,7 @@ async function peroptyx_Search20(inf) {
                         not = false
                         infNotification =
                         {
-                            'duration': 3, 'icon': './src/media/icon_4.png',
+                            'duration': 3, 'icon': './src/scripts/media/icon_4.png',
                             'title': `AGUARDE...`,
                             'text': `Traduzindo e alterando o comentário`,
                         }; retNotification = await notification(infNotification)
@@ -85,7 +85,7 @@ async function peroptyx_Search20(inf) {
 
             infNotification =
             {
-                'duration': 2, 'icon': './src/media/notification_1.png',
+                'duration': 2, 'icon': './src/scripts/media/notification_1.png',
                 'title': `CONCLUÍDO: na área de transferência`,
                 'text': `${JSON.stringify(res, null, 2)}`,
             }; retNotification = await notification(infNotification)

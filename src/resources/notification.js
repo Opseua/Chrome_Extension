@@ -1,6 +1,6 @@
 // let infNotification, retNotification // 'logFun': true,
 // infNotification = {
-//     'duration': 2, 'icon': './src/media/icon_4.png', 'retInf': false,
+//     'duration': 2, 'icon': './src/scripts/media/icon_4.png', 'retInf': false,
 //     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': 'BOTAO 2' }],
 //     'title': `TITULO`, 'text': `TEXTO`,
 // };
@@ -19,7 +19,7 @@ async function notification(infOk) {
         };
 
         if (!inf.icon || inf.icon.length > 1) {
-            let imgSrc = !inf.icon ? './src/media/icon_3.png' : inf.icon;
+            let imgSrc = !inf.icon ? './src/scripts/media/icon_3.png' : inf.icon;
             let imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer())
             imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)))
         } else {

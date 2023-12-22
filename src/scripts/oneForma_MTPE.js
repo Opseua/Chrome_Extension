@@ -59,7 +59,7 @@ async function oneForma_MTPE(inf) {
             if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
                 infNotification =
                 {
-                    'duration': 2, 'icon': '/src/media/notification_2.png',
+                    'duration': 2, 'icon': '/src/scripts/media/notification_2.png',
                     'title': `PULAR`,
                     'text': 'Mesmo texto',
                 };
@@ -68,7 +68,7 @@ async function oneForma_MTPE(inf) {
             else {
                 infNotification =
                 {
-                    'duration': 2, 'icon': './src/media/notification_1.png',
+                    'duration': 2, 'icon': './src/scripts/media/notification_1.png',
                     'title': `CONCLUÍDO`,
                     'text': `pt → ${retRegex1.res['1']}`,
                 };
@@ -78,14 +78,14 @@ async function oneForma_MTPE(inf) {
                 let firstB = retChatGpt.res.charAt(0)
                 if ((firstA === firstA.toUpperCase()) && !(firstB === firstB.toUpperCase())) {
                     infNotification = {
-                        'duration': 4, 'icon': './src/media/notification_3.png',
+                        'duration': 4, 'icon': './src/scripts/media/notification_3.png',
                         'title': `ALERTA`,
                         'text': `Conferir primeira letra!`,
                     };
                     retNotification = await notification(infNotification)
                 } else if (!(firstA === firstA.toUpperCase()) && (firstB === firstB.toUpperCase())) {
                     infNotification = {
-                        'duration': 4, 'icon': './src/media/notification_3.png',
+                        'duration': 4, 'icon': './src/scripts/media/notification_3.png',
                         'title': `ALERTA`,
                         'text': `Conferir primeira letra!`,
                     }
@@ -96,7 +96,7 @@ async function oneForma_MTPE(inf) {
         } else {
             infNotification =
             {
-                'duration': 4, 'icon': './src/media/notification_3.png',
+                'duration': 4, 'icon': './src/scripts/media/notification_3.png',
                 'title': `PULAR`,
                 'text': `Erro ao alterar texto`,
             }
