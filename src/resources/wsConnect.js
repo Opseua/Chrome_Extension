@@ -1,15 +1,15 @@
 // await wsConnect({ 'e': e, 'url': [dev1, dev2, dev3, dev4,] })
-// wsList(devSend, async (nomeList, par1) => {
-//     console.log('MENSAGEM RECEBIDA EM:', nomeList, '→', par1);
+// wsList(devSend, async (nomeList, param1) => {
+//     console.log('MENSAGEM RECEBIDA EM:', nomeList, '→', param1);
 // })
 // await new Promise(resolve => { setTimeout(resolve, 2000) })
 // wsSend({ 'e': e, 'url': dev1, 'message': `Essa mensagem está sendo enviada` })
 
-// wsList('listener1', async (nomeList, par1, par2) => {
-//     console.log('ACIONADO:', nomeList, '→', par1, par2);
+// wsList('listener1', async (nomeList, param1, param2) => {
+//     console.log('ACIONADO:', nomeList, '→', param1, param2);
 // });
-// wsList('listener2', async (nomeList, par1, par2) => {
-//     console.log('ACIONADO:', nomeList, '→', par1, par2);
+// wsList('listener2', async (nomeList, param1, param2) => {
+//     console.log('ACIONADO:', nomeList, '→', param1, param2);
 // });
 
 // acionarListener('listener1', 'INF1', 'INF2');
@@ -20,8 +20,8 @@ let listeners = {};
 function wsList(nomeList, callback) {
     if (!listeners[nomeList]) { listeners[nomeList] = []; } listeners[nomeList].push(callback);
 }
-function acionarListener(nomeList, par1, par2) {
-    if (listeners[nomeList]) { listeners[nomeList].forEach(async (callback) => { await callback(nomeList, par1, par2); }); }
+function acionarListener(nomeList, param1, param2) {
+    if (listeners[nomeList]) { listeners[nomeList].forEach(async (callback) => { await callback(nomeList, param1, param2); }); }
 }
 async function logWs(inf) { // NODEJS
     if (!eng) {

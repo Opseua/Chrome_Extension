@@ -257,7 +257,7 @@ async function file(inf) {
                             if (b == 0) return '0 Bytes'; let i = Math.floor(Math.log(b) / Math.log(1024));
                             return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i];
                         };
-                        let entries = await _fs.promises.readdir(path), result = [], count = 0, md5 = false, isFolder, stats, sizeFolder, entryObject
+                        let entries = await _fs.promises.readdir(path), result = [], count = 0, md5 = false, isFolder, stats, size, entryObject
                         for (let entry of entries) {
                             if (count >= inf.max) {
                                 break;
@@ -267,19 +267,19 @@ async function file(inf) {
                                 count++;
                                 isFolder = _fs.statSync(fullPath).isDirectory()
                                 stats = getStatus(fullPath)
-                                sizeFolder = isFolder ? false : await _getFolderSize.loose(fullPath);
-                                if (!isFolder && letter !== 'C') {
-                                    let infFile = { 'action': 'md5', 'path': fullPath }
-                                    let retFile = await file(infFile);
-                                    md5 = retFile.res
-                                }
+                                size = isFolder ? false : await _getFolderSize.loose(fullPath);
+                                // if (!isFolder && letter !== 'C') {
+                                let infFile = { 'action': 'md5', 'path': fullPath }
+                                let retFile = await file(infFile);
+                                md5 = retFile.res
+                                // }
                                 entryObject = {
                                     'ret': true,
                                     'isFolder': isFolder,
                                     'name': entry,
                                     'path': fullPath.replace(/\\/g, '/'),
                                     'edit': stats.mtime,
-                                    'size': sizeFolder ? formatBytes(sizeFolder) : false,
+                                    'size': size ? formatBytes(size) : false,
                                     ...(isFolder ? {} : { 'md5': md5 }),
                                 };
                                 result.push(entryObject);

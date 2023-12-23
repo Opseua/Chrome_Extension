@@ -24,23 +24,23 @@ async function client(inf) {
         retGetPath = await getPath({ 'e': new Error() })
         if (retGetPath?.res[6] !== 'Sniffer_Python') {
             // LIST - [WEB]
-            wsList(dev2, async (nomeList, par1) => {
-                runLis(nomeList, par1)
+            wsList(dev2, async (nomeList, param1) => {
+                runLis(nomeList, param1)
             });
 
             // LISTENER SOMENTE SE NÃO FOR [EC2]
             if (retGetPath?.res[1] !== 'C') {
                 // LIST - [LOC]
-                wsList(dev3, async (nomeList, par1) => {
-                    runLis(nomeList, par1)
+                wsList(dev3, async (nomeList, param1) => {
+                    runLis(nomeList, param1)
                 });
             }
 
             // RUN LIS
-            async function runLis(nomeList, par1) {
+            async function runLis(nomeList, param1) {
                 let data = {};
                 try {
-                    data = JSON.parse(par1)
+                    data = JSON.parse(param1)
                 } catch (e) { };
                 if (data.fun) { // FUN
                     let infDevFun = { 'data': data, 'wsOrigin': nomeList }
@@ -54,7 +54,7 @@ async function client(inf) {
                         await action_TryRating_QueryImageDeservingClassification()
                     }
                 } else {
-                    console.log(`\nMENSAGEM DO WEBSCKET\n\n${par1}\n`)
+                    console.log(`\nMENSAGEM DO WEBSCKET\n\n${param1}\n`)
                 }
             }
         }
