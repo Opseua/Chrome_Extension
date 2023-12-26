@@ -8,7 +8,7 @@ async function command2(inf) {
       'text': `Alternando sniffer`
     }
     let retNotification = await notification(infNotification);
-    let infCommandLine = { 'command': `"${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/src/1_BACKGROUND.exe"`, 'retInf': false }
+    let infCommandLine = { 'command': `"${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/src/z_Outros/Sniffer_Python_keep[N]-view[N].lnk"`, 'retInf': false }
     let retCommandLine = await commandLine(infCommandLine)
     ret['ret'] = true;
     ret['msg'] = `SHORTCUT PRESSED: OK`;
