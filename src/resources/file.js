@@ -384,7 +384,7 @@ async function file(inf) {
                         // USADO SOMENTE NO 'ARQUIVOS WEB' DO SEVIDOR
                         if (res) {
                             // É PASTA [LISTAR]
-                            infFile = { 'e': e, 'action': 'list', 'functionLocal': false, 'path': path, 'max': 100 }
+                            infFile = { 'e': e, 'action': 'list', 'functionLocal': false, 'path': path, 'max': inf.max }
                             retFile = await fileList(infFile)
                             resNew = retFile
                         } else {
