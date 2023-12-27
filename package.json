@@ -8,6 +8,6 @@
     "googleapis": "^129.0.0",
     "puppeteer": "^21.6.1",
     "stack-trace": "^1.0.0-pre2",
-    "ws": "^8.15.1"
+    "ws": "^8.16.0"
   }
 }
