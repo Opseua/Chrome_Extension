@@ -72,38 +72,6 @@ async function client(inf) {
         }
     }
 }
-await client()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -148,3 +116,5 @@ if (eng) { // CHROME
 }
 // *************************
 
+// MANTER NO FINAL PARA GARANTIR QUE O ATALHO VAI FUNCIONAR ANTES DO WEBSOCKET SER CONECTADO
+await client()
