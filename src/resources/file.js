@@ -257,22 +257,25 @@ async function file(inf) {
                             if (b == 0) return '0 Bytes'; let i = Math.floor(Math.log(b) / Math.log(1024));
                             return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i];
                         };
-                        let entries = await _fs.promises.readdir(path), result = [], count = 0, md5 = false, isFolder, stats, size, entryObject
+                        let entries = await _fs.promises.readdir(path), result = [], count = 0, isFolder, stats, size, entryObject
                         for (let entry of entries) {
                             if (count >= inf.max) {
                                 break;
                             }
                             let fullPath = _path.join(path, entry);
                             try {
+                                let md5 = false
                                 count++;
                                 isFolder = _fs.statSync(fullPath).isDirectory()
                                 stats = getStatus(fullPath)
                                 size = isFolder ? false : await _getFolderSize.loose(fullPath);
-                                // if (!isFolder && letter !== 'C') {
-                                let infFile = { 'action': 'md5', 'path': fullPath }
-                                let retFile = await file(infFile);
-                                md5 = retFile.res
-                                // }
+                                if (!isFolder && size && size <= 100 * 1024 * 1024) {
+                                    let infFile = { 'action': 'md5', 'path': fullPath }
+                                    let retFile = await file(infFile);
+                                    md5 = retFile.res
+                                } else {
+                                    md5 = `arquivo muito grande`
+                                }
                                 entryObject = {
                                     'ret': true,
                                     'isFolder': isFolder,

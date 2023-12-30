@@ -29,12 +29,12 @@ let arrGlobal = [
     'regexE', 'api', 'chatGpt', 'chromeActions', 'clipboard', 'file', 'commandLine', 'configStorage', 'dateHour', 'devFun',
     'getCookies', 'getPage', 'getPath', 'googleSheets', 'hasKey', 'htmlToJson', 'jsonInterpret', 'log', 'keepCookieLive',
     'notification', 'orderObj', 'promptChrome', 'random', 'rawText', 'regex', 'secToHour', 'sniffer', 'splitText',
-    'tabSearch', 'translate', 'wsConnect', 'wsSend',
+    'tabSearch', 'translate', 'wsConnect', 'wsSend', 'fileWrite',
     // scripts
     'oneForma_MTPE', 'peroptyx_QueryImageDeservingClassification', 'peroptyx_Search20',
     'action_TryRating_QueryImageDeservingClassification', 'background', 'command1', 'command2', 'command2_old',
     // variáveis / funções
-    'secReconnect', 'secPing', 'secScreenShot', 'par1', 'par2', 'par3', 'par4', 'par5', 'par6', 'par7', 'par8', 'securityPass',
+    'secReconnect', 'secPing', 'secScreenShot', 'secMaxWebFile', 'par1', 'par2', 'par3', 'par4', 'par5', 'par6', 'par7', 'par8', 'securityPass',
     'portWeb', 'portLocal', 'devSend', 'devGet', 'devMaster',
 
     // [Sniffer_Python]

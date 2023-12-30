@@ -225,6 +225,7 @@ let securityPass = `${retConfigStorage.res.securityPass}`
 let secReconnect = `${retConfigStorage.res.secReconnect}`
 let secPing = `${retConfigStorage.res.secPing}`
 let secScreenShot = `${retConfigStorage.res.secScreenShot}`
+let secMaxWebFile = `${retConfigStorage.res.secMaxWebFile}`
 let par1 = `${securityPass}=${retConfigStorage.res.par1}`
 let par2 = `${securityPass}=${retConfigStorage.res.par2}`
 let par3 = `${securityPass}=${retConfigStorage.res.par3}`
@@ -258,6 +259,7 @@ if (eng) { // CHROME
     window['secReconnect'] = secReconnect
     window['secPing'] = secPing
     window['secScreenShot'] = secScreenShot
+    window['secMaxWebFile'] = secMaxWebFile
     window['par1'] = par1
     window['par2'] = par2
     window['par3'] = par3
@@ -276,6 +278,7 @@ if (eng) { // CHROME
     global['secReconnect'] = secReconnect
     global['secPing'] = secPing
     global['secScreenShot'] = secScreenShot
+    global['secMaxWebFile'] = secMaxWebFile
     global['par1'] = par1
     global['par2'] = par2
     global['par3'] = par3
