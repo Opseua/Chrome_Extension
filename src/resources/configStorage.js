@@ -224,6 +224,7 @@ let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket'
 let securityPass = `${retConfigStorage.res.securityPass}`
 let secReconnect = `${retConfigStorage.res.secReconnect}`
 let secPing = `${retConfigStorage.res.secPing}`
+let secScreenShot = `${retConfigStorage.res.secScreenShot}`
 let par1 = `${securityPass}=${retConfigStorage.res.par1}`
 let par2 = `${securityPass}=${retConfigStorage.res.par2}`
 let par3 = `${securityPass}=${retConfigStorage.res.par3}`
@@ -244,30 +245,6 @@ let urlHostPortWeb = `${url}://${hostWeb}:${portWeb}`
 let urlHostPortLocal = `${url}://${hostLocal}:${portLocal}`
 let devMaster = `${devices[0].master}`
 
-// let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
-// let securityPass = `${retConfigStorage.res.securityPas}`
-// let secReconnect = `${retConfigStorage.res.secReconnect}`
-// let secPing = `${retConfigStorage.res.secPing}`
-// let par1 = `${securityPass}=${retConfigStorage.res.par1}`
-// let par2 = `${securityPass}=${retConfigStorage.res.par2}`
-// let par3 = `${securityPass}=${retConfigStorage.res.par3}`
-// let par4 = `${securityPass}=${retConfigStorage.res.par4}`
-// let par5 = `${securityPass}=${retConfigStorage.res.par5}`
-// let par6 = `${securityPass}=${retConfigStorage.res.par6}`
-// let par7 = `${securityPass}=${retConfigStorage.res.par7}`
-// let par8 = `${securityPass}=${retConfigStorage.res.par8}`
-// let serverWeb = `${retConfigStorage.res.server['1']}`
-// let serverLocal = `${retConfigStorage.res.server['2']}`
-// let url = `${serverWeb.url}`
-// let hostWeb = `${serverWeb.host}`
-// let portWeb = `${Number(serverWeb.port)}`
-// let hostLocal = `${serverLocal.host}`
-// let portLocal = `${Number(serverLocal.port)}`
-// let devices = `${retConfigStorage.res.devices}`
-// let urlHostPortWeb = `${url}://${hostWeb}:${portWeb}`
-// let urlHostPortLocal = `${url}://${hostLocal}:${portLocal}`
-// let devMaster = `${devices[0].master}`
-
 let devSend, devGet
 if (eng) { // CHROME | Send → NodeJS | Get → Chrome 
     devSend = `${letter == 'D' ? urlHostPortLocal : urlHostPortWeb}/${devMaster}_${devices[2].name}`
@@ -280,6 +257,7 @@ if (eng) { // CHROME | Send → NodeJS | Get → Chrome
 if (eng) { // CHROME
     window['secReconnect'] = secReconnect
     window['secPing'] = secPing
+    window['secScreenShot'] = secScreenShot
     window['par1'] = par1
     window['par2'] = par2
     window['par3'] = par3
@@ -297,6 +275,7 @@ if (eng) { // CHROME
 } else { // NODEJS
     global['secReconnect'] = secReconnect
     global['secPing'] = secPing
+    global['secScreenShot'] = secScreenShot
     global['par1'] = par1
     global['par2'] = par2
     global['par3'] = par3
