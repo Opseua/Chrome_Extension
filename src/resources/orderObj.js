@@ -12,9 +12,9 @@ async function orderObj(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        // ret['res'] = Object.fromEntries(Object.entries(inf).sort((a, b) => a[0].localeCompare(b[0])))
-        // ret['msg'] = `ORDEROBJ: OK`;
-        // ret['ret'] = true;
+        ret['res'] = Object.fromEntries(Object.entries(inf).sort((a, b) => a[0].localeCompare(b[0])))
+        ret['msg'] = `ORDEROBJ: OK`;
+        ret['ret'] = true;
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {

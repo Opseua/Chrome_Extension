@@ -37,6 +37,10 @@ let arrGlobal = [
     'secReconnect', 'secPing', 'secScreenShot', 'secMaxWebFile', 'par1', 'par2', 'par3', 'par4', 'par5', 'par6', 'par7', 'par8', 'securityPass',
     'portWeb', 'portLocal', 'devSend', 'devGet', 'devMaster',
 
+    // [WebSocket]
+    // @export.js
+    'getClients', 'loop', 'resetServer', 'sendRoom',
+
     // [Sniffer_Python]
     // @export.js
     'EWOQ', 'TryRating', 'TryRating_DrivingNavigation3DMaps', 'TryRating_QueryImageDeservingClassification',

@@ -227,12 +227,12 @@ let secPing = `${retConfigStorage.res.secPing}`
 let secScreenShot = `${retConfigStorage.res.secScreenShot}`
 let secMaxWebFile = `${retConfigStorage.res.secMaxWebFile}`
 let par1 = `${securityPass}=${retConfigStorage.res.par1}`
-let par2 = `${securityPass}=${retConfigStorage.res.par2}`
+let par2 = `${retConfigStorage.res.par2}`
 let par3 = `${securityPass}=${retConfigStorage.res.par3}`
 let par4 = `${securityPass}=${retConfigStorage.res.par4}`
 let par5 = `${securityPass}=${retConfigStorage.res.par5}`
-let par6 = `${securityPass}=${retConfigStorage.res.par6}`
-let par7 = `${securityPass}=${retConfigStorage.res.par7}`
+let par6 = `${retConfigStorage.res.par6}`
+let par7 = `${retConfigStorage.res.par7}`
 let par8 = `${securityPass}=${retConfigStorage.res.par8}`
 let serverWeb = retConfigStorage.res.server['1']
 let serverLocal = retConfigStorage.res.server['2']
