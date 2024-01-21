@@ -50,7 +50,8 @@ async function googleSheets(inf) {
 
         // GERAR NOVO TOKEN
         if (makeNewToken) {
-            console.log('ATUALIZANDO TOKEN')
+            let time = dateHour().res;
+            console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `ATUALIZANDO TOKEN`);
             await _auth.authorize();
             let date = new Date(_auth.credentials.expiry_date);
             let day = ('0' + date.getDate()).slice(-2);
