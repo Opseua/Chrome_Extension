@@ -27,6 +27,7 @@ if (!(eng ? window.all1 : global.all1)) {
 // FUNÇÕES DESSE PROJETO
 await import('./regexE.js') // MANTER COMO PRIMEIRO IMPORT
 await import('./api.js')
+await import('./awaitFun.js')
 await import('./chatGpt.js')
 await import('./chromeActions.js')
 await import('./clipboard.js')
