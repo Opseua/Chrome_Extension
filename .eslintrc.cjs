@@ -28,7 +28,7 @@ let arrGlobal = [
     // @export.js
     'regexE', 'api', 'chatGpt', 'chromeActions', 'clipboard', 'file', 'commandLine', 'configStorage', 'dateHour', 'devFun',
     'getCookies', 'getPage', 'getPath', 'googleSheets', 'hasKey', 'htmlToJson', 'jsonInterpret', 'log', 'keepCookieLive',
-    'notification', 'orderObj', 'promptChrome', 'random', 'rawText', 'regex', 'secToHour', 'sniffer', 'splitText',
+    'notification', 'orderObj', 'promptChrome', 'randomNumber', 'rawText', 'regex', 'secToHour', 'sniffer', 'splitText',
     'tabSearch', 'translate', 'wsConnect', 'wsSend', 'fileWrite',
     // scripts
     'oneForma_MTPE', 'peroptyx_QueryImageDeservingClassification', 'peroptyx_Search20',

@@ -21,7 +21,7 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
 
         if (dif < 15) {
             let wait = 15 - dif;
-            let retRandom = await random({ 'min': wait, 'max': wait + 9, 'await': true })
+            let retRandom = await randomNumber({ 'min': wait, 'max': wait + 9, 'await': true })
         }
         console.log('FIM', data.inf, '\n', data.res, '\n', data.query)
 

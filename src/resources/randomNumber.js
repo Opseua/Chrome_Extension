@@ -1,10 +1,10 @@
 // let infRandom, retRandom // 'logFun': true,
 // infRandom = { 'min': 3, 'max': 10, 'await': true };
-// retRandom = await random(infRandom);
+// retRandom = await randomNumber(infRandom);
 // console.log(retRandom)
 
 let e = import.meta.url;
-async function random(inf) {
+async function randomNumber(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
         let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
@@ -41,7 +41,7 @@ async function random(inf) {
 }
 
 if (eng) { // CHROME
-    window['random'] = random;
+    window['randomNumber'] = randomNumber;
 } else { // NODEJS
-    global['random'] = random;
+    global['randomNumber'] = randomNumber;
 }

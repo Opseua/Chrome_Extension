@@ -234,6 +234,7 @@ let par5 = `${securityPass}=${retConfigStorage.res.par5}`
 let par6 = `${retConfigStorage.res.par6}`
 let par7 = `${retConfigStorage.res.par7}`
 let par8 = `${securityPass}=${retConfigStorage.res.par8}`
+let par9 = `${securityPass}=${retConfigStorage.res.par9}`
 let serverWeb = retConfigStorage.res.server['1']
 let serverLocal = retConfigStorage.res.server['2']
 let url = `${serverWeb.url}`
@@ -268,6 +269,7 @@ if (eng) { // CHROME
     window['par6'] = par6
     window['par7'] = par7
     window['par8'] = par8
+    window['par9'] = par9
     window['securityPass'] = securityPass
     window['portWeb'] = portWeb
     window['portLocal'] = portLocal
@@ -287,6 +289,7 @@ if (eng) { // CHROME
     global['par6'] = par6
     global['par7'] = par7
     global['par8'] = par8
+    global['par9'] = par9
     global['securityPass'] = securityPass
     global['portWeb'] = portWeb
     global['portLocal'] = portLocal
