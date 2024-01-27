@@ -74,7 +74,7 @@ async function ws(inf) {
                 if (!activeSockets.has(server)) {
                     let webSocket = new _WebSocket(server);
                     webSocket.onopen = async () => {
-                        let msgLog = `WS OK:\n${server}`;
+                        let msgLog = `WS OK: ${server}`;
                         time = dateHour().res;
                         console.log(`${time.hou}:${time.min}:${time.sec} ${msgLog.replace('ws://', '')}`);
                         await logWs({ 'e': e, 'msg': msgLog })
@@ -94,7 +94,7 @@ async function ws(inf) {
                     webSocket.onclose = async () => {
                         clearTimeout(pingsTimeouts[server]);
                         activeSockets.delete(server);
-                        let msgLog = `WS RECONECTANDO:\n${server}`;
+                        let msgLog = `WS RECONECTANDO: ${server}`;
                         let time = dateHour().res;
                         console.log(`${time.hou}:${time.min}:${time.sec} ${msgLog.replace('ws://', '')}`);
                         await logWs({ 'e': e, 'msg': msgLog })

@@ -14,9 +14,16 @@
 // infLog = {'e':e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
 // retLog = await log(infLog);
 
+// LOOP DE REPETIÇÃO
 // setInterval(() => {
 //     console.log('OK');
-//   }, 5000);
+//   }, 2000);
+
+// ESPERAR E MOSTRAR UMA VEZ (timeout)
+// let timeout = setTimeout(function () {
+//     console.log('OK')
+// }, 2000);
+// clearTimeout(timeout);
 
 // [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
 let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
@@ -34,7 +41,7 @@ if (cng == 1) {
     global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, cs
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
 
 // DEFINIR O 'conf' E O 'letter'
 await import('./getPath.js')
@@ -56,6 +63,7 @@ if (eng) { // CHROME
     _net = await import('net');
     _util = await import('util');
     const { default: getFolderSize } = await import('get-folder-size'); _getFolderSize = getFolderSize
+    const { parse } = await import('url'); _parse = parse;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -149,6 +157,7 @@ if (eng) { // CHROME
     global['_net'] = _net
     global['_util'] = _util
     global['_getFolderSize'] = _getFolderSize
+    global['_parse'] = _parse
     // ## VARIÁVEIS
     global['cs'] = cs;
     global['catchGlobal'] = false;
@@ -177,3 +186,39 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 // matches = matches[matches.length - 1]
 
 
+// let lisTime = { 'lists': {}, 'tims': {}, 'ids': [] }
+// function lisAdd(eve, cal) { if (!lisTime.lists[eve]) { lisTime.lists[eve] = []; }; lisTime.lists[eve].push(cal); }
+// function lisDel(eve, cal) { if (lisTime.lists[eve]) { lisTime.lists[eve] = lisTime.lists[eve].filter(cb => cb !== cal); } }
+// function lisRun(eve, param) { if (lisTime.lists[eve]) { lisTime.lists[eve].forEach(cal => cal(param)); } }
+
+// let idNew = `TIMEOUT_ID_${new Date().getTime()}`
+
+// async function runAndAwait() {
+//     let resolvePromise; // RETORNO RECEBIDO A TEMPO [SIM]
+//     let promiseAwait = new Promise((resolve) => {
+//         resolvePromise = resolve; lisAdd(`timeClear_${idNew}`, (promiseRet) => { resolve(promiseRet); });
+//     }); lisTime.tims[idNew] = setTimeout(() => { // RETORNO RECEBIDO A TEMPO [NÃO]
+//         resolvePromise('RETORNO_NAO_RECEBIDO_A_TEMPO');
+//     }, 5000);
+//     // ###################
+
+
+//     // console.log('aaaa')
+
+
+//     // ################### LIMPAR TIMEOUT, LISTENER E RETORNAR RESPOSTA
+//     let retAwait = await promiseAwait; clearTimeout(lisTime.tims[idNew]); lisDel(`timeClear_${idNew}`);
+//     delete lisTime.tims[idNew]; delete lisTime.lists[`timeClear_${idNew}`]; return retAwait;
+// }
+
+// // SIMULANDO RECEBIMENTO DO RETORNO
+// let timeout = setTimeout(function () {
+//     lisRun(`timeClear_${idNew}`, 'RESPOSTA');
+// }, 2000);
+
+// async function run() {
+//     let retRunAndAwait = await runAndAwait()
+//     clearTimeout(timeout);
+//     console.log('AQUI', retRunAndAwait)
+// }
+// run()
