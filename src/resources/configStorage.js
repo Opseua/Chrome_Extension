@@ -235,6 +235,7 @@ let par6 = `${retConfigStorage.res.par6}`
 let par7 = `${retConfigStorage.res.par7}`
 let par8 = `${securityPass}=${retConfigStorage.res.par8}`
 let par9 = `${securityPass}=${retConfigStorage.res.par9}`
+let par10 = `${securityPass}=${retConfigStorage.res.par10}`
 let serverWeb = retConfigStorage.res.server['1']
 let serverLocal = retConfigStorage.res.server['2']
 let url = `${serverWeb.url}`
@@ -257,6 +258,7 @@ if (eng) { // CHROME | Send → NodeJS | Get → Chrome
 }
 
 if (eng) { // CHROME
+    window['serverWeb'] = serverWeb.host
     window['secReconnect'] = secReconnect
     window['secPing'] = secPing
     window['secScreenShot'] = secScreenShot
@@ -270,6 +272,7 @@ if (eng) { // CHROME
     window['par7'] = par7
     window['par8'] = par8
     window['par9'] = par9
+    window['par10'] = par10
     window['securityPass'] = securityPass
     window['portWeb'] = portWeb
     window['portLocal'] = portLocal
@@ -277,6 +280,7 @@ if (eng) { // CHROME
     window['devSend'] = devSend
     window['devGet'] = devGet
 } else { // NODEJS
+    global['serverWeb'] = serverWeb.host
     global['secReconnect'] = secReconnect
     global['secPing'] = secPing
     global['secScreenShot'] = secScreenShot
@@ -290,6 +294,7 @@ if (eng) { // CHROME
     global['par7'] = par7
     global['par8'] = par8
     global['par9'] = par9
+    global['par10'] = par10
     global['securityPass'] = securityPass
     global['portWeb'] = portWeb
     global['portLocal'] = portLocal
