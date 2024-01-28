@@ -222,10 +222,10 @@ if (eng) { // CHROME
 // // NÃO COMENTAR! NECESSÁRIO PARA DEFINIR AS VARIÁVEIS GLOBAIS
 let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
 let securityPass = `${retConfigStorage.res.securityPass}`
-let secReconnect = `${retConfigStorage.res.secReconnect}`
-let secPing = `${retConfigStorage.res.secPing}`
-let secScreenShot = `${retConfigStorage.res.secScreenShot}`
-let secMaxWebFile = `${retConfigStorage.res.secMaxWebFile}`
+let secReconnect = retConfigStorage.res.secReconnect
+let secPing = retConfigStorage.res.secPing
+let secScreenShot = retConfigStorage.res.secScreenShot
+let secMaxWebFile = retConfigStorage.res.secMaxWebFile
 let par1 = `${securityPass}=${retConfigStorage.res.par1}`
 let par2 = `${retConfigStorage.res.par2}`
 let par3 = `${securityPass}=${retConfigStorage.res.par3}`
