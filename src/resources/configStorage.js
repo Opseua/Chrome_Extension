@@ -247,6 +247,7 @@ let devices = retConfigStorage.res.devices
 let urlHostPortWeb = `${url}://${hostWeb}:${portWeb}`
 let urlHostPortLocal = `${url}://${hostLocal}:${portLocal}`
 let devMaster = `${devices[0].master}`
+let sheetServer = retConfigStorage.res.sheetServer
 
 let devSend, devGet
 if (eng) { // CHROME | Send → NodeJS | Get → Chrome 
@@ -279,6 +280,7 @@ if (eng) { // CHROME
     window['devMaster'] = devMaster
     window['devSend'] = devSend
     window['devGet'] = devGet
+    window['sheetServer'] = sheetServer
 } else { // NODEJS
     global['serverWeb'] = serverWeb.host
     global['secReconnect'] = secReconnect
@@ -301,6 +303,7 @@ if (eng) { // CHROME
     global['devMaster'] = devMaster
     global['devSend'] = devSend
     global['devGet'] = devGet
+    global['sheetServer'] = sheetServer
 }
 
 
