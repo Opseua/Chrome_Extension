@@ -1,6 +1,6 @@
 // let infRawText, retRawText
 // let obj = {
-//     'key1': `
+//     'e': e, 'key1': `
 //       <li>
 //         <a href="logout.php?empresa=interface">
 //           <i class="fa fa-sign-out fa-fw"></i> Logout

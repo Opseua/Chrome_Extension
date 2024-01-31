@@ -1,5 +1,5 @@
 // let infTabSearch, retTabSearch
-// infTabSearch = { 'search': `*google*`, 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': `https://www.google.com/` }
+// infTabSearch = { 'e': e, 'search': `*google*`, 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': `https://www.google.com/` }
 // retTabSearch = await tabSearch(infTabSearch); // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // console.log(retTabSearch)
 
@@ -13,7 +13,7 @@ async function tabSearch(inf) {
     }
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'tabSearch', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'tabSearch', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
@@ -57,7 +57,7 @@ async function tabSearch(inf) {
                 ret['res'] = result.res
             } else if (typeof inf.search === 'number') { // ID ret
                 for (let obj of result.res) {
-                    let infRegex = { 'pattern': inf.search.toString(), 'text': obj.id.toString() };
+                    let infRegex = { 'e': e, 'pattern': inf.search.toString(), 'text': obj.id.toString() };
                     let retRegex = regex(infRegex)
                     if (retRegex.ret) {
                         ret['res'] = {
@@ -74,7 +74,7 @@ async function tabSearch(inf) {
             } else {
                 for (let obj of result.res) {
                     let infRegex, retRegex;
-                    infRegex = { 'pattern': inf.search, 'text': obj.url };
+                    infRegex = { 'e': e, 'pattern': inf.search, 'text': obj.url };
                     retRegex = regex(infRegex);
                     if (retRegex.ret) { // URL ret
                         ret['res'] = {
@@ -87,7 +87,7 @@ async function tabSearch(inf) {
                         };
                         break
                     };
-                    infRegex = { 'pattern': inf.search, 'text': obj.title };
+                    infRegex = { 'e': e, 'pattern': inf.search, 'text': obj.title };
                     retRegex = regex(infRegex);
                     if (retRegex.ret) { // TITULO ret
                         ret['res'] = {

@@ -1,5 +1,10 @@
 // await import('./resources/@export.js'); // TESTES
 
+// let infModel, retModel // 'logFun': true,
+// infModel = { 'e': e, 'd': 'VALOR 4', 'c': 'VALOR 3', }
+// retModel = await model(infModel)
+// console.log(retModel)
+
 let e = import.meta.url;
 async function model(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
@@ -10,7 +15,7 @@ async function model(inf) {
     }
     try {
         // if (!`rodar no → CHROME ou NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-        //     let infDevAndFun = { 'enc': true, 'data': { 'name': 'model', 'par': inf, 'retInf': inf.retInf } };
+        //     let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'model', 'par': inf, 'retInf': inf.retInf } };
         //     let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         // };
 

@@ -1,5 +1,5 @@
 // let infSniffer, retSniffer // 'logFun': true,
-// infSniffer = { 'newReqSend': false, 'arrUrl': ['*google*'] }
+// infSniffer = { 'e': e, 'newReqSend': false, 'arrUrl': ['*google*'] }
 // retSniffer = await sniffer(infSniffer);
 // console.log(retSniffer)
 
@@ -8,7 +8,7 @@ async function sniffer(inf) {
     let ret = { 'ret': false, 'res': { 'req': {}, 'res': {} } };
     e = inf && inf.e ? inf.e : e
     if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-        let infDevAndFun = { 'enc': true, 'data': { 'name': 'sniffer', 'par': inf, 'retInf': inf.retInf } };
+        let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'sniffer', 'par': inf, 'retInf': inf.retInf } };
         let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
     };
     if (catchGlobal) {
@@ -60,7 +60,7 @@ async function sniffer(inf) {
                     sendPri = { 'arrUrl': ['https://ntfy.sh/'] }
                 };
                 async function intercept(infOk, eventType) {
-                    if (sendPri.arrUrl.find(infRegex => regex({ 'simple': true, 'pattern': infRegex, 'text': infOk.url }))) {
+                    if (sendPri.arrUrl.find(infRegex => regex({ 'e': e, 'simple': true, 'pattern': infRegex, 'text': infOk.url }))) {
                         if (eventType == 'onBeforeRequest') {
                             // if (infOk.requestBody && infOk.requestBody.raw && infOk.requestBody.raw[0].hasOwnProperty('bytes')) {
                             if (infOk.requestBody && infOk.requestBody.raw && 'bytes' in infOk.requestBody.raw[0]) {
@@ -99,6 +99,7 @@ async function sniffer(inf) {
                                 };
                                 hea['naoInterceptar'] = 'naoInterceptar';
                                 let infApi = {
+                                    'e': e,
                                     'url': ret.res.req.url,
                                     'method': ret.res.req.method,
                                     'headers': hea

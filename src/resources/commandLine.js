@@ -1,6 +1,6 @@
 // let infCommandLine, retCommandLine // 'logFun': true, 'awaitFinish': false,
-// infCommandLine = { 'command': `notepad` }
-// infCommandLine = { 'command': `"!letter!:/ARQUIVOS/PROJETOS/WebScraper/src/1_BACKGROUND.exe"` }
+// infCommandLine = { 'e': e, 'command': `notepad` }
+// infCommandLine = { 'e': e, 'command': `"!letter!:/ARQUIVOS/PROJETOS/WebScraper/src/1_BACKGROUND.exe"` }
 // retCommandLine = await commandLine(infCommandLine);
 // console.log(retCommandLine)
 
@@ -14,7 +14,7 @@ async function commandLine(inf) {
     }
     try {
         if (!`rodar no →  NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'commandLine', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'commandLine', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 

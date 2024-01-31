@@ -1,6 +1,6 @@
 // let infNotification, retNotification // 'logFun': true,
 // infNotification = {
-//     'duration': 2, 'icon': './src/scripts/media/icon_4.png', 'retInf': false,
+//     'e': e, 'duration': 2, 'icon': './src/scripts/media/icon_4.png', 'retInf': false,
 //     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': 'BOTAO 2' }],
 //     'title': `TITULO`, 'text': `TEXTO`,
 // };
@@ -14,7 +14,7 @@ async function notification(infOk) {
     try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': inf.retInf, } };
+            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': inf.retInf, } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 

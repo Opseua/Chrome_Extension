@@ -1,5 +1,5 @@
 // let infChromeActions, retChromeActions // 'logFun': true,
-// infChromeActions = { 'action': 'badge', 'text': `OLA` }
+// infChromeActions = { 'e': e, 'action': 'badge', 'text': `OLA` }
 // retChromeActions = await chromeActions(infChromeActions);
 // console.log(retChromeActions)
 
@@ -13,7 +13,7 @@ async function chromeActions(inf) {
     }
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'chromeActions', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'chromeActions', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 

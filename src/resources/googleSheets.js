@@ -1,6 +1,6 @@
 // let infGoogleSheets, retGoogleSheets // 'logFun': true,
 // infGoogleSheets = {
-//     'action': 'get',
+//     'e': e, 'action': 'get',
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
 //     'tab': `RESULTADOS`,
 //     'range': `E1:F1`, // PERÍMETRO
@@ -8,7 +8,7 @@
 //     'range': `E1`, // CÉLULA ÚNICA
 // }
 // infGoogleSheets = {
-//     'action': 'send',
+//     'e': e, 'action': 'send',
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
 //     'tab': `RESULTADOS`,
 //     'range': `D*`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'D' ATÉ 'DD']
@@ -29,7 +29,7 @@ async function googleSheets(inf) {
     }
     try {
         if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'googleSheets', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'googleSheets', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
@@ -98,7 +98,7 @@ async function googleSheets(inf) {
                 lin = inf.range.replace(/[^0-9]/g, '')
             } else {
                 let range = inf.range.includes('**') ? `last**${inf.range}` : inf.range.includes('*') ? `last*${inf.range}` : 'last'
-                let retNewGet = await googleSheets({ 'action': 'get', 'id': id, 'tab': tab, 'range': range })
+                let retNewGet = await googleSheets({ 'e': e, 'action': 'get', 'id': id, 'tab': tab, 'range': range })
                 lin = retNewGet.res
             }
             let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`

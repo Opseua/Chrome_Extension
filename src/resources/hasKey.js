@@ -1,6 +1,6 @@
 // let objeto = { 'chave1': { 'chave2': { 'chave3': 'VALOR' } } }; // 'logFun': true,
 // let infHasKey, retHaskey
-// infHasKey = { 'simple': true, 'key': 'chave3', 'obj': objeto };
+// infHasKey = { 'e': e, 'simple': true, 'key': 'chave3', 'obj': objeto };
 // retHaskey = hasKey(infHasKey);
 // console.log(retHaskey)
 

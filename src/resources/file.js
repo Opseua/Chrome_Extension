@@ -25,7 +25,7 @@ async function file(inf) {
         }
 
         // PASSAR NO jsonInterpret
-        if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
+        if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'e': e, 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder',].includes(inf.action)) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
         } else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {
@@ -77,7 +77,7 @@ async function file(inf) {
                     resNew['msg'] = `\n\n #### ERRO #### FILE WRITE NEW \n INFORMAR O 'text' \n\n`;
                 } else {
                     if (inf.raw) {
-                        let infRawText = { 'obj': inf.text }
+                        let infRawText = { 'e': e, 'obj': inf.text }
                         let retRawText = await rawText(infRawText)
                         text = retRawText
                     } else {

@@ -1,5 +1,5 @@
 // let infChatGpt, retChatGpt
-// infChatGpt = { 'provider': 'open.ai', 'input': `Qual a idade de Marte?` };
+// infChatGpt = { 'e': e, 'provider': 'open.ai', 'input': `Qual a idade de Marte?` };
 // retChatGpt = await chatGpt(infChatGpt);
 // console.log(retChatGpt)
 
@@ -18,14 +18,14 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
             retConfigStorage = await configStorage(infConfigStorage)
             if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             if (!retConfigStorage['cookie']) {
-                let infTabSearch = { 'search': retConfigStorage['Referer'], 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': retConfigStorage['Referer'], }
+                let infTabSearch = { 'e': e, 'search': retConfigStorage['Referer'], 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': retConfigStorage['Referer'], }
                 let retTabSearch = await tabSearch(infTabSearch);
                 if (!retTabSearch.ret) {
-                    infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO ABRIR CHATGPT`, 'text': `Não foi possível abrir a aba` }
+                    infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO ABRIR CHATGPT`, 'text': `Não foi possível abrir a aba` }
                     await notification(infNotification);
                     return retTabSearch
                 };
-                let infGetCookies = { 'url': retTabSearch.res.url, 'cookieSearch': '__Secure-next-auth.session-token', };
+                let infGetCookies = { 'e': e, 'url': retTabSearch.res.url, 'cookieSearch': '__Secure-next-auth.session-token', };
                 let retGetCookies = await getCookies(infGetCookies)
                 if (!(retGetCookies.ret)) {
                     if (eng) { // CHROME
@@ -38,7 +38,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                         retConfigStorage = retConfigStorage.res
                     };
                     infNotification = {
-                        'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PEGAR COOKIE CHATGPT`, 'text': `Verificar se a aba abriu e se está logado`
+                        'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PEGAR COOKIE CHATGPT`, 'text': `Verificar se a aba abriu e se está logado`
                     };
                     await notification(infNotification);
                     return ret
@@ -48,7 +48,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 let retSETConfigStorage = await configStorage(infConfigStorage); if (!retSETConfigStorage.ret) { return retSETConfigStorage }
             };
             infApi = {
-                method: 'POST', url: 'https://ora.ai/api/conversation', headers: {
+                'e': e, method: 'POST', url: 'https://ora.ai/api/conversation', headers: {
                     "accept": "*/*", "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
                     "content-type": "application/json", "sec-ch-ua": "\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"",
                     "sec-ch-ua-mobile": "?0", "sec-ch-ua-platform": "\"Windows\"", "sec-fetch-dest": "empty", "sec-fetch-mode": "cors",
@@ -69,7 +69,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                     infConfigStorage = { 'e': e, 'action': 'del', 'key': 'chatGptOra.ai' };
                     retConfigStorage = await configStorage(infConfigStorage)
                 };
-                infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
+                infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
                 await notification(infNotification);
                 ret['res'] = res.error.message;
                 ret['msg'] = `\n #### ERRO #### CHAT GPT ORA AI \n ${res.error.message} \n\n`;
@@ -79,7 +79,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
             infConfigStorage = { 'e': e, 'action': 'get', 'key': 'chatGptOpenAi' };
             retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             infApi = {
-                'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`,
+                'e': e, 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`,
                 'headers': { 'Content-Type': 'application/json', 'Authorization': `Bearer ${retConfigStorage.Authorization}` },
                 'body': { 'model': 'gpt-3.5-turbo', 'messages': [{ 'role': 'user', 'content': inf.input }], 'temperature': 0.7 }
             };
@@ -94,14 +94,14 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                     infConfigStorage = { 'e': e, 'action': 'del', 'key': 'chatGptOpenAi' };
                     retConfigStorage = await configStorage(infConfigStorage)
                 }
-                infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
+                infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
                 await notification(infNotification);
                 ret['res'] = res.error.message
                 ret['msg'] = `\n #### ERRO #### CHAT GPT OPEN AI \n ${res.error.message} \n\n`;
             }
         } else if (inf.provider == 'aichatos') { // ######## aichatos
             infApi = {
-                'method': 'POST', 'url': `https://api.aichatos.cloud/api/generateStream`, 'headers': {
+                'e': e, 'method': 'POST', 'url': `https://api.aichatos.cloud/api/generateStream`, 'headers': {
                     'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
                     'accept': 'application/json, text/plain, */*', 'content-type': 'application/json', 'dnt': '1', 'sec-ch-ua-mobile': '?0',
                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
@@ -116,7 +116,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `CHAT GPT AI CHATOS: OK`
                 ret['ret'] = true;
             } else {
-                infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
+                infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
                 await notification(infNotification);
                 ret['msg'] = `\n #### ERRO #### CHAT GPT AI CHATOS \n \n\n`
             }
@@ -124,7 +124,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
             infConfigStorage = { 'e': e, 'action': 'get', 'key': 'webSocket' };
             retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             infApi = {
-                'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.portWebSocket}/chatgpt`,
+                'e': e, 'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.portWebSocket}/chatgpt`,
                 'headers': {}, 'body': { "prompt": inf.input, "network": inf.network ? true : false }
             };
             retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }
@@ -133,14 +133,14 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `CHAT GPT EC2: OK`
                 ret['ret'] = true;
             } else {
-                infNotification = { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
+                infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
                 await notification(infNotification);
                 ret['msg'] = `\n #### ERRO #### CHAT GPT EC2 \n \n\n`;
                 ret['res'] = 'res.error.message'
             }
         } else if (inf.provider == 'globalgpt') { // ######## globalgpt
             infApi = {
-                'method': 'POST', 'url': `https://swiftmodel.azurewebsites.net/api/ChatTrigger`, 'headers': {
+                'e': e, 'method': 'POST', 'url': `https://swiftmodel.azurewebsites.net/api/ChatTrigger`, 'headers': {
                     'content-type': 'text/plain',
                 },
                 'body': { "name": [{ "role": "user", "content": inf.input }] }

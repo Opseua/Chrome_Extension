@@ -1,5 +1,5 @@
 // let infGetCookies, retGetCookies // 'logFun': true,
-// infGetCookies = { 'url': `https://www.google.com/`, 'cookieSearch': `__Secure-next-auth.session-token` }
+// infGetCookies = { 'e': e, 'url': `https://www.google.com/`, 'cookieSearch': `__Secure-next-auth.session-token` }
 // retGetCookies = await getCookies(infGetCookies);
 // console.log(retGetCookies);
 
@@ -13,7 +13,7 @@ async function getCookies(inf) {
     }
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'getCookies', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'getCookies', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 

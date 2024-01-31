@@ -1,6 +1,6 @@
 // let infRegex, retRegex // 'logFun': true,
-// infRegex = { 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES` }
-// infRegex = { 'simple': true, 'pattern': `*DOIS*`, 'text': `UMDOISTRES` }
+// infRegex = { 'e': e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES` }
+// infRegex = { 'e': e, 'simple': true, 'pattern': `*DOIS*`, 'text': `UMDOISTRES` }
 // retRegex = regex(infRegex);
 // console.log(retRegex)
 

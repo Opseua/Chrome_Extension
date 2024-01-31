@@ -1,5 +1,5 @@
 // let infRandom, retRandom // 'logFun': true,
-// infRandom = { 'min': 3, 'max': 10, 'await': true };
+// infRandom = { 'e': e, 'min': 3, 'max': 10, 'await': true };
 // retRandom = await randomNumber(infRandom);
 // console.log(retRandom)
 

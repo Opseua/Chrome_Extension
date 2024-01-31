@@ -1,6 +1,6 @@
 // let infApi, retApi // 'logFun': true,
 // infApi = { // ###### → json/object
-//     'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
+//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
 //     'headers': {
 //         'Content-Type': 'application/json'
 //     },
@@ -9,14 +9,14 @@
 //     }
 // };
 // infApi = { // ###### → text
-//     'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
+//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
 //     'headers': {
 //         'Content-Type': 'text/plain;charset=UTF-8'
 //     },
 //     'body': `Esse é o texto`
 // };
 // infApi = { // ###### → x-www-form-urlencoded
-//     'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
+//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
 //     'headers': {
 //         'Content-Type': 'application/x-www-form-urlencoded'
 //     },
@@ -58,7 +58,6 @@ async function api(inf) {
                 }
                 body = []
                 for (var key in inf.body) {
-                    // if (inf.body.hasOwnProperty(key)) {
                     if (key in inf.body) {
                         body.push(encodeURIComponent(key) + '=' + encodeURIComponent(inf.body[key]));
                     }

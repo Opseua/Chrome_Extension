@@ -1,6 +1,6 @@
 // let infHtmlToJson, retHtmlToJson // 'logFun': true,
 // infHtmlToJson = {
-//     'randomCol': false,
+//     'e': e, 'randomCol': false,
 //     'html': `
 
 //     <table>
@@ -44,7 +44,7 @@ async function htmlToJson(inf) {
     }
     try {
         if (!`rodar no →  NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'htmlToJson', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'htmlToJson', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 

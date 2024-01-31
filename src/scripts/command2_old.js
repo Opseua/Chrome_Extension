@@ -17,7 +17,7 @@ async function command2(inf) {
     }; gOAdd(gOEve);
     async function run() {
       reRun = false
-      infSniffer = { 'newReqSend': true, 'arrUrl': arrUrl }
+      infSniffer = { 'e': e, 'newReqSend': true, 'arrUrl': arrUrl }
       retSniffer = await sniffer(infSniffer)
       if (!retSniffer.res || !gO.inf.sniffer == 1) {
         return ret
@@ -27,7 +27,7 @@ async function command2(inf) {
       if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': arrUrl[9] })) {
         if (regex({ 'simple': true, 'text': JSON.stringify(retSniffer.res.res.body), 'pattern': '*MTPE_New_PortugueseBrazilToEnglish*' })) {
           // MTPE_New_PortugueseBrazilToEnglish
-          let infOneFormaMPTE = { 'sniffer': retSniffer.res.res.body }
+          let infOneFormaMPTE = { 'e': e, 'sniffer': retSniffer.res.res.body }
           let retoneForma_MTPE = await oneForma_MTPE(infOneFormaMPTE)
           if (retoneForma_MTPE.ret) {
             reRun = true
@@ -38,7 +38,7 @@ async function command2(inf) {
       } else if (regex({ 'simple': true, 'text': retSniffer.res.res.url, 'pattern': arrUrl[7] })) {
         if (regex({ 'simple': true, 'text': JSON.stringify(retSniffer.res.res.body), 'pattern': '*Search 2.0*' })) {
           // Search 2.0
-          let infPeroptyx_Search20 = { 'sniffer': retSniffer.res.res.body }
+          let infPeroptyx_Search20 = { 'e': e, 'sniffer': retSniffer.res.res.body }
           let retPeroptyx_Search20 = await peroptyx_Search20(infPeroptyx_Search20)
           if (retPeroptyx_Search20.ret) {
             reRun = true
@@ -46,7 +46,7 @@ async function command2(inf) {
           }
         } else if (regex({ 'simple': true, 'text': JSON.stringify(retSniffer.res.res.body), 'pattern': '*Query Image Deserving Classification*' })) {
           // Query Image Deserving Classification
-          let infPeroptyx_QueryImageDeservingClassification = { 'sniffer': retSniffer.res.res.body }
+          let infPeroptyx_QueryImageDeservingClassification = { 'e': e, 'sniffer': retSniffer.res.res.body }
           let retPeroptyx_QueryImageDeservingClassification = await peroptyx_QueryImageDeservingClassification(infPeroptyx_QueryImageDeservingClassification)
           if (retPeroptyx_QueryImageDeservingClassification.ret) {
             reRun = true

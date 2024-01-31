@@ -8,7 +8,7 @@
 // let infJsonInterpret, retJsonInterpret, json // 'logFun': true,
 // infGlobal['var1'] = 'LUA'; infGlobal['var2'] = 'SOL';
 // json = `{ "nasa": "Tanto a $[var1] quanto o $[var2] são redondos" }`;
-// infJsonInterpret = { 'json': json, 'vars': infGlobal };
+// infJsonInterpret = { 'e': e, 'json': json, 'vars': infGlobal };
 // retJsonInterpret = await jsonInterpret(infJsonInterpret)
 // console.log(retJsonInterpret)
 

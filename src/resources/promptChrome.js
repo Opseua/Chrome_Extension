@@ -1,5 +1,5 @@
 // let infPromptChrome, retPromptChrome // 'logFun': true,
-// infPromptChrome = { 'title': `NOME DO COMANDO` }
+// infPromptChrome = { 'e': e, 'title': `NOME DO COMANDO` }
 // retPromptChrome = await promptChrome(infPromptChrome)
 // console.log(retPromptChrome)
 
@@ -14,7 +14,7 @@ async function promptChrome(inf) {
     try {
         let title = (inf.title) ? `${inf.title} | Digite o comando:` : `Digite o comando:`;
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'promptChrome', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'promptChrome', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 

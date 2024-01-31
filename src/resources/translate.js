@@ -1,5 +1,5 @@
 // let infTranslate, retTranslate // 'logFun': true,
-// infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
+// infTranslate = { 'e': e, 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
 // retTranslate = await translate(infTranslate);
 // console.log(retTranslate)
 
@@ -13,13 +13,14 @@ async function translate(inf) {
     }
     try {
         let infApi = {
+            'e': e,
             method: 'GET',
             url: `https://translate.google.com/m?sl=${inf.source}&tl=${inf.target}&q=${encodeURIComponent(inf.text)}&hl=pt-BR`,
             headers: {}
         };
         let retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }
         let res = retApi.body;
-        let retRegex = regex({ 'pattern': 'class="result-container">(.*?)</div>', 'text': res });
+        let retRegex = regex({ 'e': e, 'pattern': 'class="result-container">(.*?)</div>', 'text': res });
         if (!retRegex.ret) {
             return ret
         };

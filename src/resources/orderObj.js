@@ -1,5 +1,5 @@
 // let infOrderObj, retOrderObj // 'logFun': true,
-// infOrderObj = { 'd': 'VALOR 4', 'c': 'VALOR 3', 'b': 'VALOR 2', 'a': 'VALOR 1' }
+// infOrderObj = { 'e': e, 'd': 'VALOR 4', 'c': 'VALOR 3', 'b': 'VALOR 2', 'a': 'VALOR 1' }
 // retOrderObj = await orderObj(infOrderObj)
 // console.log(retOrderObj)
 

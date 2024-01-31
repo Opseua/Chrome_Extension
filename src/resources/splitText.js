@@ -1,5 +1,5 @@
 // let infSplitText, retSplitText
-// infSplitText = { 'maxLength': 30, 'text': `Lorem Ipsum is simply dummy text of the printing and typesetting industry` }
+// infSplitText = { 'e': e, 'maxLength': 30, 'text': `Lorem Ipsum is simply dummy text of the printing and typesetting industry` }
 // retSplitText = await splitText(infSplitText);
 // console.log(retSplitText)
 

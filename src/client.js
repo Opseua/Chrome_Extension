@@ -28,8 +28,8 @@ async function client(inf) {
                 runLis(nomeList, param1)
             });
 
-            // LISTENER SOMENTE SE NÃO FOR [EC2]
-            if (retGetPath?.res[1] !== 'C') {
+            // LISTENER SOMENTE SE FOR [NOTEBOOK]
+            if (retGetPath?.res[1] == 'D') {
                 // LIST - [LOC]
                 wsList(dev3, async (nomeList, param1) => {
                     runLis(nomeList, param1)
@@ -43,7 +43,7 @@ async function client(inf) {
                     data = JSON.parse(param1)
                 } catch (e) { };
                 if (data.fun) { // FUN
-                    let infDevFun = { 'data': data, 'wsOrigin': nomeList }
+                    let infDevFun = { 'e': e, 'data': data, 'wsOrigin': nomeList }
                     let retDevFun = await devFun(infDevFun)
                 } else if (data.other) { // OTHER
                     // console.log('OTHER', data.other)
@@ -82,7 +82,7 @@ async function client(inf) {
 if (eng) { // CHROME
     let keys = ['webSocket', 'chatGptOra.aiAAAAA', 'chatGptOpenAi', 'sniffer'];
     for (let key of keys) { let infConfigStorage = { 'e': e, 'action': 'del', 'key': key }; let retConfigStorage = await configStorage(infConfigStorage) }
-    await chromeActions({ 'action': 'badge', 'text': '' });
+    await chromeActions({ 'e': e, 'action': 'badge', 'text': '' });
     chrome.downloads.onChanged.addListener(async function (...inf) { // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
         if (inf[0].state && inf[0].state.current === 'complete') {
             chrome.downloads.search({ id: inf.id }, async function (inf) {

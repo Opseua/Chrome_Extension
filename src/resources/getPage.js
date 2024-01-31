@@ -1,5 +1,5 @@
 // let infGetPage, retGetPage // 'logFun': true,
-// infGetPage = { 'id': 182593371 };
+// infGetPage = { 'e': e, 'id': 182593371 };
 // retGetPage = await getPage(infGetPage);
 // console.log(retGetPage)
 
@@ -13,7 +13,7 @@ async function getPage(inf) {
     }
     try {
         if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'enc': true, 'data': { 'name': 'getPage', 'par': inf, 'retInf': inf.retInf } };
+            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'getPage', 'par': inf, 'retInf': inf.retInf } };
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 

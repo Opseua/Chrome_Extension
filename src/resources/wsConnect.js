@@ -23,9 +23,12 @@ function wsList(nomeList, callback) {
 function acionarListener(nomeList, param1, param2) {
     if (listeners[nomeList]) { listeners[nomeList].forEach(async (callback) => { await callback(nomeList, param1, param2); }); }
 }
-async function logWs(inf) { // NODEJS
-    if (!eng) {
-        let retLog = await log({ 'e': inf.e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf.msg })
+let msgLogConsole
+async function logConsole(inf) { // NODEJS
+    let time = dateHour().res;
+    console.log(`${time.hou}:${time.min}:${time.sec} | ${inf.msg}`)
+    if (!eng && inf.write) {
+        await log({ 'e': inf.e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf.msg })
     }
 }
 
@@ -33,20 +36,18 @@ let loopIsRunning = false
 let pingsTimeouts = {};
 async function wsConnect(inf) {
     try {
-        if (!loopIsRunning) { // ENVIAR 'ping' PARA O SERVIDOR
+        // ENVIAR 'ping' PARA O SERVIDOR
+        if (!loopIsRunning) {
             loopIsRunning = true
-            let time
             setInterval(async () => {
                 for (let [key, value] of activeSockets.entries()) {
                     value.send(par6);
-                    time = dateHour().res;
-                    // console.log(`${time.hou}:${time.min}:${time.sec} ENVIADO PING:\n${key.replace('ws://', ' ')}`)
+                    msgLogConsole = `WS [CLIENT] ENVIADO PING: ${key}`;
+                    logConsole({ 'e': inf.e, 'msg': msgLogConsole });
                     let pingTimeout = setTimeout(async () => {
-                        let msgLog = `WS pong EXPIROU:\n${key}`;
-                        time = dateHour().res;
-                        console.log(`${time.hou}:${time.min}:${time.sec} WS pong EXPIROU: ${msgLog.replace('\n', '').replace('ws://', ' ').split('/')[1]}`);
+                        msgLogConsole = `WS [CLIENT] EXPIROU PONG: ${key}`;
                         value.close()
-                        await logWs({ 'e': inf.e, 'msg': msgLog });
+                        logConsole({ 'e': inf.e, 'msg': msgLogConsole });
                     }, 2000);
                     pingsTimeouts[key] = pingTimeout;
                 }
@@ -66,40 +67,55 @@ async function ws(inf) {
         let e = inf.e
         let time
         if (activeSockets.size == 0) {
-            let msgLog = `WS: START`;
-            await logWs({ 'e': e, 'msg': msgLog })
+            msgLogConsole = `WS: START`;
+            await logConsole({ 'e': e, 'msg': msgLogConsole })
         }
         async function connectToServer(server) {
             return new Promise(resolve => {
                 if (!activeSockets.has(server)) {
                     let webSocket = new _WebSocket(server);
+                    // ON OPEN
                     webSocket.onopen = async () => {
-                        let msgLog = `WS OK: ${server}`;
+                        msgLogConsole = `WS OK: ${server}`;
                         time = dateHour().res;
-                        console.log(`${time.hou}:${time.min}:${time.sec} ${msgLog.replace('ws://', '')}`);
-                        await logWs({ 'e': e, 'msg': msgLog })
+                        msgLogConsole = `WS [CLIENT] OK: ${server}`;
+                        logConsole({ 'e': inf.e, 'msg': msgLogConsole });
                         activeSockets.set(server, webSocket);
+                        // MASTER OU SLAVE [ENVIAR SOMENTE SE FOR MASTER]
+                        let masterSlaveDev = `${devMaster}_${engName}`
+                        let masterSlaveUrl = webSocket.url.split('/').pop()
+                        if (masterSlaveDev == masterSlaveUrl) {
+                            webSocket.send(par11)
+                        }
                         resolve('');
                     }
+                    // ON MESSAGE
                     webSocket.onmessage = (event) => {
-                        if (event.data == par7) { // RECEBIDO 'pong' DO SERVIDOR
+                        if (event.data.toLowerCase() == par7.toLowerCase()) {
+                            // RECEBIDO 'pong' DO SERVIDOR
                             clearTimeout(pingsTimeouts[server]);
                             time = dateHour().res;
                             // console.log(`${time.hou}:${time.min}:${time.sec} RECEBIDO PONG:\n${server.replace('ws://', ' ')}`)
-                        } else { // OUTRO TIPO DE MENSAGEM RECEBIDA
+                        } else if (event.data.toLowerCase() == par11.toLowerCase()) {
+
+
+                        } else {
+                            // OUTRO TIPO DE MENSAGEM RECEBIDA
                             acionarListener(server, event.data);
                             // console.log('RECEBIDA MENSAGEM:', server);
                         }
                     }
+                    // ON CLOSE
                     webSocket.onclose = async () => {
                         clearTimeout(pingsTimeouts[server]);
                         activeSockets.delete(server);
-                        let msgLog = `WS RECONECTANDO: ${server}`;
+                        msgLogConsole = `WS RECONECTANDO: ${server}`;
                         let time = dateHour().res;
-                        console.log(`${time.hou}:${time.min}:${time.sec} ${msgLog.replace('ws://', '')}`);
-                        await logWs({ 'e': e, 'msg': msgLog })
+                        console.log(`${time.hou}:${time.min}:${time.sec} ${msgLogConsole.replace('ws://', '')}`);
+                        await logConsole({ 'e': e, 'msg': msgLogConsole })
                         setTimeout(async () => { await connectToServer(server); }, (secReconnect * 1000));
                     }
+                    // ON ERROR
                     webSocket.onerror = async () => { };
                 }
 
@@ -114,7 +130,8 @@ async function ws(inf) {
                 }
             }));
             await Promise.all(promises);
-        } else if (typeof url === 'string') { // ENVIAR MENSAGEM
+        } else if (typeof url === 'string') {
+            // ENVIAR MENSAGEM
             return new Promise((resolve) => {
                 let webSocket = activeSockets.has(url) ? activeSockets.get(url) : new _WebSocket(url)
                 let connected = activeSockets.has(url) ? true : false
@@ -123,10 +140,10 @@ async function ws(inf) {
                     if (webSocket.readyState === _WebSocket.OPEN) {
                         let messageNew = typeof message === 'object' ? JSON.stringify(message) : message
                         let retInf = false
-                        if (messageNew.includes(`"retInf":true`) || regex({ 'simple': true, 'pattern': '*"retInf":"*', 'text': messageNew })) {
+                        if (messageNew.includes(`"retInf":true`) || regex({ 'e': e, 'simple': true, 'pattern': '*"retInf":"*', 'text': messageNew })) {
                             retInf = JSON.stringify(Date.now())
                             messageNew = messageNew.replace('"retInf":true', `"retInf":"${retInf}"`)
-                            let retRegexOK = regex({ 'pattern': '"retInf":"(.*?)"', 'text': messageNew })
+                            let retRegexOK = regex({ 'e': e, 'pattern': '"retInf":"(.*?)"', 'text': messageNew })
                             retInf = retRegexOK.res['1']
                         }
                         let awaitRet = messageNew.includes('retWs') ? false : retInf

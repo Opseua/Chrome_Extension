@@ -1,6 +1,6 @@
 
 async function command2(inf) {
-  let ret = { 'ret': false };
+  let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
   try {
     let infNotification = {
       'duration': 3, 'icon': './src/scripts/media/icon_3.png',
@@ -8,7 +8,7 @@ async function command2(inf) {
       'text': `Alternando sniffer`
     }
     let retNotification = await notification(infNotification);
-    let infCommandLine = { 'command': `"${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/src/z_Outros/Sniffer_Python_keep[N]-view[N].lnk"`, 'retInf': false }
+    let infCommandLine = { 'e': e, 'command': `"${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/src/z_Outros/Sniffer_Python_keep[N]-view[N].lnk"`, 'retInf': false }
     let retCommandLine = await commandLine(infCommandLine)
     ret['ret'] = true;
     ret['msg'] = `SHORTCUT PRESSED: OK`;

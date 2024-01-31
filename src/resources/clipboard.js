@@ -1,5 +1,5 @@
 // let infClipboard, retClipboard // 'logFun': true,
-// infClipboard = { 'value': `Esse é o texto` }
+// infClipboard = { 'e': e, 'value': `Esse é o texto` }
 // retClipboard = await clipboard(infClipboard);
 // console.log(retClipboard)
 
