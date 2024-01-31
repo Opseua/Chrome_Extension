@@ -118,7 +118,7 @@ function rateLimiter(inf) {
     }; return { check };
 }
 // // ############### CLEAR CONSOLE ###############
-//console.clear();
+console.clear();
 let msgQtd = 0; let clearConsole = console.log;
 console.log = function () {
     clearConsole.apply(console, arguments); msgQtd++;

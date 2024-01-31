@@ -3,11 +3,11 @@
 // retChatGpt = await chatGpt(infChatGpt);
 // console.log(retChatGpt)
 
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
+        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
         if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
@@ -22,7 +22,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 let retTabSearch = await tabSearch(infTabSearch);
                 if (!retTabSearch.ret) {
                     infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO ABRIR CHATGPT`, 'text': `Não foi possível abrir a aba` }
-                    await notification(infNotification);
+                    notification(infNotification);
                     return retTabSearch
                 };
                 let infGetCookies = { 'e': e, 'url': retTabSearch.res.url, 'cookieSearch': '__Secure-next-auth.session-token', };
@@ -40,7 +40,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                     infNotification = {
                         'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PEGAR COOKIE CHATGPT`, 'text': `Verificar se a aba abriu e se está logado`
                     };
-                    await notification(infNotification);
+                    notification(infNotification);
                     return ret
                 };
                 retConfigStorage['cookie'] = retGetCookies.res.concat;
@@ -70,7 +70,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                     retConfigStorage = await configStorage(infConfigStorage)
                 };
                 infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
-                await notification(infNotification);
+                notification(infNotification);
                 ret['res'] = res.error.message;
                 ret['msg'] = `\n #### ERRO #### CHAT GPT ORA AI \n ${res.error.message} \n\n`;
                 ret['ret'] = true;
@@ -95,7 +95,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                     retConfigStorage = await configStorage(infConfigStorage)
                 }
                 infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
-                await notification(infNotification);
+                notification(infNotification);
                 ret['res'] = res.error.message
                 ret['msg'] = `\n #### ERRO #### CHAT GPT OPEN AI \n ${res.error.message} \n\n`;
             }
@@ -117,7 +117,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['ret'] = true;
             } else {
                 infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
-                await notification(infNotification);
+                notification(infNotification);
                 ret['msg'] = `\n #### ERRO #### CHAT GPT AI CHATOS \n \n\n`
             }
         } else if (inf.provider == 'ec2') { // ######## ec2
@@ -134,7 +134,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
                 ret['ret'] = true;
             } else {
                 infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
-                await notification(infNotification);
+                notification(infNotification);
                 ret['msg'] = `\n #### ERRO #### CHAT GPT EC2 \n \n\n`;
                 ret['res'] = 'res.error.message'
             }
@@ -153,8 +153,8 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });

@@ -21,7 +21,7 @@
 // retRawText = await rawText(infRawText)
 // console.log(retRawText)
 
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function rawText(inf) {
     e = inf && inf.e ? inf.e : e
     let ret = ''
@@ -46,11 +46,11 @@ async function rawText(inf) {
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+        regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
     };
     return ret
 }

@@ -1,9 +1,9 @@
 // // 'write' → 'true' ESCREVE NO 'PROJECT/log/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
-// logConsole({ 'e': e, 'write': false, 'msg': `Mensagem do console` });
+// logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[api] Mensagem do console` });
 
-let e = import.meta.url;
-function logConsole(inf) { // NÃO POR COMO 'async'!!!
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+let e = import.meta.url
+async function logConsole(inf) { // NÃO POR COMO 'async'!!!
+    let ret = { 'ret': false }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
     try {
         if (catchGlobal) {
             let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await logConsoleE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
@@ -12,27 +12,21 @@ function logConsole(inf) { // NÃO POR COMO 'async'!!!
         }
 
         let time = dateHour().res;
-        console.log(`${time.hou}:${time.min}:${time.sec} | ${inf.msg}`)
+        let fileCall = ee.split('/').pop().replace('.js', '')
+        console.log(`→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil} [${fileCall}]\n${inf.msg}\n`)
         if (!eng && inf.write) {
-            (async () => {
-                await log({ 'e': inf.e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf.msg })
-            })()
+            await log({ 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf.msg })
         }
         ret['msg'] = `LOG CONSOLE: OK`;
         ret['ret'] = true;
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            (async () => {
-                let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-                infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
-            })()
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
-        (async () => {
-            let retRegexE = await logConsoleE({ 'inf': inf, 'e': e, 'catchGlobal': false });
-            ret['msg'] = retRegexE.res
-        })()
+        regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
     };
     return {
         ...({ ret: ret.ret }),

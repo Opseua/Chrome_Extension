@@ -6,11 +6,11 @@
 // retLog = await log(infLog);
 // console.log(retLog)
 
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function log(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
+        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
         if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
@@ -28,7 +28,7 @@ async function log(inf) {
 
         let infFile, retFile
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
-        let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, pathOk, rewrite = false
+        let hou = `${time.hou}:${time.min}:${time.sec}.${time.mil}`, pathOk, rewrite = false
         let text = inf.text;
         // NOME DA PASTA + ARQUIVO
         pathOk = `log/${inf.folder}`;
@@ -37,13 +37,16 @@ async function log(inf) {
         } else if (['log.txt', 'err.txt'].includes(inf.path)) {
             pathOk = `${pathOk}/${mon}/${day}_${inf.path}`; rewrite = true
         } else {
-            pathOk = `${pathOk}/${mon}/${day}/${hou}_${inf.path}`
+            pathOk = `${pathOk}/${mon}/${day}/${hou.replace(/:/g, '.')}_${inf.path}`
         }
         if (rewrite) {
-            text = typeof text === 'object' ? `${hou}\n${JSON.stringify(inf.text)}\n\n` : `${hou}\n${inf.text}\n\n`
+            text = typeof text === 'object' ? `→ ${hou}\n${JSON.stringify(inf.text)}\n\n` : `→ ${hou}\n${inf.text}\n\n`
         }
-        infFile = { 'e': e, 'action': 'write', 'raw': inf.raw ? true : false, 'functionLocal': inf.functionLocal ? true : false, 'text': text, 'rewrite': rewrite, 'path': pathOk.replace(/:/g, '') };
-        retFile = await file(infFile);
+        infFile = {
+            'e': e, 'action': 'write', 'raw': inf.raw ? true : false, 'functionLocal': inf.functionLocal ? true : false,
+            'text': text, 'rewrite': rewrite, 'path': pathOk.replace(/:/g, '')
+        };
+        await file(infFile);
         let res = `${letter}:/${inf.functionLocal ? confKeep[2] : confKeep[3]}/${pathOk}`;
         ret['res'] = res.replace('%', '');
         ret['msg'] = `LOG: OK`;
@@ -51,8 +54,8 @@ async function log(inf) {
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'raw': inf.raw ? true : false, 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            let infFile = { 'e': e, 'action': 'write', 'raw': inf.raw ? true : false, 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });

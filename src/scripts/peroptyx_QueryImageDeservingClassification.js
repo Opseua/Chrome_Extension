@@ -1,8 +1,8 @@
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function peroptyx_QueryImageDeservingClassification(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
+        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
         if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
@@ -33,7 +33,8 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
         } else if (!retChatGpt.res.includes('####SIM####') && !retChatGpt.res.includes('####NAO####')) {
             infNotification = {
                 'e': e, 'duration': 3, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO CHATGPT`, 'text': `Resposta diferente de 'SIM' ou 'NAO'`
-            }; retNotification = await notification(infNotification); console.log(`\n\n@@@\n${retChatGpt.res}\n@@@\n\n`)
+            }; retNotification = await notification(infNotification);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `\n${retChatGpt.res}` });
         } else if (retChatGpt.res.includes('####NAO####')) {
             infNotification = {
                 'e': e, 'duration': 3, 'icon': './src/scripts/media/notification_3.png', 'title': query, 'text': `🔵 GIBBERISH`

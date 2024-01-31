@@ -3,11 +3,11 @@
 // retOrderObj = await orderObj(infOrderObj)
 // console.log(retOrderObj)
 
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function orderObj(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
+        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
         if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
@@ -18,8 +18,8 @@ async function orderObj(inf) {
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
@@ -32,19 +32,8 @@ async function orderObj(inf) {
     };
 }
 
-// if (eng) { // CHROME
-//     window['orderObj'] = orderObj;
-// } else { // NODEJS
-//     global['orderObj'] = orderObj;
-// }
-export default orderObj;
-
-
-const quemChamou = () => {
-    const erro = new Error();
-    const linhasPilha = erro.stack.split('\n');
-    const chamador = linhasPilha[2].trim();
-    console.log('QUEM CHAMOU FOI', chamador);
-};
-
-export { quemChamou };
+if (eng) { // CHROME
+    window['orderObj'] = orderObj;
+} else { // NODEJS
+    global['orderObj'] = orderObj;
+}

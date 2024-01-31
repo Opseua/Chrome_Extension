@@ -2,7 +2,7 @@
 // retGetPath = await getPath({ 'e': e })
 // console.log(retGetPath)
 
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 let _stackTrace; if (!eng) { _stackTrace = await import('stack-trace'); }
 async function getPath(inf) {
     let ret = { 'ret': false };// e = inf && inf.e ? inf.e : e;
@@ -130,8 +130,8 @@ async function getPath(inf) {
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
         console.log(`\n\n### ERRO GET PATH ###\n\n${e.stack}\n\n`)

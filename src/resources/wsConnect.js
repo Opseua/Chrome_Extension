@@ -23,18 +23,12 @@ function wsList(nomeList, callback) {
 function acionarListener(nomeList, param1, param2) {
     if (listeners[nomeList]) { listeners[nomeList].forEach(async (callback) => { await callback(nomeList, param1, param2); }); }
 }
-let msgLogConsole
-async function logConsole(inf) { // NODEJS
-    let time = dateHour().res;
-    console.log(`${time.hou}:${time.min}:${time.sec} | ${inf.msg}`)
-    if (!eng && inf.write) {
-        await log({ 'e': inf.e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': inf.msg })
-    }
-}
 
 let loopIsRunning = false
 let pingsTimeouts = {};
+let e = import.meta.url, ee = e
 async function wsConnect(inf) {
+    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         // ENVIAR 'ping' PARA O SERVIDOR
         if (!loopIsRunning) {
@@ -42,12 +36,10 @@ async function wsConnect(inf) {
             setInterval(async () => {
                 for (let [key, value] of activeSockets.entries()) {
                     value.send(par6);
-                    msgLogConsole = `WS [CLIENT] ENVIADO PING: ${key}`;
-                    logConsole({ 'e': inf.e, 'msg': msgLogConsole });
+                    // logConsole({ 'e': e, 'ee': ee, 'ee': e, 'write': true, 'msg': `[CLIENT] PING ENVIADO: ${key}` });
                     let pingTimeout = setTimeout(async () => {
-                        msgLogConsole = `WS [CLIENT] EXPIROU PONG: ${key}`;
+                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[CLIENT] PONG EXPIROU: ${key}` });
                         value.close()
-                        logConsole({ 'e': inf.e, 'msg': msgLogConsole });
                     }, 2000);
                     pingsTimeouts[key] = pingTimeout;
                 }
@@ -55,7 +47,7 @@ async function wsConnect(inf) {
         }
         return await ws(inf);
     } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+        regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
     }
 }
 
@@ -65,10 +57,8 @@ async function ws(inf) {
         let url = inf.url
         let message = inf.message
         let e = inf.e
-        let time
         if (activeSockets.size == 0) {
-            msgLogConsole = `WS: START`;
-            await logConsole({ 'e': e, 'msg': msgLogConsole })
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[WS]: START` });
         }
         async function connectToServer(server) {
             return new Promise(resolve => {
@@ -76,10 +66,7 @@ async function ws(inf) {
                     let webSocket = new _WebSocket(server);
                     // ON OPEN
                     webSocket.onopen = async () => {
-                        msgLogConsole = `WS OK: ${server}`;
-                        time = dateHour().res;
-                        msgLogConsole = `WS [CLIENT] OK: ${server}`;
-                        logConsole({ 'e': inf.e, 'msg': msgLogConsole });
+                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[CLIENT] OK: ${server}` });
                         activeSockets.set(server, webSocket);
                         // MASTER OU SLAVE [ENVIAR SOMENTE SE FOR MASTER]
                         let masterSlaveDev = `${devMaster}_${engName}`
@@ -94,25 +81,18 @@ async function ws(inf) {
                         if (event.data.toLowerCase() == par7.toLowerCase()) {
                             // RECEBIDO 'pong' DO SERVIDOR
                             clearTimeout(pingsTimeouts[server]);
-                            time = dateHour().res;
-                            // console.log(`${time.hou}:${time.min}:${time.sec} RECEBIDO PONG:\n${server.replace('ws://', ' ')}`)
-                        } else if (event.data.toLowerCase() == par11.toLowerCase()) {
-
-
+                            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[SERVER] PONG RECEBIDO: ${server}` });
                         } else {
                             // OUTRO TIPO DE MENSAGEM RECEBIDA
                             acionarListener(server, event.data);
-                            // console.log('RECEBIDA MENSAGEM:', server);
+                            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[SERVER] RECEBIDA MENSAGEM: ${server}` });
                         }
                     }
                     // ON CLOSE
                     webSocket.onclose = async () => {
                         clearTimeout(pingsTimeouts[server]);
                         activeSockets.delete(server);
-                        msgLogConsole = `WS RECONECTANDO: ${server}`;
-                        let time = dateHour().res;
-                        console.log(`${time.hou}:${time.min}:${time.sec} ${msgLogConsole.replace('ws://', '')}`);
-                        await logConsole({ 'e': e, 'msg': msgLogConsole })
+                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[SERVER] RECONECTANDO: ${server}` });
                         setTimeout(async () => { await connectToServer(server); }, (secReconnect * 1000));
                     }
                     // ON ERROR
@@ -148,7 +128,7 @@ async function ws(inf) {
                         }
                         let awaitRet = messageNew.includes('retWs') ? false : retInf
                         webSocket.send(messageNew); // MOSTRAR URL DO WEBSOCKET ATUAL webSocket._url
-                        // console.log(`CONECTADO [${connected}]: MENSAGEM ENVIADA`)
+                        // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[CLIENT/${connected}] MENSAGEM ENVIADA` });
                         if (!awaitRet) {
                             if (!connected) {
                                 webSocket.close()
@@ -156,25 +136,25 @@ async function ws(inf) {
                             // RESPOSTA NECESSÁRIA [NÃO]
                             resolve({ 'ret': true, 'msg': 'WS OK: MENSAGEM ENVIADA' })
                         } else {
-                            // console.log(`CONECTADO [${connected}]: AGUARDANDO NOVA MENSAGEM`);
+                            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[CLIENT/${connected}] AGUARDANDO NOVA MENSAGEM` });
                             let timer;
                             webSocket.onmessage = function (event) {
                                 if (event.data.includes(awaitRet)) {
-                                    // console.log(`CONECTADO [${connected}]: MENSAGEM RECEBIDA`)
+                                    // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[CLIENT/${connected}] MENSAGEM RECEBIDA` });
                                     clearTimeout(timer);
                                     if (!connected) {
                                         webSocket.close()
-                                        // console.log(`CONECTADO [${connected}]: CONEXÃO ENCERRADA`)
+                                        // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[CLIENT/${connected}] CONEXÃO ENCERRADA` });
                                     }
                                     // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [SIM]
                                     resolve({ 'ret': true, 'msg': 'WS OK: MENSAGEM RECEBIDA', 'res': event.data })
                                 }
                             };
                             timer = setTimeout(() => {
-                                // console.log(`CONECTADO [${connected}]: TEMPO EXPIROU`)
+                                // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[CLIENT/${connected}] TEMPO EXPIROU` });
                                 if (!connected) {
                                     webSocket.close()
-                                    // console.log(`CONECTADO [${connected}]: CONEXÃO ENCERRADA`)
+                                    // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[CLIENT/${connected}] CONEXÃO ENCERRADA` });
                                 }
                                 // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [NÃO]
                                 resolve({ 'ret': true, 'msg': 'WS OK: TEMPO EXPIROU' })
@@ -189,7 +169,7 @@ async function ws(inf) {
             })
         }
     } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+        regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
     }
 }
 

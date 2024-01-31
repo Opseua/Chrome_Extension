@@ -1,13 +1,13 @@
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function devFun(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
+        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
         if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        let infLog, retLog
+        let infLog
         if (inf.enc) { // ENCAMINHAR PARA O DEVICE CERTO
             let retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf : inf.data.retInf ? inf.data.retInf : true
             let url = devSend
@@ -40,15 +40,15 @@ async function devFun(inf) {
             function label(funName) { return typeof (eng ? window : global)[funName] === 'function' }
             await Promise.all(data.fun.map(async (value, index) => { // --------------------------------------------------
                 if (value.securityPass !== securityPass) {
-                    ret['msg'] = `\n #### SECURITYPASS INCORRETO #### \n\n ${JSON.stringify(data)} \n\n`
-                    console.log(index, ret.msg)
-                    infLog = { 'e': e, 'folder': 'JavaScript', 'path': `err.txt`, 'text': ret.msg }
-                    retLog = await log(infLog);
+                    ret['msg'] = `#### SECURITYPASS INCORRETO ####`
+                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${ret.msg}` });
+                    infLog = { 'e': e, 'folder': 'JavaScript', 'path': `err.txt`, 'text': `${ret.msg}\n\n${JSON.stringify(data)}` }
+                    log(infLog);
                 } else if (!label(value.name)) {
-                    ret['msg'] = `\n #### FUNÇÃO '${value.name}' NÃO EXITE #### \n\n ${JSON.stringify(data)} \n\n`
-                    console.log(ret.msg)
-                    infLog = { 'e': e, 'folder': 'JavaScript', 'path': `err.txt`, 'text': ret.msg }
-                    retLog = await log(infLog);
+                    ret['msg'] = `#### FUNÇÃO '${value.name}' NÃO EXITE ####`
+                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${ret.msg}` });
+                    infLog = { 'e': e, 'folder': 'JavaScript', 'path': `err.txt`, 'text': `${ret.msg}\n\n${JSON.stringify(data)}` }
+                    log(infLog);
                 } else {
                     let name = eng ? window[value.name] : global[value.name] // CHROME ← : → NODEJS
                     let infName = value.par

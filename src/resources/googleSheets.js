@@ -19,11 +19,11 @@
 // retGoogleSheets = await googleSheets(infGoogleSheets)
 // console.log(retGoogleSheets)
 
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function googleSheets(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
+        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
         if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
@@ -50,8 +50,7 @@ async function googleSheets(inf) {
 
         // GERAR NOVO TOKEN
         if (makeNewToken) {
-            let time = dateHour().res;
-            console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `ATUALIZANDO TOKEN`);
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ATUALIZANDO TOKEN` });
             await _auth.authorize();
             let date = new Date(_auth.credentials.expiry_date);
             let day = ('0' + date.getDate()).slice(-2);
@@ -65,7 +64,7 @@ async function googleSheets(inf) {
                 // 'token': _auth.credentials.access_token
             };
             infConfigStorage = { 'e': e, 'action': 'set', 'key': 'googleApi', 'value': retToken }
-            retConfigStorage = await configStorage(infConfigStorage);
+            configStorage(infConfigStorage);
         }
 
         let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'
@@ -103,7 +102,7 @@ async function googleSheets(inf) {
             }
             let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
             try {
-                let retSheet = await _sheets.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
+                await _sheets.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
                 ret['msg'] = `GOOGLE SHEET SEND: OK`;
                 ret['ret'] = true;
             } catch (e) {
@@ -117,8 +116,8 @@ async function googleSheets(inf) {
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });

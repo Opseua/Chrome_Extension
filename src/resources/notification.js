@@ -7,7 +7,7 @@
 // retNotification = await notification(infNotification);
 // console.log(retNotification)
 
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function notification(infOk) {
     let ret = { 'ret': false };
     e = infOk && infOk.e ? infOk.e : e
@@ -51,8 +51,8 @@ async function notification(infOk) {
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': infOk, 'e': e, 'catchGlobal': false });
