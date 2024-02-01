@@ -13,7 +13,7 @@ async function client(inf) {
         let dev2 = devGet[0]
         let dev3 = devGet[1]
 
-        // CONNECT
+        // CONNECT SOMENTE SE FOR [NOTEBOOK]
         await wsConnect({ 'e': e, 'url': [dev1, dev2, dev3,] })
 
         // LISTENER SOMENTE SE NÃO FOR 'Sniffer_Python'
@@ -43,7 +43,7 @@ async function client(inf) {
                 } else if (data.other) { // OTHER
                     logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `OTHER\n${data.other}` });
                 } else {
-                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `MENSAGEM DO WEBSCKET\n${param1}` });
+                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `MENSAGEM DO WEBSCKET\n\n${param1}` });
                 }
             }
         }

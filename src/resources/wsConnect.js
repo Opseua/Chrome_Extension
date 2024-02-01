@@ -36,9 +36,9 @@ async function wsConnect(inf) {
             setInterval(async () => {
                 for (let [key, value] of activeSockets.entries()) {
                     value.send(par6);
-                    // logConsole({ 'e': e, 'ee': ee, 'ee': e, 'write': true, 'msg': `[CLIENT] PING ENVIADO: ${key}` });
+                    // logConsole({ 'e': e, 'ee': ee, 'ee': e, 'write': true, 'msg': `[CLIENT] PING ENVIADO: '${value.roomLocWeb}'` });
                     let pingTimeout = setTimeout(async () => {
-                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[CLIENT] PONG EXPIROU: ${key}` });
+                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[CLIENT] PONG EXPIROU: '${value.roomLocWeb}'` });
                         value.close()
                     }, 2000);
                     pingsTimeouts[key] = pingTimeout;
@@ -66,12 +66,14 @@ async function ws(inf) {
                     let webSocket = new _WebSocket(server);
                     // ON OPEN
                     webSocket.onopen = async () => {
-                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[CLIENT] OK: ${server}` });
+                        webSocket['room'] = server.split('/').pop()
+                        webSocket['roomLocWeb'] = server.includes('127.0.0') ? `[LOC] ${webSocket.room}` : `[WEB] ${webSocket.room}`
+                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[CLIENT] OK: '${webSocket.roomLocWeb}'` });
                         activeSockets.set(server, webSocket);
-                        // MASTER OU SLAVE [ENVIAR SOMENTE SE FOR MASTER]
+                        // MASTER OU SLAVE [ENVIAR SOMENTE SE FOR MASTER E 'WebSocket' /'Chrome_Extension']
                         let masterSlaveDev = `${devMaster}_${engName}`
                         let masterSlaveUrl = webSocket.url.split('/').pop()
-                        if (masterSlaveDev == masterSlaveUrl) {
+                        if (masterSlaveDev == masterSlaveUrl && (e.includes('WebSocket') || e.includes('chrome-extension'))) {
                             webSocket.send(par11)
                         }
                         resolve('');
@@ -81,18 +83,18 @@ async function ws(inf) {
                         if (event.data.toLowerCase() == par7.toLowerCase()) {
                             // RECEBIDO 'pong' DO SERVIDOR
                             clearTimeout(pingsTimeouts[server]);
-                            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[SERVER] PONG RECEBIDO: ${server}` });
+                            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[SERVER] PONG RECEBIDO: '${webSocket.roomLocWeb}'` });
                         } else {
                             // OUTRO TIPO DE MENSAGEM RECEBIDA
                             acionarListener(server, event.data);
-                            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[SERVER] RECEBIDA MENSAGEM: ${server}` });
+                            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[SERVER] RECEBIDA MENSAGEM: '${webSocket.roomLocWeb}'` });
                         }
                     }
                     // ON CLOSE
                     webSocket.onclose = async () => {
                         clearTimeout(pingsTimeouts[server]);
                         activeSockets.delete(server);
-                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[SERVER] RECONECTANDO: ${server}` });
+                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[SERVER] RECONECTANDO: '${webSocket.roomLocWeb}'` });
                         setTimeout(async () => { await connectToServer(server); }, (secReconnect * 1000));
                     }
                     // ON ERROR
