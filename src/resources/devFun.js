@@ -10,8 +10,8 @@ async function devFun(inf) {
         let infLog
         if (inf.enc) { // ENCAMINHAR PARA O DEVICE CERTO
             let retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf : inf.data.retInf ? inf.data.retInf : true
-            let url = devSend
-            let data = { 'securityPass': securityPass, 'retInf': retInf, 'name': inf.data.name, 'par': inf.data.par }
+            let url = windowGlobal.devSend
+            let data = { 'securityPass': windowGlobal.securityPass, 'retInf': retInf, 'name': inf.data.name, 'par': inf.data.par }
             data.par['e'] = inf.e
             delete data.par.retInf // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO
             let send = { "fun": [data] }
@@ -39,7 +39,7 @@ async function devFun(inf) {
             let data = inf.data;
             function label(funName) { return typeof (eng ? window : global)[funName] === 'function' }
             await Promise.all(data.fun.map(async (value, index) => { // --------------------------------------------------
-                if (value.securityPass !== securityPass) {
+                if (value.securityPass !== windowGlobal.securityPass) {
                     ret['msg'] = `#### SECURITYPASS INCORRETO ####`
                     logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${ret.msg}` });
                     infLog = { 'e': e, 'folder': 'JavaScript', 'path': `err.txt`, 'text': `${ret.msg}\n\n${JSON.stringify(data)}` }

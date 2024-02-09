@@ -60,6 +60,8 @@ await import('./splitText.js')
 await import('./tabSearch.js')
 await import('./translate.js')
 await import('./wsConnect.js')
+await import('./wsMessageReceived.js')
+await import('./wsMessageSend.js')
 
 // SCRIPTS DESSE PROJETO
 await import('../scripts/command1.js')

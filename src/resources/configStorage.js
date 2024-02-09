@@ -224,8 +224,10 @@ let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket'
 let securityPass = `${retConfigStorage.res.securityPass}`
 let secReconnect = retConfigStorage.res.secReconnect
 let secPing = retConfigStorage.res.secPing
-let secScreenShot = retConfigStorage.res.secScreenShot
-let secMaxWebFile = retConfigStorage.res.secMaxWebFile
+let secRetWebSocket = retConfigStorage.res.secRetWebSocket
+let secLoop = retConfigStorage.res.secLoop
+let kbPartsMessage = retConfigStorage.res.kbPartsMessage
+let minClearPartsMessages = retConfigStorage.res.minClearPartsMessages
 let par1 = `${securityPass}=${retConfigStorage.res.par1}`
 let par2 = `${retConfigStorage.res.par2}`
 let par3 = `${securityPass}=${retConfigStorage.res.par3}`
@@ -259,54 +261,39 @@ if (eng) { // CHROME | Send → NodeJS | Get → Chrome
     devGet = [`${urlHostPortWeb}/${devMaster}_${devices[2].name}`, `${urlHostPortLocal}/${devMaster}_${devices[2].name}`,]
 }
 
+// MANTER APÓS O 'devSend, devGet'
+let windowGlobal = {
+    'serverWeb': serverWeb.host,
+    'secReconnect': secReconnect,
+    'secPing': secPing,
+    'secRetWebSocket': secRetWebSocket,
+    'secLoop': secLoop,
+    'kbPartsMessage': kbPartsMessage,
+    'minClearPartsMessages': minClearPartsMessages,
+    'par1': par1,
+    'par2': par2,
+    'par3': par3,
+    'par4': par4,
+    'par5': par5,
+    'par6': par6,
+    'par7': par7,
+    'par8': par8,
+    'par9': par9,
+    'par10': par10,
+    'par11': par11,
+    'securityPass': securityPass,
+    'portWeb': portWeb,
+    'portLocal': portLocal,
+    'devMaster': devMaster,
+    'devSend': devSend,
+    'devGet': devGet,
+    'sheetServer': sheetServer,
+}
+
 if (eng) { // CHROME
-    window['serverWeb'] = serverWeb.host
-    window['secReconnect'] = secReconnect
-    window['secPing'] = secPing
-    window['secScreenShot'] = secScreenShot
-    window['secMaxWebFile'] = secMaxWebFile
-    window['par1'] = par1
-    window['par2'] = par2
-    window['par3'] = par3
-    window['par4'] = par4
-    window['par5'] = par5
-    window['par6'] = par6
-    window['par7'] = par7
-    window['par8'] = par8
-    window['par9'] = par9
-    window['par10'] = par10
-    window['par11'] = par11
-    window['securityPass'] = securityPass
-    window['portWeb'] = portWeb
-    window['portLocal'] = portLocal
-    window['devMaster'] = devMaster
-    window['devSend'] = devSend
-    window['devGet'] = devGet
-    window['sheetServer'] = sheetServer
+    window['windowGlobal'] = windowGlobal
 } else { // NODEJS
-    global['serverWeb'] = serverWeb.host
-    global['secReconnect'] = secReconnect
-    global['secPing'] = secPing
-    global['secScreenShot'] = secScreenShot
-    global['secMaxWebFile'] = secMaxWebFile
-    global['par1'] = par1
-    global['par2'] = par2
-    global['par3'] = par3
-    global['par4'] = par4
-    global['par5'] = par5
-    global['par6'] = par6
-    global['par7'] = par7
-    global['par8'] = par8
-    global['par9'] = par9
-    global['par10'] = par10
-    global['par11'] = par11
-    global['securityPass'] = securityPass
-    global['portWeb'] = portWeb
-    global['portLocal'] = portLocal
-    global['devMaster'] = devMaster
-    global['devSend'] = devSend
-    global['devGet'] = devGet
-    global['sheetServer'] = sheetServer
+    global['windowGlobal'] = windowGlobal
 }
 
 

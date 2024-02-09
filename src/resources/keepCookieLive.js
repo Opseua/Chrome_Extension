@@ -50,11 +50,11 @@ async function keepCookieLive(inf) {
         retConfigStorage = await configStorage(infConfigStorage);
         let send = {
             'fun': [
-                { 'securityPass': securityPass, 'retInf': false, 'name': 'configStorage', 'par': infConfigStorage },
-                { 'securityPass': securityPass, 'retInf': false, 'name': 'log', 'par': { 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
+                { 'securityPass': windowGlobal.securityPass, 'retInf': false, 'name': 'configStorage', 'par': infConfigStorage },
+                { 'securityPass': windowGlobal.securityPass, 'retInf': false, 'name': 'log', 'par': { 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
             ]
         };
-        wsSend({ 'e': e, 'url': devSend, 'message': send });
+        wsSend({ 'e': e, 'url': windowGlobal.devSend, 'message': send });
         ret['msg'] = `KEEP COOKIE LIVE: OK`;
         ret['ret'] = true;
     } catch (e) {

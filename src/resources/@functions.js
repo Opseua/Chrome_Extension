@@ -20,8 +20,12 @@
 //   }, 2000);
 
 // ESPERAR E MOSTRAR UMA VEZ (timeout)
-// let timeout = setTimeout(function () {
-//     console.log('OK')
+// setTimeout(() => {
+//     console.log('OK');
+// }, 2000);
+
+// let timeout = setTimeout(() => {
+//     console.log('OK');
 // }, 2000);
 // clearTimeout(timeout);
 
@@ -41,7 +45,7 @@ if (cng == 1) {
     global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, _isBinaryBuffer, cs
 
 // DEFINIR O 'conf' E O 'letter'
 await import('./getPath.js')
@@ -64,6 +68,7 @@ if (eng) { // CHROME
     _util = await import('util');
     const { default: getFolderSize } = await import('get-folder-size'); _getFolderSize = getFolderSize
     const { parse } = await import('url'); _parse = parse;
+    const { default: isBinaryBuffer } = await import('is-binary-buffer'); _isBinaryBuffer = isBinaryBuffer;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -89,11 +94,11 @@ function notificarListeners(prop, value) {
 // console.log(cs)
 
 // ############### GLOBAL OBJECT [SNIFFER CHROME] ###############
-let data = { inf: '' }; let listeners = new Set();
+let data = { inf: '' }; let listenersGoSniffer = new Set();
 let gOSniffer = new Proxy(data, {
-    set(target, key, value) { target[key] = value; globalChanged(value); listeners.forEach(listener => listener(target)); return true }
+    set(target, key, value) { target[key] = value; globalChanged(value); listenersGoSniffer.forEach(listener => listener(target)); return true }
 });
-function gOAddSniffer(listener) { listeners.add(listener) }; function gORemSniffer(listener) { listeners.delete(listener) }
+function gOAddSniffer(listener) { listenersGoSniffer.add(listener) }; function gORemSniffer(listener) { listenersGoSniffer.delete(listener) }
 async function globalChanged(i) {
     if (i.alert !== false) { console.log('globalObject ALTERADO →', i) }
 }
@@ -117,6 +122,40 @@ function rateLimiter(inf) {
         if (recent.length < max) { old.push(now); return true; } else { return false }
     }; return { check };
 }
+
+// ############### LISTENER ###############
+
+let listeners = {}; function listenerMonitorar(nomeList, callback) { if (!listeners[nomeList]) { listeners[nomeList] = []; }; listeners[nomeList].push(callback); };
+function listenerAcionar(nomeList, param1, param2) { if (listeners[nomeList]) { listeners[nomeList].forEach((callback) => { callback(nomeList, param1, param2); }); } }
+
+// listenerMonitorar('TESTE1', async (nomeList, param1, param2) => {
+//     console.log('ACIONADO:', nomeList, '→', param1, param2);
+// });
+
+// listenerAcionar('TESTE1', 'INF1', 'INF2');
+
+// ############### AWAIT TIMEOUT ###############
+
+function awaitTimeout(inf) {
+    return new Promise((resolve) => {
+        let timeout; listenerMonitorar(inf.listenerName, async (nomeList, param1, param2) => {
+            clearTimeout(timeout); resolve('TIMEOUT_FOI_LIMPO');
+        }); timeout = setTimeout(() => { resolve('TIMEOUT_EXPIROU'); }, inf.secondsAwait * 1000);
+    });
+}
+
+// async function run() {
+//     console.log('INICIO');
+//     let retAwaitTimeout = await awaitTimeout({ 'secondsAwait': 5, 'listenerName': 'NOME AQUI' });
+//     console.log(retAwaitTimeout);
+// }; run();
+
+// async function liberarTimeout() {
+//     setTimeout(() => { listenerAcionar('NOME AQUI', 'INF1', 'INF2'); }, 2000);
+// }; liberarTimeout();
+
+// ##########################################################
+
 // // ############### CLEAR CONSOLE ###############
 console.clear();
 let msgQtd = 0; let clearConsole = console.log;
@@ -138,9 +177,13 @@ if (eng) { // CHROME
     window['gOSniffer'] = gOSniffer;
     window['gOAddSniffer'] = gOAddSniffer;
     window['gORemSniffer'] = gORemSniffer;
+    // ## LISTENER
+    window['listenerMonitorar'] = listenerMonitorar;
+    window['listenerAcionar'] = listenerAcionar;
     // ## FUNÇÕES
     window['rateLimiter'] = rateLimiter
     window['getPath'] = getPath;
+    window['awaitTimeout'] = awaitTimeout;
 } else { // NODEJS 
     // ## BIBLIOTECAS / NATIVO
     const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
@@ -158,6 +201,7 @@ if (eng) { // CHROME
     global['_util'] = _util
     global['_getFolderSize'] = _getFolderSize
     global['_parse'] = _parse
+    global['_isBinaryBuffer'] = _isBinaryBuffer
     // ## VARIÁVEIS
     global['cs'] = cs;
     global['catchGlobal'] = false;
@@ -168,9 +212,13 @@ if (eng) { // CHROME
     global['gOSniffer'] = gOSniffer;
     global['gOAddSniffer'] = gOAddSniffer;
     global['gORemSniffer'] = gORemSniffer;
+    // ## LISTENER
+    global['listenerMonitorar'] = listenerMonitorar;
+    global['listenerAcionar'] = listenerAcionar;
     // ## FUNÇÕES
     global['rateLimiter'] = rateLimiter
     global['getPath'] = getPath;
+    global['awaitTimeout'] = awaitTimeout;
 }
 
 // OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!)

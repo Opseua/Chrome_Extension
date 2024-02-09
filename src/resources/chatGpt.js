@@ -124,7 +124,7 @@ async function chatGpt(inf) { // https://chat.openai.com/api/auth/session
             infConfigStorage = { 'e': e, 'action': 'get', 'key': 'webSocket' };
             retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             infApi = {
-                'e': e, 'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.portWebSocket}/chatgpt`,
+                'e': e, 'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.windowGlobal.portWebSocket}/chatgpt`,
                 'headers': {}, 'body': { "prompt": inf.input, "network": inf.network ? true : false }
             };
             retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }

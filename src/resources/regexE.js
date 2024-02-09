@@ -100,7 +100,7 @@ async function regexE(inf) {
         let reqOpt = { 'method': 'POST', };
         let body = JSON.stringify({
             'fun': [{
-                'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : securityPass,
+                'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : windowGlobal.securityPass,
                 'retInf': false,
                 'name': 'notification',
                 'par': {
@@ -111,7 +111,7 @@ async function regexE(inf) {
             }]
         })
         try {
-            let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:8888/AAAAAAAA' : `http://${devSend.split('://')[1]}`
+            let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:8888/AAAAAAAA' : `http://${windowGlobal.devSend.split('://')[1]}`
             // GOGOLE
             if (errorOk.cng == 3) {
                 reqOpt['payload'] = body
@@ -283,7 +283,7 @@ if (eng) { // CHROME
 //         let reqOpt = { 'method': 'POST', };
 //         let body = JSON.stringify({
 //             'fun': [{
-//                 'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : securityPass,
+//                 'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : windowGlobal.securityPass,
 //                 'retInf': false,
 //                 'name': 'notification',
 //                 'par': {
@@ -294,7 +294,7 @@ if (eng) { // CHROME
 //             }]
 //         })
 //         try {
-//             let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:8888/AAAAAAAA' : `http://${devSend.split('://')[1]}`
+//             let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:8888/AAAAAAAA' : `http://${windowGlobal.devSend.split('://')[1]}`
 //             // GOOGLE
 //             if (errorOk.cng == 3) {
 //                 reqOpt['payload'] = body
