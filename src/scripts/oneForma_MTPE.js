@@ -28,19 +28,19 @@ async function oneForma_MTPE(inf) {
             if (!gO.inf.sniffer == 1) {
                 return ret
             }
-            let infChatGpt = { 'e': e, 'provider': 'open.ai', 'input': `REWRITE THE SENTENCE IN ENGLISH, WHICH WAS IN PORTUGUESE AND WAS TRANSLATED, KEEPING THE SAME MEANING AND LEAVING THE MOST LIKE THE ORIGINAL\n\nPORTUGUESE:\n${retRegex1.res['1']}\n\nENGLISH:\n${retRegex2.res['1']}` }
-            let retChatGpt = await chatGpt(infChatGpt)
-            if (!retChatGpt.res || !gO.inf.sniffer == 1) {
+            let infChat = { 'e': e, 'provider': 'open.ai', 'input': `REWRITE THE SENTENCE IN ENGLISH, WHICH WAS IN PORTUGUESE AND WAS TRANSLATED, KEEPING THE SAME MEANING AND LEAVING THE MOST LIKE THE ORIGINAL\n\nPORTUGUESE:\n${retRegex1.res['1']}\n\nENGLISH:\n${retRegex2.res['1']}` }
+            let retChat = await chat(infChat)
+            if (!retChat.res || !gO.inf.sniffer == 1) {
                 return ret
             }
 
             let clipboardText
-            if (!retRegex2.res['1'].endsWith('.') && retChatGpt.res.endsWith('.')) {
-                clipboardText = retChatGpt.res.slice(0, -1);
-            } else if (retRegex2.res['1'].endsWith('.') && !retChatGpt.res.endsWith('.')) {
-                clipboardText = `${retChatGpt.res}.`
+            if (!retRegex2.res['1'].endsWith('.') && retChat.res.endsWith('.')) {
+                clipboardText = retChat.res.slice(0, -1);
+            } else if (retRegex2.res['1'].endsWith('.') && !retChat.res.endsWith('.')) {
+                clipboardText = `${retChat.res}.`
             } else {
-                clipboardText = retChatGpt.res
+                clipboardText = retChat.res
             }
             if (retRegex2.res['1'].toLowerCase() == clipboardText.toLowerCase()) {
                 let infTranslate = { 'e': e, 'source': 'pt', 'target': 'en', 'text': clipboardText };
@@ -73,7 +73,7 @@ async function oneForma_MTPE(inf) {
                 retNotification = await notification(infNotification)
 
                 let firstA = retRegex1.res['1'].charAt(0)
-                let firstB = retChatGpt.res.charAt(0)
+                let firstB = retChat.res.charAt(0)
                 if ((firstA === firstA.toUpperCase()) && !(firstB === firstB.toUpperCase())) {
                     infNotification = {
                         'e': e, 'duration': 4, 'icon': './src/scripts/media/notification_3.png',

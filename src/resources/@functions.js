@@ -29,6 +29,16 @@
 // }, 2000);
 // clearTimeout(timeout);
 
+// let data = 'CASAMENTO'
+// // QUALQUER → BASE64
+// let qualquerParaBase64 = Buffer.from(data).toString('base64')
+// console.log(`qualquerParaBase64 ${qualquerParaBase64}`)
+// // BASE64 → UTF8
+// let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8')
+// console.log(`base64ParaUtf8 ${base64ParaUtf8}`)
+
+// cd /d D:\ARQUIVOS\PROJETOS\URA_Reversa
+
 // [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
 let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
 // ###### true CHROME / GOOGLE | false NODEJS
@@ -45,11 +55,11 @@ if (cng == 1) {
     global['engName'] = 'GOOGLE'
 }
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, _isBinaryBuffer, cs
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
 
-// DEFINIR O 'conf' E O 'letter'
+// DEFINIR O 'conf' / 'letter' / 'project'
 await import('./getPath.js')
-let retGetPath = await getPath({ 'e': new Error() }); if (!retGetPath.ret) { console.log('ERRO getPath', retGetPath) }
+await getPath({ 'e': new Error(), 'mode': 1, 'keep': true });
 
 if (eng) { // CHROME
     _WebSocket = window.WebSocket
@@ -68,7 +78,6 @@ if (eng) { // CHROME
     _util = await import('util');
     const { default: getFolderSize } = await import('get-folder-size'); _getFolderSize = getFolderSize
     const { parse } = await import('url'); _parse = parse;
-    const { default: isBinaryBuffer } = await import('is-binary-buffer'); _isBinaryBuffer = isBinaryBuffer;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -104,11 +113,8 @@ async function globalChanged(i) {
 }
 
 // ############### RATE LIMIT ###############
-// let rate = rateLimiter({ 'max': 5, 'sec': 10 });
+// let rate = rateLimiter({ 'max': 3, 'sec': 5 });
 // function testRate() {
-//     console.log(rate.check())
-//     console.log(rate.check())
-//     console.log(rate.check())
 //     console.log(rate.check())
 //     console.log(rate.check())
 //     console.log(rate.check())
@@ -125,22 +131,36 @@ function rateLimiter(inf) {
 
 // ############### LISTENER ###############
 
-let listeners = {}; function listenerMonitorar(nomeList, callback) { if (!listeners[nomeList]) { listeners[nomeList] = []; }; listeners[nomeList].push(callback); };
-function listenerAcionar(nomeList, param1, param2) { if (listeners[nomeList]) { listeners[nomeList].forEach((callback) => { callback(nomeList, param1, param2); }); } }
+// [antigo] → sem retorno
+// let listeners = {}; function listenerMonitorar(nomeList, callback) { if (!listeners[nomeList]) { listeners[nomeList] = []; }; listeners[nomeList].push(callback); };
+// function listenerAcionar(nomeList, param1, param2) { if (listeners[nomeList]) { listeners[nomeList].forEach((callback) => { callback(nomeList, param1, param2); }); } }
 
 // listenerMonitorar('TESTE1', async (nomeList, param1, param2) => {
 //     console.log('ACIONADO:', nomeList, '→', param1, param2);
 // });
-
 // listenerAcionar('TESTE1', 'INF1', 'INF2');
+
+// ------------
+
+// [novo] → com retorno
+let listeners = {}; function listenerMonitorar(nomeList, callback) { if (!listeners[nomeList]) { listeners[nomeList] = []; } listeners[nomeList].push(callback); }
+async function listenerAcionar(nomeList, inf, callback) {
+    if (listeners[nomeList]) { for (let callFun of listeners[nomeList]) { let response = await callFun(nomeList, inf); if (callback) { callback(response); } return response; } }
+}
+
+// listenerMonitorar('TESTE1', async (nomeList, inf) => {
+//     console.log('ACIONADO:', nomeList, '→', inf);
+//     return 'retorno do listener';
+// });
+// let retListenerAcionar = await listenerAcionar('TESTE1', { 'a': 'a', 'b': 'b' });
+// console.log(retListenerAcionar);
 
 // ############### AWAIT TIMEOUT ###############
 
 function awaitTimeout(inf) {
     return new Promise((resolve) => {
-        let timeout; listenerMonitorar(inf.listenerName, async (nomeList, param1, param2) => {
-            clearTimeout(timeout); resolve('TIMEOUT_FOI_LIMPO');
-        }); timeout = setTimeout(() => { resolve('TIMEOUT_EXPIROU'); }, inf.secondsAwait * 1000);
+        let timeout; listenerMonitorar(inf.listenerName, async (nomeList, param1) => { clearTimeout(timeout); resolve({ 'ret': true, 'msg': 'TIMEOUT_FOI_LIMPO', 'res': param1, }); });
+        timeout = setTimeout(() => { resolve({ 'ret': false, 'msg': 'TIMEOUT_EXPIROU' }); }, inf.secondsAwait * 1000);
     });
 }
 
@@ -157,11 +177,10 @@ function awaitTimeout(inf) {
 // ##########################################################
 
 // // ############### CLEAR CONSOLE ###############
-console.clear();
-let msgQtd = 0; let clearConsole = console.log;
+function clearConsoleRun() { if (eng) { console.clear(); } else { process.stdout.write('\x1Bc'); } }
+clearConsoleRun(); let msgQtd = 0; let clearConsole = console.log;
 console.log = function () {
-    clearConsole.apply(console, arguments); msgQtd++;
-    if (msgQtd >= 100) { console.clear(); msgQtd = 0; console.log('CONSOLE LIMPO!') }
+    clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearConsoleRun(); msgQtd = 0; console.log('CONSOLE LIMPO!') }
 }
 // // ###############               ###############
 
@@ -201,7 +220,6 @@ if (eng) { // CHROME
     global['_util'] = _util
     global['_getFolderSize'] = _getFolderSize
     global['_parse'] = _parse
-    global['_isBinaryBuffer'] = _isBinaryBuffer
     // ## VARIÁVEIS
     global['cs'] = cs;
     global['catchGlobal'] = false;
@@ -233,7 +251,6 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 // let matches = new Error().stack.match(/\:\/\/(.*?)\.js\:/g).map(match => match.slice(1, -1))
 // matches = matches[matches.length - 1]
 
-
 // let lisTime = { 'lists': {}, 'tims': {}, 'ids': [] }
 // function lisAdd(eve, cal) { if (!lisTime.lists[eve]) { lisTime.lists[eve] = []; }; lisTime.lists[eve].push(cal); }
 // function lisDel(eve, cal) { if (lisTime.lists[eve]) { lisTime.lists[eve] = lisTime.lists[eve].filter(cb => cb !== cal); } }
@@ -249,10 +266,6 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 //         resolvePromise('RETORNO_NAO_RECEBIDO_A_TEMPO');
 //     }, 5000);
 //     // ###################
-
-
-//     // console.log('aaaa')
-
 
 //     // ################### LIMPAR TIMEOUT, LISTENER E RETORNAR RESPOSTA
 //     let retAwait = await promiseAwait; clearTimeout(lisTime.tims[idNew]); lisDel(`timeClear_${idNew}`);
@@ -270,3 +283,13 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 //     console.log('AQUI', retRunAndAwait)
 // }
 // run()
+
+
+// javascript: (function () {
+//     function pw(j, pw, ph, u) {
+//         let w = (pw / 100) * j.top.screen.width, h = (ph / 100) * j.top.screen.height;
+//         let y = j.top.outerHeight / 2 + j.top.screenY - (h / 2), x = j.top.outerWidth / 2 + j.top.screenX - (w / 2);
+//         return j.open(u, '', `width=${w},height=${h},top=${y},left=${x}`);
+//     }; pw(window, 40, 40, 'http://12.345.678.910:123');
+// })();
+

@@ -58,7 +58,7 @@ async function peroptyx_Search20(inf) {
                     // comentario2 = retTranslate2.res
 
                     let infChatGpt = { 'e': e, 'provider': 'open.ai', 'input': `REWRITE THIS SENTENCE WITH OTHER WORDS, KEEPING THE SAME MEANING:\n\n ${comentario}` }
-                    let retChatGpt = await chatGpt(infChatGpt)
+                    let retChatGpt = await chat(infChatGpt)
                     if (!retChatGpt.ret) {
                         return ret
                     }; comentario2 = retChatGpt.res.replace(/\n/g, ' ').replace(/\\"/g, "'");

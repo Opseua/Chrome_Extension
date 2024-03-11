@@ -26,7 +26,7 @@ async function promptChrome(inf) {
                 "other": "TryRating_QueryImageDeservingClassification",
                 "inf": [retPrompt.split(',').map(Number)], "query": "#####"
             }
-            acionarListener(windowGlobal.devGet[0], send)
+            console.log('ADICIONAR AÇÃO', send)
             ret['res'] = retPrompt;
             ret['msg'] = 'PROMPT CHROME: OK'
             ret['ret'] = true;

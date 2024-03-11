@@ -222,51 +222,51 @@ if (eng) { // CHROME
 // // NÃO COMENTAR! NECESSÁRIO PARA DEFINIR AS VARIÁVEIS GLOBAIS
 let retConfigStorage = await configStorage({ 'action': 'get', 'key': 'webSocket', });
 let securityPass = `${retConfigStorage.res.securityPass}`
+let secConnect = retConfigStorage.res.secConnect
 let secReconnect = retConfigStorage.res.secReconnect
-let secPing = retConfigStorage.res.secPing
 let secRetWebSocket = retConfigStorage.res.secRetWebSocket
+let secPing = retConfigStorage.res.secPing
 let secLoop = retConfigStorage.res.secLoop
 let kbPartsMessage = retConfigStorage.res.kbPartsMessage
 let minClearPartsMessages = retConfigStorage.res.minClearPartsMessages
-let par1 = `${securityPass}=${retConfigStorage.res.par1}`
+let par1 = `${securityPass}-${retConfigStorage.res.par1}`
 let par2 = `${retConfigStorage.res.par2}`
-let par3 = `${securityPass}=${retConfigStorage.res.par3}`
-let par4 = `${securityPass}=${retConfigStorage.res.par4}`
-let par5 = `${securityPass}=${retConfigStorage.res.par5}`
+let par3 = `${securityPass}-${retConfigStorage.res.par3}`
+let par4 = `${securityPass}-${retConfigStorage.res.par4}`
+let par5 = `${securityPass}-${retConfigStorage.res.par5}`
 let par6 = `${retConfigStorage.res.par6}`
 let par7 = `${retConfigStorage.res.par7}`
-let par8 = `${securityPass}=${retConfigStorage.res.par8}`
-let par9 = `${securityPass}=${retConfigStorage.res.par9}`
-let par10 = `${securityPass}=${retConfigStorage.res.par10}`
-let par11 = `${securityPass}=${retConfigStorage.res.par11}`
+let par8 = `${securityPass}-${retConfigStorage.res.par8}`
+let par9 = `${securityPass}-${retConfigStorage.res.par9}`
+let par10 = `${securityPass}-${retConfigStorage.res.par10}`
 let serverWeb = retConfigStorage.res.server['1']
 let serverLocal = retConfigStorage.res.server['2']
-let url = `${serverWeb.url}`
 let hostWeb = `${serverWeb.host}`
-let portWeb = `${Number(serverWeb.port)}`
+let portWeb = `${serverWeb.port}`
 let hostLocal = `${serverLocal.host}`
-let portLocal = `${Number(serverLocal.port)}`
+let portLocal = `${serverLocal.port}`
 let devices = retConfigStorage.res.devices
-let urlHostPortWeb = `${url}://${hostWeb}:${portWeb}`
-let urlHostPortLocal = `${url}://${hostLocal}:${portLocal}`
+let hostRoomWeb = `${hostWeb}:${portWeb}`
+let hostRoomLocal = `${hostLocal}:${portLocal}`
 let devMaster = `${devices[0].master}`
 let sheetServer = retConfigStorage.res.sheetServer
 
 let devSend, devGet
 if (eng) { // CHROME | Send → NodeJS | Get → Chrome 
-    devSend = `${letter == 'D' ? urlHostPortLocal : urlHostPortWeb}/${devMaster}_${devices[2].name}`
-    devGet = [`${urlHostPortWeb}/${devices[1].name}`, `${urlHostPortLocal}/${devices[1].name}`]
+    devSend = `${letter == 'D' ? hostRoomLocal : hostRoomWeb}/${devMaster}_${devices[2].name}`
+    devGet = [`${hostRoomWeb}/${devices[1].name}`, `${hostRoomLocal}/${devices[1].name}`]
 } else { // NODEJS | Send → Chrome | Get → NodeJS
-    devSend = `${letter == 'D' ? urlHostPortLocal : urlHostPortWeb}/${devices[1].name}`
-    devGet = [`${urlHostPortWeb}/${devMaster}_${devices[2].name}`, `${urlHostPortLocal}/${devMaster}_${devices[2].name}`,]
+    devSend = `${letter == 'D' ? hostRoomLocal : hostRoomWeb}/${devices[1].name}`
+    devGet = [`${hostRoomWeb}/${devMaster}_${devices[2].name}`, `${hostRoomLocal}/${devMaster}_${devices[2].name}`,]
 }
 
 // MANTER APÓS O 'devSend, devGet'
-let windowGlobal = {
+let globalWindow = {
     'serverWeb': serverWeb.host,
+    'secConnect': secConnect,
     'secReconnect': secReconnect,
-    'secPing': secPing,
     'secRetWebSocket': secRetWebSocket,
+    'secPing': secPing,
     'secLoop': secLoop,
     'kbPartsMessage': kbPartsMessage,
     'minClearPartsMessages': minClearPartsMessages,
@@ -280,7 +280,6 @@ let windowGlobal = {
     'par8': par8,
     'par9': par9,
     'par10': par10,
-    'par11': par11,
     'securityPass': securityPass,
     'portWeb': portWeb,
     'portLocal': portLocal,
@@ -291,9 +290,7 @@ let windowGlobal = {
 }
 
 if (eng) { // CHROME
-    window['windowGlobal'] = windowGlobal
+    window['globalWindow'] = globalWindow
 } else { // NODEJS
-    global['windowGlobal'] = windowGlobal
+    global['globalWindow'] = globalWindow
 }
-
-

@@ -24,9 +24,9 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             infNotification = { 'e': e, 'duration': 2, 'icon': './src/scripts/media/notification_1.png', 'title': `NÃO BLIND`, 'text': `${query}` }
             // retNotification = await notification(infNotification)
         }; let infChatGpt = {
-            'e': e, 'provider': 'ora.ai',
+            'e': e, 'provider': 'open.ai',
             'input': `Eu preciso identificar se uma consulta que foi feita no Google faz sentido ou não. Com base nos dados que você tem da internet até 2021, só me responda '####SIM####' se fizer sentido ou '####NAO####' caso não faça sentido. A consulta é a seguinte: \n\n '${query}'`
-        }; let retChatGpt = await chatGpt(infChatGpt); if (!retChatGpt.ret) {
+        }; let retChatGpt = await chat(infChatGpt); if (!retChatGpt.ret) {
             infNotification = {
                 'e': e, 'duration': 3, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO PESQUISA NO CHATGPT`, 'text': `'ret' → false`
             }; retNotification = await notification(infNotification)
@@ -42,12 +42,11 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             let radio = { "other": "peroptyx_QueryImageDeservingClassification", "inf": [2], "res": "🔵 GIBBERISH", "query": query }
             // ws1.send(JSON.stringify(radio))
             let infApi = {
-                'e': e, 'method': 'POST', 'url': `http://127.0.0.1:8888/O_CHROME/`,
+                'e': e, 'method': 'POST', 'url': `http://127.0.0.1:1234/SALA_AQUI/`,
                 'headers': { 'accept-language': 'application/json' }, 'body': radio
             }; let retApi = await api(infApi);
         } else {
-            // ws1.send(JSON.stringify({ "name": "google", "par": { "search": query } }))
-            wsSend({ 'e': e, 'url': gO.inf.wsArr[0], 'message': { "name": "google", "par": { "search": query } } })
+            listenerAcionar('messageSendOrigin_127.0.0.1:1234/ORIGEM_AQUI', { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': { "name": "google", "par": { "search": query } }, 'secondsAwait': 0, });
 
         }; ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
     } catch (e) {

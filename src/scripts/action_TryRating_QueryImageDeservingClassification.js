@@ -56,7 +56,7 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
         await new Promise(resolve => { setTimeout(resolve, 800) })
         let infChromeActions = { 'e': e, 'action': 'script', 'code': code, 'search': retTabSearch.res.id };
         let retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { return retChromeActions }
-        wsSend({ 'e': e, 'url': nomeList, 'message': { 'other': 'OK: TryRating_QueryImageDeservingClassification' } })
+        listenerAcionar('messageSendOrigin_127.0.0.1:1234/ORIGEM_AQUI', { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': { 'other': 'OK: TryRating_QueryImageDeservingClassification' }, 'secondsAwait': 0, });
 
         ret['msg'] = `action_TryRating_QueryImageDeservingClassification: OK`;
         ret['ret'] = true;

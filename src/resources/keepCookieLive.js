@@ -13,7 +13,7 @@ async function keepCookieLive(inf) {
         };
 
         let retGetCookies, infChromeActions, retChromeActions
-        let retConfigStorage = await configStorage({ 'e': e, 'action': 'get', 'key': 'chatGptOra.ai' });
+        let retConfigStorage = await configStorage({ 'e': e, 'action': 'get', 'key': 'chatOra.ai' });
         retConfigStorage = retConfigStorage.res
         // ATUALIZAR A PÁGINA DO ora.ai
         let retTabSearch = await tabSearch({ 'e': e, 'search': '*ora.ai*', 'openIfNotExist': true, 'active': false, 'pinned': true, 'url': retConfigStorage.meu });
@@ -46,15 +46,15 @@ async function keepCookieLive(inf) {
         let time = dateHour().res;
         retConfigStorage['cookie'] = retGetCookies.res.concat;
         retConfigStorage['dateHour'] = `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`;
-        let infConfigStorage = { 'e': e, 'action': 'set', 'key': 'chatGptOra.ai', 'value': retConfigStorage }
+        let infConfigStorage = { 'e': e, 'action': 'set', 'key': 'chatOra.ai', 'value': retConfigStorage }
         retConfigStorage = await configStorage(infConfigStorage);
         let send = {
             'fun': [
-                { 'securityPass': windowGlobal.securityPass, 'retInf': false, 'name': 'configStorage', 'par': infConfigStorage },
-                { 'securityPass': windowGlobal.securityPass, 'retInf': false, 'name': 'log', 'par': { 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
+                { 'securityPass': globalWindow.securityPass, 'retInf': false, 'name': 'configStorage', 'par': infConfigStorage },
+                { 'securityPass': globalWindow.securityPass, 'retInf': false, 'name': 'log', 'par': { 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `keepCookieLive` } }
             ]
         };
-        wsSend({ 'e': e, 'url': windowGlobal.devSend, 'message': send });
+        listenerAcionar('messageSendOrigin_127.0.0.1:1234/ORIGEM_AQUI', { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': send, 'secondsAwait': 0, });
         ret['msg'] = `KEEP COOKIE LIVE: OK`;
         ret['ret'] = true;
     } catch (e) {

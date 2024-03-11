@@ -1,4 +1,20 @@
+// APAGAR TODO O CONTEUDO DO STORAGE
+chrome.storage.local.clear(function () {
+    // console.log('DEL 1');
+});
+chrome.storage.sync.clear(function () {
+    // console.log('DEL 2');
+});
+
 import('../server.js');
+
+chrome.browserAction.onClicked.addListener(async function () { // ######################### CLICK NO ICONE
+    console.log('ON START: ICONE PRESSIONADO'); //chrome.browserAction.setPopup({popup: './popup.html'});
+});
+
+
+
+// → BACKUP
 
 // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
 // chrome.downloads.onChanged.addListener(async function (...inf) {
@@ -50,14 +66,10 @@ import('../server.js');
 //             // JS PATH
 //             // code: `document.querySelector("#app-root > div > div.application-wrapper--content > div.survey-view > div.task-container > div:nth-child(1) > div.editor.mode-live.mode-view > div > div > div > div > div > div > div > div > div > div:nth-child(2) > div > div > div > div > div:nth-child(3) > div.extra-wrapper > div > div > div > div:nth-child(8) > div > div > div > div.d-flex.justify-content-center.field-array-actions.py-2 > button").click()`
 //             // ELEMENT (por '.' nos espaços)   <button class="btn btn-primary">Get a Survey</button>    →    document.querySelector('.btn.btn-primary').click()
-//             // code: `document.querySelector('.btn.btn-primary').click()`  
+//             // code: `document.querySelector('.btn.btn-primary').click()`
 //         })
 //     });
 // }, 5000);
-
-chrome.browserAction.onClicked.addListener(async function () { // ######################### CLICK NO ICONE
-    console.log('ON START: ICONE PRESSIONADO'); //chrome.browserAction.setPopup({popup: './popup.html'});
-});
 
 // NAO POR NADA AQUI!
 

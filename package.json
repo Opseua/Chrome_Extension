@@ -6,7 +6,6 @@
     "crypto": "^1.0.1",
     "get-folder-size": "^4.0.0",
     "googleapis": "^131.0.0",
-    "is-binary-buffer": "^2.0.0",
     "puppeteer": "^21.7.0",
     "stack-trace": "^1.0.0-pre2",
     "ws": "^8.16.0"

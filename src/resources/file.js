@@ -25,7 +25,7 @@ async function file(inf) {
         }
 
         // PASSAR NO jsonInterpret
-        if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'e': e, 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
+        // if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'e': e, 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder',].includes(inf.action)) {
             ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
         } else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {
@@ -81,7 +81,14 @@ async function file(inf) {
                         let retRawText = await rawText(infRawText)
                         text = retRawText
                     } else {
-                        text = typeof inf.text === 'object' ? JSON.stringify(inf.text) : inf.text
+                        if (typeof inf.text !== 'object') {
+                            // STRING
+                            text = inf.text
+                        } else {
+                            // OBJETO / BUFFER
+                            text = JSON.stringify(inf.text)
+                            text = text.includes(`"type":"Buffer"`) && text.includes(`"data":[`) ? inf.text : text
+                        }
                     }
                     if (inf.path.includes(':')) {
                         path = inf.path;
@@ -141,7 +148,10 @@ async function file(inf) {
                         // REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                         let pathLetter = path.charAt(0)
                         path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`)
-                        await _fs.promises.mkdir(_path.dirname(path), { recursive: true });
+                        if (path.split('/').length > 2) {
+                            // DENTRO DE UMA PASTA (CRIAR ELA)
+                            await _fs.promises.mkdir(_path.dirname(path), { recursive: true });
+                        }
                         await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' })
                     };
                     let res = path

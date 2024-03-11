@@ -7,7 +7,7 @@ async function regexE(inf) {
     let ret = { 'ret': false };
     try {
         let confKeep = conf
-        let retGetPath = await getPath({ 'e': inf.e })
+        let retGetPath = await getPath({ 'e': inf.e, 'mode': 1 })
 
         // IDENTIFICAR ENGINE
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
@@ -100,7 +100,7 @@ async function regexE(inf) {
         let reqOpt = { 'method': 'POST', };
         let body = JSON.stringify({
             'fun': [{
-                'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : windowGlobal.securityPass,
+                'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : globalWindow.securityPass,
                 'retInf': false,
                 'name': 'notification',
                 'par': {
@@ -111,7 +111,7 @@ async function regexE(inf) {
             }]
         })
         try {
-            let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:8888/AAAAAAAA' : `http://${windowGlobal.devSend.split('://')[1]}`
+            let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:1234/AAAAAAAA' : `http://${globalWindow.devSend.split('://')[1]}`
             // GOGOLE
             if (errorOk.cng == 3) {
                 reqOpt['payload'] = body
@@ -283,7 +283,7 @@ if (eng) { // CHROME
 //         let reqOpt = { 'method': 'POST', };
 //         let body = JSON.stringify({
 //             'fun': [{
-//                 'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : windowGlobal.securityPass,
+//                 'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : globalWindow.securityPass,
 //                 'retInf': false,
 //                 'name': 'notification',
 //                 'par': {
@@ -294,7 +294,7 @@ if (eng) { // CHROME
 //             }]
 //         })
 //         try {
-//             let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:8888/AAAAAAAA' : `http://${windowGlobal.devSend.split('://')[1]}`
+//             let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:1234/AAAAAAAA' : `http://${globalWindow.devSend.split('://')[1]}`
 //             // GOOGLE
 //             if (errorOk.cng == 3) {
 //                 reqOpt['payload'] = body

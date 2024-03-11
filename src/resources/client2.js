@@ -1,7 +1,7 @@
 let e = import.meta.url, ee = e
 
 let wsServers = { 'rooms': {} }, reconnecting = {}, timeoutSecConnect = {}
-async function client(inf) {
+async function client2(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
         let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
@@ -29,12 +29,12 @@ async function client(inf) {
 
                 async function aaaa() {
                     await new Promise(resolve => { setTimeout(resolve, 5000) });
-                    _fs.readFile('D:/1_IMAGE_2000KB.jpg', async (err, data) => {
-                        // data = { "fun": [{ "securityPass": "passwordAqui", "retInf": true, "name": "commandLine", "par": { "command": "notepad", "awaitFinish": true } }] }
+                    _fs.readFile('D:/1_ZIP_25MB.zip', async (err, data) => {
+                        data = { "fun": [{ "securityPass": "passwordAqui", "retInf": true, "name": "commandLine", "par": { "command": "notepad", "awaitFinish": true } }] }
                         let retMessageSend = await messageSend({ 'destination': '127.0.0.1:1234/NAME', 'message': data, 'resWs': ws, 'secondsAwait': 0, });
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `RESPOSTA SENDO ESPERADA:\n${JSON.stringify(retMessageSend)}` });
                     });
-                }; if (!eng) { aaaa() }
+                }; // if (!eng) { aaaa() }
             };
 
             // # ON MESSAGE
@@ -45,13 +45,10 @@ async function client(inf) {
                 console.log(`CLI ← ${Date.now()}`)
                 if (messageLowerCase == globalWindow.par7.toLowerCase()) {
                     // RECEBIDO: 'PONG' (não fazer nada)
-                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PONG ${locWeb} '${room}'` });
+                    // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PONG ${locWeb} '${room}'` });
                 } else if (messageLowerCase == globalWindow.par6.toLowerCase()) {
                     // RECEBIDO: 'PING' → ENVIAR 'PONG'
-                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
-                    let retMessageSend = await messageSend({ 'destination': '127.0.0.1:1234/NAME', 'message': 'data', 'resWs': ws, 'secondsAwait': 0, });
-                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `RESPOSTA SENDO ESPERADA:\n${JSON.stringify(retMessageSend)}` });
-                    ws.send(globalWindow.par7);
+                    ws.send(globalWindow.par7); // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
                 } else {
                     try { message = JSON.parse(message) } catch (e) { message = { 'message': message } }; if (!message.message) { message = { 'message': message } }
                     // RECEBIDO: OUTRA MENSAGEM
@@ -81,7 +78,7 @@ async function client(inf) {
         }
 
         // SERVIDORES: CONECTAR
-        let dev2 = globalWindow.devGet[0], dev3 = globalWindow.devGet[1]
+        let dev2 = globalWindow.devGet[0], dev3 = '127.0.0.1:1234/NAME' // globalWindow.devGet[1]
         let servers = letter == 'D' ? [
             // ### NOTEBOOK
             // dev2, // → GET [WEB]
@@ -147,8 +144,8 @@ async function client(inf) {
 }
 
 if (eng) { // CHROME
-    window['client'] = client;
+    window['client2'] = client2;
 } else { // NODEJS
-    global['client'] = client;
+    global['client2'] = client2;
 }
 

@@ -1,6 +1,6 @@
 // let infCommandLine, retCommandLine // 'logFun': true, 'awaitFinish': false,
-// infCommandLine = { 'e': e, 'command': `notepad` }
-// infCommandLine = { 'e': e, 'command': `"!letter!:/ARQUIVOS/PROJETOS/WebScraper/src/1_BACKGROUND.exe"` }
+// infCommandLine = { 'e': e, 'awaitFinish': false, 'command': `notepad` }
+// infCommandLine = { 'e': e, 'awaitFinish': false, 'command': `"!letter!:/ARQUIVOS/PROJETOS/WebScraper/src/1_BACKGROUND.exe"` }
 // retCommandLine = await commandLine(infCommandLine);
 // console.log(retCommandLine)
 
