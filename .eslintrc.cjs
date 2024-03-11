@@ -40,7 +40,7 @@ let arrGlobal = [
 
     // [Sniffer_Python]
     // → funções globais
-    'EWOQ', 'TryRating', 'tryRating_Search20', 'performTask',
+    'ewoq', 'tryRating', 'tryRating_Search20', 'performTask', 'tryRating_QueryImageDeservingClassification', 'tryRating_DrivingNavigation3DMaps',
 
     // [URA_Reversa]
     // → funções globais
