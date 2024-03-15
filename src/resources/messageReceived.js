@@ -7,7 +7,7 @@ async function messageReceived(inf) {
     let message = typeof inf.message === 'object' ? JSON.stringify(inf.message) : inf.message
     let buffer = inf.buffer ? inf.buffer : false
     let { host, room, resWs, wsClients } = inf
-    let origin = inf.origin ? inf.origin.replace('ws://', '').replace('?roo=', '') : `${host}/${room}`
+    let origin = inf.origin ? inf.origin.replace('ws://', '').replace('?roo=', '') : `${host}/${room}`;
     let destination = inf.destination ? inf.destination.replace('ws://', '').replace('?roo=', '') : 'x', isSerCli = wsClients ? 'isSer' : 'isCli'
 
     // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
@@ -42,15 +42,16 @@ async function messageReceived(inf) {
 
         // ENVIAR: MENSAGEM REAL → DESTINO
         if (!erroType) {
-            let messageDestination = {
-                'origin': origin,
-                'destination': destination,
-                'messageId': messageId,
-                'buffer': buffer,
-                'partesRestantes': partesRestantes,
-                'message': inf.message
-            }
             for (let [index, value] of wsClientsToSend.entries()) {
+                let messageDestination = {
+                    'origin': origin,
+                    'destination': `${value.host}/${value.room}`,
+                    'messageId': messageId,
+                    'buffer': buffer,
+                    'partesRestantes': partesRestantes,
+                    'message': message
+                }
+                // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ENVIANDO MENSAGEM: [${index + 1}/${wsClientsToSend.length}] ${messageId} → ${messageDestination.destination}` });
                 value.send(JSON.stringify(messageDestination))
                 await new Promise(resolve => { setTimeout(resolve, 200) })
             }
@@ -65,11 +66,14 @@ async function messageReceived(inf) {
             let listName = 'x'
             if (messageId.includes(`SERVER`) || messageId.includes(`RET-OK`)) {
                 // RECEBIDO: RETORNO DO SERVIDOR OU RESPOSTA SENDO AGUARDADA
-                listName = messageId
+                listName = `${messageId}`
             } else {
                 // RECEBIDO: OUTRA MENSAGEM → PROCESSAR E CHAMAR A FUNÇÃO
                 listName = `${destination}`
             }
+
+            // ACIONAR LISTENER
+            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ACIONANDO LISTENER: '${listName}` });
             listenerAcionar(`${listName}`, { 'origin': origin, 'messageId': messageId, 'message': message, 'resWs': resWs, 'host': host, 'room': room })
         }
 

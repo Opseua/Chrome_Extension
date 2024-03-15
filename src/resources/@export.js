@@ -25,16 +25,15 @@ if (!(eng ? window.all1 : global.all1)) {
 }
 
 // FUNÇÕES DESSE PROJETO
-await import('./regexE.js') // MANTER COMO PRIMEIRO IMPORT
-await import('./file.js') // MANTER COMO SEGUNDO IMPORT
+await import('./regexE.js') // MANTER COMO 1º IMPORT
+await import('./file.js') // MANTER COMO 2º IMPORT
+await import('./configStorage.js') // MANTER COMO 3º IMPORT
 await import('./api.js')
 await import('./chat.js')
 await import('./chromeActions.js')
 await import('./client.js')
-await import('./client2.js')
 await import('./clipboard.js')
 await import('./commandLine.js')
-await import('./configStorage.js')
 await import('./dateHour.js')
 await import('./devFun.js')
 // await import('./getCookies.js')
@@ -51,7 +50,7 @@ await import('./notification.js')
 await import('./messageReceived.js')
 await import('./messageSend.js')
 // await import('./orderObj.js')
-await import('./promptChrome.js')
+// await import('./promptChrome.js')
 // await import('./randomNumber.js')
 await import('./rawText.js')
 await import('./regex.js')

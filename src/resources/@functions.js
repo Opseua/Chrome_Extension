@@ -177,9 +177,8 @@ function awaitTimeout(inf) {
 // ##########################################################
 
 // // ############### CLEAR CONSOLE ###############
-function clearConsoleRun() { if (eng) { console.clear(); } else { process.stdout.write('\x1Bc'); } }
-clearConsoleRun(); let msgQtd = 0; let clearConsole = console.log;
-console.log = function () {
+function clearConsoleRun() { console.clear(); if (!eng) { process.stdout.write('\x1B[2J\x1B[0f'); } }
+clearConsoleRun(); let msgQtd = 0; let clearConsole = console.log; console.log = function () {
     clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearConsoleRun(); msgQtd = 0; console.log('CONSOLE LIMPO!') }
 }
 // // ###############               ###############

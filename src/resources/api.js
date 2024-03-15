@@ -1,28 +1,18 @@
-// let infApi, retApi // 'logFun': true,
+// let infApi, retApi // 'logFun': true
 // infApi = { // ###### → json/object
-//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
-//     'headers': {
-//         'Content-Type': 'application/json'
-//     },
-//     'body': {
-//         'aaa': 'bbbb',
-//     }
+//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
+//     'headers': { 'Content-Type': 'application/json' },
+//     'body': { 'aaa': 'bbbb' }, 'max': 10
 // };
 // infApi = { // ###### → text
-//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
-//     'headers': {
-//         'Content-Type': 'text/plain;charset=UTF-8'
-//     },
-//     'body': `Esse é o texto`
+//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
+//     'headers': { 'Content-Type': 'text/plain;charset=UTF-8' },
+//     'body': `Esse é o texto`, 'max': 10
 // };
 // infApi = { // ###### → x-www-form-urlencoded
-//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/OPSEUA`,
-//     'headers': {
-//         'Content-Type': 'application/x-www-form-urlencoded'
-//     },
-//     'body': {
-//         'Chave': 'Valor',
-//     }
+//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
+//     'headers': { 'Content-Type': 'application/x-www-form-urlencoded' },
+//     'body': { 'Chave': 'Valor' }, 'max': 10
 // };
 // retApi = await api(infApi);
 // console.log(retApi)
@@ -36,8 +26,8 @@ async function api(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        let req, resCode, resHeaders, resBody, body = false
-        let reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, };
+        let req, resCode, resHeaders, resBody, body = false, reqOk = false, reqE
+        let reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'rejectUnauthorized': false };
 
         // HEADERS
         reqOpt['headers'] = {}
@@ -74,10 +64,16 @@ async function api(inf) {
                 reqOpt['payload'] = body
             }
 
-            req = UrlFetchApp.fetch(inf.url, reqOpt);
-            resCode = req.getResponseCode()
-            resHeaders = req.getAllHeaders();
-            resBody = req.getContentText();
+            try {
+                req = UrlFetchApp.fetch(inf.url, reqOpt);
+                resCode = req.getResponseCode()
+                resHeaders = req.getAllHeaders();
+                resBody = req.getContentText();
+                reqOk = true
+            } catch (e) {
+                reqE = e
+            }
+
         } else {
             // ################ CHROME | NODEJS
             // TEMPO LIMITE [PADRÃO 20 SEGUNDOS]
@@ -97,21 +93,31 @@ async function api(inf) {
                 controller.abort();
             }, max);
 
-            req = await fetch(inf.url, reqOpt);
-            // LIMPAR O TIMER SE A RESPOSTA FOR RECEBIDA ANTES DO TEMPO
-            clearTimeout(timeoutId);
-            resCode = req.status
-            resHeaders = {};
-            req.headers.forEach((value, name) => { resHeaders[name] = value })
-            resBody = await req.text();
+            try {
+                req = await fetch(inf.url, reqOpt);
+                // LIMPAR O TIMER SE A RESPOSTA FOR RECEBIDA ANTES DO TEMPO
+                clearTimeout(timeoutId);
+                resCode = req.status
+                resHeaders = {};
+                req.headers.forEach((value, name) => { resHeaders[name] = value })
+                resBody = await req.text();
+                reqOk = true
+            } catch (e) {
+                clearTimeout(timeoutId);
+                reqE = e
+            }
         }
 
-        ret['ret'] = true;
-        ret['msg'] = 'API: OK';
-        ret['res'] = {
-            'code': resCode,
-            'headers': resHeaders,
-            'body': resBody
+        if (!reqOk) {
+            ret['msg'] = ret.msg ? ret.msg : `API: ERRO AO FAZER REQUISIÇÃO (NÃO NA FUNÇÃO)\n\n${reqE}`;
+        } else {
+            ret['ret'] = true;
+            ret['msg'] = 'API: OK';
+            ret['res'] = {
+                'code': resCode,
+                'headers': resHeaders,
+                'body': resBody
+            }
         }
 
         // ### LOG FUN ###

@@ -226,6 +226,7 @@ let secConnect = retConfigStorage.res.secConnect
 let secReconnect = retConfigStorage.res.secReconnect
 let secRetWebSocket = retConfigStorage.res.secRetWebSocket
 let secPing = retConfigStorage.res.secPing
+let secPingTimeout = retConfigStorage.res.secPingTimeout
 let secLoop = retConfigStorage.res.secLoop
 let kbPartsMessage = retConfigStorage.res.kbPartsMessage
 let minClearPartsMessages = retConfigStorage.res.minClearPartsMessages
@@ -267,6 +268,7 @@ let globalWindow = {
     'secReconnect': secReconnect,
     'secRetWebSocket': secRetWebSocket,
     'secPing': secPing,
+    'secPingTimeout': secPingTimeout,
     'secLoop': secLoop,
     'kbPartsMessage': kbPartsMessage,
     'minClearPartsMessages': minClearPartsMessages,

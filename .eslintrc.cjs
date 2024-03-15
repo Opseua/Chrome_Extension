@@ -77,6 +77,10 @@ let arrUnused = [
     'res',
     'host',
     'room',
+    'teste',
+    'big',
+    'write',
+    'msg',
 
 ];
 
@@ -96,6 +100,7 @@ module.exports = {
         'no-regex-spaces': 'off', // ESPAÇO NO REGEX
         'no-control-regex': 'off', // DIVISÃO DE COLUNAS NO REGEX
         'no-unreachable': 'off', // CÓDIGO APÓS O RETURN
+        'no-constant-condition': 'off', // 'true' DO WHILE
         'no-unused-vars': ['error', { 'varsIgnorePattern': "^(" + arrUnused.join('|') + ")$" }]
     }, 'globals': arrGlobalObj,
     'ignorePatterns': ['*teste*.js', '*Teste*.js', '*TESTE*.js',] // ARQUIVOS IGNORADOS
