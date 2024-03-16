@@ -18,8 +18,7 @@ async function client(inf) {
             // # ON OPEN
             ws.onopen = async () => {
                 // LIMPAR TIMEOUT DE CONEXÃO | SALA [ADICIONAR] | ENVIAR PING DE INÍCIO DE CONEXÃO
-                clearTimeout(timeoutSecConnect[hostRoom]);
-                if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set() }; wsServers.rooms[hostRoom].add(ws); ws.send(`ping`)
+                clearTimeout(timeoutSecConnect[hostRoom]); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set() }; wsServers.rooms[hostRoom].add(ws); ws.send(`ping`)
                 logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `OK: ${locWeb} '${room}'` });
 
                 // LISTENER PARA ENVIAR MENSAGEM DE OUTROS ARQUIVOS (FORA DO WebSocket!!!)
@@ -27,21 +26,6 @@ async function client(inf) {
                     let { destination, message, secondsAwait } = inf;
                     let retMessageSend = await messageSend({ 'destination': destination, 'message': message, 'resWs': ws, 'secondsAwait': secondsAwait, }); return retMessageSend
                 });
-
-                async function teste() {
-                    await new Promise(resolve => { setTimeout(resolve, 1000) }); // console.log('INICIO'); let data
-                    async function sendTest(data) {
-                        let retMessageSend = await messageSend({ 'destination': '127.0.0.1:8889/CLIENTE_1', 'message': data, 'resWs': ws, 'secondsAwait': 0, });
-                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `RESPOSTA SENDO ESPERADA:\n${JSON.stringify(retMessageSend)}` });
-                    }
-                    // _fs.readFile('D:/1_IMAGE_2000KB.jpg', async (err, data) => {
-                    //     // data = { "fun": [{ "securityPass": "passwordAqui", "retInf": true, "name": "commandLine", "par": { "command": "notepad", "awaitFinish": true } }] }
-                    //     sendTest(data)
-                    // });
-                    let retFile = await file({ 'e': e, 'action': 'read', 'functionLocal': false, 'path': 'D:/1_ZIP_25MB.zip' }); await sendTest(retFile.res)
-                    await new Promise(resolve => { setTimeout(resolve, 1000) });
-                    // teste()
-                }; // if (!eng) { teste() }
             };
 
             // # ON MESSAGE
@@ -54,13 +38,11 @@ async function client(inf) {
                 if (pingPong > 0) {
                     if (pingPong == 2) { return }
                     // RECEBIDO: 'PING' ENVIAR 'PONG'
-                    // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
-                    ws.send('pong')
+                    ws.send('pong'); // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
                 } else {
                     try { message = JSON.parse(message) } catch (e) { message = { 'message': message } }; if (!message.message) { message = { 'message': message } }
                     // RECEBIDO: OUTRA MENSAGEM
-                    ws.send(`pong`)
-                    messageReceived({ ...message, 'host': host, 'room': room, 'resWs': ws, 'locWeb': locWeb, });
+                    if (ws.lastMessage) { ws.send(`pong`) }; messageReceived({ ...message, 'host': host, 'room': room, 'resWs': ws, 'locWeb': locWeb, });
                 }
             };
 
@@ -107,14 +89,12 @@ async function client(inf) {
             let { nomeList } = inf, { messageId, message, resWs, origin, host, room } = inf.param1
             // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
 
+            // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
             let data = {}; try { data = JSON.parse(message) } catch (e) { }; if (data.fun) {
-                // FUN
                 devFun({ 'e': e, 'data': data, 'messageId': messageId, 'resWs': resWs, 'destination': origin, })
             } else if (data.other) {
-                // OTHER
                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `OTHER\n${JSON.stringify(data.other)}` });
             } else {
-                // MENSAGEM NÃO IDENTIFICADA
                 // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `MENSAGEM DO WEBSCKET\n\n${message}` });
             }
         }

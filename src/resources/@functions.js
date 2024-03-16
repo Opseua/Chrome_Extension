@@ -1,4 +1,6 @@
 // await new Promise(resolve => { setTimeout(resolve, 2000) })
+'use strict';
+process.stdout.write('\x1Bc');
 
 // process.exit();
 
@@ -177,7 +179,12 @@ function awaitTimeout(inf) {
 // ##########################################################
 
 // // ############### CLEAR CONSOLE ###############
-function clearConsoleRun() { console.clear(); if (!eng) { process.stdout.write('\x1B[2J\x1B[0f'); } }
+function clearConsoleRun() {
+    console.clear(); if (!eng) {
+        _exec('cls', (error, stdout, stderr) => { if (error || stderr) { console.error(`Erro ao executar o comando`) }; return; });
+        process.stdout.write('\x1Bc'); process.stdout.write('\x1B[2J\x1B[0f'); process.stdout.write('\x1b[2J\x1b[0;0H')
+    }
+}
 clearConsoleRun(); let msgQtd = 0; let clearConsole = console.log; console.log = function () {
     clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearConsoleRun(); msgQtd = 0; console.log('CONSOLE LIMPO!') }
 }

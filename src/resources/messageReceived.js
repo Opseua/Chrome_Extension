@@ -38,11 +38,14 @@ async function messageReceived(inf) {
             'partesRestantes': 0,
             'message': { 'ret': !erroType, 'msg': !erroType ? `SEND [SERVER]: OK` : `${erroType} '${destination}'` }
         }
-        resWs.send(JSON.stringify(messageOrigin))
+        if (resWs.lastMessage || erroType) {
+            resWs.send(JSON.stringify(messageOrigin))
+        }
 
         // ENVIAR: MENSAGEM REAL → DESTINO
         if (!erroType) {
             for (let [index, value] of wsClientsToSend.entries()) {
+                try { message = JSON.parse(message) } catch (e) { }
                 let messageDestination = {
                     'origin': origin,
                     'destination': `${value.host}/${value.room}`,
