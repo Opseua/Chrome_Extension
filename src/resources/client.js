@@ -21,10 +21,13 @@ async function client(inf) {
                 clearTimeout(timeoutSecConnect[hostRoom]); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set() }; wsServers.rooms[hostRoom].add(ws); ws.send(`ping`)
                 logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `OK: ${locWeb} '${room}'` });
 
+                // LISTENER PARA RETORNAR O 'ws' QUANDO 'messageSend' FOR CHAMADA EM OUTROS ARQUIVOS (SOMENTE NO CLIENT!!!)
+                listenerMonitorar(`getWs_${locWeb}`, async (/*nomeList, inf*/) => { return ws });
+
                 // LISTENER PARA ENVIAR MENSAGEM DE OUTROS ARQUIVOS (FORA DO WebSocket!!!)
                 listenerMonitorar(`messageSendOrigin_${host}/${room}`, async (nomeList, inf) => {
                     let { destination, message, secondsAwait } = inf;
-                    let retMessageSend = await messageSend({ 'destination': destination, 'message': message, 'resWs': ws, 'secondsAwait': secondsAwait, }); return retMessageSend
+                    let retMessageSend = await messageSend({ 'destination': destination, 'messageId': true, 'message': message, 'resWs': ws, 'secondsAwait': secondsAwait, }); return retMessageSend
                 });
             };
 
@@ -40,7 +43,7 @@ async function client(inf) {
                     // RECEBIDO: 'PING' ENVIAR 'PONG'
                     ws.send('pong'); // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
                 } else {
-                    try { message = JSON.parse(message) } catch (e) { message = { 'message': message } }; if (!message.message) { message = { 'message': message } }
+                    try { message = JSON.parse(message) } catch (err) { message = { 'message': message } }; if (!message.message) { message = { 'message': message } }
                     // RECEBIDO: OUTRA MENSAGEM
                     if (ws.lastMessage) { ws.send(`pong`) }; messageReceived({ ...message, 'host': host, 'room': room, 'resWs': ws, 'locWeb': locWeb, });
                 }
@@ -87,15 +90,15 @@ async function client(inf) {
 
         async function runLis(inf) {
             let { nomeList } = inf, { messageId, message, resWs, origin, host, room } = inf.param1
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
+            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
 
             // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
-            let data = {}; try { data = JSON.parse(message) } catch (e) { }; if (data.fun) {
+            let data = {}; try { data = JSON.parse(message) } catch (err) { }; if (data.fun) {
                 devFun({ 'e': e, 'data': data, 'messageId': messageId, 'resWs': resWs, 'destination': origin, })
             } else if (data.other) {
-                logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `OTHER\n${JSON.stringify(data.other)}` });
+                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `OTHER\n${JSON.stringify(data.other)}` });
             } else {
-                // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `MENSAGEM DO WEBSCKET\n\n${message}` });
+                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `MENSAGEM DO WEBSCKET\n\n${message}` });
             }
         }
 
@@ -118,8 +121,8 @@ async function client(inf) {
 
         ret['ret'] = true
         ret['msg'] = 'CLIENT: OK'
-    } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+    } catch (err) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     if (!ret.ret) {

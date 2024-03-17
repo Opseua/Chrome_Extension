@@ -1,5 +1,5 @@
-// } catch (e) {
-//     let retRegexE = await regexE({ 'e': e });
+// } catch (err) {
+//     let retRegexE = await regexE({ 'e': err });
 //     ret['msg'] = retRegexE.res;
 // };
 
@@ -29,7 +29,7 @@ async function regexE(inf) {
                 retFetch = await retFetch.text()
                 retFetch = JSON.parse(retFetch)
                 devMaster = retFetch.webSocket.devices[0].master
-            } catch (e) {
+            } catch (err) {
                 devMaster = `???`
             }
         } else if (cng == 2) { // NODEJS
@@ -37,7 +37,7 @@ async function regexE(inf) {
                 retFetch = await _fs.promises.readFile(`${confKeep[1]}://${confKeep[2]}/${confKeep[0]}`, 'utf8');
                 retFetch = JSON.parse(retFetch)
                 devMaster = retFetch.webSocket.devices[0].master
-            } catch (e) {
+            } catch (err) {
                 devMaster = `???`
             }
         };
@@ -122,13 +122,13 @@ async function regexE(inf) {
                 reqOpt['body'] = body
                 await fetch(url, reqOpt)
             }
-        } catch (e) {
-            console.log(`\n\n### ERRO REGEXe [FETCH] ###\n\n${e}\n\n`)
+        } catch (err) {
+            console.log(`\n\n### ERRO REGEXe [FETCH] ###\n\n${err}\n\n`)
         }
         ret['res'] = { 'file': errorOk.file, 'line': errorOk.line, 'projectFile': errorOk.projectFile, 'e': errorOk.e, }
         ret['msg'] = `\n\n### ERRO ### [catchGlobal ${inf.catchGlobal}]\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
-    } catch (e) {
-        console.log(`\n\n### ERRO REGEXe ###\n\n${e.stack}\n\n`)
+    } catch (err) {
+        console.log(`\n\n### ERRO REGEXe ###\n\n${err.stack}\n\n`)
     };
     return {
         ...({ ret: ret.ret }),
@@ -209,7 +209,7 @@ if (eng) { // CHROME
 //                 retFetch = await retFetch.text()
 //                 retFetch = JSON.parse(retFetch)
 //                 devMaster = retFetch.webSocket.devices[0].master
-//             } catch (e) {
+//             } catch (err) {
 //                 devMaster = `???`
 //             }
 //         } else if (cng == 2) { // NODEJS
@@ -217,7 +217,7 @@ if (eng) { // CHROME
 //                 retFetch = await _fs.promises.readFile(`${confKeep[1]}://${confKeep[2]}/${confKeep[0]}`, 'utf8');
 //                 retFetch = JSON.parse(retFetch)
 //                 devMaster = retFetch.webSocket.devices[0].master
-//             } catch (e) {
+//             } catch (err) {
 //                 devMaster = `???`
 //             }
 //         };
@@ -305,13 +305,13 @@ if (eng) { // CHROME
 //                 reqOpt['body'] = body
 //                 await fetch(url, reqOpt)
 //             }
-//         } catch (e) {
-//             console.log(`\n\n### ERRO REGEXe [FETCH] ###\n\n${e}\n\n`)
+//         } catch (err) {
+//             console.log(`\n\n### ERRO REGEXe [FETCH] ###\n\n${err}\n\n`)
 //         }
 //         ret['res'] = { 'file': errorOk.file, 'line': errorOk.line, 'projectFile': errorOk.projectFile, 'e': errorOk.e, }
 //         ret['msg'] = `\n\n### ERRO ### [catchGlobal ${inf.catchGlobal}]\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
-//     } catch (e) {
-//         console.log(`\n\n### ERRO REGEXe ###\n\n${e.stack}\n\n`)
+//     } catch (err) {
+//         console.log(`\n\n### ERRO REGEXe ###\n\n${err.stack}\n\n`)
 //     };
 //     return {
 //         ...({ ret: ret.ret }),

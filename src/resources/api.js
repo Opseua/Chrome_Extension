@@ -70,8 +70,8 @@ async function api(inf) {
                 resHeaders = req.getAllHeaders();
                 resBody = req.getContentText();
                 reqOk = true
-            } catch (e) {
-                reqE = e
+            } catch (err) {
+                reqE = err
             }
 
         } else {
@@ -102,9 +102,9 @@ async function api(inf) {
                 req.headers.forEach((value, name) => { resHeaders[name] = value })
                 resBody = await req.text();
                 reqOk = true
-            } catch (e) {
+            } catch (err) {
                 clearTimeout(timeoutId);
-                reqE = e
+                reqE = err
             }
         }
 
@@ -125,9 +125,9 @@ async function api(inf) {
             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
-    } catch (e) {
-        if (e.name !== 'AbortError') {
-            let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
             ret['msg'] = retRegexE.res
         }
     };

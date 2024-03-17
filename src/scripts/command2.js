@@ -12,8 +12,8 @@ async function command2(inf) {
     let retCommandLine = await commandLine(infCommandLine)
     ret['ret'] = true;
     ret['msg'] = `SHORTCUT PRESSED: OK`;
-  } catch (e) {
-    let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+  } catch (err) {
+    let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
     ret['msg'] = retRegexE.res
   };
   return {

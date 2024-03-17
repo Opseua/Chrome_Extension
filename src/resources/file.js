@@ -135,7 +135,7 @@ async function file(inf) {
                                     retFetch = retFile.res
                                 };
                                 text = `${retFetch}${text}`
-                            } catch (e) { }
+                            } catch (err) { }
                         };
                         let blob = new Blob([text], { type: 'text/plain' });
                         // REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
@@ -194,7 +194,7 @@ async function file(inf) {
                         resNew['ret'] = true;
                         resNew['msg'] = `FILE READ: OK`;
                         resNew['res'] = res;
-                    } catch (e) {
+                    } catch (err) {
                         resNew['msg'] = `FILE READ: ERRO → ARQUIVO NÃO ENCONTRADO '${path}'`;
                     }
                 };
@@ -226,15 +226,15 @@ async function file(inf) {
                                 await _fs.promises.unlink(inf)
                             };
                             ok = true
-                        } catch (e) { }
+                        } catch (err) { }
                         if (!ok) {
                             resNew['msg'] = `FILE DEL: ERRO → AO DELETAR ARQUIVO '${path}'`;
                         } else {
                             resNew['ret'] = true;
                             resNew['msg'] = `FILE DEL: OK`;
                         }
-                    } catch (e) {
-                        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+                    } catch (err) {
+                        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
                         resNew['msg'] = retRegexE.res
                     }
                 };
@@ -296,7 +296,7 @@ async function file(inf) {
                                     ...(isFolder ? {} : { 'md5': md5 }),
                                 };
                                 result.push(entryObject);
-                            } catch (e) {
+                            } catch (err) {
                                 result.push({
                                     'ret': false,
                                     'name': entry,
@@ -318,7 +318,7 @@ async function file(inf) {
                         resNew['msg'] = `FILE LIST: OK`;
                         resNew['res'] = res;
                     }
-                } catch (e) {
+                } catch (err) {
                     resNew['msg'] = `FILE LIST: ERRO → AO LISTAR '${path}'`;
                 }
                 return resNew
@@ -347,7 +347,7 @@ async function file(inf) {
                         await _fs.promises.rename(pathOld, pathNew);
                         resNew['ret'] = true;
                         resNew['msg'] = `FILE CHANGE: OK`
-                    } catch (e) {
+                    } catch (err) {
                         resNew['msg'] = `FILE CHANGE: ERRO → AO MOVER ARQUIVO '${pathOld}'`;
                     }
                 }
@@ -372,8 +372,8 @@ async function file(inf) {
                     resNew['ret'] = true;
                     resNew['msg'] = `FILE MD5: OK`;
                     resNew['res'] = res;
-                } catch (e) {
-                    resNew['msg'] = e;
+                } catch (err) {
+                    resNew['msg'] = err;
                 }
                 return resNew
             }
@@ -408,7 +408,7 @@ async function file(inf) {
                             resNew = retFile
                         }
                     }
-                } catch (e) {
+                } catch (err) {
                     resNew['msg'] = `FILE IS FOLDER: ERRO → AO CHECAR '${path}'`;
                 }
                 return resNew
@@ -454,8 +454,8 @@ async function file(inf) {
             let infFile = { 'stop': true, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await fileWrite(infFile);
         }
-    } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+    } catch (err) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

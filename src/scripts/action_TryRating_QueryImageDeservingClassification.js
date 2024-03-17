@@ -61,8 +61,8 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
         ret['msg'] = `action_TryRating_QueryImageDeservingClassification: OK`;
         ret['ret'] = true;
 
-    } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+    } catch (err) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

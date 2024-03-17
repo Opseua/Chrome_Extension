@@ -281,8 +281,8 @@ async function getPath(inf) {
             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
-    } catch (e) {
-        console.log(`\n\n### ERRO GET PATH ###\n\n${e.stack}\n\n`)
+    } catch (err) {
+        console.log(`\n\n### ERRO GET PATH ###\n\n${err.stack}\n\n`)
 
         let conf = [
             'src/config.json',
@@ -423,9 +423,9 @@ if (eng) { // CHROME
 //             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
 //             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
 //         }
-//     } catch (e) {
-//         // console.log(`\n\n### ERRO GET PATH ###\n\n${e.stack}\n\n`)
-//         // console.log(inf.e)
+//     } catch (err) {
+//         // console.log(`\n\n### ERRO GET PATH ###\n\n${err.stack}\n\n`)
+//         // console.log(inf.)
 //     };
 //     return {
 //         ...({ ret: ret.ret }),

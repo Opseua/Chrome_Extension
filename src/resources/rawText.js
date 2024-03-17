@@ -49,8 +49,8 @@ async function rawText(inf) {
             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
-    } catch (e) {
-        regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+    } catch (err) {
+        regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
     };
     return ret
 }

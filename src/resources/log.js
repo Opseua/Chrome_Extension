@@ -26,39 +26,39 @@ async function log(inf) {
             if (regex) { confKeep[3] = regex[1].replace('file:///', '').split(':/')[1] }
         }
 
+        let { text, folder, path, raw, functionLocal, fileProject, fileCall } = inf
         let infFile, retFile
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
         let hou = `${time.hou}:${time.min}:${time.sec}.${time.mil}`, pathOk, rewrite = false
-        let text = inf.text;
         // NOME DA PASTA + ARQUIVO
-        pathOk = `log/${inf.folder}`;
-        if (['reg.txt', 'reg1.txt', 'reg2.txt', 'reset.js'].includes(inf.path)) {
-            pathOk = `${pathOk}/${inf.path}`
-        } else if (['log.txt', 'err.txt'].includes(inf.path)) {
-            pathOk = `${pathOk}/${mon}/${day}_${inf.path}`; rewrite = true
+        pathOk = `log/${folder}`;
+        if (['reg.txt', 'reg1.txt', 'reg2.txt', 'reset.js'].includes(path)) {
+            pathOk = `${pathOk}/${path}`
+        } else if (['log.txt', 'err.txt'].includes(path)) {
+            pathOk = `${pathOk}/${mon}/${day}_${path}`; rewrite = true
         } else {
-            pathOk = `${pathOk}/${mon}/${day}/${hou.replace(/:/g, '.')}_${inf.path}`
+            pathOk = `${pathOk}/${mon}/${day}/${hou.replace(/:/g, '.')}_${path}`
         }
         if (rewrite) {
-            text = typeof text === 'object' ? `→ ${hou}\n${JSON.stringify(inf.text)}\n\n` : `→ ${hou}\n${inf.text}\n\n`
+            text = `→ ${hou}${fileProject ? ` ${fileProject}` : ''}${fileCall ? ` ${fileCall}` : ''}\n${typeof text === 'object' ? JSON.stringify(text) : text}\n\n`
         }
         infFile = {
-            'e': e, 'action': 'write', 'raw': inf.raw ? true : false, 'functionLocal': inf.functionLocal ? true : false,
+            'e': e, 'action': 'write', 'raw': raw ? true : false, 'functionLocal': functionLocal ? true : false,
             'text': text, 'rewrite': rewrite, 'path': pathOk.replace(/:/g, '')
         };
         await file(infFile);
-        let res = `${letter}:/${inf.functionLocal ? confKeep[2] : confKeep[3]}/${pathOk}`;
+        let res = `${letter}:/${functionLocal ? confKeep[2] : confKeep[3]}/${pathOk}`;
         ret['res'] = res.replace('%', '');
         ret['msg'] = `LOG: OK`;
         ret['ret'] = true
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'raw': inf.raw ? true : false, 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            let infFile = { 'e': e, 'action': 'write', 'raw': raw ? true : false, 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
-    } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+    } catch (err) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

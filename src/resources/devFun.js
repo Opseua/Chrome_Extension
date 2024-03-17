@@ -7,46 +7,51 @@ async function devFun(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        if (inf.enc) { // ENCAMINHAR PARA O DEVICE CERTO
-            let retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf : inf.data.retInf ? inf.data.retInf : true
-            let url = globalWindow.devSend
+        if (inf.enc) {
+            // ENCAMINHAR PARA O DEVICE CERTO
+            let retMessageSend, retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf : inf.data.retInf ? inf.data.retInf : true
+            let destination = globalWindow.devSend;
+            let locWeb = destination.includes('127.0.0.1') ? '[LOC]' : '[WEB]'
             let data = { 'securityPass': globalWindow.securityPass, 'retInf': retInf, 'name': inf.data.name, 'par': inf.data.par }
             data.par['e'] = inf.e
-            delete data.par.retInf // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO
-            let send = { "fun": [data] }
-            // let retWsSend = await wsSend({ 'e': e, 'url': url, 'message': send });
-            let retMessageSend = await messageSend({ 'messageId': false, 'message': send, 'ws': url, 'secondsAwait': 0, })
-            console.log('DEV FUN')
-            if (!retMessageSend.ret) {
-                return retMessageSend
+            // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO
+            delete data.par.retInf
+            let message = { "fun": [data] }
+            // PEGAR 'ws'
+            let retListenerAcionar = await listenerAcionar(`getWs_${locWeb}`, { 'a': 'a', 'b': 'b' });
+            if (!retListenerAcionar) {
+                ret['msg'] = `NÃO ACHOU O OBJETO 'ws'`
             } else {
-                retMessageSend = retMessageSend.res
-            }
-            if (!data.retInf) { // RESPOSTA NECESSÁRIA [NÃO]
-                ret['msg'] = `[ENC] ${data.name}`
-                ret['ret'] = true
-            } else if (!retMessageSend) { // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [NÃO]
-                ret['msg'] = `[ENC][EXPIROU] ${data.name}`
-                ret['ret'] = true
-            } else { // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [SIM]
-                try {
-                    retMessageSend = JSON.parse(retMessageSend.replace('"msg":"', '"msg":"[ENC] '))
-                    ret = retMessageSend.retWs
-                } catch (e) {
-                    ret['msg'] = `RESPOSTA DO WEBSOCKET NÃO É OBJETO`
-                };
+                // ENVIAR COMANDO PARA O DESTINO CERTO
+                retMessageSend = await messageSend({ 'destination': destination, 'messageId': true, 'message': message, 'resWs': retListenerAcionar, 'secondsAwait': 0, });
+                if (retMessageSend.ret && !data.retInf) {
+                    // RESPOSTA NECESSÁRIA [NÃO]
+                    ret['ret'] = true
+                    ret['msg'] = `[ENC] ${data.name}`
+                } else if (!retMessageSend.ret && data.retInf) {
+                    // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [NÃO]
+                    ret = retMessageSend
+                } else if (retMessageSend.ret && data.retInf) {
+                    // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [SIM]
+                    if (!(retMessageSend.ret === true || retMessageSend.ret === false)) {
+                        ret['msg'] = `RESPOSTA DO WEBSOCKET NÃO É OBJETO`
+                    } else {
+                        ret = JSON.parse(JSON.stringify(retMessageSend).replace('"msg":"', '"msg":"[ENC] '))
+                    }
+                }
             }
         } else {
             // RECEBIDO DO WEBSOCKET
             let data = inf.data;
             function label(funName) { return typeof (eng ? window : global)[funName] === 'function' }
             for (let [index, value] of data.fun.entries()) {
+                let { resWs, destination, messageId, } = inf
                 if (value.securityPass !== globalWindow.securityPass) {
                     ret['msg'] = `#### SECURITYPASS INCORRETO ####`
                     logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
                 } else if (!label(value.name)) {
                     ret['msg'] = `#### FUNÇÃO '${value.name}' NÃO EXITE ####`
-                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
+                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
                 } else {
                     let name = eng ? window[value.name] : global[value.name] // CHROME ← : → NODEJS
                     let infName = value.par
@@ -55,7 +60,6 @@ async function devFun(inf) {
                     let retName = await name(infName);
                     if (retInf) {
                         // RESPOSTA NECESSÁRIA [SIM]
-                        let { resWs, destination, messageId, } = inf
                         messageSend({ 'destination': destination, 'messageId': messageId, 'message': retName, 'resWs': resWs, 'secondsAwait': 0, })
                     }
                     ret['ret'] = true
@@ -64,8 +68,8 @@ async function devFun(inf) {
                 }
             }
         }
-    } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+    } catch (err) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

@@ -33,52 +33,32 @@ async function googleSheets(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        let infConfigStorage, retConfigStorage, makeNewToken = true
-        let pathOAuth = `${letter}:/${conf[2]}/src/config.json`
+        let infConfigStorage, retConfigStorage, makeNewToken = true; let pathOAuth = `${letter}:/${conf[2]}/src/config.json`
         let _authClient = new _google.auth.GoogleAuth({ keyFile: pathOAuth, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
-        let _auth = await _authClient.getClient();
-        let _sheets = _google.sheets('v4');
+        let _auth = await _authClient.getClient(); let _sheets = _google.sheets('v4');
 
-        infConfigStorage = { 'e': e, 'action': 'get', 'key': 'googleApi' }
-        retConfigStorage = await configStorage(infConfigStorage);
-        if (retConfigStorage.ret) {
-            let timestamp = Math.floor(new Date().getTime());
-            if (retConfigStorage.res.tim - 60000 > timestamp) {
-                makeNewToken = false
-            }
-        }
+        infConfigStorage = { 'e': e, 'action': 'get', 'key': 'googleApi' }; retConfigStorage = await configStorage(infConfigStorage);
+        if (retConfigStorage.ret) { let timestamp = Math.floor(new Date().getTime()); if (retConfigStorage.res.tim - 60000 > timestamp) { makeNewToken = false } }
 
         // GERAR NOVO TOKEN
         if (makeNewToken) {
             logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ATUALIZANDO TOKEN` });
-            await _auth.authorize();
-            let date = new Date(_auth.credentials.expiry_date);
-            let day = ('0' + date.getDate()).slice(-2);
-            let mon = ('0' + (date.getMonth() + 1)).slice(-2);
-            let hou = ('0' + date.getHours()).slice(-2);
-            let min = ('0' + date.getMinutes()).slice(-2);
-            let sec = ('0' + date.getSeconds()).slice(-2);
-            let retToken = {
-                'tim': _auth.credentials.expiry_date,
-                'dateHor': `${day}/${mon} ${hou}:${min}:${sec}`,
-                // 'token': _auth.credentials.access_token
-            };
-            infConfigStorage = { 'e': e, 'action': 'set', 'key': 'googleApi', 'value': retToken }
-            configStorage(infConfigStorage);
+            await _auth.authorize(); let date = new Date(_auth.credentials.expiry_date); let day = ('0' + date.getDate()).slice(-2)
+            let mon = ('0' + (date.getMonth() + 1)).slice(-2), hou = ('0' + date.getHours()).slice(-2)
+            let min = ('0' + date.getMinutes()).slice(-2), sec = ('0' + date.getSeconds()).slice(-2);
+            let retToken = { 'tim': _auth.credentials.expiry_date, 'dateHor': `${day}/${mon} ${hou}:${min}:${sec}`, };
+            infConfigStorage = { 'e': e, 'action': 'set', 'key': 'googleApi', 'value': retToken }; configStorage(infConfigStorage);
         }
 
-        let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'
-        let tab = inf && inf.tab ? inf.tab : 'RESULTADOS'
+        let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'; let tab = inf && inf.tab ? inf.tab : 'RESULTADOS'
         if (inf.action == 'get') { // GET
             let range = inf.range
             // ÚLTIMA LINHA EM BRANCO DA [COLUNA]
             if (range.includes('last**')) {
-                range = range.replace('last**', '').replace('**', '')
-                range = `${range}1:${range}`
+                range = range.replace('last**', '').replace('**', ''); range = `${range}1:${range}`
             } else if (range.includes('last*')) {
                 // ÚLTIMA LINHA EM BRANCO DA [PLANILHA]
-                range = range.replace('last*', '').replace('*', '')
-                range = `${range}1:${range}${range}`
+                range = range.replace('last*', '').replace('*', ''); range = `${range}1:${range}${range}`
             }
             range = range == 'last' ? `${tab}!A1:AA` : `${tab}!${range}`
             try {
@@ -86,26 +66,23 @@ async function googleSheets(inf) {
                 ret['res'] = inf.range.includes('last') ? retSheet.data.values ? retSheet.data.values.length + 1 : 1 : retSheet.data.values
                 ret['msg'] = `GOOGLE SHEET GET: OK`;
                 ret['ret'] = true;
-            } catch (e) {
+            } catch (err) {
                 ret['msg'] = `NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
             }
         } else if (inf.action == 'send') { // SEND
-            let col = inf.range.replace(/[^a-zA-Z]/g, '')
-            let values = { 'values': inf.values }
-            let lin = ''
+            let col = inf.range.replace(/[^a-zA-Z]/g, ''), values = { 'values': inf.values }, lin = ''
             if (/[0-9]/.test(inf.range)) {
                 lin = inf.range.replace(/[^0-9]/g, '')
             } else {
                 let range = inf.range.includes('**') ? `last**${inf.range}` : inf.range.includes('*') ? `last*${inf.range}` : 'last'
-                let retNewGet = await googleSheets({ 'e': e, 'action': 'get', 'id': id, 'tab': tab, 'range': range })
-                lin = retNewGet.res
+                let retNewGet = await googleSheets({ 'e': e, 'action': 'get', 'id': id, 'tab': tab, 'range': range }); lin = retNewGet.res
             }
             let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
             try {
                 await _sheets.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
                 ret['msg'] = `GOOGLE SHEET SEND: OK`;
                 ret['ret'] = true;
-            } catch (e) {
+            } catch (err) {
                 if (JSON.stringify(e).includes(`You are trying to edit a protected`)) {
                     ret['msg'] = `RANGE PROTEGIDO`;
                 } else {
@@ -114,13 +91,20 @@ async function googleSheets(inf) {
             }
         }
 
+        // TENTAR NOVAMENTE EM CASO DE ERRO
+        if (!ret.ret && !inf.newRun) {
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `GOOGLE SHEETS: PRIMEIRA TENTATIVA \n${JSON.stringify(ret)}` });
+            let retGoogleSheets = await googleSheets({ ...inf, 'newRun': true })
+            ret = retGoogleSheets
+        }
+
         // ### LOG FUN ###
         if (inf && inf.logFun) {
             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
-    } catch (e) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+    } catch (err) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

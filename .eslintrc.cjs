@@ -81,7 +81,6 @@ let arrUnused = [
     'big',
     'write',
     'msg',
-
 ];
 
 let arrGlobalObj = {};

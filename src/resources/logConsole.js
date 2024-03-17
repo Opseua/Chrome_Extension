@@ -40,11 +40,10 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
         msg = typeof msg === 'object' ? JSON.stringify(msg) : msg
         // console.log(`→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil} [${fileProject} - ${fileCall}]\n${msg}\n`)
         colorConsole({
-            'text':
-                `<verde>→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
+            'text': `<verde>→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
         });
         if (!eng && write) {
-            await log({ 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg })
+            await log({ 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall })
         }
         ret['msg'] = `LOG CONSOLE: OK`;
         ret['ret'] = true;
@@ -54,8 +53,8 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
-    } catch (e) {
-        regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
+    } catch (err) {
+        regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
     };
     return {
         ...({ ret: ret.ret }),

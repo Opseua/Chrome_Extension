@@ -1,6 +1,4 @@
 // await new Promise(resolve => { setTimeout(resolve, 2000) })
-'use strict';
-process.stdout.write('\x1Bc');
 
 // process.exit();
 
@@ -12,8 +10,8 @@ process.stdout.write('\x1Bc');
 // console.log('FIM');
 
 // // ## LOG ## retApi
-// let err = `$ [leadChangeStatus] LOG retApi`
-// infLog = {'e':e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+// let errMsg = `$ [leadChangeStatus] LOG retApi`
+// infLog = {'e':e, 'folder': 'Registros', 'path': `${errMsg}.txt`, 'text': retApi }
 // retLog = await log(infLog);
 
 // LOOP DE REPETIÇÃO
