@@ -140,7 +140,7 @@ async function configStorage(inf) {
                     try {
                         await _fs.promises.access(path);
                         ret_Fs = true
-                    } catch (err) { }
+                    } catch (catchErr) { }
                     if (ret_Fs) {
                         let configFile = await _fs.promises.readFile(path, 'utf8');
                         config = JSON.parse(configFile)
@@ -200,8 +200,8 @@ async function configStorage(inf) {
             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
-    } catch (err) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+    } catch (catchErr) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

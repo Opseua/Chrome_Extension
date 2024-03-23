@@ -66,7 +66,7 @@ async function googleSheets(inf) {
                 ret['res'] = inf.range.includes('last') ? retSheet.data.values ? retSheet.data.values.length + 1 : 1 : retSheet.data.values
                 ret['msg'] = `GOOGLE SHEET GET: OK`;
                 ret['ret'] = true;
-            } catch (err) {
+            } catch (catchErr) {
                 ret['msg'] = `NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
             }
         } else if (inf.action == 'send') { // SEND
@@ -82,7 +82,7 @@ async function googleSheets(inf) {
                 await _sheets.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
                 ret['msg'] = `GOOGLE SHEET SEND: OK`;
                 ret['ret'] = true;
-            } catch (err) {
+            } catch (catchErr) {
                 if (JSON.stringify(e).includes(`You are trying to edit a protected`)) {
                     ret['msg'] = `RANGE PROTEGIDO`;
                 } else {
@@ -103,8 +103,8 @@ async function googleSheets(inf) {
             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
-    } catch (err) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+    } catch (catchErr) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

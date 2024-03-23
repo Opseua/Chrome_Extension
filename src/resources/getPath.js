@@ -279,8 +279,8 @@ async function getPath(inf) {
             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
-    } catch (err) {
-        console.log(`\n\n### ERRO GET PATH ###\n\n${err.stack}\n\n`)
+    } catch (catchErr) {
+        console.log(`\n\n### ERRO GET PATH ###\n\n${catchErr.stack}\n\n`)
 
         let conf = [
             'src/config.json',

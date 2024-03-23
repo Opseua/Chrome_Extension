@@ -57,8 +57,8 @@ async function keepCookieLive(inf) {
         listenerAcionar('messageSendOrigin_127.0.0.1:1234/ORIGEM_AQUI', { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': send, 'secondsAwait': 0, });
         ret['msg'] = `KEEP COOKIE LIVE: OK`;
         ret['ret'] = true;
-    } catch (err) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+    } catch (catchErr) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

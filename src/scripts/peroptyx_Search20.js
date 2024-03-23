@@ -31,15 +31,15 @@ async function peroptyx_Search20(inf) {
             let testQuestionInformation = retSniffer.tasks[0].taskData.testQuestionInformation.answer.serializedAnswer; let not = true
             let res = await Promise.all(resultList.map(async (v, index) => {
                 let idTask = [v.surveyKeys['193']]; let resultado = null
-                try { resultado = index + 1 } catch (err) { }; let nome = null
-                try { nome = v.value.name } catch (err) { }; let endereco = null
-                try { endereco = v.value.address[0] } catch (err) { }; let fechado = null
-                try { fechado = testQuestionInformation['Closed-DNE'][idTask].closed_dne.value ? 'SIM' : 'NAO' } catch (err) { }; let relevance = null
-                try { relevance = testQuestionInformation.Relevance[idTask].Relevance[0].label } catch (err) { }; let nameAccurracy = null
-                try { nameAccurracy = testQuestionInformation.Data[idTask].Name[0].value } catch (err) { }; let addressAccurracy = null
-                try { addressAccurracy = testQuestionInformation.Data[idTask].Address[0].value } catch (err) { }; let pinAccurracy = null
-                try { pinAccurracy = testQuestionInformation.Data[idTask].Pin[0].value } catch (err) { }; let comentario = null
-                try { comentario = resultList[index].comments } catch (err) { }; let comentario1, comentario2
+                try { resultado = index + 1 } catch (catchErr) { }; let nome = null
+                try { nome = v.value.name } catch (catchErr) { }; let endereco = null
+                try { endereco = v.value.address[0] } catch (catchErr) { }; let fechado = null
+                try { fechado = testQuestionInformation['Closed-DNE'][idTask].closed_dne.value ? 'SIM' : 'NAO' } catch (catchErr) { }; let relevance = null
+                try { relevance = testQuestionInformation.Relevance[idTask].Relevance[0].label } catch (catchErr) { }; let nameAccurracy = null
+                try { nameAccurracy = testQuestionInformation.Data[idTask].Name[0].value } catch (catchErr) { }; let addressAccurracy = null
+                try { addressAccurracy = testQuestionInformation.Data[idTask].Address[0].value } catch (catchErr) { }; let pinAccurracy = null
+                try { pinAccurracy = testQuestionInformation.Data[idTask].Pin[0].value } catch (catchErr) { }; let comentario = null
+                try { comentario = resultList[index].comments } catch (catchErr) { }; let comentario1, comentario2
                 if (comentario) {
                     if (not) {
                         not = false
@@ -90,8 +90,8 @@ async function peroptyx_Search20(inf) {
             await clipboard({ 'e': e, 'value': JSON.stringify(res, null, 2) })
         }
         ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
-    } catch (err) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+    } catch (catchErr) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

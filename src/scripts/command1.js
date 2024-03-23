@@ -5,8 +5,8 @@ async function command1(inf) {
     // let retPromptChrome = promptChrome({ 'e': e, 'title': `NOME DO COMANDO` });
     ret['msg'] = `COMMAND 1: OK`;
     ret['ret'] = true;
-  } catch (err) {
-    let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+  } catch (catchErr) {
+    let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
     ret['msg'] = retRegexE.res
   };
   return {

@@ -1,5 +1,5 @@
-// } catch (err) {
-//     let retRegexE = await regexE({ 'e': err });
+// } catch (catchErr) {
+//     let retRegexE = await regexE({ 'e': catchErr });
 //     ret['msg'] = retRegexE.res;
 // };
 
@@ -20,13 +20,13 @@ async function regexE(inf) {
         if (cng == 1) { // CHROME
             try {
                 retFetch = await fetch(chrome.runtime.getURL(conf)); retFetch = await retFetch.text(); retFetch = JSON.parse(retFetch); devMaster = retFetch.webSocket.devices[0].master
-            } catch (err) {
+            } catch (catchErr) {
                 devMaster = `???`
             }
         } else if (cng == 2) { // NODEJS
             try {
                 retFetch = await _fs.promises.readFile(`${letter}:/${root}/${functions}/${conf}`, 'utf8'); retFetch = JSON.parse(retFetch); devMaster = retFetch.webSocket.devices[0].master
-            } catch (err) {
+            } catch (catchErr) {
                 devMaster = `???`
             }
         };
@@ -90,13 +90,13 @@ async function regexE(inf) {
                 // CHROME | NODE
                 reqOpt['body'] = body; await fetch(url, reqOpt)
             }
-        } catch (err) {
-            console.log(`\n\n### ERRO REGEXe [FETCH] ###\n\n${err}\n`)
+        } catch (catchErr) {
+            console.log(`\n\n### ERRO REGEXe [FETCH] ###\n\n${catchErr}\n`)
         }
         ret['res'] = { 'file': errorOk.file, 'line': errorOk.line, 'projectFile': errorOk.projectFile, 'e': errorOk.e, }
         ret['msg'] = `\n\n### ERRO ### [catchGlobal ${inf.catchGlobal}]\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
-    } catch (err) {
-        console.log(`\n\n### ERRO REGEXe ###\n\n${err.stack}\n`)
+    } catch (catchErr) {
+        console.log(`\n\n### ERRO REGEXe ###\n\n${catchErr.stack}\n`)
     };
     console.log('--------------------------------------\n')
     return {

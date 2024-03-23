@@ -18,9 +18,9 @@ function secToHour(inf) { // NÃO POR COMO 'async'!!!
         ret['res'] = String(`${hou}:${min}:${sec}`)
         ret['msg'] = `SEC TO HOUR: OK` // manter o 'String' para forcar o '0' (zero) na frente → '001'
         ret['ret'] = true;
-    } catch (err) {
+    } catch (catchErr) {
         (async () => {
-            let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+            let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
             ret['msg'] = retRegexE.res
         })()
     };

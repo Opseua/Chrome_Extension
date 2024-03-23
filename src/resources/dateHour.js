@@ -31,9 +31,9 @@ function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
         };
         ret['msg'] = `DATE HOUR: OK`
         ret['ret'] = true;
-    } catch (err) {
+    } catch (catchErr) {
         (async () => {
-            let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+            let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
             ret['msg'] = retRegexE.res
         })()
     };

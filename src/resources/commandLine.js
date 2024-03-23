@@ -45,8 +45,8 @@ async function commandLine(inf) {
             child.stdout.on('data', () => { });
             child.stderr.on('data', () => { });
         });
-    } catch (err) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+    } catch (catchErr) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

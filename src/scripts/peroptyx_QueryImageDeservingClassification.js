@@ -49,8 +49,8 @@ async function peroptyx_QueryImageDeservingClassification(inf) {
             listenerAcionar('messageSendOrigin_127.0.0.1:1234/ORIGEM_AQUI', { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': { "name": "google", "par": { "search": query } }, 'secondsAwait': 0, });
 
         }; ret['ret'] = true; ret['msg'] = `PEROPTYX: OK`;
-    } catch (err) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+    } catch (catchErr) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
     };
     return {

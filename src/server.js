@@ -4,8 +4,8 @@ let e = import.meta.url, ee = e;
 
 try {
     console.log(aaaaaaa)
-} catch (err) {
-    let retGetPathNew = await getPathNew({ 'e': err, 'isFunction': false, })
+} catch (catchErr) {
+    let retGetPathNew = await getPathNew({ 'e': catchErr, 'isFunction': false, })
     console.log(retGetPathNew)
 }
 
@@ -45,8 +45,8 @@ try {
 //         } else if (infShortcutPressed.shortcut == 'atalho_2') {
 //             command2();
 //         } else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
-//     } catch (err) {
-//         let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+//     } catch (catchErr) {
+//         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
 //         ret['msg'] = retRegexE.res
 //     };
 //     return {
