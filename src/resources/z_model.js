@@ -48,11 +48,3 @@ if (eng) { // CHROME
     global['model'] = model;
 }
 
-// TESTES
-async function run() {
-    let infModel, retModel
-    infModel = { 'nire': '35132685930', 'aut': 'ASP.NET_SessionId=wivpxhlq3b45tgtb12dcgk4t' }
-    retModel = await model(infModel)
-    console.log(retModel)
-}
-await run()

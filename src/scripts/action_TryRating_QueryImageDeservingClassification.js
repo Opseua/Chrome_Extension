@@ -26,10 +26,10 @@ async function action_TryRating_QueryImageDeservingClassification(inf) {
         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `FIM` });
 
         let infTabSearch = { 'e': e, 'search': '*tryrating.com*', 'openIfNotExist': false, 'active': true, 'pinned': false }
-        let retTabSearch = await tabSearch(infTabSearch); if (!retTabSearch.res) { console.log('voltou'); return }
+        let retTabSearch = await tabSearch(infTabSearch); if (!retTabSearch.res) { logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `voltou` }); return }
         let element, action, code, array = data.inf;
         for (let [index, value] of array.entries()) {
-            await new Promise(resolve => { setTimeout(resolve, 800) });// console.log(`INDEX: ${index} | VALUE: ${value}`)
+            await new Promise(resolve => { setTimeout(resolve, 800) });// logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `INDEX: ${index} | VALUE: ${value}` })
             if (index == 0) {
                 if (value == 1) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[3]/div/div/form/div/div/div/div[1]/label/span[2]` }
                 else if (value == 2) { element = `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div[1]/div/div/div/div[3]/div/div/form/div/div/div/div[2]/label/span[2]` }

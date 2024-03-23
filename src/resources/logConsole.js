@@ -38,7 +38,6 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
         let fileProject = eng ? 'Chrome' : ee.split('PROJETOS/')[1].split('/')[0]
         let fileCall = ee.split('/').pop()
         msg = typeof msg === 'object' ? JSON.stringify(msg) : msg
-        // console.log(`→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil} [${fileProject} - ${fileCall}]\n${msg}\n`)
         colorConsole({
             'text': `<verde>→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
         });
@@ -54,7 +53,8 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (err) {
-        regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+        let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
+        ret['msg'] = retRegexE.res
     };
     return {
         ...({ ret: ret.ret }),

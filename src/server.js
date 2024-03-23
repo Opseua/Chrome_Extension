@@ -38,7 +38,7 @@ try {
 // chrome.commands.onCommand.addListener(async function (...inf) {
 //     let ret = { 'ret': false };
 //     try {
-//         // console.log('ON START: ATALHO PRESSIONADO')
+//         // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ON START: ATALHO PRESSIONADO` })
 //         let infShortcutPressed = { 'shortcut': inf[0] }
 //         if (infShortcutPressed.shortcut == 'atalho_1') {
 //             command1();

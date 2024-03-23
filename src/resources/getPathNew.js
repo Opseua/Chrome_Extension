@@ -36,7 +36,7 @@ async function getPathNew(inf) {
         }
         res['file'] = fileOk; res['line'] = Number(line);
     } catch (err) {
-        //console.log(`\n\n### ERRO GET PATH ###\n\n${err.stack}\n\n`)
+        console.log(`\n\n### ERRO GET PATH ###\n\n${err.stack}\n\n`)
         res = { 'conf': nd, 'letter': nd, 'root': nd, 'functions': nd, 'project': nd, 'file': nd, 'line': 0 }
     }
     globalWindow['conf'] = res.conf; letter = res.letter; globalWindow['letter'] = res.letter; globalWindow['root'] = res.root; globalWindow['functions'] = res.functions;
