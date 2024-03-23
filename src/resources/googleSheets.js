@@ -33,7 +33,7 @@ async function googleSheets(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        let infConfigStorage, retConfigStorage, makeNewToken = true; let pathOAuth = `${letter}:/${conf[2]}/src/config.json`
+        let infConfigStorage, retConfigStorage, makeNewToken = true; let pathOAuth = `${letter}:/${globalWindow.root}/${globalWindow.functions}/${globalWindow.conf}`
         let _authClient = new _google.auth.GoogleAuth({ keyFile: pathOAuth, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
         let _auth = await _authClient.getClient(); let _sheets = _google.sheets('v4');
 

@@ -1,27 +1,17 @@
-// console.clear();
-// console.clear();
-
 // [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
 let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
-// ###### true CHROME / GOOGLE | false NODEJS
-if (cng == 1) {
-    window['eng'] = true
-    window['engName'] = 'CHROME'
-} else if (cng == 2) {
-    global['eng'] = false
-    global['engName'] = 'NODEJS'
-} else if (cng == 3) {
-    global['eng'] = true
-    global['engName'] = 'GOOGLE'
-}
 
 function all2() { }; // ******************************************************** NÃO USAR !!!
-if (eng) { window['all2'] = all2; } else { global['all2'] = all2 }
+if (cng == 1) { window['all2'] = all2; } else { global['all2'] = all2 }
 // *****************************************************************************************
 
 // IMPORTAR BIBLIOTECAS
-if (!(eng ? window.all1 : global.all1)) {
+if (!(cng == 1 ? window.all1 : global.all1)) {
     await import('./@functions.js');
+
+    // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
+    let retGetPathNew = await getPathNew({ 'e': new Error(), 'isFunction': false, })
+    globalWindow.devResWs = cng == 1 ? 'CHROME' : 'NODEJS';
 }
 
 // FUNÇÕES DESSE PROJETO
@@ -38,7 +28,7 @@ await import('./dateHour.js')
 await import('./devFun.js')
 // await import('./getCookies.js')
 // await import('./getPage.js')
-// await import('./getPath.js') // IMPORTADA PELA @functions
+await import('./getPath.js') // IMPORTADA PELA @functions
 await import('./googleSheets.js')
 await import('./hasKey.js')
 await import('./htmlToJson.js')
