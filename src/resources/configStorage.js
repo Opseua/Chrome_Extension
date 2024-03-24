@@ -1,7 +1,7 @@
 // let infConfigStorage, retConfigStorage; // 'logFun': true, 'functionLocal': false, SOMENTE NO NODEJS
-// infConfigStorage = { 'e': e, 'action': 'set', 'functionLocal': false, 'key': 'NomeDaChave', 'value': 'Valor da chave' }
-// infConfigStorage = { 'e': e, 'action': 'get', 'functionLocal': false, 'key': 'NomeDaChave' }
-// infConfigStorage = { 'e': e, 'action': 'del', 'functionLocal': false, 'key': 'NomeDaChave' }
+// infConfigStorage = { 'e': e, 'action': 'set', 'functionLocal': true, 'key': 'NomeDaChave', 'value': 'Valor da chave' }
+// infConfigStorage = { 'e': e, 'action': 'get', 'functionLocal': true, 'key': 'NomeDaChave' }
+// infConfigStorage = { 'e': e, 'action': 'del', 'functionLocal': true, 'key': 'NomeDaChave' }
 // retConfigStorage = await configStorage(infConfigStorage);
 // console.log(retConfigStorage)
 
@@ -20,14 +20,8 @@ async function configStorage(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        let confKeep = conf
-        if (!eng && inf && inf.e) {
-            let regex = e.match(/(file:\/\/\/.*?PROJETOS\/[^\/]+)/)
-            if (regex) { confKeep[3] = regex[1].replace('file:///', '').split(':/')[1] }
-        }
-
-        if (inf instanceof Array && inf.length == 1) { // ### CS
-            inf['path'] = `${letter}:/${confKeep[2]}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
+        if (!eng && inf instanceof Array && inf.length == 1) { // ### CS
+            inf['path'] = `${letter}:/${globalWindow.root}/${globalWindow.functions}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
                 rf = await file({ 'e': e, 'action': 'read', 'path': inf.path }); if (!rf.ret) { dt = {} } else { dt = JSON.parse(rf.res).dt }
             } else { dt = typeof inf[0] === 'object' ? inf[0] : { 'key': inf[0] } };
             if (!rf.ret) { rf = await file({ 'e': e, 'action': 'write', 'path': inf.path, 'rewrite': false, 'text': JSON.stringify({ 'dt': dt }, null, 2) }) }
@@ -75,7 +69,7 @@ async function configStorage(inf) {
                                         ret['msg'] = `\n\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`
                                     } else if (Object.keys(result).length == 0) {
                                         async function checkConfig() {
-                                            let infFile = { 'e': e, 'action': 'read', 'path': inf.path ? inf.path : confKeep[0], 'functionLocal': true }
+                                            let infFile = { 'e': e, 'action': 'read', 'path': inf.path ? inf.path : globalWindow.conf, 'functionLocal': true }
                                             let retFile = await file(infFile);
                                             let config = JSON.parse(retFile.res);
                                             if (config[inf.key]) {
@@ -133,7 +127,7 @@ async function configStorage(inf) {
                     if (inf.path && inf.path.includes(':')) {
                         path = inf.path
                     } else {
-                        infFile = { 'e': e, 'action': 'relative', 'path': inf.path ? inf.path : confKeep[0], 'functionLocal': typeof inf.functionLocal == 'boolean' && !inf.functionLocal ? false : true }
+                        infFile = { 'e': e, 'action': 'relative', 'path': inf.path ? inf.path : globalWindow.conf, 'functionLocal': typeof inf.functionLocal == 'boolean' && !inf.functionLocal ? false : true }
                         retFile = await file(infFile);
                         path = retFile.res[0]
                     };

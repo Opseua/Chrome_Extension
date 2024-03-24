@@ -18,12 +18,6 @@ async function file(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        let confKeep = conf
-        if (!eng && inf && inf.e) {
-            let regex = e.match(/(file:\/\/\/.*?PROJETOS\/[^\/]+)/)
-            if (regex) { confKeep[3] = regex[1].replace('file:///', '').split(':/')[1] }
-        }
-
         // PASSAR NO jsonInterpret
         // if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'e': e, 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder',].includes(inf.action)) {
@@ -49,7 +43,8 @@ async function file(inf) {
                     } else if (relative.startsWith('/')) {
                         pp = pp.slice(1)
                     }
-                    pathFull = confKeep[par].split('/');
+                    par = par ? `${globalWindow.root}/${globalWindow.functions}` : `${globalWindow.root}/${globalWindow.project}`
+                    pathFull = par.split('/');
                     relativeParts = pp.split('/');
                     while (pathFull.length > 0 && relativeParts[0] == '..') {
                         pathFull.pop(); relativeParts.shift();
@@ -62,7 +57,7 @@ async function file(inf) {
                     };
                     return retRelative
                 };
-                let res = [`${eng && inf.functionLocal ? '' : `${letter}:/`}${runPath(inf.path, inf.functionLocal ? 2 : 3)}`]
+                let res = [`${eng && inf.functionLocal ? '' : `${letter}:/`}${runPath(inf.path, inf.functionLocal ? true : false)}`]
                 resNew['ret'] = true;
                 resNew['msg'] = `FILE RELATIVE: OK`
                 resNew['res'] = res

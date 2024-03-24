@@ -20,12 +20,6 @@ async function log(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        let confKeep = conf
-        if (!eng && inf && inf.e) {
-            let regex = e.match(/(file:\/\/\/.*?PROJETOS\/[^\/]+)/)
-            if (regex) { confKeep[3] = regex[1].replace('file:///', '').split(':/')[1] }
-        }
-
         let { text, folder, path, raw, functionLocal, fileProject, fileCall } = inf
         let infFile, retFile
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
@@ -47,7 +41,7 @@ async function log(inf) {
             'text': text, 'rewrite': rewrite, 'path': pathOk.replace(/:/g, '')
         };
         await file(infFile);
-        let res = `${letter}:/${functionLocal ? confKeep[2] : confKeep[3]}/${pathOk}`;
+        let res = `${letter}:/${globalWindow.root}/${functionLocal ? globalWindow.functions : globalWindow.project}/${pathOk}`;
         ret['res'] = res.replace('%', '');
         ret['msg'] = `LOG: OK`;
         ret['ret'] = true
