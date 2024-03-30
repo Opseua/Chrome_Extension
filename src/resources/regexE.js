@@ -12,24 +12,19 @@ async function regexE(inf) {
         // IDENTIFICAR ENGINE
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
 
-        // NOME E LINHA DO ARQUIVO
-        let projectFile = `[${project}]\n→ ${fileOk}`
-
-        // IDENTIFICAR O 'devMaster'
-        let retFetch, devMaster
+        // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
+        let projectFile = `[${project}]\n→ ${fileOk}`; let retFetch, devCatchErr, devSecurityPass, devHost, devPort, devMaster
         if (cng == 1) { // CHROME
-            try {
-                retFetch = await fetch(chrome.runtime.getURL(conf)); retFetch = await retFetch.text(); retFetch = JSON.parse(retFetch); devMaster = retFetch.webSocket.devices[0].master
-            } catch (catchErr) {
-                devMaster = `???`
-            }
+            try { retFetch = await fetch(chrome.runtime.getURL(conf)); retFetch = await retFetch.text() } catch (catchErr) { devCatchErr = true }
         } else if (cng == 2) { // NODEJS
-            try {
-                retFetch = await _fs.promises.readFile(`${letter}:/${root}/${functions}/${conf}`, 'utf8'); retFetch = JSON.parse(retFetch); devMaster = retFetch.webSocket.devices[0].master
-            } catch (catchErr) {
-                devMaster = `???`
+            try { retFetch = await _fs.promises.readFile(`${letter}:/${root}/${functions}/${conf}`, 'utf8') } catch (catchErr) { devCatchErr = true }
+        }; if (cng == 1 || cng == 2) {
+            if (devCatchErr) { devSecurityPass = 'AAAAAAAA'; devHost = '127.0.0.1'; devPort = '1234'; devMaster = `???` }
+            else {
+                retFetch = JSON.parse(retFetch); let webSocket = retFetch.webSocket;
+                devSecurityPass = webSocket.securityPass; devHost = webSocket.server['1'].host; devPort = webSocket.server['1'].port; devPort = webSocket.devices[0].master
             }
-        };
+        }
 
         let errorOk = {
             'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': devMaster,
@@ -47,8 +42,7 @@ async function regexE(inf) {
                 'sec': String(dt1.getSeconds()).padStart(2, '0'), 'mil': String(dt2.toString().slice(-3)),
                 'tim': String(dt2.toString().slice(0, -3)), 'timMil': String(dt2.toString()),
                 'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()]
-            };
-            let time = dtRes, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
+            }; let time = dtRes, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
             let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, text = errorOk
             text = text = typeof text === 'object' ? `${hou}\n${JSON.stringify(text)}\n\n` : `${hou}\n${text}\n\n`
 
@@ -58,11 +52,9 @@ async function regexE(inf) {
             if (typeof errorOk === 'object') {
                 let raw = ''; let obj = errorOk; let concat = inf.concat ? inf.concat : `\n\n#######\n\n`
                 for (let chave in obj) {
-                    if (typeof obj[chave] === 'object') { for (let subChave in obj[chave]) { raw += obj[chave][subChave] + concat; } }
-                    else { raw += obj[chave] + concat; }
+                    if (typeof obj[chave] === 'object') { for (let subChave in obj[chave]) { raw += obj[chave][subChave] + concat; } } else { raw += obj[chave] + concat; }
                 }; text = `${text}\n\n${raw}`
             }
-
             await _fs.promises.mkdir(_path.dirname(path), { recursive: true }); await _fs.promises.writeFile(path, text, { flag: 'a' })
         }
 
@@ -70,10 +62,8 @@ async function regexE(inf) {
         let reqOpt = { 'method': 'POST', };
         let body = JSON.stringify({
             'fun': [{
-                'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : globalWindow.securityPass,
-                'retInf': false,
-                'name': 'notification',
-                'par': {
+                'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : devSecurityPass,
+                'retInf': false, 'name': 'notification', 'par': {
                     'duration': 5, 'icon': './src/scripts/media/notification_3.png',
                     'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`,
                     'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e.substring(0, 128)}`
@@ -81,7 +71,7 @@ async function regexE(inf) {
             }]
         })
         try {
-            let url = errorOk.cng == 3 ? 'http://AAAAAAAA.20:1234/AAAAAAAA' : `http://18.191.205.200:8888/OPSEUA_CHROME`//`http://${globalWindow.devSend}`
+            let url = errorOk.cng == 3 ? `http://AAAAAAAA.20:1234/AAAAAAAA` : `http://${devHost}:${devPort}/OPSEUA_CHROME`
             // GOOGLE
             if (errorOk.cng == 3) {
                 reqOpt['payload'] = body; UrlFetchApp.fetch(url, reqOpt)

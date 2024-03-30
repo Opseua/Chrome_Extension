@@ -133,7 +133,7 @@ function awaitTimeout(inf) {
 // async function run() {  console.log('INICIO'); let retAwaitTimeout = await awaitTimeout({ 'secondsAwait': 5, 'listenerName': 'NOME AQUI' }); console.log(retAwaitTimeout); }; run();
 // async function liberarTimeout() { setTimeout(() => { listenerAcionar('NOME AQUI', 'INF1', 'INF2'); }, 2000);}; liberarTimeout();
 
-// // ############### CLEAR CONSOLE ###############
+// ############### CLEAR CONSOLE ###############
 function clearConsoleRun() {
     console.clear(); if (!eng) {
         _exec('cls', (error, stdout, stderr) => { if (error || stderr) { console.error(`Erro ao executar o comando`) }; return; });
