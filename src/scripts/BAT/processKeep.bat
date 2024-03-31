@@ -14,7 +14,7 @@ rem AVISO PARA USAR O ATALHO COM PARAMENTROS
 if "!arg1!"=="" ( msg * "[processKeep.bat] Usar o atalho e nao o executavel" & exit )
 
 rem VARIAVEIS
-set "ret2=ERRO" & set "actionRun=ERRO" & set "winTP=15 65 500 300" & set "action=!arg1!" & set "fileScript=!arg3!"
+set "ret2=ERRO" & set "actionRun=ERRO" & set "winTP=15 65 500 300" & set "action=!arg1!" & set "fileScript=!arg3!" & set "fileScriptProcess=!fileScript:\=\\!"
 for /f "tokens=1,2 delims=@" %%a in ("!arg2!") do ( set "project=%%a" & set "outrosAdd=%%b" )
 
 rem CHECAR SE O nodeExe EXISTE
@@ -57,18 +57,22 @@ if "!arg4!"=="SCRIPT" (
 echo !timeNow!>!file!
 
 rem ### → ACAO | PARAR
-if "!actionRun!"=="OFF" ( taskkill /F /FI "WindowTitle eq Administrador:  #_!fileScriptFullWithBars!" /T )
+rem if "!actionRun!"=="OFF" ( taskkill /F /FI "WindowTitle eq Administrador:  !fileScriptFullWithBars!" /T )
+rem if "!actionRun!"=="OFF" ( powershell -Command "(Get-WmiObject Win32_Process | where {$_.CommandLine -like '*!fileScript!*'}).Terminate()" )
+if "!actionRun!"=="OFF" ( wmic Path win32_process Where "CommandLine Like '%%!fileScriptProcess!%%'" Call Terminate > nul )
 
 rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
 	rem [HIDE]
 	if not "!action!"=="!action:HIDE=!" (
-		!1_BACKGROUND! "title #_!fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! REBOOT"
+		rem !1_BACKGROUND! "title !fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! REBOOT"
+		"D:\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe" title !fileScriptFullWithBars!#1# !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! REBOOT
 	)
 	
 	rem [VIEW]
 	if not "!action!"=="!action:VIEW=!" ( 
-		start cmd.exe /c "title #_!fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! REBOOT"
+		rem start cmd.exe /c "title !fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! REBOOT"
+		"D:\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe" start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# start cmd.exe /c !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! REBOOT
 		if "!letra!"=="D" (
 			rem OPSEUA
 			if not "!action!"=="!action:WINTP1=!" ( set "winTP=15 65 500 300" )
@@ -87,7 +91,7 @@ if "!actionRun!"=="ON" (
 			if not "!action!"=="!action:WINTP6=!" ( set "winTP=420 650 410 300" )
 		)
 		rem JANELA DO LOG POSICIONAR
-		!1_BACKGROUND! "timeout 2 > nul & !nircmd! win setsize ititle #_!fileScriptFullWithBars! !winTP!"
+		!1_BACKGROUND! "timeout 3 > nul & !nircmd! win setsize ititle !fileScriptFullWithBars! !winTP!"
 	)
 )
 
