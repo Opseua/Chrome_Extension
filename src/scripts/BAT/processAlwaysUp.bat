@@ -16,39 +16,30 @@ set "ret2=ERRO" & set "actionRun=ERRO" & set "winTP=15 65 500 300" & set "action
 for /f "tokens=1,2 delims=@" %%a in ("!arg2!") do ( set "project=%%a" & set "outrosAdd=%%b" ) & if not "!mode!"=="!mode:RESTART_STOP=!" ( exit )
 if not "!mode!"=="!mode:LEGACY=!" ( set "restartOnStop=RESTART_STOP" ) else ( set "restartOnStop=RESTART" )
 
-rem ESCREVER LOG PM2JLIST NO TXT
-set "arquivoTemp=!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\pm2JList.txt"
-set "loopMax=500" & set "loopQtd=0" & del /f !arquivoTemp!
-"!2_BACKGROUND!" pm2 jlist#2#!arquivoTemp!
-
-:LER_ARQUIVO
-set /a loopQtd+=1
-if exist !arquivoTemp! (
-    set /p arquivoConteudo=<"!arquivoTemp!"
-    if !errorlevel! neq 0 (
-        if !loopQtd! lss !loopMax! (
-			ping -n 1 -w 1 127.0.0.1 >nul
-            goto LER_ARQUIVO
-        ) else (
-            goto FIM_SCRIPT
-        )
-    )
-) else (
-    if !loopQtd! lss !loopMax! (
-		goto LER_ARQUIVO
-    ) else (
-        goto FIM_SCRIPT
-    )
-)
+rem DEFINIR nodeExe
+set "nodeExe=node!project!_!outrosAdd!"
 
 rem PATH COMPLETO DO SCRIPT SEM BARRA E DOIS PONTOS
 set "replace=-"
 set "fileScriptFullWithBars=!fileScript::=%replace%!" && set "fileScriptFullWithBars=!fileScriptFullWithBars:\=%replace%!"
 set "fileScriptFullWithBars=!project!_!fileScriptFullWithBars!"
 
-rem CHECAR SE ESTA NO JLIST
-findstr /m "!fileScriptFullWithBars!" "!arquivoTemp!" >Nul
-if not !errorlevel! equ 0 ( set "ret2=FALSE" ) else ( set "ret2=TRUE" )
+rem CHECAR SE ESTA RODANDO
+set "url=http://127.0.0.1:9999/api/get-status?password=c590ad16d9f928fc1b75b88adf5bb7eb&application=!nodeExe!"
+set "headers=--header=Content-Type:application/json --header=chave1:valor1 --header=chave2:valor2"
+set "bodyPathRes=!local!\z_BODY_RES.txt" & "!wget!" "!headers!" --quiet -O "!bodyPathRes!" "!url!"
+
+rem DEFINIR STATUS DO PROCESSO
+set "ret2=ERRO"
+findstr /m "Running" "!bodyPathRes!" >Nul
+if !errorlevel! equ 0 ( set "ret2=TRUE" )
+findstr /m "Restarting" "!bodyPathRes!" >Nul
+if !errorlevel! equ 0 ( set "ret2=TRUE" )
+findstr /m "Stopping" "!bodyPathRes!" >Nul
+if !errorlevel! equ 0 ( set "ret2=FALSE" )
+findstr /m "Stopped" "!bodyPathRes!" >Nul
+if !errorlevel! equ 0 ( set "ret2=FALSE" )
+del /f !bodyPathRes!
 
 rem rem DEFINIR ACAO → RODANDO [NAO] | RODANDO [SIM]
 if "!ret2!"=="FALSE" (
@@ -62,7 +53,7 @@ if "!ret2!"=="TRUE" (
 
 rem ACTION → NAO DEFINIDA (ENCERRAR)
 if "!actionRun!"=="ERRO" (
-	echo !TIME! - [NODEJS FILE] = [EXE: EXIT - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun! - LOOP: !loopMax!/!loopQtd!] # !fileScriptFullWithBars!>>"!fileAll!" & exit
+	echo !TIME! - [NODEJS FILE] = [EXE: EXIT - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!>>"!fileAll!" & exit
 )
 
 rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'echo !timeNow!>!file!' !!!)
@@ -75,21 +66,19 @@ echo !timeNow!>"!file!"
 
 rem ### → ACAO | PARAR
 if "!actionRun!"=="OFF" (
-	"!2_BACKGROUND!" pm2 del !fileScriptFullWithBars!
-	rem JANELA DO LOG FECHAR
-	"!2_BACKGROUND!" !nircmd! win close ititle "#_!fileScriptFullWithBars!"
+	"!2_BACKGROUND!" "C:\Program Files (x86)\AlwaysUp\AlwaysUp.exe" -stop "!nodeExe!"
 )
 
 rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
-	rem INICIAR SCRIPT NO PM2
-	"!2_BACKGROUND!" pm2 start "!fileScript!" --name "!fileScriptFullWithBars!" -i 1
+	rem [HIDE]
+	if not "!action!"=="!action:HIDE=!" (
+		"!2_BACKGROUND!" "C:\Program Files (x86)\AlwaysUp\AlwaysUp.exe" -start "!nodeExe!"
+	)
 	
 	rem [VIEW]
 	if not "!action!"=="!action:VIEW=!" (
-		rem start cmd.exe /c "title #_!fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\nodeZPm2JList.exe "%letra%:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\node_modules\pm2\bin\pm2" logs !fileScriptFullWithBars!"
-		rem "D:\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe" start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# start cmd.exe /c !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! REBOOT
-		rem "D:\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe" start "#_!fileScriptFullWithBars!" !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\nodeZPm2JList.exe %letra%:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\node_modules\pm2\bin\pm2 logs !fileScriptFullWithBars!
+		"!2_BACKGROUND!" "C:\Program Files (x86)\AlwaysUp\AlwaysUp.exe" -start-in-current-session "!nodeExe!"
 		if "!letra!"=="D" (
 			rem OPSEUA
 			if not "!action!"=="!action:WINTP1=!" ( set "winTP=15 65 500 300" )
@@ -108,38 +97,14 @@ if "!actionRun!"=="ON" (
 			if not "!action!"=="!action:WINTP6=!" ( set "winTP=420 650 410 300" )
 		)
 		rem JANELA DO LOG POSICIONAR
-		"!2_BACKGROUND!" timeout 2 #2# nul #1# !nircmd! win setsize ititle #_!fileScriptFullWithBars! !winTP!
+		"!2_BACKGROUND!" timeout 2 #2# nul #1# !nircmd! win setsize ititle !nodeExe! !winTP!
 	)
 )
 
-:FIM_SCRIPT
-
 rem LOG E RETORNAR O RESULTADO
-echo !TIME! - [NODEJS FILE] = [EXE: SIM - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun! - LOOP: !loopMax!/!loopQtd!] # !fileScriptFullWithBars!>>"!fileAll!"
+echo !TIME! - [NODEJS FILE] = [EXE: SIM - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!>>"!fileAll!"
 rem BAT2 - DEFINIR O VALOR E RETORNAR (USAR '%' NAS VARIAVEIS!!!)
 endlocal & set "ret2=%ret2%" & setlocal enabledelayedexpansion & exit /b
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

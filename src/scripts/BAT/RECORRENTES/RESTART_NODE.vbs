@@ -24,10 +24,13 @@ localizacao_so_a_ultima_pasta = ultimapasta               rem RESULTADO: 'PORTAB
 rem ############################ ABRIR ARQUIVO COM PARAMETROS ############################
 file = letra + ":\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\1_BACKGROUND.exe"
 par1 = localizacao + "\RESTART_NODE.bat"
-par2 = arquivoSemExtensao
+par2 = "PAR OU VAR 2"
 par3 = "PAR OU VAR 3"
 par4 = "PAR OU VAR 4"
 par5 = "PAR OU VAR 5"
 aspas = """"
 fileAndPars = aspas & file & aspas & " " & aspas & par1 & aspas & " " & aspas & par2 & aspas & " " & aspas & par3 & aspas & " " & aspas & par4 & aspas & " " & aspas & par5 & aspas
 CreateObject("WScript.Shell").Run(fileAndPars)
+
+rem ENCERRAR SCRIPT
+WScript.Quit

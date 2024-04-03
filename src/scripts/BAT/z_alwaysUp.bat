@@ -9,11 +9,11 @@ echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a
 set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!" & set "fileAll=!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!"=="" ( msg * "[!local!\!arquivo!] Usar o atalho e nao o executavel" & exit )
+if "!arg1!"=="" ( msg * "[!local!\!arquivo!] Usar o atalho e nao o executavel" )
 
-echo !TIME! - [SHUTDOWN PC] = [APOS 1 MINUTO]>>"!fileAll!"
+rem VARIAVEIS
+set "state=!arg1!" & set "process=!arg2!"
 
-shutdown.exe /r /t 60
+echo !TIME! - [ALWAYSUP] = !state! - !process!>>"!fileAll!"
 
-exit
 exit
