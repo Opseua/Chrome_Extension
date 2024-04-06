@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!" equ "" !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
+if "!arg1!" equ "" "!fileMsg!" "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION >nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -18,7 +18,7 @@ if not "!mode!"=="!mode:LEGACY=!" ( set "restartOnStop=RESTART_STOP" ) else ( se
 
 rem CHECAR SE O nodeExe EXISTE
 set "nodeExe=node!project!_!outrosAdd!"
-if not exist "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe" !fileMsg! "[!local!\!arquivo!] Executavel nodeExe nao existe\n!nodeExe!.exe" & exit
+if not exist "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe" "!fileMsg!" "[!local!\!arquivo!] Executavel nodeExe nao existe\n!nodeExe!.exe" & exit
 
 rem PATH COMPLETO DO SCRIPT SEM BARRA E DOIS PONTOS
 set "replace=-"

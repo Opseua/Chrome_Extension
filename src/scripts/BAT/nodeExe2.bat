@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!" equ "" !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
+if "!arg1!" equ "" "!fileMsg!" "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION >nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -19,7 +19,7 @@ cd\ & !letra!: & cd "!local!"
 
 if "!arg1!"=="APAGAR" ( goto COPIA_APAGAR )
 if "!arg1!"=="CRIAR" ( goto COPIA_CRIAR )
-@echo x=msgbox((Replace(  "[!local!\!arquivo!]\nParamentro invalido. Deve ser 'APAGAR' ou 'CRIAR'"  ,"\n",Chr(13))))>%temp%\alert.vbs & start "" %temp%\alert.vbs & exit
+"!fileMsg!" "[!local!\!arquivo!]\nParamentro invalido. Deve ser 'APAGAR' ou 'CRIAR'" & exit
 
 :COPIA_CRIAR
 rem CRIAR COPIA nodeExe
