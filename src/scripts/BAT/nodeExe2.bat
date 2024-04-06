@@ -1,15 +1,15 @@
-@chcp 65001 && @echo off && setlocal enabledelayedexpansion
-set "letra=%~d0" &&  set "local=%~dp0"
-set "letra=%letra:~0,1%" && set "local=%local:~0,-1%" && set "arquivo=%~nx0" & set "argString=%*"
-set "usuario=%USERNAME%" && set "argTUDO=%~1 %~2 %~3 %~4 %~5" && set "arg1=%~1" && set "arg2=%~2" && set "arg3=%~3" && set "arg4=%~4"
-
-rem set "start=ERRO" & set "adm=ERRO" && NET SESSION >nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
-
-rem echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
-rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!" & set "fileAll=!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt"
+@chcp 65001 & @echo off & setlocal enabledelayedexpansion
+set "letra=%~d0" & set "local=%~dp0"
+set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set "argString=%*"
+set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!"=="" ( msg * "[!local!\!arquivo!] Usar o atalho e nao o executavel" & exit )
+if "!arg1!" equ "" !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
+
+rem set "start=ERRO" & set "adm=ERRO" & NET SESSION >nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
+
+rem echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
+rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 rem ALTERAR LOCAL PARA PASTA 'PORTABLE_NodeJS'
 set "local=!letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS"
@@ -19,7 +19,7 @@ cd\ & !letra!: & cd "!local!"
 
 if "!arg1!"=="APAGAR" ( goto COPIA_APAGAR )
 if "!arg1!"=="CRIAR" ( goto COPIA_CRIAR )
-msg * "[!local!\!arquivo!] Paramentro invalido. Deve ser 'APAGAR' ou 'CRIAR'" & exit
+@echo x=msgbox((Replace(  "[!local!\!arquivo!]\nParamentro invalido. Deve ser 'APAGAR' ou 'CRIAR'"  ,"\n",Chr(13))))>%temp%\alert.vbs & start "" %temp%\alert.vbs & exit
 
 :COPIA_CRIAR
 rem CRIAR COPIA nodeExe
@@ -38,7 +38,7 @@ for %%a in ("%projects:;=" "%") do (
         echo F|xcopy /Q /Y /F "!origem!" "!destino!"
     )
 )
-msg * "Copiados: !fileQtdCopy!" & exit
+@echo x=msgbox((Replace(  "[!local!\!arquivo!]\nCopiados: !fileQtdCopy!"  ,"\n",Chr(13))))>%temp%\alert.vbs & start "" %temp%\alert.vbs & exit
 
 :COPIA_APAGAR
 rem APAGAR OS nodeExe ANTIGOS (EXCETO O PROPRIO 'node.exe')
@@ -63,7 +63,7 @@ for %%F in (*) do (
 		echo [NAO] - !filename!
 	)
 )
-msg * "Total de arquivos: !fileQtdAll! - Deletados: !fileQtdDel!" & exit
+@echo x=msgbox((Replace(  "[!local!\!arquivo!]\nTotal de arquivos: !fileQtdAll!\nDeletados: !fileQtdDel!"  ,"\n",Chr(13))))>%temp%\alert.vbs & start "" %temp%\alert.vbs & exit
 
 
 

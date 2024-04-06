@@ -22,8 +22,8 @@ localizacao_completa_ate_a_pasta_anterior = resultado     rem RESULTADO: 'D:\ARQ
 localizacao_so_a_ultima_pasta = ultimapasta               rem RESULTADO: 'PORTABLE_Telegram'
 
 rem ############################ ABRIR ARQUIVO COM PARAMETROS ############################
-file = letra + ":\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\1_BACKGROUND.exe"
-par1 = localizacao + "\RECORRENTES_NODE.bat"
+file = letra + ":\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe"
+par1 = localizacao + "\RESTART.bat"
 par2 = "PAR OU VAR 2"
 par3 = "PAR OU VAR 3"
 par4 = "PAR OU VAR 4"
