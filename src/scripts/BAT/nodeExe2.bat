@@ -38,7 +38,7 @@ for %%a in ("%projects:;=" "%") do (
         echo F|xcopy /Q /Y /F "!origem!" "!destino!"
     )
 )
-@echo x=msgbox((Replace(  "[!local!\!arquivo!]\nCopiados: !fileQtdCopy!"  ,"\n",Chr(13))))>%temp%\alert.vbs & start "" %temp%\alert.vbs & exit
+"!fileMsg!" "[!local!\!arquivo!]\n\nCopiados: !fileQtdCopy!" & exit
 
 :COPIA_APAGAR
 rem APAGAR OS nodeExe ANTIGOS (EXCETO O PROPRIO 'node.exe')
@@ -63,7 +63,7 @@ for %%F in (*) do (
 		echo [NAO] - !filename!
 	)
 )
-@echo x=msgbox((Replace(  "[!local!\!arquivo!]\nTotal de arquivos: !fileQtdAll!\nDeletados: !fileQtdDel!"  ,"\n",Chr(13))))>%temp%\alert.vbs & start "" %temp%\alert.vbs & exit
+"!fileMsg!" "[!local!\!arquivo!]\n\nTotal de arquivos: !fileQtdAll!\nDeletados: !fileQtdDel!" & exit
 
 
 

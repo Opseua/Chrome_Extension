@@ -41,18 +41,7 @@ Else
         rebootQtd = pars(7)
 
 		rem Calcular a diferença de tempo e determinar permissao
-		If Not runType = "RESTART" Then
-			dif = timeNow - timeManual
-			rebootQtd = 0
-			If dif > 6 Then
-				allow = "SIM"
-				obs = "EXECUTAR"
-				timeManual = timeNow
-			Else
-				allow = "NAO"
-				obs = "MUITO_RECENTE"
-			End If
-		Else
+		If InStr(runType, "RESTART") Then
 			dif = timeNow - timeReboot
 			If dif > 59 Then
 				allow = "SIM"
@@ -68,6 +57,23 @@ Else
 				timeReboot = timeNow
 				rebootQtd = rebootQtd + 1
 			End If
+		Else
+			dif = timeNow - timeManual
+			rebootQtd = 0
+			If InStr(runType, "TOGGLE") Then
+				If dif > 6 Then
+					allow = "SIM"
+					obs = "EXECUTAR"
+					timeManual = timeNow
+				Else
+					allow = "NAO"
+					obs = "MUITO_RECENTE"
+				End If
+			Else
+					allow = "SIM"
+					obs = "EXECUTAR_FORCADO"
+					timeManual = timeNow
+			End If
 		End If
     End If
 
@@ -81,7 +87,7 @@ Else
     fsoFile.Write strLine
 
     rem Fechar o arquivo
-    fsoFile.Close
+    fsoFile.Close	
 End If
 
 rem WScript.Sleep 5000

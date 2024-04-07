@@ -17,7 +17,7 @@ for /f "tokens=1,2 delims=@" %%a in ("!arg2!") do ( set "project=%%a" & set "out
 if not "!mode!"=="!mode:LEGACY=!" ( set "restartOnStop=RESTART_STOP" ) else ( set "restartOnStop=RESTART" )
 
 rem ESCREVER LOG PM2JLIST NO TXT
-set "arquivoTemp=!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\pm2JList.txt"
+set "arquivoTemp=!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\processPm2JList.txt"
 set "loopMax=500" & set "loopQtd=0" & del /f !arquivoTemp!
 "!2_BACKGROUND!" pm2 jlist#2#!arquivoTemp!
 
@@ -61,9 +61,7 @@ if "!ret2!"=="TRUE" (
 )
 
 rem ACTION → NAO DEFINIDA (ENCERRAR)
-if "!actionRun!"=="ERRO" (
-	echo !TIME! - [NODEJS FILE] = [EXE: EXIT - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun! - LOOP: !loopMax!/!loopQtd!] # !fileScriptFullWithBars!>>"!fileAll!" & exit
-)
+if "!actionRun!"=="ERRO" ( "!fileLog!" "[NODEJS FILE] = [EXE: EXIT - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun! - LOOP: !loopMax!/!loopQtd!] # !fileScriptFullWithBars!" & exit )
 
 rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'echo !timeNow!>!file!' !!!)
 set "file=!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\logTime!project!!outrosAdd!.txt" & if not exist "!file!" ( set "timeLast=123" ) else ( set /p timeLast=<!file! )
@@ -88,7 +86,7 @@ if "!actionRun!"=="ON" (
 	rem [VIEW]
 	if not "!action!"=="!action:VIEW=!" (
 		rem start cmd.exe /c "title #_!fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\nodeZPm2JList.exe "%letra%:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\node_modules\pm2\bin\pm2" logs !fileScriptFullWithBars!"
-		rem "D:\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe" start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# start cmd.exe /c !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! REBOOT
+		rem "D:\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe" start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# start cmd.exe /c !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processPm2JList.bat !action! !project!@!outrosAdd! !fileScript! REBOOT
 		rem "D:\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe" start "#_!fileScriptFullWithBars!" !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\nodeZPm2JList.exe %letra%:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\node_modules\pm2\bin\pm2 logs !fileScriptFullWithBars!
 		if "!letra!"=="D" (
 			rem OPSEUA

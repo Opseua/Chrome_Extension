@@ -43,7 +43,7 @@ rem ACTION → NAO DEFINIDA (ENCERRAR)
 if "!actionRun!"=="ERRO" "!fileLog!" "[NODEJS FILE] = [EXE: EXIT - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!" & exit
 
 rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'findstr'!!!)
-"!fileLastRun!" "!mode!" "!nodeExe!"
+"!fileLastRun!" "!mode!_!action!" "!nodeExe!"
 findstr /m "SIM" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\logTime_!nodeExe!.txt" >Nul
 if not %errorlevel%==0 "!fileLog!" "[NODEJS FILE] = [EXE: NAO - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!" & exit 
 
@@ -54,12 +54,12 @@ rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
 	rem [HIDE]
 	if not "!action!"=="!action:HIDE=!" (
-		"!2_BACKGROUND!" title !fileScriptFullWithBars!#1# !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop!
+		"!2_BACKGROUND!" title !fileScriptFullWithBars!#1# !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop!
 	)
 	
 	rem [VIEW]
 	if not "!action!"=="!action:VIEW=!" ( 
-		"!2_BACKGROUND!" start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# "!2_BACKGROUND!" !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop!
+		"!2_BACKGROUND!" start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# "!2_BACKGROUND!" !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop!
 		
 		rem JANELA DO LOG POSICIONAR
 		"!2_BACKGROUND!" timeout 3 #2# nul #1# "!fileNircmdSetSize!" !fileScriptFullWithBars! !action!
