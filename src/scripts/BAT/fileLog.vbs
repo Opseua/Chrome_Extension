@@ -15,15 +15,33 @@ Else
 	rem PARAMENTROS PASSADOS
     rem  DEFININDO A DATA E HORA ATUAL
     dataAtual = Now
+	horaAmPm = ""
     dia = Right("00" & Day(dataAtual), 2)
     mes = Right("00" & Month(dataAtual), 2)
     ano = Year(dataAtual)
-    hora = Right("00" & Hour(dataAtual), 2)
+    rem hora = Right("00" & Hour(dataAtual), 2)
+	hora = Hour(dataAtual)
     minuto = Right("00" & Minute(dataAtual), 2)
     segundo = Right("00" & Second(dataAtual), 2)
     milissegundo = Right("000" & Round((Timer - Int(Timer)) * 1000), 3)
+	
+	rem #####################################################################
+	rem CONVERTER PARA O FORMATO '12 HORAS' (SE NECESSARIO)
+	Function HoraPadrao12(hora)
+		If hora < 13 Then
+			horaAmPm = " AM"
+		Else
+			horaAmPm = " PM"
+			hora = hora - 12
+		End If
+		HoraPadrao12 = hora
+	End Function
+	hora = HoraPadrao12(hora)
+	rem #####################################################################s
+	
+	hora = Right("00" & hora, 2)
 	completaData = "z_MES_" & mes & "_DIA_" & dia
-    completaHora = hora & ":" & minuto & ":" & segundo & "." & milissegundo
+    completaHora = hora & ":" & minuto & ":" & segundo & "." & milissegundo & horaAmPm
 
 	rem VERIFICAR SE O ARQUIVO EXISTE
 	pathArquivo = letra & ":\ARQUIVOS\WINDOWS\BAT\z_log\" & completaData & ".txt"

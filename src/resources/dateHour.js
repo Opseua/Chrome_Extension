@@ -16,11 +16,14 @@ function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
         let dt1 = new Date();
         dt1.setSeconds(new Date().getSeconds() + inf).setSeconds;
         let dt2 = Date.now() + (inf * 1000);
+        let hou = dt1.getHours()
         ret['res'] = { // manter o 'String' para forçar o '0' (zero) na frente → '001'
             'day': String(dt1.getDate()).padStart(2, '0'),
             'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
             'yea': String(dt1.getFullYear()),
-            'hou': String(dt1.getHours()).padStart(2, '0'),
+            'hou': String(hou).padStart(2, '0'),
+            'hou12': String(hou < 13 ? hou : (hou - 12)).padStart(2, '0'),
+            'houAmPm': hou < 13 ? 'AM' : 'PM',
             'min': String(dt1.getMinutes()).padStart(2, '0'),
             'sec': String(dt1.getSeconds()).padStart(2, '0'),
             'mil': String(dt2.toString().slice(-3)),

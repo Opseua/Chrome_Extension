@@ -1,5 +1,5 @@
 // // 'write' → 'true' ESCREVE NO 'PROJECT/log/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
-// logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[api] Mensagem do console` });
+// logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `Mensagem do console` });
 
 let e = import.meta.url
 async function logConsole(inf) { // NÃO POR COMO 'async'!!!
@@ -39,7 +39,10 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
         let fileCall = ee.split('/').pop()
         msg = typeof msg === 'object' ? JSON.stringify(msg) : msg
         colorConsole({
-            'text': `<verde>→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
+            // FORMATO: 24 HORAS (11h, 12h, 13h, 14h...)
+            // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
+            // FORMATO: 12 HORAS (11h, 12h, 01h, 02h...)
+            'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
         });
         if (!eng && write) {
             await log({ 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall })
