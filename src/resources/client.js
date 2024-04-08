@@ -71,17 +71,9 @@ async function client(inf) {
         }
 
         // SERVIDORES: CONECTAR
-        let dev2 = globalWindow.devGet[0], dev3 = globalWindow.devGet[1]
-        servers = letter == 'D' ? [
-            // ### NOTEBOOK
-            dev2, // → GET [WEB]
-            dev3, // → GET [LOC]
-            // '127.0.0.1:8889/TESTE_NODEJS'
-        ] : [
-            // ### EC2 | ESTRELAR
-            dev2, // → GET [WEB]
-            dev3, // → GET [LOC]
-            // '127.0.0.1:8889/TESTE_NODEJS'
+        servers = [
+            globalWindow.devGet[0], // → GET [WEB]
+            globalWindow.devGet[1], // → GET [LOC]
         ]; servers.forEach((hostRoom) => connect({ 'hostRoom': hostRoom }));
 
         // LISTENER DE MENSAGENS RECEBIDAS [WEB] | [LOC]

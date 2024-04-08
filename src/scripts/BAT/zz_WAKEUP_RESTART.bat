@@ -97,7 +97,7 @@ if "!devMaster!"=="OPSEUA" (
 	ping -n 3 -w 1000 127.0.0.1 >nul
 	
 	rem INICIAR URA_Reversa [JSF] (view)
-	"!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\ON_VIEW.vbs"
+	rem "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\ON_VIEW.vbs"
 	ping -n 3 -w 1000 127.0.0.1 >nul
 ) else (
 	rem → EC2/AWS/ESTRELAR

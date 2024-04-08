@@ -7,7 +7,7 @@ async function regexE(inf) {
     let ret = { 'ret': false };
     console.log('\n--------------------------------------')
     try {
-        let retGetPathNew = await getPathNew({ 'e': inf.e, }); let { conf, root, functions, project, line } = retGetPathNew.res; let fileOk = retGetPathNew.res.file
+        let retGetPath = await getPath({ 'e': inf.e, }); let { conf, root, functions, project, line } = retGetPath.res; let fileOk = retGetPath.res.file
 
         // IDENTIFICAR ENGINE
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2

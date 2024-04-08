@@ -48,30 +48,34 @@ if (cng == 1) { // CHROME
 }
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
-await import('./getPathNew.js'); let retGetPathNew; retGetPathNew = await getPathNew({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPathNew.res.confOk.webSocket;
+await import('./getPath.js'); let retGetPath; retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket;
 
-let securityPass = `${conf.securityPass}`; let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket
-let secPing = conf.secPing; let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop; let kbPartsMessage = conf.kbPartsMessage
-let minClearPartsMessages = conf.minClearPartsMessages; let par1 = `${securityPass}-${conf.par1}`
-let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`; let par5 = `${securityPass}-${conf.par5}`
-let par6 = `${conf.par6}`; let par7 = `${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`; let par10 = `${securityPass}-${conf.par10}`
-let serverWeb = conf.server['1']; let serverLocal = conf.server['2']; let hostWeb = `${serverWeb.host}`; let portWeb = `${serverWeb.port}`
-let hostLocal = `${serverLocal.host}`; let portLocal = `${serverLocal.port}`; let devices = conf.devices; let hostRoomWeb = `${hostWeb}:${portWeb}`
-let hostRoomLocal = `${hostLocal}:${portLocal}`; let devMaster = `${devices[0].master}`; let sheetServer = conf.sheetServer
+let securityPass = `${conf.securityPass}`;
+let serverWeb = conf.server['1']; let hostWeb = `${serverWeb.host}`; let portWeb = `${serverWeb.port}`; let hostRoomWeb = `${hostWeb}:${portWeb}`
+let serverLoc = conf.server['2']; let hostLoc = `${serverLoc.host}`; let portLoc = `${serverLoc.port}`; let hostRoomLoc = `${hostLoc}:${portLoc}`;
 
-let devGet, devSend = `${letter == 'D' ? hostRoomLocal : hostRoomWeb}/${devMaster}` // CHROME | Send → NodeJS | Get → Chrome # NODEJS | Send → Chrome | Get → NodeJS
-if (eng) { devSend = `${devSend}_${devices[2].name}`; devGet = [`${hostRoomWeb}/${devices[1].name}`, `${hostRoomLocal}/${devices[1].name}`] }
-else { devSend = `${devSend}_${devices[1].name}`; devGet = [`${hostRoomWeb}/${devMaster}_${devices[2].name}`, `${hostRoomLocal}/${devMaster}_${devices[2].name}`,] }
+let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing;
+let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop; let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages;
 
-// MANTER APÓS O 'devSend, devGet'
+let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`;
+let par5 = `${securityPass}-${conf.par5}`; let par6 = `${conf.par6}`; let par7 = `${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`;
+let par9 = `${securityPass}-${conf.par9}`; let par10 = `${securityPass}-${conf.par10}`
+
+let devices = conf.devices; let devMaster = `${devices[0].master}`; let sheetServer = conf.sheetServer
+// CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
+let devSend = `${letter == 'D' ? hostRoomLoc : hostRoomWeb}/${devMaster}`; devSend = `${devSend}_${devices[eng ? 1 : 2].name}`
+
+// MANTER APÓS O 'devSend'
 globalWindow = {
     ...globalWindow,
-    'devMaster': devMaster, 'serverWeb': serverWeb.host, 'secConnect': secConnect, 'secReconnect': secReconnect, 'secRetWebSocket': secRetWebSocket,
-    'secPing': secPing, 'secPingTimeout': secPingTimeout, 'secLoop': secLoop, 'kbPartsMessage': kbPartsMessage, 'minClearPartsMessages': minClearPartsMessages, 'par1': par1,
-    'par2': par2, 'par3': par3, 'par4': par4, 'par5': par5, 'par6': par6, 'par7': par7, 'par8': par8, 'par9': par9, 'par10': par10, 'securityPass': securityPass, 'portWeb': portWeb,
-    'portLocal': portLocal, 'sheetServer': sheetServer, 'devSend': devSend, 'devGet': devGet,
+    'securityPass': securityPass, 'serverWeb': serverWeb.host, 'portWeb': portWeb, 'portLoc': portLoc, 'devMaster': devMaster, 'devSend': devSend,
+
+    'hostRoomWeb': hostRoomWeb, 'hostRoomLoc': hostRoomLoc, 'secConnect': secConnect, 'secReconnect': secReconnect, 'secRetWebSocket': secRetWebSocket,
+    'secPing': secPing, 'secPingTimeout': secPingTimeout, 'secLoop': secLoop, 'kbPartsMessage': kbPartsMessage, 'minClearPartsMessages': minClearPartsMessages,
+
+    'par1': par1, 'par2': par2, 'par3': par3, 'par4': par4, 'par5': par5, 'par6': par6, 'par7': par7, 'par8': par8, 'par9': par9, 'par10': par10, 'sheetServer': sheetServer,
 }
-// console.log('1', '-', globalWindow.conf, '|', letter, '|', globalWindow.root, '| functions →', globalWindow.functions, '| devMaster →', globalWindow.devMaster, '| project →', globalWindow.project, '| devResWs →', globalWindow.devResWs)
+// console.log('1', '-', globalWindow.conf, '|', letter, '|', globalWindow.root, '| functions →', globalWindow.functions, '| devMaster →', globalWindow.devMaster, '| project →', globalWindow.project, '| devSlave →', globalWindow.devSlave)
 
 if (eng) { // CHROME
     _WebSocket = window.WebSocket
@@ -188,22 +192,22 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 // javascript: (function () {
 //     function pw(j, pw, ph, u) {
 //         let w = (pw / 100) * j.top.screen.width, h = (ph / 100) * j.top.screen.height; let y = j.top.outerHeight / 2 + j.top.screenY - (h / 2)
-//         let x = j.top.outerWidth / 2 + j.top.screenX - (w / 2); return j.open(u, '', `width=${w},height=${h},top=${y},left=${x}`);
+//         let x = j.top.outerWidth / 2 + j.top.screenX - (w / 2); return j.open(u, '', `width = ${ w }, height = ${ h }, top = ${ y }, left = ${ x } `);
 //     }; pw(window, 40, 40, 'http://12.345.678.910:1234');
 // })();
 
 
 // ### Chrome
-// 1 - src/config.json | D | chrome-extension | functions → afelhdjampgfmchfcnbginicjcmjhhma | devMaster → OPSEUA | project → Downloads/Google Chrome% | devResWs → NAO_DEFINIDO
-// 2 - src/config.json | D | chrome-extension | functions → afelhdjampgfmchfcnbginicjcmjhhma | devMaster → OPSEUA | project → Downloads/Google Chrome% | devResWs → CHROME
+// 1 - src/config.json | D | chrome-extension | functions → afelhdjampgfmchfcnbginicjcmjhhma | devMaster → OPSEUA | project → Downloads/Google Chrome% | devSlave → NAO_DEFINIDO
+// 2 - src/config.json | D | chrome-extension | functions → afelhdjampgfmchfcnbginicjcmjhhma | devMaster → OPSEUA | project → Downloads/Google Chrome% | devSlave → CHROME
 
 // ### NodeJS
-// 1 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → NAO_DEFINIDO | devResWs → NAO_DEFINIDO
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → Chrome_Extension | devResWs → NODEJS
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → WebSocket | devResWs → NODEJS
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → Sniffer_Python | devResWs → SNIFFER
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → URA_Reversa | devResWs → NAO_DEFINIDO
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → WebScraper | devResWs → NAO_DEFINIDO
+// 1 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → NAO_DEFINIDO | devSlave → NAO_DEFINIDO
+// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → Chrome_Extension | devSlave → NODEJS
+// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → WebSocket | devSlave → NODEJS
+// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → Sniffer_Python | devSlave → SNIFFER
+// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → URA_Reversa | devSlave → NAO_DEFINIDO
+// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → WebScraper | devSlave → NAO_DEFINIDO
 
 // "src/config.json"                                       → globalWindow.conf
 // "D"                                                     → letter
@@ -211,7 +215,7 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 // "afelhdjampgfmchfcnbginicjcmjhhma" | "Chrome_Extension" → globalWindow.functions
 // "OPSEUA"                                                → globalWindow.devMaster
 // "Downloads/Google Chrome%" | "Sniffer_Python"           → globalWindow.project
-// "SNIFFER"                                               → globalWindow.devResWs
+// "SNIFFER"                                               → globalWindow.devSlave
 
 // → CONF ANTIGA [Chrome] | [NodeJS]
 // [

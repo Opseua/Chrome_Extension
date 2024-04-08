@@ -27,7 +27,7 @@ let arrGlobal = [
     // [Chrome_Extension]
     // → funções globais
     'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file',
-    'getCookies', 'getPage', 'getPath', 'getPathNew', 'googleSheets', 'hasKey', 'htmlToJson', 'jsonInterpret', 'keepCookieLive', 'log', 'logConsole',
+    'getCookies', 'getPage', 'getPath', 'getPath', 'googleSheets', 'hasKey', 'htmlToJson', 'jsonInterpret', 'keepCookieLive', 'log', 'logConsole',
     'messageSend', 'messageReceived', 'notification', 'orderObj', 'promptChrome', 'randomNumber', 'rawText', 'regex', 'regexE', 'secToHour',
     'sniffer', 'splitText', 'tabSearch', 'translate',
     // scripts
