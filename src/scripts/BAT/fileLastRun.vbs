@@ -43,12 +43,12 @@ Else
 		rem Calcular a diferença de tempo e determinar permissao
 		If InStr(runType, "RESTART") Then
 			dif = timeNow - timeReboot
-			If dif > 59 Then
+			If dif > 29 Then
 				allow = "SIM"
 				obs = "RESTART_ANTIGO"
 				timeReboot = timeNow
 				rebootQtd = 1
-			ElseIf rebootQtd > 4 Then
+			ElseIf rebootQtd > 2 Then
 				allow = "NAO"
 				obs = "MUITOS_RESTARTS"
 			Else

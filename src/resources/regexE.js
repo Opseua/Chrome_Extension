@@ -7,31 +7,33 @@ async function regexE(inf) {
     let ret = { 'ret': false };
     console.log('\n--------------------------------------')
     try {
-        let retGetPath = await getPath({ 'e': inf.e, }); let { conf, root, functions, project, line } = retGetPath.res; let fileOk = retGetPath.res.file
-
         // IDENTIFICAR ENGINE
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
 
+        // PEGAR O PROJETO, ARQUIVO E LINHA DO ERRO
+        let retGetPath = await getPath({ 'e': inf.e, }); let { conf, root, functions, project, line } = retGetPath.res; let fileOk = retGetPath.res.file
+
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
-        let projectFile = `[${project}]\n→ ${fileOk}`; let retFetch, devCatchErr, devSecurityPass, devHost, devPort, devMaster
+        let projectFile = `[${project}]\n→ ${fileOk}`; let retFetch, devCatchErr, devSecurityPass, devHost, devPort, devMaster, devSend
         if (cng == 1) { // CHROME
             try { retFetch = await fetch(chrome.runtime.getURL(conf)); retFetch = await retFetch.text() } catch (catchErr) { devCatchErr = true }
         } else if (cng == 2) { // NODEJS
             try { retFetch = await _fs.promises.readFile(`${letter}:/${root}/${functions}/${conf}`, 'utf8') } catch (catchErr) { devCatchErr = true }
         }; if (cng == 1 || cng == 2) {
-            if (devCatchErr) { devSecurityPass = 'AAAAAAAA'; devHost = '127.0.0.1'; devPort = '1234'; devMaster = `???` }
+            if (devCatchErr) { devSecurityPass = 'AAAAAAAA'; devHost = '127.0.0.1'; devPort = '1234'; devMaster = `???`; devSend = `???` }
             else {
-                retFetch = JSON.parse(retFetch); let webSocket = retFetch.webSocket;
-                devSecurityPass = webSocket.securityPass; devHost = webSocket.server['1'].host; devPort = webSocket.server['1'].port; devPort = webSocket.devices[0].master
+                retFetch = JSON.parse(retFetch); let webSocket = retFetch.webSocket; devSecurityPass = webSocket.securityPass;
+                devHost = webSocket.server[letter == 'D' ? '2' : '1'].host; devPort = webSocket.server[letter == 'D' ? '2' : '1'].port;
+                devMaster = webSocket.devices[0].master; devSend = webSocket.devices[eng ? 2 : 1].name;
             }
         }
 
         let errorOk = {
             'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': devMaster,
-            'file': fileOk, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'catchGlobal': inf.catchGlobal, 'e': inf.e.stack,
+            'file': fileOk, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'catchGlobal': catchGlobal, 'e': inf.e.stack,
         };
 
-        console.log(`\n### ERRO ### [catchGlobal ${inf.catchGlobal}]\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n`)
+        console.log(`\n### ERRO ### [catchGlobal ${errorOk.catchGlobal}]\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n`)
 
         // LOG DE ERROS [NODEJS]
         if (errorOk.cng == 2) {
@@ -59,19 +61,21 @@ async function regexE(inf) {
         }
 
         // ENVIAR NOTIFICAÇÃO COM O ERRO
-        let reqOpt = { 'method': 'POST', };
-        let body = JSON.stringify({
-            'fun': [{
-                'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : devSecurityPass,
-                'retInf': false, 'name': 'notification', 'par': {
-                    'duration': 5, 'icon': './src/scripts/media/notification_3.png',
-                    'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`,
-                    'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e.substring(0, 128)}`
-                }
-            }]
-        })
         try {
-            let url = errorOk.cng == 3 ? `http://AAAAAAAA.20:1234/AAAAAAAA` : `http://${devHost}:${devPort}/OPSEUA_CHROME`
+            let reqOpt = { 'method': 'POST', }; let body = JSON.stringify({
+                'destination': `/${devHost}:${devPort}/?roo=${devSend}`, 'messageId': true, 'buffer': false, 'partesRestantes': 0,
+                'message': {
+                    'fun': [{
+                        'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : devSecurityPass,
+                        'retInf': false, 'name': 'notification', 'par': {
+                            'duration': 5, 'icon': './src/scripts/media/notification_3.png',
+                            'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`,
+                            'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e.substring(0, 128)}`
+                        }
+                    }]
+                }
+            })
+            let url = errorOk.cng == 3 ? `http://123.456.789:1234/AAAAAAAA` : `http://${devHost}:${devPort}/?roo=${devSend}`
             // GOOGLE
             if (errorOk.cng == 3) {
                 reqOpt['payload'] = body; UrlFetchApp.fetch(url, reqOpt)

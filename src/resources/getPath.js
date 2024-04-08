@@ -85,15 +85,13 @@ async function getPath(inf) {
     globalWindow['line'] = res.line;
     if (inf && inf.devSlave) {
         let devSlave = inf.devSlave
-        res['devSlave'] = devSlave
         let devMasterDevSlave = `${globalWindow.devMaster}_${devSlave}`
-        res['devGet'] = [`${globalWindow.hostRoomWeb}/${devMasterDevSlave}`, `${globalWindow.hostRoomLoc}/${devMasterDevSlave}`]
-        globalWindow['devSlave'] = res.devSlave;
-        globalWindow['devGet'] = res.devGet;
+        globalWindow['devSlave'] = devSlave;
+        globalWindow['devGet'] = [`${globalWindow.hostRoomWeb}/${devMasterDevSlave}`, `${globalWindow.hostRoomLoc}/${devMasterDevSlave}`];
     }
 
     ret['ret'] = true;
-    ret['msg'] = `GET PATH NEW: OK`;
+    ret['msg'] = `GET PATH: OK`;
     ret['res'] = res;
     return {
         ...({ ret: ret.ret }),

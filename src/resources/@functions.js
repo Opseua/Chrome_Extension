@@ -42,9 +42,10 @@ let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined'
 let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, _isAdmin, cs
 
 if (cng == 1) { // CHROME
-    window['eng'] = true; window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {};
+    window['eng'] = true; window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['catchGlobal'] = false; window['globalWindow'] = {};
 } else { // NDEJS
-    global['eng'] = false; global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['globalWindow'] = {}; _fs = await import('fs'); global['_fs'] = _fs;
+    global['eng'] = false; global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['catchGlobal'] = false; global['globalWindow'] = {};
+    _fs = await import('fs'); global['_fs'] = _fs;
 }
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
@@ -63,7 +64,7 @@ let par9 = `${securityPass}-${conf.par9}`; let par10 = `${securityPass}-${conf.p
 
 let devices = conf.devices; let devMaster = `${devices[0].master}`; let sheetServer = conf.sheetServer
 // CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
-let devSend = `${letter == 'D' ? hostRoomLoc : hostRoomWeb}/${devMaster}`; devSend = `${devSend}_${devices[eng ? 1 : 2].name}`
+let devSend = `${letter == 'D' ? hostRoomLoc : hostRoomWeb}/${devMaster}`; devSend = `${devSend}_${devices[eng ? 2 : 1].name}`
 
 // MANTER APÓS O 'devSend'
 globalWindow = {
@@ -153,7 +154,7 @@ if (eng) { // CHROME
     // ## BIBLIOTECAS / NATIVO
     window['_WebSocket'] = _WebSocket;
     // ## VARIÁVEIS
-    window['cs'] = cs; window['catchGlobal'] = false;
+    window['cs'] = cs;
     // ## GLOBAL OBJECT
     window['gO'] = gO; window['gOList'] = gOList;
     // ## GLOBAL OBJECT [SNIFFER CHROME]
@@ -169,7 +170,7 @@ if (eng) { // CHROME
     global['_http'] = _http; global['_exec'] = _exec; global['_google'] = _google; global['_crypto'] = _crypto; global['_puppeteer'] = _puppeteer; global['_net'] = _net;
     global['_util'] = _util; global['_getFolderSize'] = _getFolderSize; global['_parse'] = _parse; global['_isAdmin'] = _isAdmin;
     // ## VARIÁVEIS
-    global['cs'] = cs; global['catchGlobal'] = false;
+    global['cs'] = cs;
     // ## GLOBAL OBJECT [NOVO]
     global['gO'] = gO; global['gOList'] = gOList;
     // ## GLOBAL OBJECT [SNIFFER CHROME]

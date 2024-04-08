@@ -1,20 +1,6 @@
 await import('./resources/@export.js');
 let e = import.meta.url, ee = e;
 
-
-// try {
-//     console.log(aaaaaaa)
-// } catch (catchErr) {
-//     let retGetPath = await getPath({ 'e': catchErr, 'isFunction': false, })
-//     console.log(retGetPath)
-// }
-
-// // *************************
-
-// APAGAR TODO O STORAGE (É APAGADO NO 'background.js')
-// let keys = ['webSocket', 'chatOra.ai', 'chatOpenAi', 'sniffer'];
-// for (let key of keys) { let infConfigStorage = { 'e': e, 'action': 'del', 'key': key }; await configStorage(infConfigStorage) }
-
 // LIMPAR O BADGE
 chromeActions({ 'e': e, 'action': 'badge', 'text': '' });
 
