@@ -43,7 +43,7 @@ async function api(inf) {
             } else {
                 // ###### → x-www-form-urlencoded
                 if (!typeof inf.body === 'object' || !Object.keys(inf.body).length > 0) {
-                    ret['msg'] = `\n\n #### ERRO #### API \n 'body' NÃO É OBJETO [x-www-form-urlencoded] \n\n`
+                    ret['msg'] = `\n\n#### ERRO #### API \n 'body' NÃO É OBJETO [x-www-form-urlencoded] \n\n`
                     return ret
                 }
                 body = []

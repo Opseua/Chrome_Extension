@@ -71,7 +71,7 @@ function regex(inf) { // NÃO POR COMO 'async'!!!
                     ret['ret'] = true;
                 }
                 else {
-                    ret['msg'] = `\n\n #### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
+                    ret['msg'] = `\n\n#### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
                 }
             }
         }

@@ -20,7 +20,7 @@ async function promptChrome(inf) {
 
         let retPrompt = prompt(`${title}`);
         if (!retPrompt) {
-            ret['msg'] = `\n #### ERRO #### PROMPT CHROME \n EM BRANCO \n\n`
+            ret['msg'] = `\n#### ERRO #### PROMPT CHROME \n EM BRANCO \n\n`
         } else {
             let send = {
                 "other": "TryRating_QueryImageDeservingClassification",

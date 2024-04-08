@@ -21,11 +21,11 @@ async function file(inf) {
         // PASSAR NO jsonInterpret
         // if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'e': e, 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder',].includes(inf.action)) {
-            ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
+            ret['msg'] = `\n\n#### ERRO #### FILE \n INFORMAR O 'action' \n\n`;
         } else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {
-            ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'functionLocal' \n\n`
+            ret['msg'] = `\n\n#### ERRO #### FILE \n INFORMAR O 'functionLocal' \n\n`
         } else if (inf.action !== 'inf' && (!inf.path || inf.path == '')) {
-            ret['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'path' \n\n`
+            ret['msg'] = `\n\n#### ERRO #### FILE \n INFORMAR O 'path' \n\n`
         } else {
             let infFile, retFile, retFetch = '', text, relative, pathFull, md5, relativeParts, retRelative, infFilesList, retFilesList
 
@@ -67,9 +67,9 @@ async function file(inf) {
             async function fileWrite(inf) {
                 let resNew = { 'ret': false }, path
                 if (typeof inf.rewrite !== 'boolean') {
-                    resNew['msg'] = `\n\n #### ERRO #### FILE WRITE NEW \n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`;
+                    resNew['msg'] = `\n\n#### ERRO #### FILE WRITE\n INFORMAR O 'rewrite' TRUE ou FALSE \n\n`;
                 } else if (!inf.text || inf.text == '') {
-                    resNew['msg'] = `\n\n #### ERRO #### FILE WRITE NEW \n INFORMAR O 'text' \n\n`;
+                    resNew['msg'] = `\n\n#### ERRO #### FILE WRITE\n INFORMAR O 'text' \n\n`;
                 } else {
                     if (inf.raw) {
                         let infRawText = { 'e': e, 'obj': inf.text }
@@ -241,7 +241,7 @@ async function file(inf) {
                 let resNew = { 'ret': false }, path
                 try {
                     if (!inf.max || inf.max == '') {
-                        resNew['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'max' \n\n`;
+                        resNew['msg'] = `\n\n#### ERRO #### FILE \n INFORMAR O 'max' \n\n`;
                     } else {
                         if (inf.path.includes(':')) {
                             path = inf.path
@@ -322,7 +322,7 @@ async function file(inf) {
             async function fileChange(inf) {
                 let resNew = { 'ret': false }, pathOld, pathNew
                 if (!inf.pathNew || inf.pathNew == '') {
-                    resNew['msg'] = `\n\n #### ERRO #### FILE \n INFORMAR O 'pathNew' \n\n`;
+                    resNew['msg'] = `\n\n#### ERRO #### FILE \n INFORMAR O 'pathNew' \n\n`;
                 } else {
                     if (inf.path.includes(':')) {
                         pathOld = inf.path

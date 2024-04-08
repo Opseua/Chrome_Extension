@@ -36,7 +36,7 @@ async function chat(inf) { // https://chat.openai.com/api/auth/session
                 infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
                 notification(infNotification);
                 ret['res'] = res.error.message
-                ret['msg'] = `\n #### ERRO #### CHAT GPT OPEN AI \n ${res.error.message} \n\n`;
+                ret['msg'] = `\n#### ERRO #### CHAT GPT OPEN AI \n ${res.error.message} \n\n`;
             }
         } else if (inf.provider == 'ec2') {
             // ######## AWS
@@ -54,7 +54,7 @@ async function chat(inf) { // https://chat.openai.com/api/auth/session
             } else {
                 infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
                 notification(infNotification);
-                ret['msg'] = `\n #### ERRO #### CHAT GPT EC2 \n \n\n`;
+                ret['msg'] = `\n#### ERRO #### CHAT GPT EC2 \n \n\n`;
                 ret['res'] = 'res.error.message'
             }
         } else if (inf.provider == 'globalgpt') {

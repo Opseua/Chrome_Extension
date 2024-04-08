@@ -108,16 +108,16 @@ async function tabSearch(inf) {
                 ret['ret'] = true;
             } else {
                 if (typeof inf.search === 'number') {
-                    ret['msg'] = `\n #### ERRO #### SEARCH TAB \n ABA ID '${inf.search}' NAO ENCONTRADA \n\n`
+                    ret['msg'] = `\n#### ERRO #### SEARCH TAB \n ABA ID '${inf.search}' NAO ENCONTRADA \n\n`
                 } else {
-                    ret['msg'] = `\n #### ERRO #### SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
+                    ret['msg'] = `\n#### ERRO #### SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
                 }
             }
         } else {
             if (inf.search == 'ATIVA' || inf.search == 'TODAS') {
-                ret['msg'] = `\n #### ERRO #### SEARCH TAB \n NENHUM ABA ATIVA \n\n`
+                ret['msg'] = `\n#### ERRO #### SEARCH TAB \n NENHUM ABA ATIVA \n\n`
             } else {
-                ret['msg'] = `\n #### ERRO #### SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
+                ret['msg'] = `\n#### ERRO #### SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
             }
         }
 

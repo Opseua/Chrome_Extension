@@ -29,13 +29,13 @@ async function configStorage(inf) {
         } else {
             let run = false;
             if (!inf.action || !['set', 'get', 'del'].includes(inf.action)) {
-                ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'action' \n\n`
+                ret['msg'] = `\n\n#### ERRO #### CONFIG STORAGE \n INFORMAR O 'action' \n\n`
             } else {
                 if ((!inf.key || inf.key == '')) {
-                    ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR A 'key' \n\n`;
+                    ret['msg'] = `\n\n#### ERRO #### CONFIG STORAGE \n INFORMAR A 'key' \n\n`;
                 } else {
                     if (inf.action == 'set' && !inf.value) {
-                        ret['msg'] = `\n\n #### ERRO #### CONFIG STORAGE \n INFORMAR O 'value' \n\n`
+                        ret['msg'] = `\n\n#### ERRO #### CONFIG STORAGE \n INFORMAR O 'value' \n\n`
                     } else {
                         run = true
                     }
@@ -51,7 +51,7 @@ async function configStorage(inf) {
                                 data[inf.key] = inf.value;
                                 chrome.storage.local.set(data, async () => {
                                     if (chrome.runtime.lastError) {
-                                        ret['msg'] = `\n\n #### ERRO #### STORAGE SET \n ${chrome.runtime.lastError} \n\n`
+                                        ret['msg'] = `\n\n#### ERRO #### STORAGE SET \n ${chrome.runtime.lastError} \n\n`
                                     } else {
                                         ret['msg'] = 'STORAGE SET: OK'
                                         ret['ret'] = true;
@@ -66,7 +66,7 @@ async function configStorage(inf) {
                             return new Promise((resolve) => {
                                 chrome.storage.local.get(inf.key, async (result) => {
                                     if (chrome.runtime.lastError) {
-                                        ret['msg'] = `\n\n #### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`
+                                        ret['msg'] = `\n\n#### ERRO #### STORAGE GET \n ${chrome.runtime.lastError} \n\n`
                                     } else if (Object.keys(result).length == 0) {
                                         async function checkConfig() {
                                             let infFile = { 'e': e, 'action': 'read', 'path': inf.path ? inf.path : globalWindow.conf, 'functionLocal': true }
@@ -78,7 +78,7 @@ async function configStorage(inf) {
                                                 return new Promise((resolve) => {
                                                     chrome.storage.local.set(data, async () => {
                                                         if (chrome.runtime.lastError) {
-                                                            ret['msg'] = `\n\n #### ERRO #### STORAGE SET* \n ${chrome.runtime.lastError} \n\n`
+                                                            ret['msg'] = `\n\n#### ERRO #### STORAGE SET* \n ${chrome.runtime.lastError} \n\n`
                                                         } else {
                                                             ret['res'] = config[inf.key]
                                                             ret['msg'] = 'STORAGE GET: OK';
@@ -88,7 +88,7 @@ async function configStorage(inf) {
                                                     });
                                                 })
                                             } else {
-                                                ret['msg'] = `\n\n #### ERRO #### STORAGE GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
+                                                ret['msg'] = `\n\n#### ERRO #### STORAGE GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                                             }
                                         };
                                         await checkConfig()
@@ -107,10 +107,10 @@ async function configStorage(inf) {
                             return new Promise((resolve) => {
                                 chrome.storage.local.get(inf.key, async (result) => {
                                     if (chrome.runtime.lastError) {
-                                        ret['msg'] = `\n\n #### ERRO #### STORAGE DEL \n ${chrome.runtime.lastError} \n\n`
+                                        ret['msg'] = `\n\n#### ERRO #### STORAGE DEL \n ${chrome.runtime.lastError} \n\n`
                                     }
                                     else if (Object.keys(result).length == 0) {
-                                        ret['msg'] = `\n\n #### ERRO #### STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`
+                                        ret['msg'] = `\n\n#### ERRO #### STORAGE DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`
                                     } else {
                                         chrome.storage.local.remove(inf.key, async () => { });
                                         ret['msg'] = 'STORAGE DEL: OK'
@@ -142,14 +142,14 @@ async function configStorage(inf) {
                         config = {}
                     }
                     if (!inf.key || inf.key == '') {
-                        ret['msg'] = `\n\n #### ERRO #### CONFIG \n INFORMAR A 'key' \n\n`;
+                        ret['msg'] = `\n\n#### ERRO #### CONFIG \n INFORMAR A 'key' \n\n`;
                     }
                     else if (inf.action == 'set') { // #### CONFIG: SET
                         if (!inf.value && !inf.value == false) {
-                            ret['msg'] = `\n\n #### ERRO #### CONFIG \n INFORMAR O 'value' \n\n`
+                            ret['msg'] = `\n\n#### ERRO #### CONFIG \n INFORMAR O 'value' \n\n`
                         } else {
                             if (inf.key == '*' && typeof inf.value !== 'object') {
-                                ret['msg'] = `\n\n #### ERRO #### CONFIG \n VALOR NAO É OBJETO \n\n`
+                                ret['msg'] = `\n\n#### ERRO #### CONFIG \n VALOR NAO É OBJETO \n\n`
                             } else if (inf.key == '*') {
                                 config = inf.value
                             } else {
@@ -164,17 +164,17 @@ async function configStorage(inf) {
                         }
                     } else if (inf.action == 'get') { // #### CONFIG NODE: GET
                         if (!ret_Fs) {
-                            ret['msg'] = `\n\n #### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`
+                            ret['msg'] = `\n\n#### ERRO #### CONFIG GET \n ARQUIVO '${path}' NAO ENCONTRADO \n\n`
                         } else if (inf.key == '*' || (inf.key !== '*' && config[inf.key])) {
                             ret['res'] = inf.key == '*' ? config : config[inf.key]
                             ret['msg'] = `CONFIG GET: OK`;
                             ret['ret'] = true;
                         } else {
-                            ret['msg'] = `\n\n #### ERRO #### CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`
+                            ret['msg'] = `\n\n#### ERRO #### CONFIG GET \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`
                         }
                     } else if (inf.action == 'del') { // #### CONFIG NODE: DEL
                         if (!ret_Fs) {
-                            ret['msg'] = `\n\n #### ERRO #### CONFIG DEL\n ARQUIVO '${path}' NAO ENCONTRADO \n\n`
+                            ret['msg'] = `\n\n#### ERRO #### CONFIG DEL\n ARQUIVO '${path}' NAO ENCONTRADO \n\n`
                         } else if (config[inf.key]) {
                             delete config[inf.key];
                             infFile = { 'e': e, 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }
@@ -182,7 +182,7 @@ async function configStorage(inf) {
                             ret['msg'] = `CONFIG DEL: OK`
                             ret['ret'] = true;
                         } else {
-                            ret['msg'] = `\n\n #### ERRO #### CONFIG DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
+                            ret['msg'] = `\n\n#### ERRO #### CONFIG DEL \n CHAVE '${inf.key}' NAO ENCONTRADA \n\n`;
                         }
                     }
                 }

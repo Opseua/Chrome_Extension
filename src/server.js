@@ -44,7 +44,7 @@ chrome.commands.onCommand.addListener(async function (...inf) {
             command1();
         } else if (infShortcutPressed.shortcut == 'atalho_2') {
             command2();
-        } else { ret['msg'] = `\n #### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
+        } else { ret['msg'] = `\n#### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
