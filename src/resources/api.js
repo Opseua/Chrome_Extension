@@ -47,7 +47,7 @@ async function api(inf) {
                     return ret
                 }
                 body = []
-                for (var key in inf.body) {
+                for (let key in inf.body) {
                     if (key in inf.body) {
                         body.push(encodeURIComponent(key) + '=' + encodeURIComponent(inf.body[key]));
                     }

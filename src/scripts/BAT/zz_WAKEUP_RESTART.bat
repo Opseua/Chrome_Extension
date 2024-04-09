@@ -100,6 +100,14 @@ if "!devMaster!"=="OPSEUA" (
 	rem "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\ON_VIEW.vbs"
 	ping -n 3 -w 1000 127.0.0.1 >nul
 ) else (
+	"!2_BACKGROUND!" taskmgr
+	
+	ping -n 3 -w 1000 127.0.0.1 >nul
+	
+	"!letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\fileNircmdSetSize.vbs" "Task Manager" "890 50 600 600"
+	
+	ping -n 3 -w 1000 127.0.0.1 >nul
+
 	rem → EC2/AWS/ESTRELAR
 	rem INICIAR WebSocket (view) [Old]
 	"!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\ON_VIEW.vbs"

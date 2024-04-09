@@ -34,8 +34,6 @@ Else
 			windowResize = "520 380 500 300"
 		ElseIf InStr(windowResize, "WINTP6") Then
 			windowResize = "520 695 500 300"
-		Else
-			windowResize = "15 65 500 300"
 		End If
 	Else
 		rem EC2/AWS/ESTRELAR
@@ -51,14 +49,12 @@ Else
 			windowResize = "420 350 410 300"
 		ElseIf InStr(windowResize, "WINTP6") Then
 			windowResize = "420 650 410 300"
-		Else
-			windowResize = "15 50 410 300"
 		End If
 	End If
 
 	
 	Set oShell = CreateObject("Shell.Application")
-	oShell.ShellExecute letra & ":\ARQUIVOS\WINDOWS\BAT\nircmd.exe", "win setsize ititle " & windowTitle & " " & windowResize & "", , "runas", 1
+	oShell.ShellExecute letra & ":\ARQUIVOS\WINDOWS\BAT\nircmd.exe", "win setsize ititle " & """" & windowTitle & """" & " " & windowResize & "", , "runas", 1
 End If
 
 rem ENCERRAR SCRIPT
