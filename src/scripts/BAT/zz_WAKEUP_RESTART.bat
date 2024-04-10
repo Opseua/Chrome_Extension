@@ -100,7 +100,7 @@ if "!devMaster!"=="OPSEUA" (
 	rem "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\ON_VIEW.vbs"
 	ping -n 3 -w 1000 127.0.0.1 >nul
 ) else (
-	"!2_BACKGROUND!" taskmgr
+	start "" taskmgr
 	
 	ping -n 3 -w 1000 127.0.0.1 >nul
 	
