@@ -23,17 +23,17 @@ Else
 	If InStr(letra, "D") Then
 		rem OPSEUA
 		If InStr(windowResize, "WINTP1") Then
-			windowResize = "15 65 500 300"
+			windowResize = "15 65 480 300"
 		ElseIf InStr(windowResize, "WINTP2") Then
-			windowResize = "15 380 500 300"
+			windowResize = "15 380 480 300"
 		ElseIf InStr(windowResize, "WINTP3") Then
-			windowResize = "15 695 500 300"
+			windowResize = "15 695 480 300"
 		ElseIf InStr(windowResize, "WINTP4") Then
-			windowResize = "520 65 500 300"
+			windowResize = "520 65 480 300"
 		ElseIf InStr(windowResize, "WINTP5") Then
-			windowResize = "520 380 500 300"
+			windowResize = "520 380 480 300"
 		ElseIf InStr(windowResize, "WINTP6") Then
-			windowResize = "520 695 500 300"
+			windowResize = "520 695 480 300"
 		End If
 	Else
 		rem EC2/AWS/ESTRELAR

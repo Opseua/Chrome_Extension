@@ -39,7 +39,7 @@
 // [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
 let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2;
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, _isAdmin, cs
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
 
 if (cng == 1) { // CHROME
     window['eng'] = true; window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['catchGlobal'] = false; window['globalWindow'] = {};
@@ -86,7 +86,7 @@ if (eng) { // CHROME
     const { exec } = await import('child_process'); _exec = exec; const { google } = await import('googleapis'); _google = google
     const { createHash } = await import('crypto'); _crypto = createHash; _puppeteer = await import('puppeteer'); _net = await import('net');
     _util = await import('util'); const { default: getFolderSize } = await import('get-folder-size'); _getFolderSize = getFolderSize
-    const { parse } = await import('url'); _parse = parse; const { default: isAdmin } = await import('is-admin'); _isAdmin = await isAdmin();
+    const { parse } = await import('url'); _parse = parse;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -139,13 +139,9 @@ function awaitTimeout(inf) {
 // async function liberarTimeout() { setTimeout(() => { listenerAcionar('NOME AQUI', 'INF1', 'INF2'); }, 2000);}; liberarTimeout();
 
 // ############### CLEAR CONSOLE ###############
-function clearConsoleRun() {
-    console.clear(); if (!eng) {
-        _exec('cls', (error, stdout, stderr) => { if (error || stderr) { console.error(`Erro ao executar o comando`) }; return; });
-        process.stdout.write('\x1Bc'); process.stdout.write('\x1B[2J\x1B[0f'); process.stdout.write('\x1b[2J\x1b[0;0H')
-    }
-}; let msgQtd = 0; let clearConsole = console.log; console.log = function () {
-    clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearConsoleRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n') }
+function clearConsoleRun() { /* CHROME | ANTIGO | NOVO */ if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } };
+let msgQtd = 0; let clearConsole = console.log; console.log = function () {
+    clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 30) { clearConsoleRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n') }
 }; clearConsoleRun();
 
 // // ###############               ###############
@@ -168,7 +164,7 @@ if (eng) { // CHROME
     const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
     global['_WebSocket'] = _WebSocket; global['_fs'] = _fs; global['_path'] = _path; global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
     global['_http'] = _http; global['_exec'] = _exec; global['_google'] = _google; global['_crypto'] = _crypto; global['_puppeteer'] = _puppeteer; global['_net'] = _net;
-    global['_util'] = _util; global['_getFolderSize'] = _getFolderSize; global['_parse'] = _parse; global['_isAdmin'] = _isAdmin;
+    global['_util'] = _util; global['_getFolderSize'] = _getFolderSize; global['_parse'] = _parse;
     // ## VARIÁVEIS
     global['cs'] = cs;
     // ## GLOBAL OBJECT [NOVO]
@@ -228,3 +224,4 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 //     58,
 //     'Chrome_Extension' | 'Sniffer_Python',
 // ]
+

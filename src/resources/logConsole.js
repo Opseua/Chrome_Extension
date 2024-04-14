@@ -28,8 +28,11 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
                 'reset': '\x1b[0m',
             };
             let textColored = text; textColored = textColored.replace(/<(\w+)>([\s\S]*?)<\/\1>/g, (match, color, data) => {
-                if (color.toLowerCase() in colors) { return `${colors[color.toLowerCase()]}${data}${colors.reset}`; }
-                else { return match; }
+                if (color.toLowerCase() in colors) {
+                    return `${colors[color.toLowerCase()]}${data}${colors.reset}`;
+                } else {
+                    return match;
+                }
             });
             console.log(textColored);
         }
@@ -47,6 +50,7 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
         if (!eng && write) {
             await log({ 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall })
         }
+
         ret['msg'] = `LOG CONSOLE: OK`;
         ret['ret'] = true;
 
