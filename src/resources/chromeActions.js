@@ -17,8 +17,10 @@ async function chromeActions(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        if (inf.action == 'badge') {
-            let action = chrome.browserAction;
+        let { action } = inf;
+
+        if (action == 'badge') {
+            action = chrome.browserAction;
             if (inf.color) {
                 action.setBadgeBackgroundColor({ 'color': inf.color })
             } // [25, 255, 71, 255]
@@ -27,7 +29,7 @@ async function chromeActions(inf) {
                 action.setBadgeText({ 'text': inf.text })
             };
             ret['msg'] = `CHROME ACTIONS BADGE: OK`
-        } else if (inf.action == 'script') {
+        } else if (action == 'script') {
             let code, element
             if (inf.method == 'xpath') {
                 code, element = `document.evaluate('${inf.element}', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue`;
@@ -43,7 +45,21 @@ async function chromeActions(inf) {
                 code: code
             });
             ret['msg'] = `CHROME ACTIONS SCRIPT: OK`
+        } else if (action == 'user') {
+            action = chrome.identity;
+            let user = await new Promise((resolve) => {
+                action.getProfileUserInfo(function (userInfo) {
+                    if (userInfo.email) {
+                        resolve(userInfo.email);
+                    } else {
+                        resolve('NAO_DEFINIDO')
+                    }
+                });
+            });
+            ret['msg'] = `CHROME ACTIONS USER: OK`
+            ret['res'] = user
         };
+
         ret['ret'] = true;
 
         // ### LOG FUN ###

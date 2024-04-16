@@ -9,7 +9,7 @@
 async function getPath(inf) {
     let ret = { 'ret': false };// e = inf && inf.e ? inf.e : e;
     let nd = 'NAO_DEFINIDO', funLetter = `D`, root = eng ? 'chrome-extension' : 'ARQUIVOS/PROJETOS', conf = 'src/config.json', confOk, functions = eng ? chrome.runtime.id : nd
-    let project = eng ? 'Downloads/Google Chrome%' : nd, fileOk = nd, line
+    let project = eng ? 'Downloads/Google Chrome%' : nd, fileOk = nd, line; let devChildren = inf && inf.devChildren ? inf.devChildren : nd
     let paths = [], stack = inf.e.stack, res
     try {
         // stack = `
@@ -28,8 +28,10 @@ async function getPath(inf) {
                 paths.push(value)
             }
         };
-        // ARQUIVO DA PILHA → [PRIMEIRO] | [ÚLTIMO]
+
+        // ARQUIVO DA PILHA → [PRIMEIRO]
         paths = paths[0]
+        // ARQUIVO DA PILHA → [ÚLTIMO]
         // paths = paths[paths.length - 1]
 
         if (eng) {
@@ -83,11 +85,11 @@ async function getPath(inf) {
     globalWindow['project'] = res.project;
     globalWindow['file'] = res.file;
     globalWindow['line'] = res.line;
-    if (inf && inf.devSlave) {
-        let devSlave = inf.devSlave
-        let devMasterDevSlave = `${globalWindow.devMaster}_${devSlave}`
-        globalWindow['devSlave'] = devSlave;
-        globalWindow['devGet'] = [`${globalWindow.hostRoomWeb}/${devMasterDevSlave}`, `${globalWindow.hostRoomLoc}/${devMasterDevSlave}`];
+
+    if (!inf.isFunction) {
+        let devChildrenIndex = globalWindow.devices[1][1][`${res.project}_${devChildren}`]; devChildren = devChildrenIndex > -1 ? globalWindow.devices[1][2][devChildrenIndex] : nd
+        let devMasterDevSlaveDevChildren = `${globalWindow.devMaster}-${globalWindow.devSlave}-${devChildren}`; globalWindow['devChildren'] = devChildren;
+        globalWindow['devGet'] = [`${globalWindow.hostPortWeb}/${devMasterDevSlaveDevChildren}`, `${globalWindow.hostPortLoc}/${devMasterDevSlaveDevChildren}`];
     }
 
     ret['ret'] = true;

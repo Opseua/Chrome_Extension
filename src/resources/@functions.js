@@ -52,29 +52,36 @@ if (cng == 1) { // CHROME
 await import('./getPath.js'); let retGetPath; retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket;
 
 let securityPass = `${conf.securityPass}`;
-let serverWeb = conf.server['1']; let hostWeb = `${serverWeb.host}`; let portWeb = `${serverWeb.port}`; let hostRoomWeb = `${hostWeb}:${portWeb}`
-let serverLoc = conf.server['2']; let hostLoc = `${serverLoc.host}`; let portLoc = `${serverLoc.port}`; let hostRoomLoc = `${hostLoc}:${portLoc}`;
+
+let devicesObjSend = conf.devices[conf.devices.is[engName].sendTo]; let devicesValuesSend = Object.values(devicesObjSend);
+let devicesKeysSend = {}; Object.keys(devicesObjSend).forEach((key, index) => { devicesKeysSend[key] = index; });
+let devicesObjGet = conf.devices[engName]; let devicesValuesGet = Object.values(devicesObjGet);
+let devicesKeysGet = {}; Object.keys(devicesObjGet).forEach((key, index) => { devicesKeysGet[key] = index; });
+let devMaster = conf.master; let devices = [[conf.devices.is[engName].sendTo, devicesKeysSend, devicesValuesSend], [engName, devicesKeysGet, devicesValuesGet]]
+
+let serverLoc = conf.server['1']; let hostLoc = `${serverLoc.host}`; let portLoc = `${serverLoc.port}`; let hostPortLoc = `${hostLoc}:${portLoc}`;
+let serverWeb = conf.server['2']; let hostWeb = `${serverWeb.host}`; let portWeb = `${serverWeb.port}`; let hostPortWeb = `${hostWeb}:${portWeb}`
 
 let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing;
 let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop; let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages;
 
-let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`;
-let par5 = `${securityPass}-${conf.par5}`; let par6 = `${conf.par6}`; let par7 = `${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`;
-let par9 = `${securityPass}-${conf.par9}`; let par10 = `${securityPass}-${conf.par10}`
+let sheetServer = conf.sheetServer; let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`;
+let par5 = `${securityPass}-${conf.par5}`; let par6 = `${conf.par6}`; let par7 = `${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`;
+let par10 = `${securityPass}-${conf.par10}`
 
-let devices = conf.devices; let devMaster = `${devices[0].master}`; let sheetServer = conf.sheetServer
 // CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
-let devSend = `${letter == 'D' ? hostRoomLoc : hostRoomWeb}/${devMaster}`; devSend = `${devSend}_${devices[eng ? 2 : 1].name}`
+let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/${devMaster}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`
 
 // MANTER APÓS O 'devSend'
 globalWindow = {
     ...globalWindow,
-    'securityPass': securityPass, 'serverWeb': serverWeb.host, 'portWeb': portWeb, 'portLoc': portLoc, 'devMaster': devMaster, 'devSend': devSend,
+    'securityPass': securityPass, 'serverWeb': serverWeb.host, 'portWeb': portWeb, 'serverLoc': serverLoc.host, 'portLoc': portLoc,
+    'devMaster': devMaster, 'devSlave': engName, 'devSend': devSend, 'devices': devices,
 
-    'hostRoomWeb': hostRoomWeb, 'hostRoomLoc': hostRoomLoc, 'secConnect': secConnect, 'secReconnect': secReconnect, 'secRetWebSocket': secRetWebSocket,
+    'hostPortWeb': hostPortWeb, 'hostPortLoc': hostPortLoc, 'secConnect': secConnect, 'secReconnect': secReconnect, 'secRetWebSocket': secRetWebSocket,
     'secPing': secPing, 'secPingTimeout': secPingTimeout, 'secLoop': secLoop, 'kbPartsMessage': kbPartsMessage, 'minClearPartsMessages': minClearPartsMessages,
 
-    'par1': par1, 'par2': par2, 'par3': par3, 'par4': par4, 'par5': par5, 'par6': par6, 'par7': par7, 'par8': par8, 'par9': par9, 'par10': par10, 'sheetServer': sheetServer,
+    'sheetServer': sheetServer, 'par1': par1, 'par2': par2, 'par3': par3, 'par4': par4, 'par5': par5, 'par6': par6, 'par7': par7, 'par8': par8, 'par9': par9, 'par10': par10,
 }
 // console.log('1', '-', globalWindow.conf, '|', letter, '|', globalWindow.root, '| functions →', globalWindow.functions, '| devMaster →', globalWindow.devMaster, '| project →', globalWindow.project, '| devSlave →', globalWindow.devSlave)
 

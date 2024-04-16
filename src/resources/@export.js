@@ -6,19 +6,23 @@ if (cng == 1) { window['all2'] = all2; } else { global['all2'] = all2 }
 
 // IMPORTAR BIBLIOTECAS
 if (!(cng == 1 ? window.all1 : global.all1)) {
+    // DEFINIR O 'devChildren' → [CHROME] EMAIL DO USUÁRIO | [NODEJS] PRIMEIRO ARQUIVO A SER EXECUTADO (NA MAIORIA DOS CASOS 'server')
+    let devC = new Error().stack.split('\n'); devC = devC[devC.length - 1]; let devChildren = devC.includes('.js:') ? devC.match(/\/([^/]+)\.[^/]+$/)[1] : false
+    if (typeof window !== 'undefined') { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email) }) }) }
+
+    // @functions
     await import('./@functions.js');
 
     // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
-    let retGetPath = await getPath({ 'e': new Error(), 'isFunction': false, 'devSlave': cng == 1 ? 'CHROME' : 'NODEJS' })
+    let retGetPath = await getPath({ 'e': new Error(), 'devChildren': devChildren })
 
-    // console.log(eng); console.log(engName); console.log(cng); console.log(letter); console.log("#################")
-    // console.log(globalWindow.serverWeb)
-    // console.log(globalWindow.portWeb)
-    // console.log(globalWindow.portLoc)
-    // console.log(globalWindow.securityPass)
-    // console.log(globalWindow.devMaster)
-    // console.log(globalWindow.devSlave)
-    // console.log(globalWindow.devGet)
+    // console.log(eng, '-', engName, '-', cng, '-', letter); console.log("#################")
+    // console.log('securityPass:', globalWindow.securityPass)
+    // console.log('portWeb:', globalWindow.portWeb, '|', 'serverWeb:', globalWindow.serverWeb)
+    // console.log('portLoc:', globalWindow.portLoc, '|', 'serverLoc:', globalWindow.serverLoc)
+    // console.log('devMaster:', globalWindow.devMaster, '|', 'devSlave:', globalWindow.devSlave, '|', 'devChildren:', globalWindow.devChildren)
+    // console.log('devSend:', globalWindow.devSend)
+    // console.log('devGet:', globalWindow.devGet)
 }
 
 // FUNÇÕES DESSE PROJETO
