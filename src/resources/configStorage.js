@@ -11,7 +11,7 @@
 // cs = await csf([{ 'a': 'b' }]); cs = cs.res // ***** CS ***** SET VALOR NO 'reg.json'
 // console.log(cs)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function configStorage(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

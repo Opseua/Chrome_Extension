@@ -9,7 +9,7 @@
 // retFile = await file(infFile);
 // console.log(retFile)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function file(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

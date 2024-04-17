@@ -7,7 +7,7 @@
 // retNotification = await notification(infNotification);
 // console.log(retNotification)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function notification(infOk) {
     let ret = { 'ret': false };
     e = infOk && infOk.e ? infOk.e : e

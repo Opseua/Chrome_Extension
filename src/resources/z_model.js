@@ -5,7 +5,7 @@
 // retModel = await model(infModel)
 // console.log(retModel)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function model(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

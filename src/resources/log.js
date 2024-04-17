@@ -6,7 +6,7 @@
 // retLog = await log(infLog);
 // console.log(retLog)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function log(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

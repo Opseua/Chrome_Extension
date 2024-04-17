@@ -3,7 +3,7 @@
 // retSecToHour = secToHour(infSecToHour)
 // console.log(retSecToHour)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 function secToHour(inf) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

@@ -3,7 +3,7 @@
 // retClipboard = await clipboard(infClipboard);
 // console.log(retClipboard)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function clipboard(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

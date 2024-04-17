@@ -3,7 +3,7 @@
 // retRandom = await randomNumber(infRandom);
 // console.log(retRandom)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function randomNumber(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

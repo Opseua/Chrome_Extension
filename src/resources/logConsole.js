@@ -6,7 +6,7 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
     try {
         if (catchGlobal) {
-            let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
+            let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
             if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
             else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
         }

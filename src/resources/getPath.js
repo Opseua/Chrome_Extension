@@ -1,9 +1,6 @@
 // let infGetPath, retGetPath; // 'isFunction': true
-// infGetPath = { 'e': new Error(), 'isFunction': true, }
-// retGetPath = retGetPath = await getPath(infGetPath);
-// console.log(retGetPath)
-// infGetPath = { 'e': new Error(), 'isFunction': false, }
-// retGetPath = retGetPath = await getPath(infGetPath);
+// infGetPath = { 'e': new Error() }
+// retGetPath = await getPath(infGetPath);
 // console.log(retGetPath)
 
 async function getPath(inf) {

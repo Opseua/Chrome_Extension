@@ -4,7 +4,7 @@
 // retHaskey = hasKey(infHasKey);
 // console.log(retHaskey)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 function hasKey(inf) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

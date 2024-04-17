@@ -3,7 +3,7 @@
 // retChromeActions = await chromeActions(infChromeActions);
 // console.log(retChromeActions)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function chromeActions(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

@@ -12,7 +12,7 @@
 // retJsonInterpret = await jsonInterpret(infJsonInterpret)
 // console.log(retJsonInterpret)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function jsonInterpret(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

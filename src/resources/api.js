@@ -2,7 +2,7 @@
 // infApi = { // ###### → json/object
 //     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
 //     'headers': { 'Content-Type': 'application/json' },
-//     'body': { 'aaa': 'bbbb' }, 'max': 10
+//     'body': { 'aaa': 'bbb' }, 'max': 10
 // };
 // infApi = { // ###### → text
 //     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
@@ -17,7 +17,7 @@
 // retApi = await api(infApi);
 // console.log(retApi)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function api(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

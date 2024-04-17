@@ -3,7 +3,7 @@
 // retTabSearch = await tabSearch(infTabSearch); // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // console.log(retTabSearch)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function tabSearch(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

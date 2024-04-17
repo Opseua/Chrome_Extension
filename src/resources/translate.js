@@ -3,7 +3,7 @@
 // retTranslate = await translate(infTranslate);
 // console.log(retTranslate)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function translate(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {

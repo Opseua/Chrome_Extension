@@ -3,7 +3,7 @@
 // retSniffer = await sniffer(infSniffer);
 // console.log(retSniffer)
 
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 async function sniffer(inf) {
     let ret = { 'ret': false, 'res': { 'req': {}, 'res': {} } };
     e = inf && inf.e ? inf.e : e

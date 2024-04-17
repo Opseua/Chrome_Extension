@@ -1,4 +1,4 @@
-let e = import.meta.url, ee = e
+let e = import.meta.url, ee = e;
 let mensagensPartesRecebida = {}
 async function messageReceived(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
