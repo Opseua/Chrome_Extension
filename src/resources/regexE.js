@@ -5,26 +5,35 @@
 
 async function regexE(inf) {
     let ret = { 'ret': false };
-    console.log('\n--------------------------------------')
     try {
         // IDENTIFICAR ENGINE
-        let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
+        let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2; let engName = cng == 1 ? 'CHROME' : 'NODEJS'
 
         // PEGAR O PROJETO, ARQUIVO E LINHA DO ERRO
         let retGetPath = await getPath({ 'e': inf.e, }); let { conf, root, functions, project, line } = retGetPath.res; let fileOk = retGetPath.res.file
 
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
-        let projectFile = `[${project}]\n→ ${fileOk}`; let retFetch, devCatchErr, devSecurityPass, devHost, devPort, devMaster, devSend
+        let projectFile = `[${project}]\n→ ${fileOk}`; let retFetch, devCatchErr, devSecurityPass, devMaster, devSend
         if (cng == 1) { // CHROME
             try { retFetch = await fetch(chrome.runtime.getURL(conf)); retFetch = await retFetch.text() } catch (catchErr) { devCatchErr = true }
         } else if (cng == 2) { // NODEJS
             try { retFetch = await _fs.promises.readFile(`${letter}:/${root}/${functions}/${conf}`, 'utf8') } catch (catchErr) { devCatchErr = true }
         }; if (cng == 1 || cng == 2) {
-            if (devCatchErr) { devSecurityPass = 'AAAAAAAA'; devHost = '127.0.0.1'; devPort = '1234'; devMaster = `???`; devSend = `???` }
+            if (devCatchErr) { devSecurityPass = 'AAAAAAAA'; devSend = `127.0.0.1:1234/AAA` }
             else {
                 retFetch = JSON.parse(retFetch); let webSocket = retFetch.webSocket; devSecurityPass = webSocket.securityPass;
-                devHost = webSocket.server[letter == 'D' ? '2' : '1'].host; devPort = webSocket.server[letter == 'D' ? '2' : '1'].port;
-                devMaster = webSocket.devices[0].master; devSend = webSocket.devices[eng ? 2 : 1].name;
+
+                let devicesObjSend = webSocket.devices[webSocket.devices.is[engName].sendTo]; let devicesValuesSend = Object.values(devicesObjSend);
+                let devicesKeysSend = {}; Object.keys(devicesObjSend).forEach((key, index) => { devicesKeysSend[key] = index; });
+                let devicesObjGet = webSocket.devices[engName]; let devicesValuesGet = Object.values(devicesObjGet);
+                let devicesKeysGet = {}; Object.keys(devicesObjGet).forEach((key, index) => { devicesKeysGet[key] = index; });
+                devMaster = webSocket.master; let devices = [[webSocket.devices.is[engName].sendTo, devicesKeysSend, devicesValuesSend], [engName, devicesKeysGet, devicesValuesGet]]
+
+                let serverLoc = webSocket.server['1']; let hostLoc = `${serverLoc.host}`; let portLoc = `${serverLoc.port}`; let hostPortLoc = `${hostLoc}:${portLoc}`;
+                let serverWeb = webSocket.server['2']; let hostWeb = `${serverWeb.host}`; let portWeb = `${serverWeb.port}`; let hostPortWeb = `${hostWeb}:${portWeb}`
+
+                // CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
+                devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/${devMaster}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`
             }
         }
 
@@ -33,7 +42,7 @@ async function regexE(inf) {
             'file': fileOk, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'catchGlobal': catchGlobal, 'e': inf.e.stack,
         };
 
-        console.log(`\n### ERRO ### [catchGlobal ${errorOk.catchGlobal}]\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n`)
+        console.log(`\n------------------------------------------------\n\n### ERRO ### [catchGlobal ${errorOk.catchGlobal}]\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n\n------------------------------------------------`)
 
         // LOG DE ERROS [NODEJS]
         if (errorOk.cng == 2) {
@@ -63,19 +72,18 @@ async function regexE(inf) {
         // ENVIAR NOTIFICAÇÃO COM O ERRO
         try {
             let reqOpt = { 'method': 'POST', }; let body = JSON.stringify({
-                'destination': `/${devHost}:${devPort}/?roo=${devSend}`, 'messageId': true, 'buffer': false, 'partesRestantes': 0,
-                'message': {
-                    'fun': [{
-                        'securityPass': errorOk.cng == 3 ? 'AAAAAAAA' : devSecurityPass,
+                "fun": [
+                    {
+                        "securityPass": errorOk.cng == 3 ? 'AAAAAAAA' : devSecurityPass,
                         'retInf': false, 'name': 'notification', 'par': {
                             'duration': 5, 'icon': './src/scripts/media/notification_3.png',
                             'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`,
                             'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e.substring(0, 128)}`
                         }
-                    }]
-                }
+                    }
+                ]
             })
-            let url = errorOk.cng == 3 ? `http://123.456.789:1234/AAAAAAAA` : `http://${devHost}:${devPort}/?roo=${devSend}`
+            let url = errorOk.cng == 3 ? `http://123.456.789:1234/AAAAAAAA` : `http://${devSend}`
             // GOOGLE
             if (errorOk.cng == 3) {
                 reqOpt['payload'] = body; UrlFetchApp.fetch(url, reqOpt)
@@ -85,14 +93,13 @@ async function regexE(inf) {
                 reqOpt['body'] = body; await fetch(url, reqOpt)
             }
         } catch (catchErr) {
-            console.log(`\n\n### ERRO REGEXe [FETCH] ###\n\n${catchErr}\n`)
+            console.log(`\n------------------------------------------------\n\n### ERRO REGEXe [FETCH] ###\n\n${catchErr}\n\n------------------------------------------------`)
         }
         ret['res'] = { 'file': errorOk.file, 'line': errorOk.line, 'projectFile': errorOk.projectFile, 'e': errorOk.e, }
-        ret['msg'] = `\n\n### ERRO ### [catchGlobal ${inf.catchGlobal}]\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
+        ret['msg'] = `### ERRO ### [catchGlobal ${inf.catchGlobal}]\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
     } catch (catchErr) {
-        console.log(`\n\n### ERRO REGEXe ###\n\n${catchErr.stack}\n`)
+        console.log(`\n------------------------------------------------\n\n### ERRO REGEXe ###\n\n${catchErr.stack}\n\n------------------------------------------------`)
     };
-    console.log('--------------------------------------\n')
     return {
         ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),

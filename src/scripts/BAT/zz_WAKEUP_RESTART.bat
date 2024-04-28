@@ -8,8 +8,8 @@ if "!arg1!" equ "" "!fileMsg!" "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION >nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
-rem echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
-rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
+echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
+set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 "!fileLog!" "[WAKEUP_RESTART] = [### INICIOU ###] [PARS-!arg1!]"
 
@@ -100,7 +100,15 @@ if "!devMaster!"=="OPSEUA" (
 	rem "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\ON_VIEW.vbs"
 	ping -n 3 -w 1000 127.0.0.1 >nul
 ) else (
-	start "" taskmgr
+	"!2_BACKGROUND!" "explorer"
+	
+	ping -n 5 -w 1000 127.0.0.1 >nul
+	
+	"!2_BACKGROUND!" "taskmgr"
+	
+	ping -n 3 -w 1000 127.0.0.1 >nul
+	
+	"!2_BACKGROUND!" "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt" -monitor
 	
 	ping -n 3 -w 1000 127.0.0.1 >nul
 	

@@ -1,7 +1,7 @@
 // await import('./resources/@export.js'); // TESTES
 
 // let infModel, retModel // 'logFun': true,
-// infModel = { 'e': e, 'd': 'VALOR 4', 'c': 'VALOR 3', }
+// infModel = { 'e': e, 'chaveUm': 'valorUm', 'chaveDois': 'valorDois' }
 // retModel = await model(infModel)
 // console.log(retModel)
 

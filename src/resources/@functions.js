@@ -11,12 +11,12 @@
 // infLog = {'e':e, 'folder': 'Registros', 'path': `${errMsg}.txt`, 'text': retApi }
 // retLog = await log(infLog);
 
-// LOOP DE REPETIÇÃO
+// ESPERAR E REPETIR
 // setInterval(() => {
 //     console.log('OK');
 //   }, 2000);
 
-// ESPERAR E MOSTRAR UMA VEZ (timeout)
+// ESPERAR E EXECUTAR UMA VEZ
 // setTimeout(() => {
 //     console.log('OK');
 // }, 2000);

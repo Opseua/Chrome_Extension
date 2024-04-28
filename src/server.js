@@ -32,23 +32,13 @@ async function serverRun(inf) {
 
         // ATALHO PRESSIONADO
         chrome.commands.onCommand.addListener(async function (...inf) {
-            let ret = { 'ret': false };
             try {
-                // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ON START: ATALHO PRESSIONADO` })
-                let infShortcutPressed = { 'shortcut': inf[0] }
-                if (infShortcutPressed.shortcut == 'atalho_1') {
-                    command1();
-                } else if (infShortcutPressed.shortcut == 'atalho_2') {
-                    command2();
-                } else { ret['msg'] = `\n#### ERRO #### ON START | ACAO DO ATALHO NAO DEFINIDA \n\n` }
+                let infShortcutPressed = { 'shortcut': inf[0] }; // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ON START: ATALHO PRESSIONADO` })
+                if (infShortcutPressed.shortcut == 'atalho_1') { command1(); }
+                else if (infShortcutPressed.shortcut == 'atalho_2') { command2(); }
+                else { logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ACAO DO ATALHO NAO DEFINIDA` }) }
             } catch (catchErr) {
-                let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
-                ret['msg'] = retRegexE.res
-            };
-            return {
-                ...({ ret: ret.ret }),
-                ...(ret.msg && { msg: ret.msg }),
-                ...(ret.res && { res: ret.res }),
+                await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
             };
         });
 
@@ -58,9 +48,29 @@ async function serverRun(inf) {
         // CLIENT (NÃO POR COMO 'await'!!!)
         client({ 'e': e })
 
-
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
+
+        // let retCompleteJudge = await completeJudge({ 'e': e, 'hitApp': 'POI_Evaluation' })
+        // console.log(retCompleteJudge.res)
+
+        // let infChromeActions, retChromeActions // 'logFun': true,
+        // infChromeActions = { 'e': e, 'action': 'getBody', 'tabTarget': `*tryrating*` }
+        // retChromeActions = await chromeActions(infChromeActions); let body = retChromeActions.res
+
+        // let infRegex, retRegex
+        // retRegex = regex({ 'e': e, 'pattern': `textarea name="(.*?)" type="text" rows="`, 'text': body });
+        // console.log(retRegex)
+        // // field-sJ5TlHZLBX
+
+        // // PEGAR O ID DO CAMPO // →→→   <label for="field-oiaYE9zikt" class="field-label">Name Correction *</label>        
+        // infChromeActions = { 'e': e, 'action': 'elementGetId', 'body': body, 'nameClass': 'field-label', 'nameLabel': 'Comments' }
+        // // infChromeActions = { 'e': e, 'action': 'elementGetValue1', 'body': body, 'method': 'xpath', 'element': `//*[@id="endereco"]` }
+        // // infChromeActions = { 'e': e, 'action': 'elementGetValue2', 'tabTarget': `*buscacepinter*`, 'method': 'xpath', 'element': `//*[@id="endereco"]` }
+        // infChromeActions = { 'e': e, 'action': 'elementSet', 'tabTarget': `*tryrating*`, 'method': 'xpath', 'element': `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div/div/div[3]/div[1]/div[1]/div[2]/div/div/div/div/div/div/div/div[19]/div/div/div/div/div/div/div/div/div/div/div/form/div/div/textarea`, 'value': `22021-001` }
+        // // infChromeActions = { 'e': e, 'action': 'elementClick', 'tabTarget': `*buscacepinter*`, 'method': 'xpath', 'element': `//*[@id="btn_pesquisar"]` }
+        // retChromeActions = await chromeActions(infChromeActions);
+        // console.log(retChromeActions)
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
@@ -77,7 +87,7 @@ async function serverRun(inf) {
         ...(ret.res && { res: ret.res }),
     };
 }
-// TODAS AS FUNÇÕES PRIMÁRIAS DO 'server.js' / 'serverC6.js' / 'serverJsf.js' DEVEM ser 'serverRun'!!!
+// TODAS AS FUNÇÕES PRIMÁRIAS DO 'server.js' / 'serverC6.js' / 'serverJsf.js' DEVEM SE CHAMAR 'serverRun'!!!
 serverRun()
 
 

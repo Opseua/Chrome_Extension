@@ -2,7 +2,7 @@ let e = import.meta.url, ee = e;
 async function command1(inf) {
   let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
   try {
-    // let retPromptChrome = promptChrome({ 'e': e, 'title': `NOME DO COMANDO` });
+    let retPromptChrome = promptChrome({ 'e': e, 'title': `NOME DO COMANDO` });
     ret['msg'] = `COMMAND 1: OK`;
     ret['ret'] = true;
   } catch (catchErr) {
