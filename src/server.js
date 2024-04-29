@@ -51,26 +51,8 @@ async function serverRun(inf) {
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 
-        // let retCompleteJudge = await completeJudge({ 'e': e, 'hitApp': 'POI_Evaluation' })
-        // console.log(retCompleteJudge.res)
-
-        // let infChromeActions, retChromeActions // 'logFun': true,
-        // infChromeActions = { 'e': e, 'action': 'getBody', 'tabTarget': `*tryrating*` }
-        // retChromeActions = await chromeActions(infChromeActions); let body = retChromeActions.res
-
-        // let infRegex, retRegex
-        // retRegex = regex({ 'e': e, 'pattern': `textarea name="(.*?)" type="text" rows="`, 'text': body });
-        // console.log(retRegex)
-        // // field-sJ5TlHZLBX
-
-        // // PEGAR O ID DO CAMPO // →→→   <label for="field-oiaYE9zikt" class="field-label">Name Correction *</label>        
-        // infChromeActions = { 'e': e, 'action': 'elementGetId', 'body': body, 'nameClass': 'field-label', 'nameLabel': 'Comments' }
-        // // infChromeActions = { 'e': e, 'action': 'elementGetValue1', 'body': body, 'method': 'xpath', 'element': `//*[@id="endereco"]` }
-        // // infChromeActions = { 'e': e, 'action': 'elementGetValue2', 'tabTarget': `*buscacepinter*`, 'method': 'xpath', 'element': `//*[@id="endereco"]` }
-        // infChromeActions = { 'e': e, 'action': 'elementSet', 'tabTarget': `*tryrating*`, 'method': 'xpath', 'element': `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div/div/div[3]/div[1]/div[1]/div[2]/div/div/div/div/div/div/div/div[19]/div/div/div/div/div/div/div/div/div/div/div/form/div/div/textarea`, 'value': `22021-001` }
-        // // infChromeActions = { 'e': e, 'action': 'elementClick', 'tabTarget': `*buscacepinter*`, 'method': 'xpath', 'element': `//*[@id="btn_pesquisar"]` }
-        // retChromeActions = await chromeActions(infChromeActions);
-        // console.log(retChromeActions)
+        let retCompleteJudge = await completeJudge({ 'e': e, 'hitApp': 'POIEvaluation' })
+        console.log(retCompleteJudge.res)
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {

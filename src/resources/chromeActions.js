@@ -1,14 +1,32 @@
+// → HTML para teste em: "D:\ARQUIVOS\PROJETOS\Chrome_Extension\src\resources\z_HTML.html"
+
 // let infChromeActions, retChromeActions // 'logFun': true,
 // infChromeActions = { 'e': e, 'action': 'badge', 'text': `OLA` }
 // infChromeActions = { 'e': e, 'action': 'badge', 'color': [25, 255, 71, 255] }
 // infChromeActions = { 'e': e, 'action': 'user' }
 // infChromeActions = { 'e': e, 'action': 'getBody', 'tabTarget': `*buscacepinter*` }
-// // PEGAR O ID DO CAMPO // →→→   <label for="field-oiaYE9zikt" class="field-label">Name Correction *</label>
-// infChromeActions = { 'e': e, 'action': 'elementGetId', 'body': body, 'nameClass': 'field-label', 'nameLabel': 'POI Validity *' }
-// infChromeActions = { 'e': e, 'action': 'elementGetValue1', 'body': body, 'method': 'xpath', 'element': `//*[@id="endereco"]` }
-// infChromeActions = { 'e': e, 'action': 'elementGetValue2', 'tabTarget': `*buscacepinter*`, 'method': 'xpath', 'element': `//*[@id="endereco"]` }
-// infChromeActions = { 'e': e, 'action': 'elementSet', 'tabTarget': `*buscacepinter*`, 'method': 'xpath', 'element': `//*[@id="endereco"]`, 'value': `22021-001` }
-// infChromeActions = { 'e': e, 'action': 'elementClick', 'tabTarget': `*buscacepinter*`, 'method': 'xpath', 'element': `//*[@id="btn_pesquisar"]` }
+
+// // ############ PEGAR O BODY  ############
+// infChromeActions = { 'e': e, 'action': 'getBody', 'tabTarget': `*file:///*`, }
+// // ############ ATRIBUTO: PEGAR VALOR  ############
+// // → todos com a (tag + atributo + conteúdo) TAGS →→→ [input/select/textarea/button/div/label/span] | ATRIBUTOS →→→ [id/class/name/type/for/nomeDoAtributo] | CONTEÚDO →→→ [nomeDoConteudo]
+// infChromeActions = { 'e': e, 'action': 'attributeGetValue', 'tabTarget': `*file:///*`, 'tag': `label`, 'attribute': `name`, 'content': `LABEL 2`, }
+// // ############ ELEMENTO: PEGAR VALOR  ############
+// // → todos com a (tag) TAGS →→→ [input/select/textarea/button/div/label/span]
+// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'tabTarget': `*file:///*`, 'tag': `input`, }
+// // → todos com a (tag + atributo) TAGS →→→ [input/select/textarea/button/div/label/span] | ATRIBUTOS →→→ [type/id/class/name/for/nomeDoAtributo]
+// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'tabTarget': `*file:///*`, 'tag': `textarea`, 'attribute': `class`, }
+// // → todos com a (atributo + valor do atributo) ATRIBUTOS →→→ [type/id/class/name/for/nomeDoAtributo] | ATRIBUTOS VALOR →→→ [text/checkbox/nomeDoAtributo]
+// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'tabTarget': `*file:///*`, 'attribute': `id`, 'attributeValue': `idNome1`, }
+// // → todos com a (tag + atributo + valor do atributo) TAGS →→→ [input/select/textarea/button/div/label/span] | ATRIBUTOS →→→ [type/id/class/name/for/nomeDoAtributo] | ATRIBUTOS VALOR →→→ [text/checkbox/nomeDoAtributo]
+// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'tabTarget': `*file:///*`, 'tag': `textarea`, 'attribute': `id`, 'attributeValue': `idNome1`, }
+// // ############ ELEMENTO: DEFINIR VALOR  ############
+// // → todos com o (atributo + valor do atributo) ATRIBUTOS →→→ [id/class/name/type/for/nomeDoAtributo] | ATRIBUTOS VALOR →→→ [text/checkbox/nomeDoAtributo]
+// infChromeActions = { 'e': e, 'action': 'elementSetValue', 'tabTarget': `*file:///*`, 'attribute': `class`, 'attributeValue': `classNome3`, 'elementValue': `VALOR NOVO` }
+// // ############ ELEMENTO: CLICAR  ############
+// // → todos com o (atributo + valor do atributo) ATRIBUTOS →→→ [id/class/name/type/for/nomeDoAtributo] | ATRIBUTOS VALOR →→→ [text/checkbox/nomeDoAtributo]
+// infChromeActions = { 'e': e, 'action': 'elementClick', 'tabTarget': `*file:///*`, 'attribute': `nomeDoAtributo`, 'attributeValue': `atributoNome2Botao`, }
+
 // retChromeActions = await chromeActions(infChromeActions);
 // console.log(retChromeActions)
 
@@ -26,12 +44,12 @@ async function chromeActions(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        let { action, color, text, tabTarget, method, element, value, nameClass, nameLabel, body } = inf; let retTabSearch, code = '', id, retExecuteScript
+        let { action, color, text, tabTarget, tag, attribute, attributeValue, elementValue, content } = inf; let retTabSearch, code = '', retExecuteScript, tabId
 
         if (action == 'badge') {
             action = chrome.browserAction; if (color) { action.setBadgeBackgroundColor({ 'color': color }) } // [25, 255, 71, 255]
             // if (inf.hasOwnProperty('text')) {
-            if (text) { action.setBadgeText({ 'text': text }) };
+            if (text || text == '') { action.setBadgeText({ 'text': text }) };
             ret['msg'] = `CHROME ACTIONS [BADGE]: OK`
             ret['ret'] = true
         } else if (action == 'user') {
@@ -41,60 +59,50 @@ async function chromeActions(inf) {
             ret['res'] = retGetProfileUserInfo
             ret['msg'] = `CHROME ACTIONS [USER]: OK`
             ret['ret'] = true
-        } else if (action == 'getBody' || action == 'elementClick' || action == 'elementSet' || action == 'elementGetValue2') {
+        } else if (action == 'getBody' || action == 'attributeGetValue' || action == 'elementGetValue' || action == 'elementSetValue' || action == 'elementClick') {
             // DEFINIR ID DA ABA ALVO
-            if (typeof tabTarget === "number") { id = tabTarget }
-            else { retTabSearch = await tabSearch({ 'e': e, 'search': tabTarget, 'openIfNotExist': false }); if (!retTabSearch.ret) { return retTabSearch } id = retTabSearch.res.id }
+            if (typeof tabTarget === "number") { tabId = tabTarget }
+            else { retTabSearch = await tabSearch({ 'e': e, 'search': tabTarget, 'openIfNotExist': false }); if (!retTabSearch.ret) { return retTabSearch } tabId = retTabSearch.res.id }
+
+            function elementAction({ action, tag, attribute, attributeValue, elementValue, content }) {
+                let elementos = attribute ? document.querySelectorAll(`${tag ? tag : ''}[${attribute}${attributeValue ? `="${attributeValue}"` : ''}]`) : document.getElementsByTagName(tag)
+                if (elementos && elementos.length > 0) {
+                    if (action == 'attributeGetValue') {
+                        // ATRIBUTO: PEGAR VALOR
+                        return Array.from(elementos).map(elemento => {
+                            if ((elemento.tagName.toLowerCase() === 'label' || elemento.tagName.toLowerCase() === 'span') && elemento.innerText.trim() === content) { return elemento.getAttribute(attribute); }
+                        }).filter(value => value !== undefined);
+                    } else if (action == 'elementGetValue') {
+                        // ELEMENTO: PEGAR VALOR
+                        return Array.from(elementos).map(elemento => {
+                            if (elemento.tagName.toLowerCase() === 'select') { return Array.from(elemento.selectedOptions).map(option => option.value); }
+                            else if (elemento.tagName.toLowerCase() === 'textarea') { return elemento.value; } else if (elemento.type === 'checkbox' || elemento.type === 'radio') { return elemento.checked; }
+                            else { return elemento.value || elemento.innerText; }
+                        });
+                    } else if (action == 'elementSetValue' || action == 'elementClick') {
+                        // ELEMENTO: DEFINIR VALOR | CLICAR
+                        elementos.forEach(elemento => {
+                            if (action == 'elementClick') { elemento.click() } else if (elemento.type === 'checkbox' || elemento.type === 'radio') { elemento.checked = elementValue; } else { elemento.value = elementValue; }
+                        }); return true;
+                    }
+                }; return false;
+            }
+
             if (action == 'getBody') {
                 // PEGAR O BODY
                 code = `function getBody() {return document.documentElement.outerHTML;}getBody();`;
-            } else if (method == 'xpath') {
-                if (action == 'elementClick') {
-                    // ELEMENTO: CLICAR
-                    code = `var eleCode = document.evaluate('${element}', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue; if (eleCode) { eleCode.click(); true; };`
-                } else if (action == 'elementSet') {
-                    // ELEMENTO: VALOR → DEFINIR
-                    code = `var eleCode = document.evaluate('${element}', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue; if (eleCode) { eleCode.value = '${value}' }`
-                } else if (action == 'elementGetValue2') {
-                    // ELEMENTO: VALOR → PEGAR
-                    code = `function getValue(ele) { ele = '${element}'; var eleSelect, retXpath = document.evaluate(ele, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null); if (retXpath.singleNodeValue) {
-                            ele = retXpath.singleNodeValue; if (ele.tagName === 'INPUT' || ele.tagName === 'SELECT' || ele.tagName === 'TEXTAREA') { eleSelect = ele.value; } 
-                            else if (ele.tagName === 'CHECKBOX' || ele.tagName === 'RADIO') { eleSelect = ele.checked; } else { eleSelect = ele.textContent.trim(); }; return eleSelect; } }; getValue();`;
-                }
+            } else {
+                // OUTRO TIPO DE AÇÃO
+                let infElementAction = { 'action': action, 'tag': tag, 'attribute': attribute, 'attributeValue': attributeValue, 'elementValue': elementValue, 'content': content };
+                code = `(${elementAction.toString()})(${JSON.stringify(infElementAction)});`;
             }
 
-            // *** EXECUTAR SCRIPT ***
-            if (code.includes('document')) {
-                retExecuteScript = await new Promise((resolve) => { chrome.tabs.executeScript(id, { 'code': code }, (res) => { resolve(res[0]) }) });
-                if ((action == 'getBody' || action == 'elementGetValue2') && retExecuteScript) { ret['res'] = retExecuteScript }
-                ret['msg'] = `CHROME ACTIONS [GET BODY/ELEMENT CLICK/ELEMENT SET/ELEMENT GET VALUE 2]: ${retExecuteScript ? 'OK' : 'ERRO | ELEMENTO NÃO ENCONTRADO'}`
-                ret['ret'] = retExecuteScript ? true : false
-            }
-        } else if (action == 'elementGetId' || action == 'elementGetValue1') {
-            let documentOrBody = new DOMParser().parseFromString(body, 'text/html');
-            if (documentOrBody) {
-                if (action == 'elementGetId') {
-                    let labels = documentOrBody.querySelectorAll(`label.${nameClass}`); let retIds = [];
-                    for (let label of labels) { if (label.textContent.trim() === nameLabel) { retIds.push(label.getAttribute('for')); } };
-                    if (retIds.length > 0) { ret['res'] = retIds }
-                    ret['msg'] = `CHROME ACTIONS [ELEMENT GET ID]: ${retIds.length > 0 ? 'OK' : 'ERRO | ELEMENTO NÃO ENCONTRADO'}`
-                    ret['ret'] = retIds.length > 0 ? true : false
-                } else {
-                    if (method == 'xpath') {
-                        let retXpath = documentOrBody.evaluate(element, documentOrBody, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-                        if (retXpath.singleNodeValue) {
-                            let ele = retXpath.singleNodeValue; if (ele.tagName === 'INPUT' || ele.tagName === 'SELECT' || ele.tagName === 'TEXTAREA') { retXpath = ele.value; }
-                            else if (ele.tagName === 'CHECKBOX' || ele.tagName === 'RADIO') { retXpath = ele.checked; } else { retXpath = ele.textContent.trim(); }
-                        } else { retXpath = false; }
-                        if (retXpath) { ret['res'] = retXpath }
-                        ret['msg'] = `CHROME ACTIONS [ELEMENT GET VALUE1]: ${retXpath ? 'OK' : 'ERRO | ELEMENTO NÃO ENCONTRADO'}`
-                        ret['ret'] = retXpath ? true : false
-                    }
-                }
-            } else {
-                ret['msg'] = `CHROME ACTIONS [ELEMENT GET ID/VALUE]: ERRO | BODY INVÁLIDO`
-                ret['ret'] = false
-            }
+            // INJETAR SCRIPT
+            retExecuteScript = await new Promise((resolve) => { chrome.tabs.executeScript(tabId, { 'code': code }, (res) => { resolve(res[0]) }) });
+
+            if ((action == 'getBody' || action == 'attributeGetValue' || action == 'elementGetValue') && retExecuteScript) { ret['res'] = retExecuteScript }
+            ret['msg'] = `CHROME ACTIONS [INJECT]: ${retExecuteScript ? 'OK' : 'ERRO | ELEMENTO NÃO ENCONTRADO'}`
+            ret['ret'] = retExecuteScript ? true : false
         }
 
         // ### LOG FUN ###
