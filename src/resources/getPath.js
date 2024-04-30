@@ -86,7 +86,7 @@ async function getPath(inf) {
     if (!inf.isFunction) {
         let devChildrenIndex = globalWindow.devices[1][1][`${res.project}_${devChildren}`]; devChildren = devChildrenIndex > -1 ? globalWindow.devices[1][2][devChildrenIndex] : nd
         let devMasterDevSlaveDevChildren = `${globalWindow.devMaster}-${globalWindow.devSlave}-${devChildren}`; globalWindow['devChildren'] = devChildren;
-        globalWindow['devGet'] = [`${globalWindow.hostPortWeb}/${devMasterDevSlaveDevChildren}`, `${globalWindow.hostPortLoc}/${devMasterDevSlaveDevChildren}`];
+        globalWindow['devGet'] = [`${globalWindow.hostPortWeb}/?roo=${devMasterDevSlaveDevChildren}`, `${globalWindow.hostPortLoc}/?roo=${devMasterDevSlaveDevChildren}`];
     }
 
     ret['ret'] = true;

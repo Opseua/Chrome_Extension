@@ -22,11 +22,6 @@ async function promptChrome(inf) {
         if (!retPrompt) {
             ret['msg'] = `\n#### ERRO #### PROMPT CHROME \n EM BRANCO \n\n`
         } else {
-            let send = {
-                "other": "TryRating_QueryImageDeservingClassification",
-                "inf": [retPrompt.split(',').map(Number)], "query": "#####"
-            }
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ADICIONAR AÇÃO\n${send}` })
             ret['res'] = retPrompt;
             ret['msg'] = 'PROMPT CHROME: OK'
             ret['ret'] = true;

@@ -6,9 +6,9 @@ async function messageReceived(inf) {
     let partesRestantes = inf.partesRestantes > -99 ? inf.partesRestantes : 0
     let message = typeof inf.message === 'object' ? JSON.stringify(inf.message) : inf.message
     let buffer = inf.buffer ? inf.buffer : false
-    let { host, room, resWs, wsClients } = inf
-    let origin = inf.origin ? inf.origin.replace('ws://', '').replace('?roo=', '') : `${host}/${room}`;
-    let destination = inf.destination ? inf.destination.replace('ws://', '').replace('?roo=', '') : 'x', isSerCli = wsClients ? 'isSer' : 'isCli'
+    let { host, room, hostRoom, resWs, wsClients } = inf
+    let origin = inf.origin ? inf.origin.replace('ws://', '') : `${hostRoom}`;
+    let destination = inf.destination ? inf.destination.replace('ws://', '') : 'x', isSerCli = wsClients ? 'isSer' : 'isCli'
 
     // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
     if (Object.keys(mensagensPartesRecebida).length == 0) {
@@ -27,7 +27,7 @@ async function messageReceived(inf) {
                 wsClientsToSend = wsClientsToSend.concat(Array.from(wsClients.rooms[room]));
             }
         }
-        erroType = wsClientsToSend.length == 0 ? `DESTINO INVÁLIDO` : origin == destination ? `DESTINO IGUAL` : 0
+        erroType = wsClientsToSend.length == 0 ? `DESTINO INVÁLIDO` : (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': origin }) || origin == destination) ? `DESTINO IGUAL` : 0
 
         // ENVIAR: MENSAGEM STATUS → ORIGEM
         let messageOrigin = {
@@ -46,7 +46,7 @@ async function messageReceived(inf) {
                 try { message = JSON.parse(message) } catch (catchErr) { }
                 let messageDestination = {
                     'origin': origin,
-                    'destination': `${value.host}/${value.room}`,
+                    'destination': `${value.hostRoom}`,
                     'messageId': messageId,
                     'buffer': buffer,
                     'partesRestantes': partesRestantes,

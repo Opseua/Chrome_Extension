@@ -19,7 +19,9 @@ async function completeJudge(inf) {
 
         let { hitApp } = inf;
 
-        if (['POIEvaluation', 'Search20',].includes(hitApp)) {
+        if (!['POIEvaluation', 'Search20',].includes(hitApp)) {
+            ret['msg'] = `COMPLETE JUDGE: ERRO NÃO EXISTE '${hitApp}'`;
+        } else {
             async function commentCreate(inf) {
                 let { options } = inf; let comment = ''; for (let [index, value] of options.entries()) {
                     let retChromeActions, infChromeActions
@@ -27,6 +29,7 @@ async function completeJudge(inf) {
                     infChromeActions = { 'e': e, 'action': 'attributeGetValue', 'tabTarget': `*tryrating*`, 'tag': `${value.action.tag}`, 'attribute': `${value.action.attribute}`, 'content': `${value.action.content}`, }
                     retChromeActions = await chromeActions(infChromeActions); // console.log(retChromeActions)
                     // ############ ELEMENTO: PEGAR VALOR ############
+                    if (!retChromeActions.ret) { return retChromeActions }
                     infChromeActions = { 'e': e, 'action': 'elementGetValue', 'tabTarget': `*tryrating*`, 'attribute': `id`, 'attributeValue': `${retChromeActions.res[0]}`, }
                     retChromeActions = await chromeActions(infChromeActions); // console.log(retChromeActions)
                     // DEFINIR COMENTÁRIO
@@ -101,10 +104,13 @@ async function completeJudge(inf) {
             }
 
             let retCommentCreate = await commentCreate({ 'options': options[hitApp] });
-
-            ret['res'] = retCommentCreate.res;
-            ret['msg'] = `COMPLETE JUDGE: OK`;
-            ret['ret'] = true;
+            if (!retCommentCreate.ret) {
+                ret = retCommentCreate
+            } else {
+                ret['res'] = retCommentCreate.res;
+                ret['msg'] = `COMPLETE JUDGE: OK`;
+                ret['ret'] = true;
+            }
         }
 
         // ### LOG FUN ###

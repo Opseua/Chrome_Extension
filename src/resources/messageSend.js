@@ -1,5 +1,6 @@
 // // SOMENTE FORA DO WEBSOCKET!!! → 'WEB' PARA 'WEB  E  'LOC' PARA 'LOC'
-// let retListenerAcionar = await listenerAcionar('messageSendOrigin_127.0.0.1:1234/ORIGEM_AQUI', { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': 'aaa', 'secondsAwait': 0, });
+// let message = { "fun": [{ "securityPass": globalWindow.securityPass, "retInf": true, "name": "notification", "par": { "duration": 2, "title": "TITULO", "text": "TEXTO", } }] };
+// let retListenerAcionar = await listenerAcionar(`messageSendOrigin_127.0.0.1:1234/?roo=ORIGEM_AQUI`, { 'destination': `127.0.0.1:1234/?roo=DESTINO_AQUI`, 'message': message, 'secondsAwait': 0, });
 // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': JSON.stringify(retListenerAcionar) });
 
 // // SOMENTE DENTRO DO WEBSOCKET!!!
@@ -18,8 +19,8 @@ async function messageSend(inf) {
         message = buffer ? Buffer.from(inf.message).toString('base64') : message;
     } else { buffer = false; message = inf.message }; let messageLength = message.length; let totalChunks = Math.ceil(messageLength / chunkSize);
     let secondsAwait = !message.includes('"retInf":true') ? 0 : inf.secondsAwait > 0 ? inf.secondsAwait : globalWindow.secRetWebSocket // → TEMPO PADRÃO SE NÃO FOR INFORMADO
-    messageId = secondsAwait == 0 ? `${messageId}` : `${messageId}_RET-TRUE`; let { resWs, } = inf; let host = resWs.host, room = resWs.room
-    let origin = inf.origin ? inf.origin : `${host}/${room}`; let destination = inf.destination ? inf.destination.replace('ws://', '').replace('?roo=', '') : 'x'
+    messageId = secondsAwait == 0 ? `${messageId}` : `${messageId}_RET-TRUE`; let { resWs, } = inf; let host = resWs.host, room = resWs.room;
+    let destination = inf.destination ? inf.destination.replace('ws://', '') : 'x'; let hostRoom = `${host}/?roo=${room}`; let origin = inf.origin ? inf.origin : `${hostRoom}`;
 
     // LISTENER DE RESPOSTA: DEFINIR (SE NECESSÁRIO)
     let retAwaitTimeout, listenerName;
@@ -88,6 +89,7 @@ let filaBigFalse = []; let filaBigTrue = []; let sending = false; function envia
 
         // LISTENER DE STATUS: MONITORAR
         retAwaitTimeout = await retAwaitTimeout;
+
         retAwaitTimeout = retAwaitTimeout.ret ? JSON.parse(retAwaitTimeout.res.message) : { 'ret': false, 'msg': `TIMEOUT_EXPIROU | MENSAGEM STATUS DO SERVIDOR` }
         if (!retAwaitTimeout.ret || partesRestantes == 0 && secondsAwait == 0) {
             let listenerName = `${messageId.replace('_RET-TRUE', '_RET-OK').split('_SERVER_')[0]}`; listenerAcionar(listenerName, retAwaitTimeout);

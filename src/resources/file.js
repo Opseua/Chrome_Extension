@@ -43,7 +43,7 @@ async function file(inf) {
                     } else if (relative.startsWith('/')) {
                         pp = pp.slice(1)
                     }
-                    par = par ? `${globalWindow.root}/${globalWindow.functions}` : `${globalWindow.root}/${globalWindow.project}`
+                    par = par ? `${globalWindow.root}${eng ? ':/' : ''}/${globalWindow.functions}` : `${eng ? `` : `${globalWindow.root}/`}${globalWindow.project}`
                     pathFull = par.split('/');
                     relativeParts = pp.split('/');
                     while (pathFull.length > 0 && relativeParts[0] == '..') {

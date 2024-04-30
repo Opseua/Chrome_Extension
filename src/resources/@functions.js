@@ -70,7 +70,7 @@ let par5 = `${securityPass}-${conf.par5}`; let par6 = `${conf.par6}`; let par7 =
 let par10 = `${securityPass}-${conf.par10}`
 
 // CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
-let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/${devMaster}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`
+let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/?roo=${devMaster}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`
 
 // MANTER APÓS O 'devSend'
 globalWindow = {
@@ -200,35 +200,4 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 //     }; pw(window, 40, 40, 'http://12.345.678.910:1234');
 // })();
 
-
-// ### Chrome
-// 1 - src/config.json | D | chrome-extension | functions → afelhdjampgfmchfcnbginicjcmjhhma | devMaster → OPSEUA | project → Downloads/Google Chrome% | devSlave → NAO_DEFINIDO
-// 2 - src/config.json | D | chrome-extension | functions → afelhdjampgfmchfcnbginicjcmjhhma | devMaster → OPSEUA | project → Downloads/Google Chrome% | devSlave → CHROME
-
-// ### NodeJS
-// 1 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → NAO_DEFINIDO | devSlave → NAO_DEFINIDO
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → Chrome_Extension | devSlave → NODEJS
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → WebSocket | devSlave → NODEJS
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → Sniffer_Python | devSlave → SNIFFER
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → URA_Reversa | devSlave → NAO_DEFINIDO
-// 2 - src/config.json | D | ARQUIVOS/PROJETOS | functions → Chrome_Extension | devMaster → OPSEUA | project → WebScraper | devSlave → NAO_DEFINIDO
-
-// "src/config.json"                                       → globalWindow.conf
-// "D"                                                     → letter
-// "chrome-extension" | "ARQUIVOS/PROJETOS"                → globalWindow.root
-// "afelhdjampgfmchfcnbginicjcmjhhma" | "Chrome_Extension" → globalWindow.functions
-// "OPSEUA"                                                → globalWindow.devMaster
-// "Downloads/Google Chrome%" | "Sniffer_Python"           → globalWindow.project
-// "SNIFFER"                                               → globalWindow.devSlave
-
-// → CONF ANTIGA [Chrome] | [NodeJS]
-// [
-//     'src/config.json',
-//     'D',
-//     'chrome-extension://afelhdjampgfmchfcnbginicjcmjhhma' | 'ARQUIVOS/PROJETOS/Chrome_Extension',
-//     'Downloads/Google Chrome%' | 'ARQUIVOS/PROJETOS/Sniffer_Python',
-//     'src/server.js',
-//     58,
-//     'Chrome_Extension' | 'Sniffer_Python',
-// ]
 

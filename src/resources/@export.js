@@ -23,6 +23,10 @@ if (!(cng == 1 ? window.all1 : global.all1)) {
     // console.log('devMaster:', globalWindow.devMaster, '|', 'devSlave:', globalWindow.devSlave, '|', 'devChildren:', globalWindow.devChildren)
     // console.log('devSend:', globalWindow.devSend)
     // console.log('devGet:', globalWindow.devGet)
+    // console.log('conf:', globalWindow.conf)
+    // console.log('root:', globalWindow.root)
+    // console.log('functions:', globalWindow.functions)
+    // console.log('project:', globalWindow.project)
 }
 
 // FUNÇÕES DESSE PROJETO

@@ -10,10 +10,11 @@ async function client(inf) {
     }
     try {
         // ### CONEXÃO
+
         function connect(inf) {
-            let { hostRoom } = inf; let ws = new _WebSocket(`ws://${hostRoom.replace('/?roo=', '/').replace('/', '/?roo=')}`)
+            let { hostRoom } = inf; let ws = new _WebSocket(`ws://${hostRoom}`)
             let url = ws._url ? ws._url : ws.url; let host = url.replace('ws://', '').split('/')[0]; let room = url.split(`${host}/`)[1].replace('?roo=', '')
-            let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; ws['host'] = host; ws['room'] = room; ws['locWeb'] = locWeb; ws['method'] = 'WEBSOCKET';
+            let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; ws['host'] = host; ws['room'] = room; ws['hostRoom'] = hostRoom; ws['locWeb'] = locWeb; ws['method'] = 'WEBSOCKET';
 
             // # ON OPEN
             ws.onopen = async () => {
@@ -25,7 +26,7 @@ async function client(inf) {
                 listenerMonitorar(`getWs_${locWeb}`, async (/*nomeList, inf*/) => { return ws });
 
                 // LISTENER PARA ENVIAR MENSAGEM DE OUTROS ARQUIVOS (FORA DO WebSocket!!!)
-                listenerMonitorar(`messageSendOrigin_${host}/${room}`, async (nomeList, inf) => {
+                listenerMonitorar(`messageSendOrigin_${hostRoom}`, async (nomeList, inf) => {
                     let { destination, message, secondsAwait } = inf;
                     let retMessageSend = await messageSend({ 'destination': destination, 'messageId': true, 'message': message, 'resWs': ws, 'secondsAwait': secondsAwait, }); return retMessageSend
                 });
@@ -51,7 +52,7 @@ async function client(inf) {
 
             // # ON ERROR/CLOSE | TEMPO MÁXIMO DE CONEXÃO
             ws.onerror = () => { clearTimeoutReconnect('error') }; ws.onclose = () => { clearTimeoutReconnect('close') };
-            function clearTimeoutReconnect(inf) { clearTimeout(timeoutSecConnect[hostRoom]); reconnect({ 'host': host, 'room': room, 'resWs': ws, 'event': inf }) }
+            function clearTimeoutReconnect(inf) { clearTimeout(timeoutSecConnect[hostRoom]); reconnect({ 'host': host, 'room': room, 'hostRoom': hostRoom, 'resWs': ws, 'event': inf }) }
             timeoutSecConnect[hostRoom] = setTimeout(() => { ws.close() }, secConnect * 1000);
         }
 
@@ -59,13 +60,13 @@ async function client(inf) {
 
         // ### RECONEXÃO | REMOVER SERVIDOR
         function reconnect(inf) {
-            let { host, room, resWs, event } = inf; let hostRoom = `${host}/${room}`; let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; if (!reconnecting[hostRoom]) {
+            let { host, room, hostRoom, resWs, event } = inf; let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; if (!reconnecting[hostRoom]) {
                 reconnecting[hostRoom] = true; let secReconnect = globalWindow.secReconnect - secConnect + 1
-                removeSerCli({ 'host': host, 'room': room, 'resWs': resWs, 'write': true, msg: `RECONECTANDO ${event}: ${locWeb} ${room}` }) // ↓ MENOS SEGUNDOS DO TEMPO DE CONEXÃO
+                removeSerCli({ 'host': host, 'room': room, 'hostRoom': hostRoom, 'resWs': resWs, 'write': true, msg: `RECONECTANDO ${event}: ${locWeb} ${room}` }) // ↓ MENOS SEGUNDOS DO TEMPO DE CONEXÃO
                 setTimeout(() => { reconnecting[hostRoom] = false; connect({ 'hostRoom': hostRoom }); }, (secReconnect * 1000) - 50);
             }
         }; function removeSerCli(inf) {
-            let { host, room, resWs, msg, write } = inf; let hostRoom = `${host}/${room}`; logConsole({ 'e': e, 'ee': ee, 'write': write, 'msg': msg }); if (wsServers.rooms[hostRoom]) {
+            let { host, room, hostRoom, resWs, msg, write } = inf; logConsole({ 'e': e, 'ee': ee, 'write': write, 'msg': msg }); if (wsServers.rooms[hostRoom]) {
                 wsServers.rooms[hostRoom].delete(resWs); if (wsServers.rooms[hostRoom].size == 0) { delete wsServers.rooms[hostRoom] }
             }
         }

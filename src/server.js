@@ -51,9 +51,6 @@ async function serverRun(inf) {
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 
-        let retCompleteJudge = await completeJudge({ 'e': e, 'hitApp': 'POIEvaluation' })
-        console.log(retCompleteJudge.res)
-
         // ### LOG FUN ###
         if (inf && inf.logFun) {
             let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
