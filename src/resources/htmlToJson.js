@@ -116,39 +116,17 @@ async function htmlToJson(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        let $ = _cheerio.load(inf.html);
-        let result = [], headers = [], randomCol = inf.mode == 1 ? false : true
-        let hasHeader = $('table thead').length > 0;
+        let $ = _cheerio.load(inf.html); let result = [], headers = [], randomCol = inf.mode == 1 ? false : true; let hasHeader = $('table thead').length > 0;
 
         // SE CONTEM O CABEÇALHO 
-        if (hasHeader) {
-            $('table thead th').each((i, header) => {
-                headers.push(randomCol ? `col${i + 1}` : $(header).text().trim());
-            });
-        }
+        if (hasHeader) { $('table thead th').each((i, header) => { headers.push(randomCol ? `col${i + 1}` : $(header).text().trim()); }); }
         $('table tbody tr').each((index, row) => {
-            let rowData = {};
-            $(row).find('td').each((i, cell) => {
-                let key = hasHeader ? headers[i] : `col${i + 1}`;
-                rowData[key] = $(cell).text().trim();
-            });
-            if (!hasHeader && index === 0) {
-                result.push(Object.fromEntries(Object.entries(rowData).map(([key, value]) => [key, value])));
-            } else {
-                result.push(rowData);
-            }
+            let rowData = {}; $(row).find('td').each((i, cell) => { let key = hasHeader ? headers[i] : `col${i + 1}`; rowData[key] = $(cell).text().trim(); });
+            if (!hasHeader && index === 0) { result.push(Object.fromEntries(Object.entries(rowData).map(([key, value]) => [key, value]))); }
+            else { result.push(rowData); }
         });
 
-        if (inf.mode == 3) {
-            let keys = Object.values(result[0]);
-            result = result.slice(1).map(obj => {
-                let newObj = {};
-                keys.forEach((key, index) => {
-                    newObj[key] = obj[`col${index + 1}`];
-                });
-                return newObj;
-            });
-        }
+        if (inf.mode == 3) { let keys = Object.values(result[0]); result = result.slice(1).map(obj => { let newObj = {}; keys.forEach((key, index) => { newObj[key] = obj[`col${index + 1}`]; }); return newObj; }); }
 
         ret['ret'] = true;
         ret['msg'] = `HTML TO JSON: OK`;

@@ -22,9 +22,7 @@ async function tabSearch(inf) {
             result = await new Promise(resolve => {
                 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
                     if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {
-                        let tab = tabs[0];
-                        let abaInf = { 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned };
-                        resolve({ 'res': abaInf })
+                        let tab = tabs[0]; let abaInf = { 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned }; resolve({ 'res': abaInf })
                     } else { resolve(result) }
                 })
             })
@@ -32,74 +30,30 @@ async function tabSearch(inf) {
             result = await new Promise(resolve => {
                 chrome.tabs.query({}, function (tabs) {
                     if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {
-                        let abaInf = tabs.map(function (tab) {
-                            return { 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned }
-                        })
-                        resolve({ 'res': abaInf })
-                    } else {
-                        resolve(result)
-                    }
+                        let abaInf = tabs.map(function (tab) { return { 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned } }); resolve({ 'res': abaInf })
+                    } else { resolve(result) }
                 })
             })
         };
         // if (result.hasOwnProperty('res')) { // ATIVA ret
         if ('res' in result) { // ATIVA ret
             if (inf.search == 'ATIVA') {
-                ret['res'] = {
-                    'id': result.res.id,
-                    'title': result.res.title,
-                    'url': result.res.url,
-                    'active': result.res.active,
-                    'index': result.res.index,
-                    'pinned': result.res.pinned
-                }
+                ret['res'] = { 'id': result.res.id, 'title': result.res.title, 'url': result.res.url, 'active': result.res.active, 'index': result.res.index, 'pinned': result.res.pinned }
             } else if (inf.search == 'TODAS') { // TODAS ret
                 ret['res'] = result.res
             } else if (typeof inf.search === 'number') { // ID ret
                 for (let obj of result.res) {
-                    let infRegex = { 'e': e, 'pattern': inf.search.toString(), 'text': obj.id.toString() };
-                    let retRegex = regex(infRegex)
-                    if (retRegex.ret) {
-                        ret['res'] = {
-                            'id': obj.id,
-                            'title': obj.title,
-                            'url': obj.url,
-                            'active': obj.active,
-                            'index': obj.index,
-                            'pinned': obj.pinned
-                        };
-                        break
-                    }
+                    let infRegex = { 'e': e, 'pattern': inf.search.toString(), 'text': obj.id.toString() }; let retRegex = regex(infRegex)
+                    if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned }; break }
                 }
             } else {
                 for (let obj of result.res) {
-                    let infRegex, retRegex;
-                    infRegex = { 'e': e, 'pattern': inf.search, 'text': obj.url };
-                    retRegex = regex(infRegex);
-                    if (retRegex.ret) { // URL ret
-                        ret['res'] = {
-                            'id': obj.id,
-                            'title': obj.title,
-                            'url': obj.url,
-                            'active': obj.active,
-                            'index': obj.index,
-                            'pinned': obj.pinned
-                        };
-                        break
-                    };
-                    infRegex = { 'e': e, 'pattern': inf.search, 'text': obj.title };
-                    retRegex = regex(infRegex);
-                    if (retRegex.ret) { // TITULO ret
-                        ret['res'] = {
-                            'id': obj.id,
-                            'title': obj.title,
-                            'url': obj.url,
-                            'active': obj.active,
-                            'index': obj.index,
-                            'pinned': obj.pinned
-                        };
-                        break
-                    }
+                    let infRegex, retRegex; infRegex = { 'e': e, 'pattern': inf.search, 'text': obj.url }; retRegex = regex(infRegex);
+                    // URL ret
+                    if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned }; break };
+                    infRegex = { 'e': e, 'pattern': inf.search, 'text': obj.title }; retRegex = regex(infRegex);
+                    // TITULO ret
+                    if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned }; break }
                 }
             };
             // if (ret.hasOwnProperty('res')) {
@@ -108,16 +62,16 @@ async function tabSearch(inf) {
                 ret['ret'] = true;
             } else {
                 if (typeof inf.search === 'number') {
-                    ret['msg'] = `\n#### ERRO #### SEARCH TAB \n ABA ID '${inf.search}' NAO ENCONTRADA \n\n`
+                    ret['msg'] = `TAB SEARCH: ERRO | ABA ID '${inf.search}' NAO ENCONTRADA`;
                 } else {
-                    ret['msg'] = `\n#### ERRO #### SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
+                    ret['msg'] = `TAB SEARCH: ERRO | ABA '${inf.search}' NAO ENCONTRADA`;
                 }
             }
         } else {
             if (inf.search == 'ATIVA' || inf.search == 'TODAS') {
-                ret['msg'] = `\n#### ERRO #### SEARCH TAB \n NENHUM ABA ATIVA \n\n`
+                ret['msg'] = `TAB SEARCH: ERRO | NENHUM ABA ATIVA`;
             } else {
-                ret['msg'] = `\n#### ERRO #### SEARCH TAB \n ABA '${inf.search}' NAO ENCONTRADA \n\n`;
+                ret['msg'] = `TAB SEARCH: ERRO | ABA '${inf.search}' NAO ENCONTRADA`;
             }
         }
 
@@ -150,16 +104,13 @@ async function tabSearch(inf) {
 
 async function openTab(inf) { // NAO USAR
     try {
-        let active = inf.active ? true : false;
-        let pinned = inf.pinned ? true : false;
-        let url = inf.url ? inf.url : 'https://www.google.com';
+        let active = inf.active ? true : false; let pinned = inf.pinned ? true : false; let url = inf.url ? inf.url : 'https://www.google.com';
         return await new Promise((resolve) => {
             chrome.tabs.create({ 'url': url, 'active': active, 'pinned': pinned }, function (novaAba) {
                 chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
                     if (tabId === novaAba.id && changeInfo.status === 'complete') {
                         chrome.tabs.get(novaAba.id, function (tab) {
-                            chrome.tabs.onUpdated.removeListener(listener)
-                            resolve({ 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned })
+                            chrome.tabs.onUpdated.removeListener(listener); resolve({ 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned })
                         })
                     }
                 })

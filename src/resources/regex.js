@@ -19,17 +19,13 @@ function regex(inf) { // NÃO POR COMO 'async'!!!
             ret['msg'] = `REGEX: ERRO | INFORMAR O 'text'`;
         } else {
             if (inf.pattern.includes('(.*?)')) {
-                let res = {}; let ok = false;
-                let patternSplit = inf.pattern.split('(.*?)');
+                let res = {}; let ok = false; let patternSplit = inf.pattern.split('(.*?)');
                 // let split1 = patternSplit[0].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
                 // let split2 = patternSplit[1].replace(/[.+?^${}()|[\]\\]/g, '\\$&');
                 let split1 = patternSplit[0].replace(/[*.+?^${}()|[\]\\]/g, '\\$&')
-                let split2 = patternSplit[1].replace(/[*.+?^${}()|[\]\\]/g, '\\$&');
-                let result1 = inf.text.match(`${split1}(.*?)${split2}`);
-                let result2 = inf.text.match(`(?<=${split1})(.+)(?=${split2})`);
-                let result3 = inf.text.match(`${split1}([\\s\\S]*?)${split2}`);
-                let result4 = inf.text.match(`(?<=${split1})([\\s\\S]+)(?=${split2})`);
-                let matches = inf.text.match(new RegExp(split1 + '(.*?)' + split2, 'g'));
+                let split2 = patternSplit[1].replace(/[*.+?^${}()|[\]\\]/g, '\\$&'); let result1 = inf.text.match(`${split1}(.*?)${split2}`);
+                let result2 = inf.text.match(`(?<=${split1})(.+)(?=${split2})`); let result3 = inf.text.match(`${split1}([\\s\\S]*?)${split2}`);
+                let result4 = inf.text.match(`(?<=${split1})([\\s\\S]+)(?=${split2})`); let matches = inf.text.match(new RegExp(split1 + '(.*?)' + split2, 'g'));
                 let result5 = matches ? matches.map(function (match) { return match.replace(new RegExp(split1 + '|' + split2, 'g'), ''); }) : [];
                 res['0'] = `res.['1'] → [-|<] | res.['2'] → [-|>] | res.['3'] → [^|<] | res.['4'] → [^|>] | res.['5'] → [-|< ALL]`
                 if (result1 && result1.length > 0) {
@@ -78,7 +74,7 @@ function regex(inf) { // NÃO POR COMO 'async'!!!
                         ret['ret'] = true;
                     }
                     else {
-                        ret['msg'] = `\n\n#### ERRO #### REGEX \n PADRAO '${inf.pattern}' NAO ENCONTRADO \n\n`;
+                        ret['msg'] = `REGEX: ERRO | PADRAO '${inf.pattern}' NAO ENCONTRADO`;
                     }
                 }
             }

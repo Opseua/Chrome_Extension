@@ -44,8 +44,7 @@ async function googleSheets(inf) {
         if (makeNewToken) {
             logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ATUALIZANDO TOKEN` });
             await _auth.authorize(); let date = new Date(_auth.credentials.expiry_date); let day = ('0' + date.getDate()).slice(-2)
-            let mon = ('0' + (date.getMonth() + 1)).slice(-2), hou = ('0' + date.getHours()).slice(-2)
-            let min = ('0' + date.getMinutes()).slice(-2), sec = ('0' + date.getSeconds()).slice(-2);
+            let mon = ('0' + (date.getMonth() + 1)).slice(-2), hou = ('0' + date.getHours()).slice(-2); let min = ('0' + date.getMinutes()).slice(-2), sec = ('0' + date.getSeconds()).slice(-2);
             let retToken = { 'tim': _auth.credentials.expiry_date, 'dateHor': `${day}/${mon} ${hou}:${min}:${sec}`, };
             infConfigStorage = { 'e': e, 'action': 'set', 'key': 'googleApi', 'value': retToken }; configStorage(infConfigStorage);
         }
@@ -54,13 +53,11 @@ async function googleSheets(inf) {
         if (inf.action == 'get') { // GET
             let range = inf.range
             // ÚLTIMA LINHA EM BRANCO DA [COLUNA]
-            if (range.includes('last**')) {
-                range = range.replace('last**', '').replace('**', ''); range = `${range}1:${range}`
-            } else if (range.includes('last*')) {
+            if (range.includes('last**')) { range = range.replace('last**', '').replace('**', ''); range = `${range}1:${range}` }
+            else if (range.includes('last*')) {
                 // ÚLTIMA LINHA EM BRANCO DA [PLANILHA]
                 range = range.replace('last*', '').replace('*', ''); range = `${range}1:${range}${range}`
-            }
-            range = range == 'last' ? `${tab}!A1:AA` : `${tab}!${range}`
+            }; range = range == 'last' ? `${tab}!A1:AA` : `${tab}!${range}`
             try {
                 let retSheet = await _sheets.spreadsheets.values.get({ auth: _auth, 'spreadsheetId': id, range });
                 ret['res'] = inf.range.includes('last') ? retSheet.data.values ? retSheet.data.values.length + 1 : 1 : retSheet.data.values
@@ -71,13 +68,11 @@ async function googleSheets(inf) {
             }
         } else if (inf.action == 'send') { // SEND
             let col = inf.range.replace(/[^a-zA-Z]/g, ''), values = { 'values': inf.values }, lin = ''
-            if (/[0-9]/.test(inf.range)) {
-                lin = inf.range.replace(/[^0-9]/g, '')
-            } else {
+            if (/[0-9]/.test(inf.range)) { lin = inf.range.replace(/[^0-9]/g, '') }
+            else {
                 let range = inf.range.includes('**') ? `last**${inf.range}` : inf.range.includes('*') ? `last*${inf.range}` : 'last'
                 let retNewGet = await googleSheets({ 'e': e, 'action': 'get', 'id': id, 'tab': tab, 'range': range }); lin = retNewGet.res
-            }
-            let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
+            }; let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
             try {
                 await _sheets.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
                 ret['msg'] = `GOOGLE SHEET SEND: OK`;

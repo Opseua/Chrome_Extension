@@ -62,11 +62,8 @@ async function regexE(inf) {
 
             if (typeof errorOk === 'object') {
                 let raw = ''; let obj = errorOk; let concat = inf.concat ? inf.concat : `\n\n#######\n\n`
-                for (let chave in obj) {
-                    if (typeof obj[chave] === 'object') { for (let subChave in obj[chave]) { raw += obj[chave][subChave] + concat; } } else { raw += obj[chave] + concat; }
-                }; text = `${text}\n\n${raw}`
-            }
-            await _fs.promises.mkdir(_path.dirname(path), { recursive: true }); await _fs.promises.writeFile(path, text, { flag: 'a' })
+                for (let chave in obj) { if (typeof obj[chave] === 'object') { for (let subChave in obj[chave]) { raw += obj[chave][subChave] + concat; } } else { raw += obj[chave] + concat; } }; text = `${text}\n\n${raw}`
+            }; await _fs.promises.mkdir(_path.dirname(path), { recursive: true }); await _fs.promises.writeFile(path, text, { flag: 'a' })
         }
 
         // ENVIAR NOTIFICAÇÃO COM O ERRO

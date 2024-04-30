@@ -34,18 +34,15 @@ async function client(inf) {
 
             // # ON MESSAGE
             ws.onmessage = async (data) => {
-                let message = data.data.toString('utf-8')
-                let pingPong = message == `${globalWindow.par6}` ? 1 : message == `${globalWindow.par7}` ? 2 : 0
+                let message = data.data.toString('utf-8'); let pingPong = message == `${globalWindow.par6}` ? 1 : message == `${globalWindow.par7}` ? 2 : 0
                 // ÚLTIMA MENSAGEM RECEBIDA
                 ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false
                 // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `← CLI | ${ws.lastMessage} | ${hostRoom}` });
                 if (pingPong > 0) {
-                    if (pingPong == 2) { return }
-                    // RECEBIDO: 'PING' ENVIAR 'PONG'
+                    if (pingPong == 2) { return } // RECEBIDO: 'PING' ENVIAR 'PONG'
                     ws.send('pong'); // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
-                } else {
+                } else { // RECEBIDO: OUTRA MENSAGEM
                     try { message = JSON.parse(message) } catch (catchErr) { message = { 'message': message } }; if (!message.message) { message = { 'message': message } }
-                    // RECEBIDO: OUTRA MENSAGEM
                     if (ws.lastMessage) { ws.send(`pong`) }; messageReceived({ ...message, 'host': host, 'room': room, 'resWs': ws, 'locWeb': locWeb, });
                 }
             };
@@ -71,13 +68,8 @@ async function client(inf) {
             }
         }
 
-        // SERVIDORES: CONECTAR
-        servers = [
-            globalWindow.devGet[0], // → GET [WEB]
-            globalWindow.devGet[1], // → GET [LOC]
-        ]; servers.forEach((hostRoom) => connect({ 'hostRoom': hostRoom }));
-
-        // LISTENER DE MENSAGENS RECEBIDAS [WEB] | [LOC]
+        // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → GET [WEB] | GET [LOC]
+        servers = [globalWindow.devGet[0], globalWindow.devGet[1],]; servers.forEach((hostRoom) => connect({ 'hostRoom': hostRoom }));
         listenerMonitorar(servers[0], async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) });
         listenerMonitorar(servers[1], async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) });
 

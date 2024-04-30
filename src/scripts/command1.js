@@ -16,6 +16,13 @@ async function command1(inf) {
       let message = { "fun": [{ "securityPass": globalWindow.securityPass, "retInf": true, "name": "completeJudge", "par": { "hitApp": "POIEvaluation", "title": "TITULO", "text": "TEXTO", } }] };
       let retListenerAcionar = await listenerAcionar(`messageSendOrigin_${globalWindow.devGet[1]}`, { 'destination': devSendOther, 'message': message, 'secondsAwait': 0, });
       logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': JSON.stringify(retListenerAcionar) });
+
+      let infNotification, retNotification // 'logFun': true,
+      infNotification = {
+        'e': e, 'duration': 4, 'icon': `./src/scripts/media/icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
+        'title': `Complete Judge`, 'text': JSON.stringify(retListenerAcionar.msg),
+      };
+      retNotification = await notification(infNotification);
     }
 
     ret['msg'] = `COMMAND 1: OK`;

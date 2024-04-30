@@ -13,7 +13,7 @@ async function clipboard(inf) {
     }
     try {
         if (inf.value == null || inf.value == '') {
-            ret['msg'] = `\n\n#### ERRO #### CLIPBOARD \n INFORMAR O 'value' \n\n`
+            ret['msg'] = `CLIPBOARD: ERRO | INFORMAR O 'value'`;
         } else {
             let text = inf.value;
             if (typeof text === 'object') { // OBJETO INDENTADO EM TEXTO BRUTO
