@@ -27,6 +27,9 @@
 // // → todos com o (atributo + valor do atributo) ATRIBUTOS →→→ [id/class/name/type/for/nomeDoAtributo] | ATRIBUTOS VALOR →→→ [text/checkbox/nomeDoAtributo]
 // infChromeActions = { 'e': e, 'action': 'elementClick', 'tabTarget': `*file:///*`, 'attribute': `nomeDoAtributo`, 'attributeValue': `atributoNome2Botao`, }
 
+// // ############ (XPATH) ELEMENTO: PEGAR VALOR  ############
+// infChromeActions = { 'e': e, 'action': 'elementGetValueXpath', 'tabTarget': `*file:///*`, 'elementName': `//*[@id="app-root"]/div/div[4]/div[2]/div[1]/div/div[1]/div/div[1]/span[2]/span`, }
+
 // retChromeActions = await chromeActions(infChromeActions);
 // console.log(retChromeActions)
 
@@ -44,7 +47,7 @@ async function chromeActions(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        let { action, color, text, tabTarget, tag, attribute, attributeValue, elementValue, content } = inf; let retTabSearch, code = '', retExecuteScript, tabId
+        let { action, color, text, tabTarget, tag, attribute, attributeValue, elementValue, content, elementName } = inf; let retTabSearch, code = '', retExecuteScript, tabId
 
         if (action == 'badge') {
             action = chrome.browserAction; if (color) { action.setBadgeBackgroundColor({ 'color': color }) } // [25, 255, 71, 255]
@@ -59,11 +62,12 @@ async function chromeActions(inf) {
             ret['res'] = retGetProfileUserInfo
             ret['msg'] = `CHROME ACTIONS [USER]: OK`
             ret['ret'] = true
-        } else if (action == 'getBody' || action == 'attributeGetValue' || action == 'elementGetValue' || action == 'elementSetValue' || action == 'elementClick') {
+        } else if (action == 'getBody' || action == 'attributeGetValue' || action == 'elementGetValue' || action == 'elementSetValue' || action == 'elementClick' || action == 'elementGetValueXpath') {
             // DEFINIR ID DA ABA ALVO
             if (typeof tabTarget === "number") { tabId = tabTarget }
             else { retTabSearch = await tabSearch({ 'e': e, 'search': tabTarget, 'openIfNotExist': false }); if (!retTabSearch.ret) { return retTabSearch } tabId = retTabSearch.res.id }
 
+            // **************************************************************************************************************************************
             function elementAction({ action, tag, attribute, attributeValue, elementValue, content }) {
                 let elementos = attribute ? document.querySelectorAll(`${tag ? tag : ''}[${attribute}${attributeValue ? `="${attributeValue}"` : ''}]`) : document.getElementsByTagName(tag)
                 if (elementos && elementos.length > 0) {
@@ -87,10 +91,22 @@ async function chromeActions(inf) {
                     }
                 }; return false;
             }
+            // ###
+            function xpathElementGetValue({ elementName }) {
+                let eleSelect, retXpath = document.evaluate(elementName, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null); if (retXpath.singleNodeValue) {
+                    elementName = retXpath.singleNodeValue; if (elementName.tagName === 'INPUT' || elementName.tagName === 'SELECT' || elementName.tagName === 'TEXTAREA') { eleSelect = elementName.value; }
+                    else if (elementName.tagName === 'CHECKBOX' || elementName.tagName === 'RADIO') { eleSelect = elementName.checked; } else { eleSelect = elementName.textContent.trim(); }; return eleSelect;
+                }
+            };
+            // **************************************************************************************************************************************
 
             if (action == 'getBody') {
                 // PEGAR O BODY
                 code = `function getBody() {return document.documentElement.outerHTML;}getBody();`;
+            } else if (action == 'elementGetValueXpath') {
+                // (XPATH) ELEMENTO: VALOR → PEGAR
+                let infXpathElementGetValue = { 'elementName': elementName };
+                code = `(${xpathElementGetValue.toString()})(${JSON.stringify(infXpathElementGetValue)});`;
             } else {
                 // OUTRO TIPO DE AÇÃO
                 let infElementAction = { 'action': action, 'tag': tag, 'attribute': attribute, 'attributeValue': attributeValue, 'elementValue': elementValue, 'content': content };
@@ -100,7 +116,7 @@ async function chromeActions(inf) {
             // INJETAR SCRIPT
             retExecuteScript = await new Promise((resolve) => { chrome.tabs.executeScript(tabId, { 'code': code }, (res) => { resolve(res[0]) }) });
 
-            if ((action == 'getBody' || action == 'attributeGetValue' || action == 'elementGetValue') && retExecuteScript) { ret['res'] = retExecuteScript }
+            if ((action == 'getBody' || action == 'attributeGetValue' || action == 'elementGetValue' || action == 'elementGetValueXpath') && retExecuteScript) { ret['res'] = retExecuteScript }
             ret['msg'] = `CHROME ACTIONS [INJECT]: ${retExecuteScript ? 'OK' : 'ERRO | ELEMENTO NÃO ENCONTRADO'}`
             ret['ret'] = retExecuteScript ? true : false
         }

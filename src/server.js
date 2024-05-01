@@ -46,10 +46,15 @@ async function serverRun(inf) {
 
         // MANTER NO FINAL PARA GARANTIR QUE O ATALHO VAI FUNCIONAR ANTES DO WEBSOCKET SER CONECTADO
         // CLIENT (NÃO POR COMO 'await'!!!)
-        client({ 'e': e })
+        // client({ 'e': e })
 
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
+
+        let infCompleteJudge, retCompleteJudge // 'logFun': true,
+        infCompleteJudge = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
+        retCompleteJudge = await completeJudge(infCompleteJudge)
+        console.log(JSON.stringify(retCompleteJudge, null, 2))
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {

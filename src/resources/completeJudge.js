@@ -3,6 +3,10 @@
 // retCompleteJudge = await completeJudge(infCompleteJudge)
 // console.log(retCompleteJudge)
 
+// IMPORTAR OBJETOS COM AS OPÇÕES E RESPOSTAS
+import optTryRating_POIEvaluation from '../scripts/objects/optTryRating_POIEvaluation.js'
+import optTryRating_Search20 from '../scripts/objects/optTryRating_Search20.js'
+
 let e = import.meta.url, ee = e;
 async function completeJudge(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
@@ -17,100 +21,43 @@ async function completeJudge(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        let { hitApp } = inf;
+        let { urlGoogleMaps } = inf; let retChromeActions, infChromeActions, attributeValue, judges = []; let options = { 'POIEvaluation': optTryRating_POIEvaluation, 'Search20': optTryRating_Search20 }
+
+        // PEGAR O NOME DO HIT APP
+        infChromeActions = { 'e': e, 'action': 'elementGetValueXpath', 'tabTarget': `*tryrating*`, 'elementName': `//*[@id="app-root"]/div/div[4]/div[2]/div[1]/div/div[1]/div/div[1]/span[2]/span`, }
+        retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { return retChromeActions }; let hitApp = retChromeActions.res.replace(/[^a-zA-Z0-9]/g, '')
 
         if (!['POIEvaluation', 'Search20',].includes(hitApp)) {
             ret['msg'] = `COMPLETE JUDGE: ERRO NÃO EXISTE '${hitApp}'`;
         } else {
             async function commentCreate(inf) {
-                let { options } = inf; let comment = ''; for (let [index, value] of options.entries()) {
-                    let retChromeActions, infChromeActions
-                    // ############ ATRIBUTO: PEGAR VALOR  ############
-                    infChromeActions = { 'e': e, 'action': 'attributeGetValue', 'tabTarget': `*tryrating*`, 'tag': `${value.action.tag}`, 'attribute': `${value.action.attribute}`, 'content': `${value.action.content}`, }
-                    retChromeActions = await chromeActions(infChromeActions); // console.log(retChromeActions)
-                    // ############ ELEMENTO: PEGAR VALOR ############
-                    if (!retChromeActions.ret) { return retChromeActions }
-                    infChromeActions = { 'e': e, 'action': 'elementGetValue', 'tabTarget': `*tryrating*`, 'attribute': `id`, 'attributeValue': `${retChromeActions.res[0]}`, }
-                    retChromeActions = await chromeActions(infChromeActions); // console.log(retChromeActions)
-                    // DEFINIR COMENTÁRIO
-                    if (!retChromeActions.ret || retChromeActions.res[0] == '' || retChromeActions.res[0] == 'Select...') { comment = `${comment}${value.action.content}: ###\n` }
-                    else if (value[retChromeActions.res[0]] !== 'AAA') { comment = `${comment}${value[retChromeActions.res[0]]}\n` }
-                }; return { 'ret': true, 'msg': 'COMMENT CREAT: OK', 'res': `${comment}\nLINK_GOOGLE_MAPS` }
+                let { options } = inf; for (let [index, value] of options.entries()) {
+                    let actions = value; let indexOk = index; for (let [index, value] of actions.actions.entries()) {
+                        if (value.action == 'attributeGetValue') {
+                            // ############ ATRIBUTO: PEGAR VALOR  ############
+                            infChromeActions = { 'e': e, 'action': value.action, 'tabTarget': `*tryrating*`, 'tag': value.tag, 'attribute': value.attribute, 'content': value.content, }
+                            retChromeActions = await chromeActions(infChromeActions); if (retChromeActions.ret) { attributeValue = retChromeActions.res[0]; };  // console.log(retChromeActions.res);
+                        } else if (value.action == 'elementGetValue') {
+                            // ############ ELEMENTO: PEGAR VALOR ############
+                            infChromeActions = { 'e': e, 'action': value.action, 'tabTarget': `*tryrating*`, 'attribute': value.attribute, 'attributeValue': value.attributeValue == "OLD" ? attributeValue : value.attributeValue, }
+                            retChromeActions = await chromeActions(infChromeActions); let actionsOk = actions.actions[0]; actionsOk = actionsOk.content ? actionsOk.content : actionsOk.attributeValue
+                            if (retChromeActions.ret) { // DEFINIR COMENTÁRIO
+                                let judgesOk = [], judgesArr = retChromeActions.res; // judgesArr = [retChromeActions.res[0], retChromeActions.res[0], retChromeActions.res[0],];
+                                for (let [index, value] of judgesArr.entries()) {
+                                    let retChromeActionsOk = typeof value == 'boolean' ? JSON.stringify(value) : value;  // console.log(retChromeActions.res)
+                                    if (retChromeActionsOk == '' || retChromeActionsOk == 'Select...') { judgesOk.push(`############ PERGUNTA [${indexOk + 1}] → ${actionsOk.content}`) }
+                                    else if (actions[retChromeActionsOk] !== 'AAA') { judgesOk.push(`${actions[retChromeActionsOk]} → ${actionsOk}`) };
+                                }; judges.push({ [actionsOk]: judgesOk });
+                            }
+                        }
+                    };
+                }; return { 'ret': true, 'msg': 'COMMENT CREAT: OK', 'res': { 'urlGoogleMaps': urlGoogleMaps, 'judges': judges, } }
             }
 
-            let options = {
-                "POIEvaluation":
-                    [
-                        {
-                            "action": { "content": "POI Validity *", "tag": "label", "attribute": "for", },
-                            "Yes": "AAA",
-                            "Yes - temporary closure": "The POI is temporarily closed.",
-                            "No - closed": "After searching the internet, it was possible to confirm that the place is permanently closed",
-                            "No - no physical location": "The POI does not have a physical location",
-                            "No - mobile business": "The POI is an itinerant place that is constantly moving",
-                            "No - service business out of a home": "It is a POI that does not have a physical location and offers its services during visits",
-                            "No - not a POI": "The result is not a valid POI",
-                            "Can't Verify": "After searching online, it was not possible to confirm that the location exists",
-                        },
-                        {
-                            "action": { "content": "Name *", "tag": "label", "attribute": "for", },
-                            "Correct": "AAA",
-                            "Partially Correct": "Problem: The name is PARTIALLY CORRECY",
-                            "Incorrect": "Problem: The name is WRONG",
-                        },
-                        {  // ['Street Number'] | ['Unit/Apt'] | ['Street Name'] | ['Sub-Locality'] | ['Locality'] | ['Region'] | ['Postal Code'] | ['Other/Market Specific'] | ['Country']
-                            "action": { "content": "Address *", "tag": "label", "attribute": "for", },
-                            "Correct": "AAA",
-                            "Correct - formatting issues": "Problem: The address has small FORMAT ERRORS",
-                            "OK without": "AAA",
-                            "Incorrect": "Problem: The address is INCORRECT",
-                        },
-                        {
-                            "action": { "content": "Phone *", "tag": "label", "attribute": "for", },
-                            "Correct": "AAA",
-                            "Incorrect": "Problem: The phone is WRONG",
-                            "Can't Verify": "Problem: UNABLE to confirm correct number",
-                        },
-                        {
-                            "action": { "content": "URL *", "tag": "label", "attribute": "for", },
-                            "Correct": "AAA",
-                            "Partially Correct": "Problem: The website is PARTIALLY RIGHT",
-                            "Incorrect": "Problem: The url is WRONG",
-                            "Can't Verify": "Problem: UNABLE to confirm url",
-                        },
-                        {
-                            "action": { "content": "Category *", "tag": "label", "attribute": "for", },
-                            "Correct": "AAA",
-                            "Approximate - too general": "Problem: Category is TOO GENERAL for POI",
-                            "Approximate - too specific": "Problem: The category is TOO SPECIFIC to the POI",
-                            "Incorrect": "Problem: The category is NOT CORRECT",
-                            "Missing": "Problem: The category is MISSING and cannot be determined",
-                        },
-                        {
-                            "action": { "content": "Pin *", "tag": "label", "attribute": "for", },
-                            "Perfect": "AAA",
-                            "Approximate": "Problem: Pin is NEAR the correct location",
-                            "Next Door": "Problem: The pin is located in the NEXT DOOR",
-                            "Wrong": "Problem: Pin is NOT RIGHT",
-                            "Can't Verify": "Problem: UNABLE to determine correct pin location",
-                        },
-                        {
-                            "action": { "content": "Hours *", "tag": "label", "attribute": "for", },
-                            "Correct": "AAA",
-                            "Incorrect": "Problem: The opening hours are WRONG",
-                            "Can't Verify": "Problem: UNABLE to determine correct opening hours",
-                        },
-                    ],
-            }
-
-            let retCommentCreate = await commentCreate({ 'options': options[hitApp] });
-            if (!retCommentCreate.ret) {
-                ret = retCommentCreate
-            } else {
-                ret['res'] = retCommentCreate.res;
-                ret['msg'] = `COMPLETE JUDGE: OK`;
-                ret['ret'] = true;
-            }
+            let retCommentCreate = await commentCreate({ 'options': options[hitApp] }); if (!retCommentCreate.ret) { return retCommentCreate }
+            ret['res'] = retCommentCreate.res;
+            ret['msg'] = `COMPLETE JUDGE: OK`;
+            ret['ret'] = true;
         }
 
         // ### LOG FUN ###

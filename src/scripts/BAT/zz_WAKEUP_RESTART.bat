@@ -13,126 +13,102 @@ set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 "!fileLog!" "[WAKEUP_RESTART] = [### INICIOU ###] [PARS-!arg1!]"
 
-rem SCRIPTS PARAR 
-rem WebSocket [Old]
-"!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\OFF.vbs"
-ping -n 3 -w 1000 127.0.0.1 >nul
-rem WebSocket
-"!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\OFF.vbs"
-ping -n 3 -w 1000 127.0.0.1 >nul
-rem Sniffer_Python
-"!letra!:\ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs"
-ping -n 3 -w 1000 127.0.0.1 >nul
-rem URA_Reversa [Telein]
-"!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverTelein\OFF.vbs"
-ping -n 3 -w 1000 127.0.0.1 >nul
-rem URA_Reversa [JSF]
-"!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\OFF.vbs"
-ping -n 3 -w 1000 127.0.0.1 >nul
-rem WebScraper [Jucesp]
-"!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\OFF.vbs"
-ping -n 3 -w 1000 127.0.0.1 >nul
-rem WebScraper [C6]
-"!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\OFF.vbs"
-ping -n 3 -w 1000 127.0.0.1 >nul
+rem QUAIS DEVS EXECUTAM O PROJETO
+set "projectWebSocket=OPSEUA_AWS_ESTRELAR"
+set "projectWebSocketOld=OPSEUA_AWS_ESTRELAR"
+set "projectSniffer_Python=OPSEUA"
+set "projectURA_Reversa_JSF=ESTRELAR"
+set "projectWebScraper_C6=ESTRELAR"
+set "projectWebScraper_Jucesp=ESTRELAR"
 
-rem ### ENCERRAR SCRIPT E NAO INICIAR OS PROCESSOS (SE FOI ESPECIFICADO NO PARAMENTRO)
+rem IDENTIFICAR O DEVMASTER PELO CONFIG
+set "conteudo=" & set "atalhoModo="
+for /f "usebackq delims=" %%a in ("!letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\config.json") do ( set "conteudo=!conteudo!%%a" )
+
+rem DEVMASTER 'OPSEUA'
+set "search=master": "OPSEUA"
+set "resultDevMaster=!conteudo:%search%=!"
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=OPSEUA" &  set "atalhoModo=ON_HIDE" )
+
+rem DEVMASTER 'AWS'
+set "search=master": "AWS"
+set "resultDevMaster=!conteudo:%search%=!"
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=AWS" &  set "atalhoModo=ON_VIEW" )
+
+rem DEVMASTER 'ESTRELAR'
+set "search=master": "ESTRELAR"
+set "resultDevMaster=!conteudo:%search%=!"
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=ESTRELAR" &  set "atalhoModo=ON_VIEW" )
+
+
+rem ### SOMENTE INICIAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
+if not "!arg1!"=="!arg1:ONLY_START=!" goto START_SCRIPTS
+
+
+rem ################################## SCRIPTS PARAR
+rem → WebSocket
+if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebSocket [Old]
+if not "!projectWebSocketOld!"=="!projectWebSocketOld:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → Sniffer_Python
+if not "!projectSniffer_Python!"=="!projectSniffer_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → URA_Reversa [JSF]
+if not "!projectURA_Reversa_JSF!"=="!projectURA_Reversa_JSF:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [C6]
+if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [Jucesp]
+if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+
+rem ### SOMENTE PARAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_STOP=!" goto FIM_DO_SCRIPT
 
+
+:START_SCRIPTS
+rem ################################## SCRIPTS INICIAR
 rem APAGAR LOGS DO PM2
 del /f /s /q "C:\Users\!usuario!\.pm2\logs" & del /f /s /q "C:\Users\!usuario!\.pm2\pids" & del /f "C:\Users\!usuario!\.pm2\pm2.log" & del /f /s /q "C:\Users\!usuario!\.pm2\pm2.pid"
 "!fileLog!" "[WAKEUP_RESTART] = LOGS PM2 DELETADOS"
 
-rem LER O CONFIG
-set "conteudo="
-for /f "usebackq delims=" %%a in ("!letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\config.json") do ( set "conteudo=!conteudo!%%a" )
 
-rem IDENTIFICAR O DISPOSITIVO (OPSEUA/EC2/AWS/ESTRELAR)
-set "devMaster="
-set "str=!conteudo!"
+rem → WebSocket
+if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem DEVMASTER 'OPSEUA'
-set "search=master": "OPSEUA"
-set "resultDevMaster=!str:%search%=!"
-if /I "!resultDevMaster!" neq "!str!" (
-	set "devMaster=OPSEUA"
-	goto ENCONTROU_DEVMASTER[SIM]
-)
+rem → WebSocket [Old]
+if not "!projectWebSocketOld!"=="!projectWebSocketOld:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem DEVMASTER 'EC2'
-set "search=master": "EC2"
-set "resultDevMaster=!str:%search%=!"
-if /I "!resultDevMaster!" neq "!str!" (
-	set "devMaster=EC2"
-	goto ENCONTROU_DEVMASTER[SIM]
-)
+rem → URA_Reversa [JSF]
+if not "!projectURA_Reversa_JSF!"=="!projectURA_Reversa_JSF:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem DEVMASTER 'AWS'
-set "search=master": "AWS"
-set "resultDevMaster=!str:%search%=!"
-if /I "!resultDevMaster!" neq "!str!" (
-	set "devMaster=AWS"
-	goto ENCONTROU_DEVMASTER[SIM]
-)
+rem → WebScraper [C6]
+if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem DEVMASTER 'ESTRELAR'
-set "search=master": "ESTRELAR"
-set "resultDevMaster=!str:%search%=!"
-if /I "!resultDevMaster!" neq "!str!" (
-	set "devMaster=ESTRELAR"
-	goto ENCONTROU_DEVMASTER[SIM]
-)
+rem → WebScraper [Jucesp]
+if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-:ENCONTROU_DEVMASTER[SIM]
-
-rem SCRIPTS INICIAR 
-if "!devMaster!"=="OPSEUA" (
-	rem → OPSEUA
-	rem INICIAR WebSocket (hide) [Old]
-	"!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\ON_HIDE.vbs"
-	ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	rem INICIAR WebSocket (hide)
-	"!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\ON_HIDE.vbs"
-	ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	rem INICIAR URA_Reversa [JSF] (view)
-	rem "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\ON_VIEW.vbs"
-	ping -n 3 -w 1000 127.0.0.1 >nul
-) else (
+rem ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS
+if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
+	rem → AWS/ESTRELAR
 	"!2_BACKGROUND!" "explorer"
 	
-	ping -n 5 -w 1000 127.0.0.1 >nul
-	
-	"!2_BACKGROUND!" "taskmgr"
-	
 	ping -n 3 -w 1000 127.0.0.1 >nul
 	
-	"!2_BACKGROUND!" "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt" -monitor
+	"!2_BACKGROUND!" "taskmgr"
 	
 	ping -n 3 -w 1000 127.0.0.1 >nul
 	
 	"!letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\fileNircmdSetSize.vbs" "Task Manager" "890 50 600 600"
 	
 	ping -n 3 -w 1000 127.0.0.1 >nul
-
-	rem → EC2/AWS/ESTRELAR
-	rem INICIAR WebSocket (view) [Old]
-	"!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\ON_VIEW.vbs"
-	ping -n 3 -w 1000 127.0.0.1 >nul
 	
-	rem INICIAR WebSocket (view)
-	"!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\ON_VIEW.vbs"
-	ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	rem INICIAR URA_Reversa [Telein] (view)
-	rem "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\ON_VIEW.vbs"
-	ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	rem INICIAR URA_Reversa [JSF] (view)
-	rem "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\ON_VIEW.vbs"
-	ping -n 3 -w 1000 127.0.0.1 >nul
+	"!2_BACKGROUND!" "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt" -monitor
 )
+
 
 :FIM_DO_SCRIPT
 
