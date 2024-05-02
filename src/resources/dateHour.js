@@ -1,10 +1,11 @@
 // let retDateHour
 // retDateHour = dateHour() // HORA ATUAL
 // retDateHour = dateHour(new Date()) // HORA ATUAL [Chrome/NodeJS/Google]
-// retDateHour = dateHour(-43200) // HORA ATUAL - 12 HORAS
-// retDateHour = dateHour(+86400) // HORA ATUAL + 1 DIA
 // retDateHour = dateHour('Wed Jan 11 2024 22:33:44 GMT-0300 (Horário Padrão de Brasília)') // [Chrome/NodeJS/Google]
 // retDateHour = dateHour('2024-01-11T22:33:44.000Z') // [Chrome/NodeJS/Google] (o retorno é 3 horas a MENOS)
+// retDateHour = dateHour(`-${(3600 * 12)}`) // HORA ATUAL - 12 HORAS | OBRIGATÓRIO SER STRING!!!
+// retDateHour = dateHour(`+${(86400 * 1)}`) // HORA ATUAL + 1 DIA | OBRIGATÓRIO SER STRING!!!
+// retDateHour = dateHour(65) // *** ANTIGO 'secToHour' *** | OBS: se o parametro for NÚMERO e NÃO tiver '-' ou '+' será a 'secToHour'
 // console.log(retDateHour)
 
 // let timestamp = Math.floor(new Date().getTime() / 1000);
@@ -15,8 +16,25 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
     try {
         let dt1;
         if (typeof inf === 'number') {
+
+            // ******************************************************************************************
+            // ANTIGO 'secToHour'
+            if (inf > 0) {
+                let hou = Math.floor(inf / 3600).toString().padStart(2, "0");
+                let min = Math.floor((inf % 3600) / 60).toString().padStart(2, "0");
+                let sec = (inf % 60).toString().padStart(2, "0");
+                ret['res'] = String(`${hou}:${min}:${sec}`) // manter o 'String' para forcar o '0' (zero) na frente → '001'
+                ret['msg'] = `DATE HOUR [SEC TO HOUR]: OK`
+                ret['ret'] = true;
+                return ret
+            }
+            // ******************************************************************************************
+
             dt1 = new Date();
             dt1.setSeconds(new Date().getSeconds() + inf);
+        } else if (typeof inf === 'string' && (inf[0] === '-' || inf[0] === '+')) {
+            dt1 = new Date();
+            dt1.setSeconds(new Date().getSeconds() + Number(inf));
         } else if (inf instanceof Date && !isNaN(inf)) {
             dt1 = new Date(inf);
             inf = 0;
@@ -50,6 +68,7 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
         };
         ret['msg'] = `DATE HOUR: OK`
         ret['ret'] = true;
+
     } catch (catchErr) {
         (async () => {
             let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });

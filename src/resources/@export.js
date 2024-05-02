@@ -60,7 +60,6 @@ let functionsArr = [
     // { 'eng': 'CHROME/NODEJS', 'functionName': 'randomNumber', 'functionPath': './randomNumber.js', },
     { 'eng': 'CHROME/NODEJS', 'functionName': 'rawText', 'functionPath': './rawText.js', },
     { 'eng': 'CHROME/NODEJS', 'functionName': 'regex', 'functionPath': './regex.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'secToHour', 'functionPath': './secToHour.js', },
     // { 'eng': 'CHROME', 'functionName': 'sniffer', 'functionPath': './sniffer.js', },
     // { 'eng': 'CHROME/NODEJS', 'functionName': 'splitText', 'functionPath': './splitText.js', },
     { 'eng': 'CHROME', 'functionName': 'tabSearch', 'functionPath': './tabSearch.js', },

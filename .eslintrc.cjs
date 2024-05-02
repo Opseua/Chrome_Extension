@@ -12,7 +12,7 @@ let arrGlobal = [
     '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto',
     '_puppeteer', '_net', '_util', '_getFolderSize', 'process', 'Buffer', '_parse', '_stackTrace',
     // ## VARIÁVEIS
-    'cs', 'catchGlobal',
+    'cs',
     // ## GLOBAL OBJECT [NOVO]
     'gO', 'gOList',
     // ## GLOBAL OBJECT [SNIFFER CHROME]
@@ -28,7 +28,7 @@ let arrGlobal = [
     // → funções globais
     'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'completeJudge', 'configStorage', 'dateHour', 'delOldLogs', 'devFun', 'file',
     'getCookies', 'getPage', 'getPath', 'getPath', 'googleSheets', 'hasKey', 'htmlToJson', 'jsonInterpret', 'keepCookieLive', 'log', 'logConsole',
-    'messageSend', 'messageReceived', 'notification', 'orderObj', 'promptChrome', 'randomNumber', 'rawText', 'regex', 'regexE', 'secToHour',
+    'messageSend', 'messageReceived', 'notification', 'orderObj', 'promptChrome', 'randomNumber', 'rawText', 'regex', 'regexE',
     'sniffer', 'splitText', 'tabSearch', 'translate',
     // scripts
     'action_TryRating_QueryImageDeservingClassification', 'background', 'command1', 'command2', 'command2_old',
