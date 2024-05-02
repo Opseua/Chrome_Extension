@@ -21,7 +21,7 @@ async function completeJudge(inf) {
             let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
         };
 
-        let { urlGoogleMaps } = inf; let retChromeActions, infChromeActions, attributeValue, judges = []; let options = { 'POIEvaluation': optTryRating_POIEvaluation, 'Search20': optTryRating_Search20 }
+        let { urlGoogleMaps } = inf; let retChromeActions, infChromeActions, attributeValue; let options = { 'POIEvaluation': optTryRating_POIEvaluation, 'Search20': optTryRating_Search20 }
 
         // PEGAR O NOME DO HIT APP
         infChromeActions = { 'e': e, 'action': 'elementGetValueXpath', 'tabTarget': `*tryrating*`, 'elementName': `//*[@id="app-root"]/div/div[4]/div[2]/div[1]/div/div[1]/div/div[1]/span[2]/span`, }
@@ -30,7 +30,7 @@ async function completeJudge(inf) {
         if (!['POIEvaluation', 'Search20',].includes(hitApp)) {
             ret['msg'] = `COMPLETE JUDGE: ERRO NÃO EXISTE '${hitApp}'`;
         } else {
-            async function commentCreate(inf) {
+            async function getJudges(inf) {
                 let { options } = inf; for (let [index, value] of options.entries()) {
                     let actions = value; let indexOk = index; for (let [index, value] of actions.actions.entries()) {
                         if (value.action == 'attributeGetValue') {
@@ -51,11 +51,25 @@ async function completeJudge(inf) {
                             }
                         }
                     };
-                }; return { 'ret': true, 'msg': 'COMMENT CREAT: OK', 'res': { 'urlGoogleMaps': urlGoogleMaps, 'judges': judges, } }
+                }; return { 'ret': true, 'msg': 'COMMENT CREAT: OK', 'res': { 'judges': judges, } }
             }
 
-            let retCommentCreate = await commentCreate({ 'options': options[hitApp] }); if (!retCommentCreate.ret) { return retCommentCreate }
-            ret['res'] = retCommentCreate.res;
+            let retGetJudges = await getJudges({ 'options': options[hitApp] }); if (!retGetJudges.ret) { return retGetJudges }
+
+            // DESMEMBRAR ARRAY COM JUDGES
+            let oa = retGetJudges.res.judges; let keys = oa.map(obj => Object.keys(obj)[0]); let judges = []; let comment = ''; let search = 'Comment and Link'
+            for (let i = 0; i < oa[0][keys[0]].length; i++) { let newArray = []; for (let j = 0; j < keys.length; j++) { let per = keys[j]; let resposta = oa[j][per][i]; newArray.push({ [per]: resposta }); }; judges.push(newArray) }
+
+            // JULGAMENTO ATUAL + JUDGES
+            let c = -1; for (let [ia, va] of judges.entries()) { for (let [/*ib*/, vb] of va.entries()) { let k = Object.keys(vb)[0]; let s = search; if (k == s && vb[s].includes('###')) { c = ia; break; } }; if (c !== -1) { break } }
+
+            // CRIAR COMENTÁRIO
+            if (c == -1) { comment = { 'index': c, 'comment': 'Nenhum julgamento pendente', 'judges': judges } }
+            else { for (let [index, value] of judges[c].entries()) { let key = Object.keys(value)[0]; comment = `${comment}${value[key]}\n`; }; comment = { 'index': c, 'comment': `${comment}\n\n${urlGoogleMaps}`, 'judges': judges } }
+
+            console.log(comment);
+
+            ret['res'] = judges;
             ret['msg'] = `COMPLETE JUDGE: OK`;
             ret['ret'] = true;
         }

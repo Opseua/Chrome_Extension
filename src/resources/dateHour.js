@@ -5,7 +5,7 @@
 // let timestamp = Math.floor(new Date().getTime() / 1000);
 
 let e = import.meta.url, ee = e;
-function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
+function dateHour(inf) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
         let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
@@ -13,10 +13,25 @@ function dateHour(inf = 0) { // NÃO POR COMO 'async'!!!
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        let dt1 = new Date();
-        dt1.setSeconds(new Date().getSeconds() + inf).setSeconds;
+        let dt1;
+        if (typeof inf === 'number') {
+            dt1 = new Date();
+            dt1.setSeconds(new Date().getSeconds() + inf);
+        } else if (inf instanceof Date && !isNaN(inf)) {
+            dt1 = new Date(inf);
+            inf = 0;
+        } else {
+            let parsedDate = new Date(inf);
+            if (!isNaN(parsedDate)) {
+                dt1 = parsedDate;
+            } else {
+                dt1 = new Date();
+            }
+            inf = 0;
+        }
         let dt2 = Date.now() + (inf * 1000);
         let hou = dt1.getHours()
+
         ret['res'] = { // manter o 'String' para forçar o '0' (zero) na frente → '001'
             'day': String(dt1.getDate()).padStart(2, '0'),
             'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
