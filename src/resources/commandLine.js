@@ -7,11 +7,6 @@
 let e = import.meta.url, ee = e;
 async function commandLine(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
-    if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
-        if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
-        else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
-    }
     try {
         let command = inf.awaitFinish ? `${inf.command.replace(/!letter!/g, letter)}` : `"${letter}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/2_BACKGROUND.exe" ${inf.command.replace(/!letter!/g, letter)}`
         await new Promise((resolve) => {
@@ -36,7 +31,7 @@ async function commandLine(inf) {
             child.stderr.on('data', () => { });
         });
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
         ret['msg'] = retRegexE.res
     };
     return {

@@ -20,11 +20,6 @@
 let e = import.meta.url, ee = e;
 async function api(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
-    if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
-        if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
-        else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
-    }
     try {
         let req, resCode, resHeaders, resBody, body = false, reqOk = false, reqE; let reqOpt = { 'method': inf.method, 'redirect': 'follow', 'keepalive': true, 'rejectUnauthorized': false };
 
@@ -80,7 +75,7 @@ async function api(inf) {
 
     } catch (catchErr) {
         if (catchErr.name !== 'AbortError') {
-            let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
+            let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
             ret['msg'] = retRegexE.res
         }
     };

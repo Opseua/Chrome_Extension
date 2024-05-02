@@ -46,7 +46,7 @@ async function notification(infOk) {
         ret['ret'] = true;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': infOk, 'e': catchErr, 'catchGlobal': false });
+        let retRegexE = await regexE({ 'inf': infOk, 'e': catchErr, });
         ret['msg'] = retRegexE.res
     };
     return {

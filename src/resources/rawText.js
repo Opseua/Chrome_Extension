@@ -45,7 +45,7 @@ async function rawText(inf) {
         }
 
     } catch (catchErr) {
-        regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
+        regexE({ 'inf': inf, 'e': catchErr, });
     };
     return ret
 }

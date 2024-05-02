@@ -1,11 +1,6 @@
 let e = import.meta.url, ee = e;
 async function devFun(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
-    if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
-        if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
-        else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
-    }
     try {
         if (inf.enc) {
             // ENCAMINHAR PARA O DEVICE CERTO
@@ -69,7 +64,7 @@ async function devFun(inf) {
             }
         }
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
         ret['msg'] = retRegexE.res
     };
     return {
