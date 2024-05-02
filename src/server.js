@@ -44,9 +44,8 @@ async function serverRun(inf) {
 
         // *************************
 
-        // MANTER NO FINAL PARA GARANTIR QUE O ATALHO VAI FUNCIONAR ANTES DO WEBSOCKET SER CONECTADO
-        // CLIENT (NÃO POR COMO 'await'!!!)
-        // client({ 'e': e })
+        // MANTER NO FINAL PARA GARANTIR QUE O ATALHO VAI FUNCIONAR ANTES DO WEBSOCKET SER CONECTADO | CLIENT (NÃO POR COMO 'await'!!!)
+        client({ 'e': e }); await new Promise(resolve => { setTimeout(resolve, 2000) })
 
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
@@ -56,11 +55,6 @@ async function serverRun(inf) {
         // retCompleteJudge = await completeJudge(infCompleteJudge)
         // console.log(JSON.stringify(retCompleteJudge, null, 2))
 
-        // ### LOG FUN ###
-        if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
-        }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res

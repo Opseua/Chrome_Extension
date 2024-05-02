@@ -44,11 +44,6 @@ async function rawText(inf) {
             ret = `${JSON.stringify(obj)}\n\n\n\n${raw}`
         }
 
-        // ### LOG FUN ###
-        if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
-        }
     } catch (catchErr) {
         regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
     };

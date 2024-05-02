@@ -7,11 +7,6 @@ async function keepCookieLive(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'keepCookieLive', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
-        };
-
         let retGetCookies, infChromeActions, retChromeActions
         let retConfigStorage = await configStorage({ 'e': e, 'action': 'get', 'key': 'chatOra.ai' });
         retConfigStorage = retConfigStorage.res

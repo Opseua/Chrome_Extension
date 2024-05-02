@@ -12,11 +12,6 @@ async function getPage(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'getPage', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
-        };
-
         function getContent(inf) {
             return new Promise((resolve) => {
                 chrome.pageCapture.saveAsMHTML({ 'tabId': inf.id }, function (data) {
@@ -39,11 +34,6 @@ async function getPage(inf) {
         };
         await getContent(inf)
 
-        // ### LOG FUN ###
-        if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
-        }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res

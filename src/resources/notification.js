@@ -13,10 +13,6 @@ async function notification(infOk) {
     e = infOk && infOk.e ? infOk.e : e
     try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
-        if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': inf.retInf, } };
-            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
-        };
 
         if (!inf.icon || inf.icon.length > 1) {
             let imgSrc = !inf.icon ? './src/scripts/media/icon_3.png' : inf.icon;
@@ -49,11 +45,6 @@ async function notification(infOk) {
         ret['msg'] = 'NOTIFICATION: OK'
         ret['ret'] = true;
 
-        // ### LOG FUN ###
-        if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
-        }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': infOk, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res

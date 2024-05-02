@@ -37,11 +37,6 @@ function hasKey(inf) { // NÃO POR COMO 'async'!!!
             ret['ret'] = true
         }
 
-        // ### LOG FUN ###
-        if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
-        }
     } catch (catchErr) {
         (async () => {
             let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });

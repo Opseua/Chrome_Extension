@@ -15,11 +15,6 @@ async function log(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        if (!`rodar no → NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'log', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
-        };
-
         let { text, folder, path, raw, functionLocal, fileProject, fileCall } = inf
         let infFile, retFile, houTxt, houFile, minSecMil, pathOk, rewrite = false
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
@@ -54,11 +49,6 @@ async function log(inf) {
         ret['msg'] = `LOG: OK`;
         ret['ret'] = true
 
-        // ### LOG FUN ###
-        if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'raw': raw ? true : false, 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
-        }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res

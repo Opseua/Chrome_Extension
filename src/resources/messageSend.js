@@ -7,7 +7,7 @@
 // let infMessageSend, retMessageSend
 // infMessageSend = { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': 'aaa', 'resWs': ws, 'secondsAwait': 0, }
 // retMessageSend = await messageSend(infMessageSend);
-// logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': JSON.stringify(retMessageSend) });
+// console.log(retMessageSend)
 
 let e = import.meta.url, ee = e;
 async function messageSend(inf) {
@@ -20,7 +20,7 @@ async function messageSend(inf) {
     } else { buffer = false; message = inf.message }; let messageLength = message.length; let totalChunks = Math.ceil(messageLength / chunkSize);
     let secondsAwait = !message.includes('"retInf":true') ? 0 : inf.secondsAwait > 0 ? inf.secondsAwait : globalWindow.secRetWebSocket // → TEMPO PADRÃO SE NÃO FOR INFORMADO
     messageId = secondsAwait == 0 ? `${messageId}` : `${messageId}_RET-TRUE`; let { resWs, } = inf; let host = resWs.host, room = resWs.room;
-    let destination = inf.destination ? inf.destination.replace('ws://', '') : 'x'; let hostRoom = `${host}/?roo=${room}`; let origin = inf.origin ? inf.origin : `${hostRoom}`;
+    let destination = inf.destination ? inf.destination.replace('ws://', '') : 'x'; let origin = inf.origin ? inf.origin : `${host}/?roo=${room}`;
 
     // LISTENER DE RESPOSTA: DEFINIR (SE NECESSÁRIO)
     let retAwaitTimeout, listenerName;

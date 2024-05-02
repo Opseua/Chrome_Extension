@@ -13,11 +13,6 @@ async function commandLine(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        if (!`rodar no →  NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'commandLine', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
-        };
-
         let command = inf.awaitFinish ? `${inf.command.replace(/!letter!/g, letter)}` : `"${letter}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/2_BACKGROUND.exe" ${inf.command.replace(/!letter!/g, letter)}`
         await new Promise((resolve) => {
             let child = _exec(command, async (error, stdout, stderr) => {
@@ -34,11 +29,6 @@ async function commandLine(inf) {
                     ret['ret'] = true;
                 }
 
-                // ### LOG FUN ###
-                if (inf && inf.logFun) {
-                    let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-                    infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
-                }
                 resolve();
                 return;
             });

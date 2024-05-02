@@ -13,11 +13,6 @@ async function promptChrome(inf) {
     }
     try {
         let title = (inf.title) ? `${inf.title} | Digite o comando:` : `Digite o comando:`;
-        if (!`rodar no → CHROME`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'promptChrome', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
-        };
-
         let retPrompt = prompt(`${title}`);
         if (!retPrompt) {
             ret['msg'] = `PROMPT CHROME: ERRO | PROMPT EM BRANCO`;
@@ -27,11 +22,6 @@ async function promptChrome(inf) {
             ret['ret'] = true;
         }
 
-        // ### LOG FUN ###
-        if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
-        }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res

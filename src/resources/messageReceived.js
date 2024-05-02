@@ -6,8 +6,8 @@ async function messageReceived(inf) {
     let partesRestantes = inf.partesRestantes > -99 ? inf.partesRestantes : 0
     let message = typeof inf.message === 'object' ? JSON.stringify(inf.message) : inf.message
     let buffer = inf.buffer ? inf.buffer : false
-    let { host, room, hostRoom, resWs, wsClients } = inf
-    let origin = inf.origin ? inf.origin.replace('ws://', '') : `${hostRoom}`;
+    let { host, room, resWs, wsClients } = inf
+    let origin = inf.origin ? inf.origin.replace('ws://', '') : `${host}/?roo=${room}`;
     let destination = inf.destination ? inf.destination.replace('ws://', '') : 'x', isSerCli = wsClients ? 'isSer' : 'isCli'
 
     // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
@@ -21,9 +21,10 @@ async function messageReceived(inf) {
 
     if (isSerCli == 'isSer') {
         // ### RECEBIDO NO SERVER
-        let wsClientsToSend = [], erroType = 0
+        let wsClientsToSend = [], erroType = 0; let wsClientsArrRoom = []
         for (let room in wsClients.rooms) {
-            if (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': room })) {
+            if (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': room }) && !JSON.stringify(wsClientsArrRoom).includes(room.split('/')[1])) {
+                wsClientsArrRoom.push(room) // // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
                 wsClientsToSend = wsClientsToSend.concat(Array.from(wsClients.rooms[room]));
             }
         }

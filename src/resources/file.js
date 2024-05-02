@@ -231,11 +231,6 @@ async function file(inf) {
             else if (inf.action == 'md5' && !eng) { return await fileMd5(inf) } else if (inf.action == 'isFolder' && !eng) { return await fileIsFolder(inf) }
         }
 
-        // ### LOG FUN ### [AQUI É NECESSÁRIO INSERIR A CHAVE 'stop' PARA NÃO FICAR EM LOOP INFINITO!!!]
-        if (inf.logFun && !inf.stop) {
-            let infFile = { 'stop': true, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await fileWrite(infFile);
-        }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res

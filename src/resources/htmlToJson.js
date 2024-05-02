@@ -111,11 +111,6 @@ async function htmlToJson(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        if (!`rodar no →  NODEJS`.includes(engName)) { // [ENCAMINHAR PARA DEVICE]
-            let infDevAndFun = { 'e': e, 'enc': true, 'data': { 'name': 'htmlToJson', 'par': inf, 'retInf': inf.retInf } };
-            let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
-        };
-
         let $ = _cheerio.load(inf.html); let result = [], headers = [], randomCol = inf.mode == 1 ? false : true; let hasHeader = $('table thead').length > 0;
 
         // SE CONTEM O CABEÇALHO 
@@ -132,11 +127,6 @@ async function htmlToJson(inf) {
         ret['msg'] = `HTML TO JSON: OK`;
         ret['res'] = JSON.stringify(result);
 
-        // ### LOG FUN ###
-        if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
-        }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
         ret['msg'] = retRegexE.res
