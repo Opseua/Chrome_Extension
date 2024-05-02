@@ -51,10 +51,10 @@ async function serverRun(inf) {
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 
-        let infCompleteJudge, retCompleteJudge // 'logFun': true,
-        infCompleteJudge = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
-        retCompleteJudge = await completeJudge(infCompleteJudge)
-        console.log(JSON.stringify(retCompleteJudge, null, 2))
+        // let infCompleteJudge, retCompleteJudge // 'logFun': true,
+        // infCompleteJudge = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
+        // retCompleteJudge = await completeJudge(infCompleteJudge)
+        // console.log(JSON.stringify(retCompleteJudge, null, 2))
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
