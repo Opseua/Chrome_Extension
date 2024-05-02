@@ -1,5 +1,10 @@
 // let retDateHour
-// retDateHour = dateHour() // dateHour(86400) + 1 DIA | dateHour(-43200) - 12 HORAS
+// retDateHour = dateHour() // HORA ATUAL
+// retDateHour = dateHour(new Date()) // HORA ATUAL [Chrome/NodeJS/Google]
+// retDateHour = dateHour(-43200) // HORA ATUAL - 12 HORAS
+// retDateHour = dateHour(+86400) // HORA ATUAL + 1 DIA
+// retDateHour = dateHour('Wed Jan 11 2024 22:33:44 GMT-0300 (Horário Padrão de Brasília)') // [Chrome/NodeJS/Google]
+// retDateHour = dateHour('2024-01-11T22:33:44.000Z') // [Chrome/NodeJS/Google] (o retorno é 3 horas a MENOS)
 // console.log(retDateHour)
 
 // let timestamp = Math.floor(new Date().getTime() / 1000);
@@ -32,7 +37,8 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
         let dt2 = Date.now() + (inf * 1000);
         let hou = dt1.getHours()
 
-        ret['res'] = { // manter o 'String' para forçar o '0' (zero) na frente → '001'
+        ret['res'] = {
+            // manter o 'String' para forçar o '0' (zero) na frente → '001'
             'day': String(dt1.getDate()).padStart(2, '0'),
             'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
             'yea': String(dt1.getFullYear()),
