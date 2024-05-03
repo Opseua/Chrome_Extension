@@ -1,6 +1,6 @@
 // let infCommandLine, retCommandLine // 'logFun': true, 'awaitFinish': false,
 // infCommandLine = { 'e': e, 'awaitFinish': false, 'command': `notepad` }
-// infCommandLine = { 'e': e, 'awaitFinish': false, 'command': `"!letter!:/ARQUIVOS/PROJETOS/WebScraper/src/2_BACKGROUND.exe"` }
+// infCommandLine = { 'e': e, 'awaitFinish': false, 'command': `!letter!:/PASTA/PROGRAMA.exe` }
 // retCommandLine = await commandLine(infCommandLine);
 // console.log(retCommandLine)
 
@@ -8,7 +8,7 @@ let e = import.meta.url, ee = e;
 async function commandLine(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let command = inf.awaitFinish ? `${inf.command.replace(/!letter!/g, letter)}` : `"${letter}:/ARQUIVOS/WINDOWS/BAT/RUN_PORTABLE/2_BACKGROUND.exe" ${inf.command.replace(/!letter!/g, letter)}`
+        let command = inf.awaitFinish ? `${inf.command.replace(/!letter!/g, letter)}` : `%2_BACKGROUND% ${inf.command.replace(/!letter!/g, letter)}`
         await new Promise((resolve) => {
             let child = _exec(command, async (error, stdout, stderr) => {
                 if (error) {

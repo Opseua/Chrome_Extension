@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!" equ "" "!fileMsg!" "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
+if "!arg1!" equ "" !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION >nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -19,7 +19,7 @@ if not "!mode!"=="!mode:LEGACY=!" ( set "restartOnStop=RESTART_STOP" ) else ( se
 rem ESCREVER LOG PM2JLIST NO TXT
 set "arquivoTemp=!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\processPm2JList.txt"
 set "loopMax=500" & set "loopQtd=0" & del /f !arquivoTemp!
-"!2_BACKGROUND!" pm2 jlist#2#!arquivoTemp!
+!2_BACKGROUND! pm2 jlist#2#!arquivoTemp!
 
 :LER_ARQUIVO
 set /a loopQtd+=1
@@ -61,7 +61,7 @@ if "!ret2!"=="TRUE" (
 )
 
 rem ACTION → NAO DEFINIDA (ENCERRAR)
-if "!actionRun!"=="ERRO" ( "!fileLog!" "[NODEJS FILE] = [EXE: EXIT - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun! - LOOP: !loopMax!/!loopQtd!] # !fileScriptFullWithBars!" & exit )
+if "!actionRun!"=="ERRO" ( !fileLog! "[NODEJS FILE] = [EXE: EXIT - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun! - LOOP: !loopMax!/!loopQtd!] # !fileScriptFullWithBars!" & exit )
 
 rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'echo !timeNow!>!file!' !!!)
 set "file=!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\logTime!project!!outrosAdd!.txt" & if not exist "!file!" ( set "timeLast=123" ) else ( set /p timeLast=<!file! )
@@ -73,21 +73,21 @@ echo !timeNow!>"!file!"
 
 rem ### → ACAO | PARAR
 if "!actionRun!"=="OFF" (
-	"!2_BACKGROUND!" pm2 del !fileScriptFullWithBars!
+	!2_BACKGROUND! pm2 del !fileScriptFullWithBars!
 	rem JANELA DO LOG FECHAR
-	"!2_BACKGROUND!" !nircmd! win close ititle "#_!fileScriptFullWithBars!"
+	!2_BACKGROUND! !nircmd! win close ititle "#_!fileScriptFullWithBars!"
 )
 
 rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
 	rem INICIAR SCRIPT NO PM2
-	"!2_BACKGROUND!" pm2 start "!fileScript!" --name "!fileScriptFullWithBars!" -i 1
+	!2_BACKGROUND! pm2 start "!fileScript!" --name "!fileScriptFullWithBars!" -i 1
 	
 	rem [VIEW]
 	if not "!action!"=="!action:VIEW=!" (
-		rem start cmd.exe /c "title #_!fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\nodeZPm2JList.exe "%letra%:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\node_modules\pm2\bin\pm2" logs !fileScriptFullWithBars!"
-		rem "D:\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe" start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# start cmd.exe /c !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processPm2JList.bat !action! !project!@!outrosAdd! !fileScript! REBOOT
-		rem "D:\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe" start "#_!fileScriptFullWithBars!" !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\nodeZPm2JList.exe %letra%:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\node_modules\pm2\bin\pm2 logs !fileScriptFullWithBars!
+		rem start cmd.exe /c "title #_!fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\nodeZPm2JList.exe "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\node_modules\pm2\bin\pm2" logs !fileScriptFullWithBars!"
+		rem !2_BACKGROUND! start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# start cmd.exe /c !fileChrome_Extension!\src\scripts\BAT\processPm2JList.bat !action! !project!@!outrosAdd! !fileScript! REBOOT
+		rem !2_BACKGROUND! start "#_!fileScriptFullWithBars!" !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\nodeZPm2JList.exe !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\node_modules\pm2\bin\pm2 logs !fileScriptFullWithBars!
 		if "!letra!"=="D" (
 			rem OPSEUA
 			if not "!action!"=="!action:WINTP1=!" ( set "winTP=15 65 500 300" )
@@ -106,7 +106,7 @@ if "!actionRun!"=="ON" (
 			if not "!action!"=="!action:WINTP6=!" ( set "winTP=420 650 410 300" )
 		)
 		rem JANELA DO LOG POSICIONAR
-		"!2_BACKGROUND!" timeout 2 #2# nul #1# !nircmd! win setsize ititle #_!fileScriptFullWithBars! !winTP!
+		!2_BACKGROUND! timeout 2 #2# nul #1# !nircmd! win setsize ititle #_!fileScriptFullWithBars! !winTP!
 	)
 )
 

@@ -39,7 +39,7 @@
 // [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
 let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2;
 
-let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
+let _fs, _path, _url, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
 
 if (cng == 1) { // CHROME
     window['eng'] = true; window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {};
@@ -88,7 +88,7 @@ globalWindow = {
 if (eng) { // CHROME
     _WebSocket = window.WebSocket
 } else { // NODEJS
-    _path = await import('path'); _cheerio = await import('cheerio'); const { default: WebSocket } = await import('ws'); _WebSocket = WebSocket;
+    _path = await import('path'); _url = await import('url'); _cheerio = await import('cheerio'); const { default: WebSocket } = await import('ws'); _WebSocket = WebSocket;
     const { default: clipboard } = await import('clipboardy'); _clipboard = clipboard; const { default: http } = await import('http'); _http = http;
     const { exec } = await import('child_process'); _exec = exec; const { google } = await import('googleapis'); _google = google
     const { createHash } = await import('crypto'); _crypto = createHash; _puppeteer = await import('puppeteer'); _net = await import('net');
@@ -169,7 +169,7 @@ if (eng) { // CHROME
 } else { // NODEJS
     // ## BIBLIOTECAS / NATIVO
     const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
-    global['_WebSocket'] = _WebSocket; global['_fs'] = _fs; global['_path'] = _path; global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
+    global['_WebSocket'] = _WebSocket; global['_fs'] = _fs; global['_path'] = _path; global['_url'] = _url; global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
     global['_http'] = _http; global['_exec'] = _exec; global['_google'] = _google; global['_crypto'] = _crypto; global['_puppeteer'] = _puppeteer; global['_net'] = _net;
     global['_util'] = _util; global['_getFolderSize'] = _getFolderSize; global['_parse'] = _parse;
     // ## VARIÁVEIS

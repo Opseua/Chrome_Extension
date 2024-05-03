@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!" equ "" "!fileMsg!" "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
+if "!arg1!" equ "" !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION >nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -19,12 +19,12 @@ cd\ & !letra!: & cd "!local!"
 
 if "!arg1!"=="APAGAR" ( goto COPIA_APAGAR )
 if "!arg1!"=="CRIAR" ( goto COPIA_CRIAR )
-"!fileMsg!" "[!local!\!arquivo!]\nParamentro invalido. Deve ser 'APAGAR' ou 'CRIAR'" & exit
+!fileMsg! "[!local!\!arquivo!]\nParamentro invalido. Deve ser 'APAGAR' ou 'CRIAR'" & exit
 
 :COPIA_CRIAR
 rem CRIAR COPIA nodeExe
 set "projects=nodeZPm2JList;Chrome_Extension;Chrome_ExtensionOld;Sniffer_Python_server;URA_Reversa_serverJsf;URA_Reversa_serverTelein;WebScraper_serverC6;WebScraper_serverJucesp"
-set "projects=!projects!;WebSocket_server;WebSocketOld_server"
+set "projects=!projects!;WebSocket_server;WebSocketOld_server;WebSocketNew_server"
 set fileQtdCopy=0
 for %%a in ("%projects:;=" "%") do (
     if exist "!local!\node%%~a.exe" (
@@ -36,9 +36,11 @@ for %%a in ("%projects:;=" "%") do (
         set "origem=!local!\node.exe"
         set "destino=!local!\node%%~a.exe"
         echo F|xcopy /Q /Y /F "!origem!" "!destino!"
+		rem FIREWALL [PERMITIR]
+		!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\BAT\firewallAllowBlock.bat ALLOW "!destino!" NAO_MOSTRAR_POPUP
     )
 )
-"!fileMsg!" "[!local!\!arquivo!]\n\nCopiados: !fileQtdCopy!" & exit
+!fileMsg! "[!local!\!arquivo!]\n\nCopiados: !fileQtdCopy!" & exit
 
 :COPIA_APAGAR
 rem APAGAR OS nodeExe ANTIGOS (EXCETO O PROPRIO 'node.exe')
@@ -55,6 +57,8 @@ for %%F in (*) do (
 				set /a fileQtdDel+=1
 				echo [APAGAR] →→→ - !filename!
 				del /f "!local!\!filename!"
+				rem FIREWALL [APAGAR REGRA]
+				!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\BAT\firewallAllowBlock.bat DEL "!local!\!filename!" NAO_MOSTRAR_POPUP
 			)
 		) else (
 			echo [NAO] - !filename!
@@ -63,7 +67,7 @@ for %%F in (*) do (
 		echo [NAO] - !filename!
 	)
 )
-"!fileMsg!" "[!local!\!arquivo!]\n\nTotal de arquivos: !fileQtdAll!\nDeletados: !fileQtdDel!" & exit
+!fileMsg! "[!local!\!arquivo!]\n\nTotal de arquivos: !fileQtdAll!\nDeletados: !fileQtdDel!" & exit
 
 
 

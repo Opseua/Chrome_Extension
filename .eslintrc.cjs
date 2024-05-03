@@ -9,7 +9,7 @@ let arrGlobal = [
 
     // NODEJS
     // ## BIBLIOTECAS / NATIVO
-    '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto',
+    '_WebSocketServer', '_WebSocket', '_fs', '_path', '_url', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto',
     '_puppeteer', '_net', '_util', '_getFolderSize', 'process', 'Buffer', '_parse', '_stackTrace',
     // ## VARIÁVEIS
     'cs',
