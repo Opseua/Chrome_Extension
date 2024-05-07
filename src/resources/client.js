@@ -1,4 +1,4 @@
-let wsServers = { 'rooms': {} }, reconnecting = {}, timeoutSecConnect = {}, secConnect = globalWindow.secConnect, servers
+let wsServers = { 'rooms': {} }, reconnecting = {}, timeoutSecConnect = {}, secConnect = globalWindow.secConnect
 
 let e = import.meta.url, ee = e;
 async function client(inf) {
@@ -64,9 +64,9 @@ async function client(inf) {
         }
 
         // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → GET [WEB] | GET [LOC]
-        servers = [globalWindow.devGet[0], globalWindow.devGet[1],]; servers.forEach((hostRoom) => connect({ 'hostRoom': hostRoom }));
-        listenerMonitorar(servers[0], async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) });
-        listenerMonitorar(servers[1], async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) });
+        let servers = [globalWindow.devGet[0], globalWindow.devGet[1],]; for (let [index, value] of servers.entries()) {
+            if (value.includes('127.0.0.1') || globalWindow.project !== 'Sniffer_Python') { connect({ 'hostRoom': value }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) }) }
+        };
 
         async function runLis(inf) {
             let { nomeList } = inf, { messageId, message, resWs, origin, host, room } = inf.param1

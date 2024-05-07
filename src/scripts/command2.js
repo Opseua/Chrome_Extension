@@ -8,8 +8,10 @@ async function command2(inf) {
       'text': `Alternando sniffer`
     }
     let retNotification = await notification(infNotification);
-    let infCommandLine = { 'e': e, 'command': `"${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/src/z_Outros_server/TOGGLE_HIDE.vbs"`, 'retInf': false }
+
+    let infCommandLine = { 'e': e, 'command': `"${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/src/z_Outros_server/TOGGLE_HIDE.vbs"`, 'retInf': true }
     let retCommandLine = await commandLine(infCommandLine)
+
     ret['ret'] = true;
     ret['msg'] = `SHORTCUT PRESSED: OK`;
   } catch (catchErr) {
