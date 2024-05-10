@@ -26,7 +26,7 @@ let arrGlobal = [
 
     // [Chrome_Extension]
     // → funções globais
-    'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'completeJudge', 'configStorage', 'dateHour', 'delOldLogs', 'devFun', 'file',
+    'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'judgeComplete', 'configStorage', 'dateHour', 'delOldLogs', 'devFun', 'file',
     'getCookies', 'getPage', 'getPath', 'getPath', 'googleSheets', 'hasKey', 'htmlToJson', 'jsonInterpret', 'keepCookieLive', 'log', 'logConsole',
     'messageSend', 'messageReceived', 'notification', 'orderObj', 'promptChrome', 'randomNumber', 'rawText', 'regex', 'regexE',
     'sniffer', 'splitText', 'tabSearch', 'translate',
@@ -40,7 +40,7 @@ let arrGlobal = [
 
     // [Sniffer_Python]
     // → funções globais
-    'ewoq', 'tryRating', 'tryRating_Search20', 'performTask', 'tryRating_QueryImageDeservingClassification', 'tryRating_DrivingNavigation3DMaps',
+    'ewoq', 'judgesGetResponse', 'tryRating', 'tryRating_Search20', 'performTask', 'tryRating_QueryImageDeservingClassification', 'tryRating_DrivingNavigation3DMaps',
 
     // [URA_Reversa]
     // → funções globais

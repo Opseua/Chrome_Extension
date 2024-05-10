@@ -45,10 +45,10 @@ async function serverRun(inf) {
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 
-        // let infCompleteJudge, retCompleteJudge // 'logFun': true,
-        // infCompleteJudge = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
-        // retCompleteJudge = await completeJudge(infCompleteJudge)
-        // console.log(JSON.stringify(retCompleteJudge, null, 2))
+        // let infJudgeComplete, retJudgeComplete // 'logFun': true,
+        // infJudgeComplete = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
+        // retJudgeComplete = await judgeComplete(infJudgeComplete)
+        // console.log(JSON.stringify(retJudgeComplete, null, 2))
 
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });

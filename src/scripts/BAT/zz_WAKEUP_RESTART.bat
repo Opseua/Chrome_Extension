@@ -126,7 +126,7 @@ if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
 	rem → AWS/ESTRELAR
 	!2_BACKGROUND! explorer
 	
-	ping -n 3 -w 1000 127.0.0.1 >nul
+	ping -n 5 -w 1000 127.0.0.1 >nul
 	
 	!2_BACKGROUND! taskmgr
 	
