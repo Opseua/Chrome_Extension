@@ -1,4 +1,4 @@
-// let infNotification, retNotification // 'logFun': true,
+// let infNotification, retNotification
 // infNotification = {
 //     'e': e, 'duration': 2, 'icon': './src/scripts/media/icon_4.png', 'retInf': false,
 //     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': 'BOTAO 2' }],

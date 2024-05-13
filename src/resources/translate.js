@@ -1,4 +1,4 @@
-// let infTranslate, retTranslate // 'logFun': true,
+// let infTranslate, retTranslate
 // infTranslate = { 'e': e, 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
 // retTranslate = await translate(infTranslate);
 // console.log(retTranslate)

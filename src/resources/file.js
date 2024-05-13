@@ -1,4 +1,4 @@
-// let infFile, retFile // 'logFun': true, 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
+// let infFile, retFile // 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
 // infFile = { 'e': e, 'action': 'relative', 'functionLocal': false, 'path': './PASTA/arquivo.txt' }
 // infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'path': './PASTA/arquivo.txt', 'rewrite': true, 'text': '1234\n' }
 // infFile = { 'e': e, 'action': 'read', 'functionLocal': false, 'path': './PASTA/arquivo.txt' }

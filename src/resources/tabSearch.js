@@ -25,7 +25,6 @@ async function tabSearch(inf) {
                 })
             })
         };
-        // if (result.hasOwnProperty('res')) { // ATIVA ret
         if ('res' in result) { // ATIVA ret
             if (inf.search == 'ATIVA') {
                 ret['res'] = { 'id': result.res.id, 'title': result.res.title, 'url': result.res.url, 'active': result.res.active, 'index': result.res.index, 'pinned': result.res.pinned }
@@ -46,7 +45,6 @@ async function tabSearch(inf) {
                     if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned }; break }
                 }
             };
-            // if (ret.hasOwnProperty('res')) {
             if ('res' in ret) {
                 ret['msg'] = `SEARCH TAB: OK`
                 ret['ret'] = true;
@@ -72,7 +70,6 @@ async function tabSearch(inf) {
     if (!ret.ret) {
         if (inf.openIfNotExist) {
             let retOpenTab = await openTab(inf);
-            //if (retOpenTab.hasOwnProperty('id')) {
             if ('id' in retOpenTab) {
                 ret['res'] = retOpenTab;
                 ret['msg'] = `SEARCH TAB: OK`

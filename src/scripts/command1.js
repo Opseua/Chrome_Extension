@@ -14,15 +14,19 @@ async function command1(inf) {
 
       // ENVIAR MENSAGEM COM O COMANDO
       let message = {
-        "fun": [{
-          "securityPass": globalWindow.securityPass, "retInf": true, "name": "judgeComplete",
-          "par": { "urlGoogleMaps": retPromptChrome.res, }
+        'fun': [{
+          'securityPass': globalWindow.securityPass, 'retInf': true, 'name': 'judgeComplete',
+          'par': { 'urlGoogleMaps': retPromptChrome.res, }
         }]
       };
       let retListenerAcionar = await listenerAcionar(`messageSendOrigin_${globalWindow.devGet[1]}`, { 'destination': devSendOther, 'message': message, 'secondsAwait': 0, });
-      logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': JSON.stringify(retListenerAcionar) });
+      // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': JSON.stringify(retListenerAcionar) });
 
-      let infNotification, retNotification // 'logFun': true,
+      if (retListenerAcionar.ret) {
+        let retClipboard = await clipboard({ 'e': e, 'value': retListenerAcionar.res.comments[retListenerAcionar.res.current] });
+      }
+
+      let infNotification, retNotification
       infNotification = {
         'e': e, 'duration': 4, 'icon': `./src/scripts/media/icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
         'title': `Complete Judge`, 'text': retListenerAcionar.msg,

@@ -1,4 +1,4 @@
-// let infRandom, retRandom // 'logFun': true,
+// let infRandom, retRandom
 // infRandom = { 'e': e, 'min': 3, 'max': 10, 'await': true };
 // retRandom = await randomNumber(infRandom);
 // console.log(retRandom)

@@ -13,7 +13,6 @@ async function peroptyx_Search20(inf) {
         }
         if (inf.logFile) { retFile = await file({ 'e': e, 'action': 'read', 'path': inf.logFile }); retSniffer = JSON.parse(retFile.res) }
         else { retSniffer = JSON.parse(inf.sniffer) }
-        // if (!retSniffer.tasks[0].taskData.hasOwnProperty('testQuestionInformation')) {
         if (!('testQuestionInformation' in retSniffer.tasks[0].taskData)) {
             infNotification = {
                 'e': e, 'duration': 2, 'icon': './src/scripts/media/notification_3.png',

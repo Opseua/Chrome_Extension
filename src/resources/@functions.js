@@ -26,6 +26,11 @@
 // }, 2000);
 // clearTimeout(timeout);
 
+// LOOP 99 VEZES
+// for (let index = 0; index < 99; index++) {
+//     console.log('INDEX', index,);
+// }; console.log('FIM');
+
 // let data = 'CASAMENTO'
 // // QUALQUER → BASE64
 // let qualquerParaBase64 = Buffer.from(data).toString('base64')
@@ -148,7 +153,7 @@ function awaitTimeout(inf) {
 // ############### CLEAR CONSOLE ###############
 function clearConsoleRun() { /* CHROME | ANTIGO | NOVO */ if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } };
 let msgQtd = 0; let clearConsole = console.log; console.log = function () {
-    clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 30) { clearConsoleRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n') }
+    clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearConsoleRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n') }
 }; clearConsoleRun();
 
 // // ###############               ###############

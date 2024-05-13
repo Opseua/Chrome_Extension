@@ -58,7 +58,7 @@ let arrUnused = [
     // [infNomeFuncao] [infNomeFuncao]
     'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',
     // (for)
-    'index', 'value', 'event',
+    'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'index4', 'value4', 'event',
     // (time)
     'time', 'time1', 'time2', 'hour', 'timeout',
     'ee',

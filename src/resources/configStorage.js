@@ -1,4 +1,4 @@
-// let infConfigStorage, retConfigStorage; // 'logFun': true, 'functionLocal': false, SOMENTE NO NODEJS
+// let infConfigStorage, retConfigStorage
 // infConfigStorage = { 'e': e, 'action': 'set', 'functionLocal': true, 'key': 'NomeDaChave', 'value': 'Valor da chave' }
 // infConfigStorage = { 'e': e, 'action': 'get', 'functionLocal': true, 'key': 'NomeDaChave' }
 // infConfigStorage = { 'e': e, 'action': 'del', 'functionLocal': true, 'key': 'NomeDaChave' }

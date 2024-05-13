@@ -1,4 +1,4 @@
-// let infGetPage, retGetPage // 'logFun': true,
+// let infGetPage, retGetPage
 // infGetPage = { 'e': e, 'id': 182593371 };
 // retGetPage = await getPage(infGetPage);
 // console.log(retGetPage)

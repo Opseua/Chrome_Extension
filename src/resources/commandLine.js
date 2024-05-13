@@ -1,4 +1,4 @@
-// let infCommandLine, retCommandLine // 'logFun': true, 'awaitFinish': false,
+// let infCommandLine, retCommandLine
 // infCommandLine = { 'e': e, 'awaitFinish': false, 'command': `notepad` }
 // infCommandLine = { 'e': e, 'awaitFinish': false, 'command': `!letter!:/PASTA/PROGRAMA.exe` }
 // retCommandLine = await commandLine(infCommandLine);

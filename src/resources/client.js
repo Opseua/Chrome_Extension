@@ -65,7 +65,11 @@ async function client(inf) {
 
         // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → GET [WEB] | GET [LOC]
         let servers = [globalWindow.devGet[0], globalWindow.devGet[1],]; for (let [index, value] of servers.entries()) {
-            if (value.includes('127.0.0.1') || globalWindow.project !== 'Sniffer_Python') { connect({ 'hostRoom': value }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) }) }
+            if (!value.includes('127.0.0.1') && (globalWindow.project == 'Sniffer_Python' || (!value.includes('USUARIO_0') && value.includes('USUARIO_')))) {
+                // NÃO CONECTAR AO WEBSOCKET
+            } else {
+                connect({ 'hostRoom': value }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) })
+            }
         };
 
         async function runLis(inf) {

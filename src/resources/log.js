@@ -1,4 +1,4 @@
-// let infLog, retLog // 'logFun': true, 'functionLocal': true, 'raw': true,
+// let infLog, retLog // 'raw': true,
 // // → [Chrome_Extension]/log/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
 // infLog = { 'e': e, 'folder': '#_PASTA_#', 'functionLocal': false, 'path': `ARQUIVO.txt`, 'text': `INF AQUI` }
 // // (ESCREVE NO MESMO ARQUIVO) → [Chrome_Extension]/log/#_PASTA_#/log.txt

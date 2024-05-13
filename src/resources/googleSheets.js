@@ -1,4 +1,4 @@
-// let infGoogleSheets, retGoogleSheets // 'logFun': true,
+// let infGoogleSheets, retGoogleSheets
 // infGoogleSheets = {
 //     'e': e, 'action': 'get',
 //     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,

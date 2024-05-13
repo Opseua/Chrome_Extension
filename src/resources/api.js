@@ -1,4 +1,4 @@
-// let infApi, retApi // 'logFun': true
+// let infApi, retApi
 // infApi = { // ###### → json/object
 //     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
 //     'headers': { 'Content-Type': 'application/json' },

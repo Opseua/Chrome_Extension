@@ -1,4 +1,4 @@
-// let infPromptChrome, retPromptChrome // 'logFun': true,
+// let infPromptChrome, retPromptChrome
 // infPromptChrome = { 'e': e, 'title': `NOME DO COMANDO` }
 // retPromptChrome = await promptChrome(infPromptChrome)
 // console.log(retPromptChrome)
