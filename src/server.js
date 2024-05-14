@@ -40,7 +40,7 @@ async function serverRun(inf) {
         // *************************
 
         // MANTER NO FINAL PARA GARANTIR QUE O ATALHO VAI FUNCIONAR ANTES DO WEBSOCKET SER CONECTADO | CLIENT (NÃO POR COMO 'await'!!!)
-        // client({ 'e': e }); await new Promise(resolve => { setTimeout(resolve, 2000) })
+        client({ 'e': e }); await new Promise(resolve => { setTimeout(resolve, 2000) })
 
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
@@ -48,65 +48,6 @@ async function serverRun(inf) {
         // let infJudgeComplete, retJudgeComplete
         // infJudgeComplete = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
         // retJudgeComplete = await judgeComplete(infJudgeComplete); console.log(retJudgeComplete)
-
-        // let retClipboard = await clipboard({ 'e': e, 'value': retJudgeComplete.ret ? retJudgeComplete.res.comment : retJudgeComplete.msg });
-        // let infNotification, retNotification
-        // infNotification = {
-        //     'e': e, 'duration': 4, 'icon': `./src/scripts/media/icon_${retJudgeComplete.ret ? 3 : 2}.png`, 'retInf': false,
-        //     'title': `Complete Judge`, 'text': retJudgeComplete.msg,
-        // }; retNotification = await notification(infNotification);
-        // // console.log(JSON.stringify(retJudgeComplete, null, 2))
-
-
-
-        let infChromeActions, retChromeActions, htmlDiv
-        // // → DIV: PEGAR (BRUTA) [XPATH] *** JUDGE
-        // infChromeActions = { 'e': e, 'action': 'elementGetDivXpath', 'target': `*tryrating*`, 'elementName': `//*[@id="app-root"]/div/div[4]/div[2]/div[2]/div/div/div/div/div/div/div/div/div[1]/div/div/div/div/div[3]/div[1]/div[1]/div[2]/div/div/div/div/div/div/div/div[6]/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div/div/div`, }
-        // retChromeActions = await chromeActions(infChromeActions); htmlDiv = retChromeActions.res[0]; // console.log(retChromeActions)
-
-        // // ******************
-
-        // // → DIV: PEGAR (BRUTA) *** QUESTION
-        // infChromeActions = { 'e': e, 'action': 'elementGetDiv', 'target': htmlDiv, 'tag': `label`, 'content': `Result name/title is in unexpected language or script`, 'tagFather': 'div' }
-        // retChromeActions = await chromeActions(infChromeActions); // console.log(retChromeActions)
-
-        // // → ATRIBUTO: PEGAR VALOR
-        // infChromeActions = { 'e': e, 'action': 'attributeGetValue', 'target': retChromeActions.res[0], 'tag': `input`, 'attribute': `name`, 'contentA': `User intent issue`, }
-        // retChromeActions = await chromeActions(infChromeActions); // console.log(retChromeActions)
-
-        // // → ELEMENTO: PEGAR VALOR
-        // infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*tryrating*`, 'attribute': `name`, 'attributeValue': retChromeActions.res[0], }
-        // retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
-
-        // // ******************
-
-        // // → DIV: PEGAR (BRUTA) *** QUESTION
-        // infChromeActions = { 'e': e, 'action': 'elementGetDiv', 'target': htmlDiv, 'tag': `label`, 'content': `Business/POI is closed or does not exist`, 'tagFather': 'div' }
-        // retChromeActions = await chromeActions(infChromeActions); // console.log(retChromeActions)
-
-        // // → ATRIBUTO: PEGAR VALOR
-        // infChromeActions = { 'e': e, 'action': 'attributeGetValue', 'target': retChromeActions.res[0], 'tag': `input`, 'attribute': `name`, }
-        // retChromeActions = await chromeActions(infChromeActions); // console.log(retChromeActions)
-
-        // // → ELEMENTO: PEGAR VALOR
-        // infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*tryrating*`, 'attribute': `name`, 'attributeValue': retChromeActions.res[0], }
-        // retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
-
-        // // ******************
-
-        // // → DIV: PEGAR (BRUTA) *** QUESTION
-        // infChromeActions = { 'e': e, 'action': 'elementGetDiv', 'target': htmlDiv, 'tag': `label`, 'content': `Relevance`, 'tagFather': 'div' }
-        // retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
-
-        // // → ATRIBUTO: PEGAR VALOR
-        // infChromeActions = { 'e': e, 'action': 'attributeGetValue', 'target': retChromeActions.res[0], 'tag': `div`, 'attribute': `class`, }
-        // retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
-
-        // → ELEMENTO: PEGAR VALOR
-        infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*tryrating*`, 'tag': `div`, 'attribute': `class`, 'attributeValue': `css-151xaom-placeholder react-select__placeholder`, }
-        retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
-
-
 
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
