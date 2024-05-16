@@ -126,17 +126,17 @@ if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
 	rem → AWS/ESTRELAR
 	!2_BACKGROUND! explorer
 	
-	ping -n 5 -w 1000 127.0.0.1 >nul
+	ping -n 7 -w 1000 127.0.0.1 >nul
+	
+	!2_BACKGROUND! "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt" -monitor
+	
+	ping -n 3 -w 1000 127.0.0.1 >nul
 	
 	!2_BACKGROUND! taskmgr
 	
 	ping -n 3 -w 1000 127.0.0.1 >nul
 	
 	!fileNircmdSetSize! "Task Manager" "890 50 600 600"
-	
-	ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	!2_BACKGROUND! "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt" -monitor
 )
 
 
