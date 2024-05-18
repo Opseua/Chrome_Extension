@@ -17,9 +17,9 @@ async function log(inf) {
         houFile = `${time.hou}:${minSecMil}`
 
         // FORMATO: 24 HORAS (11h, 12h, 13h, 14h...)
-        // houTxt = `${time.hou}:${minSecMil}`
-        // FORMATO: 24 HORAS (11h, 12h, 13h, 14h...)
-        houTxt = `${time.hou12}:${minSecMil} ${time.houAmPm}`
+        houTxt = `${time.hou}:${minSecMil}`
+        // FORMATO: 12 HORAS (11h, 12h, 01h, 02h...)
+        // houTxt = `${time.hou12}:${minSecMil} ${time.houAmPm}`
 
         // NOME DA PASTA + ARQUIVO
         pathOk = `log/${folder}`;

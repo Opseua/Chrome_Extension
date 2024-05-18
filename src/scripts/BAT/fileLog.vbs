@@ -36,7 +36,7 @@ Else
 		End If
 		HoraPadrao12 = hora
 	End Function
-	hora = HoraPadrao12(hora)
+	rem hora = HoraPadrao12(hora)
 	rem #####################################################################s
 	
 	hora = Right("00" & hora, 2)

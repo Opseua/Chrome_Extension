@@ -52,6 +52,7 @@ let functionsArr = [
     // { 'eng': 'CHROME', 'functionName': 'keepCookieLive', 'functionPath': './keepCookieLive.js', },
     { 'eng': 'NODEJS', 'functionName': 'log', 'functionPath': './log.js', },
     { 'eng': 'CHROME/NODEJS', 'functionName': 'logConsole', 'functionPath': './logConsole.js', },
+    { 'eng': 'NODEJS', 'functionName': 'logConsole', 'functionPath': './logsDelOld.js', },
     { 'eng': 'CHROME', 'functionName': 'notification', 'functionPath': './notification.js', },
     { 'eng': 'CHROME/NODEJS', 'functionName': 'messageReceived', 'functionPath': './messageReceived.js', },
     { 'eng': 'CHROME/NODEJS', 'functionName': 'messageSend', 'functionPath': './messageSend.js', },
