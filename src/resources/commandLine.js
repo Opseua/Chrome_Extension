@@ -12,7 +12,7 @@ async function commandLine(inf) {
         await new Promise((resolve) => {
             let child = _exec(command, async (error, stdout, stderr) => {
                 if (error) {
-                    ret['msg'] = 'COMMAND LINE: ERRO';
+                    ret['msg'] = `COMMAND LINE: ERRO | ${error}`;
                     if (stderr) {
                         ret['res'] = stderr;
                     }

@@ -52,7 +52,7 @@ async function api(inf) {
             if (body) { reqOpt['body'] = body; let encoder = new TextEncoder(); let length = encoder.encode(reqOpt.body).length; reqOpt.headers['Content-Length'] = length }
             let timeoutId = setTimeout(() => {
                 // CANCELAR A REQUISIÇÃO SE O TEMPO FOR ATINGIDO
-                ret['msg'] = 'API: TEMPO MÁXIMO ATINGIDO'; controller.abort();
+                ret['msg'] = 'API: ERRO | TEMPO MÁXIMO ATINGIDO'; controller.abort();
             }, max);
             try {
                 req = await fetch(inf.url, reqOpt);

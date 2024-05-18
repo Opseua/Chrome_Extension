@@ -1,20 +1,19 @@
 // let infGoogleSheets, retGoogleSheets
 // infGoogleSheets = {
-//     'e': e, 'action': 'get',
-//     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
-//     'tab': `RESULTADOS`,
+//     'e': e, 'action': 'get', 'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`, 'tab': `RESULTADOS`,
 //     'range': `E1:F1`, // PERÍMETRO
 //     'range': `E:E`, // COLUNA
 //     'range': `E1`, // CÉLULA ÚNICA
 // }
 // infGoogleSheets = {
-//     'e': e, 'action': 'send',
-//     'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`,
-//     'tab': `RESULTADOS`,
+//     'e': e, 'action': 'send', 'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`, 'tab': `RESULTADOS`,
 //     'range': `D*`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'D' ATÉ 'DD']
 //     'range': `D**`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'D' ATÉ 'D']
 //     'range': `D22`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
 //     'values': [['a', 'b', 'c']]
+// }
+// infGoogleSheets = {
+//     'e': e, 'action': 'lastLin', 'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`, 'tab': `RESULTADOS`,
 // }
 // retGoogleSheets = await googleSheets(infGoogleSheets)
 // console.log(retGoogleSheets)
@@ -40,40 +39,52 @@ async function googleSheets(inf) {
         }
 
         let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'; let tab = inf && inf.tab ? inf.tab : 'RESULTADOS'
-        if (inf.action == 'get') { // GET
+        if (inf.action == 'get') {
+            // GET
             let range = inf.range
             // ÚLTIMA LINHA EM BRANCO DA [COLUNA]
-            if (range.includes('last**')) { range = range.replace('last**', '').replace('**', ''); range = `${range}1:${range}` }
-            else if (range.includes('last*')) {
+            if (range.includes('last**')) { range = range.replace('last**', '').replace('**', ''); range = `${range}1:${range}` } else if (range.includes('last*')) {
                 // ÚLTIMA LINHA EM BRANCO DA [PLANILHA]
                 range = range.replace('last*', '').replace('*', ''); range = `${range}1:${range}${range}`
-            }; range = range == 'last' ? `${tab}!A1:AA` : `${tab}!${range}`
-            try {
+            }; range = range == 'last' ? `${tab}!A1:AA` : `${tab}!${range}`; try {
                 let retSheet = await _sheets.spreadsheets.values.get({ auth: _auth, 'spreadsheetId': id, range });
                 ret['res'] = inf.range.includes('last') ? retSheet.data.values ? retSheet.data.values.length + 1 : 1 : retSheet.data.values
-                ret['msg'] = `GOOGLE SHEET GET: OK`;
+                ret['msg'] = `GOOGLE SHEET [GET]: OK`;
                 ret['ret'] = true;
             } catch (catchErr) {
-                ret['msg'] = `NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
+                ret['msg'] = `GOOGLE SHEET [GET]: ERRO | NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
             }
-        } else if (inf.action == 'send') { // SEND
+        } else if (inf.action == 'send') {
+            // SEND
             let col = inf.range.replace(/[^a-zA-Z]/g, ''), values = { 'values': inf.values }, lin = ''
-            if (/[0-9]/.test(inf.range)) { lin = inf.range.replace(/[^0-9]/g, '') }
-            else {
+            if (/[0-9]/.test(inf.range)) { lin = inf.range.replace(/[^0-9]/g, '') } else {
                 let range = inf.range.includes('**') ? `last**${inf.range}` : inf.range.includes('*') ? `last*${inf.range}` : 'last'
                 let retNewGet = await googleSheets({ 'e': e, 'action': 'get', 'id': id, 'tab': tab, 'range': range }); lin = retNewGet.res
-            }; let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`
-            try {
+            }; let range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`; try {
                 await _sheets.spreadsheets.values.update({ auth: _auth, 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values });
-                ret['msg'] = `GOOGLE SHEET SEND: OK`;
+                ret['msg'] = `GOOGLE SHEET [SEND]: OK`;
                 ret['ret'] = true;
             } catch (catchErr) {
                 if (JSON.stringify(e).includes(`You are trying to edit a protected`)) {
-                    ret['msg'] = `RANGE PROTEGIDO`;
+                    ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | RANGE PROTEGIDO`;
                 } else {
-                    ret['msg'] = `NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
+                    ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
                 }
             }
+        } else if (inf.action == 'lastLin') {
+            // LAST LIN
+            let googleAppScriptId; infConfigStorage = { 'e': e, 'action': 'get', 'key': 'googleAppScript' }; retConfigStorage = await configStorage(infConfigStorage);
+            if (!retConfigStorage.ret) { return retConfigStorage } else { googleAppScriptId = retConfigStorage.res.id; }
+            let infApi = {
+                'e': e, 'method': 'GET', 'url': `https://script.google.com/macros/s/${googleAppScriptId}/exec?&functionName=sheetNew&infFunction={ "id": "${id}", "tab": "${tab}", "action": "${inf.action}" }`,
+                'headers': { 'Content-Type': 'application/json' }, 'max': 10
+            }; let retApi = await api(infApi); if (!retApi.ret) { return retApi }; retApi = JSON.parse(retApi.res.body); if (!retApi.ret) { return retApi };
+            ret['res'] = {
+                'lastLinWithData': retApi.res.lastLinWithData,
+                'lastLinSheet': retApi.res.lastLinSheet
+            }
+            ret['msg'] = `GOOGLE SHEET [LAST LIN]: OK`;
+            ret['ret'] = true;
         }
 
         // TENTAR NOVAMENTE EM CASO DE ERRO

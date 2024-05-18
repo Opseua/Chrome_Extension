@@ -15,7 +15,7 @@ async function devFun(inf) {
             // PEGAR 'ws'
             let retListenerAcionar = await listenerAcionar(`getWs_${locWeb}`, { 'a': 'a', 'b': 'b' });
             if (!retListenerAcionar) {
-                ret['msg'] = `NÃO ACHOU O OBJETO 'ws'`
+                ret['msg'] = `DEV FUN: ERRO | NÃO ACHOU O OBJETO 'ws'`
             } else {
                 // ENVIAR COMANDO PARA O DESTINO CERTO
                 retMessageSend = await messageSend({ 'destination': destination, 'messageId': true, 'message': message, 'resWs': retListenerAcionar, 'secondsAwait': 0, });
@@ -29,7 +29,7 @@ async function devFun(inf) {
                 } else if (retMessageSend.ret && data.retInf) {
                     // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [SIM]
                     if (!(retMessageSend.ret === true || retMessageSend.ret === false)) {
-                        ret['msg'] = `RESPOSTA DO WEBSOCKET NÃO É OBJETO`
+                        ret['msg'] = `DEV FUN: ERRO | RESPOSTA DO WEBSOCKET NÃO É OBJETO`
                     } else {
                         ret = JSON.parse(JSON.stringify(retMessageSend).replace('"msg":"', '"msg":"[ENC] '))
                     }
@@ -42,10 +42,10 @@ async function devFun(inf) {
             for (let [index, value] of data.fun.entries()) {
                 let { resWs, destination, messageId, } = inf
                 if (value.securityPass !== globalWindow.securityPass) {
-                    ret['msg'] = `#### SECURITYPASS INCORRETO ####`
+                    ret['msg'] = `DEV FUN: ERRO | SECURITYPASS INCORRETO`
                     logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
                 } else if (!label(value.name)) {
-                    ret['msg'] = `#### FUNÇÃO '${value.name}' NÃO EXITE ####`
+                    ret['msg'] = `DEV FUN: ERRO | FUNÇÃO '${value.name}' NÃO EXITE`
                     logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
                 } else {
                     let name = eng ? window[value.name] : global[value.name] // CHROME ← : → NODEJS
