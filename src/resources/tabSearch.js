@@ -1,7 +1,6 @@
 // let infTabSearch, retTabSearch
 // infTabSearch = { 'e': e, 'search': `*google*`, 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': `https://www.google.com/` }
-// retTabSearch = await tabSearch(infTabSearch); // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
-// console.log(retTabSearch)
+// retTabSearch = await tabSearch(infTabSearch); console.log(retTabSearch) // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 
 let e = import.meta.url, ee = e;
 async function tabSearch(inf) {

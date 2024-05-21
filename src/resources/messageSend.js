@@ -6,8 +6,7 @@
 // // SOMENTE DENTRO DO WEBSOCKET!!!
 // let infMessageSend, retMessageSend
 // infMessageSend = { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': 'aaa', 'resWs': ws, 'secondsAwait': 0, }
-// retMessageSend = await messageSend(infMessageSend);
-// console.log(retMessageSend)
+// retMessageSend = await messageSend(infMessageSend); console.log(retMessageSend)
 
 let e = import.meta.url, ee = e;
 async function messageSend(inf) {

@@ -2,8 +2,7 @@
 // infConfigStorage = { 'e': e, 'action': 'set', 'functionLocal': true, 'key': 'NomeDaChave', 'value': 'Valor da chave' }
 // infConfigStorage = { 'e': e, 'action': 'get', 'functionLocal': true, 'key': 'NomeDaChave' }
 // infConfigStorage = { 'e': e, 'action': 'del', 'functionLocal': true, 'key': 'NomeDaChave' }
-// retConfigStorage = await configStorage(infConfigStorage);
-// console.log(retConfigStorage)
+// retConfigStorage = await configStorage(infConfigStorage); console.log(retConfigStorage)
 
 // let cs
 // cs = await csf(['']); cs = cs.res // ***** CS ***** GET VALOR DO 'reg.json'

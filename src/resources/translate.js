@@ -1,7 +1,6 @@
 // let infTranslate, retTranslate
 // infTranslate = { 'e': e, 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
-// retTranslate = await translate(infTranslate);
-// console.log(retTranslate)
+// retTranslate = await translate(infTranslate); console.log(retTranslate)
 
 let e = import.meta.url, ee = e;
 async function translate(inf) {

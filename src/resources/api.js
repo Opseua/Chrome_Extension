@@ -14,8 +14,7 @@
 //     'headers': { 'Content-Type': 'application/x-www-form-urlencoded' },
 //     'body': { 'Chave': 'Valor' }, 'max': 10
 // };
-// retApi = await api(infApi);
-// console.log(retApi)
+// retApi = await api(infApi); console.log(retApi)
 
 let e = import.meta.url, ee = e;
 async function api(inf) {

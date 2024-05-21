@@ -4,7 +4,7 @@
 
 // for (let [index, value] of array.entries()) {
 //     console.log('INDEX', index, 'VALUE', value);
-// }; console.log('FIM');
+// };
 
 // // ## LOG ## retApi
 // let errMsg = `$ [leadChangeStatus] LOG retApi`
@@ -29,7 +29,7 @@
 // LOOP 99 VEZES
 // for (let index = 0; index < 99; index++) {
 //     console.log('INDEX', index,);
-// }; console.log('FIM');
+// };
 
 // let data = 'CASAMENTO'
 // // QUALQUER → BASE64
@@ -47,9 +47,9 @@ let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined'
 let _fs, _path, _url, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
 
 if (cng == 1) { // CHROME
-    window['eng'] = true; window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {};
+    window['eng'] = true; window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {}; // window['wsClients'] = { 'rooms': {} }; window['wsClientLoc'] = '';
 } else { // NDEJS
-    global['eng'] = false; global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['globalWindow'] = {};
+    global['eng'] = false; global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['globalWindow'] = {}; // global['wsClients'] = { 'rooms': {} }; global['wsClientLoc'] = '';
     _fs = await import('fs'); global['_fs'] = _fs;
 }
 
@@ -204,5 +204,4 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 //         let x = j.top.outerWidth / 2 + j.top.screenX - (w / 2); return j.open(u, '', `width = ${ w }, height = ${ h }, top = ${ y }, left = ${ x } `);
 //     }; pw(window, 40, 40, 'http://12.345.678.910:1234');
 // })();
-
 

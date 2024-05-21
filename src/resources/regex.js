@@ -1,8 +1,7 @@
 // let infRegex, retRegex
 // infRegex = { 'e': e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES` }
 // infRegex = { 'e': e, 'simple': true, 'pattern': `*DOIS*`, 'text': `UMDOISTRES` }
-// retRegex = regex(infRegex);
-// console.log(retRegex)
+// retRegex = regex(infRegex); console.log(retRegex)
 
 let e = import.meta.url, ee = e;
 function regex(inf) { // NÃO POR COMO 'async'!!!

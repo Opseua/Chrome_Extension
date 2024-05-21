@@ -1,7 +1,6 @@
 // let infOrderObj, retOrderObj
 // infOrderObj = { 'e': e, 'd': 'VALOR 4', 'c': 'VALOR 3', 'b': 'VALOR 2', 'a': 'VALOR 1' }
-// retOrderObj = await orderObj(infOrderObj)
-// console.log(retOrderObj)
+// retOrderObj = await orderObj(infOrderObj); console.log(retOrderObj)
 
 let e = import.meta.url, ee = e;
 async function orderObj(inf) {

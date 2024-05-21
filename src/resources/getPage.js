@@ -1,7 +1,6 @@
 // let infGetPage, retGetPage
 // infGetPage = { 'e': e, 'id': 182593371 };
-// retGetPage = await getPage(infGetPage);
-// console.log(retGetPage)
+// retGetPage = await getPage(infGetPage); console.log(retGetPage)
 
 let e = import.meta.url, ee = e;
 async function getPage(inf) {

@@ -14,7 +14,7 @@ async function serverRun(inf) {
             if (inf[0].state && inf[0].state.current === 'complete') {
                 chrome.downloads.search({ id: inf.id }, async function (inf) {
                     if (inf.length > 0) {
-                        let d = inf[0]; if (d.byExtensionName.includes('BOT') && !d.filename.includes('[KEEP]')) {
+                        let d = inf[0]; if (d.byExtensionName && d.byExtensionName.includes('BOT') && !d.filename.includes('[KEEP]')) {
                             setTimeout(function () {
                                 chrome.downloads.erase({ id: d.id });
                                 // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)

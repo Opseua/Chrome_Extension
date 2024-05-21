@@ -1,8 +1,7 @@
 // let objeto = { 'chave1': { 'chave2': { 'chave3': 'VALOR' } } }
 // let infHasKey, retHaskey
 // infHasKey = { 'e': e, 'simple': true, 'key': 'chave3', 'obj': objeto };
-// retHaskey = hasKey(infHasKey);
-// console.log(retHaskey)
+// retHaskey = hasKey(infHasKey); console.log(retHaskey)
 
 let e = import.meta.url, ee = e;
 function hasKey(inf) { // NÃO POR COMO 'async'!!!

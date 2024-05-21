@@ -1,7 +1,6 @@
 // let infSplitText, retSplitText
 // infSplitText = { 'e': e, 'maxLength': 30, 'text': `Lorem Ipsum is simply dummy text of the printing and typesetting industry` }
-// retSplitText = await splitText(infSplitText);
-// console.log(retSplitText)
+// retSplitText = await splitText(infSplitText); console.log(retSplitText)
 
 let e = import.meta.url, ee = e;
 async function splitText(inf) {

@@ -1,7 +1,6 @@
 // let infChat, retChat
 // infChat = { 'e': e, 'provider': 'open.ai', 'input': `Qual a idade de Marte?` };
-// retChat = await chat(infChat);
-// console.log(retChat)
+// retChat = await chat(infChat); console.log(retChat)
 
 let e = import.meta.url, ee = e;
 async function chat(inf) { // https://chat.openai.com/api/auth/session

@@ -15,8 +15,7 @@
 // infGoogleSheets = {
 //     'e': e, 'action': 'lastLin', 'id': `1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8`, 'tab': `RESULTADOS`,
 // }
-// retGoogleSheets = await googleSheets(infGoogleSheets)
-// console.log(retGoogleSheets)
+// retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets)
 
 let e = import.meta.url, ee = e;
 async function googleSheets(inf) {

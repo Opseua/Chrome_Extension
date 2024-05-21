@@ -1,7 +1,6 @@
 // let infRandom, retRandom
 // infRandom = { 'e': e, 'min': 3, 'max': 10, 'await': true };
-// retRandom = await randomNumber(infRandom);
-// console.log(retRandom)
+// retRandom = await randomNumber(infRandom); console.log(retRandom)
 
 let e = import.meta.url, ee = e;
 async function randomNumber(inf) {

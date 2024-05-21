@@ -3,8 +3,7 @@
 // infLog = { 'e': e, 'folder': '#_PASTA_#', 'functionLocal': false, 'path': `ARQUIVO.txt`, 'text': `INF AQUI` }
 // // (ESCREVE NO MESMO ARQUIVO) → [Chrome_Extension]/log/#_PASTA_#/log.txt
 // infLog = { 'e': e, 'folder': '#_PASTA_#', 'functionLocal': false, 'path': `log.txt`, 'text': `INF AQUI` }
-// retLog = await log(infLog);
-// console.log(retLog)
+// retLog = await log(infLog); console.log(retLog)
 
 let e = import.meta.url, ee = e;
 async function log(inf) {

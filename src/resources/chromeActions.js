@@ -192,8 +192,7 @@ if (eng) { // CHROME
 // function teste(funInf) { console.log('FUNCAO TESTE: OK', funInf); return document.documentElement.outerHTML; } let funInf = { 'A': '' };
 // infChromeActions = { 'e': e, 'action': 'inject', 'target': '*file:///*', 'fun': teste, 'funInf': funInf, };
 
-// retChromeActions = await chromeActions(infChromeActions);
-// console.log(retChromeActions)
+// retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
 
 
 

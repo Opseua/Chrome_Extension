@@ -9,8 +9,7 @@
 // infGlobal['var1'] = 'LUA'; infGlobal['var2'] = 'SOL';
 // json = `{ "nasa": "Tanto a $[var1] quanto o $[var2] são redondos" }`;
 // infJsonInterpret = { 'e': e, 'json': json, 'vars': infGlobal };
-// retJsonInterpret = await jsonInterpret(infJsonInterpret)
-// console.log(retJsonInterpret)
+// retJsonInterpret = await jsonInterpret(infJsonInterpret); console.log(retJsonInterpret)
 
 let e = import.meta.url, ee = e;
 async function jsonInterpret(inf) {

@@ -1,7 +1,6 @@
 // let infSniffer, retSniffer
 // infSniffer = { 'e': e, 'newReqSend': false, 'arrUrl': ['*google*'] }
-// retSniffer = await sniffer(infSniffer);
-// console.log(retSniffer)
+// retSniffer = await sniffer(infSniffer); console.log(retSniffer)
 
 let e = import.meta.url, ee = e;
 async function sniffer(inf) {

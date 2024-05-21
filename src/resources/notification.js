@@ -4,8 +4,7 @@
 //     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': 'BOTAO 2' }],
 //     'title': `TITULO`, 'text': `TEXTO`,
 // };
-// retNotification = await notification(infNotification);
-// console.log(retNotification)
+// retNotification = await notification(infNotification); console.log(retNotification)
 
 let e = import.meta.url, ee = e;
 async function notification(infOk) {

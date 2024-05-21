@@ -18,8 +18,7 @@
 //     }
 // };
 // infRawText = { 'obj': obj }
-// retRawText = await rawText(infRawText)
-// console.log(retRawText)
+// retRawText = await rawText(infRawText); console.log(retRawText)
 
 let e = import.meta.url, ee = e;
 async function rawText(inf) {

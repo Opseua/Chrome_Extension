@@ -36,8 +36,7 @@
 //     </table>
 //     `
 // }
-// retHtmlToJson = await htmlToJson(infHtmlToJson)
-// console.log(retHtmlToJson.res)
+// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson.res)
 
 // infHtmlToJson = {
 //     'e': e, 'mode': 2,
@@ -65,8 +64,7 @@
 //     </table>
 //     `
 // }
-// retHtmlToJson = await htmlToJson(infHtmlToJson)
-// console.log(retHtmlToJson.res)
+// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson.res)
 
 // infHtmlToJson = {
 //     'e': e, 'mode': 3,
@@ -99,8 +97,7 @@
 //     </table>
 //     `
 // }
-// retHtmlToJson = await htmlToJson(infHtmlToJson)
-// console.log(retHtmlToJson.res)
+// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson.res)
 
 let e = import.meta.url, ee = e;
 async function htmlToJson(inf) {

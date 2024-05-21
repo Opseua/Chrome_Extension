@@ -1,7 +1,6 @@
 // let infPromptChrome, retPromptChrome
 // infPromptChrome = { 'e': e, 'title': `NOME DO COMANDO` }
-// retPromptChrome = await promptChrome(infPromptChrome)
-// console.log(retPromptChrome)
+// retPromptChrome = await promptChrome(infPromptChrome); console.log(retPromptChrome)
 
 let e = import.meta.url, ee = e;
 async function promptChrome(inf) {

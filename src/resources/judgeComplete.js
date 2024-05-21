@@ -1,7 +1,6 @@
 // let infJudgeComplete, retJudgeComplete
 // infJudgeComplete = { 'e': e, 'hitApp': 'POIEvaluation' }
-// retJudgeComplete = await judgeComplete(infJudgeComplete)
-// console.log(retJudgeComplete)
+// retJudgeComplete = await judgeComplete(infJudgeComplete); console.log(retJudgeComplete)
 
 // IMPORTAR OBJETOS COM AS OPÇÕES E RESPOSTAS
 import optTryRating_POIEvaluation from '../scripts/objects/optTryRating_POIEvaluation.js'
