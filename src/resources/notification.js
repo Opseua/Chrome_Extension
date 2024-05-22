@@ -8,7 +8,8 @@
 
 // → 'duration': 5 | ERROS ( 'regexE' [crash NodeJS] )
 // → 'duration': 4 | AVISOS/ALERTAS ( 'ERRO AO PESQUISAR NO CHATGPT' / 'BLIND' [tem a resposta]/[não tem a resposta] )
-// → 'duration': 3 | COMUNICADOS ( 'NOVA TASK' / 'NÃO É BLIND )
+// → 'duration': 3 | COMUNICADOS ( 'NOVA TASK' / 'NÃO É BLIND / REPORT DE TAREFAS )
+// → 'duration': 2 | COMUNICADOS ( 'SNIFFER [ativado/desativado' )
 
 let e = import.meta.url, ee = e;
 async function notification(infOk) {

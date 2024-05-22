@@ -20,10 +20,10 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
             // ******************************************************************************************
             // ANTIGO 'secToHour'
             if (inf > 0) {
-                let hou = Math.floor(inf / 3600).toString().padStart(2, "0");
-                let min = Math.floor((inf % 3600) / 60).toString().padStart(2, "0");
-                let sec = (inf % 60).toString().padStart(2, "0");
-                ret['res'] = String(`${hou}:${min}:${sec}`) // manter o 'String' para forcar o '0' (zero) na frente → '001'
+                let hou = Math.floor(inf / 3600).toString().padStart(2, '0');
+                let min = Math.floor((inf % 3600) / 60).toString().padStart(2, '0');
+                let sec = Math.min(Math.floor(inf % 60), 59).toString().padStart(2, '0');
+                ret['res'] = `${hou}:${min}:${sec}`
                 ret['msg'] = `DATE HOUR [SEC TO HOUR]: OK`
                 ret['ret'] = true;
                 return ret
@@ -51,18 +51,17 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
         let hou = dt1.getHours()
 
         ret['res'] = {
-            // manter o 'String' para forçar o '0' (zero) na frente → '001'
-            'day': String(dt1.getDate()).padStart(2, '0'),
-            'mon': String(dt1.getMonth() + 1).padStart(2, '0'),
-            'yea': String(dt1.getFullYear()),
-            'hou': String(hou).padStart(2, '0'),
-            'hou12': String(hou < 13 ? hou : (hou - 12)).padStart(2, '0'),
+            'day': dt1.getDate().toString().padStart(2, '0'),
+            'mon': (dt1.getMonth() + 1).toString().padStart(2, '0'),
+            'yea': dt1.getFullYear().toString(),
+            'hou': hou.toString().padStart(2, '0'),
+            'hou12': (hou < 13 ? hou : (hou - 12)).toString().padStart(2, '0'),
             'houAmPm': hou < 13 ? 'AM' : 'PM',
-            'min': String(dt1.getMinutes()).padStart(2, '0'),
-            'sec': String(dt1.getSeconds()).padStart(2, '0'),
-            'mil': String(dt2.toString().slice(-3)),
-            'tim': String(dt2.toString().slice(0, -3)),
-            'timMil': String(dt2.toString()),
+            'min': dt1.getMinutes().toString().padStart(2, '0'),
+            'sec': dt1.getSeconds().toString().padStart(2, '0'),
+            'mil': dt2.toString().slice(-3),
+            'tim': dt2.toString().slice(0, -3),
+            'timMil': dt2.toString(),
             'dayNam': ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'][dt1.getDay()],
             'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()],
         };

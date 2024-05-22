@@ -28,7 +28,7 @@ async function command1(inf) {
 
       let infNotification, retNotification
       infNotification = {
-        'e': e, 'duration': 3, 'icon': `./src/scripts/media/icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
+        'e': e, 'duration': 2, 'icon': `./src/scripts/media/icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
         'title': `Complete Judge`, 'text': retListenerAcionar.msg,
       };
       retNotification = await notification(infNotification);

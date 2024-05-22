@@ -3,7 +3,7 @@ async function command2(inf) {
   let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
   try {
     let infNotification = {
-      'duration': 3, 'icon': './src/scripts/media/icon_3.png',
+      'duration': 2, 'icon': './src/scripts/media/icon_3.png',
       'title': `AGUARDE...`,
       'text': `Alternando sniffer`
     }
