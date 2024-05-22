@@ -1,5 +1,3 @@
-// await import('./resources/@export.js'); // TESTES
-
 // let infModel, retModel
 // infModel = { 'e': e, 'chaveUm': 'valorUm', 'chaveDois': 'valorDois' }
 // retModel = await model(infModel); console.log(retModel)

@@ -1,13 +1,13 @@
-// let infJudgeComplete, retJudgeComplete
-// infJudgeComplete = { 'e': e, 'hitApp': 'POIEvaluation' }
-// retJudgeComplete = await judgeComplete(infJudgeComplete); console.log(retJudgeComplete)
+// let infTryRatingComplete, retTryRatingComplete
+// infTryRatingComplete = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
+// retTryRatingComplete = await tryRatingComplete(infTryRatingComplete); console.log(retTryRatingComplete)
 
 // IMPORTAR OBJETOS COM AS OPÇÕES E RESPOSTAS
-import optTryRating_POIEvaluation from '../scripts/objects/optTryRating_POIEvaluation.js'
-import optTryRating_Search20 from '../scripts/objects/optTryRating_Search20.js'
+import optTryRating_POIEvaluation from './objects/optTryRating_POIEvaluation.js'
+import optTryRating_Search20 from './objects/optTryRating_Search20.js'
 
 let e = import.meta.url, ee = e;
-async function judgeComplete(inf) {
+async function tryRatingComplete(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         let { urlGoogleMaps } = inf; let infChromeActions, retChromeActions, judgesValues = { 'current': -1, 'comments': [], 'responses': [], 'values': [] };
@@ -100,7 +100,7 @@ async function judgeComplete(inf) {
                 ret['msg'] = `Nenhum julgamento pendente`;
             } else {
                 ret['res'] = judgesValues;
-                ret['msg'] = `JUDGE COMPLETE: OK`;
+                ret['msg'] = `TRYRATING COMPLET: OK`;
                 ret['ret'] = true;
             }
         }
@@ -116,9 +116,9 @@ async function judgeComplete(inf) {
 }
 
 if (eng) { // CHROME
-    window['judgeComplete'] = judgeComplete;
+    window['tryRatingComplete'] = tryRatingComplete;
 } else { // NODEJS
-    global['judgeComplete'] = judgeComplete;
+    global['tryRatingComplete'] = tryRatingComplete;
 }
 
 

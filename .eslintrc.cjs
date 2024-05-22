@@ -26,13 +26,12 @@ let arrGlobal = [
 
     // [Chrome_Extension]
     // → funções globais
-    'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'judgeComplete', 'configStorage', 'dateHour', 'logsDelOld', 'devFun', 'file',
+    'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'logsDelOld', 'devFun', 'file',
     'getCookies', 'getPage', 'getPath', 'getPath', 'googleSheets', 'hasKey', 'htmlToJson', 'jsonInterpret', 'keepCookieLive', 'log', 'logConsole',
     'messageSend', 'messageReceived', 'notification', 'orderObj', 'promptChrome', 'randomNumber', 'rawText', 'regex', 'regexE',
     'sniffer', 'splitText', 'tabSearch', 'translate',
     // scripts
-    'action_TryRating_QueryImageDeservingClassification', 'background', 'command1', 'command2', 'command2_old',
-    'oneForma_MTPE', 'peroptyx_QueryImageDeservingClassification', 'peroptyx_Search20',
+    'background', 'command1', 'command2', 'tryRatingComplete',
 
     // [WebSocket]
     // → funções globais
@@ -40,7 +39,7 @@ let arrGlobal = [
 
     // [Sniffer_Python]
     // → funções globais
-    'ewoq', 'judgesGetResponse', 'tryRating', 'tryRating_Search20', 'performTask', 'tryRating_QueryImageDeservingClassification', 'tryRating_DrivingNavigation3DMaps',
+    'ewoq', 'tryRating', 'tryRatingGetResponse', 'performTask',
 
     // [URA_Reversa]
     // → funções globais

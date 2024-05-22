@@ -38,7 +38,6 @@ let functionsArr = [
     { 'eng': 'CHROME/NODEJS', 'functionName': 'client', 'functionPath': './client.js', },
     { 'eng': 'CHROME/NODEJS', 'functionName': 'clipboard', 'functionPath': './clipboard.js', },
     { 'eng': 'NODEJS', 'functionName': 'commandLine', 'functionPath': './commandLine.js', },
-    { 'eng': 'CHROME', 'functionName': 'judgeComplete', 'functionPath': './judgeComplete.js', },
     { 'eng': 'CHROME/NODEJS', 'functionName': 'configStorage', 'functionPath': './configStorage.js', },
     { 'eng': 'CHROME/NODEJS', 'functionName': 'dateHour', 'functionPath': './dateHour.js', },
     { 'eng': 'CHROME/NODEJS', 'functionName': 'devFun', 'functionPath': './devFun.js', },
@@ -69,6 +68,7 @@ let functionsArr = [
     // SCRIPTS DESSE PROJETO
     { 'eng': 'CHROME', 'functionName': 'command1', 'functionPath': '../scripts/command1.js', },
     { 'eng': 'CHROME', 'functionName': 'command2', 'functionPath': '../scripts/command2.js', },
+    { 'eng': 'CHROME', 'functionName': 'tryRatingComplete', 'functionPath': '../scripts/tryRatingComplete.js', },
 ]
 
 // FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO)

@@ -7,7 +7,7 @@
 // infFile = { 'e': e, 'action': 'change', 'functionLocal': false, 'path': './PASTA/arquivo.txt', 'pathNew': './PASTA/arquivo2.txt' }
 // infFile = { 'e': e, 'action': 'list', 'functionLocal': false, 'path': './PASTA', 'max': 10 }
 // infFile = { 'e': e, 'action': 'del', 'functionLocal': false, 'path': './PASTA' }
-// infFile = { 'e': e, 'action': 'storage', 'functionLocal': false, 'path': 'C:' }
+// infFile = { 'e': e, 'action': 'storage', 'functionLocal': false, 'path': 'C:' } // SEMPRE COMO 'ADM'!!!
 // retFile = await file(infFile); console.log(retFile)
 
 let e = import.meta.url, ee = e;
@@ -91,7 +91,11 @@ async function file(inf) {
                 let resNew = { 'ret': false }, path; if (inf.path.includes(':')) { path = inf.path }
                 else { infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal }; retFile = await fileRelative(infFile); path = retFile.res[0] };
                 if (eng) { // CHROME
-                    if (!inf.functionLocal) { path = `file:///${path}` }; path = path.replace('%', ''); retFetch = await fetch(path); retFetch = await retFetch.text()
+                    if (!inf.functionLocal) { path = `file:///${path}` }; path = path.replace('%', '');
+                    // ENCODIFICAR PATH *********************
+                    let pathParts = path.replace('file:///', '').split(':/'); path = (path.includes('file:///') ? 'file:///' : '') + pathParts[0] + ':/' + pathParts[1].split('/').map(encodeURIComponent).join('/');
+                    // *********************
+                    retFetch = await fetch(path); retFetch = await retFetch.text()
                     if (!retFetch.includes('Copyright 2012 The Chromium Authors')) {
                         let res = retFetch
                         resNew['ret'] = true;

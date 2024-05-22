@@ -27,7 +27,7 @@ async function chat(inf) { // https://chat.openai.com/api/auth/session
                     infConfigStorage = { 'e': e, 'action': 'del', 'key': 'chatOpenAi' };
                     retConfigStorage = await configStorage(infConfigStorage)
                 }
-                infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
+                infNotification = { 'e': e, 'duration': 4, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
                 notification(infNotification);
                 ret['res'] = res.error.message
                 ret['msg'] = `CHAT [OPEN AI]: ERRO | ${res.error.message}`;
@@ -46,7 +46,7 @@ async function chat(inf) { // https://chat.openai.com/api/auth/session
                 ret['msg'] = `CHAT [EC2]: OK`
                 ret['ret'] = true;
             } else {
-                infNotification = { 'e': e, 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
+                infNotification = { 'e': e, 'duration': 4, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
                 notification(infNotification);
                 ret['msg'] = `CHAT [EC2]: ERRO`;
                 ret['res'] = 'res.error.message'

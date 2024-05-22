@@ -163,7 +163,7 @@ if (eng) { // CHROME
     window['_WebSocket'] = _WebSocket;
     // ## VARIÁVEIS
     window['cs'] = cs;
-    // ## GLOBAL OBJECT
+    // ## GLOBAL OBJECT [NOVO]
     window['gO'] = gO; window['gOList'] = gOList;
     // ## GLOBAL OBJECT [SNIFFER CHROME]
     window['gOSniffer'] = gOSniffer; window['gOAddSniffer'] = gOAddSniffer; window['gORemSniffer'] = gORemSniffer;

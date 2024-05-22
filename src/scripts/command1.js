@@ -6,7 +6,7 @@ async function command1(inf) {
     if (!retPromptChrome.ret) { return retPromptChrome }
 
     if (retPromptChrome.res.includes('https://maps.app.goo.gl/')) {
-      // → GERAR O COMENTÁRIO DO 'judgeComplete'
+      // → GERAR O COMENTÁRIO DO 'tryRatingComplete'
 
       // DEFINIR DESTINO (USUÁRIO 3 DO CHROME)
       let devSendOther, devices = globalWindow.devices[1]; let retChromeActions = await chromeActions({ 'e': e, 'action': 'user' });
@@ -15,7 +15,7 @@ async function command1(inf) {
       // ENVIAR MENSAGEM COM O COMANDO
       let message = {
         'fun': [{
-          'securityPass': globalWindow.securityPass, 'retInf': true, 'name': 'judgeComplete',
+          'securityPass': globalWindow.securityPass, 'retInf': true, 'name': 'tryRatingComplete',
           'par': { 'urlGoogleMaps': retPromptChrome.res, }
         }]
       };
@@ -28,7 +28,7 @@ async function command1(inf) {
 
       let infNotification, retNotification
       infNotification = {
-        'e': e, 'duration': 4, 'icon': `./src/scripts/media/icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
+        'e': e, 'duration': 3, 'icon': `./src/scripts/media/icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
         'title': `Complete Judge`, 'text': retListenerAcionar.msg,
       };
       retNotification = await notification(infNotification);
