@@ -88,8 +88,8 @@ async function client(inf) {
 
         // LOOP: CHECAR ÚLTIMA MENSAGEM
         let secPing = globalWindow.secPing; function lastMessageReceived() {
-            for (const clientSet of Object.values(wsServers.rooms)) {
-                for (const value of clientSet) {
+            for (let clientSet of Object.values(wsServers.rooms)) {
+                for (let value of clientSet) {
                     function check(inf) { let { lastMessage, locWeb, room } = inf; return { 'dif': lastMessage ? Number(dateHour().res.tim) - lastMessage : -99, 'locWeb': locWeb, 'room': room } };
                     let retCheck = check(value); if (retCheck.dif > (secPing - 1)) {
                         // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `MENSAGEM ANTIGA → ENVIAR 'PING' ${retCheck.locWeb} '${retCheck.room}'` });
