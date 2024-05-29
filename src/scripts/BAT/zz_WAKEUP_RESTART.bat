@@ -81,7 +81,7 @@ if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( 
 
 
 rem ### SOMENTE PARAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
-if not "!arg1!"=="!arg1:ONLY_STOP=!" goto FIM_DO_SCRIPT
+if not "!arg1!"=="!arg1:ONLY_START_STOP=!" goto FIM_DO_SCRIPT
 
 
 :START_SCRIPTS
