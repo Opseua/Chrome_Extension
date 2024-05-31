@@ -14,8 +14,6 @@ let e = import.meta.url, ee = e;
 async function file(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        // PASSAR NO jsonInterpret
-        // if (/\$\[[^\]]+\]/.test(JSON.stringify(inf))) { let rji = await jsonInterpret({ 'e': e, 'json': inf }); if (rji.ret) { rji = JSON.parse(rji.res); inf = rji } }
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder', 'storage',].includes(inf.action)) {
             ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`;
         } else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) {

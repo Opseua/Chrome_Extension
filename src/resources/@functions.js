@@ -41,15 +41,15 @@
 
 // cd /d D:\ARQUIVOS\PROJETOS\URA_Reversa
 
-// [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
-let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2;
+// [1] CHROME [c] | [2] NODEJS [n]  
+let cng = eng ? 1 : 2;
 
 let _fs, _path, _url, _cheerio, _clipboard, _WebSocket, _http, _exec, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
 
 if (cng == 1) { // CHROME
-    window['eng'] = true; window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {}; // window['wsClients'] = { 'rooms': {} }; window['wsClientLoc'] = '';
+    window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {}; // window['wsClients'] = { 'rooms': {} }; window['wsClientLoc'] = '';
 } else { // NDEJS
-    global['eng'] = false; global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['globalWindow'] = {}; // global['wsClients'] = { 'rooms': {} }; global['wsClientLoc'] = '';
+    global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['globalWindow'] = {}; // global['wsClients'] = { 'rooms': {} }; global['wsClientLoc'] = '';
     _fs = await import('fs'); global['_fs'] = _fs;
 }
 

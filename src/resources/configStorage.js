@@ -160,8 +160,6 @@ async function configStorage(inf) {
 
 if (eng) { // CHROME
     window['configStorage'] = configStorage;
-    window['csf'] = configStorage;
 } else { // NODEJS
     global['configStorage'] = configStorage;
-    global['csf'] = configStorage;
 }

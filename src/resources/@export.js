@@ -1,90 +1,66 @@
-// [1] CHROME [c] | [2] NODEJS [n] | [3] GOOGLE [g]  
-let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2
-function all2() { }; // ******************************************************** NÃO USAR !!!
-if (cng == 1) { window['all2'] = all2; } else { global['all2'] = all2 }
-// *****************************************************************************************
+let gloWin = eng ? window : global; // [true] CHROME | [false] NODEJS
+function all2() { }; gloWin['all2'] = all2; // ******************************************************** NÃO USAR !!!
 
-if (!(cng == 1 ? window.all1 : global.all1)) {
+if (!(eng ? window.all1 : global.all1)) {
     // DEFINIR O 'devChildren' → [CHROME] EMAIL DO USUÁRIO | [NODEJS] PRIMEIRO ARQUIVO A SER EXECUTADO (NA MAIORIA DOS CASOS 'server')
     let devC = new Error().stack.split('\n'); devC = devC[devC.length - 1]; let devChildren = devC.includes('.js:') ? devC.match(/\/([^/]+)\.[^/]+$/)[1] : false
-    if (typeof window !== 'undefined') { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email) }) }) }
+    if (eng) { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email) }) }) }
 
     // @functions
     await import('./@functions.js');
 
     // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
-    let retGetPath = await getPath({ 'e': new Error(), 'devChildren': devChildren })
+    await getPath({ 'e': new Error(), 'devChildren': devChildren })
 
-    // console.log(eng, '-', engName, '-', cng, '-', letter); console.log("#################")
-    // console.log('securityPass:', globalWindow.securityPass)
-    // console.log('portWeb:', globalWindow.portWeb, '|', 'serverWeb:', globalWindow.serverWeb)
-    // console.log('portLoc:', globalWindow.portLoc, '|', 'serverLoc:', globalWindow.serverLoc)
-    // console.log('devMaster:', globalWindow.devMaster, '|', 'devSlave:', globalWindow.devSlave, '|', 'devChildren:', globalWindow.devChildren)
-    // console.log('devSend:', globalWindow.devSend)
-    // console.log('devGet:', globalWindow.devGet)
-    // console.log('conf:', globalWindow.conf)
-    // console.log('root:', globalWindow.root)
-    // console.log('functions:', globalWindow.functions)
-    // console.log('project:', globalWindow.project)
+    // console.log(eng, '-', engName, '-', letter); console.log("#################"); console.log('securityPass:', globalWindow.securityPass);
+    // console.log('portWeb:', globalWindow.portWeb, '|', 'serverWeb:', globalWindow.serverWeb); console.log('portLoc:', globalWindow.portLoc, '|', 'serverLoc:', globalWindow.serverLoc);
+    // console.log('devMaster:', globalWindow.devMaster, '|', 'devSlave:', globalWindow.devSlave, '|', 'devChildren:', globalWindow.devChildren);
+    // console.log('devSend:', globalWindow.devSend); console.log('devGet:', globalWindow.devGet); console.log('conf:', globalWindow.conf);
+    // console.log('root:', globalWindow.root); console.log('functions:', globalWindow.functions); console.log('project:', globalWindow.project);
 }
+// IMPORTAR FUNÇÕES DINAMICAMENTE QUANDO NECESSÁRIO 
+let qtd = 0; async function functionImport(infOk) { let { name, path, inf } = infOk; qtd++; if (qtd > 30) { console.log('IMP...', name) }; await import(`${path}`); return await gloWin[name](inf) }
 
-let functionsArr = [
-    // FUNÇÕES DESSE PROJETO
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'regexE', 'functionPath': './regexE.js', }, // MANTER COMO 1º IMPORT
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'file', 'functionPath': './file.js', }, // MANTER COMO 2º IMPORT
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'api', 'functionPath': './api.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'chat', 'functionPath': './chat.js', },
-    { 'eng': 'CHROME', 'functionName': 'chromeActions', 'functionPath': './chromeActions.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'client', 'functionPath': './client.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'clipboard', 'functionPath': './clipboard.js', },
-    { 'eng': 'NODEJS', 'functionName': 'commandLine', 'functionPath': './commandLine.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'configStorage', 'functionPath': './configStorage.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'dateHour', 'functionPath': './dateHour.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'devFun', 'functionPath': './devFun.js', },
-    // { 'eng': 'CHROME', 'functionName': 'getCookies', 'functionPath': './getCookies.js', },
-    // { 'eng': 'CHROME', 'functionName': 'getPage', 'functionPath': './getPage.js', },
-    // { 'eng': 'CHROME/NODEJS', 'functionName': 'getPath', 'functionPath': './getPath.js', },
-    { 'eng': 'NODEJS', 'functionName': 'googleSheets', 'functionPath': './googleSheets.js', },
-    // { 'eng': 'CHROME/NODEJS', 'functionName': 'hasKey', 'functionPath': './hasKey.js', },
-    { 'eng': 'NODEJS', 'functionName': 'htmlToJson', 'functionPath': './htmlToJson.js', },
-    // { 'eng': 'CHROME/NODEJS', 'functionName': 'jsonInterpret', 'functionPath': './jsonInterpret.js', },
-    // { 'eng': 'CHROME', 'functionName': 'keepCookieLive', 'functionPath': './keepCookieLive.js', },
-    { 'eng': 'NODEJS', 'functionName': 'log', 'functionPath': './log.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'logConsole', 'functionPath': './logConsole.js', },
-    { 'eng': 'NODEJS', 'functionName': 'logConsole', 'functionPath': './logsDelOld.js', },
-    { 'eng': 'CHROME', 'functionName': 'notification', 'functionPath': './notification.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'messageReceived', 'functionPath': './messageReceived.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'messageSend', 'functionPath': './messageSend.js', },
-    // { 'eng': 'CHROME/NODEJS', 'functionName': 'orderObj', 'functionPath': './orderObj.js', },
-    { 'eng': 'CHROME', 'functionName': 'promptChrome', 'functionPath': './promptChrome.js', },
-    // { 'eng': 'CHROME/NODEJS', 'functionName': 'randomNumber', 'functionPath': './randomNumber.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'rawText', 'functionPath': './rawText.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'regex', 'functionPath': './regex.js', },
-    // { 'eng': 'CHROME', 'functionName': 'sniffer', 'functionPath': './sniffer.js', },
-    // { 'eng': 'CHROME/NODEJS', 'functionName': 'splitText', 'functionPath': './splitText.js', },
-    { 'eng': 'CHROME', 'functionName': 'tabSearch', 'functionPath': './tabSearch.js', },
-    { 'eng': 'CHROME/NODEJS', 'functionName': 'translate', 'functionPath': './translate.js', },
+// FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) | ENCAMINHAR PARA DEVICE
+async function functionGeneric(infOk) { let { name, inf, retInf } = infOk; let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { 'name': name, 'par': inf, 'retInf': retInf, } }); return retDevAndFun }
 
-    // SCRIPTS DESSE PROJETO
-    { 'eng': 'CHROME', 'functionName': 'command1', 'functionPath': '../scripts/command1.js', },
-    { 'eng': 'CHROME', 'functionName': 'command2', 'functionPath': '../scripts/command2.js', },
-    { 'eng': 'CHROME', 'functionName': 'tryRatingComplete', 'functionPath': '../scripts/tryRatingComplete.js', },
-]
+// FUNÇÕES DESSE PROJETO
+gloWin['regexE'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'regexE', 'path': './regexE.js', 'inf': inf }); };  // MANTER COMO 1º IMPORT
+gloWin['file'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'file', 'path': './file.js', 'inf': inf }); }; // MANTER COMO 2º IMPORT
+gloWin['api'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'api', 'path': './api.js', 'inf': inf }); };
+gloWin['chat'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'chat', 'path': './chat.js', 'inf': inf }); };
+gloWin['chromeActions'] = (inf) => { let fun = (eng) ? functionImport : functionGeneric; return fun({ 'name': 'chromeActions', 'path': './chromeActions.js', 'inf': inf }); };
+gloWin['client'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'client', 'path': './client.js', 'inf': inf }); };
+gloWin['clipboard'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'clipboard', 'path': './clipboard.js', 'inf': inf }); };
+gloWin['commandLine'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'commandLine', 'path': './commandLine.js', 'inf': inf }); };
+gloWin['configStorage'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'configStorage', 'path': './configStorage.js', 'inf': inf }); };
+gloWin['dateHour'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'dateHour', 'path': './dateHour.js', 'inf': inf }); };
+gloWin['devFun'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'devFun', 'path': './devFun.js', 'inf': inf }); };
+// gloWin['getCookies'] = (inf) => { let fun = (eng ) ? functionImport : functionGeneric; return fun({ 'name': 'getCookies', 'path': './getCookies.js', 'inf': inf }); };
+// gloWin['getPage'] = (inf) => { let fun = (eng) ? functionImport : functionGeneric; return fun({ 'name': 'getPage', 'path': './getPage.js', 'inf': inf }); };
+// gloWin['getPath'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'getPath', 'path': './getPath.js', 'inf': inf }); }; // IMPORTADO NO TOPO
+gloWin['googleSheets'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'googleSheets', 'path': './googleSheets.js', 'inf': inf }); };
+gloWin['htmlToJson'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'htmlToJson', 'path': './htmlToJson.js', 'inf': inf }); };
+gloWin['log'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'log', 'path': './log.js', 'inf': inf }); };
+gloWin['logConsole'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'logConsole', 'path': './logConsole.js', 'inf': inf }); };
+gloWin['logsDelOld'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'logsDelOld', 'path': './logsDelOld.js', 'inf': inf }); };
+gloWin['notification'] = (inf) => { let fun = (eng) ? functionImport : functionGeneric; return fun({ 'name': 'notification', 'path': './notification.js', 'inf': inf }); };
+gloWin['messageReceived'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'messageReceived', 'path': './messageReceived.js', 'inf': inf }); };
+gloWin['messageSend'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'messageSend', 'path': './messageSend.js', 'inf': inf }); };
+gloWin['promptChrome'] = (inf) => { let fun = (eng) ? functionImport : functionGeneric; return fun({ 'name': 'promptChrome', 'path': './promptChrome.js', 'inf': inf }); };
+gloWin['rawText'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'rawText', 'path': './rawText.js', 'inf': inf }); };
+gloWin['regex'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'regex', 'path': './regex.js', 'inf': inf }); };
+gloWin['tabSearch'] = (inf) => { let fun = (eng) ? functionImport : functionGeneric; return fun({ 'name': 'tabSearch', 'path': './tabSearch.js', 'inf': inf }); };
+gloWin['translate'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'translate', 'path': './translate.js', 'inf': inf }); };
 
-// FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO)
-async function functionGeneric(functionName, inf) {
-    // ENCAMINHAR PARA DEVICE
-    let infDevAndFun = { 'e': cng == 1 ? chrome.runtime.getURL(functionName) : import.meta.url, 'enc': true, 'data': { 'name': functionName, 'par': inf, 'retInf': inf.retInf, } };
-    let retDevAndFun = await devFun(infDevAndFun); return retDevAndFun
-}
+// SCRIPTS DESSE PROJETO
+gloWin['command1'] = (inf) => { let fun = (eng) ? functionImport : functionGeneric; return fun({ 'name': 'command1', 'path': '../scripts/command1.js', 'inf': inf }); };
+gloWin['command2'] = (inf) => { let fun = (eng) ? functionImport : functionGeneric; return fun({ 'name': 'command2', 'path': '../scripts/command2.js', 'inf': inf }); };
+gloWin['tryRatingComplete'] = (inf) => { let fun = (eng) ? functionImport : functionGeneric; return fun({ 'name': 'tryRatingComplete', 'path': '../scripts/tryRatingComplete.js', 'inf': inf }); };
 
-// IMPORTAR FUNÇÕES
-async function functionsImport() {
-    // ASSOCIAR FUNÇÃO GENÉRICA EM TODAS AS VARIÁVEIS GLOBAIS COM O NOME DAS FUNÇÕES
-    for (let [index, value] of functionsArr.entries()) {
-        if (cng == 1) { window[value.functionName] = (inf) => functionGeneric(value.functionName, inf); } // CHROME
-        else { global[value.functionName] = (inf) => functionGeneric(value.functionName, inf); } // NODEJS
-    }; let devType = cng == 1 ? 'CHROME' : 'NODEJS'
-    // ASSOCIAR FUNÇÕES NAS VARIÁVEIS GLOBAIS 
-    for (let [index, value] of functionsArr.entries()) { if (value.eng.includes(devType)) { await import(`${value.functionPath}`); } };
-}; await functionsImport()
+// AGUARDAR IMPORT DE FUNÇÕES NÃO ASYNC **************
+let e = import.meta.url, ee = e; let infTest
+infTest = 'Wed Jan 11 2024 22:33:44 GMT-0300 (Horário Padrão de Brasília)'; await dateHour(infTest); // console.log(dateHour(infTest));
+infTest = { 'e': e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES` }; await regex(infTest); // console.log(regex(infTest))
+//  **************
+
