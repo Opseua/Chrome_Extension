@@ -6,6 +6,8 @@ let e = import.meta.url, ee = e;
 async function model(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
+        // let { text, folder, } = inf
+
         // let infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
         // let retTranslate = await translate(infTranslate); if (!retTranslate.ret) { return retTranslate } else { retTranslate = retTranslate.res }
 

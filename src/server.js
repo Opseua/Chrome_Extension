@@ -1,4 +1,3 @@
-if (typeof window !== 'undefined') { window['eng'] = true } else { global['eng'] = false }; // [true] CHROME | [false] NODEJS
 function startupFun(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}` }; let startup = new Date();
 await import('./resources/@export.js');
 
@@ -50,14 +49,6 @@ async function serverRun(inf) {
         // let infTryRatingComplete, retTryRatingComplete
         // infTryRatingComplete = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
         // retTryRatingComplete = await tryRatingComplete(infTryRatingComplete); console.log(retTryRatingComplete)
-
-        // let retFile = await file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': './PASTA/arquivo.txt', 'rewrite': true, 'text': '1234\n' }); console.log(retFile)
-
-        // let retApi = await api({ 'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'text/plain;charset=UTF-8' }, 'body': `AAA`, }); console.log(retApi)
-
-        // let retChat = await chat({ 'e': e, 'provider': 'open.ai', 'input': `Qual a idade de Marte?` }); console.log(retChat)
-
-        // let retChromeActions = await chromeActions({ 'e': e, 'action': 'badge', 'text': `OLA` }); console.log(retChromeActions)
 
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });

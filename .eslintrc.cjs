@@ -46,7 +46,7 @@ let arrGlobal = [
 
     // [WebScraper]
     // → funções globais
-    'apiCnpj', 'apiNire', 'awaitLoad', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement',
+    'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement',
     'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData', 'clientImput'
 
 ];

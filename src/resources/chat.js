@@ -3,7 +3,7 @@
 // retChat = await chat(infChat); console.log(retChat)
 
 let e = import.meta.url, ee = e;
-async function chat(inf) { // https://chat.openai.com/api/auth/session
+async function chat(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         let infConfigStorage, retConfigStorage, retApi, infNotification, infApi
