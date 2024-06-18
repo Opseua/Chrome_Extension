@@ -9,7 +9,8 @@ chrome.storage.sync.clear(function () {
 import('../server.js');
 
 chrome.browserAction.onClicked.addListener(async function () { // ######################### CLICK NO ICONE
-    console.log('ON START: ICONE PRESSIONADO'); //chrome.browserAction.setPopup({popup: './popup.html'});
+    console.log('ON START: ICONE PRESSIONADO');
+    // chrome.browserAction.setPopup({popup: './popup.html'});
 });
 
 
@@ -57,19 +58,6 @@ chrome.browserAction.onClicked.addListener(async function () { // ##############
 // chrome.runtime.onMessage.addListener(async function (...inf) {
 //   console.log(`EVENTO: mensagem recebida\n`, inf)
 // });
-
-// setTimeout(function () {
-//     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-//         chrome.tabs.executeScript(tabs[0].id, {
-//             // XPATH
-//             code: `document.evaluate('//*[@id="app-root"]/div/div[4]/div[2]/div/p/a/button', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click()`
-//             // JS PATH
-//             // code: `document.querySelector("#app-root > div > div.application-wrapper--content > div.survey-view > div.task-container > div:nth-child(1) > div.editor.mode-live.mode-view > div > div > div > div > div > div > div > div > div > div:nth-child(2) > div > div > div > div > div:nth-child(3) > div.extra-wrapper > div > div > div > div:nth-child(8) > div > div > div > div.d-flex.justify-content-center.field-array-actions.py-2 > button").click()`
-//             // ELEMENT (por '.' nos espaços)   <button class="btn btn-primary">Get a Survey</button>    →    document.querySelector('.btn.btn-primary').click()
-//             // code: `document.querySelector('.btn.btn-primary').click()`
-//         })
-//     });
-// }, 5000);
 
 // NAO POR NADA AQUI!
 

@@ -93,10 +93,6 @@
     "48": "./src/scripts/media/icon_3.png",
     "128": "./src/scripts/media/icon_3.png"
   },
-  "backgroundAAA": {
-    "service_worker": "./src/scripts/background.js",
-    "type": "module"
-  },
   "actionAAA": {
     "default_popup": "popup.html"
   },

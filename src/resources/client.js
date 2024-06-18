@@ -4,8 +4,26 @@ let e = import.meta.url, ee = e;
 async function client(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        // ### CONEXÃO
+        // ############### PEGAR O IP LOCAL ###############
+        async function getIpLocal() {
+            if (eng) {
+                return new Promise((resolve) => {
+                    let ips = []; let RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection; if (!RTCPeerConnection) return resolve([]);
+                    let pc = new RTCPeerConnection({ iceServers: [] }); pc.createDataChannel(''); let resolved = false; pc.onicecandidate = e => {
+                        if (!e.candidate) { pc.close(); if (!resolved) { resolved = true; if (ips.length === 0) { resolve(false); } else { resolve(ips); } }; return; };
+                        let ip = e.candidate.candidate.split(' ')[4]; if (!ips.includes(ip)) ips.push(ip);
+                    }; pc.createOffer().then(sdp => pc.setLocalDescription(sdp)).catch(() => resolve([])); setTimeout(() => { if (!resolved) { resolved = true; resolve(ips); } }, 500);
+                });
+            } else {
+                let retCommandLine = await commandLine({ 'awaitFinish': true, 'command': `ipconfig` }); retCommandLine = retCommandLine.res
+                if (retCommandLine.includes('IPv4')) { return [retCommandLine.match(/Endere.+IPv4.+:\s*([\d.]+)/i)[1]] } else { return [] }
+            }
+        }
+        let ipLocal = await getIpLocal(); ipLocal = ipLocal.length == 0 ? '127.0.0.1' : ipLocal[0]
+        console.log(ipLocal);
 
+
+        // ### CONEXÃO
         function connect(inf) {
             let { hostRoom } = inf; let ws = new _WebSocket(`ws://${hostRoom}`)
             let url = ws._url ? ws._url : ws.url; let host = url.replace('ws://', '').split('/')[0]; let room = url.split(`${host}/`)[1].replace('?roo=', '')
