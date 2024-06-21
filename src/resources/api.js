@@ -16,6 +16,24 @@
 // };
 // retApi = await api(infApi); console.log(retApi)
 
+// fetch("http://www.cepdobrasil.com.br/rio-de-janeiro/rua-tenente-agenor-brito.html", {
+//     "headers": {},
+//     "body": null,
+//     "method": "GET"
+// })
+//     .then(response => {
+//         console.log('RESPONSE code:', response.status);
+//         // console.log('RESPONSE headers:', [...response.headers.entries()]);
+//         return response.text();
+//     })
+//     .then(body => {
+//         console.log('RESPONSE body:', body);
+//     })
+//     .catch(error => {
+//         console.error('RESPONSE error:', error);
+//     });
+
+
 let e = import.meta.url, ee = e;
 async function api(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
