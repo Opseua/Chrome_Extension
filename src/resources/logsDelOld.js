@@ -63,6 +63,9 @@ async function logsDelOld(inf) {
             logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `LOGS APAGADOS\n${JSON.stringify(pathsDel, null, 2)}` });
         }
 
+        // LIMPAR PASTA 'Temp'
+        await commandLine({ 'e': e, 'command': `!letter!:/ARQUIVOS/WINDOWS/BAT/clearTemp.bat` });
+
         ret['res'] = pathsDel;
         ret['msg'] = `LOGS DEL OLD: OK`;
         ret['ret'] = true;

@@ -116,10 +116,10 @@ rem → URA_Reversa [JSF]
 if not "!projectURA_Reversa_JSF!"=="!projectURA_Reversa_JSF:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [C6]
-if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+rem if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [Jucesp]
-if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+rem if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS
 if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
