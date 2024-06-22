@@ -91,15 +91,8 @@ async function getPath(inf) {
     ret['ret'] = true;
     ret['msg'] = `GET PATH: OK`;
     ret['res'] = res;
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-}
+    return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+};
 
-if (eng) { // CHROME
-    window['getPath'] = getPath;
-} else { // NODEJS
-    global['getPath'] = getPath;
-}
+// CHROME | NODEJS
+(eng ? window : global)['getPath'] = getPath;

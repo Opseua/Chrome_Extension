@@ -120,18 +120,9 @@ async function htmlToJson(inf) {
         ret['res'] = JSON.stringify(result);
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
-        ret['msg'] = retRegexE.res
-    };
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-}
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+};
 
-if (eng) { // CHROME
-    window['htmlToJson'] = htmlToJson;
-} else { // NODEJS
-    global['htmlToJson'] = htmlToJson;
-}
+// CHROME | NODEJS
+(eng ? window : global)['htmlToJson'] = htmlToJson;

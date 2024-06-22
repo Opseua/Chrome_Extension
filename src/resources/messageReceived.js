@@ -94,11 +94,7 @@ async function messageReceived(inf) {
         // }
         // ----------------
     }
-}
+};
 
-if (eng) { // CHROME
-    window['messageReceived'] = messageReceived;
-} else { // NODEJS
-    global['messageReceived'] = messageReceived;
-}
-
+// CHROME | NODEJS
+(eng ? window : global)['messageReceived'] = messageReceived;

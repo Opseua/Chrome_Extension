@@ -55,11 +55,7 @@ async function messageSend(inf) {
         ret['msg'] = 'MESSAGE SEND: OK';
     }
 
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
+    return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
 }
 
 let filaBigFalse = []; let filaBigTrue = []; let sending = false; function enviarMensagem(inf) {
@@ -96,11 +92,7 @@ let filaBigFalse = []; let filaBigTrue = []; let sending = false; function envia
             filaBigFalse = filaBigFalse.filter(item => item.messageId !== messageId); filaBigTrue = filaBigTrue.filter(item => item.messageId !== messageId);
         }
     }
-}
+};
 
-if (eng) { // CHROME
-    window['messageSend'] = messageSend;
-} else { // NODEJS
-    global['messageSend'] = messageSend;
-}
-
+// CHROME | NODEJS
+(eng ? window : global)['messageSend'] = messageSend;

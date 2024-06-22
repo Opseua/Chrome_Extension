@@ -23,10 +23,7 @@ async function command2(inf) {
     ...(ret.msg && { msg: ret.msg }),
     ...(ret.res && { res: ret.res }),
   };
-}
+};
 
-if (eng) { // CHROME
-  window['command2'] = command2;
-} else { // NODEJS
-  global['command2'] = command2;
-}
+// CHROME | NODEJS
+(eng ? window : global)['command2'] = command2;

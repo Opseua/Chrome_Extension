@@ -96,18 +96,8 @@ async function regexE(inf) {
         ret['msg'] = `### ERRO ###\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
     } catch (catchErr) {
         console.log(`\n------------------------------------------------\n\n### ERRO REGEXe ###\n\n${catchErr.stack}\n\n------------------------------------------------`)
-    };
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-}
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+};
 
-if (eng) { // CHROME
-    window['regexE'] = regexE;
-} else { // NODEJS
-    global['regexE'] = regexE;
-}
-
-
+// CHROME | NODEJS
+(eng ? window : global)['regexE'] = regexE;

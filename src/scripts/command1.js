@@ -46,10 +46,7 @@ async function command1(inf) {
     ...(ret.msg && { msg: ret.msg }),
     ...(ret.res && { res: ret.res }),
   };
-}
+};
 
-if (eng) { // CHROME
-  window['command1'] = command1;
-} else { // NODEJS
-  global['command1'] = command1;
-}
+// CHROME | NODEJS
+(eng ? window : global)['command1'] = command1;

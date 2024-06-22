@@ -69,16 +69,8 @@ async function notification(infOk) {
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': infOk, 'e': catchErr, });
         ret['msg'] = retRegexE.res
-    };
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-}
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+};
 
-if (eng) { // CHROME
-    window['notification'] = notification;
-} else { // NODEJS
-    global['notification'] = notification;
-}
+// CHROME | NODEJS
+(eng ? window : global)['notification'] = notification;

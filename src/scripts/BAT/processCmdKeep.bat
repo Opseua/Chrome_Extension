@@ -26,8 +26,8 @@ set "fileScriptFullWithBars=!fileScript::=%replace%!" && set "fileScriptFullWith
 set "fileScriptFullWithBars=!project!_!fileScriptFullWithBars!"
 
 rem CHECAR SE ESTA RODANDO
-tasklist | findstr /i "!nodeExe!" >nul
-if not !errorlevel! equ 0 ( set "ret2=FALSE" ) else ( set "ret2=TRUE" )
+tasklist /fi "ImageName eq !nodeExe!.exe" /fo csv 2>NUL | find /I "!nodeExe!.exe">NUL
+if "%ERRORLEVEL%"=="0"  ( set "ret2=TRUE" ) else ( set "ret2=FALSE" )
 
 rem rem DEFINIR ACAO → RODANDO [NAO] | RODANDO [SIM]
 if "!ret2!"=="FALSE" (

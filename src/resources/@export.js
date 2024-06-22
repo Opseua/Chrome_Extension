@@ -1,4 +1,5 @@
-let gloWin; if (typeof window !== 'undefined') { window['eng'] = true; gloWin = window } else { global['eng'] = false; gloWin = global }; // [true] CHROME | [false] NODEJS
+let eng = (typeof window !== 'undefined'); (eng ? window : global)['eng'] = eng; let gloWin = eng ? window : global // [true] CHROME | [false] NODEJS
+
 function all2() { }; gloWin['all2'] = all2; // ******************************************************** NÃO USAR !!!
 
 if (!(eng ? window.all1 : global.all1)) {

@@ -47,10 +47,7 @@ async function rawText(inf) {
         regexE({ 'inf': inf, 'e': catchErr, });
     };
     return ret
-}
+};
 
-if (eng) { // CHROME
-    window['rawText'] = rawText;
-} else { // NODEJS
-    global['rawText'] = rawText;
-}
+// CHROME | NODEJS
+(eng ? window : global)['rawText'] = rawText;

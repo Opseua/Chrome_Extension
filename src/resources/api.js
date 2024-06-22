@@ -95,18 +95,8 @@ async function api(inf) {
             let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
             ret['msg'] = retRegexE.res
         }
-    };
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-}
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+};
 
-if (eng) { // CHROME
-    window['api'] = api;
-} else { // NODEJS
-    global['api'] = api;
-}
-
-
+// CHROME | NODEJS
+(eng ? window : global)['api'] = api;

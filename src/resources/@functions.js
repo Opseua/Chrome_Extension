@@ -1,6 +1,7 @@
 // await new Promise(resolve => { setTimeout(resolve, 2000) });
 
 // process.exit();
+// process.cwd();
 
 // for (let [index, value] of array.entries()) {
 //     console.log('INDEX', index, 'VALUE', value);
@@ -191,7 +192,7 @@ if (eng) { // CHROME
 
 // OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!)
 function all1() { }; // ******************************************************** NÃO USAR !!!
-if (eng) { window['all1'] = all1; } else { global['all1'] = all1 }
+(eng ? window : global)['all1'] = all1;
 // *****************************************************************************************
 
 // NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'

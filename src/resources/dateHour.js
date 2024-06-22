@@ -73,16 +73,8 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
             let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
             ret['msg'] = retRegexE.res
         })()
-    };
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-}
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+};
 
-if (eng) { // CHROME
-    window['dateHour'] = dateHour;
-} else { // NODEJS
-    global['dateHour'] = dateHour;
-}
+// CHROME | NODEJS
+(eng ? window : global)['dateHour'] = dateHour;

@@ -75,12 +75,7 @@ async function tabSearch(inf) {
                 ret['ret'] = true;
             } else { ret['msg'] = retOpenTab }
         }
-    };
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
 }
 
 async function openTab(inf) { // NAO USAR
@@ -102,9 +97,5 @@ async function openTab(inf) { // NAO USAR
     }
 };
 
-if (eng) { // CHROME
-    window['tabSearch'] = tabSearch;
-} else { // NODEJS
-    global['tabSearch'] = tabSearch;
-}
-
+// CHROME | NODEJS
+(eng ? window : global)['tabSearch'] = tabSearch;
