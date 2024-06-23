@@ -15,11 +15,11 @@ set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 rem QUAIS DEVS EXECUTAM O PROJETO
 set "projectWebSocket=OPSEUA_AWS_ESTRELAR"
-set "projectWebSocketOld=OPSEUA_AWS"
-set "projectWebSocketNew=ESTRELAR"
+set "projectWebSocketOld=OPSEUA_AWS_ESTRELAR"
 set "projectSniffer_Python=OPSEUA"
-set "projectURA_Reversa_JSF=ESTRELAR"
+set "projectURA_Reversa_Jsf=ESTRELAR"
 set "projectWebScraper_C6=ESTRELAR"
+set "projectWebScraper_C6_New2=ESTRELAR"
 set "projectWebScraper_Jucesp=ESTRELAR"
 
 rem IDENTIFICAR O DEVMASTER PELO CONFIG
@@ -41,48 +41,33 @@ set "search=master": "ESTRELAR"
 set "resultDevMaster=!conteudo:%search%=!"
 if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=ESTRELAR" &  set "atalhoModo=ON_VIEW" )
 
-
 rem ### SOMENTE INICIAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_START=!" goto START_SCRIPTS
 
-
 rem ################################## SCRIPTS PARAR
 rem → WebSocket
-if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( 
-	"!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	rem TEMPORARIO (SOMENTE NA ESTRELAR)
-	if "!conteudo!"=="ESTRELAR" ( 
-		"!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_OutrosWebSocket\offWebSocket.lnk" & ping -n 3 -w 1000 127.0.0.1 >nul
-	)
-)
+if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebSocket [Old]
 if not "!projectWebSocketOld!"=="!projectWebSocketOld:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem → WebSocket [New]
-if not "!projectWebSocketNew!"=="!projectWebSocketNew:%conteudo%=!" (
-	rem TEMPORARIO (SOMENTE NA ESTRELAR)
-	"!letra!:\ARQUIVOS\PROJETOS\WebSocketNew\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul
-
-)
-
 rem → Sniffer_Python
 if not "!projectSniffer_Python!"=="!projectSniffer_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem → URA_Reversa [JSF]
-if not "!projectURA_Reversa_JSF!"=="!projectURA_Reversa_JSF:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+rem → URA_Reversa [Jsf]
+if not "!projectURA_Reversa_Jsf!"=="!projectURA_Reversa_Jsf:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [C6]
 if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
+rem → WebScraper [C6_New2]
+if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6_New2\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
 rem → WebScraper [Jucesp]
 if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-
 rem ### SOMENTE PARAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_STOP=!" goto FIM_DO_SCRIPT
-
 
 :START_SCRIPTS
 rem ################################## SCRIPTS INICIAR
@@ -90,33 +75,20 @@ rem APAGAR LOGS DO PM2
 del /f /s /q "C:\Users\!usuario!\.pm2\logs" & del /f /s /q "C:\Users\!usuario!\.pm2\pids" & del /f "C:\Users\!usuario!\.pm2\pm2.log" & del /f /s /q "C:\Users\!usuario!\.pm2\pm2.pid"
 !fileLog! "[WAKEUP_RESTART] = LOGS PM2 DELETADOS"
 
-
 rem → WebSocket
-if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" (
-	"!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	rem TEMPORARIO (SOMENTE NA ESTRELAR)
-	if "!conteudo!"=="ESTRELAR" ( 
-		!2_BACKGROUND! pm2 list 
-		ping -n 15 -w 1000 127.0.0.1 >nul
-		"!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_OutrosWebSocket\onViewWebSocket.lnk" & ping -n 3 -w 1000 127.0.0.1 >nul
-	)
-)
+if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem → WebSocket [Old]
+rem → WebSocket [Old
 if not "!projectWebSocketOld!"=="!projectWebSocketOld:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem → WebSocket [New]
-if not "!projectWebSocketNew!"=="!projectWebSocketNew:%conteudo%=!" (
-	rem TEMPORARIO (SOMENTE NA ESTRELAR)
-	"!letra!:\ARQUIVOS\PROJETOS\WebSocketNew\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul
-)
-
-rem → URA_Reversa [JSF]
-if not "!projectURA_Reversa_JSF!"=="!projectURA_Reversa_JSF:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+rem → URA_Reversa [Jsf]
+if not "!projectURA_Reversa_Jsf!"=="!projectURA_Reversa_Jsf:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [C6]
 rem if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [C6_New2]
+rem if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6_New2\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [Jucesp]
 rem if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
@@ -124,6 +96,9 @@ rem if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!
 rem ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS
 if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
 	rem → AWS/ESTRELAR
+	
+	ping -n 3 -w 1000 127.0.0.1 >nul
+	
 	!2_BACKGROUND! explorer
 	
 	ping -n 7 -w 1000 127.0.0.1 >nul
