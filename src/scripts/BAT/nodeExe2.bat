@@ -23,8 +23,7 @@ if "!arg1!"=="CRIAR" ( goto COPIA_CRIAR )
 
 :COPIA_CRIAR
 rem CRIAR COPIA nodeExe
-set "projects=nodeZPm2JList;Chrome_Extension;Chrome_ExtensionOld;Sniffer_Python_server;URA_Reversa_serverJsf;URA_Reversa_serverTelein;WebScraper_serverC6;WebScraper_serverJucesp"
-set "projects=!projects!;WebSocket_server;WebSocketOld_server;WebSocketNew_server"
+set "projects=Sniffer_Python_server;URA_Reversa_serverJsf;URA_Reversa_serverTelein;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverJucesp;WebSocket_server;WebSocketOld_server"
 set fileQtdCopy=0
 for %%a in ("%projects:;=" "%") do (
     if exist "!local!\node%%~a.exe" (
