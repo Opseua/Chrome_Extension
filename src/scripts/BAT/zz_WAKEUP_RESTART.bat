@@ -21,6 +21,7 @@ set "projectURA_Reversa_Jsf=ESTRELAR"
 set "projectWebScraper_C6=ESTRELAR"
 set "projectWebScraper_C6_New2=ESTRELAR"
 set "projectWebScraper_Jucesp=ESTRELAR"
+set "projectWebScraper_Jucesp_New2=ESTRELAR"
 
 rem IDENTIFICAR O DEVMASTER PELO CONFIG
 set "conteudo=" & set "atalhoModo="
@@ -66,6 +67,9 @@ if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" 
 rem → WebScraper [Jucesp]
 if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
+rem → WebScraper [Jucesp_New2]
+if not "!projectWebScraper_Jucesp_New2!"=="!projectWebScraper_Jucesp_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp_New2\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
 rem ### SOMENTE PARAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_STOP=!" goto FIM_DO_SCRIPT
 
@@ -92,6 +96,9 @@ rem if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%
 
 rem → WebScraper [Jucesp]
 rem if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [Jucesp_New2]
+rem if not "!projectWebScraper_Jucesp_New2!"=="!projectWebScraper_Jucesp_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp_New2\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS
 if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
