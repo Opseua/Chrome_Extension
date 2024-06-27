@@ -105,7 +105,7 @@ async function configStorage(inf) {
                     else {
                         infFile = { 'e': e, 'action': 'relative', 'path': inf.path ? inf.path : globalWindow.conf, 'functionLocal': typeof inf.functionLocal == 'boolean' && !inf.functionLocal ? false : true }
                         retFile = await file(infFile); path = retFile.res[0]
-                    }; try { await _fs.promises.access(path); ret_Fs = true } catch (catchErr) { }
+                    }; try { await _fs.promises.access(path); ret_Fs = true } catch (catchErr) { esLintIgnore = catchErr; }
                     if (ret_Fs) { let configFile = await _fs.promises.readFile(path, 'utf8'); config = JSON.parse(configFile) } else { config = {} }
                     if (!inf.key || inf.key == '') {
                         ret['msg'] = `CONFIG: ERRO | INFORMAR A 'key'`;

@@ -67,7 +67,7 @@ async function file(inf) {
                         if (path.includes('%/')) { path = path.split('%/')[1] } else if (path.includes(':')) { path = path.split(':/')[1] }
                         if (inf.rewrite) {
                             try { infFile = { 'path': path, 'functionLocal': inf.functionLocal && !eng ? true : false }; retFile = await fileRead(infFile); if (retFile.ret) { retFetch = retFile.res }; text = `${retFetch}${text}` }
-                            catch (catchErr) { }
+                            catch (catchErr) { esLintIgnore = catchErr; }
                         }; let blob = new Blob([text], { type: 'text/plain' });
                         // REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                         path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); let downloadOptions = { // 'overwrite' LIMPA | 'uniquify' (ADICIONA (1), (2), (3)... NO FINAL)
@@ -109,7 +109,7 @@ async function file(inf) {
                         resNew['msg'] = `FILE [READ]: OK`;
                         resNew['res'] = res;
                     } catch (catchErr) {
-                        resNew['msg'] = `FILE [READ]: ERRO | ARQUIVO NÃO ENCONTRADO '${path}'`;
+                        resNew['msg'] = `FILE [READ]: ERRO | ARQUIVO NÃO ENCONTRADO '${path}'`; esLintIgnore = catchErr
                     }
                 }; return resNew
             }
@@ -122,7 +122,7 @@ async function file(inf) {
                         let ok = false; try {
                             let s = await _fs.promises.stat(inf); if (s.isDirectory()) { let as = await _fs.promises.readdir(inf); for (let a of as) { let c = _path.join(inf, a); await delP(c) }; await _fs.promises.rmdir(inf) }
                             else { await _fs.promises.unlink(inf) }; ok = true
-                        } catch (catchErr) { }
+                        } catch (catchErr) { esLintIgnore = catchErr; }
                         if (!ok) {
                             resNew['msg'] = `FILE [DEL]: ERRO | AO DELETAR ARQUIVO '${path}'`;
                         } else {
@@ -131,7 +131,7 @@ async function file(inf) {
                         }
                     } catch (catchErr) {
                         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
-                        resNew['msg'] = retRegexE.res
+                        resNew['msg'] = retRegexE.res;
                     }
                 }; await delP(path); return resNew
             }
@@ -156,14 +156,14 @@ async function file(inf) {
                                 entryObject = {
                                     'ret': true, 'isFolder': isFolder, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), 'edit': stats.mtime, 'size': size ? formatBytes(size) : false, ...(isFolder ? {} : { 'md5': md5 }),
                                 }; result.push(entryObject);
-                            } catch (catchErr) { result.push({ 'ret': false, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), }); }
+                            } catch (catchErr) { result.push({ 'ret': false, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), }); esLintIgnore = catchErr; }
                         }; let retOrder = result.sort((a, b) => { if (a.isFolder && !b.isFolder) { return -1; } else if (!a.isFolder && b.isFolder) { return 1; } else { return a.name.localeCompare(b.name); } }); let res = retOrder
                         resNew['ret'] = true;
                         resNew['msg'] = `FILE [LIST]: OK`;
                         resNew['res'] = res;
                     }
                 } catch (catchErr) {
-                    resNew['msg'] = `FILE [LIST]: ERRO | AO LISTAR '${path}'`;
+                    resNew['msg'] = `FILE [LIST]: ERRO | AO LISTAR '${path}'`; esLintIgnore = catchErr;
                 }; return resNew
             }
 
@@ -180,7 +180,7 @@ async function file(inf) {
                         resNew['ret'] = true;
                         resNew['msg'] = `FILE [CHANGE]: OK`
                     } catch (catchErr) {
-                        resNew['msg'] = `FILE [CHANGE]: ERRO | AO MOVER ARQUIVO '${pathOld}'`;
+                        resNew['msg'] = `FILE [CHANGE]: ERRO | AO MOVER ARQUIVO '${pathOld}'`; esLintIgnore = catchErr;
                     }
                 }; return resNew
             }
@@ -219,7 +219,7 @@ async function file(inf) {
                         }
                     }
                 } catch (catchErr) {
-                    resNew['msg'] = `FILE [IS FOLDER]: ERRO | AO CHECAR '${path}'`;
+                    resNew['msg'] = `FILE [IS FOLDER]: ERRO | AO CHECAR '${path}'`; esLintIgnore = catchErr;
                 }; return resNew
             }
 
@@ -239,7 +239,7 @@ async function file(inf) {
                     resNew['ret'] = true;
                     resNew['msg'] = `FILE [STORAGE]: OK`;
                 } catch (catchErr) {
-                    resNew['msg'] = `FILE [STORAGE]: ERRO | AO OBTER INFORMAÇÕES DO DISCO '${path}'`;
+                    resNew['msg'] = `FILE [STORAGE]: ERRO | AO OBTER INFORMAÇÕES DO DISCO '${path}'`; esLintIgnore = catchErr;
                 }; return resNew
             }
 

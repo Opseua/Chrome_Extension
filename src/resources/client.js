@@ -36,7 +36,7 @@ async function client(inf) {
                     if (pingPong == 2) { return } // RECEBIDO: 'PING' ENVIAR 'PONG'
                     ws.send('pong'); // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
                 } else { // RECEBIDO: OUTRA MENSAGEM
-                    try { message = JSON.parse(message) } catch (catchErr) { message = { 'message': message } }; if (!message.message) { message = { 'message': message } }
+                    try { message = JSON.parse(message) } catch (catchErr) { message = { 'message': message }; esLintIgnore = catchErr; }; if (!message.message) { message = { 'message': message } }
                     if (ws.lastMessage) { ws.send(`pong`) }; messageReceived({ ...message, 'host': host, 'room': room, 'resWs': ws, 'locWeb': locWeb, });
                 }
             };
@@ -76,7 +76,7 @@ async function client(inf) {
             // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
 
             // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
-            let data = {}; try { data = JSON.parse(message) } catch (catchErr) { }; if (data.fun) {
+            let data = {}; try { data = JSON.parse(message) } catch (catchErr) { esLintIgnore = catchErr; }; if (data.fun) {
                 devFun({ 'e': e, 'data': data, 'messageId': messageId, 'resWs': resWs, 'destination': origin, })
             } else if (data.other) {
                 logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `OTHER\n${JSON.stringify(data.other)}` });

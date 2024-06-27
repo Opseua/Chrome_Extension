@@ -51,7 +51,7 @@ async function googleSheets(inf) {
                 ret['msg'] = `GOOGLE SHEET [GET]: OK`;
                 ret['ret'] = true;
             } catch (catchErr) {
-                ret['msg'] = `GOOGLE SHEET [GET]: ERRO | NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
+                ret['msg'] = `GOOGLE SHEET [GET]: ERRO | NÃO ENCONTRADO '${range}' E/OU ID '${id}'`; esLintIgnore = catchErr;
             }
         } else if (inf.action == 'send') {
             // SEND
@@ -68,7 +68,7 @@ async function googleSheets(inf) {
                     ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | RANGE PROTEGIDO`;
                 } else {
                     ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
-                }
+                }; esLintIgnore = catchErr;
             }
         } else if (inf.action == 'lastLin') {
             // LAST LIN

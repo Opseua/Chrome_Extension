@@ -15,9 +15,9 @@ async function regexE(inf) {
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
         let projectFile = `[${project}]\n→ ${fileOk}`; let retFetch, devCatchErr, devSecurityPass, devMaster, devSend
         if (cng == 1) { // CHROME
-            try { retFetch = await fetch(chrome.runtime.getURL(conf)); retFetch = await retFetch.text() } catch (catchErr) { devCatchErr = true }
+            try { retFetch = await fetch(chrome.runtime.getURL(conf)); retFetch = await retFetch.text() } catch (catchErr) { devCatchErr = true; esLintIgnore = catchErr; }
         } else if (cng == 2) { // NODEJS
-            try { retFetch = await _fs.promises.readFile(`${letter}:/${root}/${functions}/${conf}`, 'utf8') } catch (catchErr) { devCatchErr = true }
+            try { retFetch = await _fs.promises.readFile(`${letter}:/${root}/${functions}/${conf}`, 'utf8') } catch (catchErr) { devCatchErr = true; esLintIgnore = catchErr; }
         }; if (cng == 1 || cng == 2) {
             if (devCatchErr) { devSecurityPass = 'AAAAAAAA'; devSend = `127.0.0.1:1234/AAA` }
             else {

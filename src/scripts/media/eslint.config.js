@@ -1,7 +1,7 @@
 // ************** VARIÁVEIS NÃO DECLARADAS [globais] **************
 let arrGlobal = [
   'window', 'global', 'globalWindow', 'devSend', 'wsClients', 'wsClientLoc',
-  'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'listenerAcionar', 'listenerMonitorar',
+  'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'listenerAcionar', 'listenerMonitorar', 'esLintIgnore',
 
   // CHROME
   // ## BIBLIOTECAS / NATIVO
@@ -79,6 +79,8 @@ let arrUnused = [
   'big',
   'write',
   'msg',
+  'sendNtfy',
+  'e'
 ];
 
 let arrGlobalObj = {};

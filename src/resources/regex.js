@@ -14,8 +14,6 @@ function regex(inf) { // NÃO POR COMO 'async'!!!
         } else {
             if (inf.pattern.includes('(.*?)')) {
                 let res = {}; let ok = false; let patternSplit = inf.pattern.split('(.*?)');
-                // let split1 = patternSplit[0].replace(/[.+?^${}()|[\]\\]/g, '\\$&')
-                // let split2 = patternSplit[1].replace(/[.+?^${}()|[\]\\]/g, '\\$&');
                 let split1 = patternSplit[0].replace(/[*.+?^${}()|[\]\\]/g, '\\$&')
                 let split2 = patternSplit[1].replace(/[*.+?^${}()|[\]\\]/g, '\\$&'); let result1 = inf.text.match(`${split1}(.*?)${split2}`);
                 let result2 = inf.text.match(`(?<=${split1})(.+)(?=${split2})`); let result3 = inf.text.match(`${split1}([\\s\\S]*?)${split2}`);

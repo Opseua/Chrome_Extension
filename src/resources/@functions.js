@@ -48,9 +48,9 @@ let cng = eng ? 1 : 2;
 let _fs, _path, _url, _cheerio, _clipboard, _WebSocket, _http, _exec, _spawn, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
 
 if (cng == 1) { // CHROME
-    window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {}; // window['wsClients'] = { 'rooms': {} }; window['wsClientLoc'] = '';
+    window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {}; window['esLintIgnore'] = ''; // window['wsClients'] = { 'rooms': {} }; window['wsClientLoc'] = '';
 } else { // NDEJS
-    global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['globalWindow'] = {}; // global['wsClients'] = { 'rooms': {} }; global['wsClientLoc'] = '';
+    global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['globalWindow'] = {}; global['esLintIgnore'] = ''; // global['wsClients'] = { 'rooms': {} }; global['wsClientLoc'] = '';
     _fs = await import('fs'); global['_fs'] = _fs;
 }
 
