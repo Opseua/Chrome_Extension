@@ -1,7 +1,7 @@
 // ************** VARIÁVEIS NÃO DECLARADAS [globais] **************
 let arrGlobal = [
-  'window', 'global', 'globalWindow', 'devSend', 'wsClients', 'wsClientLoc',
-  'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'listenerAcionar', 'listenerMonitorar', 'esLintIgnore',
+  'window', 'global', 'globalWindow', 'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf',
+  'listenerAcionar', 'listenerMonitorar', 'esLintIgnore',
 
   // CHROME
   // ## BIBLIOTECAS / NATIVO
@@ -9,8 +9,7 @@ let arrGlobal = [
 
   // NODEJS
   // ## BIBLIOTECAS / NATIVO
-  '_WebSocketServer', '_WebSocket', '_fs', '_path', '_url', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto',
-  '_puppeteer', '_net', '_util', '_getFolderSize', 'process', 'Buffer', '_parse', '_stackTrace',
+  '_WebSocketServer', '_WebSocket', '_fs', '_path', '_url', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto', '_puppeteer', '_net', '_util', '_getFolderSize', 'process', 'Buffer', '_parse', '_stackTrace',
   // ## VARIÁVEIS
   'cs',
   // ## GLOBAL OBJECT [NOVO]
@@ -26,8 +25,7 @@ let arrGlobal = [
 
   // [Chrome_Extension]
   // → funções globais
-  'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'logsDelOld', 'devFun', 'file',
-  'getCookies', 'getPath', 'getPath', 'googleSheets', 'htmlToJson', 'log', 'logConsole',
+  'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'logsDelOld', 'devFun', 'file', 'getCookies', 'getPath', 'getPath', 'googleSheets', 'htmlToJson', 'log', 'logConsole',
   'messageSend', 'messageReceived', 'notification', 'promptChrome', 'rawText', 'regex', 'regexE', 'tabSearch', 'translate',
   // scripts
   'background', 'command1', 'command2', 'tryRatingComplete',
@@ -46,8 +44,7 @@ let arrGlobal = [
 
   // [WebScraper]
   // → funções globais
-  'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement',
-  'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData', 'clientImput'
+  'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData', 'clientImput'
 
 ];
 
@@ -62,25 +59,7 @@ let arrUnused = [
   'ee',
 
   // outros
-  'dev1', 'dev2', 'dev3', 'dev4', 'lin',
-  'browser',
-  'tipo',
-  'element',
-  'cookies',
-  '_stackTrace',
-  'nomeList',
-  'param1',
-  'param2',
-  'ret',
-  'res',
-  'host',
-  'room',
-  'teste',
-  'big',
-  'write',
-  'msg',
-  'sendNtfy',
-  'e'
+  'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write', 'msg', 'sendNtfy', 'e'
 ];
 
 let arrGlobalObj = {};
@@ -103,5 +82,6 @@ export const jsConfig = [
       'no-unused-vars': ['error', { 'varsIgnorePattern': "^(" + arrUnused.join('|') + ")$" }]
 
     }
+
   }
 ];
