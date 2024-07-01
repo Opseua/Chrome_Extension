@@ -126,8 +126,7 @@
         "src/scripts/media/floatingButton/styles.css"
       ],
       "matches": [
-        "https://drive.google.com/drive/*",
-		"https://www.tryrating.com/*"
+        "https://www.tryrating.com/*"
       ]
     }
   ]
