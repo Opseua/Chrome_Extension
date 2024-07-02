@@ -11,7 +11,7 @@ rem set "start=ERRO" & set "adm=ERRO" & NET SESSION >nul 2>&1 & if !errorlevel! 
 echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
 set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
-rem VARIAVEIS ('restartOnStop' NAO E USADO NO PM2 PORQUE E IMPOSSIVEL SABER QUANDO O SCRIPT PAROU DE RODAR)
+rem VARIAVEIS
 set "ret2=ERRO" & set "actionRun=ERRO" & set "winTP=15 65 500 300" & set "action=!arg1!" & set "fileScript=!arg3!" & set "mode=!arg4!" & set "fileScriptProcess=!fileScript:\=\\!"
 for /f "tokens=1,2 delims=@" %%a in ("!arg2!") do ( set "project=%%a" & set "outrosAdd=%%b" ) & if not "!mode!"=="!mode:RESTART_STOP=!" ( exit )
 if not "!mode!"=="!mode:LEGACY=!" ( set "restartOnStop=RESTART_STOP" ) else ( set "restartOnStop=RESTART" )
@@ -40,15 +40,15 @@ if "!ret2!"=="TRUE" (
 )
 
 rem ACTION → NAO DEFINIDA (ENCERRAR)
-if "!actionRun!"=="ERRO" !fileLog! "[NODEJS FILE] = [EXE: EXIT - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!" & exit
+if "!actionRun!"=="ERRO" ( !fileLog! "[NODEJS FILE] = [EXE: EXIT - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!" & exit )
 
 rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'findstr'!!!)
 !fileLastRun! "!mode!_!action!" "!nodeExe!"
 findstr /m "SIM" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\logTime_!nodeExe!.txt" >Nul
 if not %errorlevel%==0 !fileLog! "[NODEJS FILE] = [EXE: NAO - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!" & exit 
 
-rem ### → ACAO | PARAR
-if "!actionRun!"=="OFF" wmic Path win32_process Where "CommandLine Like '%%!fileScriptProcess!%%'" Call Terminate > nul
+rem ### → ACAO | PARAR [FORCADO] PROCESSO PAI E FILHOS
+if "!actionRun!"=="OFF" ( !2_BACKGROUND! !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKill.bat COMMAND_LINE cmd.exe "!nodeExe!.exe" )
 
 rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (

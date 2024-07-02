@@ -75,10 +75,6 @@ if not "!arg1!"=="!arg1:ONLY_STOP=!" goto FIM_DO_SCRIPT
 
 :START_SCRIPTS
 rem ################################## SCRIPTS INICIAR
-rem APAGAR LOGS DO PM2
-del /f /s /q "C:\Users\!usuario!\.pm2\logs" & del /f /s /q "C:\Users\!usuario!\.pm2\pids" & del /f "C:\Users\!usuario!\.pm2\pm2.log" & del /f /s /q "C:\Users\!usuario!\.pm2\pm2.pid"
-!fileLog! "[WAKEUP_RESTART] = LOGS PM2 DELETADOS"
-
 rem → WebSocket
 if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
