@@ -10,7 +10,7 @@ async function log(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         let { text, folder, path, raw, functionLocal, fileProject, fileCall } = inf
-        let infFile, retFile, houTxt, houFile, minSecMil, pathOk, rewrite = false
+        let infFile, houTxt, houFile, minSecMil, pathOk, rewrite = false
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
         minSecMil = `${time.min}:${time.sec}.${time.mil}`
         houFile = `${time.hou}:${minSecMil}`

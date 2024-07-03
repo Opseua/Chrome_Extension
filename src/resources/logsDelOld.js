@@ -5,7 +5,7 @@ let e = import.meta.url, ee = e;
 async function logsDelOld(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let infFile, retFile, pathsDel = [], filesDelOrNot = [], infDelOrNot, retDelOrNot
+        let retFile, pathsDel = [], filesDelOrNot = [], retDelOrNot
 
         async function delOrNot(inf) {
             let { daysKeep, path, edit } = inf;
@@ -25,13 +25,11 @@ async function logsDelOld(inf) {
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 4 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/URA_Reversa/log/Registros`, },
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 4 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebScraper/log/Registros`, },
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 4 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebSocket/log/Registros`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 4 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebSocketOld/log/Registros`, },
         ]
 
         // LISTAR PASTAS E ARQUIVOS
         for (let [index, value] of pathsToDel.entries()) {
-            infFile = { 'e': e, 'action': 'list', 'path': value.path, 'max': 50 }
-            retFile = await file(infFile);
+            retFile = await file({ 'e': e, 'action': 'list', 'path': value.path, 'max': 50 });
             retFile = retFile.ret ? retFile.res : []
             for (let [index1, value1] of retFile.entries()) {
                 if (!value1.isFolder) {
@@ -39,8 +37,7 @@ async function logsDelOld(inf) {
                     filesDelOrNot.push({ 'daysKeep': value.daysKeep, 'path': value1.path, 'edit': value1.edit })
                 } else {
                     // CHECAR SE DEVE SER DELETADO [PASTA]
-                    infFile = { 'e': e, 'action': 'list', 'path': value1.path, 'max': 50 }
-                    retFile = await file(infFile);
+                    retFile = await file({ 'e': e, 'action': 'list', 'path': value1.path, 'max': 50 });
                     retFile = retFile.ret ? retFile.res : []
                     if (retFile.length == 0) {
                         pathsDel.push({ 'path': value1.path })

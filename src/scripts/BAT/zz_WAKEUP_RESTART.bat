@@ -15,7 +15,6 @@ set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 rem QUAIS DEVS EXECUTAM O PROJETO
 set "projectWebSocket=OPSEUA_AWS_ESTRELAR"
-set "projectWebSocketOld=OPSEUA_AWS_ESTRELAR"
 set "projectSniffer_Python=OPSEUA"
 set "projectURA_Reversa_Jsf=ESTRELAR"
 set "projectWebScraper_C6=ESTRELAR"
@@ -49,9 +48,6 @@ rem ################################## SCRIPTS PARAR
 rem → WebSocket
 if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem → WebSocket [Old]
-if not "!projectWebSocketOld!"=="!projectWebSocketOld:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
-
 rem → Sniffer_Python
 if not "!projectSniffer_Python!"=="!projectSniffer_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
@@ -77,9 +73,6 @@ if not "!arg1!"=="!arg1:ONLY_STOP=!" goto FIM_DO_SCRIPT
 rem ################################## SCRIPTS INICIAR
 rem → WebSocket
 if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
-
-rem → WebSocket [Old
-if not "!projectWebSocketOld!"=="!projectWebSocketOld:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocketOld\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → URA_Reversa [Jsf]
 if not "!projectURA_Reversa_Jsf!"=="!projectURA_Reversa_Jsf:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )

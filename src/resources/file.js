@@ -22,7 +22,7 @@ async function file(inf) {
             ret['msg'] = `FILE: ERRO | INFORMAR O 'path'`;
         } else {
             function formatBytes(b, d = 2) { if (b == 0) return '0 Bytes'; let i = Math.floor(Math.log(b) / Math.log(1024)); return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i]; }
-            let infFile, retFile, retFetch = '', text, relative, pathFull, md5, relativeParts, retRelative, infFilesList, retFilesList
+            let infFile, retFile, retFetch = '', text, relative, pathFull, md5, relativeParts, retRelative
 
             // SUBSTITUIR '!letter!' PELA LETRA DA UNIDADE
             if (inf.path) { inf.path = inf.path.replace(/!letter!/g, letter) }

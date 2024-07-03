@@ -51,7 +51,7 @@ let arrGlobal = [
 // ************** VARIÁVEIS NÃO USADAS **************
 let arrUnused = [
   // [infNomeFuncao] [infNomeFuncao]
-  'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',
+  // 'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',
   // (for)
   'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'index4', 'value4', 'event',
   // (time)

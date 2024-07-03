@@ -23,15 +23,14 @@ async function command1(inf) {
       // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': JSON.stringify(retListenerAcionar) });
 
       if (retListenerAcionar.ret) {
-        let retClipboard = await clipboard({ 'e': e, 'value': retListenerAcionar.res.comments[retListenerAcionar.res.current] });
+        await clipboard({ 'e': e, 'value': retListenerAcionar.res.comments[retListenerAcionar.res.current] });
       }
 
-      let infNotification, retNotification
-      infNotification = {
+      let infNotification = {
         'e': e, 'duration': 2, 'icon': `./src/scripts/media/icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
         'title': `Complete Judge`, 'text': retListenerAcionar.msg,
       };
-      retNotification = await notification(infNotification);
+      await notification(infNotification);
     }
 
     ret['msg'] = `COMMAND 1: OK`;
