@@ -203,7 +203,7 @@ if (!(eng ? window.all2 : global.all2)) { await import('./@export.js'); }
 //     function pw(j, pw, ph, u) {
 //         let w = (pw / 100) * j.top.screen.width, h = (ph / 100) * j.top.screen.height; let y = j.top.outerHeight / 2 + j.top.screenY - (h / 2), x = j.top.outerWidth / 2 + j.top.screenX - (w / 2);
 //         return j.open(u, '', `width=${w},height=${h},top=${y},left=${x}`)
-//     }; pw(window, 40, 40, 'http://34.227.26.180:8889')
+//     }; pw(window, 40, 40, 'http://12.345.678.910:1234')
 // })()
 
 

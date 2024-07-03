@@ -20,29 +20,21 @@ async function notification(infOk) {
 
         // MANTER NOTIFICAÇÕES ANTIGAS
         if (!inf.oldKeep) {
-            let notifications = await new Promise((resolve) => {
-                chrome.notifications.getAll((notifs) => resolve(notifs));
-            });
-            for (let notifId in notifications) {
-                await new Promise((resolve) => {
-                    chrome.notifications.clear(notifId, resolve);
-                });
-            }
+            let notifications = await new Promise((resolve) => { chrome.notifications.getAll((notifs) => resolve(notifs)); });
+            for (let notifId in notifications) { await new Promise((resolve) => { chrome.notifications.clear(notifId, resolve); }); }
         }
 
         if (!inf.icon || inf.icon.length > 1) {
-            let imgSrc = !inf.icon ? './src/scripts/media/icon_3.png' : inf.icon;
-            let imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer())
-            imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)))
-        } else {
-            imgBase64 = inf.icon
-        };
+            let imgSrc = !inf.icon ? './src/scripts/media/icon_3.png' : inf.icon; let imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer()); imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)))
+        } else { imgBase64 = inf.icon };
         let title = ((!inf.title) || (inf.title == '')) ? `TITULO VAZIO` : typeof inf.title === 'object' ? JSON.stringify(inf.title) : inf.title
         let text = ((!inf.text) || (inf.text == '')) ? `TEXTO VAZIO` : typeof inf.text === 'object' ? JSON.stringify(inf.text) : inf.text
         let json = {
             'duration': ((!inf.duration) || !(inf.duration > 0)) ? 5 : inf.duration, 'type': 'basic', 'icon': `data:image/png;base64,${imgBase64}`,
-            'title': title, 'text': text,
+            'title': title,
+            'text': text,
             'buttons': inf.buttons ? inf.buttons : [],
+            'ntfy': inf.ntfy ? true : false,
         };
         let not = {
             // MÁXIMO [CONSIDERANDO TUDO 'A']
@@ -50,19 +42,27 @@ async function notification(infOk) {
             // MÁXIMO [CONSIDERANDO TUDO 'A']
             'message': json.text.substring(0, 128), 'buttons': json.buttons
         };
+
+        // ENVIAR NOTIFICAÇÃO
         chrome.notifications.create(not, (notificationId) => {
-            chrome.notifications.onButtonClicked.addListener((notifId, btnIdx) => {
-                // ALGUM BOTAO PRESSIONADO
-                if (notifId === notificationId && btnIdx === 0) {
-                    alert('1')
-                };
-                if (notifId === notificationId && btnIdx === 1) {
-                    alert('2')
-                }
-            }); setTimeout(() => {
-                chrome.notifications.clear(notificationId)
-            }, json.duration * 1000)
+            // CHROME
+            chrome.notifications.onButtonClicked.addListener((notifId, btnIdx) => { // ALGUM BOTAO PRESSIONADO
+                if (notifId === notificationId && btnIdx === 0) { alert('Botao 1 pressionado') }; if (notifId === notificationId && btnIdx === 1) { alert('Botao 2 pressionado') }
+            }); setTimeout(() => { chrome.notifications.clear(notificationId) }, json.duration * 1000)
+
+            // NFTY
+            if (json.ntfy) {
+                (async () => {
+                    let infApi = {
+                        'method': 'POST', 'url': `https://ntfy.sh/${globalWindow.devMaster}`, 'headers': {
+                            'Content-Type': 'application/json',
+                            'Title': `${not.title}`,
+                        }, 'body': `${not.message}`,
+                    }; await api(infApi);
+                })()
+            }
         });
+
         ret['msg'] = 'NOTIFICATION: OK'
         ret['ret'] = true;
 
