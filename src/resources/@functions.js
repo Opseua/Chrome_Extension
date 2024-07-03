@@ -76,7 +76,7 @@ let par5 = `${securityPass}-${conf.par5}`; let par6 = `${conf.par6}`; let par7 =
 let par10 = `${securityPass}-${conf.par10}`
 
 // CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
-let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/?roo=${devMaster}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`
+let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/?roo=OPSEUA-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`
 
 // MANTER APÓS O 'devSend'
 globalWindow = {

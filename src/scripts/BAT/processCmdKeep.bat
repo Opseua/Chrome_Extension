@@ -22,7 +22,7 @@ if not exist "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe" !fileMsg!
 
 rem PATH COMPLETO DO SCRIPT SEM BARRA E DOIS PONTOS
 set "replace=-"
-set "fileScriptFullWithBars=!fileScript::=%replace%!" && set "fileScriptFullWithBars=!fileScriptFullWithBars:\=%replace%!"
+set "fileScriptFullWithBars=!fileScript::=%replace%!" & set "fileScriptFullWithBars=!fileScriptFullWithBars:\=%replace%!"
 set "fileScriptFullWithBars=!project!_!fileScriptFullWithBars!"
 
 rem CHECAR SE ESTA RODANDO
@@ -47,8 +47,14 @@ rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'findstr'!!!)
 findstr /m "SIM" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\logTime_!nodeExe!.txt" >Nul
 if not %errorlevel%==0 !fileLog! "[NODEJS FILE] = [EXE: NAO - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!" & exit 
 
-rem ### → ACAO | PARAR [FORCADO] PROCESSO PAI E FILHOS
-if "!actionRun!"=="OFF" ( !2_BACKGROUND! !letra!:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\processKill.bat COMMAND_LINE cmd.exe "!nodeExe!.exe" )
+rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS
+if "!actionRun!"=="OFF" ( 
+	rem for /f "usebackq tokens=*" %%i in (`powershell -Command "Get-WmiObject Win32_Process -Filter 'name = ''cmd.exe''' | Where-Object { $_.CommandLine -like '*!nodeExe!.exe*' } | ForEach-Object { $_.ProcessId }"`) do (
+	for /f "tokens=2 delims==" %%i in ('wmic process where "Name like '%%cmd.exe%%' and CommandLine like '%%!nodeExe!.exe%%'" get processid /value') do (
+		for %%a in (%%i) do ( !letra!:\ARQUIVOS\WINDOWS\BAT\processKillForceTree.exe -t %%a & goto :LOOP_EXIT )
+	)
+)
+:LOOP_EXIT
 
 rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
