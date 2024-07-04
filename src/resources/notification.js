@@ -17,6 +17,8 @@ async function notification(infOk) {
     try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
 
+        console.log(infOk)
+
         // MANTER NOTIFICAÇÕES ANTIGAS
         if (!inf.keepOld) {
             let notifications = await new Promise((resolve) => { chrome.notifications.getAll((notifs) => resolve(notifs)); });
@@ -53,10 +55,8 @@ async function notification(infOk) {
             if (json.ntfy) {
                 (async () => {
                     let infApi = {
-                        'method': 'POST', 'url': `https://ntfy.sh/${globalWindow.devMaster}`, 'headers': {
-                            'Content-Type': 'application/json',
-                            'Title': `${not.title}`,
-                        }, 'body': `${not.message}`,
+                        'method': 'POST', 'url': `https://ntfy.sh/${globalWindow.devMaster}?title=${encodeURIComponent(not.title)}`,
+                        'headers': { 'Content-Type': 'text/plain;charset=UTF-8', }, 'body': not.message,
                     }; await api(infApi);
                 })()
             }

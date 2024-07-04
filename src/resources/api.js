@@ -5,7 +5,7 @@
 //     'body': { 'aaa': 'bbb' }, 'max': 10
 // };
 // infApi = { // ###### → text
-//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
+//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,  
 //     'headers': { 'Content-Type': 'text/plain;charset=UTF-8' },
 //     'body': `Esse é o texto`, 'max': 10
 // };
@@ -16,7 +16,7 @@
 // };
 // retApi = await api(infApi); console.log(retApi)
 
-// fetch("http://www.cepdobrasil.com.br/rio-de-janeiro/rua-tenente-agenor-brito.html", {
+// fetch("http://www.cepdobrasil.com.br/rio-de-janeiro/rua-maria-da-silva.html", {
 //     "headers": {},
 //     "body": null,
 //     "method": "GET"
