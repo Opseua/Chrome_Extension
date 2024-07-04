@@ -1,16 +1,10 @@
 // await new Promise(resolve => { setTimeout(resolve, 2000) });
 
-// process.exit();
-// process.cwd();
+// process.exit(); process.cwd();
 
 // for (let [index, value] of array.entries()) {
 //     console.log('INDEX', index, 'VALUE', value);
 // };
-
-// // ## LOG ## retApi
-// let errMsg = `LOG retApi`
-// infLog = {'e':e, 'folder': 'Registros', 'path': `${errMsg}.txt`, 'text': retApi }
-// retLog = await log(infLog);
 
 // ESPERAR E REPETIR
 // setInterval(() => {
@@ -32,20 +26,22 @@
 //     console.log('INDEX', index,);
 // };
 
+// // ## LOG ## retApi
+// let errMsg = `LOG retApi`
+// infLog = {'e':e, 'folder': 'Registros', 'path': `${errMsg}.txt`, 'text': retApi }; await log(infLog);
+
 // let data = 'CASAMENTO'
 // // QUALQUER → BASE64
-// let qualquerParaBase64 = Buffer.from(data).toString('base64')
-// console.log(`qualquerParaBase64 ${qualquerParaBase64}`)
+// let qualquerParaBase64 = Buffer.from(data).toString('base64'); console.log(`qualquerParaBase64 ${qualquerParaBase64}`)
 // // BASE64 → UTF8
-// let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8')
-// console.log(`base64ParaUtf8 ${base64ParaUtf8}`)
+// let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8'); console.log(`base64ParaUtf8 ${base64ParaUtf8}`)
 
 // cd /d D:\ARQUIVOS\PROJETOS\URA_Reversa
 
 // [1] CHROME [c] | [2] NODEJS [n]  
 let cng = eng ? 1 : 2;
 
-let _fs, _path, _url, _cheerio, _clipboard, _WebSocket, _http, _exec, _spawn, _google, _crypto, _puppeteer, _net, _util, _getFolderSize, _parse, cs
+let _fs, _path, _cheerio, _clipboard, _WebSocket, _http, _exec, _spawn, _google, _crypto, _puppeteer, _net, _getFolderSize, _parse, cs // *** _url, _util
 
 if (cng == 1) { // CHROME
     window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {}; window['esLintIgnore'] = ''; // window['wsClients'] = { 'rooms': {} }; window['wsClientLoc'] = '';
@@ -94,12 +90,12 @@ globalWindow = {
 if (eng) { // CHROME
     _WebSocket = window.WebSocket
 } else { // NODEJS
-    _path = await import('path'); _url = await import('url'); _cheerio = await import('cheerio'); const { default: WebSocket } = await import('ws'); _WebSocket = WebSocket;
+    _path = await import('path'); _cheerio = await import('cheerio'); const { default: WebSocket } = await import('ws'); _WebSocket = WebSocket;
     const { default: clipboard } = await import('clipboardy'); _clipboard = clipboard; const { default: http } = await import('http'); _http = http;
     const { exec } = await import('child_process'); _exec = exec; const { spawn } = await import('child_process'); _spawn = spawn; const { google } = await import('googleapis'); _google = google
     const { createHash } = await import('crypto'); _crypto = createHash; _puppeteer = await import('puppeteer'); _net = await import('net');
-    _util = await import('util'); const { default: getFolderSize } = await import('get-folder-size'); _getFolderSize = getFolderSize
-    const { parse } = await import('url'); _parse = parse;
+    const { default: getFolderSize } = await import('get-folder-size'); _getFolderSize = getFolderSize
+    const { parse } = await import('url'); _parse = parse; // *** _url = await import('url'); _util = await import('util');
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -113,12 +109,6 @@ let gO = new Proxy(gOObj, { set(target, prop, value) { target[prop] = value; not
 
 // let cs = await configStorage([''])
 // console.log(cs)
-
-// ############### GLOBAL OBJECT [SNIFFER CHROME] ###############
-let data = { inf: '' }; let listenersGoSniffer = new Set();
-let gOSniffer = new Proxy(data, { set(target, key, value) { target[key] = value; globalChanged(value); listenersGoSniffer.forEach(listener => listener(target)); return true } });
-function gOAddSniffer(listener) { listenersGoSniffer.add(listener) }; function gORemSniffer(listener) { listenersGoSniffer.delete(listener) }
-async function globalChanged(i) { if (i.alert !== false) { console.log('globalObject ALTERADO →', i) } }
 
 // ############### RATE LIMIT ###############
 // let rate = rateLimiter({ 'max': 3, 'sec': 5 }); function testRate() { console.log(rate.check()); console.log(rate.check()); console.log(rate.check()); console.log(rate.check()) }; testRate();
@@ -166,24 +156,20 @@ if (eng) { // CHROME
     window['cs'] = cs;
     // ## GLOBAL OBJECT [NOVO]
     window['gO'] = gO; window['gOList'] = gOList;
-    // ## GLOBAL OBJECT [SNIFFER CHROME]
-    window['gOSniffer'] = gOSniffer; window['gOAddSniffer'] = gOAddSniffer; window['gORemSniffer'] = gORemSniffer;
     // ## LISTENER
     window['listenerMonitorar'] = listenerMonitorar; window['listenerAcionar'] = listenerAcionar;
     // ## FUNÇÕES
     window['rateLimiter'] = rateLimiter; window['awaitTimeout'] = awaitTimeout;
 } else { // NODEJS
     // ## BIBLIOTECAS / NATIVO
-    const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer; // SERVER WEBSOCKET [EC2] (não subir!!!)
-    global['_WebSocket'] = _WebSocket; global['_fs'] = _fs; global['_path'] = _path; global['_url'] = _url; global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
+    const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer;
+    global['_WebSocket'] = _WebSocket; global['_fs'] = _fs; global['_path'] = _path; global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
     global['_http'] = _http; global['_exec'] = _exec; global['_spawn'] = _spawn; global['_google'] = _google; global['_crypto'] = _crypto; global['_puppeteer'] = _puppeteer;
-    global['_net'] = _net; global['_util'] = _util; global['_getFolderSize'] = _getFolderSize; global['_parse'] = _parse;
+    global['_net'] = _net; global['_getFolderSize'] = _getFolderSize; global['_parse'] = _parse; // *** global['_url'] = _url; global['_util'] = _util;
     // ## VARIÁVEIS
     global['cs'] = cs;
     // ## GLOBAL OBJECT [NOVO]
     global['gO'] = gO; global['gOList'] = gOList;
-    // ## GLOBAL OBJECT [SNIFFER CHROME]
-    global['gOSniffer'] = gOSniffer; global['gOAddSniffer'] = gOAddSniffer; global['gORemSniffer'] = gORemSniffer;
     // ## LISTENER
     global['listenerMonitorar'] = listenerMonitorar; global['listenerAcionar'] = listenerAcionar;
     // ## FUNÇÕES

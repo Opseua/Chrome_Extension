@@ -37,7 +37,7 @@ gloWin['commandLine'] = (inf) => { let fun = (!eng) ? functionImport : functionG
 gloWin['configStorage'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'configStorage', 'path': './configStorage.js', 'inf': inf }); };
 gloWin['dateHour'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'dateHour', 'path': './dateHour.js', 'inf': inf }); };
 gloWin['devFun'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'devFun', 'path': './devFun.js', 'inf': inf }); };
-// gloWin['getCookies'] = (inf) => { let fun = (eng ) ? functionImport : functionGeneric; return fun({ 'name': 'getCookies', 'path': './getCookies.js', 'inf': inf }); };
+// gloWin['cookie'] = (inf) => { let fun = (eng ) ? functionImport : functionGeneric; return fun({ 'name': 'cookie', 'path': './cookie.js', 'inf': inf }); };
 // gloWin['getPath'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'getPath', 'path': './getPath.js', 'inf': inf }); }; // IMPORTADO NO TOPO
 gloWin['googleSheets'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'googleSheets', 'path': './googleSheets.js', 'inf': inf }); };
 gloWin['htmlToJson'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'htmlToJson', 'path': './htmlToJson.js', 'inf': inf }); };

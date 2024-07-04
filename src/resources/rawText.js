@@ -22,8 +22,7 @@
 
 let e = import.meta.url, ee = e;
 async function rawText(inf) {
-    e = inf && inf.e ? inf.e : e
-    let ret = ''
+    let ret = ''; e = inf && inf.e ? inf.e : e
     try {
         let obj = inf.obj
         if ((/<!.* html>.*<\/html>/s.test(obj) || !(typeof obj === 'object'))) {
@@ -45,8 +44,7 @@ async function rawText(inf) {
 
     } catch (catchErr) {
         regexE({ 'inf': inf, 'e': catchErr, });
-    };
-    return ret
+    }; return ret
 };
 
 // CHROME | NODEJS

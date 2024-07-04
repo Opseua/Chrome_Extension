@@ -63,8 +63,7 @@ async function tabSearch(inf) {
         }
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
-        ret['msg'] = retRegexE.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
     }
     if (!ret.ret) {
         if (inf.openIfNotExist) {
@@ -75,7 +74,7 @@ async function tabSearch(inf) {
                 ret['ret'] = true;
             } else { ret['msg'] = retOpenTab }
         }
-    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }) };
 }
 
 async function openTab(inf) { // NAO USAR

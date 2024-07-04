@@ -14,8 +14,6 @@ let arrGlobal = [
   'cs',
   // ## GLOBAL OBJECT [NOVO]
   'gO', 'gOList',
-  // ## GLOBAL OBJECT [SNIFFER CHROME]
-  'gOSniffer', 'gOAddSniffer', 'gORemSniffer',
   // ## FUNÇÕES
   'rateLimiter', 'getPath', 'awaitTimeout',
 
@@ -25,7 +23,7 @@ let arrGlobal = [
 
   // [Chrome_Extension]
   // → funções globais
-  'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'logsDelOld', 'devFun', 'file', 'getCookies', 'getPath', 'getPath', 'googleSheets', 'htmlToJson', 'log', 'logConsole',
+  'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'logsDelOld', 'devFun', 'file', 'cookie', 'getPath', 'getPath', 'googleSheets', 'htmlToJson', 'log', 'logConsole',
   'messageSend', 'messageReceived', 'notification', 'promptChrome', 'rawText', 'regex', 'regexE', 'tabSearch', 'translate',
   // scripts
   'background', 'command1', 'command2', 'tryRatingComplete',

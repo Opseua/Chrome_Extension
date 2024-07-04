@@ -76,7 +76,7 @@ async function file(inf) {
                     } else { // NODEJS
                         // REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                         let pathLetter = path.charAt(0); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`)
-                        if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true }); }; // DENTRO DE UMA PASTA (CRIAR ELA)
+                        if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true }); };  // DENTRO DE UMA PASTA (CRIAR ELA)
                         await _fs.promises.writeFile(path, text, { flag: !inf.rewrite ? 'w' : 'a' })
                     }; let res = path
                     resNew['ret'] = true;
@@ -120,8 +120,9 @@ async function file(inf) {
                 async function delP(inf) {
                     try {
                         let ok = false; try {
-                            let s = await _fs.promises.stat(inf); if (s.isDirectory()) { let as = await _fs.promises.readdir(inf); for (let a of as) { let c = _path.join(inf, a); await delP(c) }; await _fs.promises.rmdir(inf) }
-                            else { await _fs.promises.unlink(inf) }; ok = true
+                            let s = await _fs.promises.stat(inf); if (s.isDirectory()) {
+                                let as = await _fs.promises.readdir(inf); for (let a of as) { let c = _path.join(inf, a); await delP(c) }; await _fs.promises.rmdir(inf)
+                            } else { await _fs.promises.unlink(inf) }; ok = true
                         } catch (catchErr) { esLintIgnore = catchErr; }
                         if (!ok) {
                             resNew['msg'] = `FILE [DEL]: ERRO | AO DELETAR ARQUIVO '${path}'`;
@@ -130,8 +131,7 @@ async function file(inf) {
                             resNew['msg'] = `FILE [DEL]: OK`;
                         }
                     } catch (catchErr) {
-                        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
-                        resNew['msg'] = retRegexE.res;
+                        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); resNew['msg'] = retRegexE.res;
                     }
                 }; await delP(path); return resNew
             }
@@ -148,8 +148,7 @@ async function file(inf) {
                             status['ctime'] = new Date(status.ctime.getTime() - (3 * 60 * 60 * 1000)); status['birthtime'] = new Date(status.birthtime.getTime() - (3 * 60 * 60 * 1000)); return status
                         }; let entries = await _fs.promises.readdir(path), result = [], count = 0, isFolder, stats, size, entryObject
                         for (let entry of entries) {
-                            if (count >= inf.max) { break; }; let fullPath = _path.join(path, entry);
-                            try {
+                            if (count >= inf.max) { break; }; let fullPath = _path.join(path, entry); try {
                                 let md5 = false; count++; isFolder = _fs.statSync(fullPath).isDirectory(); stats = getStatus(fullPath); size = isFolder ? false : await _getFolderSize.loose(fullPath);
                                 if (!isFolder && size && size <= 100 * 1024 * 1024) { let infFile = { 'action': 'md5', 'path': fullPath }; let retFile = await file(infFile); md5 = retFile.res }
                                 else { md5 = `arquivo muito grande` }
@@ -174,8 +173,7 @@ async function file(inf) {
                 } else {
                     if (inf.path.includes(':')) { pathOld = inf.path } else { infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal }; retFile = await fileRelative(infFile); pathOld = retFile.res[0] };
                     if (inf.pathNew.includes(':')) { pathNew = inf.pathNew }
-                    else { infFile = { 'path': inf.pathNew, 'functionLocal': inf.functionLocal }; retFile = await fileRelative(infFile); pathNew = retFile.res[0] };
-                    try {
+                    else { infFile = { 'path': inf.pathNew, 'functionLocal': inf.functionLocal }; retFile = await fileRelative(infFile); pathNew = retFile.res[0] }; try {
                         await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true }); await _fs.promises.rename(pathOld, pathNew);
                         resNew['ret'] = true;
                         resNew['msg'] = `FILE [CHANGE]: OK`
@@ -252,7 +250,7 @@ async function file(inf) {
         }
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
     }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
 };
 

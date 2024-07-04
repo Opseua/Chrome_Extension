@@ -70,8 +70,7 @@ async function getPath(inf) {
         }
         res['file'] = fileOk; res['line'] = Number(line);
     } catch (catchErr) {
-        console.log(`\n\n### ERRO GET PATH ###\n\n${catchErr.stack}\n\n`)
-        res = { 'conf': nd, 'letter': nd, 'root': nd, 'functions': nd, 'project': nd, 'file': nd, 'line': 0 }
+        console.log(`\n\n### ERRO GET PATH ###\n\n${catchErr.stack}\n\n`); res = { 'conf': nd, 'letter': nd, 'root': nd, 'functions': nd, 'project': nd, 'file': nd, 'line': 0 }
     }
     globalWindow['conf'] = res.conf;
     letter = res.letter;

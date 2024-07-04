@@ -13,8 +13,7 @@
 
 let e = import.meta.url, ee = e;
 async function notification(infOk) {
-    let ret = { 'ret': false };
-    e = infOk && infOk.e ? infOk.e : e
+    let ret = { 'ret': false }; e = infOk && infOk.e ? infOk.e : e
     try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
 
@@ -67,8 +66,7 @@ async function notification(infOk) {
         ret['ret'] = true;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': infOk, 'e': catchErr, });
-        ret['msg'] = retRegexE.res
+        let retRegexE = await regexE({ 'inf': infOk, 'e': catchErr, }); ret['msg'] = retRegexE.res;
     }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
 };
 

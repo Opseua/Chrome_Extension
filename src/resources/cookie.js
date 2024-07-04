@@ -1,9 +1,9 @@
-// let infGetCookies, retGetCookies
-// infGetCookies = { 'e': e, 'url': `https://www.google.com/`, 'cookieSearch': `__Secure-next-auth.session-token` }
-// retGetCookies = await getCookies(infGetCookies); console.log(retGetCookies);
+// let infCookie, retCookie
+// infCookie = { 'e': e, 'url': `https://www.google.com/`, 'cookieSearch': `__Secure-next-auth.session-token` }
+// retCookie = await cookie(infCookie); console.log(retCookie);
 
 let e = import.meta.url, ee = e;
-async function getCookies(inf) {
+async function cookie(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         let cookiesPromise = new Promise((resolve) => {
@@ -28,9 +28,9 @@ async function getCookies(inf) {
         }
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
     }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
 };
 
 // CHROME | NODEJS
-(eng ? window : global)['getCookies'] = getCookies;
+(eng ? window : global)['cookie'] = cookie;
