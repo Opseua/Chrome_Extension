@@ -1,7 +1,7 @@
 // let infNotification, retNotification
 // infNotification = {
 //     'e': e, 'duration': 3, 'icon': `./src/scripts/media/icon_4.png`, 'retInf': false,
-//     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': `BOTAO 2` }], 'oldKeep': true,
+//     'buttons': [{ 'title': 'BOTAO 1' }, { 'title': `BOTAO 2` }], 'keepOld': true,
 //     'title': `TITULO`, 'text': `TEXTO`,
 // };
 // retNotification = await notification(infNotification); console.log(retNotification)
@@ -19,7 +19,7 @@ async function notification(infOk) {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
 
         // MANTER NOTIFICAÇÕES ANTIGAS
-        if (!inf.oldKeep) {
+        if (!inf.keepOld) {
             let notifications = await new Promise((resolve) => { chrome.notifications.getAll((notifs) => resolve(notifs)); });
             for (let notifId in notifications) { await new Promise((resolve) => { chrome.notifications.clear(notifId, resolve); }); }
         }

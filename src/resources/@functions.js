@@ -8,7 +8,7 @@
 // };
 
 // // ## LOG ## retApi
-// let errMsg = `$ [leadChangeStatus] LOG retApi`
+// let errMsg = `LOG retApi`
 // infLog = {'e':e, 'folder': 'Registros', 'path': `${errMsg}.txt`, 'text': retApi }
 // retLog = await log(infLog);
 
