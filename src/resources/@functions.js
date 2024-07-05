@@ -67,12 +67,12 @@ let serverWeb = conf.server['2']; let hostWeb = `${serverWeb.host}`; let portWeb
 let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing;
 let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop; let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages;
 
-let sheetServer = conf.sheetServer; let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`;
+let devMy = conf.devMy; let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`;
 let par5 = `${securityPass}-${conf.par5}`; let par6 = `${conf.par6}`; let par7 = `${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`;
 let par10 = `${securityPass}-${conf.par10}`
 
 // CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
-let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/?roo=OPSEUA-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`
+let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/?roo=${devMy}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`
 
 // MANTER APÓS O 'devSend'
 globalWindow = {
@@ -83,7 +83,7 @@ globalWindow = {
     'hostPortWeb': hostPortWeb, 'hostPortLoc': hostPortLoc, 'secConnect': secConnect, 'secReconnect': secReconnect, 'secRetWebSocket': secRetWebSocket,
     'secPing': secPing, 'secPingTimeout': secPingTimeout, 'secLoop': secLoop, 'kbPartsMessage': kbPartsMessage, 'minClearPartsMessages': minClearPartsMessages,
 
-    'sheetServer': sheetServer, 'par1': par1, 'par2': par2, 'par3': par3, 'par4': par4, 'par5': par5, 'par6': par6, 'par7': par7, 'par8': par8, 'par9': par9, 'par10': par10,
+    'devMy': devMy, 'par1': par1, 'par2': par2, 'par3': par3, 'par4': par4, 'par5': par5, 'par6': par6, 'par7': par7, 'par8': par8, 'par9': par9, 'par10': par10,
 }
 // console.log('1', '-', globalWindow.conf, '|', letter, '|', globalWindow.root, '| functions →', globalWindow.functions, '| devMaster →', globalWindow.devMaster, '| project →', globalWindow.project, '| devSlave →', globalWindow.devSlave)
 
