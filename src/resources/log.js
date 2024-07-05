@@ -9,7 +9,7 @@ let e = import.meta.url, ee = e;
 async function log(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let { text, folder, path, raw, functionLocal, fileProject, fileCall } = inf
+        let { text, folder, path, raw, functionLocal, fileProject, fileCall, unique } = inf
         let infFile, houTxt, houFile, minSecMil, pathOk, rewrite = false
         let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`
         minSecMil = `${time.min}:${time.sec}.${time.mil}`
@@ -25,7 +25,8 @@ async function log(inf) {
         if (['reg.txt', 'reg1.txt', 'reg2.txt', 'reset.js'].includes(path)) {
             pathOk = `${pathOk}/${path}`
         } else if (['log.txt', 'err.txt'].includes(path)) {
-            pathOk = `${pathOk}/${mon}/${day}_${path}`; rewrite = true
+            let pathEnd = unique ? '' : `/${time.hou}.00-${time.hou}.59`
+            pathOk = `${pathOk}/${mon}/${day}${pathEnd}_${path}`; rewrite = true
         } else {
             // NÃO ALTERAR PARA O PADRÃO DE 12 HORAS!!! (PORQUE OS ARQUIVOS NÃO FICARIAM EM ORDEM NUMÉRICA)
             pathOk = `${pathOk}/${mon}/${day}/${houFile.replace(/:/g, '.')}_${path}`
@@ -44,7 +45,7 @@ async function log(inf) {
         ret['ret'] = true
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res
     }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
 };
 

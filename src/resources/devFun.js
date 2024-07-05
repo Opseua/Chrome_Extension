@@ -8,7 +8,7 @@ async function devFun(inf) {
             let destination = globalWindow.devSend;
             let locWeb = destination.includes('127.0.0.1') ? '[LOC]' : '[WEB]'
             let data = { 'securityPass': globalWindow.securityPass, 'retInf': retInf, 'name': inf.data.name, 'par': inf.data.par }
-            data.par['e'] = inf.e
+            data.par['enc'] = true; data.par['e'] = inf.e
             // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO
             delete data.par.retInf
             let message = { "fun": [data] }

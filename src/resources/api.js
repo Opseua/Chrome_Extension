@@ -21,17 +21,9 @@
 //     "body": null,
 //     "method": "GET"
 // })
-//     .then(response => {
-//         console.log('RESPONSE code:', response.status);
-//         // console.log('RESPONSE headers:', [...response.headers.entries()]);
-//         return response.text();
-//     })
-//     .then(body => {
-//         console.log('RESPONSE body:', body);
-//     })
-//     .catch(error => {
-//         console.error('RESPONSE error:', error);
-//     });
+// .then(response => {
+//     console.log('RESPONSE code:', response.status); return response.text();  // console.log('RESPONSE headers:', [...response.headers.entries()]);
+// }).then(body => { console.log('RESPONSE body:', body); }).catch(error => { console.error('RESPONSE error:', error); });
 
 
 let e = import.meta.url, ee = e;

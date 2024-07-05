@@ -43,7 +43,7 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
             // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
         });
         if (!eng && write) {
-            await log({ 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall })
+            await log({ 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall, 'unique': false })
         }
 
         ret['msg'] = `LOG CONSOLE: OK`;

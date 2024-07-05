@@ -17,8 +17,6 @@ async function notification(infOk) {
     try {
         let inf, imgBase64; if (!infOk) { inf = {} } else { inf = infOk };
 
-        console.log(infOk)
-
         // MANTER NOTIFICAÇÕES ANTIGAS
         if (!inf.keepOld) {
             let notifications = await new Promise((resolve) => { chrome.notifications.getAll((notifs) => resolve(notifs)); });
@@ -46,20 +44,9 @@ async function notification(infOk) {
 
         // ENVIAR NOTIFICAÇÃO
         chrome.notifications.create(not, (notificationId) => {
-            // CHROME
             chrome.notifications.onButtonClicked.addListener((notifId, btnIdx) => { // ALGUM BOTAO PRESSIONADO
                 if (notifId === notificationId && btnIdx === 0) { alert('Botao 1 pressionado') }; if (notifId === notificationId && btnIdx === 1) { alert('Botao 2 pressionado') }
             }); setTimeout(() => { chrome.notifications.clear(notificationId) }, json.duration * 1000)
-
-            // NFTY
-            if (json.ntfy) {
-                (async () => {
-                    let infApi = {
-                        'method': 'POST', 'url': `https://ntfy.sh/${globalWindow.devMaster}?title=${encodeURIComponent(not.title)}`,
-                        'headers': { 'Content-Type': 'text/plain;charset=UTF-8', }, 'body': not.message,
-                    }; await api(infApi);
-                })()
-            }
         });
 
         ret['msg'] = 'NOTIFICATION: OK'

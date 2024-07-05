@@ -150,7 +150,7 @@ async function file(inf) {
                         for (let entry of entries) {
                             if (count >= inf.max) { break; }; let fullPath = _path.join(path, entry); try {
                                 let md5 = false; count++; isFolder = _fs.statSync(fullPath).isDirectory(); stats = getStatus(fullPath); size = isFolder ? false : await _getFolderSize.loose(fullPath);
-                                if (!isFolder && size && size <= 100 * 1024 * 1024) { let infFile = { 'action': 'md5', 'path': fullPath }; let retFile = await file(infFile); md5 = retFile.res }
+                                if (!isFolder && size && size <= 1 * 1024 * 1024) { let infFile = { 'action': 'md5', 'path': fullPath }; let retFile = await file(infFile); md5 = retFile.res }
                                 else { md5 = `arquivo muito grande` }
                                 entryObject = {
                                     'ret': true, 'isFolder': isFolder, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), 'edit': stats.mtime, 'size': size ? formatBytes(size) : false, ...(isFolder ? {} : { 'md5': md5 }),
