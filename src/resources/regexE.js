@@ -41,22 +41,13 @@ async function regexE(inf) {
 
         // ENVIAR NOTIFICAÇÃO COM O ERRO
         try {
-            let url = errorOk.cng == 3 ? `http://PREENCHER_NO_GOOGLE_APP_SCRIPT` : `http://${globalWindow.devSend}`; let reqOpt = { 'method': 'POST', }; let body = JSON.stringify({
-                "fun": [{
-                    "securityPass": errorOk.cng == 3 ? 'PREENCHER_NO_GOOGLE_APP_SCRIPT' : globalWindow.securityPass, 'retInf': false, 'name': 'notification', 'par': {
-                        'duration': 5, 'icon': './src/scripts/media/notification_3.png',
-                        'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`,
-                        'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}`, 'ntfy': true
-                    }
-                }]
-            })
-            // GOOGLE
-            if (errorOk.cng == 3) {
-                reqOpt['payload'] = body; UrlFetchApp.fetch(url, reqOpt); Browser.msgBox(`### ERRO ### → ${errorOk.projectFile}[${errorOk.line}]`, `${errorOk.e}`, Browser.Buttons.OK);
-            } else {
-                // CHROME | NODE
-                reqOpt['body'] = body; await fetch(url, reqOpt)
-            }
+            function notificationLegacy(inf) {
+                let { title, text } = inf; let cng = typeof UrlFetchApp !== 'undefined'; (async () => {
+                    let url = `http://${globalWindow.devSend}`; let reqOpt = { 'method': 'POST', }; let body = JSON.stringify({
+                        "fun": [{ "securityPass": globalWindow.securityPass, 'name': 'notification', 'par': { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': inf.title, 'text': inf.text, 'ntfy': true } }]
+                    }); reqOpt[cng ? 'payload' : 'body'] = body; if (cng) { UrlFetchApp.fetch(url, reqOpt); Browser.msgBox(title, text, Browser.Buttons.OK) } else { await fetch(url, reqOpt) } // GOOGLE | Chrome/NodeJS
+                })()
+            }; notificationLegacy({ 'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`, 'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}` })
         } catch (catchErr) {
             console.log(`\n------------------------------------------------\n\n### ERRO REGEXe [FETCH] ###\n\n${catchErr}\n\n------------------------------------------------`)
         }

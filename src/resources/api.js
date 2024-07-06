@@ -1,16 +1,16 @@
 // let infApi, retApi
 // infApi = { // ###### → json/object
-//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
+//     'e': e, 'method': 'POST', 'url': `https://www.google.com`,
 //     'headers': { 'Content-Type': 'application/json' },
 //     'body': { 'aaa': 'bbb' }, 'max': 10
 // };
 // infApi = { // ###### → text
-//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,  
+//     'e': e, 'method': 'POST', 'url': `https://www.google.com`,  
 //     'headers': { 'Content-Type': 'text/plain;charset=UTF-8' },
 //     'body': `Esse é o texto`, 'max': 10
 // };
 // infApi = { // ###### → x-www-form-urlencoded
-//     'e': e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
+//     'e': e, 'method': 'POST', 'url': `https://www.google.com`,
 //     'headers': { 'Content-Type': 'application/x-www-form-urlencoded' },
 //     'body': { 'Chave': 'Valor' }, 'max': 10
 // };

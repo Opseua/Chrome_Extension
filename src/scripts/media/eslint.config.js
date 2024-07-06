@@ -53,7 +53,7 @@ let arrUnused = [
   // (for)
   'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'index4', 'value4', 'event',
   // (time)
-  'time', 'time1', 'time2', 'hour', 'timeout',
+  'time', 'time1', 'time2', 'hour', 'timeout', 'notificationLegacy'
   'ee',
 
   // outros

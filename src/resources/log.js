@@ -1,8 +1,10 @@
 // let infLog, retLog // 'raw': true,
-// // → [Chrome_Extension]/log/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
-// infLog = { 'e': e, 'folder': '#_PASTA_#', 'functionLocal': false, 'path': `ARQUIVO.txt`, 'text': `INF AQUI` }
-// // (ESCREVE NO MESMO ARQUIVO) → [Chrome_Extension]/log/#_PASTA_#/log.txt
-// infLog = { 'e': e, 'folder': '#_PASTA_#', 'functionLocal': false, 'path': `log.txt`, 'text': `INF AQUI` }
+// // (ESCREVE NO MESMO ARQUIVO: NÃO) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/log/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
+// infLog = { 'e': e, 'folder': '#_PASTA_#', 'functionLocal': false, 'path': `ARQUIVO.txt`, 'text': `INF AQUI`, }
+// // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/log/JavaScript/MES_11_NOV/DIA_27_log.txt
+// infLog = { 'e': e, 'folder': 'JavaScript', 'functionLocal': false, 'path': `log.txt`, 'text': `INF AQUI`, 'unique': true, }
+// // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: SIM) → [Chrome_Extension]/log/JavaScript/MES_11_NOV/DIA_27/00.48.10.064_log.txt
+// infLog = { 'e': e, 'folder': 'JavaScript', 'functionLocal': false, 'path': `log.txt`, 'text': `INF AQUI`, 'unique': false, }
 // retLog = await log(infLog); console.log(retLog)
 
 let e = import.meta.url, ee = e;

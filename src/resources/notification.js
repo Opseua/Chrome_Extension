@@ -33,7 +33,6 @@ async function notification(infOk) {
             'title': title,
             'text': text,
             'buttons': inf.buttons ? inf.buttons : [],
-            'ntfy': inf.ntfy ? true : false,
         };
         let not = {
             // MÁXIMO [CONSIDERANDO TUDO 'A']
