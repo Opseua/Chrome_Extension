@@ -7,15 +7,12 @@ async function chromeActions(inf) {
         let { action, color, text, target, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, tagFather, fun, funInf } = inf;
         let retTabSearch, code = '', retExecuteScript, tabId, divTemp
 
-        if (action == 'badge') {
-            action = chrome.browserAction; if (color) { action.setBadgeBackgroundColor({ 'color': color }) } // [25, 255, 71, 255]
-            if (text || text == '') { action.setBadgeText({ 'text': text }) };
+        if (action == 'badge') { // [25, 255, 71, 255]
+            action = chrome.browserAction; if (color) { action.setBadgeBackgroundColor({ 'color': color }) }; if (text || text == '') { action.setBadgeText({ 'text': text }) };
             ret['msg'] = `CHROME ACTIONS [BADGE]: OK`
             ret['ret'] = true
         } else if (action == 'user') {
-            action = chrome.identity; let retGetProfileUserInfo = await new Promise((resolve) => {
-                action.getProfileUserInfo(function (userInfo) { if (userInfo.email) { resolve(userInfo.email); } else { resolve('NAO_DEFINIDO') } });
-            });
+            action = chrome.identity; let retGetProfileUserInfo = await new Promise((resolve) => { action.getProfileUserInfo(function (userInfo) { if (userInfo.email) { resolve(userInfo.email) } else { resolve('NAO_DEFINIDO') } }) })
             ret['res'] = retGetProfileUserInfo
             ret['msg'] = `CHROME ACTIONS [USER]: OK`
             ret['ret'] = true
@@ -23,8 +20,7 @@ async function chromeActions(inf) {
             let targetMode = (target.includes('<') || target.includes('>')) ? 'HTML' : 'INJECT'
 
             // →→→ ONDE EXECUTAR? HTML BRUTO FOI PASSADO (CRIAR DIV TEMPORÁRIA) | EXECUTAR NA PÁGINA (INJETANDO SCRIPT - DEFINIR ID DA ABA ALVO)
-            if (targetMode == 'HTML') { divTemp = document.createElement('div'); divTemp.innerHTML = target; document.body.appendChild(divTemp); }
-            else {
+            if (targetMode == 'HTML') { divTemp = document.createElement('div'); divTemp.innerHTML = target; document.body.appendChild(divTemp); } else {
                 if (typeof target === "number") { tabId = target }
                 else { retTabSearch = await tabSearch({ 'e': e, 'search': target, 'openIfNotExist': false }); if (!retTabSearch.ret) { return retTabSearch } tabId = retTabSearch.res.id }
             }
@@ -43,16 +39,13 @@ async function chromeActions(inf) {
                         // ATRIBUTO: PEGAR VALOR
                         return Array.from(elements).map(element => {
                             let contentOk = content ? element.innerText.trim() === content : true
-                            if ((element.tagName.toLowerCase() === 'label' || element.tagName.toLowerCase() === 'span' || element.tagName.toLowerCase() === tag.toLowerCase()) && contentOk) {
-                                return element.getAttribute(attribute);
-                            }
+                            if ((element.tagName.toLowerCase() === 'label' || element.tagName.toLowerCase() === 'span' || element.tagName.toLowerCase() === tag.toLowerCase()) && contentOk) { return element.getAttribute(attribute); }
                         }).filter(value => value !== undefined);
                     } else if (action == 'elementGetValue') {
                         // ELEMENTO: PEGAR VALOR
                         return Array.from(elements).map(element => {
                             let find = false; if (!attributeAdd) { find = true } else { find = element.hasAttribute(attributeAdd) && element.getAttribute(attributeAdd) === attributeValueAdd }; if (find) {
-                                if (element.tagName.toLowerCase() === 'select') { return Array.from(element.selectedOptions).map(option => option.value); }
-                                else if (element.tagName.toLowerCase() === 'textarea') { return element.value; }
+                                if (element.tagName.toLowerCase() === 'select') { return Array.from(element.selectedOptions).map(option => option.value) } else if (element.tagName.toLowerCase() === 'textarea') { return element.value }
                                 else if (element.type === 'checkbox' || element.type === 'radio') { return element.checked; } else { return element.value || element.innerText; }
                             }
                         }).filter(value => value !== undefined);
@@ -81,8 +74,7 @@ async function chromeActions(inf) {
                 let infElementAction = {
                     'e': e, 'action': action, 'elementName': elementName, 'elementValue': elementValue, 'attribute': attribute, 'attributeAdd': attributeAdd,
                     'content': content, 'tag': tag, 'attributeValue': attributeValue, 'attributeValueAdd': attributeValueAdd,
-                }
-                // INJECT | HTML RENDERIZAR
+                }  // INJECT | HTML RENDERIZAR
                 if (targetMode == 'INJECT') { code = `(${elementAction.toString()})(${JSON.stringify(infElementAction)});`; } else { retExecuteScript = elementAction(infElementAction); }
             } else if (action == 'elementGetDiv') {
                 function elementGetDivFun(valor, tagName, attributeName, attributeValue, parentTagName) {

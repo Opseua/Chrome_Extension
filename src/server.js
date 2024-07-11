@@ -40,8 +40,8 @@ async function serverRun(inf) {
 
         // *************************
 
-        // MANTER NO FINAL PARA GARANTIR QUE O ATALHO VAI FUNCIONAR ANTES DO WEBSOCKET SER CONECTADO | CLIENT (NÃO POR COMO 'await'!!!)
-        client({ 'e': e }); await new Promise(resolve => { setTimeout(resolve, 2000) })
+        // CLIENT (NÃO POR COMO 'await'!!!) | MANTER NO FINAL
+        client({ 'e': e });
 
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;

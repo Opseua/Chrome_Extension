@@ -53,62 +53,44 @@ if (cng == 1) { // CHROME
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
 await import('./getPath.js'); let retGetPath; retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket;
 
-let securityPass = `${conf.securityPass}`;
-
-let devicesObjSend = conf.devices[conf.devices.is[engName].sendTo]; let devicesValuesSend = Object.values(devicesObjSend);
-let devicesKeysSend = {}; Object.keys(devicesObjSend).forEach((key, index) => { devicesKeysSend[key] = index; });
-let devicesObjGet = conf.devices[engName]; let devicesValuesGet = Object.values(devicesObjGet);
-let devicesKeysGet = {}; Object.keys(devicesObjGet).forEach((key, index) => { devicesKeysGet[key] = index; });
-let devMaster = conf.master; let devices = [[conf.devices.is[engName].sendTo, devicesKeysSend, devicesValuesSend], [engName, devicesKeysGet, devicesValuesGet]]
-
-let serverLoc = conf.server['1']; let hostLoc = `${serverLoc.host}`; let portLoc = `${serverLoc.port}`; let hostPortLoc = `${hostLoc}:${portLoc}`;
-let serverWeb = conf.server['2']; let hostWeb = `${serverWeb.host}`; let portWeb = `${serverWeb.port}`; let hostPortWeb = `${hostWeb}:${portWeb}`
-
-let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing;
-let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop; let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages;
-
-let devMy = conf.devMy; let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`;
-let par5 = `${securityPass}-${conf.par5}`; let par6 = `${conf.par6}`; let par7 = `${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`;
+let securityPass = `${conf.securityPass}`; let devicesObjSend = conf.devices[conf.devices.is[engName].sendTo]; let devicesValuesSend = Object.values(devicesObjSend);
+let devicesKeysSend = {}; Object.keys(devicesObjSend).forEach((key, index) => { devicesKeysSend[key] = index; }); let devicesObjGet = conf.devices[engName];
+let devicesValuesGet = Object.values(devicesObjGet); let devicesKeysGet = {}; Object.keys(devicesObjGet).forEach((key, index) => { devicesKeysGet[key] = index; }); let devMaster = conf.master;
+let devices = [[conf.devices.is[engName].sendTo, devicesKeysSend, devicesValuesSend], [engName, devicesKeysGet, devicesValuesGet]]; let serverLoc = conf.server['1']; let hostLoc = `${serverLoc.host}`;
+let portLoc = `${serverLoc.port}`; let hostPortLoc = `${hostLoc}:${portLoc}`; let serverWeb = conf.server['2']; let hostWeb = `${serverWeb.host}`; let portWeb = `${serverWeb.port}`; let hostPortWeb = `${hostWeb}:${portWeb}`
+let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing; let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop;
+let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages; let devMy = conf.devMy; let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`;
+let par4 = `${securityPass}-${conf.par4}`; let par5 = `${securityPass}-${conf.par5}`; let par6 = `${conf.par6}`; let par7 = `${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`;
 let par10 = `${securityPass}-${conf.par10}`
-
-// CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
-let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/?roo=${devMy}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`
+let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/?roo=${devMy}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}` // CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
 
 // MANTER APÓS O 'devSend'
 globalWindow = {
-    ...globalWindow,
-    'securityPass': securityPass, 'serverWeb': serverWeb.host, 'portWeb': portWeb, 'serverLoc': serverLoc.host, 'portLoc': portLoc,
-    'devMaster': devMaster, 'devSlave': engName, 'devSend': devSend, 'devices': devices,
-
-    'hostPortWeb': hostPortWeb, 'hostPortLoc': hostPortLoc, 'secConnect': secConnect, 'secReconnect': secReconnect, 'secRetWebSocket': secRetWebSocket,
-    'secPing': secPing, 'secPingTimeout': secPingTimeout, 'secLoop': secLoop, 'kbPartsMessage': kbPartsMessage, 'minClearPartsMessages': minClearPartsMessages,
-
-    'devMy': devMy, 'par1': par1, 'par2': par2, 'par3': par3, 'par4': par4, 'par5': par5, 'par6': par6, 'par7': par7, 'par8': par8, 'par9': par9, 'par10': par10,
-}
-// console.log('1', '-', globalWindow.conf, '|', letter, '|', globalWindow.root, '| functions →', globalWindow.functions, '| devMaster →', globalWindow.devMaster, '| project →', globalWindow.project, '| devSlave →', globalWindow.devSlave)
+    ...globalWindow, 'securityPass': securityPass, 'serverWeb': serverWeb.host, 'portWeb': portWeb, 'serverLoc': serverLoc.host, 'portLoc': portLoc, 'devMaster': devMaster, 'devSlave': engName, 'devSend': devSend,
+    'devices': devices, 'hostPortWeb': hostPortWeb, 'hostPortLoc': hostPortLoc, 'secConnect': secConnect, 'secReconnect': secReconnect, 'secRetWebSocket': secRetWebSocket, 'secPing': secPing, 'secPingTimeout': secPingTimeout,
+    'secLoop': secLoop, 'kbPartsMessage': kbPartsMessage, 'minClearPartsMessages': minClearPartsMessages, 'devMy': devMy, 'par1': par1, 'par2': par2, 'par3': par3, 'par4': par4, 'par5': par5, 'par6': par6, 'par7': par7, 'par8': par8,
+    'par9': par9, 'par10': par10,
+}; // console.log('1', '-', globalWindow.conf, '|', letter, '|', globalWindow.root, '| functions →', globalWindow.functions, '| devMaster →', globalWindow.devMaster, '| project →', globalWindow.project, '| devSlave →', globalWindow.devSlave)
 
 if (eng) { // CHROME
     _WebSocket = window.WebSocket
 } else { // NODEJS
-    _path = await import('path'); _cheerio = await import('cheerio'); const { default: WebSocket } = await import('ws'); _WebSocket = WebSocket;
-    const { default: clipboard } = await import('clipboardy'); _clipboard = clipboard; const { default: http } = await import('http'); _http = http;
-    const { exec } = await import('child_process'); _exec = exec; const { spawn } = await import('child_process'); _spawn = spawn; const { google } = await import('googleapis'); _google = google
-    const { createHash } = await import('crypto'); _crypto = createHash; _puppeteer = await import('puppeteer'); _net = await import('net');
-    const { default: getFolderSize } = await import('get-folder-size'); _getFolderSize = getFolderSize
-    const { parse } = await import('url'); _parse = parse; // *** _url = await import('url'); _util = await import('util');
+    _path = await import('path'); _cheerio = await import('cheerio'); const { default: WebSocket } = await import('ws'); _WebSocket = WebSocket; const { default: clipboard } = await import('clipboardy');
+    _clipboard = clipboard; const { default: http } = await import('http'); _http = http; const { exec } = await import('child_process'); _exec = exec; const { spawn } = await import('child_process');
+    _spawn = spawn; const { google } = await import('googleapis'); _google = google; const { createHash } = await import('crypto'); _crypto = createHash; _puppeteer = await import('puppeteer');
+    _net = await import('net'); const { default: getFolderSize } = await import('get-folder-size'); _getFolderSize = getFolderSize; const { parse } = await import('url'); _parse = parse;
+    // *** _url = await import('url'); _util = await import('util');
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // ############### GLOBAL OBJECT ###############
-// gOList(async function () { console.log('globalObject [import] ALTERADO →', gO.inf) })
-// gO.inf['NovaChave'] = { 'a': 'b' }; gO.inf['NovaChave'] = ['a', 'b', 'c',]; console.log(gO.inf)
+// gOList(async function () { console.log('globalObject [import] ALTERADO →', gO.inf) }); gO.inf['NovaChave'] = { 'a': 'b' }; gO.inf['NovaChave'] = ['a', 'b', 'c',]; console.log(gO.inf)
 
-let gOListener = []; let gOObj = {}; function gOList(listener) { gOListener.push(listener) }
-function notificarListeners(prop, value) { if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf) }; for (let listener of gOListener) { listener(prop, value); } };
-let gO = new Proxy(gOObj, { set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; } }); gO.inf = {}
+let gOListener = []; let gOObj = {}; function gOList(listener) { gOListener.push(listener) }; function notificarListeners(prop, value) {
+    if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf) }; for (let listener of gOListener) { listener(prop, value); }
+}; let gO = new Proxy(gOObj, { set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; } }); gO.inf = {}
 
-// let cs = await configStorage([''])
-// console.log(cs)
+// let cs = await configStorage(['']); console.log(cs)
 
 // ############### RATE LIMIT ###############
 // let rate = rateLimiter({ 'max': 3, 'sec': 5 }); function testRate() { console.log(rate.check()); console.log(rate.check()); console.log(rate.check()); console.log(rate.check()) }; testRate();
@@ -121,14 +103,10 @@ function rateLimiter(inf) {
 
 // ############### LISTENER ###############
 let listeners = {}; function listenerMonitorar(nomeList, callback) { if (!listeners[nomeList]) { listeners[nomeList] = []; } listeners[nomeList].push(callback); }
-async function listenerAcionar(nomeList, inf, callback) {
-    if (listeners[nomeList]) { for (let callFun of listeners[nomeList]) { let response = await callFun(nomeList, inf); if (callback) { callback(response); } return response; } }
-}
+async function listenerAcionar(nomeList, inf, callback) { if (listeners[nomeList]) { for (let callFun of listeners[nomeList]) { let response = await callFun(nomeList, inf); if (callback) { callback(response); } return response; } } }
 
-// listenerMonitorar('TESTE1', async (nomeList, inf) => {
-//     console.log('ACIONADO:', nomeList, '→', inf);
-//     return 'retorno do listener';
-// }); let retListenerAcionar = await listenerAcionar('TESTE1', { 'a': 'a', 'b': 'b' }); console.log(retListenerAcionar);
+// listenerMonitorar('TESTE1', async (nomeList, inf) => { console.log('ACIONADO:', nomeList, '→', inf); return 'retorno do listener'; });
+// let retListenerAcionar = await listenerAcionar('TESTE1', { 'a': 'a', 'b': 'b' }); console.log(retListenerAcionar);
 
 // ############### AWAIT TIMEOUT ###############
 function awaitTimeout(inf) {
@@ -143,9 +121,7 @@ function awaitTimeout(inf) {
 
 // ############### CLEAR CONSOLE ###############
 function clearConsoleRun() { /* CHROME | ANTIGO | NOVO */ if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } };
-let msgQtd = 0; let clearConsole = console.log; console.log = function () {
-    clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearConsoleRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n') }
-}; clearConsoleRun();
+let msgQtd = 0; let clearConsole = console.log; console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearConsoleRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n') } }; clearConsoleRun();
 
 // // ###############               ###############
 
@@ -162,9 +138,8 @@ if (eng) { // CHROME
     window['rateLimiter'] = rateLimiter; window['awaitTimeout'] = awaitTimeout;
 } else { // NODEJS
     // ## BIBLIOTECAS / NATIVO
-    const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer;
-    global['_WebSocket'] = _WebSocket; global['_fs'] = _fs; global['_path'] = _path; global['_cheerio'] = _cheerio; global['_clipboard'] = _clipboard;
-    global['_http'] = _http; global['_exec'] = _exec; global['_spawn'] = _spawn; global['_google'] = _google; global['_crypto'] = _crypto; global['_puppeteer'] = _puppeteer;
+    const { WebSocketServer } = await import('ws'); global['_WebSocketServer'] = WebSocketServer; global['_WebSocket'] = _WebSocket; global['_fs'] = _fs; global['_path'] = _path; global['_cheerio'] = _cheerio;
+    global['_clipboard'] = _clipboard; global['_http'] = _http; global['_exec'] = _exec; global['_spawn'] = _spawn; global['_google'] = _google; global['_crypto'] = _crypto; global['_puppeteer'] = _puppeteer;
     global['_net'] = _net; global['_getFolderSize'] = _getFolderSize; global['_parse'] = _parse; // *** global['_url'] = _url; global['_util'] = _util;
     // ## VARIÁVEIS
     global['cs'] = cs;
@@ -176,9 +151,8 @@ if (eng) { // CHROME
     global['rateLimiter'] = rateLimiter; global['awaitTimeout'] = awaitTimeout;
 }
 
-// OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!)
-function all1() { }; // ******************************************************** NÃO USAR !!!
-(eng ? window : global)['all1'] = all1;
+// ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!!
+function all1() { }; (eng ? window : global)['all1'] = all1;
 // *****************************************************************************************
 
 // NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'

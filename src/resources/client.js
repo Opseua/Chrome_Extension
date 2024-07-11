@@ -6,8 +6,7 @@ async function client(inf) {
     try {
         // ### CONEXÃO
         function connect(inf) {
-            let { hostRoom } = inf; let ws = new _WebSocket(`ws://${hostRoom}`)
-            let url = ws._url ? ws._url : ws.url; let host = url.replace('ws://', '').split('/')[0]; let room = url.split(`${host}/`)[1].replace('?roo=', '')
+            let { hostRoom } = inf; let ws = new _WebSocket(`ws://${hostRoom}`); let url = ws._url ? ws._url : ws.url; let host = url.replace('ws://', '').split('/')[0]; let room = url.split(`${host}/`)[1].replace('?roo=', '')
             let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; ws['host'] = host; ws['room'] = room; ws['hostRoom'] = hostRoom; ws['locWeb'] = locWeb; ws['method'] = 'WEBSOCKET';
 
             // # ON OPEN
@@ -32,9 +31,8 @@ async function client(inf) {
                 // ÚLTIMA MENSAGEM RECEBIDA
                 ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false
                 // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `← CLI | ${ws.lastMessage} | ${hostRoom}` });
-                if (pingPong > 0) {
-                    if (pingPong == 2) { return } // RECEBIDO: 'PING' ENVIAR 'PONG'
-                    ws.send('pong'); // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
+                if (pingPong > 0) { // RECEBIDO: 'PING' ENVIAR 'PONG'
+                    if (pingPong == 2) { return }; ws.send('pong'); // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
                 } else { // RECEBIDO: OUTRA MENSAGEM
                     try { message = JSON.parse(message) } catch (catchErr) { message = { 'message': message }; esLintIgnore = catchErr; }; if (!message.message) { message = { 'message': message } }
                     if (ws.lastMessage) { ws.send(`pong`) }; messageReceived({ ...message, 'host': host, 'room': room, 'resWs': ws, 'locWeb': locWeb, });
@@ -66,9 +64,7 @@ async function client(inf) {
         let servers = [globalWindow.devGet[0], globalWindow.devGet[1],]; for (let [index, value] of servers.entries()) {
             if (!value.includes('127.0.0.1') && (globalWindow.project == 'Sniffer_Python' || (!value.includes('USUARIO_0') && value.includes('USUARIO_')))) {
                 // NÃO CONECTAR AO WEBSOCKET
-            } else {
-                connect({ 'hostRoom': value }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) })
-            }
+            } else { connect({ 'hostRoom': value }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) }) }
         };
 
         async function runLis(inf) {
@@ -78,11 +74,8 @@ async function client(inf) {
             // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
             let data = {}; try { data = JSON.parse(message) } catch (catchErr) { esLintIgnore = catchErr; }; if (data.fun) {
                 devFun({ 'e': e, 'data': data, 'messageId': messageId, 'resWs': resWs, 'destination': origin, })
-            } else if (data.other) {
-                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `OTHER\n${JSON.stringify(data.other)}` });
-            } else {
-                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `MENSAGEM DO WEBSCKET\n\n${message}` });
-            }
+            } else if (data.other) { logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `OTHER\n${JSON.stringify(data.other)}` }); }
+            else { logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `MENSAGEM DO WEBSCKET\n\n${message}` }); }
         }
 
         // LOOP: CHECAR ÚLTIMA MENSAGEM

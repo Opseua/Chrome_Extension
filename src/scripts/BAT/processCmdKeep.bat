@@ -1,7 +1,7 @@
 @chcp 65001 & @echo off & setlocal enabledelayedexpansion
 set "letra=%~d0" & set "local=%~dp0"
 set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set "argString=%*"
-set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4"
+set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4" & set "arg5=%~5"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
 if "!arg1!" equ "" !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
@@ -25,9 +25,13 @@ set "replace=-"
 set "fileScriptFullWithBars=!fileScript::=%replace%!" & set "fileScriptFullWithBars=!fileScriptFullWithBars:\=%replace%!"
 set "fileScriptFullWithBars=!project!_!fileScriptFullWithBars!"
 
+rem NAO CHECAR NOVAMENTE SE ESTA RODANDO (PORQUE O '2_SCRIPT' JA PASSOU O RETORNO)
+if not "!arg5!"=="" ( set "ret2=!arg5!" & goto :IGNORE_IS_RUNNING )
+
 rem CHECAR SE ESTA RODANDO
 tasklist /fi "ImageName eq !nodeExe!.exe" /fo csv 2>NUL | find /I "!nodeExe!.exe">NUL
 if "%ERRORLEVEL%"=="0"  ( set "ret2=TRUE" ) else ( set "ret2=FALSE" )
+:IGNORE_IS_RUNNING
 
 rem rem DEFINIR ACAO → RODANDO [NAO] | RODANDO [SIM]
 if "!ret2!"=="FALSE" (
@@ -49,9 +53,8 @@ if not %errorlevel%==0 !fileLog! "[NODEJS FILE] = [EXE: NAO - OLD: !ret2! - CALL
 
 rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS
 if "!actionRun!"=="OFF" ( 
-	rem for /f "usebackq tokens=*" %%i in (`powershell -Command "Get-WmiObject Win32_Process -Filter 'name = ''cmd.exe''' | Where-Object { $_.CommandLine -like '*!nodeExe!.exe*' } | ForEach-Object { $_.ProcessId }"`) do (
 	for /f "tokens=2 delims==" %%i in ('wmic process where "Name like '%%cmd.exe%%' and CommandLine like '%%!nodeExe!.exe%%'" get processid /value') do (
-		for %%a in (%%i) do ( !letra!:\ARQUIVOS\WINDOWS\BAT\processKillForceTree.exe -t %%a & goto :LOOP_EXIT )
+		for %%a in (%%i) do ( !2_BACKGROUND! taskkill /F /T /PID %%a & goto :LOOP_EXIT )
 	)
 )
 :LOOP_EXIT
@@ -75,6 +78,7 @@ if "!actionRun!"=="ON" (
 rem LOG E RETORNAR O RESULTADO
 !fileLog! "[NODEJS FILE] = [EXE: SIM - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!"
 rem BAT2 - DEFINIR O VALOR E RETORNAR (USAR '%' NAS VARIAVEIS!!!)
+
 endlocal & set "ret2=%ret2%" & setlocal enabledelayedexpansion & exit /b
 
 

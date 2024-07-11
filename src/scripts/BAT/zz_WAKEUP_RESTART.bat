@@ -45,8 +45,6 @@ rem ### SOMENTE INICIAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_START=!" goto START_SCRIPTS
 
 rem ################################## SCRIPTS PARAR
-rem → WebSocket
-if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → Sniffer_Python
 if not "!projectSniffer_Python!"=="!projectSniffer_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
@@ -65,6 +63,9 @@ if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( 
 
 rem → WebScraper [Jucesp_New2]
 if not "!projectWebScraper_Jucesp_New2!"=="!projectWebScraper_Jucesp_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp_New2\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebSocket (MANTER COMO ULTIMO PARA GARANTIR QUE OUTROS PROJETOS CONSIGAM ENVIAR OS COMANDOS ATE ENCERRAR TUDO)
+if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem ### SOMENTE PARAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_STOP=!" goto FIM_DO_SCRIPT
