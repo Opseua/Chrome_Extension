@@ -63,15 +63,15 @@ rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
 	rem [HIDE]
 	if not "!action!"=="!action:HIDE=!" (
-		!2_BACKGROUND! title !fileScriptFullWithBars!#1# !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop!
+		!2_BACKGROUND! " title !fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop! "
 	)
 	
 	rem [VIEW]
 	if not "!action!"=="!action:VIEW=!" ( 
-		!2_BACKGROUND! start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! #1# !2_BACKGROUND! !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop!
+		!2_BACKGROUND! " start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !2_BACKGROUND! !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop! "
 		
 		rem JANELA DO LOG POSICIONAR
-		!2_BACKGROUND! timeout 3 #2# nul #1# !fileNircmdSetSize! !fileScriptFullWithBars! !action!
+		!2_BACKGROUND! "timeout 3 > nul & !fileNircmdSetSize! !fileScriptFullWithBars! !action!"
 	)
 )
 
