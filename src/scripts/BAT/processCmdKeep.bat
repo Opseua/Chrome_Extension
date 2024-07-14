@@ -53,7 +53,8 @@ if not %errorlevel%==0 !fileLog! "[NODEJS FILE] = [EXE: NAO - OLD: !ret2! - CALL
 
 rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS (NAO APAGAR DO 'powershell' nem 'wmic'!!!)
 if "!actionRun!"=="OFF" ( 
-	powershell.exe -Command "function KillTree { Param([int]$idF); Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $idF } | ForEach-Object { KillTree $_.ProcessId }; Stop-Process -Id $idF }; $ids = Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'cmd.exe' -and $_.CommandLine -like '*!nodeExe!.exe*' } | Select-Object -ExpandProperty ProcessId; foreach ($id in $ids) { KillTree $id }"
+	rem powershell.exe -Command "function KillTree { Param([int]$idF); Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $idF } | ForEach-Object { KillTree $_.ProcessId }; Stop-Process -Id $idF }; $ids = Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'cmd.exe' -and $_.CommandLine -like '*!nodeExe!.exe*' } | Select-Object -ExpandProperty ProcessId; foreach ($id in $ids) { KillTree $id }"
+	powershell.exe -Command "$a = @(); function getId { Param([int]$f); $global:a += $f; Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $f } | ForEach-Object { getId $_.ProcessId } }; $s = Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'cmd.exe' -and $_.CommandLine -like '*!nodeExe!.exe*' } | Select-Object -ExpandProperty ProcessId; foreach ($i in $s) { getId $i }; foreach ($i in $a) { Stop-Process -Id $i }"
 	rem for /f "tokens=2 delims==" %%i in ('wmic process where "Name like '%%cmd.exe%%' and CommandLine like '%%!nodeExe!.exe%%'" get processid /value') do ( for %%a in (%%i) do ( taskkill /F /T /PID %%a & goto :LOOP_EXIT ) )
 )
 :LOOP_EXIT
