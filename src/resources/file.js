@@ -78,7 +78,7 @@ async function file(inf) {
                     try {
                         let encoding = path.match(/\.(jpg|jpeg|png|ico)$/) ? undefined : 'utf8'; retFetch = await _fs.promises.readFile(path, encoding); let res = retFetch
                         resNew['ret'] = true; resNew['msg'] = `FILE [READ]: OK`; resNew['res'] = res;
-                    } catch (catchErr) { resNew['msg'] = `FILE [READ]: ERRO | ARQUIVO NÃO ENCONTRADO '${path}'`; esLintIgnore = catchErr }
+                    } catch (catchErr) { resNew['msg'] = `FILE [READ]: ERRO | ARQUIVO NÃO ENCONTRADO '${path}'`; esLintIgnore = catchErr; }
                 }; return resNew
             }
 
