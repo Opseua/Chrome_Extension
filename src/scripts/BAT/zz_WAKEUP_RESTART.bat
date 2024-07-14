@@ -83,29 +83,32 @@ rem if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%
 rem → WebScraper [Jucesp]
 rem if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS
-if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (	
-	rem → AWS/ESTRELAR
-	
-	ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	!2_BACKGROUND! explorer
-	
-	ping -n 7 -w 1000 127.0.0.1 >nul
-	
-	!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe !letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt -monitor
-	
-	ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	rem !2_BACKGROUND! taskmgr
-	!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\PORTABLE_System_Informer\SystemInformer.exe
-	
-	ping -n 3 -w 1000 127.0.0.1 >nul
-	
-	rem !fileNircmdSetSize! "Task Manager" "890 50 600 600"
-	!fileNircmdSetSize! "System Informer" "890 50 600 400"
-)
+rem ATALHO ACIONADO FOI 'AllRestart'
+if not "!arg1!"=="!arg1:ALL_RESTART=!" (
+	rem (NOTEBOOK) RECARREGAR EXTENSOES DO 'CHROME_0' E 'CHROME_3'
+	if not "!ComputerName!"=="!ComputerName:NOTEBOOK=!" ( !letra!:\ARQUIVOS\WINDOWS\BAT\ESCREVER_e_ou_TECLA.vbs [CTRL+SHIFT+E] & !letra!:\ARQUIVOS\WINDOWS\BAT\ESCREVER_e_ou_TECLA.vbs [CTRL+SHIFT+R] )
 
+	if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
+		rem (AWS/ESTRELAR) ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS
+		ping -n 3 -w 1000 127.0.0.1 >nul
+		
+		!2_BACKGROUND! explorer
+		
+		ping -n 7 -w 1000 127.0.0.1 >nul
+		
+		!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe !letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt -monitor
+		
+		ping -n 3 -w 1000 127.0.0.1 >nul
+		
+		rem !2_BACKGROUND! taskmgr
+		!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\PORTABLE_System_Informer\SystemInformer.exe
+		
+		ping -n 3 -w 1000 127.0.0.1 >nul
+		
+		rem !fileNircmdSetSize! "Task Manager" "890 50 600 600"
+		!fileNircmdSetSize! "System Informer" "890 50 600 400"
+	)
+)
 
 :FIM_DO_SCRIPT
 
