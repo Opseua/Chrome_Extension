@@ -19,11 +19,11 @@ async function logsDelOld(inf) {
 
         let pathsToDel = [
             { 'daysKeep': 7, 'path': `${letter}:/ARQUIVOS/WINDOWS/BAT/z_log`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 4 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/log/Registros`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 4 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/Registros`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 4 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/URA_Reversa/log/Registros`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 4 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebScraper/log/Registros`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 4 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebSocket/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/URA_Reversa/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebScraper/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebSocket/log/Registros`, },
         ]
 
         // LISTAR PASTAS E ARQUIVOS

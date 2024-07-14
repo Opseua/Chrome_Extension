@@ -23,7 +23,16 @@ if "!arg1!"=="CRIAR" ( goto COPIA_CRIAR )
 
 :COPIA_CRIAR
 rem CRIAR COPIA nodeExe
-set "projects=Sniffer_Python_server;URA_Reversa_serverJsf;URA_Reversa_serverTelein;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverJucesp;WebScraper_serverJucesp_New2;WebSocket_server"
+set "projects=WebSocket_server"
+
+rem AWS
+if not "!ComputerName!"=="!ComputerName:AWS=!" ( set "projects=!projects!" )
+rem NOTEBOOK
+if not "!ComputerName!"=="!ComputerName:NOTEBOOK=!" ( set "projects=!projects!;Sniffer_Python_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverJucesp" )
+rem ESTRELAR
+if not "!ComputerName!"=="!ComputerName:ESTRELAR=!" ( set "projects=!projects!;Sniffer_Python_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverJucesp" )
+
+set "projects=!projects!;"
 set fileQtdCopy=0
 for %%a in ("%projects:;=" "%") do (
     if exist "!local!\node%%~a.exe" (
@@ -36,7 +45,7 @@ for %%a in ("%projects:;=" "%") do (
         set "destino=!local!\node%%~a.exe"
         echo F|xcopy /Q /Y /F "!origem!" "!destino!"
 		rem FIREWALL [PERMITIR]
-		!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\BAT\firewallAllowBlock.bat ALLOW "!destino!" NAO_MOSTRAR_POPUP
+		!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\BAT\firewallAllowBlock.bat ALLOW !destino! NAO_MOSTRAR_POPUP
     )
 )
 !fileMsg! "[!local!\!arquivo!]\n\nCopiados: !fileQtdCopy!" & exit
@@ -57,7 +66,7 @@ for %%F in (*) do (
 				echo [APAGAR] →→→ - !filename!
 				del /f "!local!\!filename!"
 				rem FIREWALL [APAGAR REGRA]
-				!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\BAT\firewallAllowBlock.bat DEL "!local!\!filename!" NAO_MOSTRAR_POPUP
+				!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\BAT\firewallAllowBlock.bat DEL !local!\!filename! NAO_MOSTRAR_POPUP
 			)
 		) else (
 			echo [NAO] - !filename!

@@ -20,7 +20,6 @@ set "projectURA_Reversa_Jsf=ESTRELAR"
 set "projectWebScraper_C6=ESTRELAR"
 set "projectWebScraper_C6_New2=ESTRELAR"
 set "projectWebScraper_Jucesp=ESTRELAR"
-set "projectWebScraper_Jucesp_New2=ESTRELAR"
 
 rem IDENTIFICAR O DEVMASTER PELO CONFIG
 set "conteudo=" & set "atalhoModo="
@@ -29,17 +28,17 @@ for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\config.json") do (
 rem DEVMASTER 'OPSEUA'
 set "search=master": "OPSEUA"
 set "resultDevMaster=!conteudo:%search%=!"
-if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=OPSEUA" &  set "atalhoModo=ON_HIDE" )
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=OPSEUA" & set "atalhoModo=ON_HIDE" )
 
 rem DEVMASTER 'AWS'
 set "search=master": "AWS"
 set "resultDevMaster=!conteudo:%search%=!"
-if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=AWS" &  set "atalhoModo=ON_VIEW" )
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=AWS" & set "atalhoModo=ON_VIEW" )
 
 rem DEVMASTER 'ESTRELAR'
 set "search=master": "ESTRELAR"
 set "resultDevMaster=!conteudo:%search%=!"
-if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=ESTRELAR" &  set "atalhoModo=ON_VIEW" )
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=ESTRELAR" & set "atalhoModo=ON_VIEW" )
 
 rem ### SOMENTE INICIAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_START=!" goto START_SCRIPTS
@@ -60,9 +59,6 @@ if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" 
 
 rem → WebScraper [Jucesp]
 if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
-
-rem → WebScraper [Jucesp_New2]
-if not "!projectWebScraper_Jucesp_New2!"=="!projectWebScraper_Jucesp_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp_New2\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebSocket (MANTER COMO ULTIMO PARA GARANTIR QUE OUTROS PROJETOS CONSIGAM ENVIAR OS COMANDOS ATE ENCERRAR TUDO)
 if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
@@ -87,11 +83,8 @@ rem if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%
 rem → WebScraper [Jucesp]
 rem if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem → WebScraper [Jucesp_New2]
-rem if not "!projectWebScraper_Jucesp_New2!"=="!projectWebScraper_Jucesp_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp_New2\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
-
 rem ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS
-if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
+if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (	
 	rem → AWS/ESTRELAR
 	
 	ping -n 3 -w 1000 127.0.0.1 >nul
@@ -100,23 +93,21 @@ if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
 	
 	ping -n 7 -w 1000 127.0.0.1 >nul
 	
-	!2_BACKGROUND! "!letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt" -monitor
+	!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe !letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt -monitor
 	
 	ping -n 3 -w 1000 127.0.0.1 >nul
 	
-	!2_BACKGROUND! taskmgr
+	rem !2_BACKGROUND! taskmgr
+	!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\PORTABLE_System_Informer\SystemInformer.exe
 	
 	ping -n 3 -w 1000 127.0.0.1 >nul
 	
-	!fileNircmdSetSize! "Task Manager" "890 50 600 600"
+	rem !fileNircmdSetSize! "Task Manager" "890 50 600 600"
+	!fileNircmdSetSize! "System Informer" "890 50 600 400"
 )
 
 
 :FIM_DO_SCRIPT
 
 !fileLog! "[WAKEUP_RESTART] = FIM"
-
-exit
-exit
-
 

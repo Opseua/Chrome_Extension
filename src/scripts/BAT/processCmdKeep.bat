@@ -51,11 +51,10 @@ rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'findstr'!!!)
 findstr /m "SIM" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\logTime_!nodeExe!.txt" >Nul
 if not %errorlevel%==0 !fileLog! "[NODEJS FILE] = [EXE: NAO - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!" & exit 
 
-rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS
+rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS (NAO APAGAR DO 'powershell' nem 'wmic'!!!)
 if "!actionRun!"=="OFF" ( 
-	for /f "tokens=2 delims==" %%i in ('wmic process where "Name like '%%cmd.exe%%' and CommandLine like '%%!nodeExe!.exe%%'" get processid /value') do (
-		for %%a in (%%i) do ( !2_BACKGROUND! taskkill /F /T /PID %%a & goto :LOOP_EXIT )
-	)
+	powershell.exe -Command "function KillTree { Param([int]$idF); Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $idF } | ForEach-Object { KillTree $_.ProcessId }; Stop-Process -Id $idF }; $ids = Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'cmd.exe' -and $_.CommandLine -like '*!nodeExe!.exe*' } | Select-Object -ExpandProperty ProcessId; foreach ($id in $ids) { KillTree $id }"
+	rem for /f "tokens=2 delims==" %%i in ('wmic process where "Name like '%%cmd.exe%%' and CommandLine like '%%!nodeExe!.exe%%'" get processid /value') do ( for %%a in (%%i) do ( taskkill /F /T /PID %%a & goto :LOOP_EXIT ) )
 )
 :LOOP_EXIT
 
@@ -63,12 +62,12 @@ rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
 	rem [HIDE]
 	if not "!action!"=="!action:HIDE=!" (
-		!2_BACKGROUND! " title !fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop! "
+		!2_BACKGROUND! "title !fileScriptFullWithBars!& !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop!"
 	)
 	
 	rem [VIEW]
 	if not "!action!"=="!action:VIEW=!" ( 
-		!2_BACKGROUND! " start "!fileScriptFullWithBars!" /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !2_BACKGROUND! !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop! "
+		!2_BACKGROUND! "start #1#!fileScriptFullWithBars!#1# /WAIT !letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS\!nodeExe!.exe !fileScript! & !2_BACKGROUND! #1#!fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !action! !project!@!outrosAdd! !fileScript! !restartOnStop!#1#"
 		
 		rem JANELA DO LOG POSICIONAR
 		!2_BACKGROUND! "timeout 3 > nul & !fileNircmdSetSize! !fileScriptFullWithBars! !action!"
