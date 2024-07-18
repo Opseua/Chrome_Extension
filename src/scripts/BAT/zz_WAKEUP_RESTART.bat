@@ -86,7 +86,9 @@ rem if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!
 rem ATALHO ACIONADO FOI 'AllRestart'
 if not "!arg1!"=="!arg1:ALL_RESTART=!" (
 	rem (NOTEBOOK) RECARREGAR EXTENSOES DO 'CHROME_0' E 'CHROME_3'
-	if not "!ComputerName!"=="!ComputerName:NOTEBOOK=!" ( !letra!:\ARQUIVOS\WINDOWS\BAT\ESCREVER_e_ou_TECLA.vbs [CTRL+SHIFT+E] & !letra!:\ARQUIVOS\WINDOWS\BAT\ESCREVER_e_ou_TECLA.vbs [CTRL+SHIFT+R] )
+	if not "!ComputerName!"=="!ComputerName:NOTEBOOK=!" (
+		!2_BACKGROUND! "!letra!:\ARQUIVOS\WINDOWS\BAT\ESCREVER_e_ou_TECLA.vbs [CTRL+SHIFT+O]"
+	)
 
 	if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
 		rem (AWS/ESTRELAR) ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS

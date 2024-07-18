@@ -63,7 +63,7 @@ async function tryRatingComplete(inf) {
                     let breakBoolen = false; for (let [index1, value1] of optionsHitApp.judgeOptions.entries()) {
                         for (let [index2, value2] of value1.actions.entries()) {
                             if (value1.actionsMode == 'subDiv+content+attributeValue' && value2.action == 'elementGetDiv' && value.elementName == value2.content) { breakBoolen = true; }; if (breakBoolen) {
-                                let response = value1[value.elementValue]; response = response !== undefined ? response : `######### FALTA RESPOSTA: ${value.elementName}`
+                                let response = value1[value.elementValue]; response = response !== undefined ? response : `############## FALTA RESPOSTA: ${value.elementName}`
                                 let valueOk = value; valueOk['elementResponse'] = response; judgeResponses.push(valueOk); break
                             }
                         }; if (breakBoolen) { break }
@@ -80,9 +80,9 @@ async function tryRatingComplete(inf) {
                             else if (value.elementName == 'Comment and Link') {
                                 // PEGAR O NOME DO HIT APP | ############ (XPATH) ELEMENTO: PEGAR VALOR ############
                                 let viewport; infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*tryrating*`, 'elementName': `/html/body/div[1]/div/div[4]/div[2]/div[2]/div/div/div/div/div/div/div/div/div[1]/div/div/div/div/div[3]/div[1]/div[1]/div[2]/div/div/div/div/div/div/div/div[2]/div/div/div/table/tbody/tr[2]/td[2]/div/div/div/div/div/div/div/div/div/div/p/span[2]/strong`, }
-                                retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { viewport = '######### NÃO ENCONTRADA VIEWPORT #########' } else { viewport = retChromeActions.res[0] };
+                                retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { viewport = '############## NÃO ENCONTRADA VIEWPORT ##############' } else { viewport = retChromeActions.res[0] };
                                 viewport = viewport == 'FRESH' ? 'NEW' : 'OLD'; if (value.elementValue == '' && judgesValues.current == -1) { judgesValues.current = indexDiv };
-                                comment = `Visualization is ${viewport} and the user is IN OUT\n${comment}\n\n${urlGoogleMaps}`
+                                comment = `Visualization is ${viewport} and the user is IN OUT\n${comment}${comment.includes('place is permanently closed or does not exist') ? '' : `\n\n${urlGoogleMaps}`}`
                             }
                         }
                     }
@@ -98,6 +98,8 @@ async function tryRatingComplete(inf) {
 
             if (judgesValues.current == -1) {
                 ret['msg'] = `Nenhum julgamento pendente`;
+            } else if (JSON.stringify(judgesValues.comments[judgesValues.current]).includes('##############')) {
+                ret['msg'] = `Falta resposta`;
             } else {
                 ret['res'] = judgesValues;
                 ret['msg'] = `TRYRATING COMPLET: OK`;
