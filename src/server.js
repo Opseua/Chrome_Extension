@@ -18,7 +18,7 @@ async function serverRun(inf) {
                         let d = inf[0]; if (d.byExtensionName && d.byExtensionName.includes('BOT') && !d.filename.includes('[KEEP]')) {
                             setTimeout(function () {
                                 chrome.downloads.erase({ id: d.id });
-                                // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)
+                                // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)
                             }, 5000);
                         }
                     }
@@ -29,10 +29,10 @@ async function serverRun(inf) {
         // ATALHO PRESSIONADO
         chrome.commands.onCommand.addListener(async function (...inf) {
             try {
-                let infShortcutPressed = { 'shortcut': inf[0] }; // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ON START: ATALHO PRESSIONADO` })
+                let infShortcutPressed = { 'shortcut': inf[0] }; // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ON START: ATALHO PRESSIONADO` })
                 if (infShortcutPressed.shortcut == 'atalho_1') { command1(); }
                 else if (infShortcutPressed.shortcut == 'atalho_2') { command2(); }
-                else { logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ACAO DO ATALHO NAO DEFINIDA` }) }
+                else { logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ACAO DO ATALHO NAO DEFINIDA` }) }
             } catch (catchErr) {
                 await regexE({ 'inf': inf, 'e': catchErr, });
             };

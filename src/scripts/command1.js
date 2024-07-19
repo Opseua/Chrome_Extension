@@ -20,7 +20,7 @@ async function command1(inf) {
         }]
       };
       let retListenerAcionar = await listenerAcionar(`messageSendOrigin_${globalWindow.devGet[1]}`, { 'destination': devSendOther, 'message': message, 'secondsAwait': 0, });
-      // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': JSON.stringify(retListenerAcionar) });
+      // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': JSON.stringify(retListenerAcionar) });
 
       if (retListenerAcionar.ret) {
         await clipboard({ 'e': e, 'value': retListenerAcionar.res.comments[retListenerAcionar.res.current] });

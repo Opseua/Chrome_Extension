@@ -5,9 +5,9 @@ async function client(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         // ### CONEXÃO
-        function connect(inf) {
+        let wsConnections = {}; function connect(inf) {
             let { hostRoom } = inf; let ws = new _WebSocket(`ws://${hostRoom}`); let url = ws._url ? ws._url : ws.url; let host = url.replace('ws://', '').split('/')[0]; let room = url.split(`${host}/`)[1].replace('?roo=', '')
-            let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; ws['host'] = host; ws['room'] = room; ws['hostRoom'] = hostRoom; ws['locWeb'] = locWeb; ws['method'] = 'WEBSOCKET';
+            let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; ws['host'] = host; ws['room'] = room; ws['hostRoom'] = hostRoom; ws['locWeb'] = locWeb; ws['method'] = 'WEBSOCKET'; wsConnections[hostRoom] = ws
 
             // # ON OPEN
             ws.onopen = async () => {
@@ -16,12 +16,12 @@ async function client(inf) {
                 logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `OK: ${locWeb} '${room}'` });
 
                 // LISTENER PARA RETORNAR O 'ws' QUANDO 'messageSend' FOR CHAMADA EM OUTROS ARQUIVOS (SOMENTE NO CLIENT!!!)
-                listenerMonitorar(`getWs_${locWeb}`, async (/*nomeList, inf*/) => { return ws });
+                listenerMonitorar(`getWs_${locWeb}`, async (/*nomeList, inf*/) => { return wsConnections[hostRoom] });
 
                 // LISTENER PARA ENVIAR MENSAGEM DE OUTROS ARQUIVOS (FORA DO WebSocket!!!)
                 listenerMonitorar(`messageSendOrigin_${hostRoom}`, async (nomeList, inf) => {
                     let { destination, message, secondsAwait } = inf;
-                    let retMessageSend = await messageSend({ 'destination': destination, 'messageId': true, 'message': message, 'resWs': ws, 'secondsAwait': secondsAwait, }); return retMessageSend
+                    let retMessageSend = await messageSend({ 'destination': destination, 'messageId': true, 'message': message, 'resWs': wsConnections[hostRoom], 'secondsAwait': secondsAwait, }); return retMessageSend
                 });
             };
 
@@ -29,19 +29,19 @@ async function client(inf) {
             ws.onmessage = async (data) => {
                 let message = data.data.toString('utf-8'); let pingPong = message == `${globalWindow.par6}` ? 1 : message == `${globalWindow.par7}` ? 2 : 0
                 // ÚLTIMA MENSAGEM RECEBIDA
-                ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false
+                ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false; wsConnections[hostRoom] = ws
                 // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `← CLI | ${ws.lastMessage} | ${hostRoom}` });
                 if (pingPong > 0) { // RECEBIDO: 'PING' ENVIAR 'PONG'
                     if (pingPong == 2) { return }; ws.send('pong'); // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
                 } else { // RECEBIDO: OUTRA MENSAGEM
                     try { message = JSON.parse(message) } catch (catchErr) { message = { 'message': message }; esLintIgnore = catchErr; }; if (!message.message) { message = { 'message': message } }
-                    if (ws.lastMessage) { ws.send(`pong`) }; messageReceived({ ...message, 'host': host, 'room': room, 'resWs': ws, 'locWeb': locWeb, });
+                    if (ws.lastMessage) { ws.send(`pong`) }; messageReceived({ ...message, 'host': host, 'room': room, 'resWs': wsConnections[hostRoom], 'locWeb': locWeb, });
                 }
             };
 
             // # ON ERROR/CLOSE | TEMPO MÁXIMO DE CONEXÃO
             ws.onerror = () => { clearTimeoutReconnect('error') }; ws.onclose = () => { clearTimeoutReconnect('close') };
-            function clearTimeoutReconnect(inf) { clearTimeout(timeoutSecConnect[hostRoom]); reconnect({ 'host': host, 'room': room, 'hostRoom': hostRoom, 'resWs': ws, 'event': inf }) }
+            function clearTimeoutReconnect(inf) { clearTimeout(timeoutSecConnect[hostRoom]); reconnect({ 'host': host, 'room': room, 'hostRoom': hostRoom, 'resWs': wsConnections[hostRoom], 'event': inf }) }
             timeoutSecConnect[hostRoom] = setTimeout(() => { ws.close() }, secConnect * 1000);
         }
 

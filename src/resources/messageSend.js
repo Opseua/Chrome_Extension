@@ -1,7 +1,7 @@
 // // SOMENTE FORA DO WEBSOCKET!!! → 'WEB' PARA 'WEB  E  'LOC' PARA 'LOC'
 // let message = { "fun": [{ "securityPass": globalWindow.securityPass, "retInf": true, "name": "notification", "par": { "duration": 3, "title": "TITULO", "text": "TEXTO", } }] };
 // let retListenerAcionar = await listenerAcionar(`messageSendOrigin_127.0.0.1:1234/?roo=ORIGEM_AQUI`, { 'destination': `127.0.0.1:1234/?roo=DESTINO_AQUI`, 'message': message, 'secondsAwait': 0, });
-// logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': JSON.stringify(retListenerAcionar) });
+// logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': JSON.stringify(retListenerAcionar) });
 
 // // SOMENTE DENTRO DO WEBSOCKET!!!
 // let infMessageSend, retMessageSend
@@ -36,7 +36,7 @@ async function messageSend(inf) {
                 'partesRestantes': totalChunks - i - 1, 'secondsAwait': secondsAwait, 'message': chunk,
             })
             // ---------------- TESTES
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${messageId} | [${totalChunks - i - 1}] | → TOTAL ${JSON.stringify(messageParts).length} | DE ${start} ATÉ ${end}` });
+            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${messageId} | [${totalChunks - i - 1}] | → TOTAL ${JSON.stringify(messageParts).length} | DE ${start} ATÉ ${end}` });
             // ----------------
         };
 
@@ -80,7 +80,7 @@ let filaBigFalse = []; let filaBigTrue = []; let sending = false; function envia
         resWs.send(message);
 
         // ---------------- TESTES
-        // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[${(filaBigFalse.length + filaBigTrue.length).toString().padStart(2, '0')}] | ENVIADA ${big ? 'GRANDE' : 'PEQUENA'} ${messageId}` });
+        // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[${(filaBigFalse.length + filaBigTrue.length).toString().padStart(2, '0')}] | ENVIADA ${big ? 'GRANDE' : 'PEQUENA'} ${messageId}` });
         // file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_ENVIANDO_[${partesRestantes}]_.txt`, 'rewrite': false, 'text': message });
         // ----------------
 

@@ -1,5 +1,5 @@
 // // 'write' → 'true' ESCREVE NO 'PROJECT/log/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
-// logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `Mensagem do console` });
+// logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `Mensagem do console` });
 
 let e = import.meta.url
 async function logConsole(inf) { // NÃO POR COMO 'async'!!!
