@@ -85,12 +85,6 @@ rem if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!
 
 rem ATALHO ACIONADO FOI 'AllRestart'
 if not "!arg1!"=="!arg1:ALL_RESTART=!" (
-	rem (NOTEBOOK) RECARREGAR EXTENSOES DO 'CHROME_0' E 'CHROME_3'
-	if not "!ComputerName!"=="!ComputerName:NOTEBOOK=!" (
-		rem !2_BACKGROUND! "!letra!:\ARQUIVOS\WINDOWS\BAT\ESCREVER_e_ou_TECLA.vbs [CTRL+SHIFT+O] & ping -n 1 -w 1000 127.0.0.1 >nul & !letra!:\ARQUIVOS\WINDOWS\BAT\ESCREVER_e_ou_TECLA.vbs [CTRL+SHIFT+P] & ping -n 1 -w 1000 127.0.0.1 >nul & taskkill /IM Clavier.exe /F & ping -n 2 -w 1000 127.0.0.1 >nul & start "" !letra!:\ARQUIVOS\WINDOWS\PORTABLE_Clavier\Clavier.exe"
-	
-	)
-
 	if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
 		rem (AWS/ESTRELAR) ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS
 		ping -n 3 -w 1000 127.0.0.1 >nul
