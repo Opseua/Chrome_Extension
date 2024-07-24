@@ -120,7 +120,7 @@ async function file(inf) {
                 let resNew = { 'ret': false }, pathOld, pathNew; if (!inf.pathNew || inf.pathNew == '') { resNew['msg'] = `FILE [CHANGE]: ERRO | INFORMAR O 'pathNew'`; } else {
                     if (inf.path.includes(':')) { pathOld = inf.path } else { infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal }; retFile = await fileRelative(infFile); pathOld = retFile.res[0] };
                     if (inf.pathNew.includes(':')) { pathNew = inf.pathNew } else { infFile = { 'path': inf.pathNew, 'functionLocal': inf.functionLocal }; retFile = await fileRelative(infFile); pathNew = retFile.res[0] }; try {
-                        await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true }); await _fs.promises.rename(pathOld, pathNew); resNew['ret'] = true; resNew['msg'] = `FILE [CHANGE]: OK`
+                        await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true }); await _fs.promises.rename(pathOld, pathNew); resNew['ret'] = true; resNew['msg'] = `FILE [CHANGE]: OK`; resNew['res'] = pathNew;
                     } catch (catchErr) { resNew['msg'] = `FILE [CHANGE]: ERRO | AO MOVER ARQUIVO '${pathOld}'`; esLintIgnore = catchErr; }
                 }; return resNew
             }
