@@ -25,12 +25,24 @@ if "!arg1!"=="CRIAR" ( goto COPIA_CRIAR )
 rem CRIAR COPIA nodeExe
 set "projects=WebSocket_server"
 
+rem IDENTIFICAR O DEVMASTER PELO CONFIG
+set "conteudo="
+for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\config.json") do ( set "conteudo=!conteudo!%%a" )
+
 rem AWS
-if not "!ComputerName!"=="!ComputerName:AWS=!" ( set "projects=!projects!" )
+set "search=master": "AWS"
+set "resultDevMaster=!conteudo:%search%=!"
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "projects=!projects!" )
+
 rem NOTEBOOK
-if not "!ComputerName!"=="!ComputerName:NOTEBOOK=!" ( set "projects=!projects!;Sniffer_Python_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverJucesp" )
+set "search=master": "OPSEUA"
+set "resultDevMaster=!conteudo:%search%=!"
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "projects=!projects!;Sniffer_Python_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverJucesp" )
+
 rem ESTRELAR
-if not "!ComputerName!"=="!ComputerName:ESTRELAR=!" ( set "projects=!projects!;Sniffer_Python_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverJucesp" )
+set "search=master": "ESTRELAR"
+set "resultDevMaster=!conteudo:%search%=!"
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "projects=!projects!;Sniffer_Python_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverJucesp" )
 
 set "projects=!projects!;"
 set fileQtdCopy=0

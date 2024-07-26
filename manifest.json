@@ -126,7 +126,7 @@
         "src/scripts/media/floatingButton/styles.css"
       ],
       "matches": [
-        "https://www.tryrating.com/*"
+        "https://www.tryrating.com/AAA*"
       ]
     }
   ]

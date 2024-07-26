@@ -25,15 +25,15 @@ rem IDENTIFICAR O DEVMASTER PELO CONFIG
 set "conteudo=" & set "atalhoModo="
 for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\config.json") do ( set "conteudo=!conteudo!%%a" )
 
-rem DEVMASTER 'OPSEUA'
-set "search=master": "OPSEUA"
-set "resultDevMaster=!conteudo:%search%=!"
-if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=OPSEUA" & set "atalhoModo=ON_HIDE" )
-
 rem DEVMASTER 'AWS'
 set "search=master": "AWS"
 set "resultDevMaster=!conteudo:%search%=!"
 if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=AWS" & set "atalhoModo=ON_VIEW" )
+
+rem DEVMASTER 'OPSEUA'
+set "search=master": "OPSEUA"
+set "resultDevMaster=!conteudo:%search%=!"
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=OPSEUA" & set "atalhoModo=ON_HIDE" )
 
 rem DEVMASTER 'ESTRELAR'
 set "search=master": "ESTRELAR"
@@ -66,6 +66,9 @@ if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIV
 rem ### SOMENTE PARAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_STOP=!" goto FIM_DO_SCRIPT
 
+rem ESPERAR PARA INICIAR (PARA EVITAR FORCAR A CPU)
+ping -n 5 -w 1000 127.0.0.1 >nul
+
 :START_SCRIPTS
 rem ################################## SCRIPTS INICIAR
 rem → WebSocket
@@ -73,15 +76,6 @@ if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIV
 
 rem → URA_Reversa [Jsf]
 if not "!projectURA_Reversa_Jsf!"=="!projectURA_Reversa_Jsf:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
-
-rem → WebScraper [C6]
-rem if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
-
-rem → WebScraper [C6_New2]
-rem if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6_New2\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
-
-rem → WebScraper [Jucesp]
-rem if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem ATALHO ACIONADO FOI 'AllRestart'
 if not "!arg1!"=="!arg1:ALL_RESTART=!" (
