@@ -15,6 +15,7 @@ set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 rem QUAIS DEVS EXECUTAM O PROJETO
 set "projectWebSocket=OPSEUA_AWS_ESTRELAR"
+set "projectChat_Python=OPSEUA"
 set "projectSniffer_Python=OPSEUA"
 set "projectURA_Reversa_Jsf=ESTRELAR"
 set "projectWebScraper_C6=ESTRELAR"
@@ -45,6 +46,9 @@ if not "!arg1!"=="!arg1:ONLY_START=!" goto START_SCRIPTS
 
 rem ################################## SCRIPTS PARAR
 
+rem → Chat_Python
+if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Chat_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
 rem → Sniffer_Python
 if not "!projectSniffer_Python!"=="!projectSniffer_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
@@ -71,6 +75,9 @@ ping -n 5 -w 1000 127.0.0.1 >nul
 
 :START_SCRIPTS
 rem ################################## SCRIPTS INICIAR
+rem → Chat_Python
+if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Chat_Python\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
 rem → WebSocket
 if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 

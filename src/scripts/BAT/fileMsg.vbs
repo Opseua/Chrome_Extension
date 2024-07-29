@@ -1,7 +1,6 @@
-rem IDENTIFICAR O ARQUIVO E A LOCALIZACAO COMPLETA (sem o nome do arquivo)
+rem IDENTIFICAR O ARQUIVO E A LOCALIZACAO COMPLETA
 Set objFSO = CreateObject("Scripting.FileSystemObject")
 arquivo = objFSO.GetFileName(WScript.ScriptFullName)
-arquivoSemExtensao = Replace(arquivo, ".vbs", "")
 localizacao = objFSO.GetParentFolderName(WScript.ScriptFullName)
 
 rem DIVIDIR O CAMINHO POR '\' | QUANTIDADE DE ARRAYs | ULTIMA PASTA | LETRA DA UNIDADE

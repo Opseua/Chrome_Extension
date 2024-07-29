@@ -1,6 +1,7 @@
 // let retDateHour
 // retDateHour = dateHour() // HORA ATUAL
 // retDateHour = dateHour(new Date()) // HORA ATUAL [Chrome/NodeJS/Google]
+// retDateHour = dateHour(new Date(1668120527 * 1000)) // HORA ESPECIFICA [Chrome/NodeJS/Google] (SEM MILESSEGUNDOS)
 // retDateHour = dateHour('Wed Jan 11 2024 22:33:44 GMT-0300 (Horário Padrão de Brasília)') // [Chrome/NodeJS/Google]
 // retDateHour = dateHour('2024-01-11T22:33:44.000Z') // [Chrome/NodeJS/Google] (o retorno é 3 horas a MENOS)
 // retDateHour = dateHour(`-${(3600 * 12)}`) // HORA ATUAL - 12 HORAS | OBRIGATÓRIO SER STRING!!!

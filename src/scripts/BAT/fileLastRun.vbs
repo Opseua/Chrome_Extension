@@ -1,7 +1,6 @@
-rem IDENTIFICAR O ARQUIVO E A LOCALIZACAO COMPLETA (sem o nome do arquivo)
+rem IDENTIFICAR O ARQUIVO E A LOCALIZACAO COMPLETA
 Set objFSO = CreateObject("Scripting.FileSystemObject")
 arquivo = objFSO.GetFileName(WScript.ScriptFullName)
-arquivoSemExtensao = Replace(arquivo, ".vbs", "")
 localizacao = objFSO.GetParentFolderName(WScript.ScriptFullName)
 
 rem DIVIDIR O CAMINHO POR '\' | QUANTIDADE DE ARRAYs | ULTIMA PASTA | LETRA DA UNIDADE
@@ -12,26 +11,26 @@ If WScript.Arguments.Count = 0 Then
 	rem NENHUM PARAMENTRO PASSADO
 	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\n\nNao usar o VBS"  ,"\n",Chr(13)))
 ElseIf Not (WScript.Arguments.Count > 1) Then
-	rem Paramentros invalidos
+	rem PARAMENTROS INVALIDOS
 	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\n\nParametros invalidos. Exemplo:\n" & arquivo & " " & "'MANUAL/RESTART' 'NOME_DO_PROCESSO'"  ,"\n",Chr(13)))
 Else
-    rem Definir variaveis
+    rem DEFINIR VARIAVEIS
     Dim fsoFile, timeManual, timeReboot, rebootQtd, dif, allow, obs, strLine
     runType = WScript.Arguments.Item(0)
     idProcess = WScript.Arguments.Item(1)
     timeNow = DateDiff("s", #1/1/1970 00:00:00 AM#, Now())
 
-    rem Verificar se o arquivo existe
+    rem VERIFICAR SE O ARQUIVO EXISTE
     pathArquivo = letra & ":\ARQUIVOS\WINDOWS\BAT\z_log\logTime_" & idProcess & ".txt"
     If Not objFSO.FileExists(pathArquivo) Then
-	    rem Se o arquivo nao existe, definir valores padrao
+	    rem SE O ARQUIVO NAO EXISTIR, DEFINIR VALORES PADROES
         timeManual = timeNow
         timeReboot = timeNow
         rebootQtd = 0
 		allow = "SIM"
         obs = "NUNCA_EXECUTADO"
     Else
-	    rem Se o arquivo existe, ler os dados
+	    rem SE O ARQUIVO EXISTIR, LER OS DADOS
         Set fsoFile = objFSO.OpenTextFile(pathArquivo, 1)
         conteudoArquivo = fsoFile.ReadAll
         fsoFile.Close
@@ -40,7 +39,7 @@ Else
         timeReboot = pars(5)
         rebootQtd = pars(7)
 
-		rem Calcular a diferença de tempo e determinar permissao
+		rem CALCULAR A DIFERENCA DE TEMPO E DETERMINAR A PERMISSAO
 		If InStr(runType, "RESTART") Then
 			dif = timeNow - timeReboot
 			If dif > 29 Then
@@ -77,20 +76,19 @@ Else
 		End If
     End If
 
-    rem Abrir o arquivo para escrita
+    rem ABRIR ARQUIVO PARA ESCRITA
     Set fsoFile = objFSO.CreateTextFile(pathArquivo, True)
 
-    rem Gerar a linha de texto
+    rem GERAR A LINHA DE TEXTO
     strLine = "atual@" & timeNow & "@manual@" & timeManual & "@reboot@" & timeReboot & "@reboot_qtd@" & rebootQtd & "@diferenca@" & dif & "@permitido@" & allow & "@obs@" & obs
 
-    rem Escrever no arquivo
+    rem ESCREVER NO ARQUIVO
     fsoFile.Write strLine
 
-    rem Fechar o arquivo
+    rem FECHAR ARQUIVO
     fsoFile.Close	
 End If
 
-rem WScript.Sleep 5000
 
 rem ENCERRAR SCRIPT
 Wscript.Quit
