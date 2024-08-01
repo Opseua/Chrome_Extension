@@ -51,20 +51,23 @@ async function chat(inf) {
                 ret['msg'] = `CHAT [EC2]: ERRO`;
                 ret['res'] = 'res.error.message'
             }
-        } else if (inf.provider == 'globalgpt') {
-            // ######## GLOBALGPT
-            infApi = {
-                'e': e, 'method': 'POST', 'url': `https://swiftmodel.azurewebsites.net/api/ChatTrigger`, 'headers': {
-                    'content-type': 'text/plain',
-                },
-                'body': { "name": [{ "role": "user", "content": inf.input }] }
-            };
-            retApi = await api(infApi); if (!retApi.ret || retApi.res.code !== 200) { return retApi } else { retApi = retApi.res }
-            ret['msg'] = `CHAT [GLOBALGPT]: OK`
-            ret['res'] = JSON.parse(retApi.body).message.content;
-            ret['ret'] = true;
+        } else if (inf.provider == 'gitHub') {
+            try {
+                let messages = [{ 'role': 'user', 'content': inf.input }]; let options = {
+                    'provider': "Nextway", // Nextway / BlackBox
+                    'model': "gpt-4o-free",
+                    //'temperature': 0.7286209388976096, // PRÓXIMO DO [1 → ALEATÓRIO] | [0 → PRECISO]
+                    'x': 'x'
+                }; let response = await GPT4js.createProvider(options.provider).chatCompletion(messages, options, (data) => { return data });
+                ret['res'] = response;
+                ret['msg'] = `CHAT [GITHUB]: OK`
+                ret['ret'] = true;
+            } catch (catchErr) {
+                ret['msg'] = `CHAT [GITHUB]: ERRO | AO GERAR RESPOSTA`
+                console.log(catchErr)
+                esLintIgnore = catchErr;
+            }
         }
-
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
     }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };

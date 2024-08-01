@@ -50,6 +50,15 @@ async function serverRun(inf) {
         // infTryRatingComplete = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
         // retTryRatingComplete = await tryRatingComplete(infTryRatingComplete); console.log(retTryRatingComplete)
 
+
+        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': 'INICIO' })
+        let infChat, retChat
+        infChat = { 'e': e, 'provider': 'gitHub', 'input': `Qual a idade de Júpiter?` };
+        retChat = await chat(infChat); logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': JSON.stringify(retChat, null, 2) })
+
+
+
+
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
     }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };

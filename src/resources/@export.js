@@ -64,3 +64,6 @@ infTest = 'Wed Jan 11 2024 22:33:44 GMT-0300 (Horário Padrão de Brasília)'; a
 infTest = { 'e': e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES` }; await regex(infTest); // console.log(regex(infTest))
 //  **************
 
+// CHAT → https://github.com/zachey01/gpt4free.js
+await import('../chat/providers.js');
+
