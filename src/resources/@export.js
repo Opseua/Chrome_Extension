@@ -65,5 +65,5 @@ infTest = { 'e': e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES` }; await rege
 //  **************
 
 // CHAT → https://github.com/zachey01/gpt4free.js
-await import('../chat/providers.js');
+await import('./chat/providers.js');
 
