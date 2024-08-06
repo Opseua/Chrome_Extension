@@ -20,28 +20,24 @@ async function logsDelOld(inf) {
             // Chat_Python
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chat_Python/log/JavaScript`, },
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chat_Python/log/Python`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chat_Python/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chat_Python/log/Registros`, },
 
             // Chrome_Extension
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/log/JavaScript`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/log/Registros`, },
 
             // Sniffer_Python
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/JavaScript`, },
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/Python`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/Registros`, },
-
-            // URA_Reversa
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/URA_Reversa/log/JavaScript`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/URA_Reversa/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/Registros`, },
 
             // WebScraper
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebScraper/log/JavaScript`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebScraper/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebScraper/log/Registros`, },
 
             // WebSocket
             { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebSocket/log/JavaScript`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 31, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebSocket/log/Registros`, },
+            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebSocket/log/Registros`, },
         ]
 
         // LISTAR PASTAS E ARQUIVOS

@@ -36,7 +36,7 @@
 // // BASE64 → UTF8
 // let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8'); console.log(`base64ParaUtf8 ${base64ParaUtf8}`)
 
-// cd /d D:\ARQUIVOS\PROJETOS\URA_Reversa
+// cd /d D:\ARQUIVOS\PROJETOS\Projeto_Nome
 
 // [1] CHROME [c] | [2] NODEJS [n]  
 let cng = eng ? 1 : 2;

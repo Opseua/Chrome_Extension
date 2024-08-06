@@ -17,7 +17,6 @@ rem QUAIS DEVS EXECUTAM O PROJETO
 set "projectWebSocket=OPSEUA_AWS_ESTRELAR"
 set "projectChat_Python=OPSEUA"
 set "projectSniffer_Python=OPSEUA"
-set "projectURA_Reversa_Jsf=ESTRELAR"
 set "projectWebScraper_C6=ESTRELAR"
 set "projectWebScraper_C6_New2=ESTRELAR"
 set "projectWebScraper_Jucesp=ESTRELAR"
@@ -52,9 +51,6 @@ if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!letra!:\AR
 rem → Sniffer_Python
 if not "!projectSniffer_Python!"=="!projectSniffer_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem → URA_Reversa [Jsf]
-if not "!projectURA_Reversa_Jsf!"=="!projectURA_Reversa_Jsf:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
-
 rem → WebScraper [C6]
 if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
@@ -80,9 +76,6 @@ if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!letra!:\AR
 
 rem → WebSocket
 if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
-
-rem → URA_Reversa [Jsf]
-if not "!projectURA_Reversa_Jsf!"=="!projectURA_Reversa_Jsf:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\URA_Reversa\src\z_Outros_serverJsf\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem ATALHO ACIONADO FOI 'AllRestart'
 if not "!arg1!"=="!arg1:ALL_RESTART=!" (

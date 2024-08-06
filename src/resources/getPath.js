@@ -8,17 +8,6 @@ async function getPath(inf) {
     let project = eng ? 'Downloads/Google Chrome%' : nd, fileOk = nd, line; let devChildren = inf && inf.devChildren ? inf.devChildren : nd
     let paths = [], stack = inf.e.stack, res
     try {
-        // stack = `
-        // ReferenceError: globalWindow is not defined
-        //     at regexE (chrome-extension://afelhdjampgfmchfcnbginicjcmjhhma/src/resources/regexE.js:103:65)
-        //     at async file (chrome-extension://afelhdjampgfmchfcnbginicjcmjhhma/src/resources/file.js:448:25)
-        //     at async chrome-extension://afelhdjampgfmchfcnbginicjcmjhhma/src/resources/configStorage.js:100:41`;
-        // stack = `
-        // TypeError: Cannot read properties of null (reading '1')
-        //     at getPath (file:///d:/ARQUIVOS/PROJETOS/Chrome_Extension/src/resources/getPath.js:44:46)
-        //     at file:///d:/ARQUIVOS/PROJETOS/WebScraper/src/resources/apiNire.js:60:24
-        //     at file:///d:/ARQUIVOS/PROJETOS/URA_Reversa/src/server.js:80:24`;
-
         for (let [index, value] of stack.split('\n').entries()) {
             if (value.includes(root) && !value.includes('node_modules')) {
                 paths.push(value)
