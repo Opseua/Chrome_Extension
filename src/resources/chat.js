@@ -52,16 +52,21 @@ async function chat(inf) {
                 ret['res'] = 'res.error.message'
             }
         } else if (inf.provider == 'gitHub') {
+            // ######## GITHUB
             try {
                 let messages = [{ 'role': 'user', 'content': inf.input }]; let options = {
-                    'provider': "Nextway", // Nextway / BlackBox
-                    'model': "gpt-4o-free",
+                    'provider': "Aryahcr", // [gpt-4] Aryahcr, Nextway, ChatBotRu 
+                    'model': "gpt-4",
                     //'temperature': 0.7286209388976096, // PRÓXIMO DO [1 → ALEATÓRIO] | [0 → PRECISO]
                     'x': 'x'
                 }; let response = await GPT4js.createProvider(options.provider).chatCompletion(messages, options, (data) => { return data });
-                ret['res'] = response;
-                ret['msg'] = `CHAT [GITHUB]: OK`
-                ret['ret'] = true;
+                if (!response) {
+                    ret['msg'] = `CHAT [GITHUB]: ERRO | AO GERAR RESPOSTA`
+                } else {
+                    ret['res'] = response;
+                    ret['msg'] = `CHAT [GITHUB]: OK`
+                    ret['ret'] = true;
+                }
             } catch (catchErr) {
                 ret['msg'] = `CHAT [GITHUB]: ERRO | AO GERAR RESPOSTA`
                 console.log(catchErr)
