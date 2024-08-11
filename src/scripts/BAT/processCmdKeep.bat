@@ -35,7 +35,7 @@ if "!arg6!"=="FALSE" ( set "ret2=FALSE" & goto :IGNORE_IS_RUNNING ) else ( if "!
 
 rem CHECAR SE ESTA RODANDO
 tasklist /fi "ImageName eq !programExe!.exe" /fo csv 2>NUL | find /I "!programExe!.exe">NUL
-if "%ERRORLEVEL%"=="0"  ( set "ret2=TRUE" ) else ( set "ret2=FALSE" )
+if "%ERRORLEVEL%"=="0" ( set "ret2=TRUE" ) else ( set "ret2=FALSE" )
 :IGNORE_IS_RUNNING
 
 rem rem DEFINIR ACAO → RODANDO [NAO] | RODANDO [SIM]

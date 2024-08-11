@@ -79,6 +79,11 @@ if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIV
 rem ATALHO ACIONADO FOI 'AllRestart'
 if not "!arg1!"=="!arg1:ALL_RESTART=!" (
 	if not "!atalhoModo!"=="!atalhoModo:ON_VIEW=!" (
+	
+		rem NAO ABRIR PROGRAMAS SE JA ESTIVEREM ABERTOS
+		tasklist /fi "ImageName eq SystemInformer.exe" /fo csv 2>NUL | find /I "SystemInformer.exe">NUL
+		if "!ERRORLEVEL!"=="0" ( goto FIM_DO_SCRIPT )
+	
 		rem (AWS/ESTRELAR) ABRIR EXPLORER/TASKMANAGER/NOTEPAD++ E POSICIONAR JANELAS
 		ping -n 3 -w 1000 127.0.0.1 >nul
 		
