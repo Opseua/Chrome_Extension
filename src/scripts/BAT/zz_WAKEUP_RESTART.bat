@@ -14,8 +14,8 @@ set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 !fileLog! "[WAKEUP_RESTART] = [### INICIOU ###] [PARS-!arg1!]"
 
 rem QUAIS DEVS EXECUTAM O PROJETO
-set "projectWebSocket=OPSEUA_AWS_ESTRELAR"
-set "projectChat_Python=OPSEUA"
+set "projectWebSocket=AWS_OPSEUA_ESTRELAR"
+set "projectChat_Python=AWS_OPSEUA"
 set "projectSniffer_Python=OPSEUA"
 set "projectWebScraper_C6=ESTRELAR"
 set "projectWebScraper_C6_New2=ESTRELAR"
@@ -23,28 +23,27 @@ set "projectWebScraper_Jucesp=ESTRELAR"
 
 rem IDENTIFICAR O DEVMASTER PELO CONFIG
 set "conteudo=" & set "atalhoModo="
-for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\config.json") do ( set "conteudo=!conteudo!%%a" )
+for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\config.json") do ( 
+	rem NAO SUBIR!!!
+	set "devMaster=%%a"
+	set "devMaster=!devMaster:"=!"
+	if not "!devMaster!"=="!devMaster:master:=!" ( set "conteudo=!devMaster!" & goto DEVMASTER_ENCONTRADO )
+)
+:DEVMASTER_ENCONTRADO
 
 rem DEVMASTER 'AWS'
-set "search=master": "AWS"
-set "resultDevMaster=!conteudo:%search%=!"
-if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=AWS" & set "atalhoModo=ON_VIEW" )
+if not "!conteudo!"=="!conteudo:AWS=!" ( set "conteudo=AWS" & set "atalhoModo=ON_VIEW" )
 
 rem DEVMASTER 'OPSEUA'
-set "search=master": "OPSEUA"
-set "resultDevMaster=!conteudo:%search%=!"
-if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=OPSEUA" & set "atalhoModo=ON_HIDE" )
+if not "!conteudo!"=="!conteudo:OPSEUA=!" ( set "conteudo=OPSEUA" & set "atalhoModo=ON_HIDE" )
 
 rem DEVMASTER 'ESTRELAR'
-set "search=master": "ESTRELAR"
-set "resultDevMaster=!conteudo:%search%=!"
-if /I "!resultDevMaster!" neq "!conteudo!" ( set "conteudo=ESTRELAR" & set "atalhoModo=ON_VIEW" )
+if not "!conteudo!"=="!conteudo:ESTRELAR=!" ( set "conteudo=ESTRELAR" & set "atalhoModo=ON_VIEW" )
 
 rem ### SOMENTE INICIAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_START=!" goto START_SCRIPTS
 
 rem ################################## SCRIPTS PARAR
-
 rem → Chat_Python
 if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Chat_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 

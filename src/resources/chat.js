@@ -37,7 +37,7 @@ async function chat(inf) {
             infConfigStorage = { 'e': e, 'action': 'get', 'key': 'webSocket' };
             retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             infApi = {
-                'e': e, 'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.globalWindow.portWebSocket}/chatgpt`,
+                'e': e, 'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.portWebSocket}/chatgpt`,
                 'headers': {}, 'body': { "prompt": inf.input, "network": inf.network ? true : false }
             };
             retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }
@@ -51,7 +51,7 @@ async function chat(inf) {
                 ret['msg'] = `CHAT [EC2]: ERRO`;
                 ret['res'] = 'res.error.message'
             }
-        } else if (inf.provider == 'gitHub') {
+        } else if (inf.provider == 'gitHub_Python') {
             // ######## GITHUB
             try {
                 let messages = [{ 'role': 'user', 'content': inf.input }]; let options = {
@@ -69,9 +69,12 @@ async function chat(inf) {
                 }
             } catch (catchErr) {
                 ret['msg'] = `CHAT [GITHUB]: ERRO | AO GERAR RESPOSTA`
-                console.log(catchErr)
                 esLintIgnore = catchErr;
             }
+        } else {
+            retConfigStorage = await configStorage({ 'e': e, 'action': 'get', 'key': 'chatPython' }); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
+            infApi = { 'e': e, 'method': 'POST', 'url': `http://127.0.0.1:${retConfigStorage.portServerHttp}/chat`, 'headers': {}, 'body': inf }; retApi = await api(infApi);
+            if (!retApi.ret) { return retApi } else { retApi = retApi.res; if (retApi.body && retApi.body.includes('{"ret": ')) { retApi = JSON.parse(retApi.body) } }; return retApi
         }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
