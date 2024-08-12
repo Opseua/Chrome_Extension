@@ -21,6 +21,9 @@
 // }, 2000);
 // clearTimeout(timeout);
 
+// let obj = { 'a': { 'b': null }, 'c': 'AAA' }
+// console.log(!!obj.a)
+
 // LOOP 99 VEZES
 // for (let index = 0; index < 99; index++) {
 //     console.log('INDEX', index,);
