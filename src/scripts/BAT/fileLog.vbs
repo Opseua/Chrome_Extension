@@ -36,29 +36,47 @@ Else
 		HoraPadrao12 = hora
 	End Function
 	rem hora = HoraPadrao12(hora)
-	rem #####################################################################s
+	rem #####################################################################
+	
+	rem #####################################################################
+	rem ESCREVER NO ARQUIVO (CRIAR OU ADICIONAR)
+	Function fileWriteAppend(filePath, textToWrite)
+		Dim attempt, fsoFile
+		Set objFSO = CreateObject("Scripting.FileSystemObject")
+		rem DESATIVAR AVISO DE ERROS
+		On Error GoTo 0
+		For attempt = 1 To 50
+			rem DESATIVAR AVISO DE ERROS TEMPORARIOS
+			On Error Resume Next
+			If Not objFSO.FileExists(filePath) Then
+				rem EXISTE NAO. CRIAR
+				Set fsoFile = objFSO.CreateTextFile(filePath)
+			Else
+				rem EXISTE SIM. ABRIR
+				Set fsoFile = objFSO.OpenTextFile(filePath, 8)
+			End If
+			rem ESCREVER NO ARQUIVO E FECHAR
+			fsoFile.WriteLine(textToWrite)
+			fsoFile.Close
+			If Err.Number = 0 Then
+				rem ERRO NAO. SAIR DO LOOP
+				Exit For
+			Else
+				rem ERRO SIM. LIMPAR ERRO ATUAL. ESPERAR x MILESSEGUNDOS E VOLTAR PARA O LOOP (ESPERAR NO MAXIMO 5 SEGUNDOS)
+				Err.Clear
+				WScript.Sleep(100)
+			End If
+		Next
+	End Function
+	rem #####################################################################
 	
 	hora = Right("00" & hora, 2)
 	completaData = "z_MES_" & mes & "_DIA_" & dia
     completaHora = hora & ":" & minuto & ":" & segundo & "." & milissegundo & horaAmPm
 
-	rem VERIFICAR SE O ARQUIVO EXISTE
 	pathArquivo = letra & ":\ARQUIVOS\WINDOWS\BAT\z_log\" & completaData & ".txt"
-    Dim fsoFile
-    If Not objFSO.FileExists(pathArquivo) Then
-		rem EXISTE NAO. CRIAR
-        Set fsoFile = objFSO.CreateTextFile(pathArquivo)
-    Else
-		rem EXISTE SIM. ABRIR
-        Set fsoFile = objFSO.OpenTextFile(pathArquivo, 8)
-    End If
-	
-    rem CONCATENANDO DATA E HORA COM TEXTO
     strLine = completaHora & " - " & Wscript.Arguments.Item(0)
-
-    rem ESCREVENDO NO ARQUIVO E FECHAR
-    fsoFile.WriteLine(strLine)
-    fsoFile.Close
+	fileWriteAppend pathArquivo, strLine
 End If
 
 rem ENCERRAR SCRIPT
