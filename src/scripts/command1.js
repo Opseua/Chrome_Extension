@@ -5,7 +5,7 @@ async function command1(inf) {
     let retPromptChrome = await promptChrome({ 'e': e, 'title': `NOME DO COMANDO` });
     if (!retPromptChrome.ret) { return retPromptChrome }
 
-    if (retPromptChrome.res.includes('https://maps.app.goo.gl/')) {
+    if (retPromptChrome.res.includes('https://maps.app.goo.gl/') || ['zz', 'xx', 'cc',].includes(retPromptChrome.res.toLowerCase())) {
       // → GERAR O COMENTÁRIO DO 'tryRatingComplete'
 
       // DEFINIR DESTINO (USUÁRIO 3 DO CHROME)
@@ -19,8 +19,6 @@ async function command1(inf) {
           'par': { 'urlGoogleMaps': retPromptChrome.res, }
         }]
       };
-      // let retListenerAcionar = await listenerAcionar(`messageSendOrigin_${globalWindow.devGet[1]}`, { 'destination': devSendOther, 'message': message, 'secondsAwait': 0, });
-      // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': JSON.stringify(retListenerAcionar) });
 
       let retListenerAcionar = await tryRatingComplete({ 'e': e, 'urlGoogleMaps': message.fun[0].par.urlGoogleMaps });
 
