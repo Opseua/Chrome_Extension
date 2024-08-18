@@ -82,7 +82,7 @@ async function tryRatingComplete(inf) {
                                 let viewport; infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*tryrating*`, 'elementName': `/html/body/div[1]/div/div[4]/div[2]/div[2]/div/div/div/div/div/div/div/div/div[1]/div/div/div/div/div[3]/div[1]/div[1]/div[2]/div/div/div/div/div/div/div/div[2]/div/div/div/table/tbody/tr[2]/td[2]/div/div/div/div/div/div/div/div/div/div/p/span[2]/strong`, }
                                 retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { viewport = '############## NÃO ENCONTRADA VIEWPORT ##############' } else { viewport = retChromeActions.res[0] };
                                 viewport = viewport == 'FRESH' ? 'NEW' : 'OLD'; if (value.elementValue == '' && judgesValues.current == -1) { judgesValues.current = indexDiv };
-                                comment = `Visualization is ${viewport} and the user is IN OUT\n${comment}${comment.includes('place is permanently closed or does not exist') ? '' : `\n\n${urlGoogleMaps}`}`
+                                comment = `Visualization is ${viewport} and the user is IN OUT\n${comment}${urlGoogleMaps.includes('https://maps.app.goo.gl/') ? `\n\n${urlGoogleMaps}` : ''}`
                             }
                         }
                     }
