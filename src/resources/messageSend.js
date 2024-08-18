@@ -1,5 +1,5 @@
 // // SOMENTE FORA DO WEBSOCKET!!! → 'WEB' PARA 'WEB  E  'LOC' PARA 'LOC'
-// let message = { "fun": [{ "securityPass": globalWindow.securityPass, "retInf": true, "name": "notification", "par": { "duration": 3, "title": "TITULO", "text": "TEXTO", } }] };
+// let message = { 'fun': [{ 'securityPass': globalWindow.securityPass, 'retInf': true, 'name': 'notification', 'par': { 'duration': 3, 'title': 'TITULO', 'text': 'TEXTO', } }] };
 // let retListenerAcionar = await listenerAcionar(`messageSendOrigin_127.0.0.1:1234/?roo=ORIGEM_AQUI`, { 'destination': `127.0.0.1:1234/?roo=DESTINO_AQUI`, 'message': message, 'secondsAwait': 0, });
 // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': JSON.stringify(retListenerAcionar) });
 

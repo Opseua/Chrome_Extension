@@ -4,7 +4,7 @@ let e = import.meta.url, ee = e;
 async function chromeActions(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let { action, color, text, target, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, tagFather, fun, funInf } = inf;
+        let { action, color, text, target, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, tagFather, fun, funInf, awaitElementMil, } = inf;
         let retTabSearch, code = '', retExecuteScript, tabId, divTemp
 
         if (action == 'badge') { // [25, 255, 71, 255]
@@ -16,7 +16,7 @@ async function chromeActions(inf) {
             ret['res'] = retGetProfileUserInfo
             ret['msg'] = `CHROME ACTIONS [USER]: OK`
             ret['ret'] = true
-        } else if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'inject'].includes(action)) {
+        } else if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'inject', 'elementAwait'].includes(action)) {
             let targetMode = (target.includes('<') || target.includes('>')) ? 'HTML' : 'INJECT'
 
             // →→→ ONDE EXECUTAR? HTML BRUTO FOI PASSADO (CRIAR DIV TEMPORÁRIA) | EXECUTAR NA PÁGINA (INJETANDO SCRIPT - DEFINIR ID DA ABA ALVO)
@@ -87,20 +87,28 @@ async function chromeActions(inf) {
                         }
                     }); return elementsFind;
                 }; retExecuteScript = elementGetDivFun(content, tag, null, null, tagFather)
+            } else if (action == 'elementAwait') {
+                // AGUARDAR ELEMENTO
+                async function funAsync(inf) { // OBRIGATÓRIO TER O 'await'!!!
+                    let { awaitElementMil, tag, attribute, attributeValue } = inf; await new Promise(resolve => { setTimeout(resolve, 100) }); let start = Date.now(); let ret = false; while (Date.now() - start < awaitElementMil) {
+                        let elements = attribute ? document.querySelectorAll(`${tag ? tag : ''}[${attribute}${attributeValue ? `="${attributeValue}"` : ''}]`) : document.getElementsByTagName(tag)
+                        if (elements && elements.length > 0) { ret = true; break }; await new Promise(resolve => setTimeout(resolve, 100))
+                    }; chrome.runtime.sendMessage(ret);
+                }; code = `(${funAsync.toString()})(${JSON.stringify({ 'awaitElementMil': awaitElementMil, 'tag': tag, 'attribute': attribute, 'attributeValue': attributeValue, })});`;
             } else if (action == 'inject') {
                 // INJECT
-                code = `(${fun.toString()})(${JSON.stringify(funInf)});`;
+                code = typeof teste === 'function' ? `(${fun.toString()})(${JSON.stringify(funInf)});` : fun
             }
 
             if (targetMode == 'INJECT') {
                 // INJETAR SCRIPT E EXECUTAR
-                retExecuteScript = await new Promise((resolve) => { chrome.tabs.executeScript(tabId, { 'code': code }, (res) => { resolve(res[0]) }) });
+                if (!(action == 'elementAwait')) { retExecuteScript = await new Promise((resolve) => { chrome.tabs.executeScript(tabId, { 'code': code }, (res) => { resolve(res[0]) }) }) } // ASYNC [NÃO] | [SIM]
+                else { retExecuteScript = await new Promise((resolve) => { let c = chrome.runtime.onMessage; chrome.tabs.executeScript(tabId, { code }, () => { c.addListener(function l(r) { c.removeListener(l); resolve(r) }) }) }) }
             }
 
-            let retExecuteScriptBoolean = retExecuteScript instanceof Array; retExecuteScriptBoolean = retExecuteScriptBoolean && retExecuteScript.length ? true : false
-            if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'inject'].includes(action) && retExecuteScriptBoolean) { ret['res'] = retExecuteScript }
-            ret['msg'] = `CHROME ACTIONS [SCRIPT → ${targetMode}]: ${retExecuteScriptBoolean ? 'OK' : 'ERRO | ELEMENTO NÃO ENCONTRADO'}`
-            ret['ret'] = retExecuteScriptBoolean
+            let r = retExecuteScript; r = (typeof r === 'string' && r.length > 0) || (Array.isArray(r) && r.length > 0) || (typeof r === 'object' && r !== null && Object.keys(r).length > 0) || (typeof r === 'boolean' && r === true);
+            if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'inject',].includes(action) && r) { ret['res'] = retExecuteScript }
+            ret['msg'] = `CHROME ACTIONS [SCRIPT → ${targetMode}]: ${r ? 'OK' : 'ERRO | ELEMENTO NÃO ENCONTRADO'}`; ret['ret'] = r
 
             // REMOVER DIV TEMPORÁRIA (NECESSÁRIO PARA EVITAR VALORES DUPLICADOS!!!)
             if (targetMode == 'HTML') { document.body.removeChild(divTemp); document.body.innerHTML = ''; }
@@ -168,6 +176,11 @@ async function chromeActions(inf) {
 // infChromeActions = { 'e': e, 'action': 'elementClick', 'target': `*file:///*`, 'attribute': `id`, 'attributeValue': `idNome4Button`, } // (atributo + valor do atributo)
 
 // // ************************************************************************************************************
+// // → ELEMENTO: ESPERAR
+// infChromeActions = { 'e': e, 'action': 'elementAwait', 'target': `*file:///*`, 'awaitElementMil': 5000, 'tag': `div`, 'attribute': `class`, 'attributeValue': `mktls-option mktls-show mktls-value`, } // (tag + atributo + valor do atributo)
+// infChromeActions = { 'e': e, 'action': 'elementAwait', 'target': `*file:///*`, 'awaitElementMil': 5000, 'attribute': `class`, 'attributeValue': `mktls-option mktls-show mktls-value`, } // (atributo + valor do atributo)
+
+// // ************************************************************************************************************
 
 // // → INJECT
 // function teste(funInf) { console.log('FUNCAO TESTE: OK', funInf); return document.documentElement.outerHTML; } let funInf = { 'A': '' };
@@ -178,3 +191,40 @@ async function chromeActions(inf) {
 
 
 
+// // ****************************** SCRIPT ASYNC [SIM]
+// async function funAsync(inf) {
+//     let ret = { 'ret': false };
+//     await new Promise(resolve => { setTimeout(resolve, 500) }); // OBRIGATÓRIO TER O 'await'!!!
+//     console.log(inf);
+
+//     await new Promise(resolve => setTimeout(resolve, 2000));
+//     let retFetch = await fetch(inf.url, { 'method': 'GET', 'headers': { 'Content-Type': 'application/json', }, });
+//     if (!retFetch.ok) {
+//         ret['msg'] = 'INJECT ASYNC: ERRO | AO FAZER REQUISIÇÃO'
+//     } else {
+//         let data = await retFetch.text(); ret['ret'] = true; ret['msg'] = 'INJECT ASYNC: OK'; ret['res'] = data
+//     }
+
+//     // RETORNAR RESPOSTA PARA A EXTENSÃO
+//     chrome.runtime.sendMessage(ret);
+// }
+
+// // INJETAR O CÓDIGO
+// funInf = { 'a': 'b', 'url': 'http://127.0.0.1:8889/' }
+// code = `(${funAsync.toString()})(${JSON.stringify(funInf)});`;
+// retExecuteScript = await new Promise((resolve) => { let c = chrome.runtime.onMessage; chrome.tabs.executeScript(182883354, { code }, () => { c.addListener(function l(r) { c.removeListener(l); resolve(r) }) }) });
+// console.log(retExecuteScript);
+
+
+// // ****************************** SCRIPT ASYNC [NÃO]
+// function fun(inf) {
+//     let ret = { 'ret': false };
+//     console.log(inf);
+//     return document.documentElement.outerHTML;
+// }
+
+// // INJETAR O CÓDIGO
+// funInf = { 'a': 'b' }
+// code = `(${fun.toString()})(${JSON.stringify(funInf)});`;
+// retExecuteScript = await new Promise((resolve) => { chrome.tabs.executeScript(182883354, { code }, (res) => { resolve(res[0]); }); });
+// console.log(retExecuteScript);
