@@ -64,7 +64,7 @@ let portLoc = `${serverLoc.port}`; let hostPortLoc = `${hostLoc}:${portLoc}`; le
 let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing; let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop;
 let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages; let devMy = conf.devMy; let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`;
 let par4 = `${securityPass}-${conf.par4}`; let par5 = `${securityPass}-${conf.par5}`; let par6 = `${conf.par6}`; let par7 = `${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`;
-let par10 = `${securityPass}-${conf.par10}`; let par11 = `${conf.par11}`;
+let par10 = `${securityPass}-${conf.par10}`; let par11 = `${conf.par11}`; let par12 = `${conf.par12}`;
 let devSend = `${letter == 'D' ? hostPortLoc : hostPortWeb}/?roo=${devMy}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}` // CHROME | Send → NodeJS | Get → Chrome ##### NODEJS | Send → Chrome | Get → NodeJS
 
 // MANTER APÓS O 'devSend'
@@ -72,7 +72,7 @@ globalWindow = {
     ...globalWindow, 'securityPass': securityPass, 'serverWeb': serverWeb.host, 'portWeb': portWeb, 'serverLoc': serverLoc.host, 'portLoc': portLoc, 'devMaster': devMaster, 'devSlave': engName, 'devSend': devSend,
     'devices': devices, 'hostPortWeb': hostPortWeb, 'hostPortLoc': hostPortLoc, 'secConnect': secConnect, 'secReconnect': secReconnect, 'secRetWebSocket': secRetWebSocket, 'secPing': secPing, 'secPingTimeout': secPingTimeout,
     'secLoop': secLoop, 'kbPartsMessage': kbPartsMessage, 'minClearPartsMessages': minClearPartsMessages, 'devMy': devMy, 'par1': par1, 'par2': par2, 'par3': par3, 'par4': par4, 'par5': par5, 'par6': par6, 'par7': par7, 'par8': par8,
-    'par9': par9, 'par10': par10, 'par11': par11,
+    'par9': par9, 'par10': par10, 'par11': par11, 'par12': par12, 'pages': false,
 }; // console.log('1', '-', globalWindow.conf, '|', letter, '|', globalWindow.root, '| functions →', globalWindow.functions, '| devMaster →', globalWindow.devMaster, '| project →', globalWindow.project, '| devSlave →', globalWindow.devSlave)
 
 if (eng) { // CHROME
