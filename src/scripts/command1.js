@@ -2,10 +2,16 @@ let e = import.meta.url, ee = e;
 async function command1(inf) {
   let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
   try {
-    let retPromptChrome = await promptChrome({ 'e': e, 'title': `NOME DO COMANDO` });
-    if (!retPromptChrome.ret) { return retPromptChrome }
+    let infTryRatingComplete = ''
 
-    if (retPromptChrome.res.includes('https://maps.app.goo.gl/') || ['zz', 'xx', 'cc',].includes(retPromptChrome.res.toLowerCase())) {
+    if (inf.origin == 'chrome') {
+      let retPromptChrome = await promptChrome({ 'e': e, 'title': `NOME DO COMANDO` });
+      if (!retPromptChrome.ret) { return retPromptChrome } else { infTryRatingComplete = retPromptChrome.res }
+    } else if (inf.origin == 'web') {
+      infTryRatingComplete = inf.infTryRatingComplete
+    }
+
+    if (infTryRatingComplete.includes('maps.app.goo.gl') || ['zz', 'xx', 'cc',].includes(infTryRatingComplete.toLowerCase())) {
       // → GERAR O COMENTÁRIO DO 'tryRatingComplete'
 
       // DEFINIR DESTINO (USUÁRIO 3 DO CHROME)
@@ -16,11 +22,11 @@ async function command1(inf) {
       let message = {
         'fun': [{
           'securityPass': globalWindow.securityPass, 'retInf': true, 'name': 'tryRatingComplete',
-          'par': { 'urlGoogleMaps': retPromptChrome.res, }
+          'par': { 'infTryRatingComplete': infTryRatingComplete, }
         }]
       };
 
-      let retListenerAcionar = await tryRatingComplete({ 'e': e, 'urlGoogleMaps': message.fun[0].par.urlGoogleMaps });
+      let retListenerAcionar = await tryRatingComplete({ 'e': e, 'infTryRatingComplete': message.fun[0].par.infTryRatingComplete, });
 
       if (retListenerAcionar.ret) {
         await clipboard({ 'e': e, 'value': retListenerAcionar.res.comments[retListenerAcionar.res.current] });

@@ -1,20 +1,30 @@
 // let infChat, retChat
-// infChat = { 'e': e, 'provider': 'open.ai', 'input': `Qual a idade de Marte?` };
+// infChat = { 'e': e, 'provider': 'openAi', 'input': `Qual a idade de Marte?` };
 // retChat = await chat(infChat); console.log(retChat)
+
+// * NODEJS
+// gpt-4o-mini → openAi → 
+// gpt-4       → gitHub_Python
+
+// * PYTHON
+// gpt-4o      → telegram
+// gpt-4o      → g4f
+// gpt-4       → zukiJourney (12/min)
+// gpt-4       → naga (3/min)
 
 let e = import.meta.url, ee = e;
 async function chat(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         let infConfigStorage, retConfigStorage, retApi, infNotification, infApi
-        if (inf.provider == 'open.ai') {
+        if (inf.provider == 'openAi') {
             // ######## OPEN.AI
             infConfigStorage = { 'e': e, 'action': 'get', 'key': 'chatOpenAi' };
             retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
             infApi = {
                 'e': e, 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`,
                 'headers': { 'Content-Type': 'application/json', 'Authorization': `Bearer ${retConfigStorage.Authorization}` },
-                'body': { 'model': 'gpt-3.5-turbo', 'messages': [{ 'role': 'user', 'content': inf.input }], 'temperature': 0.7 }
+                'body': { 'model': 'gpt-4o-mini', 'messages': [{ 'role': 'user', 'content': inf.input }], 'temperature': 0.7 }
             };
             retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }
             let res = JSON.parse(retApi.body);

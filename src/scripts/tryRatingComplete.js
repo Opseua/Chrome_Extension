@@ -1,5 +1,5 @@
 // let infTryRatingComplete, retTryRatingComplete
-// infTryRatingComplete = { 'e': e, 'urlGoogleMaps': 'https://maps.app.goo.gl/' }
+// infTryRatingComplete = { 'e': e, 'infTryRatingComplete': 'https://maps.app.goo.gl/' }
 // retTryRatingComplete = await tryRatingComplete(infTryRatingComplete); console.log(retTryRatingComplete)
 
 // IMPORTAR OBJETOS COM AS OPÇÕES E RESPOSTAS
@@ -10,8 +10,8 @@ let e = import.meta.url, ee = e;
 async function tryRatingComplete(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let { urlGoogleMaps } = inf; let infChromeActions, retChromeActions, judgesValues = { 'current': -1, 'comments': [], 'responses': [], 'values': [] };
-        let optionsHitApp = { 'POIEvaluation': optTryRating_POIEvaluation, 'Search20': optTryRating_Search20 }
+        let { infTryRatingComplete } = inf; let infChromeActions, retChromeActions, judgesValues = { 'current': -1, 'comments': [], 'responses': [], 'values': [] };
+        let optionsHitApp = { 'POIEvaluation': optTryRating_POIEvaluation, 'Search20': optTryRating_Search20 };
 
         // PEGAR O NOME DO HIT APP | ############ (XPATH) ELEMENTO: PEGAR VALOR ############
         infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*tryrating*`, 'elementName': `//*[@id="app-root"]/div/div[4]/div[2]/div[1]/div/div[1]/div/div[1]/span[2]/span`, }
@@ -20,11 +20,15 @@ async function tryRatingComplete(inf) {
         if (!['POIEvaluation', 'Search20',].includes(hitApp)) {
             ret['msg'] = `COMPLETE JUDGE: ERRO NÃO EXISTE '${hitApp}'`;
         } else {
+            let infOk = {}; if (infTryRatingComplete.includes('{"')) { infOk = JSON.parse(infTryRatingComplete); } else if (infTryRatingComplete.includes(' 🟢 ')) {
+                let gM = infTryRatingComplete.split(' 🟢 '); infOk['name'] = gM[0]; infOk['category'] = gM[1]; infOk['address'] = gM[2]; infOk['urlGoogleMaps'] = gM[3];
+            } else { if (hitApp == 'Search20') { let gM = infTryRatingComplete; infOk['urlGoogleMaps'] = gM.includes('https://maps.app.goo.gl/') ? gM : false } }
+
             // ETAPA 1: PEGAR A DIV DOS JUDGES
             optionsHitApp = optionsHitApp[hitApp]; let judgesDiv = []; for (let index = 0; index < 10; index++) {
                 infChromeActions = { 'e': e, 'action': 'elementGetDivXpath', 'target': `*tryrating*`, 'elementName': `${optionsHitApp.judgeXpath.replace('_INDEX_', index + 1)}`, }
-                retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { break } else { judgesDiv.push(retChromeActions.res[0]) };
-            }; if (judgesDiv.length == 0) { ret['msg'] = `JUDGE COMPLETE: ERRO | NENHUM JULGAMENTO ENCONTRADO`; }; // console.log(judgesDiv)
+                retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { break } else { if (!retChromeActions.res[0].startsWith('<div')) { break } else { judgesDiv.push(retChromeActions.res[0]) } };
+            }; if (judgesDiv.length == 0) { ret['msg'] = `JUDGE COMPLETE: ERRO | NENHUM JULGAMENTO ENCONTRADO`; };
 
             // ETAPA 2: PEGAR VALOR DOS ELEMENTOS
             async function judgeGetValues(inf) {
@@ -36,20 +40,20 @@ async function tryRatingComplete(inf) {
                                 infChromeActions = { 'e': e, 'action': value1.action, 'target': div, 'tag': value1.tag, 'content': value1.content, 'tagFather': value1.tagFather }
                                 retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) {
                                     lastValue = '###'; judgeValues.push({ 'valid': false, 'elementIndex': index, 'elementName': value1.content, 'elementId': '###', 'elementValue': '###', })
-                                } else { lastValue = retChromeActions.res[0]; }; // console.log(lastValue)
+                                } else { lastValue = retChromeActions.res[0]; };
                             } else if (value1.action == 'attributeGetValue' && lastValue !== '###') {
                                 // → ATRIBUTO: PEGAR VALOR
                                 infChromeActions = { 'e': e, 'action': value1.action, 'target': lastValue, 'tag': value1.tag, 'attribute': value1.attribute, 'content': value1.content, }
                                 retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) {
                                     lastValue = '###'; judgeValues.push({ 'valid': false, 'elementIndex': index, 'elementName': value1.content, 'elementId': '###', 'elementValue': '###', })
-                                } else { lastValue = retChromeActions.res[0]; }; // console.log(lastValue)
+                                } else { lastValue = retChromeActions.res[0]; };
                             } else if (value1.action == 'elementGetValue' && lastValue !== '###') {
                                 // // → ELEMENTO: PEGAR VALOR
                                 infChromeActions = {
                                     'e': e, 'action': value1.action, 'target': `*tryrating*`, 'attribute': value1.attribute, 'attributeValue': lastValue,
                                     'attributeAdd': value1.attributeAdd, 'attributeValueAdd': value1.attributeValueAdd,
                                 }; retChromeActions = await chromeActions(infChromeActions); let lastValueOld = lastValue; let valid = retChromeActions.ret; let elementName = value.actions[0].content;
-                                if (!retChromeActions.ret) { lastValue = '###'; } else { lastValue = retChromeActions.res[0]; }; // console.log(lastValue)
+                                if (!retChromeActions.ret) { lastValue = '###'; } else { lastValue = retChromeActions.res[0]; };
                                 judgeValues.push({ 'valid': valid, 'elementIndex': index, 'elementName': elementName, 'elementId': lastValueOld, 'elementValue': lastValue, })
                             }
                         }
@@ -73,16 +77,21 @@ async function tryRatingComplete(inf) {
 
             // ETAPA 3: CRIAR COMENTÁRIO (COM AS RESPOSTAS ANTERIORES)
             async function judgeMakeComment(inf) {
-                let { indexDiv, responses } = inf; let comment = ''; for (let [index, value] of responses.entries()) {
-                    if (value.valid && value.elementResponse !== 'AAA') {
-                        if (hitApp == 'Search20') {
-                            if (value.elementName !== 'Comment and Link') { comment = `${comment}\n${value.elementResponse}` }
-                            else if (value.elementName == 'Comment and Link') {
+                let { indexDiv, responses } = inf; let comment = ''; let optionsErr = {}; let replaceIs = '#REP#'; for (let [index, value] of responses.entries()) {
+                    if (hitApp == 'Search20') {
+                        if (value.valid && value.elementResponse !== 'AAA') {
+                            // // After researching on the internet, it was possible to determine that the place is permanently closed or does not exist.
+                            if (value.elementName == 'Business/POI is closed or does not exist') { replaceIs = infOk.urlGoogleMaps ? ' or does not exist' : ' is permanently closed or' }
+                            else if (value.elementName == 'Name Issue' && infOk.name) { optionsErr['name'] = `\n\nCorrect name is:\n${infOk.name}` }
+                            else if (value.elementName == 'Category Issue' && infOk.category) { optionsErr['category'] = `\n\nThis is the correct category:\n${infOk.category}` }
+                            else if (value.elementName == 'Address Accuracy' && infOk.address) { optionsErr['address'] = `\n\nCorrect address:\n${infOk.address}` }; // NÃO UNIR COM O IF A SEGUIR
+                            if (value.elementName !== 'Comment and Link') { comment = `${comment}\n${value.elementResponse}` } else if (value.elementName == 'Comment and Link') {
                                 // PEGAR O NOME DO HIT APP | ############ (XPATH) ELEMENTO: PEGAR VALOR ############
                                 let viewport; infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*tryrating*`, 'elementName': `/html/body/div[1]/div/div[4]/div[2]/div[2]/div/div/div/div/div/div/div/div/div[1]/div/div/div/div/div[3]/div[1]/div[1]/div[2]/div/div/div/div/div/div/div/div[2]/div/div/div/table/tbody/tr[2]/td[2]/div/div/div/div/div/div/div/div/div/div/p/span[2]/strong`, }
                                 retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { viewport = '############## NÃO ENCONTRADA VIEWPORT ##############' } else { viewport = retChromeActions.res[0] };
                                 viewport = viewport == 'FRESH' ? 'NEW' : 'OLD'; if (value.elementValue == '' && judgesValues.current == -1) { judgesValues.current = indexDiv };
-                                comment = `Visualization is ${viewport} and the user is IN OUT\n${comment}${urlGoogleMaps.includes('https://maps.app.goo.gl/') ? `\n\n${urlGoogleMaps}` : ''}`
+                                comment = `Visualization is ${viewport} and the user is IN OUT\n${comment}`; comment = `${comment}${optionsErr.name || ''}${optionsErr.category || ''}${optionsErr.address || ''}`
+                                comment = `${comment}${infOk.urlGoogleMaps ? `\n\n${infOk.urlGoogleMaps}` : ''}`; comment = comment.replace(replaceIs, '')
                             }
                         }
                     }
@@ -90,9 +99,8 @@ async function tryRatingComplete(inf) {
             }
 
             for (let [index, value] of judgesDiv.entries()) {
-                let retJudgeGetValues = await judgeGetValues({ 'indexDiv': index, 'div': value }); // console.log(retJudgeGetValues)
-                let retJudgeMakeResponse = await judgeMakeResponse({ 'indexDiv': index, 'values': retJudgeGetValues.res }); // console.log(retJudgeMakeResponse)
-                let retJudgeMakeComment = await judgeMakeComment({ 'indexDiv': index, 'responses': retJudgeMakeResponse.res }); // console.log(JSON.stringify(retJudgeMakeComment.res, null, 2).replace(/\\n/g, '\n').replace(/"/g, ''))
+                let retJudgeGetValues = await judgeGetValues({ 'indexDiv': index, 'div': value }); let retJudgeMakeResponse = await judgeMakeResponse({ 'indexDiv': index, 'values': retJudgeGetValues.res });
+                let retJudgeMakeComment = await judgeMakeComment({ 'indexDiv': index, 'responses': retJudgeMakeResponse.res });
                 judgesValues.comments.push(retJudgeMakeComment.res); judgesValues.responses.push(retJudgeGetValues.res); judgesValues.values.push(retJudgeGetValues.res)
             };
 

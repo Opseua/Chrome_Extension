@@ -30,7 +30,17 @@ async function serverRun(inf) {
         chrome.commands.onCommand.addListener(async function (...inf) {
             try {
                 let infShortcutPressed = { 'shortcut': inf[0] }; // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ON START: ATALHO PRESSIONADO` })
-                if (infShortcutPressed.shortcut == 'atalho_1') { command1(); }
+                if (infShortcutPressed.shortcut == 'atalho_1') {
+                    command1({ 'origin': 'chrome' });
+
+                    // chrome.tabs.executeScript({
+                    //     code: `(function () {
+                    //             function pw(j, pw, ph, u) {let w = (pw / 100) * j.top.screen.width, h = (ph / 100) * j.top.screen.height; 
+                    //             let y = j.top.outerHeight / 2 + j.top.screenY - (h / 2), x = j.top.outerWidth / 2 + j.top.screenX - (w / 2);
+                    //             return j.open(u, '', 'width=' + w + ',height=' + h + ',top=' + y + ',left=' + x); }; pw(window, 30, 35, 'http://127.0.0.1:8889/?act=page&roo=&mes=0'); })();`
+                    // });
+
+                }
                 else if (infShortcutPressed.shortcut == 'atalho_2') { command2(); }
                 else { logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ACAO DO ATALHO NAO DEFINIDA` }) }
             } catch (catchErr) {
