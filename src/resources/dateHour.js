@@ -20,7 +20,7 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
 
             // ******************************************************************************************
             // ANTIGO 'secToHour'
-            if (inf > 0) {
+            if (inf > -1) {
                 let hou = Math.floor(inf / 3600).toString().padStart(2, '0');
                 let min = Math.floor((inf % 3600) / 60).toString().padStart(2, '0');
                 let sec = Math.min(Math.floor(inf % 60), 59).toString().padStart(2, '0');
