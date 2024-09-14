@@ -1,4 +1,4 @@
-// await new Promise(resolve => { setTimeout(resolve, 2000) });
+// await new Promise(resolve => { setTimeout(resolve, 2000) });   retHtmlToJson Array       NÃO USAR!!!      Usar →    Array.isArray(retHtmlToJson)
 
 // process.exit(); process.cwd();
 

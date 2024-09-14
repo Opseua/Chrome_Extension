@@ -14,7 +14,7 @@ let e = import.meta.url, ee = e;
 async function configStorage(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        if (!eng && inf instanceof Array && inf.length == 1) { // ### CS
+        if (!eng && Array.isArray(inf) && inf.length == 1) { // ### CS
             inf['path'] = `${letter}:/${globalWindow.root}/${globalWindow.functions}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
                 rf = await file({ 'e': e, 'action': 'read', 'path': inf.path }); if (!rf.ret) { dt = {} } else { dt = JSON.parse(rf.res).dt }
             } else { dt = typeof inf[0] === 'object' ? inf[0] : { 'key': inf[0] } };
