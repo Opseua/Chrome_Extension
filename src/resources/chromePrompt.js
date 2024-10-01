@@ -1,18 +1,18 @@
-// let infPromptChrome, retPromptChrome
-// infPromptChrome = { 'e': e, 'title': `NOME DO COMANDO` }
-// retPromptChrome = await promptChrome(infPromptChrome); console.log(retPromptChrome)
+// let infChromePrompt, retChromePrompt
+// infChromePrompt = { 'e': e, 'title': `NOME DO COMANDO` }
+// retChromePrompt = await chromePrompt(infChromePrompt); console.log(retChromePrompt)
 
 let e = import.meta.url, ee = e;
-async function promptChrome(inf) {
+async function chromePrompt(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         let title = (inf.title) ? `${inf.title} | Digite o comando:` : `Digite o comando:`;
         let retPrompt = prompt(`${title}`);
         if (!retPrompt) {
-            ret['msg'] = `PROMPT CHROME: ERRO | PROMPT EM BRANCO`;
+            ret['msg'] = `CHROME PROMPT : ERRO | PROMPT EM BRANCO`;
         } else {
             ret['res'] = retPrompt;
-            ret['msg'] = 'PROMPT CHROME: OK'
+            ret['msg'] = '`CHROME PROMPT: OK'
             ret['ret'] = true;
         }
 
@@ -22,4 +22,4 @@ async function promptChrome(inf) {
 };
 
 // CHROME | NODEJS
-(eng ? window : global)['promptChrome'] = promptChrome;
+(eng ? window : global)['chromePrompt'] = chromePrompt;

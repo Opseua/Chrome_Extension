@@ -5,8 +5,8 @@ async function command1(inf) {
     let infTryRatingComplete = ''
 
     if (inf.origin == 'chrome') {
-      let retPromptChrome = await promptChrome({ 'e': e, 'title': `NOME DO COMANDO` });
-      if (!retPromptChrome.ret) { return retPromptChrome } else { infTryRatingComplete = retPromptChrome.res }
+      let retChromePrompt = await chromePrompt({ 'e': e, 'title': `NOME DO COMANDO` });
+      if (!retChromePrompt.ret) { return retChromePrompt } else { infTryRatingComplete = retChromePrompt.res }
     } else if (inf.origin == 'web') {
       infTryRatingComplete = inf.infTryRatingComplete
     }

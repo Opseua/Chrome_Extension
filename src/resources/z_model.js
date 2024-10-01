@@ -8,8 +8,8 @@ async function model(inf) {
     try {
         // let { text, folder, } = inf
 
-        // let infTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
-        // let retTranslate = await translate(infTranslate); if (!retTranslate.ret) { return retTranslate } else { retTranslate = retTranslate.res }
+        // let infGoogleTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
+        // let retGoogleTranslate = await googleTranslate(infGoogleTranslate); if (!retGoogleTranslate.ret) { return retGoogleTranslate } else { retGoogleTranslate = retGoogleTranslate.res }
 
         ret['res'] = `resposta aqui`;
         ret['msg'] = `MODEL: OK`;

@@ -19,6 +19,7 @@ set "projectChat_Python=AWS_OPSEUA"
 set "projectSniffer_Python=OPSEUA"
 set "projectWebScraper_C6=ESTRELAR"
 set "projectWebScraper_C6_New2=ESTRELAR"
+set "projectWebScraper_C6_New3=ESTRELAR"
 set "projectWebScraper_Jucesp=ESTRELAR"
 
 rem IDENTIFICAR O DEVMASTER PELO CONFIG
@@ -55,6 +56,9 @@ if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!
 
 rem → WebScraper [C6_New2]
 if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6_New2\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [C6_New3]
+if not "!projectWebScraper_C6_New3!"=="!projectWebScraper_C6_New3:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6_New3\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [Jucesp]
 if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )

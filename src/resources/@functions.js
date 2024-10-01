@@ -6,15 +6,15 @@
 //     console.log('INDEX', index, 'VALUE', value);
 // };
 
-// ESPERAR E REPETIR
-// setInterval(() => {
-//     console.log('OK');
-//   }, 2000);
-
 // ESPERAR E EXECUTAR UMA VEZ
 // setTimeout(() => {
 //     console.log('OK');
 // }, 2000);
+
+// ESPERAR E REPETIR
+// setInterval(() => {
+//     console.log('OK');
+//   }, 2000);
 
 // let timeout = setTimeout(() => {
 //     console.log('OK');

@@ -10,13 +10,14 @@ let arrGlobal = [
 
   // NODEJS
   // ## BIBLIOTECAS / NATIVO
-  '_WebSocketServer', '_WebSocket', '_fs', '_path', '_url', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto', '_puppeteer', '_net', '_util', '_getFolderSize', 'process', 'Buffer', '_parse', '_stackTrace',
+  '_WebSocketServer', '_WebSocket', '_fs', '_path', '_url', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto', '_puppeteer', '_net', '_util', '_getFolderSize',
+  'process', 'Buffer', '_parse', '_stackTrace',
   // ## VARIÁVEIS
   'cs',
   // ## GLOBAL OBJECT [NOVO]
   'gO', 'gOList',
   // ## FUNÇÕES
-  'rateLimiter', 'getPath', 'awaitTimeout',
+  'rateLimiter', 'awaitTimeout',
 
   // GOOGLE 
   // ## BIBLIOTECAS / NATIVO
@@ -24,8 +25,8 @@ let arrGlobal = [
 
   // [Chrome_Extension]
   // → funções globais
-  'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'logsDelOld', 'devFun', 'file', 'cookie', 'getPath', 'getPath', 'googleSheets', 'htmlToJson', 'log', 'logConsole',
-  'messageSend', 'messageReceived', 'notification', 'promptChrome', 'rawText', 'regex', 'regexE', 'tabSearch', 'translate',
+  'api', 'chat', 'chromeActions', 'chromePrompt', 'client', 'clipboard', 'commandLine', 'configStorage', 'cookie', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets',
+  'googleTranslate', 'htmlToJson', 'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'rawText', 'regex', 'regexE', 'tabSearch',
   // scripts
   'background', 'command1', 'command2', 'tryRatingComplete',
 
@@ -58,7 +59,8 @@ let arrUnused = [
   'ee',
 
   // outros
-  'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write', 'msg', 'sendNtfy', 'e'
+  'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write',
+  'msg', 'sendNtfy', 'e'
 ];
 
 let arrGlobalObj = {};

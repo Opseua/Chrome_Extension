@@ -1,9 +1,9 @@
-// let infTranslate, retTranslate
-// infTranslate = { 'e': e, 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
-// retTranslate = await translate(infTranslate); console.log(retTranslate)
+// let infGoogleTranslate, retGoogleTranslate
+// infGoogleTranslate = { 'e': e, 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
+// retGoogleTranslate = await googleTranslate(infGoogleTranslate); console.log(retGoogleTranslate)
 
 let e = import.meta.url, ee = e;
-async function translate(inf) {
+async function googleTranslate(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         let infApi = {
@@ -26,7 +26,7 @@ async function translate(inf) {
             dom = _cheerio.load($('body').html())('body').text()
         }
         ret['res'] = dom;
-        ret['msg'] = `TRANSLATE: OK`
+        ret['msg'] = `GOOGLE TRANSLATE: OK`
         ret['ret'] = true;
 
     } catch (catchErr) {
@@ -35,4 +35,4 @@ async function translate(inf) {
 };
 
 // CHROME | NODEJS
-(eng ? window : global)['translate'] = translate;
+(eng ? window : global)['googleTranslate'] = googleTranslate;
