@@ -17,25 +17,23 @@
 // }
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets)
 
-let e = import.meta.url, ee = e;
+let e = import.meta.url, ee = e; let _sheets; let _auth = null; let expiry = null;
 async function googleSheets(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let infConfigStorage, retConfigStorage, makeNewToken = true; let pathOAuth = `${letter}:/${globalWindow.root}/${globalWindow.functions}/${globalWindow.conf}`
-        let _authClient = new _google.auth.GoogleAuth({ keyFile: pathOAuth, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
-        let _auth = await _authClient.getClient(); let _sheets = _google.sheets('v4');
+        // IMPORTAR BIBLIOTECA [NODEJS]
+        if (typeof _google === 'undefined') { await functionImportLibrary({ 'lib': '_google' }); };
 
-        infConfigStorage = { 'e': e, 'action': 'get', 'key': 'googleApi' }; retConfigStorage = await configStorage(infConfigStorage);
-        if (retConfigStorage.ret) { let timestamp = Math.floor(new Date().getTime()); if (retConfigStorage.res.tim - 60000 > timestamp) { makeNewToken = false } }
-
-        // GERAR NOVO TOKEN
-        if (makeNewToken) {
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ATUALIZANDO TOKEN` });
-            await _auth.authorize(); let date = new Date(_auth.credentials.expiry_date); let day = ('0' + date.getDate()).slice(-2)
-            let mon = ('0' + (date.getMonth() + 1)).slice(-2), hou = ('0' + date.getHours()).slice(-2); let min = ('0' + date.getMinutes()).slice(-2), sec = ('0' + date.getSeconds()).slice(-2);
-            let retToken = { 'tim': _auth.credentials.expiry_date, 'dateHor': `${day}/${mon} ${hou}:${min}:${sec}`, };
-            infConfigStorage = { 'e': e, 'action': 'set', 'key': 'googleApi', 'value': retToken }; configStorage(infConfigStorage);
+        async function getAuthClient() {
+            if (_auth && expiry && (expiry - 60000 > Math.floor(new Date().getTime()))) { return }; _sheets = _google.sheets('v4');
+            _auth = new _google.auth.GoogleAuth({ keyFile: `${letter}:/${globalWindow.root}/${globalWindow.functions}/${globalWindow.conf}`, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
+            _auth = await _auth.getClient(); logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `TOKEN: ATUALIZANDO` }); await _auth.authorize(); expiry = _auth.credentials.expiry_date;
+            let d = new Date(expiry); d = `${('0' + d.getDate()).slice(-2)}/${('0' + (d.getMonth() + 1)).slice(-2)} ${('0' + d.getHours()).slice(-2)}:${('0' + d.getMinutes()).slice(-2)}:${('0' + d.getSeconds()).slice(-2)}`;
+            await configStorage({ 'e': e, 'action': 'set', 'key': 'googleApi', 'value': { 'tim': expiry, 'dateHor': d } });
         }
+
+        // AUTENTICAR OU GERAR NOVO TOKEN (SE NECESSÁRIO)
+        await getAuthClient();
 
         let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'; let tab = inf && inf.tab ? inf.tab : 'RESULTADOS'
         if (inf.action == 'get') {
@@ -71,6 +69,7 @@ async function googleSheets(inf) {
                 }; esLintIgnore = catchErr;
             }
         } else if (inf.action == 'lastLin') {
+            console.log('SIM')
             // LAST LIN
             let googleAppScriptId; infConfigStorage = { 'e': e, 'action': 'get', 'key': 'googleAppScript' }; retConfigStorage = await configStorage(infConfigStorage);
             if (!retConfigStorage.ret) { return retConfigStorage } else { googleAppScriptId = retConfigStorage.res.id; }

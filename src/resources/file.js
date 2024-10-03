@@ -14,6 +14,9 @@ let e = import.meta.url, ee = e;
 async function file(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
+        // IMPORTAR BIBLIOTECA [NODEJS]
+        if (typeof _path === 'undefined') { await functionImportLibrary({ 'lib': '_path' }); };
+
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder', 'storage',].includes(inf.action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
         else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'functionLocal'`; }
         else if (inf.action !== 'inf' && (!inf.path || inf.path == '')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'path'`; }
@@ -95,6 +98,9 @@ async function file(inf) {
             }
 
             async function fileList(inf) {
+                // IMPORTAR BIBLIOTECA [NODEJS]
+                if (typeof _getFolderSize === 'undefined') { await functionImportLibrary({ 'lib': '_getFolderSize' }); };
+
                 let resNew = { 'ret': false }, path; try {
                     if (!inf.max || inf.max == '') { resNew['msg'] = `FILE [LIST]: ERRO | INFORMAR O 'max'`; } else {
                         if (inf.path.includes(':')) { path = inf.path } else { infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal }; retFile = await fileRelative(infFile); path = retFile.res[0] };
@@ -126,6 +132,9 @@ async function file(inf) {
             }
 
             async function fileMd5(inf) {
+                // IMPORTAR BIBLIOTECA [NODEJS]
+                if (typeof _crypto === 'undefined') { await functionImportLibrary({ 'lib': '_crypto' }); };
+
                 let resNew = { 'ret': false }, path;
                 if (inf.path.includes(':')) { path = inf.path } else { infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal }; retFile = await fileRelative(infFile); path = retFile.res[0] }; try {
                     md5 = _crypto('md5'); let fileContent = await _fs.promises.readFile(path); md5.update(fileContent); md5 = md5.digest('hex'); let res = md5;

@@ -7,6 +7,9 @@ let e = import.meta.url, ee = e;
 async function commandLine(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
+        // IMPORTAR BIBLIOTECA [NODEJS]
+        if (typeof _exec === 'undefined') { await functionImportLibrary({ 'lib': '_exec' }); };
+
         let command = inf.command.replace(/!letter!/g, letter)
         command = inf.awaitFinish ? `${command}` : `${inf.notAdm ? '%2_BACKGROUND_NOT_ADM%' : '%2_BACKGROUND%'} ${command}`
         await new Promise((resolve) => {

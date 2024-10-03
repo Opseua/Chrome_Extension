@@ -4,6 +4,8 @@ let e = import.meta.url, ee = e;
 async function client(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
+        if (typeof _WebSocket === 'undefined') { await functionImportLibrary({ 'lib': '_WebSocket' }); };
+
         // ### CONEXÃO
         function connect(inf) {
             let { hostRoom } = inf; let ws = new _WebSocket(`ws://${hostRoom}`); let url = ws._url ? ws._url : ws.url; let host = url.replace('ws://', '').split('/')[0]; let room = url.split(`${host}/`)[1].replace('?roo=', '')

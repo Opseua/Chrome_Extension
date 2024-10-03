@@ -36,7 +36,6 @@
 //     </table>
 //     `
 // }
-// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson.res)
 
 // infHtmlToJson = {
 //     'e': e, 'mode': 2,
@@ -64,7 +63,6 @@
 //     </table>
 //     `
 // }
-// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson.res)
 
 // infHtmlToJson = {
 //     'e': e, 'mode': 3,
@@ -103,6 +101,9 @@ let e = import.meta.url, ee = e;
 async function htmlToJson(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
+        // IMPORTAR BIBLIOTECA [NODEJS]
+        if (typeof _cheerio === 'undefined') { await functionImportLibrary({ 'lib': '_cheerio' }); };
+
         let $ = _cheerio.load(inf.html); let result = [], headers = [], randomCol = inf.mode == 1 ? false : true; let hasHeader = $('table thead').length > 0;
 
         // SE CONTEM O CABEÇALHO 

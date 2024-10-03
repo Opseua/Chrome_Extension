@@ -19,11 +19,32 @@ if (!(eng ? window.all1 : global.all1)) {
     // console.log('devSend:', globalWindow.devSend); console.log('devGet:', globalWindow.devGet); console.log('conf:', globalWindow.conf);
     // console.log('root:', globalWindow.root); console.log('functions:', globalWindow.functions); console.log('project:', globalWindow.project);
 }
+
 // IMPORTAR FUNÇÕES DINAMICAMENTE QUANDO NECESSÁRIO 
-let qtd = 0; async function functionImport(infOk) { let { name, path, inf } = infOk; qtd++; if (qtd > 30) { console.log('IMP...', name) }; await import(`${path}`); return await gloWin[name](inf) }
+let qtd = 0; async function functionImport(infOk) { let { name, path, inf } = infOk; qtd++; if (qtd > 30) { console.log('IMPORTANDO...', name) }; await import(`${path}`); return await gloWin[name](inf) }
 
 // FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) | ENCAMINHAR PARA DEVICE
 async function functionGeneric(infOk) { let { name, inf, retInf } = infOk; let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { 'name': name, 'par': inf, 'retInf': retInf, } }); return retDevAndFun }
+
+// IMPORTAR BIBLIOTECAS [NODE] DINAMICAMENTE QUANDO NECESSÁRIO 
+async function functionImportLibrary(infOk) {
+    let lib = infOk.lib; console.log(`IMPORTANDO BIBLIOTECA [${eng && lib !== '_WebSocket' ? 'NÃO' : 'SIM'}]...`, lib); if (eng && lib !== '_WebSocket') { gloWin[lib] = true; return }; // IGNORAR [CHROME*]
+    // NATIVA
+    if (lib == '_http') { const { default: http } = await import('http'); gloWin[lib] = http; }
+    else if (lib == '_path') { let path = await import('path'); gloWin[lib] = path; }
+    else if (lib == '_crypto') { const { createHash } = await import('crypto'); gloWin[lib] = createHash; }
+    else if (lib == '_exec') { const { exec } = await import('child_process'); gloWin[lib] = exec; }
+    else if (lib == '_net') { let net = await import('net'); gloWin[lib] = net; }
+    else if (lib == '_parse') { const { parse } = await import('url'); gloWin[lib] = parse; }
+    // INSTALADAS
+    else if (lib == '_google') { const { google } = await import('googleapis'); gloWin[lib] = google; }
+    else if (lib == '_cheerio') { let cheerio = await import('cheerio'); gloWin[lib] = cheerio; }
+    else if (lib == '_clipboard') { const { default: clipboard } = await import('clipboardy'); gloWin[lib] = clipboard; }
+    else if (lib == '_puppeteer') { let puppeteer = await import('puppeteer'); gloWin[lib] = puppeteer; }
+    else if (lib == '_WebSocket') { if (!eng) { const { default: WebSocket } = await import('ws'); gloWin[lib] = WebSocket; } else { gloWin[lib] = window.WebSocket; } }
+    else if (lib == '_WebSocketServer') { const { WebSocketServer } = await import('ws'); gloWin[lib] = WebSocketServer; }
+    else if (lib == '_getFolderSize') { const { default: getFolderSize } = await import('get-folder-size'); gloWin[lib] = getFolderSize; }
+}; gloWin['functionImportLibrary'] = functionImportLibrary
 
 // FUNÇÕES DESSE PROJETO
 gloWin['regexE'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'regexE', 'path': './regexE.js', 'inf': inf }); };  // MANTER COMO 1º IMPORT
@@ -42,7 +63,7 @@ gloWin['devFun'] = (inf) => { let fun = (eng || !eng) ? functionImport : functio
 // gloWin['getPath'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'getPath', 'path': './getPath.js', 'inf': inf }); }; // IMPORTADO NO TOPO
 gloWin['googleSheets'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'googleSheets', 'path': './googleSheets.js', 'inf': inf }); };
 gloWin['googleTranslate'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'googleTranslate', 'path': './googleTranslate.js', 'inf': inf }); };
-// gloWin['htmlToJson'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'htmlToJson', 'path': './htmlToJson.js', 'inf': inf }); };
+gloWin['htmlToJson'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'htmlToJson', 'path': './htmlToJson.js', 'inf': inf }); };
 gloWin['log'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'log', 'path': './log.js', 'inf': inf }); };
 gloWin['logConsole'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'logConsole', 'path': './logConsole.js', 'inf': inf }); };
 gloWin['logsDelOld'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'logsDelOld', 'path': './logsDelOld.js', 'inf': inf }); };

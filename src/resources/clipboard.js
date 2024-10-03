@@ -6,6 +6,9 @@ let e = import.meta.url, ee = e;
 async function clipboard(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
+        // IMPORTAR BIBLIOTECA [NODEJS]
+        if (typeof _clipboard === 'undefined') { await functionImportLibrary({ 'lib': '_clipboard' }); };
+
         if (inf.value == null || inf.value == '') {
             ret['msg'] = `CLIPBOARD: ERRO | INFORMAR O 'value'`;
         } else {
