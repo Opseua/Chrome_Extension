@@ -17,23 +17,16 @@
 // }
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets)
 
-let e = import.meta.url, ee = e; let _sheets; let _auth = null; let expiry = null;
+let e = import.meta.url, ee = e; let _sheets; let _auth; let g = globalWindow;
 async function googleSheets(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _google === 'undefined') { await functionImportLibrary({ 'lib': '_google' }); };
-
-        async function getAuthClient() {
-            if (_auth && expiry && (expiry - 60000 > Math.floor(new Date().getTime()))) { return }; _sheets = _google.sheets('v4');
-            _auth = new _google.auth.GoogleAuth({ keyFile: `${letter}:/${globalWindow.root}/${globalWindow.functions}/${globalWindow.conf}`, scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
-            _auth = await _auth.getClient(); logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `TOKEN: ATUALIZANDO` }); await _auth.authorize(); expiry = _auth.credentials.expiry_date;
-            let d = new Date(expiry); d = `${('0' + d.getDate()).slice(-2)}/${('0' + (d.getMonth() + 1)).slice(-2)} ${('0' + d.getHours()).slice(-2)}:${('0' + d.getMinutes()).slice(-2)}:${('0' + d.getSeconds()).slice(-2)}`;
-            await configStorage({ 'e': e, 'action': 'set', 'key': 'googleApi', 'value': { 'tim': expiry, 'dateHor': d } });
-        }
-
-        // AUTENTICAR OU GERAR NOVO TOKEN (SE NECESSÁRIO)
-        await getAuthClient();
+        if (typeof _sheets_v4 === 'undefined') { await functionImportLibrary({ 'lib': '_sheets_v4' }); }; if (typeof _GoogleAuth === 'undefined') {
+            await functionImportLibrary({ 'lib': '_GoogleAuth' });
+            // AUTENTICAR
+            _sheets = new _sheets_v4.Sheets({});//  _auth = await new _GoogleAuth({ keyFile: `${letter}:/${g.root}/${g.functions}/${g.conf}`, scopes: ['https://www.googleapis.com/auth/spreadsheets'], }).getClient();
+        };
 
         let id = inf && inf.id ? inf.id : '1h0cjCceBBbX6IlDYl7DfRa7_i1__SNC_0RUaHLho7d8'; let tab = inf && inf.tab ? inf.tab : 'RESULTADOS'
         if (inf.action == 'get') {
@@ -87,7 +80,9 @@ async function googleSheets(inf) {
 
         // TENTAR NOVAMENTE EM CASO DE ERRO
         if (!ret.ret && !inf.newRun) {
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `GOOGLE SHEETS: PRIMEIRA TENTATIVA \n${JSON.stringify(ret)}` });
+            await notification({ 'e': e, 'legacy': true, 'title': `ERRO GOOGLE SHEETS`, 'text': `PRIMEIRA TENTATIVA → ${ret.msg}`, });
+
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `PRIMEIRA TENTATIVA → ${ret.msg}` });
             let retGoogleSheets = await googleSheets({ ...inf, 'newRun': true })
             ret = retGoogleSheets
         }

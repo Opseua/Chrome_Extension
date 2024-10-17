@@ -22,7 +22,7 @@ async function regexE(inf) {
             'file': fileOk, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'e': inf.e.stack,
         };
 
-        console.error(`\n------------------------------------------------\n\n### ERRO ###\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n\n------------------------------------------------`)
+        console.error(`\n------------------------------------------------\n\n### ERRO ###\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n\n------------------------------------------------\n`)
 
         // LOG DE ERROS [NODEJS]
         if (errorOk.cng == 2) {
@@ -43,17 +43,11 @@ async function regexE(inf) {
         }
 
         // ENVIAR NOTIFICAÇÃO COM O ERRO
-        try {
-            function notificationLegacy(inf) {
-                let { title, text } = inf; let cng = typeof UrlFetchApp !== 'undefined'; (async () => {
-                    let url = `http://${globalWindow.devSend}`; let reqOpt = { 'method': 'POST', }; let body = JSON.stringify({
-                        "fun": [{ "securityPass": globalWindow.securityPass, 'name': 'notification', 'par': { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': inf.title, 'text': inf.text, 'ntfy': true } }]
-                    }); reqOpt[cng ? 'payload' : 'body'] = body; if (cng) { UrlFetchApp.fetch(url, reqOpt); Browser.msgBox(title, text, Browser.Buttons.OK) } else { await fetch(url, reqOpt) } // GOOGLE | Chrome/NodeJS
-                })()
-            }; notificationLegacy({ 'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`, 'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}` })
-        } catch (catchErr) {
-            console.error(`\n------------------------------------------------\n\n### ERRO REGEXe [FETCH] ###\n\n${catchErr}\n\n------------------------------------------------`)
+        let retNotification = await notification({ 'legacy': true, 'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`, 'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}`, });
+        if (!retNotification.ret) {
+            console.error(`\n------------------------------------------------\n\n### ERRO REGEXe (NOTIFICATION [LEGACY]) ###\n\n${retNotification.msg}\n\n------------------------------------------------`)
         }
+
         ret['res'] = { 'file': errorOk.file, 'line': errorOk.line, 'projectFile': errorOk.projectFile, 'e': errorOk.e, }
         ret['msg'] = `### ERRO ###\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
 

@@ -21,14 +21,14 @@ if (!(eng ? window.all1 : global.all1)) {
 }
 
 // IMPORTAR FUNÇÕES DINAMICAMENTE QUANDO NECESSÁRIO 
-let qtd = 0; async function functionImport(infOk) { let { name, path, inf } = infOk; qtd++; if (qtd > 30) { console.log('IMPORTANDO...', name) }; await import(`${path}`); return await gloWin[name](inf) }
+let qtd1 = 0; async function functionImport(infOk) { let { name, path, inf } = infOk; qtd1++; if (qtd1 > 30) { console.log('IMPORTANDO...', name) }; await import(`${path}`); return await gloWin[name](inf) }
 
 // FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) | ENCAMINHAR PARA DEVICE
 async function functionGeneric(infOk) { let { name, inf, retInf } = infOk; let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { 'name': name, 'par': inf, 'retInf': retInf, } }); return retDevAndFun }
 
 // IMPORTAR BIBLIOTECAS [NODE] DINAMICAMENTE QUANDO NECESSÁRIO 
-async function functionImportLibrary(infOk) {
-    let lib = infOk.lib; console.log(`IMPORTANDO BIBLIOTECA [${eng && lib !== '_WebSocket' ? 'NÃO' : 'SIM'}]...`, lib); if (eng && lib !== '_WebSocket') { gloWin[lib] = true; return }; // IGNORAR [CHROME*]
+let qtd2 = 0; async function functionImportLibrary(infOk) {
+    let lib = infOk.lib; qtd2++; if (qtd2 > 30) { console.log(`IMPORTANDO BIBLIOTECA [${eng && lib !== '_WebSocket' ? 'NÃO' : 'SIM'}]...`, lib); }; if (eng && lib !== '_WebSocket') { gloWin[lib] = true; return }; // IGNORAR [CHROME*]
     // NATIVA
     if (lib == '_http') { const { default: http } = await import('http'); gloWin[lib] = http; }
     else if (lib == '_path') { let path = await import('path'); gloWin[lib] = path; }
@@ -37,13 +37,15 @@ async function functionImportLibrary(infOk) {
     else if (lib == '_net') { let net = await import('net'); gloWin[lib] = net; }
     else if (lib == '_parse') { const { parse } = await import('url'); gloWin[lib] = parse; }
     // INSTALADAS
-    else if (lib == '_google') { const { google } = await import('googleapis'); gloWin[lib] = google; }
+    else if (lib == '_sheets_v4') { const { sheets_v4 } = await import('@googleapis/sheets'); gloWin[lib] = sheets_v4; }
+    else if (lib == '_GoogleAuth') { const { GoogleAuth } = await import('google-auth-library'); gloWin[lib] = GoogleAuth; }
     else if (lib == '_cheerio') { let cheerio = await import('cheerio'); gloWin[lib] = cheerio; }
     else if (lib == '_clipboard') { const { default: clipboard } = await import('clipboardy'); gloWin[lib] = clipboard; }
     else if (lib == '_puppeteer') { let puppeteer = await import('puppeteer'); gloWin[lib] = puppeteer; }
     else if (lib == '_WebSocket') { if (!eng) { const { default: WebSocket } = await import('ws'); gloWin[lib] = WebSocket; } else { gloWin[lib] = window.WebSocket; } }
     else if (lib == '_WebSocketServer') { const { WebSocketServer } = await import('ws'); gloWin[lib] = WebSocketServer; }
     else if (lib == '_getFolderSize') { const { default: getFolderSize } = await import('get-folder-size'); gloWin[lib] = getFolderSize; }
+
 }; gloWin['functionImportLibrary'] = functionImportLibrary
 
 // FUNÇÕES DESSE PROJETO
@@ -67,7 +69,7 @@ gloWin['htmlToJson'] = (inf) => { let fun = (!eng) ? functionImport : functionGe
 gloWin['log'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'log', 'path': './log.js', 'inf': inf }); };
 gloWin['logConsole'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'logConsole', 'path': './logConsole.js', 'inf': inf }); };
 gloWin['logsDelOld'] = (inf) => { let fun = (!eng) ? functionImport : functionGeneric; return fun({ 'name': 'logsDelOld', 'path': './logsDelOld.js', 'inf': inf }); };
-gloWin['notification'] = (inf) => { let fun = (eng) ? functionImport : functionGeneric; return fun({ 'name': 'notification', 'path': './notification.js', 'inf': inf }); };
+gloWin['notification'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'notification', 'path': './notification.js', 'inf': inf }); };
 gloWin['objFilter'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'objFilter', 'path': './objFilter.js', 'inf': inf }); };
 gloWin['messageReceived'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'messageReceived', 'path': './messageReceived.js', 'inf': inf }); };
 gloWin['messageSend'] = (inf) => { let fun = (eng || !eng) ? functionImport : functionGeneric; return fun({ 'name': 'messageSend', 'path': './messageSend.js', 'inf': inf }); };

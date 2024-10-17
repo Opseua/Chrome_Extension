@@ -1,4 +1,6 @@
-// await new Promise(resolve => { setTimeout(resolve, 2000) });   retHtmlToJson Array       NÃO USAR!!!      Usar →    Array.isArray(retHtmlToJson)
+// await new Promise(resolve => { setTimeout(resolve, 2000) });   
+
+// Usar →    Array.isArray(retHtmlToJson)
 
 // process.exit(); process.cwd();
 
@@ -42,15 +44,12 @@
 // cd /d D:\ARQUIVOS\PROJETOS\Projeto_Nome
 
 // [1] CHROME [c] | [2] NODEJS [n]  
-let cng = eng ? 1 : 2;
-
-let _fs, cs // *** _spawn, _url, _util // *** const { spawn } = await import('child_process'); _spawn = spawn; _url = await import('url'); _util = await import('util');
+let cng = eng ? 1 : 2; let _fs, cs // *** _spawn, _url, _util // *** const { spawn } = await import('child_process'); _spawn = spawn; _url = await import('url'); _util = await import('util');
 
 if (cng == 1) { // CHROME
     window['engName'] = 'CHROME'; window['cng'] = 1; window['letter'] = 'x'; window['globalWindow'] = {}; window['esLintIgnore'] = '';
 } else { // NDEJS
-    global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['globalWindow'] = {}; global['esLintIgnore'] = '';
-    _fs = await import('fs'); global['_fs'] = _fs;
+    global['engName'] = 'NODEJS'; global['cng'] = 2; global['letter'] = 'x'; global['globalWindow'] = {}; global['esLintIgnore'] = ''; _fs = await import('fs'); global['_fs'] = _fs;
 }
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
@@ -92,12 +91,10 @@ function rateLimiter(inf) {
 }
 
 // ############### NÚMERO ALEATÓRIO ###############
-// console.log(randomNumber(2, 5))
-function randomNumber(min, max) { return Math.floor(Math.random() * (max - min + 1) + min) }
+function randomNumber(min, max) { return Math.floor(Math.random() * (max - min + 1) + min) }; // console.log(randomNumber(2, 5))
 
 // ############### LISTENER ###############
 let listeners = {}; function listenerMonitorar(nomeList, callback) { if (!listeners[nomeList]) { listeners[nomeList] = []; } listeners[nomeList].push(callback); }
-// async function listenerAcionar(nomeList, inf, callback) { if (listeners[nomeList]) { for (let callFun of listeners[nomeList]) { let resp = await callFun(nomeList, inf); if (callback) { callback(resp) } return resp } } }
 async function listenerAcionar(nomeList, inf, call) { if (listeners[nomeList]) { for (let callFun of listeners[nomeList]) { let res = await callFun(nomeList, inf); if (typeof call === 'function') { call(res) } return res } } }
 
 // ############### AWAIT TIMEOUT ###############
