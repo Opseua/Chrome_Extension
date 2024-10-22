@@ -7,7 +7,7 @@ async function googleTranslate(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _cheerio === 'undefined') { await functionImportLibrary({ 'lib': '_cheerio' }); };
+        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio' }); };
 
         let infApi = {
             'e': e,

@@ -113,6 +113,15 @@ let msgQtd = 0; let clearConsole = console.log; console.log = function () { clea
 
 // // ###############               ###############
 
+// PEGAR O NOME DO ARQUIVO(SEM EXTENSÃO)
+function funFile(inf) { return inf.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; }; let gloWin = eng ? window : global
+
+// IMPORTAR FUNÇÕES DINAMICAMENTE QUANDO NECESSÁRIO 
+let qtd1 = 0; async function funImport(infOk) { let { path, inf } = infOk; qtd1++; let name = funFile(path); if (qtd1 > 30) { console.log('IMPORTANDO...', name) }; await import(`${path}`); return await gloWin[name](inf); }
+
+// FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) | ENCAMINHAR PARA DEVICE
+async function funGeneric(infOk) { let { path, inf } = infOk; let name = funFile(path); let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { 'name': name, 'par': inf, } }); return retDevAndFun; }
+
 if (eng) { // CHROME
     // ## VARIÁVEIS
     window['cs'] = cs;
@@ -121,7 +130,7 @@ if (eng) { // CHROME
     // ## LISTENER
     window['listenerMonitorar'] = listenerMonitorar; window['listenerAcionar'] = listenerAcionar;
     // ## FUNÇÕES
-    window['rateLimiter'] = rateLimiter; window['randomNumber'] = randomNumber; window['awaitTimeout'] = awaitTimeout;
+    window['rateLimiter'] = rateLimiter; window['randomNumber'] = randomNumber; window['awaitTimeout'] = awaitTimeout; window['funImport'] = funImport; window['funGeneric'] = funGeneric;
 } else { // NODEJS
     // ## VARIÁVEIS
     global['cs'] = cs;
@@ -130,7 +139,7 @@ if (eng) { // CHROME
     // ## LISTENER
     global['listenerMonitorar'] = listenerMonitorar; global['listenerAcionar'] = listenerAcionar;
     // ## FUNÇÕES
-    global['rateLimiter'] = rateLimiter; global['randomNumber'] = randomNumber; global['awaitTimeout'] = awaitTimeout;
+    global['rateLimiter'] = rateLimiter; global['randomNumber'] = randomNumber; global['awaitTimeout'] = awaitTimeout; global['funImport'] = funImport; global['funGeneric'] = funGeneric;
 }
 
 // ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!!

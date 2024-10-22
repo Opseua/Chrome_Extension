@@ -4,7 +4,7 @@ let e = import.meta.url, ee = e;
 async function client(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        if (typeof _WebSocket === 'undefined') { await functionImportLibrary({ 'lib': '_WebSocket' }); };
+        if (typeof _WebSocket === 'undefined') { await funLibrary({ 'lib': '_WebSocket' }); };
 
         // ### CONEXÃO
         function connect(inf) {

@@ -7,7 +7,7 @@ async function regexE(inf) {
     let ret = { 'ret': false };
     try {
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _path === 'undefined') { await functionImportLibrary({ 'lib': '_path' }); };
+        if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path' }); };
 
         // IDENTIFICAR ENGINE
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2;

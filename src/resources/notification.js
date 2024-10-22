@@ -28,7 +28,7 @@ async function notification(infOk) {
                     let { title, text } = inf; let cng = typeof UrlFetchApp !== 'undefined';
                     let url = `http://${globalWindow.devSend}`; let reqOpt = { 'method': 'POST', }; let body = JSON.stringify({
                         "fun": [{ "securityPass": globalWindow.securityPass, 'name': 'notification', 'par': { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': title, 'text': text, 'ntfy': true } }]
-                    }); reqOpt[cng ? 'payload' : 'body'] = body; if (cng) { UrlFetchApp.fetch(url, reqOpt); Browser.msgBox(title, text, Browser.Buttons.OK) } else { await fetch(url, reqOpt) } // GOOGLE | Chrome/NodeJS
+                    }); reqOpt[cng ? 'payload' : 'body'] = body; if (cng) { UrlFetchApp.fetch(url, reqOpt); } else { await fetch(url, reqOpt) } // GOOGLE | Chrome/NodeJS
                     ret['msg'] = 'NOTIFICATION [LEGACY]: OK'
                     ret['ret'] = true;
                 } catch (catchErr) {

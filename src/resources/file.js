@@ -15,7 +15,7 @@ async function file(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _path === 'undefined') { await functionImportLibrary({ 'lib': '_path' }); };
+        if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path' }); };
 
         if (!inf.action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder', 'storage',].includes(inf.action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
         else if (typeof inf.functionLocal !== 'boolean' && inf.action !== 'inf' && !inf.path.includes(':')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'functionLocal'`; }
@@ -99,7 +99,7 @@ async function file(inf) {
 
             async function fileList(inf) {
                 // IMPORTAR BIBLIOTECA [NODEJS]
-                if (typeof _getFolderSize === 'undefined') { await functionImportLibrary({ 'lib': '_getFolderSize' }); };
+                if (typeof _getFolderSize === 'undefined') { await funLibrary({ 'lib': '_getFolderSize' }); };
 
                 let resNew = { 'ret': false }, path; try {
                     if (!inf.max || inf.max == '') { resNew['msg'] = `FILE [LIST]: ERRO | INFORMAR O 'max'`; } else {
@@ -133,7 +133,7 @@ async function file(inf) {
 
             async function fileMd5(inf) {
                 // IMPORTAR BIBLIOTECA [NODEJS]
-                if (typeof _crypto === 'undefined') { await functionImportLibrary({ 'lib': '_crypto' }); };
+                if (typeof _crypto === 'undefined') { await funLibrary({ 'lib': '_crypto' }); };
 
                 let resNew = { 'ret': false }, path;
                 if (inf.path.includes(':')) { path = inf.path } else { infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal }; retFile = await fileRelative(infFile); path = retFile.res[0] }; try {
