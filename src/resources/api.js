@@ -25,6 +25,8 @@
 //     console.log('RESPONSE code:', response.status); return response.text();  // console.log('RESPONSE headers:', [...response.headers.entries()]);
 // }).then(body => { console.log('RESPONSE body:', body); }).catch(error => { console.error('RESPONSE error:', error); });
 
+// TESTAR REQUISIÇÃO E TEMPO DE RESPOSTA → https://httpbin.org/delay/5
+
 
 let e = import.meta.url, ee = e;
 async function api(inf) {

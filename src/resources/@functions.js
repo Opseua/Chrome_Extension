@@ -43,6 +43,8 @@
 
 // cd /d D:\ARQUIVOS\PROJETOS\Projeto_Nome
 
+// https://api.hashify.net/hash/md5/hex?value=aaaa
+
 // [1] CHROME [c] | [2] NODEJS [n]  
 let cng = eng ? 1 : 2; let _fs, cs // *** _spawn, _url, _util // *** const { spawn } = await import('child_process'); _spawn = spawn; _url = await import('url'); _util = await import('util');
 
