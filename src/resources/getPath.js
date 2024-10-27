@@ -4,15 +4,11 @@
 
 async function getPath(inf) {
     let ret = { 'ret': false };// e = inf && inf.e ? inf.e : e;
-    let nd = 'NAO_DEFINIDO', funLetter = `D`, root = eng ? 'chrome-extension' : 'ARQUIVOS/PROJETOS', conf = 'src/config.json', confOk, functions = eng ? chrome.runtime.id : nd
+    let nd = 'NAO_DEFINIDO', funLetter = `D`, root = eng ? 'chrome-extension' : 'ARQUIVOS/PROJETOS', conf = 'src/config.json', confOk, master = 'src/master.json', functions = eng ? chrome.runtime.id : nd
     let project = eng ? 'Downloads/Google Chrome%' : nd, fileOk = nd, line; let devChildren = inf && inf.devChildren ? inf.devChildren : nd
     let paths = [], stack = inf.e.stack, res
     try {
-        for (let [index, value] of stack.split('\n').entries()) {
-            if (value.includes(root) && !value.includes('node_modules')) {
-                paths.push(value)
-            }
-        };
+        for (let [index, value] of stack.split('\n').entries()) { if (value.includes(root) && !value.includes('node_modules')) { paths.push(value) } };
 
         // ARQUIVO DA PILHA → [PRIMEIRO]
         paths = paths[0]
@@ -21,35 +17,38 @@ async function getPath(inf) {
 
         if (eng) {
             // CHROME
-            paths = paths.split(`${functions}/`)[1];
-            paths = paths.split(':');
-            line = paths[1]; fileOk = paths[0]
+            paths = paths.split(`${functions}/`)[1]; paths = paths.split(':'); line = paths[1]; fileOk = paths[0]
             if (inf.isFunction) {
                 res = { 'conf': conf, 'letter': funLetter, 'functions': `${functions}`, 'project': project, };
-                confOk = await fetch(chrome.runtime.getURL(conf));
-                confOk = await confOk.text();
-                confOk = JSON.parse(confOk);
+
+                // CONFIG.json
+                confOk = await fetch(chrome.runtime.getURL(conf)); confOk = await confOk.text(); confOk = JSON.parse(confOk);
+
+                // MASTER.json
+                master = await fetch(chrome.runtime.getURL(master)); master = await master.text(); master = JSON.parse(master);
+                confOk['master'] = master.master
+
                 res['letter'] = funLetter;
                 res['root'] = root;
                 res['confOk'] = confOk;
+
             } else {
                 res = { 'conf': globalWindow.conf, 'letter': globalWindow.letter, 'root': globalWindow.root, 'functions': globalWindow.functions, 'project': project, }
             }
         } else {
             // NODEJS
-            paths = paths.split('file:///')[1].split(':/');
-            funLetter = paths[0].toUpperCase();
-            paths = paths[1].split(':');
-            line = paths[1];
-            fileOk = paths[0]
-            let funProject = fileOk.match(new RegExp('(' + root + '/[^/]+)'))[0];
-            fileOk = fileOk.split(`${funProject}/`)[1];
-            funProject = funProject.split(`${root}/`)[1]
+            paths = paths.split('file:///')[1].split(':/'); funLetter = paths[0].toUpperCase(); paths = paths[1].split(':'); line = paths[1]; fileOk = paths[0]
+            let funProject = fileOk.match(new RegExp('(' + root + '/[^/]+)'))[0]; fileOk = fileOk.split(`${funProject}/`)[1]; funProject = funProject.split(`${root}/`)[1]
             if (inf.isFunction) {
-                res = { 'conf': conf, 'letter': funLetter, 'functions': funProject, 'project': project, };
-                _fs = await import('fs');
-                confOk = await _fs.promises.readFile(`${funLetter}:/${root}/${funProject}/${conf}`, 'utf8');
-                confOk = JSON.parse(confOk);
+                res = { 'conf': conf, 'letter': funLetter, 'functions': funProject, 'project': project, }; _fs = await import('fs');
+
+                // CONFIG.json
+                confOk = await _fs.promises.readFile(`${funLetter}:/${root}/${funProject}/${conf}`, 'utf8'); confOk = JSON.parse(confOk);
+
+                // MASTER.json
+                master = await _fs.promises.readFile(`${funLetter}:/${root}/${funProject}/${master}`, 'utf8'); master = JSON.parse(master);
+                confOk['master'] = master.master
+
                 res['letter'] = funLetter;
                 res['root'] = root;
                 res['confOk'] = confOk;

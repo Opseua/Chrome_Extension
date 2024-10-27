@@ -24,7 +24,7 @@ set "projectWebScraper_Jucesp=ESTRELAR"
 
 rem IDENTIFICAR O DEVMASTER PELO CONFIG
 set "conteudo=" & set "atalhoModo="
-for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\config.json") do ( 
+for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\master.json") do ( 
 	rem NAO SUBIR!!!
 	set "devMaster=%%a"
 	set "devMaster=!devMaster:"=!"

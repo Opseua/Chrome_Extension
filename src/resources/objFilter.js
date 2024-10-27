@@ -1,25 +1,31 @@
 // let infObjFilter, retObjFilter
-// infObjFilter = { 'e': e, 'obj': { 'comida': 'carro', 'cadeira': { 'moto': 'carro', 'comida': 'carro', } }, 'values': ['carro',], 'filters': [{ 'includes': ['*cadeira*',] }, { 'excludes': ['*cadeira.comida*',] },] }
-// retObjFilter = objFilter(infObjFilter); console.log(retObjFilter)
+// let obj = { 'comida': 'carro', 'cadeira': { 'moto': 'carro', 'comida': 'carro', } }
+// infObjFilter = { 'e': e, 'obj': obj, 'noCaseSensitive': true, 'keys': ['MOto',], 'filters': [{ 'includes': ['*cadeira*',] }, { 'excludes': ['*cadeira.comida*',] },] }
+// infObjFilter = { 'e': e, 'obj': obj, 'noCaseSensitive': true, 'values': ['CArro',], 'filters': [{ 'includes': ['*cadeira*',] }, { 'excludes': ['*cadeira.comida*',] },] }
+// retObjFilter = await objFilter(infObjFilter); console.log(retObjFilter)
 
 let e = import.meta.url, ee = e;
 async function objFilter(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let results = []; let { obj, values, keys, filters, } = inf;
+        let results = []; let { obj, noCaseSensitive, keys, values, filters, split } = inf;
 
-        function search(current, path = []) {
-            if (typeof current === 'object' && current !== null) {
-                for (let key in current) {
-                    if (current.hasOwnProperty(key)) {
-                        if (values && values.includes(current[key])) {
-                            // CHECA SE EXISTE: VALOR
-                            results.push({ key: path.concat(key).join('.'), value: current[key] });
-                        } else if (keys && keys.includes(key)) {
-                            // CHECA SE EXISTE: CHAVE
-                            results.push({ key: path.concat(key).join('.'), value: current[key] });
+        function search(cur, path = []) {
+            if (typeof cur === 'object' && cur !== null) {
+                for (let key in cur) {
+                    if (cur.hasOwnProperty(key)) {
+                        if (keys && Array.isArray(keys) && keys.length > 0) {
+                            if ((noCaseSensitive ? keys.map(v => typeof v === 'string' ? v.toLowerCase() : v).includes(typeof key === 'string' ? key.toLowerCase() : key) : keys.includes(key))) {
+                                // CHECA SE EXISTE: KEY
+                                results.push({ 'key': path.concat(key).join(split || '.'), 'value': cur[key] });
+                            }
+                        } else if (values && Array.isArray(values) && values.length > 0) {
+                            if ((noCaseSensitive ? values.map(v => typeof v === 'string' ? v.toLowerCase() : v).includes(typeof cur[key] === 'string' ? cur[key].toLowerCase() : cur[key]) : values.includes(cur[key]))) {
+                                // CHECA SE EXISTE: VALUE
+                                results.push({ 'key': path.concat(key).join(split || '.'), 'value': cur[key] });
+                            }
                         }
-                        search(current[key], path.concat(key));
+                        search(cur[key], path.concat(key));
                     }
                 }
             }
@@ -29,12 +35,12 @@ async function objFilter(inf) {
 
         // FILTRAR OS RESULTADOS
         function filter(inf) {
-            let resultsOk = []
-            for (let [index, value] of inf.results.entries()) {
+            let resultsOk = []; let { results, filters, } = inf
+            for (let [index, value] of results.entries()) {
                 let regexRes = []
-                for (let [index1, value1] of (inf.filters.includes || inf.filters.excludes).entries()) {
-                    let regexRet = regex({ 'e': e, 'simple': true, 'pattern': value1, 'text': value.key })
-                    regexRes.push(inf.filters.includes ? regexRet : !regexRet);
+                for (let [index1, value1] of (filters.includes || filters.excludes).entries()) {
+                    let regexRet = regex({ 'e': e, 'simple': true, 'pattern': noCaseSensitive ? value1.toLowerCase() : value1, 'text': noCaseSensitive ? value.key.toLowerCase() : value.key })
+                    regexRes.push(filters.includes ? regexRet : !regexRet);
                 }
                 if (regexRes.includes(true)) {
                     resultsOk.push(value)
@@ -44,9 +50,9 @@ async function objFilter(inf) {
         }
 
         // REFILTRA OS RESULTADOS
-        if (filters && filters.length > 0) {
+        if (filters && Array.isArray(filters) && filters.length > 0) {
             for (let [index, value] of filters.entries()) {
-                if (value.includes || value.excludes) {
+                if (value && ((value.includes && Array.isArray(value.includes) && value.includes.length > 0) || (value.excludes && Array.isArray(value.excludes) && value.excludes.length > 0))) {
                     results = filter({ 'results': results, 'filters': value });
                 }
             }

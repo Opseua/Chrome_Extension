@@ -55,11 +55,11 @@ if (cng == 1) { // CHROME
 }
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
-await import('./getPath.js'); let retGetPath; retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket;
+await import('./getPath.js'); let retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket; let devMaster = retGetPath.res.confOk.master;
 
 let securityPass = `${conf.securityPass}`; let devicesObjSend = conf.devices[conf.devices.is[engName].sendTo]; let devicesValuesSend = Object.values(devicesObjSend);
 let devicesKeysSend = {}; Object.keys(devicesObjSend).forEach((key, index) => { devicesKeysSend[key] = index; }); let devicesObjGet = conf.devices[engName];
-let devicesValuesGet = Object.values(devicesObjGet); let devicesKeysGet = {}; Object.keys(devicesObjGet).forEach((key, index) => { devicesKeysGet[key] = index; }); let devMaster = conf.master;
+let devicesValuesGet = Object.values(devicesObjGet); let devicesKeysGet = {}; Object.keys(devicesObjGet).forEach((key, index) => { devicesKeysGet[key] = index; });
 let devices = [[conf.devices.is[engName].sendTo, devicesKeysSend, devicesValuesSend], [engName, devicesKeysGet, devicesValuesGet]]; let serverLoc = conf.server['1']; let hostLoc = `${serverLoc.host}`;
 let portLoc = `${serverLoc.port}`; let hostPortLoc = `${hostLoc}:${portLoc}`; let serverWeb = conf.server['2']; let hostWeb = `${serverWeb.host}`; let portWeb = `${serverWeb.port}`; let hostPortWeb = `${hostWeb}:${portWeb}`
 let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing; let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop;
@@ -111,7 +111,7 @@ function awaitTimeout(inf) {
 
 // ############### CLEAR CONSOLE ###############
 function clearRun() { /* CHROME | ANTIGO | NOVO */ if (eng) { console.clear() } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc') } };
-let msgQtd = 0; let clearConsole = console.log; console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n') } }; clearRun()
+let msgQtd = 0; let clearConsole = console.log; console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n') } }; // clearRun();
 
 // // ###############               ###############
 

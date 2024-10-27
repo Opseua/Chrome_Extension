@@ -6,15 +6,15 @@
 //     // 'range': `A:A`, // COLUNA
 // }
 // infGoogleSheets = {
-//     'e': e, 'action': 'get', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
-//     //'range': `A1`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
+//     'e': e, 'action': 'send', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
+//     // 'range': `A1`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
 //     // 'range': `A*`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'A']
 //     // 'range': `A**`, // ÚLTIMA LINHA EM BRANCO DA [ABA INTEIRA]
 //     'values': [['a', 'b', 'c', 'd',]]
 // }
 // infGoogleSheets = {
-//     'e': e, 'action': 'get', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
-//     // 'range': `A1:A20`, // PERÍMETRO
+//     'e': e, 'action': 'lastLin', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
+//     'range': `A1:A10`, // PERÍMETRO
 //     // 'range': `A:A`, // COLUNA
 // }
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets)

@@ -27,7 +27,7 @@ set "projects=WebSocket_server"
 
 rem IDENTIFICAR O DEVMASTER PELO CONFIG
 set "conteudo="
-for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\config.json") do ( set "conteudo=!conteudo!%%a" )
+for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\master.json") do ( set "conteudo=!conteudo!%%a" )
 
 rem AWS
 set "search=master": "AWS"
