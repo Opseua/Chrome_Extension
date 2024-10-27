@@ -78,7 +78,7 @@ async function getPath(inf) {
     ret['ret'] = true;
     ret['msg'] = `GET PATH: OK`;
     ret['res'] = res;
-    return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
 };
 
 // CHROME | NODEJS
