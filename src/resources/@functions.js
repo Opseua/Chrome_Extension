@@ -86,10 +86,9 @@ let gOListener = []; let gOObj = {}; function gOList(listener) { gOListener.push
 
 // ############### RATE LIMIT ###############
 // let rate = rateLimiter({ 'max': 3, 'sec': 5 }); function testRate() { console.log(rate.check()); console.log(rate.check()); console.log(rate.check()); console.log(rate.check()) }; testRate();
-function rateLimiter(inf) {
-    let max = inf.max; let sec = inf.sec * 1000; let old = []; function check() {
-        let now = Date.now(); let recent = old.filter(timestamp => timestamp >= now - sec); if (recent.length < max) { old.push(now); return true; } else { return false }
-    }; return { check };
+function rateLimiter(inf = {}) {
+    let max = inf.max; let sec = inf.sec * 1000; let old = [];
+    function check() { let now = Date.now(); let recent = old.filter(timestamp => timestamp >= now - sec); if (recent.length < max) { old.push(now); return true; } else { return false } }; return { check };
 }
 
 // ############### NÚMERO ALEATÓRIO ###############

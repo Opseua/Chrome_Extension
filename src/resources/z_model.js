@@ -3,13 +3,14 @@
 // retModel = await model(infModel); console.log(retModel)
 
 let e = import.meta.url, ee = e;
-async function model(inf) {
+async function model(inf = {}) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        // let { text, folder, } = inf
+        let { text = 'aaa', folder = 'bbb', } = inf
 
-        // let infGoogleTranslate = { 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?` };
-        // let retGoogleTranslate = await googleTranslate(infGoogleTranslate); if (!retGoogleTranslate.ret) { return retGoogleTranslate } else { retGoogleTranslate = retGoogleTranslate.res }
+        let infRegex, retRegex
+        infRegex = { 'e': e, 'pattern': `UM(.*?)TRES`, 'text': text, 'nada': folder, }
+        retRegex = regex(infRegex); console.log(retRegex)
 
         ret['res'] = `resposta aqui`;
         ret['msg'] = `MODEL: OK`;
@@ -17,7 +18,9 @@ async function model(inf) {
 
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
-    }; return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    };
+
+    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
 };
 
 // CHROME | NODEJS

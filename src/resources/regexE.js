@@ -53,7 +53,9 @@ async function regexE(inf) {
 
     } catch (catchErr) {
         console.error(`\n------------------------------------------------\n\n### ERRO REGEXe ###\n\n${catchErr.stack}\n\n------------------------------------------------`)
-    }; return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    };
+
+    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
 };
 
 // CHROME | NODEJS

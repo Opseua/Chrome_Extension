@@ -33,7 +33,9 @@ async function notification(infOk) {
                     ret['ret'] = true;
                 } catch (catchErr) {
                     ret['msg'] = catchErr;
-                }; return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+                };
+
+                return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
             };
             let retNotificationLegacy = await notificationLegacy({ 'title': title, 'text': text });
             return retNotificationLegacy
@@ -82,7 +84,9 @@ async function notification(infOk) {
 
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': infOk, 'e': catchErr, }); ret['msg'] = retRegexE.res;
-    }; return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    };
+
+    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
 };
 
 // CHROME | NODEJS
