@@ -4,21 +4,25 @@ let e = import.meta.url, ee = e;
 async function chromeActions(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let { action, color, text, target, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, tagFather, fun, funInf, awaitElementMil, } = inf;
+        let { action, color, text, title, url, cookieSearch, target, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, tagFather, fun, funInf, awaitElementMil, } = inf;
         let retTabSearch, code = '', retExecuteScript, tabId, divTemp
 
         if (action == 'badge') { // [25, 255, 71, 255]
             action = chrome.browserAction; if (color) { action.setBadgeBackgroundColor({ 'color': color }) }; if (text || text == '') { action.setBadgeText({ 'text': text }) };
-            ret['msg'] = `CHROME ACTIONS [BADGE]: OK`
-            ret['ret'] = true
+            ret['msg'] = `CHROME ACTIONS [BADGE]: OK`; ret['ret'] = true
         } else if (action == 'user') {
             action = chrome.identity; let retGetProfileUserInfo = await new Promise((resolve) => { action.getProfileUserInfo(function (userInfo) { if (userInfo.email) { resolve(userInfo.email) } else { resolve('NAO_DEFINIDO') } }) })
-            ret['res'] = retGetProfileUserInfo
-            ret['msg'] = `CHROME ACTIONS [USER]: OK`
-            ret['ret'] = true
+            ret['res'] = retGetProfileUserInfo; ret['msg'] = `CHROME ACTIONS [USER]: OK`; ret['ret'] = true
+        } else if (action == 'prompt') {
+            let retPrompt = prompt(title ? `${title} | Digite o comando:` : `Digite o comando:`);
+            if (!retPrompt) { ret['msg'] = `CHROME ACTIONS [PROMPT]: ERRO | PROMPT EM BRANCO`; } else { ret['ret'] = true; ret['msg'] = `CHROME ACTIONS [PROMPT]: OK`; ret['res'] = retPrompt; }
+        } else if (action == 'cookie') {
+            let cookiesPromise = new Promise((resolve) => { chrome.cookies.getAll({ 'url': url }, cookies => { let retCookies = JSON.stringify(cookies); resolve(retCookies) }) }); let retCookies = await cookiesPromise;
+            let cookie = ''; JSON.parse(retCookies).reduce((accumulator, v) => { cookie += `${v.name}=${v.value}; `; return accumulator; }, '');
+            if ((cookieSearch) && !(retCookies.toString().includes(cookieSearch))) { ret['msg'] = `CHROME ACTIONS [COOKIE]: ERRO | COOKIE '${cookieSearch}' NAO CONTRADO`; }
+            else { ret['ret'] = true; ret['msg'] = `CHROME ACTIONS [COOKIE]: OK`; ret['res'] = { 'array': retCookies, 'concat': cookie }; }
         } else if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'inject', 'elementAwait'].includes(action)) {
             let targetMode = (target.includes('<') || target.includes('>')) ? 'HTML' : 'INJECT'
-
             // →→→ ONDE EXECUTAR? HTML BRUTO FOI PASSADO (CRIAR DIV TEMPORÁRIA) | EXECUTAR NA PÁGINA (INJETANDO SCRIPT - DEFINIR ID DA ABA ALVO)
             if (targetMode == 'HTML') { divTemp = document.createElement('div'); divTemp.innerHTML = target; document.body.appendChild(divTemp); } else {
                 if (typeof target === "number") { tabId = target }
@@ -26,9 +30,7 @@ async function chromeActions(inf) {
             }
 
             // **************************************************************************************************************************************
-            function getBody() { return document.documentElement.outerHTML; }
-            // ###
-            function elementAction({ action, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, }) {
+            function getBody() { return document.documentElement.outerHTML; }; function elementAction({ action, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, }) {
                 // → ################ MODO SIMPLES (XPATH) | → ################ MODO AVANÇADO
                 let elements; if (!(tag || attributeValue)) {
                     elements = document.evaluate(elementName, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null); let elementsNew = [];
@@ -127,10 +129,12 @@ async function chromeActions(inf) {
 // // → HTML para teste em: "D:\ARQUIVOS\PROJETOS\Chrome_Extension\src\resources\z_HTML.html"
 
 // let infChromeActions, retChromeActions
-// // ### badge | user
-// infChromeActions = { 'e': e, 'action': 'badge', 'text': `OLA` }
-// infChromeActions = { 'e': e, 'action': 'badge', 'color': [25, 255, 71, 255] }
-// infChromeActions = { 'e': e, 'action': 'user' }
+// // ### badge | user | prompt| cookie
+// infChromeActions = { 'e': e, 'action': 'badge', 'text': `OLA`, }
+// infChromeActions = { 'e': e, 'action': 'badge', 'color': [25, 255, 71, 255], }
+// infChromeActions = { 'e': e, 'action': 'user', }
+// infChromeActions = { 'e': e, 'action': 'prompt', 'title': 'Nome do comando', }
+// infChromeActions = { 'e': e, 'action': 'cookie', 'url': `https://www.google.com/`, 'cookieSearch': `__Secure-next-auth.session-token`, }
 
 // // ************************************************************************************************************
 

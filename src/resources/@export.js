@@ -48,14 +48,12 @@ gloWin['file'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; re
 gloWin['api'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './api.js', 'inf': inf }); };
 gloWin['chat'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './chat.js', 'inf': inf }); };
 gloWin['chromeActions'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': './chromeActions.js', 'inf': inf }); };
-gloWin['chromePrompt'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': './chromePrompt.js', 'inf': inf }); };
 gloWin['client'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './client.js', 'inf': inf }); };
 gloWin['clipboard'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './clipboard.js', 'inf': inf }); };
 gloWin['commandLine'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './commandLine.js', 'inf': inf }); };
 gloWin['configStorage'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './configStorage.js', 'inf': inf }); };
 gloWin['dateHour'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './dateHour.js', 'inf': inf }); };
 gloWin['devFun'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './devFun.js', 'inf': inf }); };
-// gloWin['cookie'] = (inf) => { let fun = (eng ) ? funImport : funGeneric; return fun({ 'path': './cookie.js', 'inf': inf }); };
 // gloWin['getPath'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './getPath.js', 'inf': inf }); }; // IMPORTADO NO TOPO
 gloWin['googleSheets'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './googleSheets.js', 'inf': inf }); };
 gloWin['googleTranslate'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './googleTranslate.js', 'inf': inf }); };
@@ -67,7 +65,6 @@ gloWin['notification'] = (inf) => { let fun = (eng || !eng) ? funImport : funGen
 gloWin['objFilter'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './objFilter.js', 'inf': inf }); };
 gloWin['messageReceived'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './messageReceived.js', 'inf': inf }); };
 gloWin['messageSend'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './messageSend.js', 'inf': inf }); };
-gloWin['rawText'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './rawText.js', 'inf': inf }); };
 gloWin['regex'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './regex.js', 'inf': inf }); };
 gloWin['tabSearch'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': './tabSearch.js', 'inf': inf }); };
 

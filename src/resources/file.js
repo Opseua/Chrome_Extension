@@ -22,6 +22,15 @@ async function file(inf) {
         else if (inf.action !== 'inf' && (!inf.path || inf.path == '')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'path'`; }
         else {
             function formatBytes(b, d = 2) { if (b == 0) return '0 Bytes'; let i = Math.floor(Math.log(b) / Math.log(1024)); return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB'][i]; }
+            function rawText(inf) {
+                let ret = ''; try {
+                    let obj = inf.obj; if ((/<!.* html>.*<\/html>/s.test(obj) || !(typeof obj === 'object'))) { return obj } else {
+                        let raw = ''; let concat = inf.concat ? inf.concat : `\n\n######################################################################\n\n`
+                        for (let c in obj) { if (typeof obj[c] === 'object') { for (let sC in obj[c]) { raw += obj[c][sC] + concat; } } else { raw += obj[c] + concat; } }; ret = `${JSON.stringify(obj)}\n\n\n\n${raw}`
+                    }
+                } catch (catchErr) { esLintIgnore = catchErr; }; return ret
+            };
+
             let infFile, retFile, retFetch = '', text, relative, pathFull, md5, relativeParts, retRelative
 
             // SUBSTITUIR '!letter!' PELA LETRA DA UNIDADE
@@ -39,7 +48,7 @@ async function file(inf) {
             async function fileWrite(inf) {
                 let resNew = { 'ret': false }, path; if (typeof inf.rewrite !== 'boolean') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'rewrite' TRUE ou FALSE`; }
                 else if (!inf.text || inf.text == '') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'text'`; } else {
-                    if (inf.raw) { let infRawText = { 'e': e, 'obj': inf.text }; let retRawText = await rawText(infRawText); text = retRawText } else { // STRING /OBJETO / BUFFER
+                    if (inf.raw) { let infRawText = { 'e': e, 'obj': inf.text }; let retRawText = rawText(infRawText); text = retRawText } else { // STRING /OBJETO / BUFFER
                         if (typeof inf.text !== 'object') { text = inf.text } else { text = JSON.stringify(inf.text); text = text.includes(`"type":"Buffer"`) && text.includes(`"data":[`) ? inf.text : text }
                     }; if (inf.path.includes(':')) { path = inf.path; if (eng) { path = path.split(':/')[1] } } else {
                         if (!inf.logFun) { infFile = { 'path': inf.path, 'functionLocal': inf.functionLocal && !eng ? true : false }; retFile = await fileRelative(infFile); path = retFile.res[0] } else {
