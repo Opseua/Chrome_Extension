@@ -1,26 +1,28 @@
 // // SOMENTE FORA DO WEBSOCKET!!! → 'WEB' PARA 'WEB  E  'LOC' PARA 'LOC'
-// let message = { 'fun': [{ 'securityPass': globalWindow.securityPass, 'retInf': true, 'name': 'notification', 'par': { 'duration': 3, 'title': 'TITULO', 'text': 'TEXTO', } }] };
+// let message = { 'fun': [{ 'securityPass': globalWindow.securityPass, 'retInf': true, 'name': 'notification', 'par': { 'duration': 3, 'title': 'TITULO', 'text': 'TEXTO', } }], };
 // let retListenerAcionar = await listenerAcionar(`messageSendOrigin_127.0.0.1:1234/?roo=ORIGEM_AQUI`, { 'destination': `127.0.0.1:1234/?roo=DESTINO_AQUI`, 'message': message, 'secondsAwait': 0, });
 // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': JSON.stringify(retListenerAcionar) });
 
 // // SOMENTE DENTRO DO WEBSOCKET!!!
 // let infMessageSend, retMessageSend
 // infMessageSend = { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': 'aaa', 'resWs': ws, 'secondsAwait': 0, }
-// retMessageSend = await messageSend(infMessageSend); console.log(retMessageSend)
+// retMessageSend = await messageSend(infMessageSend); console.log(retMessageSend);
 
 let e = import.meta.url, ee = e;
-async function messageSend(inf) {
+async function messageSend(inf = {}) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let messageId = inf.messageId === true || !inf.messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : inf.messageId.replace('_RET-TRUE', '_RET-OK')
-        let message, buffer, chunkSize = globalWindow.kbPartsMessage * 1024 // globalWindow.kbPartsMessage * 1024
-        if (typeof inf.message === 'object') {
-            message = JSON.stringify(inf.message); buffer = message.includes(`"type":"Buffer"`) && message.includes(`"data":[`) && !message.includes(`"ret"`) ? true : false
-            message = buffer ? Buffer.from(inf.message).toString('base64') : message;
-        } else { buffer = false; message = inf.message }; let messageLength = message.length; let totalChunks = Math.ceil(messageLength / chunkSize);
-        let secondsAwait = !message.includes('"retInf":true') ? 0 : inf.secondsAwait > 0 ? inf.secondsAwait : globalWindow.secRetWebSocket // → TEMPO PADRÃO SE NÃO FOR INFORMADO
-        messageId = secondsAwait == 0 ? `${messageId}` : `${messageId}_RET-TRUE`; let { resWs, } = inf; let host = resWs.host, room = resWs.room;
-        let destination = inf.destination ? inf.destination.replace('ws://', '') : 'x'; let origin = inf.origin ? inf.origin : `${host}/?roo=${room}`;
+        let { resWs, messageId, secondsAwait, destination, origin, message, } = inf;
+
+        messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId.replace('_RET-TRUE', '_RET-OK')
+        let messageOk, buffer, chunkSize = globalWindow.kbPartsMessage * 1024 // globalWindow.kbPartsMessage * 1024
+        if (typeof message === 'object') {
+            messageOk = JSON.stringify(message); buffer = messageOk.includes(`"type":"Buffer"`) && messageOk.includes(`"data":[`) && !messageOk.includes(`"ret"`) ? true : false
+            messageOk = buffer ? Buffer.from(message).toString('base64') : messageOk;
+        } else { buffer = false; messageOk = message }; let messageLength = messageOk.length; let totalChunks = Math.ceil(messageLength / chunkSize);
+        secondsAwait = !messageOk.includes('"retInf":true') ? 0 : secondsAwait > 0 ? secondsAwait : globalWindow.secRetWebSocket // → TEMPO PADRÃO SE NÃO FOR INFORMADO
+        messageId = secondsAwait == 0 ? `${messageId}` : `${messageId}_RET-TRUE`; let host = resWs.host, room = resWs.room;
+        destination = destination ? destination.replace('ws://', '') : 'x'; origin = origin || `${host}/?roo=${room}`; message = messageOk;
 
         // LISTENER DE RESPOSTA: DEFINIR (SE NECESSÁRIO)
         let retAwaitTimeout, listenerName;
@@ -63,14 +65,14 @@ async function messageSend(inf) {
     return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
 }
 
-let filaBigFalse = []; let filaBigTrue = []; let sending = false; function enviarMensagem(inf) {
-    let { resWs, big, message } = inf; if (big) { if (Array.isArray(message)) { filaBigTrue.push(...message); } else { filaBigTrue.push(message); } }
+let filaBigFalse = []; let filaBigTrue = []; let sending = false; function enviarMensagem(inf = {}) {
+    let { resWs, big, message, } = inf; if (big) { if (Array.isArray(message)) { filaBigTrue.push(...message); } else { filaBigTrue.push(message); } }
     else { if (Array.isArray(message)) { filaBigFalse.push(...message); } else { filaBigFalse.push(message); } } if (!sending) { sending = true; enviarMensagens({ 'resWs': resWs }); }
 }; function processarFilas() {
     if (filaBigFalse.length > 0) { return { big: false, value: filaBigFalse.shift() }; } else if (filaBigTrue.length > 0) { return { big: true, value: filaBigTrue.shift() }; } else { return { big: false, value: false }; }
-}; async function enviarMensagens(inf) {
+}; async function enviarMensagens(inf = {}) {
     while (true) {
-        let resWs = inf.resWs; let { big, value } = processarFilas(); if (!value) { sending = false; break; }
+        let { resWs } = inf; let { big, value } = processarFilas(); if (!value) { sending = false; break; }
         let { messageId, partesRestantes, secondsAwait } = value; let message = JSON.stringify(value);
         secondsAwait = secondsAwait == 0 ? globalWindow.secRetWebSocket / 2 : secondsAwait / 2;
 

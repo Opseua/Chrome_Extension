@@ -1,10 +1,47 @@
+// → NO FINAL DA PÁGINA
+
+let e = import.meta.url, ee = e;
+async function htmlToJson(inf = {}) {
+    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    try {
+        let { html, mode, } = inf;
+
+        // IMPORTAR BIBLIOTECA [NODEJS]
+        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio' }); };
+
+        let $ = _cheerio.load(html); let result = [], headers = [], randomCol = mode == 1 ? false : true; let hasHeader = $('table thead').length > 0;
+
+        // SE CONTEM O CABEÇALHO 
+        if (hasHeader) { $('table thead th').each((i, header) => { headers.push(randomCol ? `col${i + 1}` : $(header).text().trim()); }); }
+        $('table tbody tr').each((index, row) => {
+            let rowData = {}; $(row).find('td').each((i, cell) => { let key = hasHeader ? headers[i] : `col${i + 1}`; rowData[key] = $(cell).text().trim(); });
+            if (!hasHeader && index === 0) { result.push(Object.fromEntries(Object.entries(rowData).map(([key, value]) => [key, value]))); }
+            else { result.push(rowData); }
+        });
+
+        if (mode == 3) { let keys = Object.values(result[0]); result = result.slice(1).map(obj => { let newObj = {}; keys.forEach((key, index) => { newObj[key] = obj[`col${index + 1}`]; }); return newObj; }); }
+
+        ret['ret'] = true;
+        ret['msg'] = `HTML TO JSON: OK`;
+        ret['res'] = JSON.stringify(result);
+
+    } catch (catchErr) {
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
+    };
+
+    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+};
+
+// CHROME | NODEJS
+(eng ? window : global)['htmlToJson'] = htmlToJson;
+
 // // 'mode' 1 → CHAVE IGUAL O CABEÇALHO (SE TIVER)
 // // 'mode' 2 → CHAVE ALEATÓRIA
 // // 'mode' 3 → CHAVE IGUAL AO PRIMEIRO VALOR DA TABELA
 
 // let infHtmlToJson, retHtmlToJson
 // infHtmlToJson = {
-//     'e': e, 'mode': 1,
+//     e, 'mode': 1,
 //     // TEM O CABEÇALHO [SIM]
 //     html:
 //         `
@@ -38,7 +75,7 @@
 // }
 
 // infHtmlToJson = {
-//     'e': e, 'mode': 2,
+//     e, 'mode': 2,
 //     // TEM O CABEÇALHO [NÃO]
 //     html:
 //         `
@@ -61,11 +98,11 @@
 //             </tr>
 //         </tbody>
 //     </table>
-//     `
+//     `,
 // }
 
 // infHtmlToJson = {
-//     'e': e, 'mode': 3,
+//     e, 'mode': 3,
 //     // TEM O CABEÇALHO [SIM → PRIMEIRO VALOR]
 //     html:
 //         `
@@ -93,39 +130,6 @@
 //             </tr>
 //         </tbody>
 //     </table>
-//     `
+//     `,
 // }
-// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson.res)
-
-let e = import.meta.url, ee = e;
-async function htmlToJson(inf) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
-    try {
-        // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio' }); };
-
-        let $ = _cheerio.load(inf.html); let result = [], headers = [], randomCol = inf.mode == 1 ? false : true; let hasHeader = $('table thead').length > 0;
-
-        // SE CONTEM O CABEÇALHO 
-        if (hasHeader) { $('table thead th').each((i, header) => { headers.push(randomCol ? `col${i + 1}` : $(header).text().trim()); }); }
-        $('table tbody tr').each((index, row) => {
-            let rowData = {}; $(row).find('td').each((i, cell) => { let key = hasHeader ? headers[i] : `col${i + 1}`; rowData[key] = $(cell).text().trim(); });
-            if (!hasHeader && index === 0) { result.push(Object.fromEntries(Object.entries(rowData).map(([key, value]) => [key, value]))); }
-            else { result.push(rowData); }
-        });
-
-        if (inf.mode == 3) { let keys = Object.values(result[0]); result = result.slice(1).map(obj => { let newObj = {}; keys.forEach((key, index) => { newObj[key] = obj[`col${index + 1}`]; }); return newObj; }); }
-
-        ret['ret'] = true;
-        ret['msg'] = `HTML TO JSON: OK`;
-        ret['res'] = JSON.stringify(result);
-
-    } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
-    };
-
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
-};
-
-// CHROME | NODEJS
-(eng ? window : global)['htmlToJson'] = htmlToJson;
+// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson.res);

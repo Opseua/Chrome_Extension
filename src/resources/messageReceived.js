@@ -1,13 +1,13 @@
 let e = import.meta.url, ee = e;
 let mensagensPartesRecebida = {}
-async function messageReceived(inf) {
+async function messageReceived(inf = {}) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let messageId = inf.messageId === true || !inf.messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : inf.messageId
-        let partesRestantes = inf.partesRestantes > -99 ? inf.partesRestantes : 0; let message = typeof inf.message === 'object' ? JSON.stringify(inf.message) : inf.message
-        let buffer = inf.buffer ? inf.buffer : false
-        let { host, room, resWs, wsClients } = inf
-        let origin = inf.origin ? inf.origin.replace('ws://', '') : `${host}/?roo=${room}`; let destination = inf.destination ? inf.destination.replace('ws://', '') : 'x', isSerCli = wsClients ? 'isSer' : 'isCli'
+        let { host, room, resWs, wsClients, messageId, partesRestantes, message, buffer, origin, destination, } = inf;
+
+        messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId
+        partesRestantes = partesRestantes > -99 ? partesRestantes : 0; message = typeof message === 'object' ? JSON.stringify(message) : message
+        buffer = buffer ? buffer : false; origin = origin ? origin.replace('ws://', '') : `${host}/?roo=${room}`; destination = destination ? destination.replace('ws://', '') : 'x'; let isSerCli = wsClients ? 'isSer' : 'isCli'
 
         // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
         if (Object.keys(mensagensPartesRecebida).length == 0) {
@@ -78,7 +78,7 @@ async function messageReceived(inf) {
             // ---------------- TESTES
             // if (!messageId.includes(`SERVER`)) {
             //     logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${messageId} | [${partesRestantes}] | ← TOTAL ${mensagensPartesRecebida[messageId].partes.join('').length}` });
-            //     file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_RECEBENDO_[${partesRestantes}]_.txt`, 'rewrite': false, 'text': inf.message });
+            //     file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_RECEBENDO_[${partesRestantes}]_.txt`, 'rewrite': false, 'text': message });
             //     if (partesRestantes == 0) {
             //         if (buffer && eng) {
             //             let b = new Array(message.length); for (let i = 0; i < message.length; i++) { b[i] = message.charCodeAt(i); }; let l = new Blob([new Uint8Array(b)], { type: 'application/zip' });

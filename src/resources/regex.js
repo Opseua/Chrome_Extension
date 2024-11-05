@@ -1,14 +1,14 @@
 // let infRegex, retRegex
-// infRegex = { 'e': e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES`, }
-// infRegex = { 'e': e, 'pattern': `UM(*)TRES`, 'text': `UMDOISTRES`, } // [NOVO MODO]
-// infRegex = { 'e': e, 'pattern': `*DOIS*`, 'text': `UMDOISTRES`, 'simple': true, }
-// retRegex = regex(infRegex); console.log(retRegex)
+// infRegex = { e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES`, };
+// infRegex = { e, 'pattern': `UM(*)TRES`, 'text': `UMDOISTRES`, }; // [NOVO MODO]
+// infRegex = { e, 'pattern': `*DOIS*`, 'text': `UMDOISTRES`, 'simple': true, };
+// retRegex = regex(infRegex); console.log(retRegex);
 
 let e = import.meta.url, ee = e;
-function regex(inf) { // NÃO POR COMO 'async'!!!
+function regex(inf = {}) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let { pattern, text, simple, } = inf
+        let { pattern, text, simple, } = inf;
 
         if (!pattern) {
             ret['msg'] = `REGEX: ERRO | INFORMAR O 'pattern'`;

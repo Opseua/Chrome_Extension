@@ -1,13 +1,14 @@
 // → NO FINAL DA PÁGINA
 
 let e = import.meta.url, ee = e;
-async function chromeActions(inf) {
+async function chromeActions(inf = {}) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
         let { action, color, text, title, url, cookieSearch, target, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, tagFather, fun, funInf, awaitElementMil, } = inf;
+
         let retTabSearch, code = '', retExecuteScript, tabId, divTemp
 
-        if (action == 'badge') { // [25, 255, 71, 255]
+        if (action == 'badge') {
             action = chrome.browserAction; if (color) { action.setBadgeBackgroundColor({ 'color': color }) }; if (text || text == '') { action.setBadgeText({ 'text': text }) };
             ret['msg'] = `CHROME ACTIONS [BADGE]: OK`; ret['ret'] = true
         } else if (action == 'user') {
@@ -26,7 +27,7 @@ async function chromeActions(inf) {
             // →→→ ONDE EXECUTAR? HTML BRUTO FOI PASSADO (CRIAR DIV TEMPORÁRIA) | EXECUTAR NA PÁGINA (INJETANDO SCRIPT - DEFINIR ID DA ABA ALVO)
             if (targetMode == 'HTML') { divTemp = document.createElement('div'); divTemp.innerHTML = target; document.body.appendChild(divTemp); } else {
                 if (typeof target === "number") { tabId = target }
-                else { retTabSearch = await tabSearch({ 'e': e, 'search': target, 'openIfNotExist': false }); if (!retTabSearch.ret) { return retTabSearch } tabId = retTabSearch.res.id }
+                else { retTabSearch = await tabSearch({ e, 'search': target, 'openIfNotExist': false }); if (!retTabSearch.ret) { return retTabSearch } tabId = retTabSearch.res.id }
             }
 
             // **************************************************************************************************************************************
@@ -74,7 +75,7 @@ async function chromeActions(inf) {
             } else if (['attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementIsHidden'].includes(action)) {
                 // ATRIBUTO: PEGAR VALOR | ELEMENTO: PEGAR VALOR | ELEMENTO: DEFINIR VALOR | ELEMENTO: CLICAR | DIV: PEGAR (BRUTA)
                 let infElementAction = {
-                    'e': e, 'action': action, 'elementName': elementName, 'elementValue': elementValue, 'attribute': attribute, 'attributeAdd': attributeAdd,
+                    e, 'action': action, 'elementName': elementName, 'elementValue': elementValue, 'attribute': attribute, 'attributeAdd': attributeAdd,
                     'content': content, 'tag': tag, 'attributeValue': attributeValue, 'attributeValueAdd': attributeValueAdd,
                 }  // INJECT | HTML RENDERIZAR
                 if (targetMode == 'INJECT') { code = `(${elementAction.toString()})(${JSON.stringify(infElementAction)});`; } else { retExecuteScript = elementAction(infElementAction); }
@@ -91,7 +92,7 @@ async function chromeActions(inf) {
                 }; retExecuteScript = elementGetDivFun(content, tag, null, null, tagFather)
             } else if (action == 'elementAwait') {
                 // AGUARDAR ELEMENTO
-                async function funAsync(inf) { // OBRIGATÓRIO TER O 'await'!!!
+                async function funAsync(inf = {}) { // OBRIGATÓRIO TER O 'await'!!!
                     let { awaitElementMil, tag, attribute, attributeValue } = inf; await new Promise(resolve => { setTimeout(resolve, 100) }); let start = Date.now(); let ret = false; while (Date.now() - start < awaitElementMil) {
                         let elements = attribute ? document.querySelectorAll(`${tag ? tag : ''}[${attribute}${attributeValue ? `="${attributeValue}"` : ''}]`) : document.getElementsByTagName(tag)
                         if (elements && elements.length > 0) { ret = true; break }; await new Promise(resolve => setTimeout(resolve, 100))
@@ -126,85 +127,84 @@ async function chromeActions(inf) {
 // CHROME | NODEJS
 (eng ? window : global)['chromeActions'] = chromeActions;
 
-// // → HTML para teste em: "D:\ARQUIVOS\PROJETOS\Chrome_Extension\src\resources\z_HTML.html"
+// → HTML para teste em: "D:\ARQUIVOS\PROJETOS\Chrome_Extension\src\resources\z_HTML.html"
 
 // let infChromeActions, retChromeActions
 // // ### badge | user | prompt| cookie
-// infChromeActions = { 'e': e, 'action': 'badge', 'text': `OLA`, }
-// infChromeActions = { 'e': e, 'action': 'badge', 'color': [25, 255, 71, 255], }
-// infChromeActions = { 'e': e, 'action': 'user', }
-// infChromeActions = { 'e': e, 'action': 'prompt', 'title': 'Nome do comando', }
-// infChromeActions = { 'e': e, 'action': 'cookie', 'url': `https://www.google.com/`, 'cookieSearch': `__Secure-next-auth.session-token`, }
+// infChromeActions = { e, 'action': 'badge', 'text': `OLA`, 'color': '#0ED145', };
+// infChromeActions = { e, 'action': 'user', };
+// infChromeActions = { e, 'action': 'prompt', 'title': 'Nome do comando', };
+// infChromeActions = { e, 'action': 'cookie', 'url': `https://www.google.com/`, 'cookieSearch': `__Secure-next-auth.session-token`, };
 
 // // ************************************************************************************************************
 
 // // ### getBody
-// infChromeActions = { 'e': e, 'action': 'getBody', 'target': `*file:///*` }
+// infChromeActions = { e, 'action': 'getBody', 'target': `*file:///*`, };
 
 // // ************************************************************************************************************
 
 // // ### element [MODO SIMPLES (XPATH)]
 // // → ATRIBUTO: PEGAR VALOR
-// infChromeActions = { 'e': e, 'action': 'attributeGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Label"]`, 'attribute': `class`, 'content': `LABEL 4`, }
+// infChromeActions = { e, 'action': 'attributeGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Label"]`, 'attribute': `class`, 'content': `LABEL 4`, };
 
 // // → ELEMENTO: PEGAR VALOR
-// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome1"]`, }
-// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Checkbox"]`, }
-// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Radio"]`, }
-// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Text"]`, }
+// infChromeActions = { e, 'action': 'elementGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome1"]`, };
+// infChromeActions = { e, 'action': 'elementGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Checkbox"]`, };
+// infChromeActions = { e, 'action': 'elementGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Radio"]`, };
+// infChromeActions = { e, 'action': 'elementGetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Text"]`, };
 
 // // → ELEMENTO: DEFINIR VALOR
-// infChromeActions = { 'e': e, 'action': 'elementSetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Text"]`, 'elementValue': `ISSO É UM TESTE A`, }
+// infChromeActions = { e, 'action': 'elementSetValue', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Text"]`, 'elementValue': `ISSO É UM TESTE A`, }
 
 // // → ELEMENTO: CLICAR
-// infChromeActions = { 'e': e, 'action': 'elementClick', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Button"]`, }
+// infChromeActions = { e, 'action': 'elementClick', 'target': `*file:///*`, 'elementName': `//*[@id="idNome4Button"]`, };
 
 // // → DIV: PEGAR (BRUTA)
-// infChromeActions = { 'e': e, 'action': 'elementGetDivXpath', 'target': `*file:///*`, 'elementName': `//*[@id="DivTeste"]`, }
+// infChromeActions = { e, 'action': 'elementGetDivXpath', 'target': `*file:///*`, 'elementName': `//*[@id="DivTeste"]`, };
 
 // // ************************************************************************************************************
 
 // // ### element [MODO AVANÇADO] | TAGS →→→ [input/select/textarea/button/div/label/span] | ATRIBUTOS →→→ [id/class/name/type/for/nomeDoAtributo] | CONTEÚDO →→→ [nomeDoConteudo]
 // // → ATRIBUTO: PEGAR VALOR
-// infChromeActions = { 'e': e, 'action': 'attributeGetValue', 'target': `*file:///*`, 'tag': `label`, 'attribute': `class`, 'content': `LABEL 4`, } // (tag + atributo + conteúdo)
+// infChromeActions = { e, 'action': 'attributeGetValue', 'target': `*file:///*`, 'tag': `label`, 'attribute': `class`, 'content': `LABEL 4`, }; // (tag + atributo + conteúdo)
 
 // // → ELEMENTO: PEGAR VALOR
-// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*file:///*`, 'tag': `input`, } // (tag)
-// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*file:///*`, 'tag': `textarea`, 'attribute': `class`, } // (tag + atributo)
-// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*file:///*`, 'attribute': `id`, 'attributeValue': `idNome1`, } // (atributo + valor do atributo)
-// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*file:///*`, 'tag': `textarea`, 'attribute': `id`, 'attributeValue': `idNome1`, } // (tag + atributo + valor do atributo)
-// infChromeActions = { 'e': e, 'action': 'elementGetValue', 'target': `*file:///*`, 'tag': `textarea`, 'attribute': `id`, 'attributeValue': `idNome1`, 'attributeAdd': `class`, 'attributeValueAdd': `className1`, } // (tag + atributo + valor do atributo + atributo2 + valor do atributo2)
+// infChromeActions = { e, 'action': 'elementGetValue', 'target': `*file:///*`, 'tag': `input`, }; // (tag)
+// infChromeActions = { e, 'action': 'elementGetValue', 'target': `*file:///*`, 'tag': `textarea`, 'attribute': `class`, }; // (tag + atributo)
+// infChromeActions = { e, 'action': 'elementGetValue', 'target': `*file:///*`, 'attribute': `id`, 'attributeValue': `idNome1`, }; // (atributo + valor do atributo)
+// infChromeActions = { e, 'action': 'elementGetValue', 'target': `*file:///*`, 'tag': `textarea`, 'attribute': `id`, 'attributeValue': `idNome1`, }; // (tag + atributo + valor do atributo)
+// infChromeActions = { e, 'action': 'elementGetValue', 'target': `*file:///*`, 'tag': `textarea`, 'attribute': `id`, 'attributeValue': `idNome1`, 'attributeAdd': `class`, 'attributeValueAdd': `className1`, }; // (tag + atributo + valor do atributo + atributo2 + valor do atributo2)
 
 // // → ELEMENTO: DEFINIR VALOR
-// infChromeActions = { 'e': e, 'action': 'elementSetValue', 'target': `*file:///*`, 'attribute': `id`, 'attributeValue': `idNome4Text`, 'elementValue': `ISSO É UM TESTE B` } // (atributo + valor do atributo)
+// infChromeActions = { e, 'action': 'elementSetValue', 'target': `*file:///*`, 'attribute': `id`, 'attributeValue': `idNome4Text`, 'elementValue': `ISSO É UM TESTE B`, }; // (atributo + valor do atributo)
 
 // // → ELEMENTO: CLICAR
-// infChromeActions = { 'e': e, 'action': 'elementClick', 'target': `*file:///*`, 'attribute': `id`, 'attributeValue': `idNome4Button`, } // (atributo + valor do atributo)
+// infChromeActions = { e, 'action': 'elementClick', 'target': `*file:///*`, 'attribute': `id`, 'attributeValue': `idNome4Button`, }; // (atributo + valor do atributo)
 
 // // ************************************************************************************************************
 // // → ELEMENTO: ESPERAR
-// infChromeActions = { 'e': e, 'action': 'elementAwait', 'target': `*file:///*`, 'awaitElementMil': 5000, 'tag': `div`, 'attribute': `class`, 'attributeValue': `mktls-option mktls-show mktls-value`, } // (tag + atributo + valor do atributo)
-// infChromeActions = { 'e': e, 'action': 'elementAwait', 'target': `*file:///*`, 'awaitElementMil': 5000, 'attribute': `class`, 'attributeValue': `mktls-option mktls-show mktls-value`, } // (atributo + valor do atributo)
+// infChromeActions = { e, 'action': 'elementAwait', 'target': `*file:///*`, 'awaitElementMil': 5000, 'tag': `div`, 'attribute': `class`, 'attributeValue': `mktls-option mktls-show mktls-value`, }; // (tag + atributo + valor do atributo)
+// infChromeActions = { e, 'action': 'elementAwait', 'target': `*file:///*`, 'awaitElementMil': 5000, 'attribute': `class`, 'attributeValue': `mktls-option mktls-show mktls-value`, }; // (atributo + valor do atributo)
 
 // // ************************************************************************************************************
 
 // // → INJECT
 // function teste(funInf) { console.log('FUNCAO TESTE: OK', funInf); return document.documentElement.outerHTML; } let funInf = { 'A': '' };
-// infChromeActions = { 'e': e, 'action': 'inject', 'target': '*file:///*', 'fun': teste, 'funInf': funInf, };
+// infChromeActions = { e, 'action': 'inject', 'target': '*file:///*', 'fun': teste, 'funInf': funInf, };
 
-// retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions)
+// retChromeActions = await chromeActions(infChromeActions); console.log(retChromeActions);
 
 
 
 
 // // ****************************** SCRIPT ASYNC [SIM]
-// async function funAsync(inf) {
+// async function funAsync(inf = {}) {
 //     let ret = { 'ret': false };
 //     await new Promise(resolve => { setTimeout(resolve, 500) }); // OBRIGATÓRIO TER O 'await'!!!
 //     console.log(inf);
 
 //     await new Promise(resolve => setTimeout(resolve, 2000));
-//     let retFetch = await fetch(inf.url, { 'method': 'GET', 'headers': { 'Content-Type': 'application/json', }, });
+//     let retFetch = await fetch(url, { 'method': 'GET', 'headers': { 'Content-Type': 'application/json', }, });
 //     if (!retFetch.ok) {
 //         ret['msg'] = 'INJECT ASYNC: ERRO | AO FAZER REQUISIÇÃO'
 //     } else {
@@ -216,14 +216,14 @@ async function chromeActions(inf) {
 // }
 
 // // INJETAR O CÓDIGO
-// funInf = { 'a': 'b', 'url': 'http://127.0.0.1:8889/' }
+// funInf = { 'a': 'b', 'url': 'http://127.0.0.1:8889/', };
 // code = `(${funAsync.toString()})(${JSON.stringify(funInf)});`;
 // retExecuteScript = await new Promise((resolve) => { let c = chrome.runtime.onMessage; chrome.tabs.executeScript(182883354, { code }, () => { c.addListener(function l(r) { c.removeListener(l); resolve(r) }) }) });
 // console.log(retExecuteScript);
 
 
 // // ****************************** SCRIPT ASYNC [NÃO]
-// function fun(inf) {
+// function fun(inf = {}) {
 //     let ret = { 'ret': false };
 //     console.log(inf);
 //     return document.documentElement.outerHTML;

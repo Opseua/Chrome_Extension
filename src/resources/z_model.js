@@ -1,5 +1,5 @@
 // let infModel, retModel
-// infModel = { 'e': e, 'chaveUm': 'valorUm', 'chaveDois': 'valorDois' }
+// infModel = { e, 'chaveUm': 'valorUm', 'chaveDois': 'valorDois' }
 // retModel = await model(infModel); console.log(retModel)
 
 let e = import.meta.url, ee = e;
@@ -9,7 +9,7 @@ async function model(inf = {}) {
         let { text = 'aaa', folder = 'bbb', } = inf
 
         let infRegex, retRegex
-        infRegex = { 'e': e, 'pattern': `UM(.*?)TRES`, 'text': text, 'nada': folder, }
+        infRegex = { e, 'pattern': `UM(.*?)TRES`, 'text': text, 'nada': folder, }
         retRegex = regex(infRegex); console.log(retRegex)
 
         ret['res'] = `resposta aqui`;

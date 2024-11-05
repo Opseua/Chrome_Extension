@@ -1,28 +1,30 @@
 // let infGoogleSheets, retGoogleSheets
 // infGoogleSheets = {
-//     'e': e, 'action': 'get', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
+//     e, 'action': 'get', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
 //     // 'range': `A1`, // CÉLULA ÚNICA
 //     // 'range': `A1:A2`, // PERÍMETRO
 //     // 'range': `A:A`, // COLUNA
 // }
 // infGoogleSheets = {
-//     'e': e, 'action': 'send', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
+//     e, 'action': 'send', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
 //     // 'range': `A1`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
 //     // 'range': `A*`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'A']
 //     // 'range': `A**`, // ÚLTIMA LINHA EM BRANCO DA [ABA INTEIRA]
-//     'values': [['a', 'b', 'c', 'd',]]
+//     'values': [['a', 'b', 'c', 'd',]],
 // }
 // infGoogleSheets = {
-//     'e': e, 'action': 'lastLin', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
+//     e, 'action': 'lastLin', 'id': 'ID_AQUI', 'tab': 'ABA_AQUI',
 //     'range': `A1:A10`, // PERÍMETRO
 //     // 'range': `A:A`, // COLUNA
 // }
-// retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets)
+// retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
 let e = import.meta.url, ee = e; let _auth, _sheets; let g = globalWindow; let googleAppScriptId
-async function googleSheets(inf) {
+async function googleSheets(inf = {}) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
+        let { action, id, tab, range, values, newRun, } = inf;
+
         // IMPORTAR BIBLIOTECA [NODEJS] {auth}
         if (typeof _googleapisAuth === 'undefined') {
             await funLibrary({ 'lib': '_googleapisAuth' }); _auth = new _googleapisAuth.GoogleAuth({ 'keyFile': `${letter}:/${g.root}/${g.functions}/${g.conf}`, 'scopes': ['https://www.googleapis.com/auth/spreadsheets'] });
@@ -31,10 +33,9 @@ async function googleSheets(inf) {
         // IMPORTAR BIBLIOTECA [NODEJS] {sheets}
         if (typeof _googleapisSheets === 'undefined') {
             await funLibrary({ 'lib': '_googleapisSheets' }); _sheets = _googleapisSheets({ 'version': 'v4', 'auth': _auth })
-            let retConfigStorage = await configStorage({ 'e': e, 'action': 'get', 'functionLocal': true, 'key': 'googleAppScriptId' }); if (!retConfigStorage.ret) { return retConfigStorage }; googleAppScriptId = retConfigStorage.res
+            let retConfigStorage = await configStorage({ e, 'action': 'get', 'functionLocal': true, 'key': 'googleAppScriptId' }); if (!retConfigStorage.ret) { return retConfigStorage }; googleAppScriptId = retConfigStorage.res
         }
 
-        let { action, id, tab, range, values } = inf
         if (action == 'get') {
             // GET
             try {
@@ -48,7 +49,7 @@ async function googleSheets(inf) {
         } else if (action == 'send') {
             // SEND
             let col = range.replace(/[^a-zA-Z]/g, ''), lin = ''; values = { 'values': values }; if (/[0-9]/.test(range)) { lin = range.replace(/[^0-9]/g, '') } else if (range.includes('*')) {
-                range = `${range}:${range}`; range = range.replace(/\*/g, ''); lin = await googleSheets({ 'e': e, 'action': 'lastLin', 'id': id, 'tab': tab, ...(!inf.range.includes('**') ? { 'range': range } : { 'a': 'a' }) });
+                range = `${range}:${range}`; range = range.replace(/\*/g, ''); lin = await googleSheets({ e, 'action': 'lastLin', 'id': id, 'tab': tab, ...(!inf.range.includes('**') ? { 'range': range } : { 'a': 'a' }) });
                 if (!lin.ret) { return lin }; lin = lin.res.lastLineWithData + 1
             } else {
                 ret['msg'] = `GOOGLE SHEET [SENC]: ERRO | 'range' INVÁLIDO`; return ret
@@ -67,7 +68,7 @@ async function googleSheets(inf) {
         } else if (action == 'lastLin') {
             // LAST LIN
             let infApi = {
-                'e': e, 'method': 'GET', 'headers': { 'Content-Type': 'application/json' }, 'max': 10,
+                e, 'method': 'GET', 'headers': { 'Content-Type': 'application/json' }, 'max': 10,
                 'url': `https://script.google.com/macros/s/${googleAppScriptId}/exec?inf=  { "action": "run", "name": "sheetInfTab", "par": { "id":"${id}", "tab": "${tab}" , "${range ? 'range' : 'a'}": "${range}" } }`,
             }; let retApi = await api(infApi); if (!retApi.ret) { return retApi }; retApi = JSON.parse(retApi.res.body); if (!retApi.ret) { return retApi };
             ret['res'] = {
@@ -79,10 +80,10 @@ async function googleSheets(inf) {
         }
 
         // TENTAR NOVAMENTE EM CASO DE ERRO
-        if (!ret.ret && !inf.newRun) {
-            await notification({ 'e': e, 'legacy': true, 'title': `ERRO GOOGLE SHEETS`, 'text': `PRIMEIRA TENTATIVA → ${ret.msg}`, });
+        if (!ret.ret && !newRun) {
+            await notification({ e, 'legacy': true, 'title': `ERRO GOOGLE SHEETS`, 'text': `PRIMEIRA TENTATIVA → ${ret.msg}`, });
 
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `PRIMEIRA TENTATIVA → ${ret.msg}` });
+            logConsole({ e, ee, 'write': true, 'msg': `PRIMEIRA TENTATIVA → ${ret.msg}` });
             let retGoogleSheets = await googleSheets({ ...inf, 'newRun': true })
             ret = retGoogleSheets
         }

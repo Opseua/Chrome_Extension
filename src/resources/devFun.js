@@ -1,13 +1,15 @@
 let e = import.meta.url, ee = e;
-async function devFun(inf) {
+async function devFun(inf = {}) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        if (inf.enc) {
+        let { enc, data, } = inf;
+
+        if (enc) {
             // ENCAMINHAR PARA O DEVICE CERTO
-            let retMessageSend, retInf = typeof inf.data.retInf === 'boolean' ? inf.data.retInf : inf.data.retInf ? inf.data.retInf : true
+            let retMessageSend, retInf = typeof data.retInf === 'boolean' ? data.retInf : data.retInf ? data.retInf : true
             let destination = globalWindow.devSend;
             let locWeb = destination.includes('127.0.0.1') ? '[LOC]' : '[WEB]'
-            let data = { 'securityPass': globalWindow.securityPass, 'retInf': retInf, 'name': inf.data.name, 'par': inf.data.par }
+            data = { 'securityPass': globalWindow.securityPass, 'retInf': retInf, 'name': data.name, 'par': data.par }
             data.par['enc'] = true; data.par['e'] = inf.e
             // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO
             delete data.par.retInf
@@ -37,16 +39,15 @@ async function devFun(inf) {
             }
         } else {
             // RECEBIDO DO WEBSOCKET
-            let data = inf.data;
             function label(funName) { return typeof (eng ? window : global)[funName] === 'function' }
             for (let [index, value] of data.fun.entries()) {
                 let { resWs, destination, messageId, } = inf
                 if (value.securityPass !== globalWindow.securityPass) {
                     ret['msg'] = `DEV FUN: ERRO | SECURITYPASS INCORRETO`
-                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
+                    logConsole({ e, ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
                 } else if (!label(value.name)) {
                     ret['msg'] = `DEV FUN: ERRO | FUNÇÃO '${value.name}' NÃO EXITE`
-                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
+                    logConsole({ e, ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
                 } else {
                     let name = eng ? window[value.name] : global[value.name] // CHROME ← : → NODEJS
                     let infName = value.par

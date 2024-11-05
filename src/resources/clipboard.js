@@ -1,18 +1,20 @@
 // let infClipboard, retClipboard
-// infClipboard = { 'e': e, 'value': `Esse é o texto` }
+// infClipboard = { e, 'value': `Esse é o texto` }
 // retClipboard = await clipboard(infClipboard); console.log(retClipboard)
 
 let e = import.meta.url, ee = e;
-async function clipboard(inf) {
+async function clipboard(inf = {}) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
+        let { value, } = inf;
+
         // IMPORTAR BIBLIOTECA [NODEJS]
         if (typeof _clipboard === 'undefined') { await funLibrary({ 'lib': '_clipboard' }); };
 
-        if (inf.value == null || inf.value == '') {
+        if (value == null || value == '') {
             ret['msg'] = `CLIPBOARD: ERRO | INFORMAR O 'value'`;
         } else {
-            let text = inf.value;
+            let text = value;
             if (typeof text === 'object') { // OBJETO INDENTADO EM TEXTO BRUTO
                 text = JSON.stringify(text, null, 2)
             }

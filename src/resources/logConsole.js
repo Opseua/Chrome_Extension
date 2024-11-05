@@ -1,20 +1,20 @@
 // // 'write' → 'true' ESCREVE NO 'PROJECT/log/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
-// logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `Mensagem do console` });
+// logConsole({ e, ee, 'write': true, 'msg': `Mensagem do console`, });
 
-let e = import.meta.url
-async function logConsole(inf) { // NÃO POR COMO 'async'!!!
+let e = import.meta.url;
+async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
     try {
-        let { msg, write } = inf
+        let { msg, write, } = inf;
 
-        function colorConsole(inf) {
+        function colorConsole(inf = {}) {
+            let { text, } = inf;
             // let texto
             // texto = 'NORMAL1 <amarelo>AMARELO</amarelo> NORMAL2 <azul>AZUL</azul> NORMAL3 <verde>VERDE</verde> NORMAL4 <vermelho>VERMELHO</vermelho> NORMAL5';
             // colorConsole({ 'text': texto });
             // texto = { 'A': 'B' };
             // colorConsole({ 'text': `<verde>VERDE</verde> <azul>${JSON.stringify(texto)}</azul> NORMAL1` });
             // colorConsole({ 'text': 'FIM' });
-            let { text } = inf;
             let colors = {
                 'amarelo': '\x1b[33m',
                 'azul': '\x1b[34m',
@@ -43,7 +43,7 @@ async function logConsole(inf) { // NÃO POR COMO 'async'!!!
             // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
         });
         if (!eng && write) {
-            await log({ 'e': e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall, 'unique': false })
+            await log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall, 'unique': false })
         }
 
         ret['msg'] = `LOG CONSOLE: OK`;

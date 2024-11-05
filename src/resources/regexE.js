@@ -3,9 +3,11 @@
 //     ret['msg'] = retRegexE.res;
 // };
 
-async function regexE(inf) {
+async function regexE(inf = {}) {
     let ret = { 'ret': false };
     try {
+        let { e, concat, } = inf;
+
         // IMPORTAR BIBLIOTECA [NODEJS]
         if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path' }); };
 
@@ -13,13 +15,13 @@ async function regexE(inf) {
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2;
 
         // PEGAR O PROJETO, ARQUIVO E LINHA DO ERRO
-        let retGetPath = await getPath({ 'e': inf.e, }); let { root, project, line } = retGetPath.res; let fileOk = retGetPath.res.file
+        let retGetPath = await getPath({ 'e': e, }); let { root, project, line } = retGetPath.res; let fileOk = retGetPath.res.file
 
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
         let projectFile = `[${project}]\n→ ${fileOk}`;
         let errorOk = {
             'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': globalWindow.devMaster,
-            'file': fileOk, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'e': inf.e.stack,
+            'file': fileOk, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'e': e.stack,
         };
 
         console.error(`\n------------------------------------------------\n\n### ERRO ###\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n\n------------------------------------------------\n`)
@@ -37,13 +39,13 @@ async function regexE(inf) {
             path = `${letter}:/${root}/${project}/log/JavaScript/${mon}/${day}/${hou}_ERR_${path.replace(/[<>:"\\|?*]/g, '').replace('.js', '')}.txt`
 
             if (typeof errorOk === 'object') {
-                let raw = ''; let obj = errorOk; let concat = inf.concat ? inf.concat : `\n\n#######\n\n`
+                let raw = ''; let obj = errorOk; concat = concat || `\n\n#######\n\n`
                 for (let chave in obj) { if (typeof obj[chave] === 'object') { for (let subChave in obj[chave]) { raw += obj[chave][subChave] + concat; } } else { raw += obj[chave] + concat; } }; text = `${hou}\n${raw}\n\n${text}`
             }; await _fs.promises.mkdir(_path.dirname(path), { recursive: true }); await _fs.promises.writeFile(path, text, { flag: 'a' })
         }
 
         // ENVIAR NOTIFICAÇÃO COM O ERRO
-        let retNotification = await notification({ 'legacy': true, 'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`, 'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}`, });
+        let retNotification = await notification({ 'legacy': true, 'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`, 'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}`, 'originRegexE': true, });
         if (!retNotification.ret) {
             console.error(`\n------------------------------------------------\n\n### ERRO REGEXe (NOTIFICATION [LEGACY]) ###\n\n${retNotification.msg}\n\n------------------------------------------------`)
         }

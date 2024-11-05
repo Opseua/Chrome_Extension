@@ -1,14 +1,14 @@
 // let infObjFilter, retObjFilter
-// let obj = { 'comida': 'carro', 'cadeira': { 'moto': 'carro', 'comida': 'carro', } }
-// infObjFilter = { 'e': e, 'obj': obj, 'noCaseSensitive': true, 'keys': ['MOto',], 'filters': [{ 'includes': ['*cadeira*',] }, { 'excludes': ['*cadeira.comida*',] },] }
-// infObjFilter = { 'e': e, 'obj': obj, 'noCaseSensitive': true, 'values': ['CArro',], 'filters': [{ 'includes': ['*cadeira*',] }, { 'excludes': ['*cadeira.comida*',] },] }
-// retObjFilter = await objFilter(infObjFilter); console.log(retObjFilter)
+// let obj = { 'comida': 'carro', 'cadeira': { 'moto': 'carro', 'comida': 'carro', }, };
+// infObjFilter = { e, 'obj': obj, 'noCaseSensitive': true, 'keys': ['MOto',], 'filters': [{ 'includes': ['*cadeira*',] }, { 'excludes': ['*cadeira.comida*',] },], };
+// infObjFilter = { e, 'obj': obj, 'noCaseSensitive': true, 'values': ['CArro',], 'filters': [{ 'includes': ['*cadeira*',] }, { 'excludes': ['*cadeira.comida*',] },], };
+// retObjFilter = await objFilter(infObjFilter); console.log(retObjFilter);
 
 let e = import.meta.url, ee = e;
-async function objFilter(inf) {
+async function objFilter(inf = {}) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let results = []; let { obj, noCaseSensitive, keys, values, filters, split } = inf;
+        let { obj, noCaseSensitive, keys, values, filters, split, } = inf; let results = [];
 
         function search(cur, path = []) {
             if (typeof cur === 'object' && cur !== null) {
@@ -34,12 +34,12 @@ async function objFilter(inf) {
         search(obj);
 
         // FILTRAR OS RESULTADOS
-        function filter(inf) {
+        function filter(inf = {}) {
             let resultsOk = []; let { results, filters, } = inf
             for (let [index, value] of results.entries()) {
                 let regexRes = []
                 for (let [index1, value1] of (filters.includes || filters.excludes).entries()) {
-                    let regexRet = regex({ 'e': e, 'simple': true, 'pattern': noCaseSensitive ? value1.toLowerCase() : value1, 'text': noCaseSensitive ? value.key.toLowerCase() : value.key })
+                    let regexRet = regex({ e, 'simple': true, 'pattern': noCaseSensitive ? value1.toLowerCase() : value1, 'text': noCaseSensitive ? value.key.toLowerCase() : value.key })
                     regexRes.push(filters.includes ? regexRet : !regexRet);
                 }
                 if (regexRes.includes(true)) {

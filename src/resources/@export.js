@@ -76,7 +76,7 @@ gloWin['tryRatingComplete'] = (inf) => { let fun = (eng) ? funImport : funGeneri
 // AGUARDAR IMPORT DE FUNÇÕES NÃO ASYNC **************
 let e = import.meta.url, ee = e; let infTest
 infTest = 'Wed Jan 11 2024 22:33:44 GMT-0300 (Horário Padrão de Brasília)'; await dateHour(infTest); // console.log(dateHour(infTest));
-infTest = { 'e': e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES`, }; await regex(infTest); // console.log(regex(infTest))
+infTest = { e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES`, }; await regex(infTest); // console.log(regex(infTest))
 //  **************
 
 // CHAT → https://github.com/zachey01/gpt4free.js

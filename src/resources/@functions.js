@@ -87,7 +87,7 @@ let gOListener = []; let gOObj = {}; function gOList(listener) { gOListener.push
 // ############### RATE LIMIT ###############
 // let rate = rateLimiter({ 'max': 3, 'sec': 5 }); function testRate() { console.log(rate.check()); console.log(rate.check()); console.log(rate.check()); console.log(rate.check()) }; testRate();
 function rateLimiter(inf = {}) {
-    let max = inf.max; let sec = inf.sec * 1000; let old = [];
+    let { max, sec, } = inf; sec = sec * 1000; let old = [];
     function check() { let now = Date.now(); let recent = old.filter(timestamp => timestamp >= now - sec); if (recent.length < max) { old.push(now); return true; } else { return false } }; return { check };
 }
 
@@ -99,10 +99,10 @@ let listeners = {}; function listenerMonitorar(nomeList, callback) { if (!listen
 async function listenerAcionar(nomeList, inf, call) { if (listeners[nomeList]) { for (let callFun of listeners[nomeList]) { let res = await callFun(nomeList, inf); if (typeof call === 'function') { call(res) } return res } } }
 
 // ############### AWAIT TIMEOUT ###############
-function awaitTimeout(inf) {
-    return new Promise((resolve) => {
-        let timeout; listenerMonitorar(inf.listenerName, async (nomeList, param1) => { clearTimeout(timeout); resolve({ 'ret': true, 'msg': 'TIMEOUT_FOI_LIMPO', 'res': param1, }); });
-        timeout = setTimeout(() => { resolve({ 'ret': false, 'msg': 'TIMEOUT_EXPIROU' }); }, inf.secondsAwait * 1000);
+function awaitTimeout(inf = {}) {
+    let { listenerName, secondsAwait, } = inf; return new Promise((resolve) => {
+        let timeout; listenerMonitorar(listenerName, async (nomeList, param1) => { clearTimeout(timeout); resolve({ 'ret': true, 'msg': 'TIMEOUT_FOI_LIMPO', 'res': param1, }); });
+        timeout = setTimeout(() => { resolve({ 'ret': false, 'msg': 'TIMEOUT_EXPIROU' }); }, secondsAwait * 1000);
     });
 }
 // async function runOk() {  console.log('INICIO'); let retAwaitTimeout = await awaitTimeout({ 'secondsAwait': 5, 'listenerName': 'NOME AQUI' }); console.log(retAwaitTimeout); }; runOk();
@@ -115,7 +115,7 @@ let msgQtd = 0; let clearConsole = console.log; console.log = function () { clea
 // // ###############               ###############
 
 // PEGAR O NOME DO ARQUIVO(SEM EXTENSÃO)
-function funFile(inf) { return inf.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; }; let gloWin = eng ? window : global
+function funFile(txt) { return txt.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; }; let gloWin = eng ? window : global
 
 // IMPORTAR FUNÇÕES DINAMICAMENTE QUANDO NECESSÁRIO 
 let qtd1 = 0; async function funImport(infOk) { let { path, inf } = infOk; qtd1++; let name = funFile(path); if (qtd1 > 30) { console.log('IMPORTANDO...', name) }; await import(`${path}`); return await gloWin[name](inf); }
