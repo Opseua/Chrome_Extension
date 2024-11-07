@@ -89,7 +89,7 @@ async function chat(inf = {}) {
             if (!retApi.ret) { return retApi } else { retApi = retApi.res; if (retApi.body && retApi.body.includes('{"ret": ')) { retApi = JSON.parse(retApi.body) } }; return retApi
         }
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };

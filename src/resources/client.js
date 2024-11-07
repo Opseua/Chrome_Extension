@@ -101,7 +101,7 @@ async function client(inf = {}) {
         ret['ret'] = true
         ret['msg'] = 'CLIENT: OK'
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
     if (!ret.ret) {
         if (eng) { // CHROME

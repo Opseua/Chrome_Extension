@@ -81,7 +81,7 @@ async function notification(inf = {}) {
         if (inf.originRegexE) {
             ret['msg'] = `NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`
         } else {
-            let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
+            let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
         }
     };
 

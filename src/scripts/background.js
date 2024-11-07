@@ -8,14 +8,19 @@ chrome.storage.sync.clear(function () {
 
 import('../server.js');
 
-chrome.browserAction.onClicked.addListener(async function () { // ######################### CLICK NO ICONE
-    console.log('ON START: ICONE PRESSIONADO');
+chrome.browserAction.onClicked.addListener(async function (...inf) {
+    console.log(`EVENTO: click no ícone\n`, inf)
     // chrome.browserAction.setPopup({popup: './popup.html'});
 });
 
-
-
 // → BACKUP
+
+// chrome.tabs.onUpdated.addListener(function (...inf) {
+//     [, tabInf, tab] = inf;
+//     if (tab.url == 'https://rating.ewoq.google.com/u/0/home' && tabInf.status == 'complete') {
+//         console.log(`EVENTO: URL aberto 1\n`, tab)
+//     }
+// });
 
 // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
 // chrome.downloads.onChanged.addListener(async function (...inf) {
@@ -29,10 +34,6 @@ chrome.browserAction.onClicked.addListener(async function () { // ##############
 //             }
 //         });
 //     }
-// });
-
-// chrome.browserAction.onClicked.addListener(async function (...inf) {
-//   console.log(`EVENTO: click no ícone\n`, inf)
 // });
 
 // chrome.commands.onCommand.addListener(async function (...inf) {

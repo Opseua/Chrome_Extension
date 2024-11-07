@@ -65,7 +65,8 @@ async function api(inf = {}) {
             try {
                 req = await fetch(url, reqOpt);
                 // LIMPAR O TIMER SE A RESPOSTA FOR RECEBIDA ANTES DO TEMPO
-                clearTimeout(timeoutId); resCode = req.status; resHeaders = {}; req.headers.forEach((value, name) => { resHeaders[name] = value }); resBody = await req.text(); reqOk = true
+                clearTimeout(timeoutId); resCode = req.status; resHeaders = {}; req.headers.forEach((value, name) => { resHeaders[name] = value });
+                resBody = await req.text(); reqOk = true
             } catch (catchErr) { clearTimeout(timeoutId); reqE = catchErr }
         }
 
@@ -82,7 +83,9 @@ async function api(inf = {}) {
         }
 
     } catch (catchErr) {
-        if (catchErr.name !== 'AbortError') { let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; }
+        if (catchErr.name !== 'AbortError') {
+            let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        }
     };
 
     return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };

@@ -65,7 +65,7 @@ async function tabSearch(inf = {}) {
         }
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     }
     if (!ret.ret) {
         if (inf.openIfNotExist) {

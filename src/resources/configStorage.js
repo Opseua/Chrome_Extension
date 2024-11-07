@@ -1,7 +1,7 @@
 // let infConfigStorage, retConfigStorage
 // infConfigStorage = { e, 'action': 'set', 'functionLocal': true, 'key': 'NomeDaChave', 'value': 'Valor da chave', 'returnValueAll': true, 'returnValueKey': true, };
 // infConfigStorage = { e, 'action': 'get', 'functionLocal': true, 'key': 'NomeDaChave', };
-// infConfigStorage = { e, 'action': 'del', 'functionLocal': true, 'key': 'NomeDaChave', };
+// infConfigStorage = { e, 'action': 'del', 'functionLocal': true, 'key': 'NomeDaChave', 'returnValueAll': true, };
 // retConfigStorage = await configStorage(infConfigStorage); console.log(retConfigStorage);
 
 // let cs
@@ -14,7 +14,7 @@ let e = import.meta.url, ee = e;
 async function configStorage(inf = {}) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let { action, functionLocal, key, value, path, returnValueKey, returnValueAll } = inf;
+        let { action, functionLocal, key, value, path, returnValueKey, returnValueAll, } = inf;
 
         if (!eng && Array.isArray(inf) && inf.length == 1) { // ### CS
             inf['path'] = `${letter}:/${globalWindow.root}/${globalWindow.functions}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
@@ -97,14 +97,14 @@ async function configStorage(inf = {}) {
                         if (!ret_Fs) { ret['msg'] = `CONFIG [DEL]: ERRO | ARQUIVO '${path}' NAO ENCONTRADO`; } else if (config[key]) {
                             delete config[key]; infFile = { e, 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2) }; retFile = await file(infFile);
                             ret['msg'] = `CONFIG DEL: OK`; ret['ret'] = true;
-                        } else { ret['msg'] = `CONFIG [DEL]: ERRO | CHAVE '${key}' NAO ENCONTRADA`; }
+                        } else { ret['msg'] = `CONFIG [DEL]: ERRO | CHAVE '${key}' NAO ENCONTRADA`; }; if (returnValueAll) { ret['res'] = config; };
                     }
                 }
             }
         }
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
