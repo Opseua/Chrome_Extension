@@ -17,8 +17,8 @@ for /f "tokens=1,2 delims=@" %%a in ("!arg2!") do ( set "project=%%a" & set "out
 if not "!mode!"=="!mode:LEGACY=!" ( set "restartOnStop=RESTART_STOP" ) else ( set "restartOnStop=RESTART" )
 
 rem DEFINIR programExe E programExePath
-if "!arg5!"=="node" ( set "fileScript=!fileScript!.js" & set "programExePath=!letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS" )
-if "!arg5!"=="python" ( set "fileScript=!fileScript!.py" & set "programExePath=!letra!:\ARQUIVOS\WINDOWS\PORTABLE_Python" )
+if "!arg5!"=="node" ( set "fileScript=!fileScript!.js" & set "programExePath=!fileWindows!\PORTABLE_NodeJS" )
+if "!arg5!"=="python" ( set "fileScript=!fileScript!.py" & set "programExePath=!fileWindows!\PORTABLE_Python" )
 if "!programExePath!"=="ERRO" ( !fileMsg! "[!local!\!arquivo!]\n\nprogramExe deve ser'node' ou 'python'" & exit /b )
 set "programExe=!arg5!!project!_!outrosAdd!"
 
@@ -53,7 +53,7 @@ if "!actionRun!"=="ERRO" ( !fileLog! "[!arg5!] = [EXE: EXIT - OLD: !ret2! - CALL
 
 rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'findstr'!!!)
 !fileLastRun! "!mode!_!action!" "!programExe!"
-findstr /m "SIM" "!letra!:\ARQUIVOS\WINDOWS\BAT\z_log\logTime_!programExe!.txt" >Nul
+findstr /m "SIM" "!fileWindows!\BAT\z_log\logTime_!programExe!.txt" >Nul
 if not %errorlevel%==0 !fileLog! "[!arg5!] = [EXE: NAO - OLD: !ret2! - CALL: !mode! - ACT: !action! - RUN: !actionRun!] # !fileScriptFullWithBars!" & exit /b 
 
 rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS

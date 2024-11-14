@@ -1,3 +1,6 @@
+rem COMO USAR
+rem %fileLastRun% "CMD_TOGGLE" "nodeWebSocket_server"
+
 rem IDENTIFICAR O ARQUIVO E A LOCALIZACAO COMPLETA
 Set objFSO = CreateObject("Scripting.FileSystemObject")
 arquivo = objFSO.GetFileName(WScript.ScriptFullName)
@@ -6,6 +9,11 @@ localizacao = objFSO.GetParentFolderName(WScript.ScriptFullName)
 rem DIVIDIR O CAMINHO POR '\' | QUANTIDADE DE ARRAYs | ULTIMA PASTA | LETRA DA UNIDADE
 arr = Split(localizacao, ":\")
 letra = arr(0)
+
+Set WshShell = CreateObject("WScript.Shell")
+
+rem PEGAR VARIAVEL DE AMBIENTE
+fileWindows = WshShell.ExpandEnvironmentStrings("%fileWindows%")
 
 If WScript.Arguments.Count = 0 Then
 	rem NENHUM PARAMENTRO PASSADO
@@ -21,7 +29,7 @@ Else
     timeNow = DateDiff("s", #1/1/1970 00:00:00 AM#, Now())
 
     rem VERIFICAR SE O ARQUIVO EXISTE
-    pathArquivo = letra & ":\ARQUIVOS\WINDOWS\BAT\z_log\logTime_" & idProcess & ".txt"
+    pathArquivo = fileWindows & "\BAT\z_log\logTime_" & idProcess & ".txt"
     If Not objFSO.FileExists(pathArquivo) Then
 	    rem SE O ARQUIVO NAO EXISTIR, DEFINIR VALORES PADROES
         timeManual = timeNow

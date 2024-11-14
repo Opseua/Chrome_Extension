@@ -12,7 +12,7 @@ rem echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims="
 rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 rem ALTERAR LOCAL PARA PASTA 'PORTABLE_NodeJS'
-set "local=!letra!:\ARQUIVOS\WINDOWS\PORTABLE_NodeJS"
+set "local=!fileWindows!\PORTABLE_NodeJS"
 
 rem LOCAL DE EXCUCAO DO TERMINAL
 cd\ & !letra!: & cd "!local!"
@@ -57,7 +57,7 @@ for %%a in ("%projects:;=" "%") do (
         set "destino=!local!\node%%~a.exe"
         echo F|xcopy /Q /Y /F "!origem!" "!destino!"
 		rem FIREWALL [PERMITIR]
-		!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\BAT\firewallAllowBlock.bat ALLOW !destino! NAO_MOSTRAR_POPUP
+		!2_BACKGROUND! !fileWindows!\BAT\firewallAllowBlock.bat ALLOW !destino! NAO_MOSTRAR_POPUP
     )
 )
 !fileMsg! "[!local!\!arquivo!]\n\nCopiados: !fileQtdCopy!" & exit
@@ -78,7 +78,7 @@ for %%F in (*) do (
 				echo [APAGAR] →→→ - !filename!
 				del /f "!local!\!filename!"
 				rem FIREWALL [APAGAR REGRA]
-				!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\BAT\firewallAllowBlock.bat DEL !local!\!filename! NAO_MOSTRAR_POPUP
+				!2_BACKGROUND! !fileWindows!\BAT\firewallAllowBlock.bat DEL !local!\!filename! NAO_MOSTRAR_POPUP
 			)
 		) else (
 			echo [NAO] - !filename!

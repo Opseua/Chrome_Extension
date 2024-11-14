@@ -1,3 +1,6 @@
+rem COMO USAR
+rem %fileMsg% "TITULO\n\nTexto"
+
 rem IDENTIFICAR O ARQUIVO E A LOCALIZACAO COMPLETA
 Set objFSO = CreateObject("Scripting.FileSystemObject")
 arquivo = objFSO.GetFileName(WScript.ScriptFullName)

@@ -46,25 +46,25 @@ if not "!arg1!"=="!arg1:ONLY_START=!" goto START_SCRIPTS
 
 rem ################################## SCRIPTS PARAR
 rem → Chat_Python
-if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Chat_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!fileProjetos!\Chat_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → Sniffer_Python
-if not "!projectSniffer_Python!"=="!projectSniffer_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+if not "!projectSniffer_Python!"=="!projectSniffer_Python:%conteudo%=!" ( "!fileProjetos!\Sniffer_Python\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [C6]
-if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [C6_New2]
-if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6_New2\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6_New2\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [C6_New3]
-if not "!projectWebScraper_C6_New3!"=="!projectWebScraper_C6_New3:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverC6_New3\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+if not "!projectWebScraper_C6_New3!"=="!projectWebScraper_C6_New3:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6_New3\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebScraper [Jucesp]
-if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebScraper\src\z_Outros_serverJucesp\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverJucesp\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebSocket (MANTER COMO ULTIMO PARA GARANTIR QUE OUTROS PROJETOS CONSIGAM ENVIAR OS COMANDOS ATE ENCERRAR TUDO)
-if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!fileProjetos!\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem ### SOMENTE PARAR OS SCRIPTS (SE FOI ESPECIFICADO NO PARAMENTRO)
 if not "!arg1!"=="!arg1:ONLY_STOP=!" goto FIM_DO_SCRIPT
@@ -75,10 +75,10 @@ ping -n 5 -w 1000 127.0.0.1 >nul
 :START_SCRIPTS
 rem ################################## SCRIPTS INICIAR
 rem → Chat_Python
-if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\Chat_Python\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!fileProjetos!\Chat_Python\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebSocket
-if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!letra!:\ARQUIVOS\PROJETOS\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!fileProjetos!\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem ATALHO ACIONADO FOI 'AllRestart'
 if not "!arg1!"=="!arg1:ALL_RESTART=!" (
@@ -95,12 +95,12 @@ if not "!arg1!"=="!arg1:ALL_RESTART=!" (
 		
 		ping -n 7 -w 1000 127.0.0.1 >nul
 		
-		!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\PORTABLE_Notepad++\notepad++.exe !letra!:\ARQUIVOS\WINDOWS\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt -monitor
+		!2_BACKGROUND! !fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt -monitor
 		
 		ping -n 3 -w 1000 127.0.0.1 >nul
 		
 		rem !2_BACKGROUND! taskmgr
-		!2_BACKGROUND! !letra!:\ARQUIVOS\WINDOWS\PORTABLE_System_Informer\SystemInformer.exe
+		!2_BACKGROUND! !fileWindows!\PORTABLE_System_Informer\SystemInformer.exe
 		
 		ping -n 3 -w 1000 127.0.0.1 >nul
 		
