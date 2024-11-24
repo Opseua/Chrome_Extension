@@ -2,9 +2,9 @@ function startupFun(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m =
 await import('./resources/@export.js'); let e = import.meta.url, ee = e;
 
 async function serverRun(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ e, ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]` })
+        logConsole({ e, ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]`, });
 
         // RESETAR BADGE
         chromeActions({ e, 'action': 'badge', 'text': '', });
@@ -52,13 +52,12 @@ async function serverRun(inf = {}) {
         // CLIENT (NÃO POR COMO 'await'!!!) | MANTER NO FINAL
         client({ 'e': e });
 
-        await new Promise(resolve => { setTimeout(resolve, 1000) });
-
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        // let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        console.log(catchErr)
     };
 
     return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };

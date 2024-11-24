@@ -9,7 +9,7 @@
 
 let e = import.meta.url, ee = e;
 async function log(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { folder, path, text, raw, functionLocal, fileProject, fileCall, unique, } = inf;
 
@@ -49,7 +49,7 @@ async function log(inf = {}) {
                 'text': text, 'rewrite': rewrite, 'path': pathOk.replace(/:/g, '')
             };
             await file(infFile);
-            let res = `${letter}:/${globalWindow.root}/${functionLocal ? globalWindow.functions : globalWindow.project}/${pathOk}`;
+            let res = `${letter}:/${gW.root}/${functionLocal ? gW.functions : gW.project}/${pathOk}`;
 
             ret['res'] = res.replace('%', '');
             ret['msg'] = `LOG: OK`;

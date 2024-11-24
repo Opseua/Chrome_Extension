@@ -1,35 +1,39 @@
-let eng = (typeof window !== 'undefined'); (eng ? window : global)['eng'] = eng; let gloWin = eng ? window : global // [true] CHROME | [false] NODEJS
+let eng = (typeof window !== 'undefined'); (eng ? window : global)['eng'] = eng; let gloWin = eng ? window : global; // [true] CHROME | [false] NODEJS
 
 function all2() { }; gloWin['all2'] = all2; // ******************************************************** NÃO USAR !!!
 
 if (!(eng ? window.all1 : global.all1)) {
     // DEFINIR O 'devChildren' → [CHROME] EMAIL DO USUÁRIO | [NODEJS] PRIMEIRO ARQUIVO A SER EXECUTADO (NA MAIORIA DOS CASOS 'server')
-    let devC = new Error().stack.split('\n'); devC = devC[devC.length - 1]; let devChildren = devC.includes('.js:') ? devC.match(/\/([^/]+)\.[^/]+$/)[1] : false
-    if (eng) { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email) }) }) }
+    let devC = new Error().stack.split('\n'); devC = devC[devC.length - 1]; let devChildren = devC.includes('.js:') ? devC.match(/\/([^/]+)\.[^/]+$/)[1] : false;
+    if (eng) { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email) }) }) };
 
     // @functions
     await import('./@functions.js');
 
     // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
-    await getPath({ 'e': new Error(), 'devChildren': devChildren })
+    await getPath({ 'e': new Error(), devChildren, });
 
-    // console.log(eng, '-', engName, '-', letter); console.log("#################"); console.log('securityPass:', globalWindow.securityPass);
-    // console.log('portWeb:', globalWindow.portWeb, '|', 'serverWeb:', globalWindow.serverWeb); console.log('portLoc:', globalWindow.portLoc, '|', 'serverLoc:', globalWindow.serverLoc);
-    // console.log('devMaster:', globalWindow.devMaster, '|', 'devSlave:', globalWindow.devSlave, '|', 'devChildren:', globalWindow.devChildren);
-    // console.log('devSend:', globalWindow.devSend); console.log('devGet:', globalWindow.devGet); console.log('conf:', globalWindow.conf);
-    // console.log('root:', globalWindow.root); console.log('functions:', globalWindow.functions); console.log('project:', globalWindow.project);
+    // console.log(`${eng} | ${engName} | ${letter}\n${fileProjetos} | ${fileWindows}`); console.log('\n'); console.log('securityPass:', gW.securityPass);
+    // console.log('portWeb:', gW.portWeb, '|', 'serverWeb:', gW.serverWeb); console.log('portLoc:', gW.portLoc, '|', 'serverLoc:', gW.serverLoc);
+    // console.log(`devMaster: ${gW.devMaster}\ndevSlave: ${gW.devSlave}\ndevChildren: ${gW.devChildren}`); console.log(`devSend:\n${gW.devSend}`);
+    // console.log(`devGet:\n${gW.devGet[0]}\n${gW.devGet[1]}`); console.log('conf:', gW.conf); console.log('root:', gW.root); console.log('functions:', gW.functions); console.log('project:', gW.project);
+
 }
 
 // IMPORTAR BIBLIOTECAS [NODE] DINAMICAMENTE QUANDO NECESSÁRIO 
 let qtd2 = 0; async function funLibrary(infOk) {
-    let lib = infOk.lib; qtd2++; if (qtd2 > 30) { console.log(`IMPORTANDO BIBLIOTECA [${eng && lib !== '_WebSocket' ? 'NÃO' : 'SIM'}]...`, lib); }; if (eng && lib !== '_WebSocket') { gloWin[lib] = true; return }; // IGNORAR [CHROME*]
+    let lib = infOk.lib; qtd2++; if (qtd2 > 30) { console.log(`IMPORTANDO BIBLIOTECA [${eng && lib !== '_WebSocket' ? 'NÃO' : 'SIM'}]...`, lib); }; if (eng && lib !== '_WebSocket') { gloWin[lib] = true; return };
     // NATIVA
     if (lib == '_http') { const { default: http } = await import('http'); gloWin[lib] = http; }
     else if (lib == '_path') { let path = await import('path'); gloWin[lib] = path; }
+    else if (lib == '_parse') { const { parse } = await import('url'); gloWin[lib] = parse; }
+    else if (lib == '_net') { let net = await import('net'); gloWin[lib] = net; }
+    else if (lib == '_url') { let _url = await import('url'); gloWin[lib] = _url; }
+    else if (lib == '_util') { let _util = await import('util'); gloWin[lib] = _util; }
     else if (lib == '_crypto') { const { createHash } = await import('crypto'); gloWin[lib] = createHash; }
     else if (lib == '_exec') { const { exec } = await import('child_process'); gloWin[lib] = exec; }
-    else if (lib == '_net') { let net = await import('net'); gloWin[lib] = net; }
-    else if (lib == '_parse') { const { parse } = await import('url'); gloWin[lib] = parse; }
+    else if (lib == '_spawn') { const { spawn } = await import('child_process'); gloWin[lib] = spawn; }
+
     // INSTALADAS
     else if (lib == '_googleapisAuth') { const { auth } = await import('@googleapis/sheets'); gloWin[lib] = auth; }
     else if (lib == '_googleapisSheets') { const { sheets } = await import('@googleapis/sheets'); gloWin[lib] = sheets; }
@@ -79,6 +83,4 @@ infTest = 'Wed Jan 11 2024 22:33:44 GMT-0300 (Horário Padrão de Brasília)'; a
 infTest = { e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES`, }; await regex(infTest); // console.log(regex(infTest))
 //  **************
 
-// CHAT → https://github.com/zachey01/gpt4free.js
-await import('./chat/providers.js');
 

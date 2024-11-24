@@ -1,6 +1,6 @@
 let e = import.meta.url, ee = e;
 async function command1(inf = {}) {
-  let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+  let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
   try {
     let { origin, infTryRatingComplete = '', } = inf
 
@@ -15,13 +15,13 @@ async function command1(inf = {}) {
       // → GERAR O COMENTÁRIO DO 'tryRatingComplete'
 
       // DEFINIR DESTINO (USUÁRIO 3 DO CHROME)
-      let devSendOther, devices = globalWindow.devices[1]; let retChromeActions = await chromeActions({ e, 'action': 'user' });
-      for (let c in devices[1]) { if (c.includes(retChromeActions.res)) { let valor = devices[1][c]; devSendOther = 3; devSendOther = globalWindow.devGet[1].replace(devices[2][valor], devices[2][devSendOther]) } }
+      let devSendOther, devices = gW.devices[1]; let retChromeActions = await chromeActions({ e, 'action': 'user' });
+      for (let c in devices[1]) { if (c.includes(retChromeActions.res)) { let valor = devices[1][c]; devSendOther = 3; devSendOther = gW.devGet[1].replace(devices[2][valor], devices[2][devSendOther]) } }
 
       // ENVIAR MENSAGEM COM O COMANDO
       let message = {
         'fun': [{
-          'securityPass': globalWindow.securityPass, 'retInf': true, 'name': 'tryRatingComplete',
+          'securityPass': gW.securityPass, 'retInf': true, 'name': 'tryRatingComplete',
           'par': { 'infTryRatingComplete': infTryRatingComplete, }
         }]
       };
@@ -33,7 +33,7 @@ async function command1(inf = {}) {
       }
 
       let infNotification = {
-        e, 'duration': 2, 'icon': `./src/scripts/media/icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
+        e, 'duration': 2, 'icon': `icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
         'title': `Complete Judge`, 'text': retListenerAcionar.msg,
       };
       await notification(infNotification);

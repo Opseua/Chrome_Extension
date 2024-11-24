@@ -5,7 +5,7 @@
 
 let e = import.meta.url, ee = e;
 async function commandLine(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { awaitFinish, notAdm, command, } = inf;
 

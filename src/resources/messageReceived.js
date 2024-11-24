@@ -1,21 +1,19 @@
 let e = import.meta.url, ee = e;
 let mensagensPartesRecebida = {}
 async function messageReceived(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { host, room, resWs, wsClients, messageId, partesRestantes, message, buffer, origin, destination, } = inf;
 
         messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId
-        partesRestantes = partesRestantes > -99 ? partesRestantes : 0; message = typeof message === 'object' ? JSON.stringify(message) : message
-        buffer = buffer ? buffer : false; origin = origin ? origin.replace('ws://', '') : `${host}/?roo=${room}`; destination = destination ? destination.replace('ws://', '') : 'x'; let isSerCli = wsClients ? 'isSer' : 'isCli'
+        partesRestantes = partesRestantes > -99 ? partesRestantes : 0; message = typeof message === 'object' ? JSON.stringify(message) : message; buffer = buffer ? buffer : false;
+        origin = origin ? origin.replace('ws://', '') : `${host}/?roo=${room}`; destination = destination ? destination.replace('ws://', '') : 'x'; let isSerCli = wsClients ? 'isSer' : 'isCli';
 
         // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
         if (Object.keys(mensagensPartesRecebida).length == 0) {
-            let mensagensPartesRecebida = {}; setInterval(() => {
-                let currentTime = new Date().getTime(); for (let messageId in mensagensPartesRecebida) {
-                    if ((currentTime - Number(messageId.split('_')[1])) > globalWindow.minClearPartsMessages * 60000) { delete mensagensPartesRecebida[messageId]; }
-                }
-            }, globalWindow.minClearPartsMessages * 60000);
+            let mensagensPartesRecebida = {}; let minClearPartsMessages = gW.minClearPartsMessages; setInterval(() => {
+                let c = new Date().getTime(); for (let messageId in mensagensPartesRecebida) { if ((c - Number(messageId.split('_')[1])) > minClearPartsMessages * 60000) { delete mensagensPartesRecebida[messageId]; } };
+            }, minClearPartsMessages * 60000);
         }
 
         if (isSerCli == 'isSer') {
@@ -25,8 +23,7 @@ async function messageReceived(inf = {}) {
                     wsClientsArrRoom.push(room) // // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
                     wsClientsToSend = wsClientsToSend.concat(Array.from(wsClients.rooms[room]));
                 }
-            }
-            erroType = wsClientsToSend.length == 0 ? `DESTINO INVÁLIDO` : (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': origin }) || origin == destination) ? `DESTINO IGUAL` : 0
+            }; erroType = wsClientsToSend.length == 0 ? `DESTINO INVÁLIDO` : (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': origin }) || origin == destination) ? `DESTINO IGUAL` : 0;
 
             // ENVIAR: MENSAGEM STATUS → ORIGEM
             let messageOrigin = {
@@ -35,44 +32,38 @@ async function messageReceived(inf = {}) {
                 'messageId': `${messageId}_SERVER_${partesRestantes}`,
                 'buffer': false,
                 'partesRestantes': 0,
-                'message': { 'ret': !erroType, 'msg': !erroType ? `SEND [SERVER]: OK` : `${erroType} '${destination}'` }
-            };
-            resWs.send(JSON.stringify(messageOrigin))
+                'message': { 'ret': !erroType, 'msg': !erroType ? `WS: OK` : `WS: ERRO | ${erroType} '${destination}'` },
+            }; resWs.send(JSON.stringify(messageOrigin));
 
             // ENVIAR: MENSAGEM REAL → DESTINO
             if (!erroType) {
                 for (let [index, value] of wsClientsToSend.entries()) {
-                    try { message = JSON.parse(message) } catch (catchErr) { esLintIgnore = catchErr; }
-                    let messageDestination = {
+                    try { message = JSON.parse(message) } catch (catchErr) { esLintIgnore = catchErr; }; let messageDestination = {
                         'origin': origin,
                         'destination': `${value.hostRoom}`,
                         'messageId': messageId,
                         'buffer': buffer,
                         'partesRestantes': partesRestantes,
                         'message': message
-                    }
-                    // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ENVIANDO MENSAGEM: [${index + 1}/${wsClientsToSend.length}] ${messageId} → ${messageDestination.destination}` });
-                    value.send(JSON.stringify(messageDestination));
-                    await new Promise(resolve => { setTimeout(resolve, 10) })
+                    }; // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ENVIANDO MENSAGEM: [${index + 1}/${wsClientsToSend.length}] ${messageId} → ${messageDestination.destination}` });
+                    value.send(JSON.stringify(messageDestination)); await new Promise(resolve => { setTimeout(resolve, 10) });
                 }
             }
         } else {
             // ### RECEBIDO NO CLIENT
-            if (!mensagensPartesRecebida[messageId]) { mensagensPartesRecebida[messageId] = { partes: [] }; }
-            mensagensPartesRecebida[messageId].partes.push(message)
-            if (partesRestantes == 0) {
-                message = mensagensPartesRecebida[messageId].partes.join(''); message = buffer ? eng ? atob(message) : Buffer.from(message, 'base64') : message; let listName = 'x'
+            if (!mensagensPartesRecebida[messageId]) { mensagensPartesRecebida[messageId] = { partes: [] }; }; mensagensPartesRecebida[messageId].partes.push(message); if (partesRestantes == 0) {
+                message = mensagensPartesRecebida[messageId].partes.join(''); message = buffer ? eng ? atob(message) : Buffer.from(message, 'base64') : message; let listName = 'x';
                 if (messageId.includes(`SERVER`) || messageId.includes(`RET-OK`)) {
                     // RECEBIDO: RETORNO DO SERVIDOR OU RESPOSTA SENDO AGUARDADA
-                    listName = `${messageId}`
+                    listName = `${messageId}`;
                 } else {
                     // RECEBIDO: OUTRA MENSAGEM → PROCESSAR E CHAMAR A FUNÇÃO
-                    listName = `${destination}`
+                    listName = `${destination}`;
                 }
 
                 // ACIONAR LISTENER
                 // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ACIONANDO LISTENER: '${listName}` });
-                listenerAcionar(`${listName}`, { 'origin': origin, 'messageId': messageId, 'message': message, 'resWs': resWs, 'host': host, 'room': room })
+                listenerAcionar(`${listName}`, { 'origin': origin, 'messageId': messageId, 'message': message, 'resWs': resWs, 'host': host, 'room': room });
             }
 
             // ---------------- TESTES

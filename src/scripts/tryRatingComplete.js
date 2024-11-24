@@ -8,7 +8,7 @@ import optTryRating_Search20 from './objects/optTryRating_Search20.js'
 
 let e = import.meta.url, ee = e;
 async function tryRatingComplete(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { infTryRatingComplete, } = inf; let infChromeActions, retChromeActions, judgesValues = { 'current': -1, 'comments': [], 'responses': [], 'values': [] };
         let optionsHitApp = { 'POIEvaluation': optTryRating_POIEvaluation, 'Search20': optTryRating_Search20 };

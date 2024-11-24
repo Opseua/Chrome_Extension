@@ -4,7 +4,7 @@
 // };
 
 async function regexE(inf = {}) {
-    let ret = { 'ret': false };
+    let ret = { 'ret': false, };
     try {
         let { e, concat, } = inf;
 
@@ -18,9 +18,9 @@ async function regexE(inf = {}) {
         let retGetPath = await getPath({ 'e': e, }); let { root, project, line } = retGetPath.res; let fileOk = retGetPath.res.file
 
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
-        let projectFile = `[${project}]\n→ ${fileOk}`;
+        let projectFile = `{${project}}\n→ ${fileOk}`;
         let errorOk = {
-            'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': globalWindow.devMaster,
+            'cng': cng, 'cngName': cng == 1 ? 'CHROME' : cng == 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': gW.devMaster,
             'file': fileOk, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'e': e.stack,
         };
 
@@ -40,12 +40,19 @@ async function regexE(inf = {}) {
 
             if (typeof errorOk === 'object') {
                 let raw = ''; let obj = errorOk; concat = concat || `\n\n#######\n\n`
-                for (let chave in obj) { if (typeof obj[chave] === 'object') { for (let subChave in obj[chave]) { raw += obj[chave][subChave] + concat; } } else { raw += obj[chave] + concat; } }; text = `${hou}\n${raw}\n\n${text}`
+                for (let chave in obj) { if (typeof obj[chave] === 'object') { for (let subChave in obj[chave]) { raw += obj[chave][subChave] + concat; } } else { raw += obj[chave] + concat; } };
+                text = `${hou}\n${raw}\n\n${text}`
             }; await _fs.promises.mkdir(_path.dirname(path), { recursive: true }); await _fs.promises.writeFile(path, text, { flag: 'a' })
         }
 
         // ENVIAR NOTIFICAÇÃO COM O ERRO
-        let retNotification = await notification({ 'legacy': true, 'title': `### ERRO ${errorOk.cngName} [${errorOk.devMaster}] ###`, 'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}`, 'originRegexE': true, });
+        let retNotification = await notification({
+            'originRegexE': true,
+            'legacyNew': true,
+            'title': `### ERRO (${errorOk.devMaster}) [${errorOk.cngName}]`,
+            'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}`,
+        });
+
         if (!retNotification.ret) {
             console.error(`\n------------------------------------------------\n\n### ERRO REGEXe (NOTIFICATION [LEGACY]) ###\n\n${retNotification.msg}\n\n------------------------------------------------`)
         }

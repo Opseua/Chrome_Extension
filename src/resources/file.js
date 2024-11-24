@@ -12,7 +12,7 @@
 
 let e = import.meta.url, ee = e;
 async function file(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { action, functionLocal, path, } = inf; let infFile, retFile;
 
@@ -20,7 +20,7 @@ async function file(inf = {}) {
         if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path' }); };
 
         // SUBSTITUIR '!letter!' PELA LETRA DA UNIDADE
-        if (path) { path = path.replace(/!letter!/g, letter); inf.path = path; };
+        if (path) { path = path.replace(/!letter!/g, letter).replace(/!fileProjetos!/g, fileProjetos).replace(/!fileWindows!/g, fileWindows); inf.path = path; };
 
         if (!action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder', 'storage',].includes(action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
         else if (typeof functionLocal !== 'boolean' && action !== 'inf' && !path.includes(':')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'functionLocal'`; }
@@ -39,7 +39,7 @@ async function file(inf = {}) {
             async function fileRelative(inf = {}) {
                 let { path, functionLocal, } = inf; let resNew = { 'ret': false }; let relative = path; let relativeParts; function runPath(pp, par) {
                     if (pp.startsWith('./')) { pp = pp.slice(2) } else if (relative.startsWith('/')) { pp = pp.slice(1) }
-                    par = par ? `${globalWindow.root}${eng ? ':/' : ''}/${globalWindow.functions}` : `${eng ? `` : `${globalWindow.root}/`}${globalWindow.project}`; let pathFull = par.split('/'); relativeParts = pp.split('/');
+                    par = par ? `${gW.root}${eng ? ':/' : ''}/${gW.functions}` : `${eng ? `` : `${gW.root}/`}${gW.project}`; let pathFull = par.split('/'); relativeParts = pp.split('/');
                     while (pathFull.length > 0 && relativeParts[0] == '..') { pathFull.pop(); relativeParts.shift(); }; let retRelative = pathFull.concat(relativeParts).join('/');
                     if (retRelative.endsWith('/.')) { retRelative = retRelative.slice(0, -2); } else if (retRelative.endsWith('.') || retRelative.endsWith('/')) { retRelative = retRelative.slice(0, -1); }; return retRelative
                 }; let res = [`${eng && functionLocal ? '' : `${letter}:/`}${runPath(path, functionLocal ? true : false)}`]; resNew['ret'] = true; resNew['msg'] = `FILE [RELATIVE]: OK`; resNew['res'] = res; return resNew

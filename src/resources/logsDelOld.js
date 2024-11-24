@@ -3,7 +3,7 @@
 
 let e = import.meta.url, ee = e;
 async function logsDelOld(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let retFile, pathsDel = [], filesDelOrNot = [], retDelOrNot
 
@@ -15,29 +15,29 @@ async function logsDelOld(inf = {}) {
         }
 
         let pathsToDel = [
-            { 'daysKeep': 7, 'path': `${letter}:/ARQUIVOS/WINDOWS/BAT/z_log`, },
+            { 'daysKeep': 7, 'path': `${fileWindows}/BAT/z_log`, },
 
             // Chat_Python
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chat_Python/log/JavaScript`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chat_Python/log/Python`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chat_Python/log/Registros`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 60 : 60, 'path': `${fileProjetos}/Chat_Python/log/JavaScript`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 60 : 60, 'path': `${fileProjetos}/Chat_Python/log/Python`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 3 : 7, 'path': `${fileProjetos}/Chat_Python/log/Registros`, },
 
             // Chrome_Extension
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/log/JavaScript`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/Chrome_Extension/log/Registros`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 60 : 60, 'path': `${fileProjetos}/Chrome_Extension/log/JavaScript`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 3 : 7, 'path': `${fileProjetos}/Chrome_Extension/log/Registros`, },
 
             // Sniffer_Python
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/JavaScript`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/Python`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/Sniffer_Python/log/Registros`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 60 : 60, 'path': `${fileProjetos}/Sniffer_Python/log/JavaScript`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 60 : 60, 'path': `${fileProjetos}/Sniffer_Python/log/Python`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 3 : 7, 'path': `${fileProjetos}/Sniffer_Python/log/Registros`, },
 
             // WebScraper
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebScraper/log/JavaScript`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebScraper/log/Registros`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 60 : 60, 'path': `${fileProjetos}/WebScraper/log/JavaScript`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 3 : 7, 'path': `${fileProjetos}/WebScraper/log/Registros`, },
 
             // WebSocket
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 60 : 60, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebSocket/log/JavaScript`, },
-            { 'daysKeep': globalWindow.devMaster == 'AWS' ? 3 : 7, 'path': `${letter}:/ARQUIVOS/PROJETOS/WebSocket/log/Registros`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 60 : 60, 'path': `${fileProjetos}/WebSocket/log/JavaScript`, },
+            { 'daysKeep': gW.devMaster == 'AWS' ? 3 : 7, 'path': `${fileProjetos}/WebSocket/log/Registros`, },
         ]
 
         // LISTAR PASTAS E ARQUIVOS
@@ -68,7 +68,7 @@ async function logsDelOld(inf = {}) {
         }
 
         // LIMPAR PASTA 'Temp'
-        await commandLine({ e, 'command': `!letter!:/ARQUIVOS/WINDOWS/BAT/clearTemp.bat` });
+        await commandLine({ e, 'command': `${fileWindows}/BAT/clearTemp.bat` });
 
         ret['res'] = pathsDel;
         ret['msg'] = `LOGS DEL OLD: OK`;

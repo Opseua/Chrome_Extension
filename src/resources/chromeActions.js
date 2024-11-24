@@ -2,7 +2,7 @@
 
 let e = import.meta.url, ee = e;
 async function chromeActions(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { action, color, text, title, url, cookieSearch, target, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, tagFather, fun, funInf, awaitElementMil, } = inf;
 
@@ -199,7 +199,7 @@ async function chromeActions(inf = {}) {
 
 // // ****************************** SCRIPT ASYNC [SIM]
 // async function funAsync(inf = {}) {
-//     let ret = { 'ret': false };
+//     let ret = { 'ret': false, };
 //     await new Promise(resolve => { setTimeout(resolve, 500) }); // OBRIGATÓRIO TER O 'await'!!!
 //     console.log(inf);
 
@@ -224,7 +224,7 @@ async function chromeActions(inf = {}) {
 
 // // ****************************** SCRIPT ASYNC [NÃO]
 // function fun(inf = {}) {
-//     let ret = { 'ret': false };
+//     let ret = { 'ret': false, };
 //     console.log(inf);
 //     return document.documentElement.outerHTML;
 // }

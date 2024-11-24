@@ -12,12 +12,12 @@
 
 let e = import.meta.url, ee = e;
 async function configStorage(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { action, functionLocal, key, value, path, returnValueKey, returnValueAll, } = inf;
 
         if (!eng && Array.isArray(inf) && inf.length == 1) { // ### CS
-            inf['path'] = `${letter}:/${globalWindow.root}/${globalWindow.functions}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
+            inf['path'] = `${letter}:/${gW.root}/${gW.functions}/log/reg.json`; let dt, rf = {}; if (inf[0] == '' || inf[0] == '*') {
                 rf = await file({ e, 'action': 'read', 'path': path }); if (!rf.ret) { dt = {} } else { dt = JSON.parse(rf.res).dt }
             } else { dt = typeof inf[0] === 'object' ? inf[0] : { 'key': inf[0] } };
             if (!rf.ret) { rf = await file({ e, 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify({ 'dt': dt }, null, 2) }) }
@@ -51,7 +51,7 @@ async function configStorage(inf = {}) {
                                     if (chrome.runtime.lastError) { ret['msg'] = `STORAGE [GET]: ERRO | ${chrome.runtime.lastError}`; }
                                     else if (Object.keys(result).length == 0) {
                                         async function checkConfig() {
-                                            let infFile = { e, 'action': 'read', 'path': path ? path : globalWindow.conf, 'functionLocal': true }; let retFile = await file(infFile); let config = JSON.parse(retFile.res);
+                                            let infFile = { e, 'action': 'read', 'path': path ? path : gW.conf, 'functionLocal': true }; let retFile = await file(infFile); let config = JSON.parse(retFile.res);
                                             if (config[key]) {
                                                 let data = {}; data[key] = config[key]; return new Promise((resolve) => {
                                                     chrome.storage.local.set(data, async () => {
@@ -79,7 +79,7 @@ async function configStorage(inf = {}) {
                     }
                 } else { // ################## NODE
                     let infFile, retFile, config, ret_Fs = false; if (path && path.includes(':')) { path = path } else {
-                        infFile = { e, 'action': 'relative', 'path': path ? path : globalWindow.conf, 'functionLocal': typeof functionLocal == 'boolean' && !functionLocal ? false : true }
+                        infFile = { e, 'action': 'relative', 'path': path ? path : gW.conf, 'functionLocal': typeof functionLocal == 'boolean' && !functionLocal ? false : true }
                         retFile = await file(infFile); path = retFile.res[0]
                     }; try { await _fs.promises.access(path); ret_Fs = true } catch (catchErr) { esLintIgnore = catchErr; }; if (ret_Fs) { let configFile = await _fs.promises.readFile(path, 'utf8'); config = JSON.parse(configFile) }
                     else { config = {} }; if (!key || key == '') { ret['msg'] = `CONFIG: ERRO | INFORMAR A 'key'`; } else if (action == 'set') { // #### CONFIG: SET

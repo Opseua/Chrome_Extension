@@ -1,9 +1,6 @@
 // let infNotification, retNotification
-// infNotification = { // Chrome/NodeJs [conectado ao WS]
-//     e, 'duration': 3, 'icon': `./src/scripts/media/icon_4.png`, 'retInf': false, 'buttons': [{ 'title': 'BOTAO 1' }, { 'title': `BOTAO 2` }],
-//     'keepOld': true, 'title': `TITULO`, 'text': `TEXTO`,
-// };
-// // infNotification = { e, 'legacy': true, 'title': `TITULO`, 'text': `TEXTO`, }; // Chrome/NodeJs
+// infNotification = { 'duration': 3, 'icon': `icon_4.png`, 'buttons': [{ 'title': 'BOTAO 1' }, { 'title': `BOTAO 2` }], };
+// infNotification = { e, 'retInf': false, 'title': `TITULO`, 'text': `TEXTO`, 'keepOld': true, 'ntfyNew': true, 'chromeNot': false, 'legacyNew': false, }; // 'legacyNew' SOMENTE PELA FUNÇÃO. PELO HTTP POST NÃO!!!
 // retNotification = await notification(infNotification); console.log(retNotification);
 
 // → 'duration': 5 | ERROS ( 'regexE' [crash NodeJS] )
@@ -13,73 +10,81 @@
 
 let e = import.meta.url, ee = e;
 async function notification(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { title = 'TITULO VAZIO', text = 'TEXTO VAZIO', duration, icon, buttons, keepOld, legacy, retInf, } = inf; let imgBase64;
+        let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfyNew = false, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacyNew = false, } = inf;
 
-        // →→→ LEGACY
-        if (legacy) {
-            async function notificationLegacy(inf = {}) {
-                let ret = { 'ret': false };
-                try {
-                    let { title, text, } = inf; let cng = typeof UrlFetchApp !== 'undefined';
-                    let url = `http://${globalWindow.devSend}`; let reqOpt = { 'method': 'POST', }; let body = JSON.stringify({
-                        "fun": [{ "securityPass": globalWindow.securityPass, 'name': 'notification', 'par': { 'duration': 5, 'icon': './src/scripts/media/notification_3.png', 'title': title, 'text': text, 'ntfy': true } }]
-                    }); reqOpt[cng ? 'payload' : 'body'] = body; if (cng) { UrlFetchApp.fetch(url, reqOpt); } else { await fetch(url, reqOpt) } // GOOGLE | Chrome/NodeJS
-                    ret['msg'] = 'NOTIFICATION [LEGACY]: OK'
-                    ret['ret'] = true;
-                } catch (catchErr) {
-                    ret['msg'] = catchErr;
-                };
-                return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
-            };
-            let retNotificationLegacy = await notificationLegacy({ 'title': title, 'text': text });
-            return retNotificationLegacy
+        async function apiLegacy(inf = {}) {
+            let ret = { 'ret': false, }; let cng = typeof UrlFetchApp !== 'undefined'; try {
+                let { url, method, headers = {}, body, bodyObject = null, } = inf; let req, resCode, resHeaders, resBody; let reqOpt = {
+                    method, headers, ...(cng && { 'muteHttpExceptions': true, 'validateHttpsCertificates': true }), // GOOGLE | CHROME/NODEJS
+                    ...(body && ['POST', 'PUT'].includes(method) && { [cng ? 'payload' : 'body']: typeof body === 'object' ? JSON.stringify(body) : body }),
+                }; if (cng) { req = UrlFetchApp.fetch(url, reqOpt); resCode = req.getResponseCode(); resBody = req.getContentText(); } else {
+                    req = await fetch(url, reqOpt); resCode = req.status; resHeaders = {}; req.headers.forEach((v, n) => { resHeaders[n.toLowerCase()] = v });
+                    resBody = await req.text(); // NÃO MUDAR A INDENTAÇÃO (PARA PERMITIR COMENTAR)
+                }; if (resHeaders['content-type'] == 'application/json' && bodyObject) { try { resBody = JSON.parse(resBody); bodyObject = true } catch (c) { esLintIgnore = c; }; };
+                ret['ret'] = true; ret['msg'] = 'LEGACY API: OK'; ret['res'] = { 'code': resCode, 'bodyObject': bodyObject, 'headers': resHeaders, 'body': resBody, };
+            } catch (catchErr) { if (!cng) { esLintIgnore = catchErr; }; ret['ret'] = false; delete ret['res']; ret['msg'] = `LEGACY API: ERRO | AO FAZER REQUISIÇÃO`; };
+            return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
         }
 
-        if (!eng) {
-            let retDevAndFun = await devFun({ e, 'enc': true, 'data': { 'name': 'notification', 'par': inf, 'retInf': retInf, } }); return retDevAndFun
+        // [1] → NOTIFICAÇÃO NÃO SOLICITADA | [2] → NOTIFICAÇÃO CHAMADA ret {true} | [msg] NOTIFICAÇÃO CHAMADA ret {false}
+        let retApiLegacy; let errNtfy = false; let errLegacy = false; let errDevFun = false; let errChrome = false; let { devMy, securityPass, devSend, } = gW; let retDevAndFun;
+
+        // [NOVO] NTFY
+        if (ntfyNew && !legacyNew) {
+            retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `https://ntfy.sh/${devMy}?title=${encodeURIComponent(title)}`, 'body': text, 'bodyObject': true, });
+            errNtfy = retApiLegacy.ret ? false : `{NTFY}: AO ENVIAR NOTIFICAÇÃO`;
+        }
+
+        // [NOVO] LEGACY
+        if (legacyNew && (ntfyNew || !chromeNot)) {
+            // devSend = '34.227.26.180:8889/?roo=OPSEUA-NODEJS-WEBSOCKET-SERVER'; // TESTE
+            let body = { 'fun': [{ securityPass, retInf, 'name': 'notification', 'par': { title, text, keepOld, chromeNot, ntfyNew, duration, icon, buttons, 'aws': true, } }] };
+            retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `http://${devSend}`, 'headers': { 'raw': true, }, 'body': JSON.stringify(body), 'bodyObject': true, });
+            retApiLegacy = retApiLegacy.ret ? retApiLegacy.res.body : retApiLegacy; errLegacy = retApiLegacy.ret ? false : `{LEGACY}: ${retApiLegacy.msg}`;
+        }
+
+        if (!eng && !legacyNew && !chromeNot) {
+            // →→→ NO NODEJS
+            delete inf['ntfyNew']; // DELETAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
+            retDevAndFun = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': inf, } }); errDevFun = retDevAndFun.ret ? false : `{DEV FUN}: ${retDevAndFun.msg}`;
+        } else if (!legacyNew && !chromeNot) {
+            // →→→ NO CHROME
+            try {
+                let notifications = chrome.notifications;
+
+                // MANTER NOTIFICAÇÕES ANTIGAS
+                if (!keepOld) { let nts = await new Promise((resolve) => { notifications.getAll((n) => resolve(n)); }); for (let id in nts) { await new Promise((resolve) => { notifications.clear(id, resolve); }); }; }
+
+                // ÍCONE | MÁXIMO [CONSIDERANDO TUDO 'A']
+                icon = await fetch(`./src/scripts/media/${icon}`).then(v => v.arrayBuffer()); icon = btoa(String.fromCharCode(...new Uint8Array(icon)))
+                let not = { 'type': 'basic', 'iconUrl': `data:image/png;base64,${icon}`, 'title': title.substring(0, 32), 'message': text.substring(0, 128), buttons, };
+
+                // ENVIAR NOTIFICAÇÃO
+                notifications.create(not, (notificationId) => {
+                    notifications.onButtonClicked.addListener((notifId, btnIdx) => {
+                        // BOTÃO PRESSIONADO
+                        if (notifId === notificationId && btnIdx === 0) { alert('Botao 1 pressionado') }; if (notifId === notificationId && btnIdx === 1) { alert('Botao 2 pressionado') }
+                    }); setTimeout(() => { notifications.clear(notificationId) }, duration * 1000)
+                });
+            } catch (catchErr) {
+                esLintIgnore = catchErr; errChrome = `{CHROME}: AO ENVIAR NOTIFICAÇÃO`;
+            };
+        }
+
+        let arrMsg1 = [`${ntfyNew ? 'NTFY' : ''}`, `${!chromeNot ? 'CHROME' : ''}`,].filter(v => v !== '').join('+') || 'VAZIO';
+        let arrMsg2 = [`${errNtfy || ''}`, `${errLegacy || ''}`, `${errDevFun || ''}`, `${errChrome || ''}`,].filter(v => v !== '').join(' | ') || 'NENHUM DISPOSITIVO';
+        if (errNtfy || errLegacy || errDevFun || errChrome || arrMsg1 == 'VAZIO') {
+            ret['msg'] = `NOTIFICATION [${arrMsg1}]: ERRO | ${arrMsg2}`
         } else {
-            // →→→ NORMAL
-            // MANTER NOTIFICAÇÕES ANTIGAS
-            if (!keepOld) {
-                let notifications = await new Promise((resolve) => { chrome.notifications.getAll((notifs) => resolve(notifs)); });
-                for (let notifId in notifications) { await new Promise((resolve) => { chrome.notifications.clear(notifId, resolve); }); }
-            }
-
-            if (!icon || icon.length > 1) {
-                let imgSrc = !icon ? './src/scripts/media/icon_3.png' : icon; let imgBinary = await fetch(imgSrc).then(response => response.arrayBuffer());
-                imgBase64 = btoa(String.fromCharCode(...new Uint8Array(imgBinary)))
-            } else { imgBase64 = icon };
-
-            let json = {
-                'duration': ((!duration) || !(duration > 0)) ? 5 : duration, 'type': 'basic', 'icon': `data:image/png;base64,${imgBase64}`,
-                'title': title,
-                'text': text,
-                'buttons': buttons ? buttons : [],
-            };
-            let not = {
-                // MÁXIMO [CONSIDERANDO TUDO 'A']
-                'type': json.type, 'iconUrl': json.icon, 'title': json.title.substring(0, 32),
-                // MÁXIMO [CONSIDERANDO TUDO 'A']
-                'message': json.text.substring(0, 128), 'buttons': json.buttons
-            };
-
-            // ENVIAR NOTIFICAÇÃO
-            chrome.notifications.create(not, (notificationId) => {
-                chrome.notifications.onButtonClicked.addListener((notifId, btnIdx) => { // ALGUM BOTAO PRESSIONADO
-                    if (notifId === notificationId && btnIdx === 0) { alert('Botao 1 pressionado') }; if (notifId === notificationId && btnIdx === 1) { alert('Botao 2 pressionado') }
-                }); setTimeout(() => { chrome.notifications.clear(notificationId) }, json.duration * 1000)
-            });
-
-            ret['msg'] = 'NOTIFICATION: OK'
+            ret['msg'] = `${retDevAndFun?.msg.includes('[ENC]') ? '[ENC] ' : ''}NOTIFICATION [${arrMsg1}]: OK`
             ret['ret'] = true;
-
         }
 
     } catch (catchErr) {
         if (inf.originRegexE) {
-            ret['msg'] = `NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`
+            ret['msg'] = `${(!eng && !legacyNew) ? '[ENC] ' : ''}NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`
         } else {
             let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
         }

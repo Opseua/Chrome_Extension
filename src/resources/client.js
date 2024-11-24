@@ -1,8 +1,8 @@
-let wsServers = { 'rooms': {} }, reconnecting = {}, timeoutSecConnect = {}, secConnect = globalWindow.secConnect
+let wsServers = { 'rooms': {} }, reconnecting = {}, timeoutSecConnect = {}, secConnect = gW.secConnect
 
 let e = import.meta.url, ee = e;
 async function client(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         if (typeof _WebSocket === 'undefined') { await funLibrary({ 'lib': '_WebSocket' }); };
 
@@ -15,7 +15,7 @@ async function client(inf = {}) {
             ws.onopen = async () => {
                 // LIMPAR TIMEOUT DE CONEXÃO | SALA [ADICIONAR] | ENVIAR PING DE INÍCIO DE CONEXÃO
                 clearTimeout(timeoutSecConnect[hostRoom]); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set() }; wsServers.rooms[hostRoom].add(ws); ws.send(`ping`)
-                logConsole({ e, ee, 'write': true, 'msg': `OK: ${locWeb} '${room}'` });
+                logConsole({ e, ee, 'write': true, 'msg': `${locWeb} OK:\n'${room}'` });
 
                 // LISTENER PARA RETORNAR O 'ws' QUANDO 'messageSend' FOR CHAMADA EM OUTROS ARQUIVOS (SOMENTE NO CLIENT!!!)
                 function getWs(inf = {}) { let { hostRoom, } = inf; if (wsServers.rooms[hostRoom]) { for (let ws of wsServers.rooms[hostRoom]) { if (ws.hostRoom === hostRoom) { return ws; } } }; return null; }
@@ -30,7 +30,7 @@ async function client(inf = {}) {
 
             // # ON MESSAGE
             ws.onmessage = async (data) => {
-                let message = data.data.toString('utf-8'); let pingPong = message == `${globalWindow.par6}` ? 1 : message == `${globalWindow.par7}` ? 2 : 0
+                let message = data.data.toString('utf-8'); let pingPong = message == `${gW.par6}` ? 1 : message == `${gW.par7}` ? 2 : 0
                 // ÚLTIMA MENSAGEM RECEBIDA
                 ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false;
                 // logConsole({ e, ee, 'write': true, 'msg': `← CLI | ${ws.lastMessage} | ${hostRoom}` });
@@ -53,8 +53,8 @@ async function client(inf = {}) {
         // ### RECONEXÃO | REMOVER SERVIDOR
         function reconnect(inf = {}) {
             let { host, room, hostRoom, resWs, event, } = inf; let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; if (!reconnecting[hostRoom]) {
-                reconnecting[hostRoom] = true; let secReconnect = globalWindow.secReconnect - secConnect + 1
-                removeSerCli({ 'host': host, 'room': room, 'hostRoom': hostRoom, 'resWs': resWs, 'write': true, msg: `RECONECTANDO ${event}: ${locWeb} ${room}` }) // ↓ MENOS SEGUNDOS DO TEMPO DE CONEXÃO
+                reconnecting[hostRoom] = true; let secReconnect = gW.secReconnect - secConnect + 1
+                removeSerCli({ 'host': host, 'room': room, 'hostRoom': hostRoom, 'resWs': resWs, 'write': true, msg: `${locWeb} RECONECTADO ${event}:\n${room}` }) // ↓ MENOS SEGUNDOS DO TEMPO DE CONEXÃO
                 setTimeout(() => { reconnecting[hostRoom] = false; connect({ 'hostRoom': hostRoom }); }, (secReconnect * 1000) - 50);
             }
         }; function removeSerCli(inf = {}) {
@@ -64,8 +64,8 @@ async function client(inf = {}) {
         }
 
         // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → GET [WEB] | GET [LOC]
-        let servers = [globalWindow.devGet[0], globalWindow.devGet[1],]; for (let [index, value] of servers.entries()) {
-            if (!value.includes('127.0.0.1') && (globalWindow.project == 'Sniffer_Python' || (!value.includes('USUARIO_0') && value.includes('USUARIO_')))) {
+        let servers = [gW.devGet[0], gW.devGet[1],]; for (let [index, value] of servers.entries()) {
+            if (!value.includes('127.0.0.1') && (gW.project == 'Sniffer_Python' || (!value.includes('USUARIO_0') && value.includes('USUARIO_')))) {
                 // NÃO CONECTAR AO WEBSOCKET
             } else { connect({ 'hostRoom': value }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1 }) }) }
         };
@@ -78,11 +78,10 @@ async function client(inf = {}) {
             let data = {}; try { data = JSON.parse(message) } catch (catchErr) { esLintIgnore = catchErr; }; if (data.fun) {
                 devFun({ e, 'data': data, 'messageId': messageId, 'resWs': resWs, 'destination': origin, })
             } else if (data.other) { logConsole({ e, ee, 'write': true, 'msg': `OTHER\n${JSON.stringify(data.other)}` }); }
-            else { logConsole({ e, ee, 'write': true, 'msg': `MENSAGEM DO WEBSCKET\n\n${message}` }); }
         }
 
         // LOOP: CHECAR ÚLTIMA MENSAGEM
-        let secPing = globalWindow.secPing; function lastMessageReceived() {
+        let secPing = gW.secPing; function lastMessageReceived() {
             for (let clientSet of Object.values(wsServers.rooms)) {
                 for (let value of clientSet) {
                     function check(inf = {}) { let { lastMessage, locWeb, room, } = inf; return { 'dif': lastMessage ? Number(dateHour().res.tim) - lastMessage : -99, 'locWeb': locWeb, 'room': room } };
@@ -92,7 +91,7 @@ async function client(inf = {}) {
                             retCheck = check(value); if (retCheck.dif > (secPing - 1)) {
                                 logConsole({ e, ee, 'write': true, 'msg': `DESCONECTAR [PING ${retCheck.dif}] ${retCheck.locWeb} '${retCheck.room}'` }); value.close()
                             }
-                        }, globalWindow.secPingTimeout * 1000);
+                        }, gW.secPingTimeout * 1000);
                     }
                 }
             };

@@ -1,15 +1,15 @@
 let e = import.meta.url, ee = e;
 async function devFun(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { enc, data, } = inf;
 
         if (enc) {
             // ENCAMINHAR PARA O DEVICE CERTO
             let retMessageSend, retInf = typeof data.retInf === 'boolean' ? data.retInf : data.retInf ? data.retInf : true
-            let destination = globalWindow.devSend;
+            let destination = gW.devSend;
             let locWeb = destination.includes('127.0.0.1') ? '[LOC]' : '[WEB]'
-            data = { 'securityPass': globalWindow.securityPass, 'retInf': retInf, 'name': data.name, 'par': data.par }
+            data = { 'securityPass': gW.securityPass, 'retInf': retInf, 'name': data.name, 'par': data.par }
             data.par['enc'] = true; data.par['e'] = inf.e
             // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO
             delete data.par.retInf
@@ -42,7 +42,7 @@ async function devFun(inf = {}) {
             function label(funName) { return typeof (eng ? window : global)[funName] === 'function' }
             for (let [index, value] of data.fun.entries()) {
                 let { resWs, destination, messageId, } = inf
-                if (value.securityPass !== globalWindow.securityPass) {
+                if (value.securityPass !== gW.securityPass) {
                     ret['msg'] = `DEV FUN: ERRO | SECURITYPASS INCORRETO`
                     logConsole({ e, ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}` });
                 } else if (!label(value.name)) {

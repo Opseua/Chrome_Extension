@@ -19,21 +19,23 @@
 // }
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
-let e = import.meta.url, ee = e; let _auth, _sheets; let g = globalWindow; let googleAppScriptId
+let e = import.meta.url, ee = e; let _auth, _sheets;
 async function googleSheets(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { action, id, tab, range, values, newRun, } = inf;
 
         // IMPORTAR BIBLIOTECA [NODEJS] {auth}
         if (typeof _googleapisAuth === 'undefined') {
-            await funLibrary({ 'lib': '_googleapisAuth' }); _auth = new _googleapisAuth.GoogleAuth({ 'keyFile': `${letter}:/${g.root}/${g.functions}/${g.conf}`, 'scopes': ['https://www.googleapis.com/auth/spreadsheets'] });
+            await funLibrary({ 'lib': '_googleapisAuth' });
+            _auth = new _googleapisAuth.GoogleAuth({ 'keyFile': `${letter}:/${gW.root}/${gW.functions}/${gW.conf}`, 'scopes': ['https://www.googleapis.com/auth/spreadsheets'] });
         }
 
         // IMPORTAR BIBLIOTECA [NODEJS] {sheets}
         if (typeof _googleapisSheets === 'undefined') {
             await funLibrary({ 'lib': '_googleapisSheets' }); _sheets = _googleapisSheets({ 'version': 'v4', 'auth': _auth })
-            let retConfigStorage = await configStorage({ e, 'action': 'get', 'functionLocal': true, 'key': 'googleAppScriptId' }); if (!retConfigStorage.ret) { return retConfigStorage }; googleAppScriptId = retConfigStorage.res
+            let retConfigStorage = await configStorage({ e, 'action': 'get', 'functionLocal': true, 'key': 'googleAppScriptId' }); if (!retConfigStorage.ret) { return retConfigStorage };
+            googleAppScriptId = retConfigStorage.res
         }
 
         if (action == 'get') {

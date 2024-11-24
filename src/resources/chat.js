@@ -1,87 +1,65 @@
-// let infChat, retChat;
-// infChat = { e, 'provider': 'openAi', 'input': `Qual a idade de Marte?`, };
-// retChat = await chat(infChat); console.log(retChat);
-
-// * NODEJS
-// gpt-4o-mini → openAi → 
-// gpt-4       → gitHub_Python
+// * JS [NODEJS/CRHOME]
+// nextWay                → gpt-3.5-turbo / gpt-4o-free / gemini-pro   [https://github.com/zachey01/gpt4free.js]
+// openAi                 → gpt-4o-mini
 
 // * PYTHON
-// gpt-4o      → telegram
-// gpt-4o      → g4f
-// gpt-4       → zukiJourney (12/min)
-// gpt-4       → naga (3/min)
+// telegram               → gpt-4o
+// g4f                    → gpt-4o
+// zukiJourney (12/min)   → gpt-4
+// naga (3/min)           → gpt-4
+
+// let infChat, retChat;
+// infChat = { e, 'provider': 'nextWay', 'model': 'gpt-4o-free', 'messagePrompt': `Qual a idade de Saturno?`, };
+// retChat = await chat(infChat); console.log(retChat);
+
+// IMPORTAR PROVEDORES ADICIONAIS
+if (eng || !eng) { await import('./chats/gpt4free/providers.js'); };
 
 let e = import.meta.url, ee = e;
 async function chat(inf = {}) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { provider, input, network, } = inf;
+        let { provider, model, messagePrompt, network, } = inf;
 
-        let infConfigStorage, retConfigStorage, retApi, infNotification, infApi
+        let retConfigStorage, retApi, infApi
         if (provider == 'openAi') {
             // ######## OPEN.AI
-            infConfigStorage = { e, 'action': 'get', 'key': 'chatOpenAi' };
-            retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
-            infApi = {
-                e, 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`,
-                'headers': { 'Content-Type': 'application/json', 'Authorization': `Bearer ${retConfigStorage.Authorization}` },
-                'body': { 'model': 'gpt-4o-mini', 'messages': [{ 'role': 'user', 'content': input }], 'temperature': 0.7 }
-            };
-            retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }
-            let res = JSON.parse(retApi.body);
+            retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'chatOpenAi' }); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res }; infApi = {
+                e, 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`, 'headers': { 'Content-Type': 'application/json', 'Authorization': `Bearer ${retConfigStorage.Authorization}` },
+                'body': { 'model': model || 'gpt-4o-mini', 'messages': [{ 'role': 'user', 'content': messagePrompt }], 'temperature': 0.7 }
+            }; retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }; let res = JSON.parse(retApi.body);
             if ('choices' in res) {
                 ret['res'] = res.choices[0].message.content;
                 ret['msg'] = `CHAT [OPEN AI]: OK`
                 ret['ret'] = true;
             } else { // CHROME
-                if (eng) {
-                    infConfigStorage = { e, 'action': 'del', 'key': 'chatOpenAi' };
-                    retConfigStorage = await configStorage(infConfigStorage)
-                }
-                infNotification = { e, 'duration': 4, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message }
-                notification(infNotification);
-                ret['res'] = res.error.message
+                if (eng) { retConfigStorage = await configStorage({ e, 'action': 'del', 'key': 'chatOpenAi' }); };
+                notification({ e, 'duration': 4, 'icon': 'notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message });
                 ret['msg'] = `CHAT [OPEN AI]: ERRO | ${res.error.message}`;
             }
         } else if (provider == 'ec2') {
             // ######## AWS
-            infConfigStorage = { e, 'action': 'get', 'key': 'webSocket' };
-            retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };
-            infApi = {
-                e, 'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.portWebSocket}/chatgpt`,
-                'headers': {}, 'body': { "prompt": input, "network": network ? true : false }
-            }
-            retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }
+            retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'webSocket' }); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res }; infApi = {
+                e, 'method': 'POST', 'url': `http://${retConfigStorage.ws1}:${retConfigStorage.portWebSocket}/chatgpt`, 'headers': {}, 'body': { 'prompt': messagePrompt, 'network': network ? true : false }
+            }; retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }
             if (JSON.parse(retApi.body).ret) {
                 ret['res'] = JSON.parse(retApi.body).res;
                 ret['msg'] = `CHAT [EC2]: OK`
                 ret['ret'] = true;
             } else {
-                infNotification = { e, 'duration': 4, 'icon': './src/scripts/media/notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' }
-                notification(infNotification);
+                notification({ e, 'duration': 4, 'icon': 'notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': '' });
                 ret['msg'] = `CHAT [EC2]: ERRO`;
-                ret['res'] = 'res.error.message'
             }
-        } else if (provider == 'gitHub_Python') {
+        } else if (provider.toLowerCase() === 'nextway') {
             // ######## GITHUB
-            try {
-                let messages = [{ 'role': 'user', 'content': input }]; let options = {
-                    'provider': "Aryahcr", // [gpt-4] Aryahcr, Nextway, ChatBotRu 
-                    'model': "gpt-4",
-                    //'temperature': 0.7286209388976096, // PRÓXIMO DO [1 → ALEATÓRIO] | [0 → PRECISO]
-                    'x': 'x'
-                }; let response = await GPT4js.createProvider(options.provider).chatCompletion(messages, options, (data) => { return data });
-                if (!response) {
-                    ret['msg'] = `CHAT [GITHUB]: ERRO | AO GERAR RESPOSTA`
-                } else {
-                    ret['res'] = response;
-                    ret['msg'] = `CHAT [GITHUB]: OK`
-                    ret['ret'] = true;
-                }
-            } catch (catchErr) {
-                ret['msg'] = `CHAT [GITHUB]: ERRO | AO GERAR RESPOSTA`
-                esLintIgnore = catchErr;
+            provider = 'Nextway'; let pass = false; messagePrompt = Array.isArray(messagePrompt) ? messagePrompt : [{ 'role': 'user', 'content': messagePrompt }]
+            try { let pro = GPT4js.createProvider(provider); pass = await pro.chatCompletion(messagePrompt, { provider, 'model': model || 'gpt-4o-free', }); }
+            catch (catchErr) { esLintIgnore = catchErr; }; if (!pass) {
+                ret['msg'] = `CHAT [NEXTWAY]: ERRO | AO GERAR RESPOSTA`;
+            } else {
+                ret['ret'] = true;
+                ret['msg'] = `CHAT [NEXTWAY]: OK`;
+                ret['res'] = pass;
             }
         } else {
             retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'chatPython' }); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res };

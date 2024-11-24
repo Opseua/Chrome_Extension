@@ -6,7 +6,7 @@
 
 let e = import.meta.url, ee = e;
 function regex(inf = {}) { // NÃO POR COMO 'async'!!!
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { pattern, text, simple, } = inf;
 

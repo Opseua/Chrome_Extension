@@ -1,7 +1,7 @@
 // ************** VARIÁVEIS NÃO DECLARADAS [globais] **************
 let arrGlobal = [
   'esLintIgnore',
-  'window', 'global', 'globalWindow', 'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf',
+  'window', 'global', 'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf',
   'listenerAcionar', 'listenerMonitorar',
 
   // CHROME
