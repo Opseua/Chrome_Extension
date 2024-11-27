@@ -22,9 +22,9 @@ async function notification(inf = {}) {
                     method, headers, ...(cng && { 'muteHttpExceptions': true, 'validateHttpsCertificates': true }), // GOOGLE | CHROME/NODEJS
                     ...(body && ['POST', 'PUT'].includes(method) && { [cng ? 'payload' : 'body']: typeof body === 'object' ? JSON.stringify(body) : body }),
                 }; if (cng) { req = UrlFetchApp.fetch(url, reqOpt); resCode = req.getResponseCode(); resBody = req.getContentText(); } else {
-                    req = await fetch(url, reqOpt); resCode = req.status; resHeaders = {}; req.headers.forEach((v, n) => { resHeaders[n.toLowerCase()] = v });
+                    req = await fetch(url, reqOpt); resCode = req.status; resHeaders = {}; req.headers.forEach((v, n) => { resHeaders[n.toLowerCase()] = v.toLowerCase() });
                     resBody = await req.text(); // NÃO MUDAR A INDENTAÇÃO (PARA PERMITIR COMENTAR)
-                }; if (resHeaders['content-type'] == 'application/json' && bodyObject) { try { resBody = JSON.parse(resBody); bodyObject = true } catch (c) { esLintIgnore = c; }; };
+                }; if (resHeaders['content-type'] == 'application/json' && bodyObject) { try { let temp = JSON.parse(resBody); resBody = temp; bodyObject = true; } catch (c) { esLintIgnore = c; }; };
                 ret['ret'] = true; ret['msg'] = 'LEGACY API: OK'; ret['res'] = { 'code': resCode, 'bodyObject': bodyObject, 'headers': resHeaders, 'body': resBody, };
             } catch (catchErr) { if (!cng) { esLintIgnore = catchErr; }; ret['ret'] = false; delete ret['res']; ret['msg'] = `LEGACY API: ERRO | AO FAZER REQUISIÇÃO`; };
             return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };

@@ -2,17 +2,17 @@
 // infApi = { // ###### → json/object
 //     e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
 //     'headers': { 'Content-Type': 'application/json' },
-//     'body': { 'aaa': 'bbb' }, 'max': 10,
+//     'body': { 'aaa': 'bbb' }, 'max': 10, 'bodyObject': true,
 // };
 // infApi = { // ###### → text
 //     e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
 //     'headers': { 'Content-Type': 'text/plain;charset=UTF-8' },
-//     'body': `Esse é o texto`, 'max': 10,
+//     'body': `Esse é o texto`, 'max': 10, 'bodyObject': true,
 // };
 // infApi = { // ###### → x-www-form-urlencoded
 //     e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`,
 //     'headers': { 'Content-Type': 'application/x-www-form-urlencoded' },
-//     'body': { 'Chave': 'Valor' }, 'max': 10,
+//     'body': { 'Chave': 'Valor' }, 'max': 10, 'bodyObject': true,
 // };
 // retApi = await api(infApi); console.log(retApi);
 
@@ -27,7 +27,7 @@ let e = import.meta.url, ee = e;
 async function api(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { method, url, headers, body, max, } = inf;
+        let { method, url, headers, body, max, bodyObject = null, } = inf;
 
         let req, resCode, resHeaders, resBody, reqOk = false, reqE; let reqOpt = { 'method': method, 'redirect': 'follow', 'keepalive': true, 'rejectUnauthorized': false };
 
@@ -65,8 +65,13 @@ async function api(inf = {}) {
             try {
                 req = await fetch(url, reqOpt);
                 // LIMPAR O TIMER SE A RESPOSTA FOR RECEBIDA ANTES DO TEMPO
-                clearTimeout(timeoutId); resCode = req.status; resHeaders = {}; req.headers.forEach((value, name) => { resHeaders[name] = value });
+                clearTimeout(timeoutId); resCode = req.status;
+                // resHeaders = {}; req.headers.forEach((value, name) => { resHeaders[name] = value });
                 resBody = await req.text(); reqOk = true
+
+                resHeaders = {}; req.headers.forEach((v, n) => { resHeaders[n.toLowerCase()] = v.toLowerCase() });
+                if (resHeaders['content-type'] == 'application/json' && bodyObject) { try { let temp = JSON.parse(resBody); resBody = temp; bodyObject = true; } catch (c) { esLintIgnore = c; }; };
+
             } catch (catchErr) { clearTimeout(timeoutId); reqE = catchErr }
         }
 
