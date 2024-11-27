@@ -85,7 +85,7 @@ async function notification(inf = {}) {
         }
 
     } catch (catchErr) {
-        if (inf.originRegexE) {
+        if (inf.ignoreErr) {
             ret['msg'] = `${(!eng && !legacy) ? '[ENC] ' : ''}NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`
         } else {
             let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];

@@ -47,7 +47,7 @@ async function regexE(inf = {}) {
 
         // ENVIAR NOTIFICAÇÃO COM O ERRO
         let retNotification = await notification({
-            'originRegexE': true,
+            'ignoreErr': true,
             'legacy': true,
             'keepOld': true,
             'ntfy': true,
