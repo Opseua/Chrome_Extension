@@ -1,6 +1,6 @@
 // let infNotification, retNotification
 // infNotification = { 'duration': 3, 'icon': `icon_4.png`, 'buttons': [{ 'title': 'BOTAO 1' }, { 'title': `BOTAO 2` }], };
-// infNotification = { e, 'retInf': false, 'title': `TITULO`, 'text': `TEXTO`, 'keepOld': true, 'ntfyNew': true, 'chromeNot': false, 'legacyNew': false, }; // 'legacyNew' SOMENTE PELA FUNÇÃO. PELO HTTP POST NÃO!!!
+// infNotification = { e, 'retInf': false, 'title': `TITULO`, 'text': `TEXTO`, 'keepOld': true, 'ntfy': true, 'chromeNot': false, 'legacy': false, }; // 'legacy' SOMENTE PELA FUNÇÃO. PELO HTTP POST NÃO!!!
 // retNotification = await notification(infNotification); console.log(retNotification);
 
 // → 'duration': 5 | ERROS ( 'regexE' [crash NodeJS] )
@@ -12,7 +12,9 @@ let e = import.meta.url, ee = e;
 async function notification(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfyNew = false, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacyNew = false, } = inf;
+        let {
+            retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = false, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [],
+            legacy = false, encNot = false, } = inf;
 
         async function apiLegacy(inf = {}) {
             let ret = { 'ret': false, }; let cng = typeof UrlFetchApp !== 'undefined'; try {
@@ -29,27 +31,27 @@ async function notification(inf = {}) {
         }
 
         // [1] → NOTIFICAÇÃO NÃO SOLICITADA | [2] → NOTIFICAÇÃO CHAMADA ret {true} | [msg] NOTIFICAÇÃO CHAMADA ret {false}
-        let retApiLegacy; let errNtfy = false; let errLegacy = false; let errDevFun = false; let errChrome = false; let { devMy, securityPass, devSend, } = gW; let retDevAndFun;
+        let retApiLegacy; let errNtfy = false; let errLegacy = false; let errDevFun = false; let errChrome = false; let { devMy, securityPass, devSend, } = gW; let retDevAndFun = {};
 
         // [NOVO] NTFY
-        if (ntfyNew && !legacyNew) {
+        if (ntfy && !legacy) {
             retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `https://ntfy.sh/${devMy}?title=${encodeURIComponent(title)}`, 'body': text, 'bodyObject': true, });
             errNtfy = retApiLegacy.ret ? false : `{NTFY}: AO ENVIAR NOTIFICAÇÃO`;
         }
 
         // [NOVO] LEGACY
-        if (legacyNew && (ntfyNew || !chromeNot)) {
+        if (legacy && (ntfy || !chromeNot)) {
             // devSend = '34.227.26.180:8889/?roo=OPSEUA-NODEJS-WEBSOCKET-SERVER'; // TESTE
-            let body = { 'fun': [{ securityPass, retInf, 'name': 'notification', 'par': { title, text, keepOld, chromeNot, ntfyNew, duration, icon, buttons, 'aws': true, } }] };
+            let body = { 'fun': [{ securityPass, retInf, 'name': 'notification', 'par': { title, text, keepOld, chromeNot, ntfy, duration, icon, buttons, 'aws': true, } }] };
             retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `http://${devSend}`, 'headers': { 'raw': true, }, 'body': JSON.stringify(body), 'bodyObject': true, });
             retApiLegacy = retApiLegacy.ret ? retApiLegacy.res.body : retApiLegacy; errLegacy = retApiLegacy.ret ? false : `{LEGACY}: ${retApiLegacy.msg}`;
         }
 
-        if (!eng && !legacyNew && !chromeNot) {
+        if (!eng && !legacy && !chromeNot) {
             // →→→ NO NODEJS
-            delete inf['ntfyNew']; // DELETAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
+            delete inf['ntfy']; // DELETAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
             retDevAndFun = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': inf, } }); errDevFun = retDevAndFun.ret ? false : `{DEV FUN}: ${retDevAndFun.msg}`;
-        } else if (!legacyNew && !chromeNot) {
+        } else if (!legacy && !chromeNot) {
             // →→→ NO CHROME
             try {
                 let notifications = chrome.notifications;
@@ -73,18 +75,18 @@ async function notification(inf = {}) {
             };
         }
 
-        let arrMsg1 = [`${ntfyNew ? 'NTFY' : ''}`, `${!chromeNot ? 'CHROME' : ''}`,].filter(v => v !== '').join('+') || 'VAZIO';
+        let arrMsg1 = [`${ntfy ? 'NTFY' : ''}`, `${!chromeNot ? 'CHROME' : ''}`,].filter(v => v !== '').join('+') || 'VAZIO';
         let arrMsg2 = [`${errNtfy || ''}`, `${errLegacy || ''}`, `${errDevFun || ''}`, `${errChrome || ''}`,].filter(v => v !== '').join(' | ') || 'NENHUM DISPOSITIVO';
         if (errNtfy || errLegacy || errDevFun || errChrome || arrMsg1 == 'VAZIO') {
             ret['msg'] = `NOTIFICATION [${arrMsg1}]: ERRO | ${arrMsg2}`
         } else {
-            ret['msg'] = `${retDevAndFun?.msg.includes('[ENC]') ? '[ENC] ' : ''}NOTIFICATION [${arrMsg1}]: OK`
+            ret['msg'] = `${retDevAndFun?.msg?.includes('[ENC]') && !encNot ? '[ENC] ' : ''}NOTIFICATION [${arrMsg1}]: OK`
             ret['ret'] = true;
         }
 
     } catch (catchErr) {
         if (inf.originRegexE) {
-            ret['msg'] = `${(!eng && !legacyNew) ? '[ENC] ' : ''}NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`
+            ret['msg'] = `${(!eng && !legacy) ? '[ENC] ' : ''}NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`
         } else {
             let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
         }

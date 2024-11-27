@@ -50,14 +50,13 @@ async function serverRun(inf = {}) {
         // *************************
 
         // CLIENT (NÃO POR COMO 'await'!!!) | MANTER NO FINAL
-        client({ 'e': e });
+        client({ 'e': e }); // await new Promise(resolve => { setTimeout(resolve, 1000) });
 
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 
     } catch (catchErr) {
-        // let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-        console.log(catchErr)
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };

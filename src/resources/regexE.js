@@ -48,7 +48,10 @@ async function regexE(inf = {}) {
         // ENVIAR NOTIFICAÇÃO COM O ERRO
         let retNotification = await notification({
             'originRegexE': true,
-            'legacyNew': true,
+            'legacy': true,
+            'keepOld': true,
+            'ntfy': true,
+            'chromeNot': false,
             'title': `### ERRO (${errorOk.devMaster}) [${errorOk.cngName}]`,
             'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}`,
         });
