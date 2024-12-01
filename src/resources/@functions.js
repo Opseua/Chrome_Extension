@@ -90,7 +90,7 @@ function rateLimiter(inf = {}) {
 }
 
 // ############### NÚMERO ALEATÓRIO ###############
-function randomNumber(min, max) { return Math.floor(Math.random() * (max - min + 1) + min) }; // console.log(randomNumber(2, 5))
+function randomNumber(min, max) { return Math.floor(Math.random() * ((typeof max === 'number' ? max : min + 1) - min + 1) + min) }; // console.log(randomNumber(2, 5))
 
 // ############### LISTENER ###############
 let lists = {}; function listenerMonitorar(namLis, callback) { if (!lists[namLis]) { lists[namLis] = []; } lists[namLis].push(callback); }

@@ -58,18 +58,13 @@ function regex(inf = {}) { // NÃO POR COMO 'async'!!!
                 pattern = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
                 let result = new RegExp(`^${pattern}$`).test(text);
                 if (simple) {
-                    if (result) {
-                        return true
-                    } else {
-                        return false
-                    }
+                    return result
                 } else {
                     if (result) {
                         ret['msg'] = `REGEX: OK`;
                         ret['res'] = 'TEXTO POSSUI O PADRAO';
                         ret['ret'] = true;
-                    }
-                    else {
+                    } else {
                         ret['msg'] = `REGEX: ERRO | PADRAO '${pattern}' NAO ENCONTRADO`;
                     }
                 }

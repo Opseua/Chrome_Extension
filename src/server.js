@@ -50,7 +50,10 @@ async function serverRun(inf = {}) {
         // *************************
 
         // CLIENT (NÃO POR COMO 'await'!!!) | MANTER NO FINAL
-        client({ 'e': e }); // await new Promise(resolve => { setTimeout(resolve, 1000) });
+        // client({ 'e': e }); // await new Promise(resolve => { setTimeout(resolve, 1000) });
+
+        // CHAMAR PARA DEFINIR A FUNÇÃO
+        await chromeActionsNew();
 
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
@@ -65,3 +68,30 @@ async function serverRun(inf = {}) {
 serverRun()
 
 
+// elements = elements.filter(element => {
+
+//     // FILTRO DE tags
+//     let matchesTags = tags.every(critery => {
+//         let { tagName } = critery; return !tagName || eleRegex(tagName, element.tagName.toLowerCase());
+//     });
+
+//     // FILTRO DE attributes
+//     let matchesAttributes = attributes.every(critery => {
+//         let { attributeName, attributeValue } = critery;
+//         let matchesAttr = Array.from(element.attributes).some(attr => {
+//             let matchName = !attributeName || eleRegex(attributeName, attr.name);
+//             let matchValue = !attributeValue || eleRegex(attributeValue.replace(/&quot;/g, '"'), attr.value);
+//             return matchName && matchValue;
+//         });
+//         return matchesAttr;
+//     });
+
+//     // FILTRO DE contents
+//     let matchesContents = contents.every(critery => {
+//         let { contentValue } = critery;
+//         return !contentValue || eleRegex(contentValue, element.textContent.trim());
+//     });
+
+//     // RETORNO
+//     return matchesTags && matchesAttributes && matchesContents;
+// });

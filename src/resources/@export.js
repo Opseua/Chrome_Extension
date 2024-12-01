@@ -52,6 +52,7 @@ gloWin['file'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; re
 gloWin['api'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './api.js', 'inf': inf }); };
 gloWin['chat'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './chat.js', 'inf': inf }); };
 gloWin['chromeActions'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': './chromeActions.js', 'inf': inf }); };
+gloWin['chromeActionsNew'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': './chromeActionsNew.js', 'inf': inf }); };
 gloWin['client'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './client.js', 'inf': inf }); };
 gloWin['clipboard'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './clipboard.js', 'inf': inf }); };
 gloWin['commandLine'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './commandLine.js', 'inf': inf }); };
@@ -76,6 +77,7 @@ gloWin['tabSearch'] = (inf) => { let fun = (eng) ? funImport : funGeneric; retur
 gloWin['command1'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': '../scripts/command1.js', 'inf': inf }); };
 gloWin['command2'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': '../scripts/command2.js', 'inf': inf }); };
 gloWin['tryRatingComplete'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': '../scripts/tryRatingComplete.js', 'inf': inf }); };
+gloWin['tryRatingSet'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': '../scripts/tryRatingSet.js', 'inf': inf }); };
 
 // AGUARDAR IMPORT DE FUNÇÕES NÃO ASYNC **************
 let e = import.meta.url, ee = e; let infTest

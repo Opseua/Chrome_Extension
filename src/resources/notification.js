@@ -60,6 +60,7 @@ async function notification(inf = {}) {
                 if (!keepOld) { let nts = await new Promise((resolve) => { notifications.getAll((n) => resolve(n)); }); for (let id in nts) { await new Promise((resolve) => { notifications.clear(id, resolve); }); }; }
 
                 // ÍCONE | MÁXIMO [CONSIDERANDO TUDO 'A']
+                icon = icon.replace('./src/scripts/media/', '')
                 icon = await fetch(`./src/scripts/media/${icon}`).then(v => v.arrayBuffer()); icon = btoa(String.fromCharCode(...new Uint8Array(icon)))
                 let not = { 'type': 'basic', 'iconUrl': `data:image/png;base64,${icon}`, 'title': title.substring(0, 32), 'message': text.substring(0, 128), buttons, };
 

@@ -5,7 +5,7 @@
     "clipboardy": "^4.0.0",
     "get-folder-size": "^5.0.0",
     "@googleapis/sheets": "^9.3.1",
-    "puppeteer": "^23.3.0",
+    "puppeteer": "^23.9.0",
     "ws": "^8.18.0"
   }
 }
