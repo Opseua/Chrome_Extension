@@ -14,8 +14,6 @@ async function notification(inf = {}) {
     try {
         let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = false, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacy = false, encNot = false, } = inf;
 
-        console.log(inf)
-
         async function apiLegacy(inf = {}) {
             let ret = { 'ret': false, }; let cng = typeof UrlFetchApp !== 'undefined'; try {
                 let { url, method, headers = {}, body, bodyObject = null, } = inf; let req, resCode, resHeaders, resBody; let reqOpt = {
@@ -44,9 +42,6 @@ async function notification(inf = {}) {
             let body = { 'fun': [{ securityPass, retInf: 'true,', 'name': 'notification', 'par': { title, text, keepOld, chromeNot, ntfy, duration, icon, buttons, 'aws': true, } }] };
             retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `http://${devSend}`, 'headers': { 'raw': true, }, 'body': JSON.stringify(body), 'bodyObject': true, });
             retApiLegacy = retApiLegacy.ret ? retApiLegacy.res.body : retApiLegacy; errLegacy = retApiLegacy.ret ? false : `{LEGACY}: ${retApiLegacy.msg}`;
-
-            console.log(retApiLegacy)
-
         }
 
         if (!eng && !legacy && !chromeNot) {
