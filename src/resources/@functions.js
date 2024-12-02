@@ -46,7 +46,7 @@
 // https://api.hashify.net/hash/md5/hex?value=aaaa
 
 let _fs, cs; let keepGW = eng ? window : global; keepGW['esLintIgnore'] = ''; keepGW['engName'] = (eng) ? 'CHROME' : 'NODEJS'; keepGW['letter'] = 'x'; keepGW['fileProjetos'] = 'x'; keepGW['fileWindows'] = 'x';
-if (!eng) { _fs = await import('fs'); keepGW['_fs'] = _fs; }; keepGW['gW'] = {};
+if (!eng) { _fs = await import('fs'); keepGW['_fs'] = _fs; process.noDeprecation = true; }; keepGW['gW'] = {};
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
 await import('./getPath.js'); let retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket; let devMaster = retGetPath.res.confOk.master;
@@ -68,11 +68,6 @@ gW = {
     ...gW, securityPass, 'serverWeb': serverWeb.host, portWeb, 'serverLoc': serverLoc.host, portLoc, devMaster, 'devSlave': engName, devSend, devices, hostPortWeb, hostPortLoc, secConnect, secReconnect,
     secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, par1, par2, par3, par4, par5, par6, par7, par8, par9, par10, par11, par12, 'pages': false, par13,
 };
-
-
-// TESTE
-// keepGW['globalWindow'] = gW;
-
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // ############### GLOBAL OBJECT ###############

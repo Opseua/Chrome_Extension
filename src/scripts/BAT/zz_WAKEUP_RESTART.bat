@@ -100,11 +100,10 @@ if not "!arg1!"=="!arg1:ALL_RESTART=!" (
 		ping -n 3 -w 1000 127.0.0.1 >nul
 		
 		rem !2_BACKGROUND! taskmgr
-		!2_BACKGROUND! !fileWindows!\PORTABLE_System_Informer\SystemInformer.exe
+		!2_BACKGROUND! "#1#!fileWindows!\PORTABLE_System_Informer\System Informer.lnk#1#"
 		
 		ping -n 3 -w 1000 127.0.0.1 >nul
-		
-		rem !fileNircmdSetSize! "Task Manager" "890 50 600 600"
+
 		!fileNircmdSetSize! "System Informer" "890 50 600 400"
 	)
 )

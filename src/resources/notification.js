@@ -12,9 +12,7 @@ let e = import.meta.url, ee = e;
 async function notification(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let {
-            retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = false, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [],
-            legacy = false, encNot = false, } = inf;
+        let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = false, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacy = false, encNot = false, } = inf;
 
         async function apiLegacy(inf = {}) {
             let ret = { 'ret': false, }; let cng = typeof UrlFetchApp !== 'undefined'; try {

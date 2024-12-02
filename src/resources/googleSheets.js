@@ -19,7 +19,7 @@
 // }
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
-let e = import.meta.url, ee = e; let _auth, _sheets;
+let e = import.meta.url, ee = e; let _auth, _sheets, googleAppScriptId;
 async function googleSheets(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

@@ -1,8 +1,16 @@
 // ************** VARIÁVEIS NÃO DECLARADAS [globais] **************
 let arrGlobal = [
+  // FUNÇÃO DE FÁBRICA
+  'console', 'setTimeout', 'setInterval', 'clearTimeout', 'AbortController', 'TextEncoder', 'fetch', 'prompt', 'document', 'XPathResult', 'Blob', 'URL', 'DOMParser', 'atob', 'btoa', ,
+  'alert',
+
+
   'esLintIgnore',
   'window', 'global', 'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf',
-  'listenerAcionar', 'listenerMonitorar',
+  'gW', 'legacy', 'platforms', 'ori', 'des',
+
+  // VARIÁVEIS DO SISTEMA
+  'fileChrome_Extension', 'fileProjetos', 'fileWindows',
 
   // CHROME
   // ## BIBLIOTECAS / NATIVO
@@ -11,7 +19,7 @@ let arrGlobal = [
   // NODEJS
   // ## BIBLIOTECAS / NATIVO
   '_WebSocketServer', '_WebSocket', '_fs', '_path', '_url', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto', '_puppeteer', '_net', '_util', '_getFolderSize',
-  'process', 'Buffer', '_parse', '_stackTrace',
+  'process', 'Buffer', '_parse', '_stackTrace', '_googleapisAuth', '_googleapisSheets',
   // ## VARIÁVEIS
   'cs',
   // ## GLOBAL OBJECT [NOVO]
@@ -26,7 +34,8 @@ let arrGlobal = [
   // [Chrome_Extension]
   // → funções globais
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
-  'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabSearch',
+  'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabSearch', 'GPT4js', 'listenerAcionar', 'listenerMonitorar',
+  'chromeActionsNew', 'funImport', 'funGeneric', 'funLibrary', 'taskInf',
   // scripts
   'background', 'command1', 'command2', 'tryRatingComplete',
 
@@ -63,16 +72,20 @@ let arrUnused = [
   'msg', 'sendNtfy', 'e'
 ];
 
-let arrGlobalObj = {};
-for (let variavel of arrGlobal) { arrGlobalObj[variavel] = true; }
+
+let arrGlobalObj = {}; for (let variavel of arrGlobal) { arrGlobalObj[variavel] = 'writable'; }
 
 export const jsConfig = [
   {
 
+    languageOptions: {
+      globals: arrGlobalObj, // VARIÁVEIS GLOBAIS
+    },
+
     rules: {
 
       'no-extra-semi': 'off', // PONTO E VÍRGULA
-      //  'no-undef': 'error', // VARIÁVEL NÃO DEFINIDA
+      'no-undef': 'error', // VARIÁVEL NÃO DEFINIDA
       'no-inner-declarations': 'off', // ERRO DE FUNÇÃO NO MEIO DO CÓDIGO
       'no-useless-escape': 'off', // ESCAPE DO REGEX
       'no-empty': 'off', // CHAVE VAZIA → { }
@@ -82,7 +95,7 @@ export const jsConfig = [
       'no-constant-condition': 'off', // 'true' DO WHILE
       'no-unused-vars': ['error', { 'varsIgnorePattern': "^(" + arrUnused.join('|') + ")$" }]
 
-    }
+    },
 
   }
 ];
