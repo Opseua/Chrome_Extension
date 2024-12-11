@@ -20,7 +20,7 @@ async function file(inf = {}) {
         if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path' }); };
 
         // SUBSTITUIR '!letter!' PELA LETRA DA UNIDADE
-        if (path) { path = path.replace(/!letter!/g, letter).replace(/!fileProjetos!/g, fileProjetos).replace(/!fileWindows!/g, fileWindows); inf.path = path; };
+        if (path) { path = path.replace(/!letter!|%letter%|!letra!|%letra%/g, letter).replace(/!fileProjetos!|%fileProjetos%/g, fileProjetos).replace(/!fileWindows!|%fileWindows%/g, fileWindows); inf.path = path; };
 
         if (!action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder', 'storage',].includes(action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
         else if (typeof functionLocal !== 'boolean' && action !== 'inf' && !path.includes(':')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'functionLocal'`; }
@@ -130,10 +130,7 @@ async function file(inf = {}) {
                     pathNew = pathNew.replace(/!letter!/g, letter); if (!path.includes(':')) { infFile = { 'path': path, 'functionLocal': functionLocal }; retFile = await fileRelative(infFile); path = retFile.res[0] };
                     if (!pathNew.includes(':')) { infFile = { 'path': pathNew, 'functionLocal': functionLocal }; retFile = await fileRelative(infFile); pathNew = retFile.res[0] }; try {
                         await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true }); await _fs.promises.rename(path, pathNew); resNew['ret'] = true; resNew['msg'] = `FILE [CHANGE]: OK`; resNew['res'] = pathNew;
-                    } catch (catchErr) {
-                        console.log(catchErr)
-                        resNew['msg'] = `FILE [CHANGE]: ERRO | AO MOVER ARQUIVO '${path}'`; esLintIgnore = catchErr;
-                    }
+                    } catch (catchErr) { resNew['msg'] = `FILE [CHANGE]: ERRO | AO MOVER ARQUIVO '${path}'`; esLintIgnore = catchErr; }
                 }; return resNew
             }
 

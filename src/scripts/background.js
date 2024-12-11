@@ -24,8 +24,8 @@ chrome.browserAction.onClicked.addListener(async function (...inf) {
 
 // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
 // chrome.downloads.onChanged.addListener(async function (...inf) {
-//     if (inf[0].state && inf[0].state.current === "complete") {
-//         chrome.downloads.search({ id: inf.id }, async function (inf) {
+//     let { id } = inf; if (inf[0].state && inf[0].state.current === "complete") {
+//         chrome.downloads.search({ id }, async function (inf) {
 //             if (inf.length > 0) {
 //                 let downloadItem = inf[0];
 //                 if (downloadItem.byExtensionName === 'BOT') {

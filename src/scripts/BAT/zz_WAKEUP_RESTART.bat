@@ -20,7 +20,8 @@ set "projectSniffer_Python=OPSEUA"
 set "projectWebScraper_C6=ESTRELAR"
 set "projectWebScraper_C6_New2=ESTRELAR"
 set "projectWebScraper_C6_New3=ESTRELAR"
-set "projectWebScraper_Jucesp=ESTRELAR"
+set "projectWebScraper_C6_New4=ESTRELAR"
+set "projectWebScraper_C6_New5=ESTRELAR"
 
 rem IDENTIFICAR O DEVMASTER PELO CONFIG
 set "conteudo=" & set "atalhoModo="
@@ -60,8 +61,11 @@ if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" 
 rem → WebScraper [C6_New3]
 if not "!projectWebScraper_C6_New3!"=="!projectWebScraper_C6_New3:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6_New3\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
-rem → WebScraper [Jucesp]
-if not "!projectWebScraper_Jucesp!"=="!projectWebScraper_Jucesp:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverJucesp\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+rem → WebScraper [C6_New4]
+if not "!projectWebScraper_C6_New4!"=="!projectWebScraper_C6_New4:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6_New4\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [C6_New5]
+if not "!projectWebScraper_C6_New5!"=="!projectWebScraper_C6_New5:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6_New5\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebSocket (MANTER COMO ULTIMO PARA GARANTIR QUE OUTROS PROJETOS CONSIGAM ENVIAR OS COMANDOS ATE ENCERRAR TUDO)
 if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!fileProjetos!\WebSocket\src\z_Outros_server\OFF.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
@@ -74,11 +78,27 @@ ping -n 5 -w 1000 127.0.0.1 >nul
 
 :START_SCRIPTS
 rem ################################## SCRIPTS INICIAR
-rem → Chat_Python
-if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!fileProjetos!\Chat_Python\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem → WebSocket
 if not "!projectWebSocket!"=="!projectWebSocket:%conteudo%=!" ( "!fileProjetos!\WebSocket\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → Chat_Python
+if not "!projectChat_Python!"=="!projectChat_Python:%conteudo%=!" ( "!fileProjetos!\Chat_Python\src\z_Outros_server\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [C6]
+if not "!projectWebScraper_C6!"=="!projectWebScraper_C6:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [C6_New2]
+if not "!projectWebScraper_C6_New2!"=="!projectWebScraper_C6_New2:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6_New2\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [C6_New3]
+if not "!projectWebScraper_C6_New3!"=="!projectWebScraper_C6_New3:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6_New3\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [C6_New4]
+if not "!projectWebScraper_C6_New4!"=="!projectWebScraper_C6_New4:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6_New4\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
+
+rem → WebScraper [C6_New5]
+if not "!projectWebScraper_C6_New5!"=="!projectWebScraper_C6_New5:%conteudo%=!" ( "!fileProjetos!\WebScraper\src\z_Outros_serverC6_New5\!atalhoModo!.vbs" & ping -n 3 -w 1000 127.0.0.1 >nul )
 
 rem ATALHO ACIONADO FOI 'AllRestart'
 if not "!arg1!"=="!arg1:ALL_RESTART=!" (

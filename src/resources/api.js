@@ -70,7 +70,9 @@ async function api(inf = {}) {
                 resBody = await req.text(); reqOk = true
 
                 resHeaders = {}; req.headers.forEach((v, n) => { resHeaders[n.toLowerCase()] = v.toLowerCase() });
-                if (resHeaders['content-type'] == 'application/json' && bodyObject) { try { let temp = JSON.parse(resBody); resBody = temp; bodyObject = true; } catch (c) { esLintIgnore = c; }; };
+                if (resHeaders['content-type'].includes('application/json') && bodyObject) {
+                    try { let temp = JSON.parse(resBody); resBody = temp; } catch (c) { esLintIgnore = c; bodyObject = false; };
+                };
 
             } catch (catchErr) { clearTimeout(timeoutId); reqE = catchErr }
         }
@@ -83,6 +85,7 @@ async function api(inf = {}) {
             ret['res'] = {
                 'code': resCode,
                 'headers': resHeaders,
+                'bodyObject': bodyObject,
                 'body': resBody
             }
         }

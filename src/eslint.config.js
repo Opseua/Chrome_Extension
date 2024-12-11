@@ -35,7 +35,7 @@ let arrGlobal = [
   // → funções globais
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
   'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabSearch', 'GPT4js', 'listenerAcionar', 'listenerMonitorar',
-  'chromeActionsNew', 'funImport', 'funGeneric', 'funLibrary', 'taskInf',
+  'chromeActionsNew', 'funImport', 'funGeneric', 'funLibrary', 'taskInfTryRating', 'clearRun',
   // scripts
   'background', 'command1', 'command2', 'tryRatingComplete',
 
@@ -45,7 +45,7 @@ let arrGlobal = [
 
   // [Sniffer_Python]
   // → funções globais
-  'ewoq', 'tryRating', 'tryRatingGetResponse', 'performTask',
+  'ewoq', 'tryRating', 'getResponseTryRating', 'performTask',
 
   // [URA_Reversa]
   // → funções globais
@@ -69,7 +69,8 @@ let arrUnused = [
 
   // outros
   'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write',
-  'msg', 'sendNtfy', 'e'
+  'msg', 'sendNtfy', 'e',
+
 ];
 
 

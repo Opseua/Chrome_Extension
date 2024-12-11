@@ -37,12 +37,12 @@ if /I "!resultDevMaster!" neq "!conteudo!" ( set "projects=!projects!" )
 rem NOTEBOOK
 set "search=master": "OPSEUA"
 set "resultDevMaster=!conteudo:%search%=!"
-if /I "!resultDevMaster!" neq "!conteudo!" ( set "projects=!projects!;Sniffer_Python_server;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverC6_New3;WebScraper_serverJucesp" )
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "projects=!projects!;Sniffer_Python_server;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverC6_New3;WebScraper_serverC6_New4;WebScraper_serverC6_New5" )
 
 rem ESTRELAR
 set "search=master": "ESTRELAR"
 set "resultDevMaster=!conteudo:%search%=!"
-if /I "!resultDevMaster!" neq "!conteudo!" ( set "projects=!projects!;Sniffer_Python_server;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverC6_New3;WebScraper_serverJucesp" )
+if /I "!resultDevMaster!" neq "!conteudo!" ( set "projects=!projects!;Sniffer_Python_server;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverC6_New3;WebScraper_serverC6_New4;WebScraper_serverC6_New5" )
 
 set "projects=!projects!;"
 set fileQtdCopy=0

@@ -11,8 +11,8 @@ async function serverRun(inf = {}) {
 
         // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
         chrome.downloads.onChanged.addListener(async function (...inf) {
-            if (inf[0].state && inf[0].state.current === 'complete') {
-                chrome.downloads.search({ id: inf.id }, async function (txt) {
+            let { id } = inf; if (inf[0].state && inf[0].state.current === 'complete') {
+                chrome.downloads.search({ id }, async function (txt) {
                     if (txt.length > 0) {
                         let d = inf[0]; if (d.byExtensionName && d.byExtensionName.includes('BOT') && !d.filename.includes('[KEEP]')) {
                             setTimeout(function () {
@@ -55,6 +55,29 @@ async function serverRun(inf = {}) {
         // CHAMAR PARA DEFINIR A FUNÇÃO
         await chromeActionsNew();
 
+
+
+        let infChromeActionsNew, retChromeActionsNew
+        infChromeActionsNew = { // FILTROS # 'includeChildrens' INCLUIR OS NÃO OS ELEMENTOS FILHOS | 'useCase' CONSIDERAR OU NÃO CASE SENSITIVE
+            'tags': [
+                { 'tagName': 'textarea', 'includeChildrens': false, 'useCase': false, },
+            ],
+            'attributes': [
+                { 'attributeName': 'name', 'attributeValue': 'field-6L8VfNKO7NQ', 'includeChildrens': false, 'useCase': false, },
+            ],
+        }
+
+        // attributeGetName attributeGetValue elementGetValue elementSetValue elementClick elementGetDiv elementIsHidden elementGetPath elementHighLight
+        infChromeActionsNew.action = 'elementSetValue'; infChromeActionsNew.elementValue = 'TESTE';
+        // infChromeActionsNew.path = '/html/body/div[1]/div/div[4]/div[2]/div[2]/div[1]/div[2]/div/div/div/div/div/div/div/div/div/div[4]/div/div/div/div/div/div[1]/div/div/div/div[1]/div/div/form/div/div/div/div[1]'; // SELECIONAR ELEMENTO PELO PATH
+
+        // retChromeActionsNew = await chromeActions({ e, 'action': 'inject', 'target': `*page_tryrating.mhtml*`, 'fun': chromeActionsNew, 'funInf': infChromeActionsNew, }); console.log(retChromeActionsNew);
+
+        let infTryRatingSet, retTryRatingSet
+        infTryRatingSet = { 'hitApp': `BroadMatchRatings`, 'process': `good`, } // good acceptable bad
+        retTryRatingSet = await tryRatingSet(infTryRatingSet); console.log(retTryRatingSet);
+
+
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 
@@ -67,31 +90,3 @@ async function serverRun(inf = {}) {
 // TODAS AS FUNÇÕES PRIMÁRIAS DO 'server.js' / 'serverC6.js' / 'serverJsf.js' DEVEM SE CHAMAR 'serverRun'!!!
 serverRun()
 
-
-// elements = elements.filter(element => {
-
-//     // FILTRO DE tags
-//     let matchesTags = tags.every(critery => {
-//         let { tagName } = critery; return !tagName || eleRegex(tagName, element.tagName.toLowerCase());
-//     });
-
-//     // FILTRO DE attributes
-//     let matchesAttributes = attributes.every(critery => {
-//         let { attributeName, attributeValue } = critery;
-//         let matchesAttr = Array.from(element.attributes).some(attr => {
-//             let matchName = !attributeName || eleRegex(attributeName, attr.name);
-//             let matchValue = !attributeValue || eleRegex(attributeValue.replace(/&quot;/g, '"'), attr.value);
-//             return matchName && matchValue;
-//         });
-//         return matchesAttr;
-//     });
-
-//     // FILTRO DE contents
-//     let matchesContents = contents.every(critery => {
-//         let { contentValue } = critery;
-//         return !contentValue || eleRegex(contentValue, element.textContent.trim());
-//     });
-
-//     // RETORNO
-//     return matchesTags && matchesAttributes && matchesContents;
-// });

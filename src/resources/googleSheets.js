@@ -83,7 +83,7 @@ async function googleSheets(inf = {}) {
 
         // TENTAR NOVAMENTE EM CASO DE ERRO
         if (!ret.ret && !newRun) {
-            await notification({ e, 'legacy': true, 'title': `ERRO GOOGLE SHEETS`, 'text': `PRIMEIRA TENTATIVA → ${ret.msg}`, });
+            await notification({ e, 'legacy': true, 'title': `ERRO GOOGLE SHEETS`, 'text': `PRIMEIRA TENTATIVA → ${ret.msg}`, 'ntfy': true, });
 
             logConsole({ e, ee, 'write': true, 'msg': `PRIMEIRA TENTATIVA → ${ret.msg}` });
             let retGoogleSheets = await googleSheets({ ...inf, 'newRun': true })

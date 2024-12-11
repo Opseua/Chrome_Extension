@@ -12,8 +12,8 @@ async function commandLine(inf = {}) {
         // IMPORTAR BIBLIOTECA [NODEJS]
         if (typeof _exec === 'undefined') { await funLibrary({ 'lib': '_exec' }); };
 
-        command = command.replace(/!letter!/g, letter)
-        command = awaitFinish ? `${command}` : `${notAdm ? '%2_BACKGROUND_NOT_ADM%' : '%2_BACKGROUND%'} ${command}`
+        command = command.replace(/!letter!|%letter%|!letra!|%letra%/g, letter);
+        command = awaitFinish ? `${command}` : `${notAdm ? '%2_BACKGROUND_NOT_ADM%' : '%2_BACKGROUND%'} ${command}`;
         await new Promise((resolve) => {
             let child = _exec(command, async (error, stdout, stderr) => {
                 if (error) {

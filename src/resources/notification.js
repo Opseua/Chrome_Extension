@@ -54,18 +54,18 @@ async function notification(inf = {}) {
                 let notifications = chrome.notifications;
 
                 // MANTER NOTIFICAÇÕES ANTIGAS
-                if (!keepOld) { let nts = await new Promise((resolve) => { notifications.getAll((n) => resolve(n)); }); for (let id in nts) { await new Promise((resolve) => { notifications.clear(id, resolve); }); }; }
+                if (!keepOld) { let nts = await new Promise((resolve) => { notifications.getAll((n) => resolve(n)); }); for (let id in nts) { await new Promise((resolve) => { notifications.clear(id, resolve); }); }; };
 
                 // ÍCONE | MÁXIMO [CONSIDERANDO TUDO 'A']
-                icon = icon.replace('./src/scripts/media/', '')
-                icon = await fetch(`./src/scripts/media/${icon}`).then(v => v.arrayBuffer()); icon = btoa(String.fromCharCode(...new Uint8Array(icon)))
+                icon = icon.includes('media') ? icon.split('media/')[1] : icon; // ANTIGO → './src/scripts/media/notification_3.png'
+                icon = await fetch(`./src/media/${icon}`).then(v => v.arrayBuffer()); icon = btoa(String.fromCharCode(...new Uint8Array(icon)));
                 let not = { 'type': 'basic', 'iconUrl': `data:image/png;base64,${icon}`, 'title': title.substring(0, 32), 'message': text.substring(0, 128), buttons, };
 
                 // ENVIAR NOTIFICAÇÃO
                 notifications.create(not, (notificationId) => {
                     notifications.onButtonClicked.addListener((notifId, btnIdx) => {
                         // BOTÃO PRESSIONADO
-                        if (notifId === notificationId && btnIdx === 0) { alert('Botao 1 pressionado') }; if (notifId === notificationId && btnIdx === 1) { alert('Botao 2 pressionado') }
+                        if (notifId === notificationId && btnIdx === 0) { alert('Botao 1 pressionado') }; if (notifId === notificationId && btnIdx === 1) { alert('Botao 2 pressionado') };
                     }); setTimeout(() => { notifications.clear(notificationId) }, duration * 1000)
                 });
             } catch (catchErr) {
@@ -76,9 +76,9 @@ async function notification(inf = {}) {
         let arrMsg1 = [`${ntfy ? 'NTFY' : ''}`, `${!chromeNot ? 'CHROME' : ''}`,].filter(v => v !== '').join('+') || 'VAZIO';
         let arrMsg2 = [`${errNtfy || ''}`, `${errLegacy || ''}`, `${errDevFun || ''}`, `${errChrome || ''}`,].filter(v => v !== '').join(' | ') || 'NENHUM DISPOSITIVO';
         if (errNtfy || errLegacy || errDevFun || errChrome || arrMsg1 == 'VAZIO') {
-            ret['msg'] = `NOTIFICATION [${arrMsg1}]: ERRO | ${arrMsg2}`
+            ret['msg'] = `NOTIFICATION [${arrMsg1}]: ERRO | ${arrMsg2}`;
         } else {
-            ret['msg'] = `${retDevAndFun?.msg?.includes('[ENC]') && !encNot ? '[ENC] ' : ''}NOTIFICATION [${arrMsg1}]: OK`
+            ret['msg'] = `${retDevAndFun?.msg?.includes('[ENC]') && !encNot ? '[ENC] ' : ''}NOTIFICATION [${arrMsg1}]: OK`;
             ret['ret'] = true;
         }
 

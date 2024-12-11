@@ -6,7 +6,7 @@
 // telegram               → gpt-4o
 // g4f                    → gpt-4o
 // zukiJourney (12/min)   → gpt-4
-// naga (3/min)           → gpt-4
+// naga (3/min)           → gpt-4                                       [https://naga.ac/dashboard/models]
 
 // let infChat, retChat;
 // infChat = { e, 'provider': 'nextWay', 'model': 'gpt-4o-free', 'messagePrompt': `Qual a idade de Saturno?`, };

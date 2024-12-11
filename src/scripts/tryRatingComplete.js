@@ -3,14 +3,14 @@
 // retTryRatingComplete = await tryRatingComplete(infTryRatingComplete); console.log(retTryRatingComplete)
 
 // IMPORTAR OBJETOS COM AS OPÇÕES E RESPOSTAS
-let opts = {}; let imp = ['POIEvaluation', 'Search20',]
-for (let [index, value] of imp.entries()) { await import(`./objects/tryRating/opt_${value}.js`); opts[value] = (eng ? window : global)[`act_${value}`]; delete (eng ? window : global)[`act_${value}`]; };
+let opts = {}; let imp = ['Search20',]
+for (let [index, v] of imp.entries()) { await import(`./objects/tryRating/opt_${v}.js`); opts[v] = (eng ? window : global)[`opt_${v}`]; delete (eng ? window : global)[`opt_${v}`]; };
 
 let e = import.meta.url, ee = e;
 async function tryRatingComplete(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { infTryRatingComplete, } = inf; let infChromeActions, retChromeActions, judgesValues = { 'current': -1, 'comments': [], 'responses': [], 'values': [] };
+        let { infTryRatingComplete, } = inf; let infChromeActions, retChromeActions, judgesValues = { 'current': -1, 'comments': [], 'responses': [], 'values': [], };
 
         // PEGAR O NOME DO HIT APP | ############ (XPATH) ELEMENTO: PEGAR VALOR ############
         infChromeActions = { e, 'action': 'elementGetValue', 'target': `*tryrating*`, 'elementName': `//*[@id="app-root"]/div/div[4]/div[2]/div[1]/div/div[1]/div/div[1]/span[2]/span`, }
