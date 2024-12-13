@@ -16,8 +16,7 @@ async function serverRun(inf = {}) {
                     if (txt.length > 0) {
                         let d = inf[0]; if (d.byExtensionName && d.byExtensionName.includes('BOT') && !d.filename.includes('[KEEP]')) {
                             setTimeout(function () {
-                                chrome.downloads.erase({ id: d.id });
-                                // logConsole({ e, ee, 'write': true, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)
+                                chrome.downloads.erase({ id: d.id }); // logConsole({ e, ee, 'write': true, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)
                             }, 5000);
                         }
                     }
@@ -40,11 +39,8 @@ async function serverRun(inf = {}) {
                     // });
 
                 }
-                else if (infShortcutPressed.shortcut == 'atalho_2') { command2(); }
-                else { logConsole({ e, ee, 'write': true, 'msg': `ACAO DO ATALHO NAO DEFINIDA` }) }
-            } catch (catchErr) {
-                await regexE({ 'inf': inf, 'e': catchErr, });
-            };
+                else if (infShortcutPressed.shortcut == 'atalho_2') { command2(); } else { logConsole({ e, ee, 'write': true, 'msg': `ACAO DO ATALHO NAO DEFINIDA` }) }
+            } catch (catchErr) { await regexE({ 'inf': inf, 'e': catchErr, }); };
         });
 
         // *************************
@@ -56,26 +52,25 @@ async function serverRun(inf = {}) {
         await chromeActionsNew();
 
 
+        // let infChromeActionsNew, retChromeActionsNew
+        // infChromeActionsNew = { // FILTROS # 'includeChildrens' INCLUIR OS NÃO OS ELEMENTOS FILHOS | 'useCase' CONSIDERAR OU NÃO CASE SENSITIVE
+        //     'tags': [
+        //         { 'tagName': 'textarea', 'includeChildrens': false, 'useCase': false, },
+        //     ],
+        //     'attributes': [
+        //         { 'attributeName': 'name', 'attributeValue': 'field-6L8VfNKO7NQ', 'includeChildrens': false, 'useCase': false, },
+        //     ],
+        // }
 
-        let infChromeActionsNew, retChromeActionsNew
-        infChromeActionsNew = { // FILTROS # 'includeChildrens' INCLUIR OS NÃO OS ELEMENTOS FILHOS | 'useCase' CONSIDERAR OU NÃO CASE SENSITIVE
-            'tags': [
-                { 'tagName': 'textarea', 'includeChildrens': false, 'useCase': false, },
-            ],
-            'attributes': [
-                { 'attributeName': 'name', 'attributeValue': 'field-6L8VfNKO7NQ', 'includeChildrens': false, 'useCase': false, },
-            ],
-        }
+        // // attributeGetName attributeGetValue elementGetValue elementSetValue elementClick elementGetDiv elementIsHidden elementGetPath elementHighLight
+        // infChromeActionsNew.action = 'elementSetValue'; infChromeActionsNew.elementValue = 'TESTE';
+        // // infChromeActionsNew.path = '/html/body/div[1]/div/div[4]/div[2]/div[2]/div[1]/div[2]/div/div/div/div/div/div/div/div/div/div[4]/div/div/div/div/div/div[1]/div/div/div/div[1]/div/div/form/div/div/div/div[1]'; // SELECIONAR ELEMENTO PELO PATH
 
-        // attributeGetName attributeGetValue elementGetValue elementSetValue elementClick elementGetDiv elementIsHidden elementGetPath elementHighLight
-        infChromeActionsNew.action = 'elementSetValue'; infChromeActionsNew.elementValue = 'TESTE';
-        // infChromeActionsNew.path = '/html/body/div[1]/div/div[4]/div[2]/div[2]/div[1]/div[2]/div/div/div/div/div/div/div/div/div/div[4]/div/div/div/div/div/div[1]/div/div/div/div[1]/div/div/form/div/div/div/div[1]'; // SELECIONAR ELEMENTO PELO PATH
+        // // retChromeActionsNew = await chromeActions({ e, 'action': 'inject', 'target': `*page_tryrating.mhtml*`, 'fun': chromeActionsNew, 'funInf': infChromeActionsNew, }); console.log(retChromeActionsNew);
 
-        // retChromeActionsNew = await chromeActions({ e, 'action': 'inject', 'target': `*page_tryrating.mhtml*`, 'fun': chromeActionsNew, 'funInf': infChromeActionsNew, }); console.log(retChromeActionsNew);
-
-        let infTryRatingSet, retTryRatingSet
-        infTryRatingSet = { 'hitApp': `BroadMatchRatings`, 'process': `good`, } // good acceptable bad
-        retTryRatingSet = await tryRatingSet(infTryRatingSet); console.log(retTryRatingSet);
+        // let infTryRatingSet, retTryRatingSet
+        // infTryRatingSet = { 'hitApp': `BroadMatchRatings`, 'process': `good`, } // good acceptable bad
+        // retTryRatingSet = await tryRatingSet(infTryRatingSet); console.log(retTryRatingSet);
 
 
         ret['ret'] = true;
