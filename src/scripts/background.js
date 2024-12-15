@@ -9,7 +9,7 @@ chrome.storage.sync.clear(function () {
 import('../server.js');
 
 chrome.browserAction.onClicked.addListener(async function (...inf) {
-    console.log(`EVENTO: click no ícone\n`, inf)
+    console.log(`EVENTO: click no ícone\n`, inf);
     // chrome.browserAction.setPopup({popup: './popup.html'});
 });
 

@@ -9,24 +9,26 @@ async function clipboard(inf = {}) {
         let { value, } = inf;
 
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _clipboard === 'undefined') { await funLibrary({ 'lib': '_clipboard' }); };
+        if (typeof _clipboard === 'undefined') { await funLibrary({ 'lib': '_clipboard', }); };
 
-        if (value == null || value == '') {
+        if (value === null || value === '') {
             ret['msg'] = `CLIPBOARD: ERRO | INFORMAR O 'value'`;
         } else {
             let text = value;
             if (typeof text === 'object') { // OBJETO INDENTADO EM TEXTO BRUTO
-                text = JSON.stringify(text, null, 2)
+                text = JSON.stringify(text, null, 2);
             }
-            if (eng) { // CHROME
+            if (eng) {
+                // CHROME
                 let element = document.createElement('textarea');
                 element.value = text; document.body.appendChild(element);
                 element.select(); document.execCommand('copy');
-                document.body.removeChild(element)
+                document.body.removeChild(element);
             } else {
-                _clipboard.writeSync(text)
-            }; // NODEJS
-            ret['msg'] = 'CLIPBOARD: OK'
+                // NODEJS
+                _clipboard.writeSync(text);
+            };
+            ret['msg'] = 'CLIPBOARD: OK';
             ret['ret'] = true;
 
         }
@@ -34,7 +36,7 @@ async function clipboard(inf = {}) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS

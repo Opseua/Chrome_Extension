@@ -1,4 +1,4 @@
-function startupFun(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}` }; let startup = new Date();
+function startupFun(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }; let startup = new Date();
 await import('./resources/@export.js'); let e = import.meta.url, ee = e;
 
 async function serverRun(inf = {}) {
@@ -11,12 +11,12 @@ async function serverRun(inf = {}) {
 
         // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
         chrome.downloads.onChanged.addListener(async function (...inf) {
-            let { id } = inf; if (inf[0].state && inf[0].state.current === 'complete') {
-                chrome.downloads.search({ id }, async function (txt) {
+            let { id, } = inf; if (inf[0].state && inf[0].state.current === 'complete') {
+                chrome.downloads.search({ id, }, async function (txt) {
                     if (txt.length > 0) {
                         let d = inf[0]; if (d.byExtensionName && d.byExtensionName.includes('BOT') && !d.filename.includes('[KEEP]')) {
                             setTimeout(function () {
-                                chrome.downloads.erase({ id: d.id }); // logConsole({ e, ee, 'write': true, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)
+                                chrome.downloads.erase({ id: d.id, }); // logConsole({ e, ee, 'write': true, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)
                             }, 5000);
                         }
                     }
@@ -27,8 +27,8 @@ async function serverRun(inf = {}) {
         // ATALHO PRESSIONADO
         chrome.commands.onCommand.addListener(async function (...inf) {
             try {
-                let infShortcutPressed = { 'shortcut': inf[0] }; // logConsole({ e, ee, 'write': true, 'msg': `ON START: ATALHO PRESSIONADO` })
-                if (infShortcutPressed.shortcut == 'atalho_1') {
+                let infShortcutPressed = { 'shortcut': inf[0], }; // logConsole({ e, ee, 'write': true, 'msg': `ON START: ATALHO PRESSIONADO` })
+                if (infShortcutPressed.shortcut === 'atalho_1') {
                     command1({ 'origin': 'chrome', });
 
                     // chrome.tabs.executeScript({
@@ -39,14 +39,14 @@ async function serverRun(inf = {}) {
                     // });
 
                 }
-                else if (infShortcutPressed.shortcut == 'atalho_2') { command2(); } else { logConsole({ e, ee, 'write': true, 'msg': `ACAO DO ATALHO NAO DEFINIDA` }) }
+                else if (infShortcutPressed.shortcut === 'atalho_2') { command2(); } else { logConsole({ e, ee, 'write': true, 'msg': `ACAO DO ATALHO NAO DEFINIDA`, }); }
             } catch (catchErr) { await regexE({ 'inf': inf, 'e': catchErr, }); };
         });
 
         // *************************
 
         // CLIENT (NÃO POR COMO 'await'!!!) | MANTER NO FINAL
-        client({ 'e': e }); // await new Promise(resolve => { setTimeout(resolve, 1000) });
+        client({ 'e': e, }); // await new Promise(resolve => { setTimeout(resolve, 1000) });
 
         // CHAMAR PARA DEFINIR A FUNÇÃO
         await chromeActionsNew();
@@ -72,7 +72,6 @@ async function serverRun(inf = {}) {
         // infTryRatingSet = { 'hitApp': `BroadMatchRatings`, 'process': `good`, } // good acceptable bad
         // retTryRatingSet = await tryRatingSet(infTryRatingSet); console.log(retTryRatingSet);
 
-
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 
@@ -80,8 +79,8 @@ async function serverRun(inf = {}) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 // TODAS AS FUNÇÕES PRIMÁRIAS DO 'server.js' / 'serverC6.js' / 'serverJsf.js' DEVEM SE CHAMAR 'serverRun'!!!
-serverRun()
+serverRun();
 

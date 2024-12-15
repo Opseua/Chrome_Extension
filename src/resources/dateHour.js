@@ -24,10 +24,10 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
                 let hou = Math.floor(inf / 3600).toString().padStart(2, '0');
                 let min = Math.floor((inf % 3600) / 60).toString().padStart(2, '0');
                 let sec = Math.min(Math.floor(inf % 60), 59).toString().padStart(2, '0');
-                ret['res'] = `${hou}:${min}:${sec}`
-                ret['msg'] = `DATE HOUR [SEC TO HOUR]: OK`
+                ret['res'] = `${hou}:${min}:${sec}`;
+                ret['msg'] = `DATE HOUR [SEC TO HOUR]: OK`;
                 ret['ret'] = true;
-                return ret
+                return ret;
             }
             // ******************************************************************************************
 
@@ -49,7 +49,7 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
             inf = 0;
         }
         let dt2 = Date.now() + (inf * 1000);
-        let hou = dt1.getHours()
+        let hou = dt1.getHours();
 
         ret['res'] = {
             'day': dt1.getDate().toString().padStart(2, '0'),
@@ -63,17 +63,17 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
             'mil': dt2.toString().slice(-3),
             'tim': dt2.toString().slice(0, -3),
             'timMil': dt2.toString(),
-            'dayNam': ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'][dt1.getDay()],
-            'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'][dt1.getMonth()],
+            'dayNam': ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',][dt1.getDay()],
+            'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ',][dt1.getMonth()],
         };
-        ret['msg'] = `DATE HOUR: OK`
+        ret['msg'] = `DATE HOUR: OK`;
         ret['ret'] = true;
 
     } catch (catchErr) {
-        (async () => { let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res']; })()
+        (async () => { let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res']; })();
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS

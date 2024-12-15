@@ -27,58 +27,52 @@ let e = import.meta.url, ee = e;
 async function api(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { method, url, headers, body, max, bodyObject = null, } = inf;
+        let { method, url, headers, body, max = 20, bodyObject = null, } = inf;
 
-        let req, resCode, resHeaders, resBody, reqOk = false, reqE; let reqOpt = { 'method': method, 'redirect': 'follow', 'keepalive': true, 'rejectUnauthorized': false };
+        let req, resCode, resHeaders, resBody, reqE = false; let reqOpt = { 'method': method, 'redirect': 'follow', 'keepalive': true, 'rejectUnauthorized': false, };
 
         // HEADERS
-        reqOpt['headers'] = {}; if (headers && Object.keys(headers).length > 0) { reqOpt.headers = headers };
+        reqOpt['headers'] = {}; if (headers && Object.keys(headers).length > 0) { reqOpt.headers = headers; };
 
         // BODY
-        if ((body) && (reqOpt.method == 'POST' || reqOpt.method == 'PUT')) {
-            if (!JSON.stringify(reqOpt.headers).includes('x-www-form-urlencoded')) {
+        if ((body) && (reqOpt.method === 'POST' || reqOpt.method === 'PUT')) {
+            if (!JSON.stringify(reqOpt.headers).toLowerCase().includes('x-www-form-urlencoded')) {
                 // ###### → json/object | text
-                body = typeof body === 'object' ? JSON.stringify(body) : body
+                body = typeof body === 'object' ? JSON.stringify(body) : body;
             } else {
                 // ###### → x-www-form-urlencoded
-                if (!typeof body === 'object' || !Object.keys(body).length > 0) {
-                    ret['msg'] = `API: ERRO | 'body' NÃO É OBJETO [x-www-form-urlencoded]`
-                    return ret
-                }; body = []; for (let key in body) { if (key in body) { body.push(encodeURIComponent(key) + '=' + encodeURIComponent(body[key])); } }; body = body.join('&');
+                if (!(typeof body === 'object') || !Object.keys(body).length > 0) { ret['msg'] = `API: ERRO | 'body' NÃO É OBJETO [x-www-form-urlencoded]`; return ret; };
+                body = []; for (let key in body) { if (key in body) { body.push(encodeURIComponent(key) + '=' + encodeURIComponent(body[key])); } }; body = body.join('&');
             }
         }
 
-        // ################ GOOGLE APP SCRIPT
         if (typeof UrlFetchApp !== 'undefined') {
-            reqOpt['muteHttpExceptions'] = true; reqOpt['validateHttpsCertificates'] = true; if (body) { reqOpt['payload'] = body }
-            try { req = UrlFetchApp.fetch(url, reqOpt); resCode = req.getResponseCode(); resHeaders = req.getAllHeaders(); resBody = req.getContentText(); reqOk = true }
-            catch (catchErr) { reqE = catchErr }
-        } else {
-            // ################ CHROME | NODEJS
-            // TEMPO LIMITE [PADRÃO 20 SEGUNDOS]
-            max = max ? max * 1000 : 20000; let controller = new AbortController(); let signal = controller.signal; reqOpt['signal'] = signal
-            if (body) { reqOpt['body'] = body; let encoder = new TextEncoder(); let length = encoder.encode(reqOpt.body).length; reqOpt.headers['Content-Length'] = length }
-            let timeoutId = setTimeout(() => {
-                // CANCELAR A REQUISIÇÃO SE O TEMPO FOR ATINGIDO
-                ret['msg'] = 'API: ERRO | TEMPO MÁXIMO ATINGIDO'; controller.abort();
-            }, max);
+            // ################ GOOGLE APP SCRIPT
+            reqOpt['muteHttpExceptions'] = true; reqOpt['validateHttpsCertificates'] = true; if (body) { reqOpt['payload'] = body; };
             try {
-                req = await fetch(url, reqOpt);
-                // LIMPAR O TIMER SE A RESPOSTA FOR RECEBIDA ANTES DO TEMPO
-                clearTimeout(timeoutId); resCode = req.status;
-                // resHeaders = {}; req.headers.forEach((value, name) => { resHeaders[name] = value });
-                resBody = await req.text(); reqOk = true
-
-                resHeaders = {}; req.headers.forEach((v, n) => { resHeaders[n.toLowerCase()] = v.toLowerCase() });
+                req = UrlFetchApp.fetch(url, reqOpt); resCode = req.getResponseCode(); resBody = req.getContentText();
+                resHeaders = {}; Object.entries(req.getAllHeaders()).forEach(([k, v,]) => { resHeaders[k.toLowerCase()] = v.toLowerCase(); });
                 if (resHeaders['content-type'].includes('application/json') && bodyObject) {
                     try { let temp = JSON.parse(resBody); resBody = temp; } catch (c) { esLintIgnore = c; bodyObject = false; };
                 };
-
-            } catch (catchErr) { clearTimeout(timeoutId); reqE = catchErr }
+            } catch (catchErr) { reqE = catchErr; }
+        } else {
+            // ################ CHROME | NODEJS
+            max = max * 1000; let controller = new AbortController(); let signal = controller.signal; reqOpt['signal'] = signal;
+            if (body) { reqOpt['body'] = body; let encoder = new TextEncoder(); let length = encoder.encode(reqOpt.body).length; reqOpt.headers['Content-Length'] = length; };
+            let timeoutId = setTimeout(() => { ret['msg'] = 'API: ERRO | TEMPO MÁXIMO ATINGIDO'; controller.abort(); }, max); // CANCELAR A REQUISIÇÃO AO ATINGIR O TEMPO
+            try {
+                req = await fetch(url, reqOpt);
+                clearTimeout(timeoutId); // LIMPAR TIMEOUT AO RECEBER RESPOSTA
+                resCode = req.status; resBody = await req.text(); resHeaders = {}; req.headers.forEach((v, n) => { resHeaders[n.toLowerCase()] = v.toLowerCase(); });
+                if (resHeaders['content-type'].includes('application/json') && bodyObject) {
+                    try { let temp = JSON.parse(resBody); resBody = temp; } catch (c) { esLintIgnore = c; bodyObject = false; };
+                };
+            } catch (catchErr) { reqE = catchErr; clearTimeout(timeoutId); }
         }
 
-        if (!reqOk) {
-            ret['msg'] = ret.msg ? ret.msg : `API: ERRO AO FAZER REQUISIÇÃO (NÃO NA FUNÇÃO)\n\n${reqE}`;
+        if (reqE) {
+            ret['msg'] = ret.msg || `API: ERRO AO FAZER REQUISIÇÃO (NÃO NA FUNÇÃO)\n\n${reqE}`;
         } else {
             ret['ret'] = true;
             ret['msg'] = 'API: OK';
@@ -86,8 +80,8 @@ async function api(inf = {}) {
                 'code': resCode,
                 'headers': resHeaders,
                 'bodyObject': bodyObject,
-                'body': resBody
-            }
+                'body': resBody,
+            };
         }
 
     } catch (catchErr) {
@@ -96,7 +90,7 @@ async function api(inf = {}) {
         }
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS

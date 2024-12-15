@@ -17,12 +17,12 @@ async function objFilter(inf = {}) {
                         if (keys && Array.isArray(keys) && keys.length > 0) {
                             if ((noCaseSensitive ? keys.map(v => typeof v === 'string' ? v.toLowerCase() : v).includes(typeof key === 'string' ? key.toLowerCase() : key) : keys.includes(key))) {
                                 // CHECA SE EXISTE: KEY
-                                results.push({ 'key': path.concat(key).join(split || '.'), 'value': cur[key] });
+                                results.push({ 'key': path.concat(key).join(split || '.'), 'value': cur[key], });
                             }
                         } else if (values && Array.isArray(values) && values.length > 0) {
                             if ((noCaseSensitive ? values.map(v => typeof v === 'string' ? v.toLowerCase() : v).includes(typeof cur[key] === 'string' ? cur[key].toLowerCase() : cur[key]) : values.includes(cur[key]))) {
                                 // CHECA SE EXISTE: VALUE
-                                results.push({ 'key': path.concat(key).join(split || '.'), 'value': cur[key] });
+                                results.push({ 'key': path.concat(key).join(split || '.'), 'value': cur[key], });
                             }
                         }
                         search(cur[key], path.concat(key));
@@ -35,38 +35,38 @@ async function objFilter(inf = {}) {
 
         // FILTRAR OS RESULTADOS
         function filter(inf = {}) {
-            let resultsOk = []; let { results, filters, } = inf
-            for (let [index, value] of results.entries()) {
-                let regexRes = []
-                for (let [index1, value1] of (filters.includes || filters.excludes).entries()) {
-                    let regexRet = regex({ e, 'simple': true, 'pattern': noCaseSensitive ? value1.toLowerCase() : value1, 'text': noCaseSensitive ? value.key.toLowerCase() : value.key })
+            let resultsOk = []; let { results, filters, } = inf;
+            for (let [index, value,] of results.entries()) {
+                let regexRes = [];
+                for (let [index1, value1,] of (filters.includes || filters.excludes).entries()) {
+                    let regexRet = regex({ e, 'simple': true, 'pattern': noCaseSensitive ? value1.toLowerCase() : value1, 'text': noCaseSensitive ? value.key.toLowerCase() : value.key, });
                     regexRes.push(filters.includes ? regexRet : !regexRet);
                 }
                 if (regexRes.includes(true)) {
-                    resultsOk.push(value)
+                    resultsOk.push(value);
                 }
             };
-            return resultsOk
+            return resultsOk;
         }
 
         // REFILTRA OS RESULTADOS
         if (filters && Array.isArray(filters) && filters.length > 0) {
-            for (let [index, value] of filters.entries()) {
+            for (let [index, value,] of filters.entries()) {
                 if (value && ((value.includes && Array.isArray(value.includes) && value.includes.length > 0) || (value.excludes && Array.isArray(value.excludes) && value.excludes.length > 0))) {
-                    results = filter({ 'results': results, 'filters': value });
+                    results = filter({ 'results': results, 'filters': value, });
                 }
             }
         }
 
         ret['ret'] = true;
         ret['msg'] = `OBJ FILTER: OK`;
-        ret['res'] = [...new Map(results.map(i => [i.key, i])).values()]; // REMOVER DUPLICATAS
+        ret['res'] = [...new Map(results.map(i => [i.key, i,])).values(),]; // REMOVER DUPLICATAS
 
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS

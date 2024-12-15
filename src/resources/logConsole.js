@@ -3,7 +3,7 @@
 
 let e = import.meta.url;
 async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
-    let ret = { 'ret': false }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
     try {
         let { msg, write, } = inf;
 
@@ -33,17 +33,17 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
         }
 
         let time = dateHour().res;
-        let fileProject = eng ? 'Chrome' : ee.split('PROJETOS/')[1].split('/')[0]
-        let fileCall = ee.split('/').pop()
-        msg = typeof msg === 'object' ? JSON.stringify(msg) : msg
+        let fileProject = eng ? 'Chrome' : ee.split('PROJETOS/')[1].split('/')[0];
+        let fileCall = ee.split('/').pop();
+        msg = typeof msg === 'object' ? JSON.stringify(msg) : msg;
         colorConsole({
             // FORMATO: 24 HORAS (11h, 12h, 13h, 14h...)
-            'text': `<verde>→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
+            'text': `<verde>→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`,
             // FORMATO: 12 HORAS (11h, 12h, 01h, 02h...)
             // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
         });
         if (!eng && write) {
-            await log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall, 'unique': false })
+            await log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall, 'unique': false, });
         }
 
         ret['msg'] = `LOG CONSOLE: OK`;
@@ -53,7 +53,7 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS

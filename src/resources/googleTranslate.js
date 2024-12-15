@@ -9,36 +9,36 @@ async function googleTranslate(inf = {}) {
         let { source, target, text, } = inf;
 
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio' }); };
+        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio', }); };
 
         let infApi = {
             e,
             method: 'GET',
             url: `https://translate.google.com/m?sl=${source}&tl=${target}&q=${encodeURIComponent(text)}&hl=pt-BR`,
-            headers: {}
+            headers: {},
         };
-        let retApi = await api(infApi); if (!retApi.ret) { return retApi } else { retApi = retApi.res }
+        let retApi = await api(infApi); if (!retApi.ret) { return retApi; } else { retApi = retApi.res; }
         let res = retApi.body;
-        let retRegex = regex({ e, 'pattern': 'class="result-container">(.*?)</div>', 'text': res });
+        let retRegex = regex({ e, 'pattern': 'class="result-container">(.*?)</div>', 'text': res, });
         if (!retRegex.ret) {
-            return ret
+            return ret;
         };
-        let dom, $
+        let dom, $;
         if (eng) { // CHROME
-            dom = new DOMParser().parseFromString(retRegex.res['3'], "text/html").documentElement.textContent
+            dom = new DOMParser().parseFromString(retRegex.res['3'], 'text/html').documentElement.textContent;
         } else { // NODEJS
             $ = _cheerio.load(retRegex.res['3']);
-            dom = _cheerio.load($('body').html())('body').text()
+            dom = _cheerio.load($('body').html())('body').text();
         }
         ret['res'] = dom;
-        ret['msg'] = `GOOGLE TRANSLATE: OK`
+        ret['msg'] = `GOOGLE TRANSLATE: OK`;
         ret['ret'] = true;
 
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS

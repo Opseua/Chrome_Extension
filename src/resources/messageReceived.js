@@ -1,29 +1,29 @@
 let e = import.meta.url, ee = e;
-let mensagensPartesRecebida = {}
+let mensagensPartesRecebida = {};
 async function messageReceived(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let { host, room, resWs, wsClients, messageId, partesRestantes, message, buffer, origin, destination, } = inf;
 
-        messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId
+        messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId;
         partesRestantes = partesRestantes > -99 ? partesRestantes : 0; message = typeof message === 'object' ? JSON.stringify(message) : message; buffer = buffer ? buffer : false;
         origin = origin ? origin.replace('ws://', '') : `${host}/?roo=${room}`; destination = destination ? destination.replace('ws://', '') : 'x'; let isSerCli = wsClients ? 'isSer' : 'isCli';
 
         // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
-        if (Object.keys(mensagensPartesRecebida).length == 0) {
+        if (Object.keys(mensagensPartesRecebida).length === 0) {
             let mensagensPartesRecebida = {}; let minClearPartsMessages = gW.minClearPartsMessages; setInterval(() => {
                 let c = new Date().getTime(); for (let messageId in mensagensPartesRecebida) { if ((c - Number(messageId.split('_')[1])) > minClearPartsMessages * 60000) { delete mensagensPartesRecebida[messageId]; } };
             }, minClearPartsMessages * 60000);
         }
 
-        if (isSerCli == 'isSer') {
+        if (isSerCli === 'isSer') {
             // ### RECEBIDO NO SERVER
             let wsClientsToSend = [], erroType = 0; let wsClientsArrRoom = []; for (let room in wsClients.rooms) {
-                if (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': room }) && !JSON.stringify(wsClientsArrRoom).includes(room.split('/')[1])) {
-                    wsClientsArrRoom.push(room) // // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
+                if (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': room, }) && !JSON.stringify(wsClientsArrRoom).includes(room.split('/')[1])) {
+                    wsClientsArrRoom.push(room); // // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
                     wsClientsToSend = wsClientsToSend.concat(Array.from(wsClients.rooms[room]));
                 }
-            }; erroType = wsClientsToSend.length == 0 ? `DESTINO INVÁLIDO` : (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': origin }) || origin == destination) ? `DESTINO IGUAL` : 0;
+            }; erroType = wsClientsToSend.length === 0 ? `DESTINO INVÁLIDO` : (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': origin, }) || origin === destination) ? `DESTINO IGUAL` : 0;
 
             // ENVIAR: MENSAGEM STATUS → ORIGEM
             let messageOrigin = {
@@ -32,26 +32,26 @@ async function messageReceived(inf = {}) {
                 'messageId': `${messageId}_SERVER_${partesRestantes}`,
                 'buffer': false,
                 'partesRestantes': 0,
-                'message': { 'ret': !erroType, 'msg': !erroType ? `WS: OK` : `WS: ERRO | ${erroType} '${destination}'` },
+                'message': { 'ret': !erroType, 'msg': !erroType ? `WS: OK` : `WS: ERRO | ${erroType} '${destination}'`, },
             }; resWs.send(JSON.stringify(messageOrigin));
 
             // ENVIAR: MENSAGEM REAL → DESTINO
             if (!erroType) {
-                for (let [index, value] of wsClientsToSend.entries()) {
-                    try { message = JSON.parse(message) } catch (catchErr) { esLintIgnore = catchErr; }; let messageDestination = {
+                for (let [index, value,] of wsClientsToSend.entries()) {
+                    try { message = JSON.parse(message); } catch (catchErr) { esLintIgnore = catchErr; }; let messageDestination = {
                         'origin': origin,
                         'destination': `${value.hostRoom}`,
                         'messageId': messageId,
                         'buffer': buffer,
                         'partesRestantes': partesRestantes,
-                        'message': message
+                        'message': message,
                     }; // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ENVIANDO MENSAGEM: [${index + 1}/${wsClientsToSend.length}] ${messageId} → ${messageDestination.destination}` });
-                    value.send(JSON.stringify(messageDestination)); await new Promise(resolve => { setTimeout(resolve, 10) });
+                    value.send(JSON.stringify(messageDestination)); await new Promise(resolve => { setTimeout(resolve, 10); });
                 }
             }
         } else {
             // ### RECEBIDO NO CLIENT
-            if (!mensagensPartesRecebida[messageId]) { mensagensPartesRecebida[messageId] = { partes: [] }; }; mensagensPartesRecebida[messageId].partes.push(message); if (partesRestantes == 0) {
+            if (!mensagensPartesRecebida[messageId]) { mensagensPartesRecebida[messageId] = { partes: [], }; }; mensagensPartesRecebida[messageId].partes.push(message); if (partesRestantes === 0) {
                 message = mensagensPartesRecebida[messageId].partes.join(''); message = buffer ? eng ? atob(message) : Buffer.from(message, 'base64') : message; let listName = 'x';
                 if (messageId.includes(`SERVER`) || messageId.includes(`RET-OK`)) {
                     // RECEBIDO: RETORNO DO SERVIDOR OU RESPOSTA SENDO AGUARDADA
@@ -63,14 +63,14 @@ async function messageReceived(inf = {}) {
 
                 // ACIONAR LISTENER
                 // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ACIONANDO LISTENER: '${listName}` });
-                listenerAcionar(`${listName}`, { 'origin': origin, 'messageId': messageId, 'message': message, 'resWs': resWs, 'host': host, 'room': room });
+                listenerAcionar(`${listName}`, { 'origin': origin, 'messageId': messageId, 'message': message, 'resWs': resWs, 'host': host, 'room': room, });
             }
 
             // ---------------- TESTES
             // if (!messageId.includes(`SERVER`)) {
             //     logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${messageId} | [${partesRestantes}] | ← TOTAL ${mensagensPartesRecebida[messageId].partes.join('').length}` });
             //     file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_RECEBENDO_[${partesRestantes}]_.txt`, 'rewrite': false, 'text': message });
-            //     if (partesRestantes == 0) {
+            //     if (partesRestantes === 0) {
             //         if (buffer && eng) {
             //             let b = new Array(message.length); for (let i = 0; i < message.length; i++) { b[i] = message.charCodeAt(i); }; let l = new Blob([new Uint8Array(b)], { type: 'application/zip' });
             //             chrome.downloads.download({ url: URL.createObjectURL(l), filename: `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.zip`, }, function () { });
@@ -85,7 +85,7 @@ async function messageReceived(inf = {}) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS

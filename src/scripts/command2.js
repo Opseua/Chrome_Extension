@@ -5,12 +5,12 @@ async function command2(inf = {}) {
     let infNotification = {
       'duration': 2, 'icon': 'icon_3.png',
       'title': `AGUARDE...`,
-      'text': `Alternando sniffer`
-    }
+      'text': `Alternando sniffer`,
+    };
     await notification(infNotification);
 
-    let infCommandLine = { e, 'command': `${fileProjetos}/Sniffer_Python/src/z_Outros_server/TOGGLE_HIDE.vbs`, 'retInf': true }
-    await commandLine(infCommandLine)
+    let infCommandLine = { e, 'command': `${fileProjetos}/Sniffer_Python/src/z_Outros_server/TOGGLE_HIDE.vbs`, 'retInf': true, };
+    await commandLine(infCommandLine);
 
     ret['ret'] = true;
     ret['msg'] = `SHORTCUT PRESSED: OK`;
@@ -18,7 +18,7 @@ async function command2(inf = {}) {
     let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
   };
 
-  return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+  return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS

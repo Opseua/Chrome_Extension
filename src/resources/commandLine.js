@@ -10,7 +10,7 @@ async function commandLine(inf = {}) {
         let { awaitFinish, notAdm, command, } = inf;
 
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _exec === 'undefined') { await funLibrary({ 'lib': '_exec' }); };
+        if (typeof _exec === 'undefined') { await funLibrary({ 'lib': '_exec', }); };
 
         command = command.replace(/!letter!|%letter%|!letra!|%letra%/g, letter);
         command = awaitFinish ? `${command}` : `${notAdm ? '%2_BACKGROUND_NOT_ADM%' : '%2_BACKGROUND%'} ${command}`;
@@ -39,7 +39,7 @@ async function commandLine(inf = {}) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS

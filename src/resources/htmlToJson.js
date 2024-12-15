@@ -7,19 +7,19 @@ async function htmlToJson(inf = {}) {
         let { html, mode, } = inf;
 
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio' }); };
+        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio', }); };
 
-        let $ = _cheerio.load(html); let result = [], headers = [], randomCol = mode == 1 ? false : true; let hasHeader = $('table thead').length > 0;
+        let $ = _cheerio.load(html); let result = [], headers = [], randomCol = !(mode === 1); let hasHeader = $('table thead').length > 0;
 
         // SE CONTEM O CABEÇALHO 
         if (hasHeader) { $('table thead th').each((i, header) => { headers.push(randomCol ? `col${i + 1}` : $(header).text().trim()); }); }
         $('table tbody tr').each((index, row) => {
             let rowData = {}; $(row).find('td').each((i, cell) => { let key = hasHeader ? headers[i] : `col${i + 1}`; rowData[key] = $(cell).text().trim(); });
-            if (!hasHeader && index === 0) { result.push(Object.fromEntries(Object.entries(rowData).map(([key, value]) => [key, value]))); }
+            if (!hasHeader && index === 0) { result.push(Object.fromEntries(Object.entries(rowData).map(([key, value,]) => [key, value,]))); }
             else { result.push(rowData); }
         });
 
-        if (mode == 3) { let keys = Object.values(result[0]); result = result.slice(1).map(obj => { let newObj = {}; keys.forEach((key, index) => { newObj[key] = obj[`col${index + 1}`]; }); return newObj; }); }
+        if (mode === 3) { let keys = Object.values(result[0]); result = result.slice(1).map(obj => { let newObj = {}; keys.forEach((key, index) => { newObj[key] = obj[`col${index + 1}`]; }); return newObj; }); }
 
         ret['ret'] = true;
         ret['msg'] = `HTML TO JSON: OK`;
@@ -29,7 +29,7 @@ async function htmlToJson(inf = {}) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS
