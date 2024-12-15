@@ -21,13 +21,13 @@ async function tryRatingComplete(inf = {}) {
 
         let infOk = {}; if (infTryRatingComplete.includes('{"')) { infOk = JSON.parse(infTryRatingComplete); } else if (infTryRatingComplete.includes(' 🟢 ')) {
             let gM = infTryRatingComplete.split(' 🟢 '); infOk['name'] = gM[0]; infOk['category'] = gM[1]; infOk['address'] = gM[2]; infOk['urlGoogleMaps'] = gM[3];
-        } else { if (hitApp === 'Search20') { let gM = infTryRatingComplete; infOk['urlGoogleMaps'] = gM.includes('https://maps.app.goo.gl/') ? gM : false; } }
+        } else if (hitApp === 'Search20') { let gM = infTryRatingComplete; infOk['urlGoogleMaps'] = gM.includes('https://maps.app.goo.gl/') ? gM : false; }
 
         // ETAPA 1: PEGAR A DIV DOS JUDGES
         let judgesDiv = []; for (let index = 0; index < 10; index++) {
             infChromeActions = { e, 'action': 'elementGetDivXpath', 'target': `*tryrating*`, 'elementName': `${opt.judgeXpath.replace('_INDEX_', index + 1)}`, };
             retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { break; }
-            else { if (!retChromeActions.res[0].startsWith('<div')) { break; } else { judgesDiv.push(retChromeActions.res[0]); } };
+            else if (!retChromeActions.res[0].startsWith('<div')) { break; } else { judgesDiv.push(retChromeActions.res[0]); };
         }; if (judgesDiv.length === 0) { ret['msg'] = `JUDGE COMPLETE: ERRO | NENHUM JULGAMENTO ENCONTRADO`; };
 
         // ETAPA 2: PEGAR VALOR DOS ELEMENTOS

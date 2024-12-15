@@ -106,8 +106,6 @@ export let jsConfig = [
       //   === e !==    EM VEZ DE    == e !=
       'eqeqeq': 'error',
 
-      // Expected '===' and instead saw '=='.
-
       // VÍRGULA NO FINAL
       'comma-dangle': ['error', {
         'objects': 'always',
@@ -117,6 +115,15 @@ export let jsConfig = [
         'exports': 'never',
         'functions': 'never',
       },],
+
+      // 'return' DESNECESSÁRIO
+      'no-useless-return': 'error',
+
+      // REDUNÂNCIA → let casa = true; let nova = casa ? true : false
+      'no-unneeded-ternary': ['error',],
+
+      // 'if' DESNECESSÁRIO
+      'no-lonely-if': 'error',
 
       // CHAVES E VALORES COM ASPAS SIMPLES
       'quotes': ['error', 'single', {
@@ -131,21 +138,6 @@ export let jsConfig = [
 
       // VARIÁVEL NÃO DEFINIDA
       'no-undef': 'error',
-
-      // GARANTIR USO DE 'let' E NÃO 'const' (IGNORAR [POR NO TOPO])   /* eslint-disable no-restricted-syntax */
-      'no-restricted-syntax': ['error', { 'selector': 'VariableDeclaration[kind=\'const\']', 'message': 'NÃO USAR \'const\'', },],
-
-      // LINHAS MUITO LONGAS (IGNORAR [POR NO TOPO])   /* eslint-disable max-len */
-      'max-len': ['error', {
-        'code': 222, // TAMANHO
-        'tabWidth': 4,
-        //'ignoreStrings': true, // IGNORAR STRING
-        'ignoreRegExpLiterals': true, // IGNORAR REGEX
-        'ignoreUrls': true, // IGNORAR URL
-        'ignoreTrailingComments': true,// IGNORAR COMENTÁRIO (//)
-        'ignoreComments': true, // IGNORAR COMENTÁRIO (/* ALGO AQUI */ )
-        'ignoreTemplateLiterals': true, // IGNORAR CRASE
-      },],
 
       // ERRO DE FUNÇÃO NO MEIO DO CÓDIGO
       'no-inner-declarations': 'off',
@@ -168,11 +160,26 @@ export let jsConfig = [
       // 'true' NO WHILE
       'no-constant-condition': 'off',
 
-      // OBRIGATÓRIO 'return' NA FUNÇÃO
+      // 'return' OBRIGATÓRIO NA FUNÇÃO
       // 'consistent-return': 'error',
 
       // VARIÁVEIS EM camelCase E NÃO snack_case
       'camelcase': ['error', { 'properties': 'always', },], // (IGNORAR [POR NO TOPO])   /* eslint-disable camelcase */
+
+      // GARANTIR USO DE 'let' E NÃO 'const' (IGNORAR [POR NO TOPO])   /* eslint-disable no-restricted-syntax */
+      'no-restricted-syntax': ['error', { 'selector': 'VariableDeclaration[kind=\'const\']', 'message': 'NÃO USAR \'const\'', },],
+
+      // LINHAS MUITO LONGAS (IGNORAR [POR NO TOPO])   /* eslint-disable max-len */
+      'max-len': ['error', {
+        'code': 222, // TAMANHO
+        'tabWidth': 4,
+        //'ignoreStrings': true, // IGNORAR STRING
+        'ignoreRegExpLiterals': true, // IGNORAR REGEX
+        'ignoreUrls': true, // IGNORAR URL
+        'ignoreTrailingComments': true,// IGNORAR COMENTÁRIO (//)
+        'ignoreComments': true, // IGNORAR COMENTÁRIO (/* ALGO AQUI */ )
+        'ignoreTemplateLiterals': true, // IGNORAR CRASE
+      },],
 
     },
 

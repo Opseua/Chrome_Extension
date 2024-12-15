@@ -60,14 +60,12 @@ function regex(inf = {}) { // NÃO POR COMO 'async'!!!
                 let result = new RegExp(`^${pattern}$`).test(text);
                 if (simple) {
                     return result;
+                } else if (result) {
+                    ret['msg'] = `REGEX: OK`;
+                    ret['res'] = 'TEXTO POSSUI O PADRAO';
+                    ret['ret'] = true;
                 } else {
-                    if (result) {
-                        ret['msg'] = `REGEX: OK`;
-                        ret['res'] = 'TEXTO POSSUI O PADRAO';
-                        ret['ret'] = true;
-                    } else {
-                        ret['msg'] = `REGEX: ERRO | PADRAO '${pattern}' NAO ENCONTRADO`;
-                    }
+                    ret['msg'] = `REGEX: ERRO | PADRAO '${pattern}' NAO ENCONTRADO`;
                 }
             }
         }

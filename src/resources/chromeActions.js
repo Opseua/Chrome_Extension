@@ -31,7 +31,7 @@ async function chromeActions(inf = {}) {
             let targetMode = (target.includes('<') || target.includes('>')) ? 'HTML' : 'INJECT';
             // →→→ ONDE EXECUTAR? HTML BRUTO FOI PASSADO (CRIAR DIV TEMPORÁRIA) | EXECUTAR NA PÁGINA (INJETANDO SCRIPT - DEFINIR ID DA ABA ALVO)
             if (targetMode === 'HTML') { divTemp = document.createElement('div'); divTemp.innerHTML = target; document.body.appendChild(divTemp); }
-            else { if (typeof target === 'number') { tabId = target; } else { retTabS = await tabSearch({ e, 'search': target, 'openIfNotExist': false, }); if (!retTabS.ret) { return retTabS; }; tabId = retTabS.res.id; } }
+            else if (typeof target === 'number') { tabId = target; } else { retTabS = await tabSearch({ e, 'search': target, 'openIfNotExist': false, }); if (!retTabS.ret) { return retTabS; }; tabId = retTabS.res.id; }
 
             // **************************************************************************************************************************************
             function getBody() { return document.documentElement.outerHTML; }; function elementAction({ action, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, }) {

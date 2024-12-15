@@ -50,9 +50,8 @@ async function file(inf = {}) {
             async function fileWrite(inf = {}) {
                 let { functionLocal, path, rewrite, text, raw, } = inf; let resNew = { 'ret': false, }; if (typeof rewrite !== 'boolean') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'rewrite' TRUE ou FALSE`; }
                 else if (!text || text === '') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'text'`; } else {
-                    if (raw) { let infRawText = { e, 'obj': text, }; let retRawText = rawText(infRawText); text = retRawText; } else { // STRING / OBJETO / BUFFER
-                        if (typeof text === 'object') { text = JSON.stringify(text); }
-                    }; if (path.includes(':')) { if (eng) { path = path.split(':/')[1]; } } else {
+                    if (raw) { let infRawText = { e, 'obj': text, }; let retRawText = rawText(infRawText); text = retRawText; }
+                    else if (typeof text === 'object') { text = JSON.stringify(text); /* STRING / OBJETO / BUFFER */ }; if (path.includes(':')) { if (eng) { path = path.split(':/')[1]; } } else {
                         infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRelative(infFile); path = retFile.res[0];
                     }; if (eng) { // CHROME
                         if (path.includes('%/')) { path = path.split('%/')[1]; } else if (path.includes(':')) { path = path.split(':/')[1]; }; if (rewrite) {
@@ -153,11 +152,10 @@ async function file(inf = {}) {
             async function fileIsFolder(inf = {}) {
                 let { functionLocal, path, listRead, max = 200, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { infFile = { 'path': path, 'functionLocal': functionLocal, }; retFile = await fileRelative(infFile); path = retFile.res[0]; };
-                    let res = _fs.statSync(path).isDirectory(); resNew['ret'] = true; if (!listRead) { resNew['msg'] = `FILE [IS FOLDER]: OK`; resNew['res'] = res; } else {
+                    let res = _fs.statSync(path).isDirectory(); resNew['ret'] = true; if (!listRead) { resNew['msg'] = `FILE [IS FOLDER]: OK`; resNew['res'] = res; } else if (res) {
                         // USADO SOMENTE NO 'ARQUIVOS WEB' DO SEVIDOR | É PASTA [LISTAR] | É ARQUIVO [LER]
-                        if (res) { infFile = { e, 'action': 'list', 'functionLocal': false, 'path': path, 'max': max, }; retFile = await fileList(infFile); resNew = retFile; }
-                        else { resNew['msg'] = `FILE [IS FOLDER]: OK`; infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRead(infFile); resNew = retFile; }
-                    }
+                        infFile = { e, 'action': 'list', 'functionLocal': false, 'path': path, 'max': max, }; retFile = await fileList(infFile); resNew = retFile;
+                    } else { resNew['msg'] = `FILE [IS FOLDER]: OK`; infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRead(infFile); resNew = retFile; }
                 } catch (catchErr) { resNew['msg'] = `FILE [IS FOLDER]: ERRO | AO CHECAR '${path}'`; esLintIgnore = catchErr; }; return resNew;
             }
 

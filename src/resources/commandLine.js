@@ -30,7 +30,6 @@ async function commandLine(inf = {}) {
                 }
 
                 resolve();
-                return;
             });
             child.stdout.on('data', () => { });
             child.stderr.on('data', () => { });

@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 // let infChromeActionsNew, retChromeActionsNew
 // infChromeActionsNew = { // FILTROS # 'includeChildrens' INCLUIR OS NÃO OS ELEMENTOS FILHOS | 'useCase' CONSIDERAR OU NÃO CASE SENSITIVE
 //     'tags': [

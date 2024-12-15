@@ -25,10 +25,8 @@ async function configStorage(inf = {}) {
         } else {
             let run = false;
             if (!action || !['set', 'get', 'del',].includes(action)) { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR O 'action'`; }
-            else {
-                if ((!key || key === '')) { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR A 'key'`; }
-                else { if (action === 'set' && !value) { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR O 'value'`; } else { run = true; } }
-            }; if (run) {
+            else if ((!key || key === '')) { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR A 'key'`; }
+            else if (action === 'set' && !value) { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR O 'value'`; } else { run = true; }; if (run) {
                 if (eng) { // CHROME
                     if (action === 'set') {
                         // #### STORAGE: SET
@@ -73,13 +71,13 @@ async function configStorage(inf = {}) {
                                     if (chrome.runtime.lastError) { ret['msg'] = `STORAGE [DEL]: ERRO | ${chrome.runtime.lastError}`; }
                                     else if (Object.keys(result).length === 0) { ret['msg'] = `STORAGE [DEL]: ERRO | CHAVE '${key}' NAO ENCONTRADA`; }
                                     else { chrome.storage.local.remove(key, async () => { }); ret['msg'] = 'STORAGE DEL: OK'; ret['ret'] = true; }; resolve(ret);
-                                }); return;
+                                });
                             });
                         }; await storageDel(inf);
                     }
                 } else { // ################## NODE
                     let infFile, retFile, config, retFs = false; if (path && path.includes(':')) { path = path; } else {
-                        infFile = { e, 'action': 'relative', 'path': path || gW.conf, 'functionLocal': typeof functionLocal === 'boolean' && !functionLocal ? false : true, };
+                        infFile = { e, 'action': 'relative', 'path': path || gW.conf, 'functionLocal': !(typeof functionLocal === 'boolean' && !functionLocal), };
                         retFile = await file(infFile); path = retFile.res[0];
                     }; try { await _fs.promises.access(path); retFs = true; } catch (catchErr) { esLintIgnore = catchErr; };
                     if (retFs) { let configFile = await _fs.promises.readFile(path, 'utf8'); config = JSON.parse(configFile); }
