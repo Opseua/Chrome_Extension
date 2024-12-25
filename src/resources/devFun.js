@@ -42,26 +42,31 @@ async function devFun(inf = {}) {
             function label(funName) { return typeof (eng ? window : global)[funName] === 'function'; };
             for (let [index, value,] of data.fun.entries()) {
                 let { resWs, destination, messageId, } = inf;
+                let retInf = !!value.retInf; let errAlert = false;
                 if (value.securityPass !== gW.securityPass) {
+                    errAlert = true;
+                    ret['ret'] = false;
                     ret['msg'] = `DEV FUN: ERRO | SECURITYPASS INCORRETO`;
-                    logConsole({ e, ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}`, });
                 } else if (!label(value.name)) {
+                    errAlert = true;
+                    ret['ret'] = false;
                     ret['msg'] = `DEV FUN: ERRO | FUNÇÃO '${value.name}' NÃO EXITE`;
-                    logConsole({ e, ee, 'write': true, 'msg': `${ret.msg}\n\n${JSON.stringify(data)}`, });
                 } else {
                     let name = eng ? window[value.name] : global[value.name]; // CHROME ← : → NODEJS
                     let infName = value.par;
-                    let retInf = !!value.retInf;
                     infName['retInf'] = retInf;
-                    let retName = await name(infName);
-                    if (retInf) {
-                        // RESPOSTA NECESSÁRIA [SIM]
-                        messageSend({ 'destination': destination, 'messageId': messageId, 'message': retName, 'resWs': resWs, 'secondsAwait': 0, });
-                    }
-                    ret['ret'] = true;
-                    ret['msg'] = `DEV FUN: OK`;
-                    ret['res'] = retName;
+                    ret = await name(infName);
                 }
+
+                if (retInf) {
+                    // RESPOSTA NECESSÁRIA [SIM]
+                    messageSend({ 'destination': destination, 'messageId': messageId, 'message': ret, 'resWs': resWs, 'secondsAwait': 0, });
+                }
+
+                if (errAlert) {
+                    let text = `${ret.msg}\n\n${JSON.stringify(data)}`; logConsole({ e, ee, 'write': true, 'msg': `${text}`, });
+                }
+
             }
         }
     } catch (catchErr) {

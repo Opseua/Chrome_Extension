@@ -1,4 +1,4 @@
-// let infFile, retFile // 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
+// let infFile, retFile; // 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
 // infFile = { e, 'action': 'relative', 'functionLocal': false, 'path': './PASTA/arquivo.txt', };
 // infFile = { e, 'action': 'write', 'functionLocal': false, 'path': './PASTA/arquivo.txt', 'rewrite': true, 'text': '1234\n', };
 // infFile = { e, 'action': 'isFolder', 'functionLocal': false, 'path': './PASTA/', };
@@ -118,7 +118,8 @@ async function file(inf = {}) {
                                 let md5 = false; count++; isFolder = _fs.statSync(fullPath).isDirectory(); stats = getStatus(fullPath); size = isFolder ? false : await _getFolderSize.loose(fullPath);
                                 if (!isFolder && size !== false && size <= 1 * 1024 * 1024) { let infFile = { 'action': 'md5', 'path': fullPath, }; let retFile = await file(infFile); md5 = retFile.res; }
                                 else { md5 = `arquivo muito grande`; }; entryObject = {
-                                    'ret': true, 'isFolder': isFolder, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), 'edit': stats.mtime, 'size': size ? formatBytes(size) : false, ...(isFolder ? {} : { 'md5': md5, }),
+                                    'ret': true, 'isFolder': isFolder, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), 'edit': stats.mtime.toISOString(),
+                                    'size': size ? formatBytes(size) : false, ...(isFolder ? {} : { 'md5': md5, }),
                                 }; result.push(entryObject);
                             } catch (catchErr) { result.push({ 'ret': false, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), }); esLintIgnore = catchErr; }
                         }; let retOrder = result.sort((a, b) => {

@@ -1,4 +1,4 @@
-// let infChromeActionsNew, retChromeActionsNew
+// let infChromeActionsNew, retChromeActionsNew;
 // infChromeActionsNew = { // FILTROS # 'includeChildrens' INCLUIR OS NÃO OS ELEMENTOS FILHOS | 'useCase' CONSIDERAR OU NÃO CASE SENSITIVE
 //     'tags': [
 //         { 'tagName': 'div', 'includeChildrens': false, 'useCase': false, },
@@ -10,7 +10,7 @@
 //     'contents': [
 //         { 'contentValue': 'DIV 2', 'includeChildrens': false, 'useCase': false, },
 //     ],
-// }
+// };
 
 // // attributeGetName attributeGetValue elementGetValue elementSetValue elementClick elementGetDiv elementIsHidden elementGetPath elementHighLight
 // infChromeActionsNew.action = 'elementHighLight'; infChromeActionsNew.elementValue = 'TESTE';

@@ -1,4 +1,4 @@
-// let infRegex, retRegex
+// let infRegex, retRegex;
 // infRegex = { 'pattern': `UM(.*?)TRES`, 'text': `UMdoisTRESquatroTRES`, };
 // infRegex = { 'pattern': `UM(*)TRES`, 'text': `UMdoisTRESquatroTRES`, }; // NOVO MODO
 // infRegex = { 'pattern': `UM(*)TRES`, 'text': `UM\n___doisTRESquatroTRES`, }; // NOVO MODO

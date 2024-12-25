@@ -1,5 +1,9 @@
 let e = import.meta.url, ee = e;
 let mensagensPartesRecebida = {};
+
+let minCle = gW.minClearPartsMessages * 60000; // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
+setInterval(() => { let c = new Date().getTime(); for (let mesId in mensagensPartesRecebida) { if ((c - Number(mesId.split('_')[1])) > minCle) { delete mensagensPartesRecebida[mesId]; } }; }, minCle);
+
 async function messageReceived(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
@@ -7,20 +11,20 @@ async function messageReceived(inf = {}) {
 
         messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId;
         partesRestantes = partesRestantes > -99 ? partesRestantes : 0; message = typeof message === 'object' ? JSON.stringify(message) : message; buffer = buffer ? buffer : false;
-        origin = origin ? origin.replace('ws://', '') : `${host}/?roo=${room}`; destination = destination ? destination.replace('ws://', '') : 'x'; let isSerCli = wsClients ? 'isSer' : 'isCli';
+        origin = origin ? origin.replace('ws://', '') : `${host}/?roo=${room}`; destination = destination ? destination.replace('ws://', '') : 'x';
 
-        // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
-        if (Object.keys(mensagensPartesRecebida).length === 0) {
-            let mensagensPartesRecebida = {}; let minClearPartsMessages = gW.minClearPartsMessages; setInterval(() => {
-                let c = new Date().getTime(); for (let messageId in mensagensPartesRecebida) { if ((c - Number(messageId.split('_')[1])) > minClearPartsMessages * 60000) { delete mensagensPartesRecebida[messageId]; } };
-            }, minClearPartsMessages * 60000);
-        }
+        // // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
+        // if (Object.keys(mensagensPartesRecebida).length === 0) {
+        //     let mensagensPartesRecebida = {}; let minClearPartsMessages = gW.minClearPartsMessages; setInterval(() => {
+        //         let c = new Date().getTime(); for (let messageId in mensagensPartesRecebida) { if ((c - Number(messageId.split('_')[1])) > minClearPartsMessages * 60000) { delete mensagensPartesRecebida[messageId]; } };
+        //     }, minClearPartsMessages * 60000);
+        // }
 
-        if (isSerCli === 'isSer') {
+        if (wsClients) {
             // ### RECEBIDO NO SERVER
             let wsClientsToSend = [], erroType = 0; let wsClientsArrRoom = []; for (let room in wsClients.rooms) {
                 if (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': room, }) && !JSON.stringify(wsClientsArrRoom).includes(room.split('/')[1])) {
-                    wsClientsArrRoom.push(room); // // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
+                    wsClientsArrRoom.push(room); // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
                     wsClientsToSend = wsClientsToSend.concat(Array.from(wsClients.rooms[room]));
                 }
             }; erroType = wsClientsToSend.length === 0 ? `DESTINO INVÁLIDO` : (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': origin, }) || origin === destination) ? `DESTINO IGUAL` : 0;

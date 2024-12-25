@@ -1,7 +1,7 @@
-// let infCommandLine, retCommandLine
-// infCommandLine = { e, 'awaitFinish': true, 'notAdm': true, 'command': `notepad` }
-// infCommandLine = { e, 'awaitFinish': true, 'notAdm': true, 'command': `!letter!:/PASTA/PROGRAMA.exe` }
-// retCommandLine = await commandLine(infCommandLine); console.log(retCommandLine)
+// let infCommandLine, retCommandLine;
+// infCommandLine = { e, 'awaitFinish': true, 'notAdm': true, 'command': `notepad`, };
+// infCommandLine = { e, 'awaitFinish': true, 'notAdm': true, 'command': `!letter!:/PASTA/PROGRAMA.exe`, };
+// retCommandLine = await commandLine(infCommandLine); console.log(retCommandLine);
 
 let e = import.meta.url, ee = e;
 async function commandLine(inf = {}) {

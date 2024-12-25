@@ -1,21 +1,18 @@
-// let infNotification, retNotification
-// infNotification = { 'duration': 3, 'icon': `icon_4.png`, 'buttons': [{ 'title': 'BOTAO 1' }, { 'title': `BOTAO 2` }], };
+// let infNotification, retNotification;
+// infNotification = { 'duration': 3, 'icon': `icon_4.png`, 'buttons': [{ 'title': 'BOTAO 1', }, { 'title': `BOTAO 2`, },], };
 // infNotification = { e, 'retInf': false, 'title': `TITULO`, 'text': `TEXTO`, 'keepOld': true, 'ntfy': true, 'chromeNot': false, 'legacy': false, }; // 'legacy' PELO HTTP POST NÃO!!!
 // retNotification = await notification(infNotification); console.log(retNotification);
 
-// → 'duration': 5 | ERROS ( 'regexE' [crash NodeJS] )
-// → 'duration': 4 | AVISOS/ALERTAS ( 'ERRO AO PESQUISAR NO CHATGPT' / 'BLIND' [tem a resposta]/[não tem a resposta] )
-// → 'duration': 3 | COMUNICADOS ( 'NOVA TASK' / 'NÃO É BLIND / REPORT DE TAREFAS )
-// → 'duration': 2 | COMUNICADOS ( 'SNIFFER [ativado/desativado' )
+// // → 'duration': 5 | ERROS ( 'regexE' [crash NodeJS] )
+// // → 'duration': 4 | AVISOS/ALERTAS ( 'ERRO AO PESQUISAR NO CHATGPT' / 'BLIND' [tem a resposta]/[não tem a resposta] )
+// // → 'duration': 3 | COMUNICADOS ( 'NOVA TASK' / 'NÃO É BLIND / REPORT DE TAREFAS )
+// // → 'duration': 2 | COMUNICADOS ( 'SNIFFER [ativado/desativado' )
 
 let e = import.meta.url, ee = e;
 async function notification(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let {
-            retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = false, chromeNot = false,
-            duration = 5, icon = 'notification_3.png', buttons = [], legacy = false, encNot = false,
-        } = inf;
+        let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacy = false, } = inf;
 
         async function apiLegacy(inf = {}) {
             let ret = { 'ret': false, }; let cng = typeof UrlFetchApp !== 'undefined'; try {
@@ -32,62 +29,76 @@ async function notification(inf = {}) {
         }
 
         // [1] → NOTIFICAÇÃO NÃO SOLICITADA | [2] → NOTIFICAÇÃO CHAMADA ret {true} | [msg] NOTIFICAÇÃO CHAMADA ret {false}
-        let retApiLegacy; let errNtfy = false; let errLegacy = false; let errDevFun = false; let errChrome = false; let { devMy, securityPass, devSend, } = gW; let retDevAndFun = {};
+        let retApiLegacy; let { devMy, securityPass, devSever, } = gW; let retDevAndFun = {}; let rets = []; let promises = [];
 
-        // [NOVO] NTFY
-        if (ntfy && !legacy) {
-            retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `https://ntfy.sh/${devMy}?title=${encodeURIComponent(title)}`, 'body': text, 'bodyObject': true, });
-            errNtfy = retApiLegacy.ret ? false : `{NTFY}: AO ENVIAR NOTIFICAÇÃO`;
+        // NTFY
+        if (inf.ntfy) {
+            promises.push(
+                (async () => {
+                    retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `https://ntfy.sh/${devMy}A?title=${encodeURIComponent(title)}`, 'body': text, 'bodyObject': true, });
+                    rets.push({ 'ret': retApiLegacy.ret, 'msg': `[NTFY: ${retApiLegacy.ret ? 'OK' : `ERRO | ${retApiLegacy.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}] `, });
+                })()
+            );
         }
 
-        // [NOVO] LEGACY
-        if (legacy && (ntfy || !chromeNot)) {
-            let body = { 'fun': [{ securityPass, retInf: 'true,', 'name': 'notification', 'par': { title, text, keepOld, chromeNot, ntfy, duration, icon, buttons, 'aws': true, }, },], };
-            retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `http://${devSend}`, 'headers': { 'raw': true, }, 'body': body, 'bodyObject': true, });
-            retApiLegacy = retApiLegacy.ret ? retApiLegacy.res.body : retApiLegacy; errLegacy = retApiLegacy.ret ? false : `{LEGACY}: ${retApiLegacy.msg}`;
+        // LEGACY
+        if (legacy && !chromeNot) {
+            promises.push(
+                (async () => {
+                    let body = { 'fun': [{ securityPass, 'retInf': true, 'name': 'notification', 'par': { title, text, keepOld, chromeNot, duration, icon, buttons, }, },], };
+                    retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `http://${devSever}`, 'headers': { 'raw': true, }, 'body': body, 'bodyObject': true, });
+                    retApiLegacy = retApiLegacy.ret ? retApiLegacy.res.body : retApiLegacy;
+                    rets.push({ 'ret': retApiLegacy.ret, 'msg': `[CHROME {LEGACY}: ${retApiLegacy.ret ? 'OK' : `ERRO | ${retApiLegacy.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}]`, });
+                })()
+            );
         }
 
         if (!eng && !legacy && !chromeNot) {
             // →→→ NO NODEJS
-            delete inf['ntfy']; // DELETAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
-            retDevAndFun = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': inf, }, }); errDevFun = retDevAndFun.ret ? false : `{DEV FUN}: ${retDevAndFun.msg}`;
+            promises.push(
+                (async () => {
+                    let infTemp = inf; delete infTemp['ntfy']; // DELETAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
+                    retDevAndFun = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': infTemp, }, });
+                    rets.push({ 'ret': retDevAndFun.ret, 'msg': `[CHROME {DEV FUN}: ${retDevAndFun.ret ? 'OK' : `ERRO | ${retDevAndFun.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}]`, });
+                })()
+            );
         } else if (!legacy && !chromeNot) {
             // →→→ NO CHROME
-            try {
-                let notifications = chrome.notifications;
-
-                // MANTER NOTIFICAÇÕES ANTIGAS
-                if (!keepOld) { let nts = await new Promise((resolve) => { notifications.getAll((n) => resolve(n)); }); for (let id in nts) { await new Promise((resolve) => { notifications.clear(id, resolve); }); }; };
-
-                // ÍCONE | MÁXIMO [CONSIDERANDO TUDO 'A']
-                icon = icon.includes('media') ? icon.split('media/')[1] : icon; // ANTIGO → './src/scripts/media/notification_3.png'
-                icon = await fetch(`./src/media/${icon}`).then(v => v.arrayBuffer()); icon = btoa(String.fromCharCode(...new Uint8Array(icon)));
-                let not = { 'type': 'basic', 'iconUrl': `data:image/png;base64,${icon}`, 'title': title.substring(0, 32), 'message': text.substring(0, 128), buttons, };
-
-                // ENVIAR NOTIFICAÇÃO
-                notifications.create(not, (notificationId) => {
-                    notifications.onButtonClicked.addListener((notifId, btnIdx) => {
-                        // BOTÃO PRESSIONADO
-                        if (notifId === notificationId && btnIdx === 0) { alert('Botao 1 pressionado'); }; if (notifId === notificationId && btnIdx === 1) { alert('Botao 2 pressionado'); };
-                    }); setTimeout(() => { notifications.clear(notificationId); }, duration * 1000);
-                });
-            } catch (catchErr) {
-                esLintIgnore = catchErr; errChrome = `{CHROME}: AO ENVIAR NOTIFICAÇÃO`;
-            };
+            promises.push(
+                (async () => {
+                    async function sendNotification() {
+                        try {
+                            let nots = chrome.notifications; // MANTER NOTIFICAÇÕES ANTIGAS
+                            if (!keepOld) { let nts = await new Promise((resolve) => { nots.getAll((n) => resolve(n)); }); for (let id in nts) { await new Promise((resolve) => { nots.clear(id, resolve); }); } }
+                            // ÍCONE | MÁXIMO [CONSIDERANDO TUDO 'A']
+                            icon = icon.includes('media') ? icon.split('media/')[1] : icon; // ANTIGO → './src/scripts/media/notification_3.png'
+                            icon = await fetch(`./src/media/${icon}`).then((v) => v.arrayBuffer()).then((buffer) => btoa(String.fromCharCode(...new Uint8Array(buffer))));
+                            let not = { 'type': 'basic', 'iconUrl': `data:image/png;base64,${icon}`, 'title': title.substring(0, 32), 'message': text.substring(0, 128), buttons, }; await new Promise((resolve, reject) => {
+                                nots.create(not, (notId) => { // ENVIAR NOTIFICAÇÃO
+                                    if (chrome.runtime.lastError) { return reject(chrome.runtime.lastError.message); };
+                                    nots.onButtonClicked.addListener((notifId, btnIdx) => { if (notifId === notId) { alert(`BOTÃO ${btnIdx} PRESSIONADO`); } }); // BOTÃO PRESSIONADO
+                                    setTimeout(() => { if (notId) { nots.clear(notId); } }, duration * 1000); resolve(true); // NOTIFICAÇÃO: LIMPAR
+                                });
+                            }); return true;
+                        } catch (catchErr) { esLintIgnore = catchErr; return false; }
+                    }; let retaaa = await sendNotification(); rets.push({ 'ret': retaaa, 'msg': `[CHROME: ${retaaa ? 'OK' : 'ERRO | AO ENVIAR NOTIFICAÇÃO'}]`, });
+                })()
+            );
         }
 
-        let arrMsg1 = [`${ntfy ? 'NTFY' : ''}`, `${!chromeNot ? 'CHROME' : ''}`,].filter(v => v !== '').join('+') || 'VAZIO';
-        let arrMsg2 = [`${errNtfy || ''}`, `${errLegacy || ''}`, `${errDevFun || ''}`, `${errChrome || ''}`,].filter(v => v !== '').join(' | ') || 'NENHUM DISPOSITIVO';
-        if (errNtfy || errLegacy || errDevFun || errChrome || arrMsg1 === 'VAZIO') {
-            ret['msg'] = `NOTIFICATION [${arrMsg1}]: ERRO | ${arrMsg2}`;
+        // EXECUTAR TODAS AS AÇÕES DE UMA SÓ VEZ E AGUARDAR O RETORNO DE TODAS
+        await Promise.all(promises);
+
+        ret['ret'] = rets.length > 0 && rets.every(item => item.ret === true);
+        if (!inf.ntfy && chromeNot) {
+            ret['msg'] = `NOTIFICATION: ERRO [VAZIO] = NENHUM DISPOSITIVO`;
         } else {
-            ret['msg'] = `${retDevAndFun?.msg?.includes('[ENC]') && !encNot ? '[ENC] ' : ''}NOTIFICATION [${arrMsg1}]: OK`;
-            ret['ret'] = true;
+            ret['msg'] = `${(!eng && !legacy && !chromeNot) ? '[ENC] ' : ''}NOTIFICATION: [${rets.map(item => item.ret ? 'OK' : 'ERRO').join('|')}] = ${rets.map(item => item.msg).join('')}`;
         }
 
     } catch (catchErr) {
         if (inf.ignoreErr) {
-            ret['msg'] = `${(!eng && !legacy) ? '[ENC] ' : ''}NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`;
+            ret['msg'] = `${(!eng && !inf.legacy && !inf.chromeNot) ? '[ENC] ' : ''}NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`;
         } else {
             let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
         }

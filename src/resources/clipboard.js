@@ -1,6 +1,6 @@
-// let infClipboard, retClipboard
-// infClipboard = { e, 'value': `Esse é o texto` }
-// retClipboard = await clipboard(infClipboard); console.log(retClipboard)
+// let infClipboard, retClipboard;
+// infClipboard = { e, 'value': `Esse é o texto`, };
+// retClipboard = await clipboard(infClipboard); console.log(retClipboard);
 
 let e = import.meta.url, ee = e;
 async function clipboard(inf = {}) {

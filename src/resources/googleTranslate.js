@@ -1,4 +1,4 @@
-// let infGoogleTranslate, retGoogleTranslate
+// let infGoogleTranslate, retGoogleTranslate;
 // infGoogleTranslate = { e, 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?`, };
 // retGoogleTranslate = await googleTranslate(infGoogleTranslate); console.log(retGoogleTranslate);
 

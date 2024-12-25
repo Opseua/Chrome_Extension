@@ -1,14 +1,14 @@
-// let infConfigStorage, retConfigStorage
+// let infConfigStorage, retConfigStorage;
 // infConfigStorage = { e, 'action': 'set', 'functionLocal': true, 'key': 'NomeDaChave', 'value': 'Valor da chave', 'returnValueAll': true, 'returnValueKey': true, };
 // infConfigStorage = { e, 'action': 'get', 'functionLocal': true, 'key': 'NomeDaChave', };
 // infConfigStorage = { e, 'action': 'del', 'functionLocal': true, 'key': 'NomeDaChave', 'returnValueAll': true, };
 // retConfigStorage = await configStorage(infConfigStorage); console.log(retConfigStorage);
 
-// let cs
-// cs = await csf(['']); cs = cs.res // ***** CS ***** GET VALOR DO 'reg.json'
-// console.log(cs)
-// cs = await csf([{ 'a': 'b' }]); cs = cs.res // ***** CS ***** SET VALOR NO 'reg.json'
-// console.log(cs)
+// let cs;
+// cs = await csf(['',]); cs = cs.res; // ***** CS ***** GET VALOR DO 'reg.json'
+// console.log(cs);
+// cs = await csf([{ 'a': 'b', },]); cs = cs.res; // ***** CS ***** SET VALOR NO 'reg.json'
+// console.log(cs);
 
 let e = import.meta.url, ee = e;
 async function configStorage(inf = {}) {

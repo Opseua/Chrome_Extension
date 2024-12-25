@@ -46,7 +46,7 @@ async function serverRun(inf = {}) {
         // *************************
 
         // CLIENT (NÃO POR COMO 'await'!!!) | MANTER NO FINAL
-        client({ 'e': e, }); // await new Promise(resolve => { setTimeout(resolve, 1000) });
+        client({ 'e': e, }); await new Promise(resolve => { setTimeout(resolve, 500); });
 
         // CHAMAR PARA DEFINIR A FUNÇÃO
         await chromeActionsNew();
@@ -71,6 +71,7 @@ async function serverRun(inf = {}) {
         // let infTryRatingSet, retTryRatingSet
         // infTryRatingSet = { 'hitApp': `BroadMatchRatings`, 'process': `good`, } // good acceptable bad
         // retTryRatingSet = await tryRatingSet(infTryRatingSet); console.log(retTryRatingSet);
+
 
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;

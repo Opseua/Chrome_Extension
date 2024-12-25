@@ -1,4 +1,4 @@
-// let retDateHour
+// let retDateHour;
 // retDateHour = dateHour(); // HORA ATUAL
 // retDateHour = dateHour(new Date()); // HORA ATUAL [Chrome/NodeJS/Google]
 // retDateHour = dateHour(new Date(1668120527 * 1000)); // HORA ESPECIFICA [Chrome/NodeJS/Google] (SEM MILESSEGUNDOS)

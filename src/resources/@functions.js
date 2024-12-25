@@ -1,35 +1,26 @@
 // await new Promise(resolve => { setTimeout(resolve, 2000) });   
 
-// Usar →    Array.isArray(retHtmlToJson)
+// CHECAR SE É ARRAY Array.isArray(retHtmlToJson)
+// CHECAR SE TEM A CHAVE  if ('chave' in obj){ }
+// CHECAR SE É OBJETO typeof obj === 'object'
 
 // process.exit(); process.cwd();
 
-// for (let [index, value] of array.entries()) {
-//     console.log('INDEX', index, 'VALUE', value);
-// };
+// for (let [index, value,] of array.entries()) { console.log('INDEX', index, 'VALUE', value); };
 
 // ESPERAR E EXECUTAR UMA VEZ
-// setTimeout(() => {
-//     console.log('OK');
-// }, 2000);
+// setTimeout(() => { console.log('OK'); }, 2000);
 
 // ESPERAR E REPETIR
-// setInterval(() => {
-//     console.log('OK');
-//   }, 2000);
+// setInterval(() => { console.log('OK'); }, 2000);
 
-// let timeout = setTimeout(() => {
-//     console.log('OK');
-// }, 2000);
-// clearTimeout(timeout);
+// let timeout = setTimeout(() => { console.log('OK'); }, 2000); clearTimeout(timeout);
 
 // let obj = { 'a': { 'b': null }, 'c': 'AAA' }
 // console.log(!!obj.a)
 
 // LOOP 99 VEZES
-// for (let index = 0; index < 99; index++) {
-//     console.log('INDEX', index,);
-// };
+// for (let index = 0; index < 99; index++) { console.log('INDEX', index); };
 
 // // ## LOG ## retApi
 // let errMsg = `LOG retApi`
@@ -60,13 +51,15 @@ let hostPortWeb = `${hostWeb}:${portWeb}`; let secConnect = conf.secConnect; let
 let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop; let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages; let devMy = conf.devMy;
 let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`; let par5 = `${securityPass}-${conf.par5}`;
 let par6 = `${conf.par6}`; let par7 = `${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`; let par10 = `${securityPass}-${conf.par10}`;
-let par11 = `${conf.par11}`; let par12 = `${conf.par12}`; let par13 = `${conf.par13}`;
-let devSend = `${letter === 'D' ? hostPortLoc : hostPortWeb}/?roo=${devMy}-${devices[0][0]}`; devSend = `${devSend}-${devices[0][2][0]}`; // CHROME | Send→NodeJS | Get→Chrome ##### NODEJS | Send→Chrome | Get→NodeJS
+let par11 = `${conf.par11}`; let par12 = `${conf.par12}`; let par13 = `${conf.par13}`; let hostPort = `${letter === 'D' ? hostPortLoc : hostPortWeb}/?roo=`;
+let devSend = `${hostPort}${devMy}-${devices[0][0]}-${devices[0][2][0]}`; let devSever = `${hostPort}${devMaster}-${devices[eng ? 0 : 1][0]}-${devices[eng ? 0 : 1][2][0]}`;
+// CHROME | Send→NodeJS | Get→Chrome ##### NODEJS | Send→Chrome | Get→NodeJS
 
 // MANTER APÓS O 'devSend'
 gW = {
     ...gW, securityPass, 'serverWeb': serverWeb.host, portWeb, 'serverLoc': serverLoc.host, portLoc, devMaster, 'devSlave': engName, devSend, devices, hostPortWeb, hostPortLoc, secConnect, secReconnect,
-    secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, par1, par2, par3, par4, par5, par6, par7, par8, par9, par10, par11, par12, 'pages': false, par13,
+    secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, devSever, par1, par2, par3, par4, par5, par6, par7, par8, par9, par10, par11, par12,
+    'pages': false, par13,
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

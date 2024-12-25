@@ -39,7 +39,7 @@ async function htmlToJson(inf = {}) {
 // // 'mode' 2 → CHAVE ALEATÓRIA
 // // 'mode' 3 → CHAVE IGUAL AO PRIMEIRO VALOR DA TABELA
 
-// let infHtmlToJson, retHtmlToJson
+// let infHtmlToJson, retHtmlToJson;
 // infHtmlToJson = {
 //     e, 'mode': 1,
 //     // TEM O CABEÇALHO [SIM]

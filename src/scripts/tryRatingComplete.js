@@ -1,6 +1,6 @@
-// let infTryRatingComplete, retTryRatingComplete
-// infTryRatingComplete = { e, 'infTryRatingComplete': 'https://maps.app.goo.gl/' }
-// retTryRatingComplete = await tryRatingComplete(infTryRatingComplete); console.log(retTryRatingComplete)
+// let infTryRatingComplete, retTryRatingComplete;
+// infTryRatingComplete = { e, 'infTryRatingComplete': 'https://maps.app.goo.gl/', };
+// retTryRatingComplete = await tryRatingComplete(infTryRatingComplete); console.log(retTryRatingComplete);
 
 // IMPORTAR OBJETOS COM AS OPÇÕES E RESPOSTAS
 let opts = {}; let imp = ['Search20',];

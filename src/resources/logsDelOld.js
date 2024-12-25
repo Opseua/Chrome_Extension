@@ -1,5 +1,4 @@
-// let infLogsDelOld, retLogsDelOld
-// retLogsDelOld = await logsDelOld(); console.log(retLogsDelOld);
+// let retLogsDelOld = await logsDelOld(); console.log(retLogsDelOld);
 
 let e = import.meta.url, ee = e;
 async function logsDelOld(inf = {}) {

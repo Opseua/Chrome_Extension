@@ -1,4 +1,4 @@
-// let infTabSearch, retTabSearch // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
+// let infTabSearch, retTabSearch; // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
 // infTabSearch = { e, 'search': `*google*`, 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': `https://www.google.com/`, };
 // retTabSearch = await tabSearch(infTabSearch); console.log(retTabSearch);
 

@@ -74,22 +74,20 @@ async function client(inf = {}) {
             let { nomeList, param1, } = inf, { messageId, message, resWs, origin, host, room, } = param1;
             // logConsole({ e, ee, 'write': true, 'msg': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
             // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
-            let data = {}; try { data = JSON.parse(message); } catch (catchErr) { esLintIgnore = catchErr; }; if (data.fun) {
-                devFun({ e, 'data': data, 'messageId': messageId, 'resWs': resWs, 'destination': origin, });
-            } else if (data.other) { logConsole({ e, ee, 'write': true, 'msg': `OTHER\n${JSON.stringify(data.other)}`, }); }
+            let data = {}; try { data = JSON.parse(message); } catch (catchErr) { esLintIgnore = catchErr; }; if (data.fun) { devFun({ e, 'data': data, 'messageId': messageId, 'resWs': resWs, 'destination': origin, }); }
+            else if (data.other) { logConsole({ e, ee, 'write': true, 'msg': `OTHER\n${JSON.stringify(data.other)}`, }); }
+            // else { let text = `COMANDO INVÁLIDO`; logConsole({ e, ee, 'write': true, 'msg': `${text}\n\n${message}`, }); notification({ 'keepOld': true, 'ntfy': true, 'title': `# LIST (${gW.devMaster}) [NODEJS]`, text, }); }
         }
 
         // LOOP: CHECAR ÚLTIMA MENSAGEM
         let secPing = gW.secPing; function lastMessageReceived() {
             for (let clientSet of Object.values(wsServers.rooms)) {
-                for (let value of clientSet) {
+                for (let v of clientSet) {
                     function check(inf = {}) { let { lastMessage, locWeb, room, } = inf; return { 'dif': lastMessage ? Number(dateHour().res.tim) - lastMessage : -99, 'locWeb': locWeb, 'room': room, }; };
-                    let retCheck = check(value); if (retCheck.dif > (secPing - 1)) {
+                    let retCheck = check(v); if (retCheck.dif > (secPing - 1)) {
                         // logConsole({ e, ee, 'write': true, 'msg': `MENSAGEM ANTIGA → ENVIAR 'PING' ${retCheck.locWeb} '${retCheck.room}'` });
-                        value.send('ping'); setTimeout(() => {
-                            retCheck = check(value); if (retCheck.dif > (secPing - 1)) {
-                                logConsole({ e, ee, 'write': true, 'msg': `DESCONECTAR [PING ${retCheck.dif}] ${retCheck.locWeb} '${retCheck.room}'`, }); value.close();
-                            }
+                        v.send('ping'); setTimeout(() => {
+                            retCheck = check(v); if (retCheck.dif > (secPing - 1)) { logConsole({ e, ee, 'write': true, 'msg': `DESCONECTAR [PING ${retCheck.dif}] ${retCheck.locWeb} '${retCheck.room}'`, }); v.close(); }
                         }, gW.secPingTimeout * 1000);
                     }
                 }

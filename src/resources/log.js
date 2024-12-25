@@ -1,4 +1,4 @@
-// let infLog, retLog // 'raw': true,
+// let infLog, retLog; // 'raw': true,
 // // (ESCREVE NO MESMO ARQUIVO: NÃO) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/log/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
 // infLog = { e, 'folder': '#_PASTA_#', 'functionLocal': false, 'path': `ARQUIVO.txt`, 'text': `INF AQUI`, };
 // // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/log/JavaScript/MES_11_NOV/DIA_27_log.txt

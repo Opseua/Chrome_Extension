@@ -100,7 +100,7 @@ async function tryRatingSet(inf = {}) {
 (eng ? window : global)['tryRatingSet'] = tryRatingSet;
 
 
-// let infTryRatingSet, retTryRatingSet
+// let infTryRatingSet, retTryRatingSet;
 // infTryRatingSet = {
 //     'hitApp': `Ratingoftransformedtext`,
 //     'elements': [

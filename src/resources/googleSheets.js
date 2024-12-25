@@ -1,22 +1,22 @@
-// let infGoogleSheets, retGoogleSheets
+// let infGoogleSheets, retGoogleSheets;
 // infGoogleSheets = {
 //     e, 'action': 'get', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
 //     // 'range': `A1`, // CÉLULA ÚNICA
 //     // 'range': `A1:A2`, // PERÍMETRO
 //     // 'range': `A:A`, // COLUNA
-// }
+// };
 // infGoogleSheets = {
 //     e, 'action': 'send', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
 //     // 'range': `A1`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
 //     // 'range': `A*`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'A']
 //     // 'range': `A**`, // ÚLTIMA LINHA EM BRANCO DA [ABA INTEIRA]
-//     'values': [['a', 'b', 'c', 'd',]],
-// }
+//     'values': [['a', 'b', 'c', 'd',],],
+// };
 // infGoogleSheets = {
 //     e, 'action': 'lastLin', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
 //     'range': `A1:A10`, // PERÍMETRO
 //     // 'range': `A:A`, // COLUNA
-// }
+// };
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
 let e = import.meta.url, ee = e; let _auth, _sheets, googleAppScriptId;
@@ -71,7 +71,7 @@ async function googleSheets(inf = {}) {
             // LAST LIN
             let infApi = {
                 e, 'method': 'GET', 'headers': { 'Content-Type': 'application/json', }, 'max': 10,
-                'url': `https://script.google.com/macros/s/${googleAppScriptId}/exec?inf=  { "action": "run", "name": "sheetInfTab", "par": { "id":"${id}", "tab": "${tab}" , "${range ? 'range' : 'a'}": "${range}" } }`,
+                'url': `https://script.google.com/macros/s/${googleAppScriptId}/exec?inf={"action":"run","name":"sheetInfTab","par":{"id":"${id}","tab":"${tab}","${range ? 'range' : 'a'}":"${range}"}}`,
             }; let retApi = await api(infApi); if (!retApi.ret) { return retApi; }; retApi = JSON.parse(retApi.res.body); if (!retApi.ret) { return retApi; };
             ret['res'] = {
                 'lastLineWithData': retApi.res.lastLineWithData,
@@ -83,7 +83,8 @@ async function googleSheets(inf = {}) {
 
         // TENTAR NOVAMENTE EM CASO DE ERRO
         if (!ret.ret && !newRun) {
-            await notification({ e, 'legacy': true, 'ntfy': true, 'title': `ERRO GOOGLE SHEETS`, 'text': `PRIMEIRA TENTATIVA → ${ret.msg}`, });
+            // MANTER 'legacy' true PORQUE NO WebScraper O WEBSOCKET NÃO ESTÁ CONECTADO
+            await notification({ e, 'legacy': true, 'ntfy': true, 'title': `# SHEETS (${gW.devMaster}) [NODEJS]`, 'text': `PRIMEIRA TENTATIVA → ${ret.msg}`, });
 
             logConsole({ e, ee, 'write': true, 'msg': `PRIMEIRA TENTATIVA → ${ret.msg}`, }); let retGoogleSheets = await googleSheets({ ...inf, 'newRun': true, });
             ret = retGoogleSheets;

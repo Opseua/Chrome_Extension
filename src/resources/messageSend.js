@@ -1,11 +1,11 @@
 // // SOMENTE FORA DO WEBSOCKET!!! → 'WEB' PARA 'WEB  E  'LOC' PARA 'LOC'
-// let message = { 'fun': [{ 'securityPass': gW.securityPass, 'retInf': true, 'name': 'notification', 'par': { 'duration': 3, 'title': 'TITULO', 'text': 'TEXTO', } }], };
+// let message = { 'fun': [{ 'securityPass': gW.securityPass, 'retInf': true, 'name': 'notification', 'par': { 'duration': 3, 'title': 'TITULO', 'text': 'TEXTO', }, },], };
 // let retListenerAcionar = await listenerAcionar(`messageSendOrigin_127.0.0.1:1234/?roo=ORIGEM_AQUI`, { 'destination': `127.0.0.1:1234/?roo=DESTINO_AQUI`, 'message': message, 'secondsAwait': 0, });
-// logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': JSON.stringify(retListenerAcionar) });
+// logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': JSON.stringify(retListenerAcionar), });
 
 // // SOMENTE DENTRO DO WEBSOCKET!!!
-// let infMessageSend, retMessageSend
-// infMessageSend = { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': 'aaa', 'resWs': ws, 'secondsAwait': 0, }
+// let infMessageSend, retMessageSend;
+// infMessageSend = { 'destination': '127.0.0.1:1234/DESTINO_AQUI', 'message': 'aaa', 'resWs': ws, 'secondsAwait': 0, };
 // retMessageSend = await messageSend(infMessageSend); console.log(retMessageSend);
 
 let e = import.meta.url, ee = e;
@@ -43,7 +43,7 @@ async function messageSend(inf = {}) {
             retAwaitTimeout = await retAwaitTimeout; retAwaitTimeout = retAwaitTimeout.ret ? retAwaitTimeout.res : retAwaitTimeout;
             retAwaitTimeout = retAwaitTimeout.message ? JSON.parse(retAwaitTimeout.message) : retAwaitTimeout;
             ret['ret'] = retAwaitTimeout.ret;
-            ret['msg'] = retAwaitTimeout.msg;
+            ret['msg'] = retAwaitTimeout.msg || 'MENSAGEM VAZIA';
             ret['res'] = retAwaitTimeout.res || undefined;
         } else {
             ret['ret'] = true;

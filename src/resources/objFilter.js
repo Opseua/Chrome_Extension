@@ -1,7 +1,7 @@
-// let infObjFilter, retObjFilter
+// let infObjFilter, retObjFilter;
 // let obj = { 'comida': 'carro', 'cadeira': { 'moto': 'carro', 'comida': 'carro', }, };
-// infObjFilter = { e, 'obj': obj, 'noCaseSensitive': true, 'keys': ['MOto',], 'filters': [{ 'includes': ['*cadeira*',] }, { 'excludes': ['*cadeira.comida*',] },], };
-// infObjFilter = { e, 'obj': obj, 'noCaseSensitive': true, 'values': ['CArro',], 'filters': [{ 'includes': ['*cadeira*',] }, { 'excludes': ['*cadeira.comida*',] },], };
+// infObjFilter = { e, 'obj': obj, 'noCaseSensitive': true, 'keys': ['MOto',], 'filters': [{ 'includes': ['*cadeira*',], }, { 'excludes': ['*cadeira.comida*',], },], };
+// infObjFilter = { e, 'obj': obj, 'noCaseSensitive': true, 'values': ['CArro',], 'filters': [{ 'includes': ['*cadeira*',], }, { 'excludes': ['*cadeira.comida*',], },], };
 // retObjFilter = await objFilter(infObjFilter); console.log(retObjFilter);
 
 let e = import.meta.url, ee = e;
