@@ -4,12 +4,12 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4" & set "arg5=%~5" & set "arg6=%~6"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!" equ "" !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit /b
+if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit /b )
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION >nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
-echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
-set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
+rem echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
+rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 rem VARIAVEIS
 set "ret2=ERRO" & set "actionRun=ERRO" & set "winTP=15 65 500 300" & set "action=!arg1!" & set "fileScript=!arg3!" & set "mode=!arg4!" & set "programExe=ERRO" & set "programExePath=ERRO" 
@@ -23,7 +23,7 @@ if "!programExePath!"=="ERRO" ( !fileMsg! "[!local!\!arquivo!]\n\nprogramExe dev
 set "programExe=!arg5!!project!_!outrosAdd!"
 
 rem CHECAR SE O programExe EXISTE
-if not exist "!programExePath!\!programExe!.exe" !fileMsg! "[!local!\!arquivo!]\n\nprogramExe nao existe\n\n!programExe!.exe" & exit /b
+if not exist "!programExePath!\!programExe!.exe" ( !fileMsg! "[!local!\!arquivo!]\n\nprogramExe nao existe\n\n!programExe!.exe" & exit /b )
 
 rem PATH COMPLETO DO SCRIPT SEM BARRA E DOIS PONTOS
 set "replace=-"
@@ -83,25 +83,6 @@ rem LOG E RETORNAR O RESULTADO
 rem BAT2 - DEFINIR O VALOR E RETORNAR (USAR '%' NAS VARIAVEIS!!!)
 
 endlocal & set "ret2=%ret2%" & setlocal enabledelayedexpansion & exit /b
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
