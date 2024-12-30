@@ -45,8 +45,8 @@ async function serverRun(inf = {}) {
 
         // *************************
 
-        // CLIENT (NÃO POR COMO 'await'!!!) | MANTER NO FINAL
-        client({ 'e': e, }); await new Promise(resolve => { setTimeout(resolve, 500); });
+        // CLIENT (NÃO POR COMO 'await'!!!) [MANTER NO FINAL]
+        client({ e, }); await new Promise(resolve => { setTimeout(resolve, 500); });
 
         // CHAMAR PARA DEFINIR A FUNÇÃO
         await chromeActionsNew();

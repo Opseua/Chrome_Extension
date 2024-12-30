@@ -35,7 +35,7 @@ async function notification(inf = {}) {
         if (inf.ntfy) {
             promises.push(
                 (async () => {
-                    retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `https://ntfy.sh/${devMy}A?title=${encodeURIComponent(title)}`, 'body': text, 'bodyObject': true, });
+                    retApiLegacy = await apiLegacy({ 'method': 'POST', 'url': `https://ntfy.sh/${devMy}?title=${encodeURIComponent(title)}`, 'body': text, 'bodyObject': true, });
                     rets.push({ 'ret': retApiLegacy.ret, 'msg': `[NTFY: ${retApiLegacy.ret ? 'OK' : `ERRO | ${retApiLegacy.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}] `, });
                 })()
             );

@@ -32,7 +32,7 @@
 // // BASE64 → UTF8
 // let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8'); console.log(`base64ParaUtf8 ${base64ParaUtf8}`)
 
-// cd /d D:\ARQUIVOS\PROJETOS\Projeto_Nome
+// cd /d D:\ARQUIVOS\PROJETOS\Sniffer_Python
 
 // https://api.hashify.net/hash/md5/hex?value=aaaa
 
