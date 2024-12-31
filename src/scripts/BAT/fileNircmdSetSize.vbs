@@ -17,10 +17,10 @@ fileWindows = WshShell.ExpandEnvironmentStrings("%fileWindows%")
 
 If WScript.Arguments.Count = 0 Then
 	rem NENHUM PARAMENTRO PASSADO
-	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\n\nNao usar o VBS"  ,"\n",Chr(13)))
+	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\\n\\nNao usar o VBS"  , "\\n" , Chr(13)))
 ElseIf Not (WScript.Arguments.Count > 1) Then
 	rem Paramentros invalidos
-	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\n\nParametros invalidos. Exemplo:\n" & arquivo & " " & "'TITULO_DA_JANELA' '15 65 500 300'"  ,"\n",Chr(13)))
+	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\\n\\nParametros invalidos. Exemplo:\\n" & arquivo & " " & "'TITULO_DA_JANELA' '15 65 500 300'"  , "\\n", Chr(13) ))
 Else
 	rem Definir variaveis
     windowTitle = WScript.Arguments.Item(0)

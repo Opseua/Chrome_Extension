@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit )
+if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\\n\\nNao usar o BAT/BACKGROUND" & exit )
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -21,7 +21,7 @@ cd\ & !letra!: & cd "!local!"
 
 if "!arg1!"=="APAGAR" ( goto COPIA_APAGAR )
 if "!arg1!"=="CRIAR" ( goto COPIA_CRIAR )
-!fileMsg! "[!local!\!arquivo!]\nParamentro invalido. Deve ser 'APAGAR' ou 'CRIAR'" & exit
+!fileMsg! "[!local!\!arquivo!]\\nParamentro invalido. Deve ser 'APAGAR' ou 'CRIAR'" & exit
 
 :COPIA_CRIAR
 rem CRIAR COPIA nodeExe
@@ -59,10 +59,10 @@ for %%a in ("%projects:;=" "%") do (
         set "destino=!local!\node%%~a.exe"
         echo F|xcopy /Q /Y /F "!origem!" "!destino!"
 		rem FIREWALL [PERMITIR]
-		!2_BACKGROUND! !fileWindows!\BAT\firewallAllowBlock.bat ALLOW !destino! NAO_MOSTRAR_POPUP
+		!3_BACKGROUND! /NOCONSOLE ""!fileWindows!\BAT\firewallAllowBlock.bat" "ALLOW" "!destino!" "NAO_MOSTRAR_POPUP""
     )
 )
-!fileMsg! "[!local!\!arquivo!]\n\nCopiados: !fileQtdCopy!" & exit
+!fileMsg! "[!local!\!arquivo!]\\n\\nCopiados: !fileQtdCopy!" & exit
 
 :COPIA_APAGAR
 rem APAGAR OS nodeExe ANTIGOS (EXCETO O PROPRIO 'node.exe')
@@ -80,7 +80,7 @@ for %%F in (*) do (
 				echo [APAGAR] →→→ - !filename!
 				del /f "!local!\!filename!"
 				rem FIREWALL [APAGAR REGRA]
-				!2_BACKGROUND! !fileWindows!\BAT\firewallAllowBlock.bat DEL !local!\!filename! NAO_MOSTRAR_POPUP
+				!3_BACKGROUND! /NOCONSOLE ""!fileWindows!\BAT\firewallAllowBlock.bat" "DEL" "!local!\!filename!" "NAO_MOSTRAR_POPUP""
 			)
 		) else (
 			echo [NAO] - !filename!
@@ -89,9 +89,6 @@ for %%F in (*) do (
 		echo [NAO] - !filename!
 	)
 )
-!fileMsg! "[!local!\!arquivo!]\n\nTotal de arquivos: !fileQtdAll!\nDeletados: !fileQtdDel!" & exit
-
-
-
+!fileMsg! "[!local!\!arquivo!]\\n\\nTotal de arquivos: !fileQtdAll!\nDeletados: !fileQtdDel!" & exit
 
 

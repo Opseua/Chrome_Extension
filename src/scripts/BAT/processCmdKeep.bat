@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4" & set "arg5=%~5" & set "arg6=%~6"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit /b )
+if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\\n\\nNao usar o BAT/BACKGROUND" & exit /b )
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -19,14 +19,14 @@ for /f "tokens=1,2 delims=@" %%a in ("!arg2!") do ( set "project=%%a" & set "out
 	
 if not "!mode!"=="!mode:LEGACY=!" ( set "restartOnStop=RESTART_STOP" ) else ( set "restartOnStop=RESTART" )
 
-rem DEFINIR programExe E programExePath
+rem DEFINIR programExe E programExePath | MUDAR LOCAL DO TERMINAL
 if "!arg5!"=="node" ( set "fileScript=!fileScript!.js" & set "programExePath=!fileWindows!\PORTABLE_NodeJS" )
 if "!arg5!"=="python" ( set "fileScript=!fileScript!.py" & set "programExePath=!fileWindows!\PORTABLE_Python" )
-if "!programExePath!"=="ERRO" ( !fileMsg! "[!local!\!arquivo!]\n\nprogramExe deve ser'node' ou 'python'" & exit /b)
-set "programExe=!arg5!!project!_!outrosAdd!"
+if "!programExePath!"=="ERRO" ( !fileMsg! "[!local!\!arquivo!]\\n\\nprogramExe deve ser'node' ou 'python'" & exit /b)
+set "programExe=!arg5!!project!_!outrosAdd!" & cd /d !fileProjetos!\!project!
 
 rem CHECAR SE O programExe EXISTE
-if not exist "!programExePath!\!programExe!.exe" ( !fileMsg! "[!local!\!arquivo!]\n\nprogramExe nao existe\n\n!programExe!.exe" & exit /b )
+if not exist "!programExePath!\!programExe!.exe" ( !fileMsg! "[!local!\!arquivo!]\\n\\nprogramExe nao existe\n\n!programExe!.exe" & exit /b )
 
 rem PATH COMPLETO DO SCRIPT SEM BARRA E DOIS PONTOS
 set "replace=-"
@@ -82,6 +82,5 @@ rem LOG E RETORNAR O RESULTADO
 rem BAT2 - DEFINIR O VALOR E RETORNAR (USAR '%' NAS VARIAVEIS!!!)
 
 endlocal & set "ret2=%ret2%" & setlocal enabledelayedexpansion & exit /b
-
 
 

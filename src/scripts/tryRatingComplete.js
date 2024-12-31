@@ -126,4 +126,3 @@ async function tryRatingComplete(inf = {}) {
 (eng ? window : global)['tryRatingComplete'] = tryRatingComplete;
 
 
-

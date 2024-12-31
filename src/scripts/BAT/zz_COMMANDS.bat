@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit )
+if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\\n\\nNao usar o BAT/BACKGROUND" & exit )
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -201,10 +201,10 @@ if not "!devMaster!"=="!devMaster:OPSEUA=!" (
 	if not "!arg1!"=="!arg1:_RESTART_=!" (
 		tasklist /fi "ImageName eq SystemInformer.exe" /fo csv 2> nul | find /I "SystemInformer.exe" > nul
 		if "!ERRORLEVEL!"=="0" ( goto BAT_FIM )
-		ping -n 3 -w 1000 127.0.0.1 > nul & !2_BACKGROUND! explorer
-		ping -n 7 -w 1000 127.0.0.1 > nul & !2_BACKGROUND! !fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt -monitor
-		ping -n 3 -w 1000 127.0.0.1 > nul & !2_BACKGROUND! "#1#!fileWindows!\PORTABLE_System_Informer\System Informer.lnk#1#"
-		ping -n 3 -w 1000 127.0.0.1 > nul & !fileNircmdSetSize! "This PC" "585 480 695 500" & !fileNircmdSetSize! "System Informer" "890 50 600 400"
+		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "explorer"
+		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE ""!fileWindows!\PORTABLE_Notepad++\notepad++.exe" "!fileWindows!\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt" "-monitor""
+		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!fileWindows!\PORTABLE_System_Informer\System Informer.lnk""
+		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE /WAIT "cmd.exe /c ""!fileNircmdSetSize!" "This PC" "585 480 695 500""" "cmd.exe /c ""!fileNircmdSetSize!" "System Informer" "890 50 600 400"""
 	)
 )
 

@@ -17,10 +17,10 @@ fileWindows = WshShell.ExpandEnvironmentStrings("%fileWindows%")
 
 If WScript.Arguments.Count = 0 Then
 	rem NENHUM PARAMENTRO PASSADO
-	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\n\nNao usar o VBS"  ,"\n",Chr(13)))
+	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\\n\\nNao usar o VBS"  , "\\n" , Chr(13) ))
 ElseIf Not (WScript.Arguments.Count > 1) Then
 	rem PARAMENTROS INVALIDOS
-	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\n\nParametros invalidos. Exemplo:\n" & arquivo & " " & "'MANUAL/RESTART' 'NOME_DO_PROCESSO'"  ,"\n",Chr(13)))
+	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\\n\\nParametros invalidos. Exemplo:\\n" & arquivo & " " & "'MANUAL/RESTART' 'NOME_DO_PROCESSO'"  , "\\n" , Chr(13) ))
 Else
     rem DEFINIR VARIAVEIS
     Dim fsoFile, timeManual, timeReboot, rebootQtd, dif, allow, obs, strLine
