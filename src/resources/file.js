@@ -19,13 +19,12 @@ async function file(inf = {}) {
         // IMPORTAR BIBLIOTECA [NODEJS]
         if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path', }); };
 
-        // SUBSTITUIR '!letter!' PELA LETRA DA UNIDADE
-        if (path) { path = path.replace(/!letter!|%letter%|!letra!|%letra%/g, letter).replace(/!fileProjetos!|%fileProjetos%/g, fileProjetos).replace(/!fileWindows!|%fileWindows%/g, fileWindows); inf.path = path; };
+        // SUBSTITUIR VARIÁVEIS DE AMBIENTE
+        if (path) { path = path.replace(/[!%](letter|letra)[!%]/g, letter).replace(/[!%](fileProjetos)[!%]/g, fileProjetos).replace(/[!%](fileWindows)[!%]/g, fileWindows); inf.path = path; };
 
         if (!action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder', 'storage',].includes(action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
         else if (typeof functionLocal !== 'boolean' && action !== 'inf' && !path.includes(':')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'functionLocal'`; }
-        else if (action !== 'inf' && (!path || path === '')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'path'`; }
-        else {
+        else if (action !== 'inf' && (!path || path === '')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'path'`; } else {
             function formatBytes(b, d = 2) {
                 if (b === 0) return '0 Bytes'; let i = Math.floor(Math.log(b) / Math.log(1024)); return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB',][i];
             }; function rawText(inf = {}) {
@@ -53,17 +52,13 @@ async function file(inf = {}) {
                     if (raw) { let infRawText = { e, 'obj': text, }; let retRawText = rawText(infRawText); text = retRawText; }
                     else if (typeof text === 'object') { text = JSON.stringify(text); /* STRING / OBJETO / BUFFER */ }; if (path.includes(':')) { if (eng) { path = path.split(':/')[1]; } } else {
                         infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRelative(infFile); path = retFile.res[0];
-                    }; if (eng) { // CHROME
+                    }; if (eng) { // CHROME | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                         if (path.includes('%/')) { path = path.split('%/')[1]; } else if (path.includes(':')) { path = path.split(':/')[1]; }; if (rewrite) {
-                            try { infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRead(infFile); text = `${retFile.res || ''}${text} `; }
-                            catch (catchErr) { esLintIgnore = catchErr; }
-                        }; let blob = new Blob([text,], { type: 'text/plain', });
-                        // REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
-                        path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); let downloadOptions = { // 'overwrite' LIMPA | 'uniquify' (ADICIONA (1), (2), (3)... NO FINAL)
+                            try { infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRead(infFile); text = `${retFile.res || ''}${text} `; } catch (catchErr) { esLintIgnore = catchErr; }
+                        }; let blob = new Blob([text,], { type: 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); let downloadOptions = { // 'overwrite' LIMPA | 'uniquify' AA (1), (2)... NO FINAL
                             url: URL.createObjectURL(blob), filename: path, saveAs: false, conflictAction: 'overwrite',
                         }; chrome.downloads.download(downloadOptions);
-                    } else { // NODEJS
-                        // REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
+                    } else { // NODEJS | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                         let pathLetter = path.charAt(0); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`); // DENTRO DE UMA PASTA (CRIAR ELA)
                         if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); }; await _fs.promises.writeFile(path, text, { flag: !rewrite ? 'w' : 'a', });
                     }; let res = path; resNew['ret'] = true; resNew['msg'] = `FILE[WRITE]: OK`; resNew['res'] = res;
@@ -122,10 +117,8 @@ async function file(inf = {}) {
                                     'size': size ? formatBytes(size) : false, ...(isFolder ? {} : { 'md5': md5, }),
                                 }; result.push(entryObject);
                             } catch (catchErr) { result.push({ 'ret': false, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), }); esLintIgnore = catchErr; }
-                        }; let retOrder = result.sort((a, b) => {
-                            if (a.isFolder && !b.isFolder) { return -1; } else if (!a.isFolder && b.isFolder) { return 1; } else { return a.name.localeCompare(b.name); }
-                        }); let res = retOrder;
-                        resNew['ret'] = true; resNew['msg'] = `FILE [LIST]: OK`; resNew['res'] = res;
+                        }; let retOrder = result.sort((a, b) => { if (a.isFolder && !b.isFolder) { return -1; } else if (!a.isFolder && b.isFolder) { return 1; } else { return a.name.localeCompare(b.name); } });
+                        let res = retOrder; resNew['ret'] = true; resNew['msg'] = `FILE [LIST]: OK`; resNew['res'] = res;
                     }
                 } catch (catchErr) { resNew['msg'] = `FILE [LIST]: ERRO | AO LISTAR '${path}'`; esLintIgnore = catchErr; }; return resNew;
             }
@@ -169,9 +162,7 @@ async function file(inf = {}) {
                             if (value.includes('Total de bytes da cota dispon')) { resNew.res['free'] = valueNew; resNew.res['freeFormated'] = formatBytes(valueNew); }
                             else if (value.includes('Total de bytes     ')) { resNew.res['total'] = valueNew; resNew.res['totalFormated'] = formatBytes(valueNew); }
                             else if (value.includes('Bytes usados     ')) { resNew.res['used'] = valueNew; resNew.res['usedFormated'] = formatBytes(valueNew); }
-                            else if (value.includes('Total de bytes reservados') && resNew.res['used']) {
-                                resNew.res['used'] = resNew.res['used'] + valueNew; resNew.res['usedFormated'] = formatBytes(resNew.res['used']);
-                            }
+                            else if (value.includes('Total de bytes reservados') && resNew.res['used']) { resNew.res['used'] = resNew.res['used'] + valueNew; resNew.res['usedFormated'] = formatBytes(resNew.res['used']); }
                         }
                     }; resNew['ret'] = true; resNew['msg'] = `FILE [STORAGE]: OK`;
                 } catch (catchErr) { resNew['msg'] = `FILE [STORAGE]: ERRO | AO OBTER INFORMAÇÕES DO DISCO '${path}'`; esLintIgnore = catchErr; }; return resNew;

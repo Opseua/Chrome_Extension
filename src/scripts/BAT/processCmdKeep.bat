@@ -42,12 +42,8 @@ if "%ERRORLEVEL%"=="0" ( set "ret2=TRUE" ) else ( set "ret2=FALSE" )
 :IGNORE_IS_RUNNING
 
 rem rem DEFINIR ACAO → RODANDO [NAO] | RODANDO [SIM]
-if "!ret2!"=="FALSE" (
-	if not "!action!"=="!action:TOGGLE=!" ( set "actionRun=ON" ) else ( if not "!action!"=="!action:ON=!" ( set "actionRun=ON" ) & goto IGNORE_IF )
-)
-if "!ret2!"=="TRUE" (
-	if not "!action!"=="!action:TOGGLE=!" ( set "actionRun=OFF" ) else ( if not "!action!"=="!action:OFF=!" ( set "actionRun=OFF" ) & goto IGNORE_IF )
-)
+if "!ret2!"=="FALSE" ( if not "!action!"=="!action:TOGGLE=!" ( set "actionRun=ON" ) else ( if not "!action!"=="!action:ON=!" ( set "actionRun=ON" ) & goto IGNORE_IF ) )
+if "!ret2!"=="TRUE" ( if not "!action!"=="!action:TOGGLE=!" ( set "actionRun=OFF" ) else ( if not "!action!"=="!action:OFF=!" ( set "actionRun=OFF" ) & goto IGNORE_IF ) )
 :IGNORE_IF
 
 rem ACTION → NAO DEFINIDA (ENCERRAR)
@@ -60,20 +56,25 @@ if not %errorlevel%==0 ( !fileLog! "[!arg5!] = [EXE: NAO - OLD: !ret2! - CALL: !
 
 rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS
 if "!actionRun!"=="OFF" ( 
-	powershell.exe -Command "$a = @(); function getId { Param([int]$f); $global:a += $f; Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $f } | ForEach-Object { getId $_.ProcessId } }; $s = Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'cmd.exe' -and $_.CommandLine -like '*!programExe!.exe*' } | Select-Object -ExpandProperty ProcessId; foreach ($i in $s) { getId $i }; foreach ($i in $a) { Stop-Process -Id $i }"
+	rem powershell.exe -Command "$a = @(); function getId { Param([int]$f); $global:a += $f; Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $f } | ForEach-Object { getId $_.ProcessId } }; $s = Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'cmd.exe' -and $_.CommandLine -like '*!programExe!.exe*' } | Select-Object -ExpandProperty ProcessId; foreach ($i in $s) { getId $i }; foreach ($i in $a) { Stop-Process -Id $i }"
+	if "!usuario!"=="Orlando" ( taskkill /F /FI "WINDOWTITLE eq Administrador:  CMD_!fileScriptFullWithBars!" /T ) else (  taskkill /F /FI "WINDOWTITLE eq Administrator:  CMD_!fileScriptFullWithBars!" /T )
 )
 
 rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
 	if not "!action!"=="!action:HIDE=!" (
 		rem [HIDE]
-		!3_BACKGROUND! /NOCONSOLE "!3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!programExePath!\!programExe!.exe !fileScript! & !3_BACKGROUND! /NOCONSOLE /DELAY=2 "!fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!""""
+		rem !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
+		rem OBRIGATORIO O '/RUNAS'!!!
+		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!fileScriptFullWithBars!& !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
 	) else (
 		rem [VIEW]
-		!3_BACKGROUND! /NOCONSOLE "!3_BACKGROUND! /NOCONSOLE "cmd.exe /c "start "!fileScriptFullWithBars!" /WAIT !programExePath!\!programExe!.exe !fileScript! & !3_BACKGROUND! /NOCONSOLE /DELAY=2 "!fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!""""
+		rem !3_BACKGROUND! /NOCONSOLE "cmd.exe /c start "!fileScriptFullWithBars!" /WAIT !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
+		rem OBRIGATORIO O '/RUNAS'!!!
+		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!fileScriptFullWithBars!& start "!fileScriptFullWithBars!" /WAIT !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
 
 		rem JANELA DO LOG POSICIONAR
-		!3_BACKGROUND! /NOCONSOLE "!3_BACKGROUND! /NOCONSOLE /DELAY=4 "cmd.exe /c "!fileNircmdSetSize! !fileScriptFullWithBars! !action!"""
+		!3_BACKGROUND! /NOCONSOLE "cmd.exe /c ping -n 4 -w 1000 127.0.0.1 > nul & !fileNircmdSetSize! "!fileScriptFullWithBars!" "!action!""
 	)
 )
 

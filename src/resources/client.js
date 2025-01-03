@@ -1,4 +1,4 @@
-let wsServers = { 'rooms': {}, }, reconnecting = {}, timeoutSecConnect = {}, secConnect = gW.secConnect;
+let wsServers = { 'rooms': {}, }, reconnecting = {}, timSecCon = {}, secConnect = gW.secConnect;
 
 let e = import.meta.url, ee = e;
 async function client(inf = {}) {
@@ -10,21 +10,20 @@ async function client(inf = {}) {
         function connect(inf = {}) {
             let { hostRoom, } = inf; let ws = new _WebSocket(`ws://${hostRoom}`); let url = ws._url || ws.url; let host = url.replace('ws://', '').split('/')[0]; let room = url.split(`${host}/`)[1].replace('?roo=', '');
             let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; ws['host'] = host; ws['room'] = room; ws['hostRoom'] = hostRoom; ws['locWeb'] = locWeb; ws['method'] = 'WEBSOCKET';
+            function clearTimRec(event) { clearTimeout(timSecCon[hostRoom]); if (event) { setTimeout(() => { reconnect({ host, room, hostRoom, 'resWs': ws, event, }); }, 1000); } };
 
             // # ON OPEN
             ws.onopen = async () => {
                 // LIMPAR TIMEOUT DE CONEXÃO | SALA [ADICIONAR] | ENVIAR PING DE INÍCIO DE CONEXÃO
-                clearTimeout(timeoutSecConnect[hostRoom]); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set(); }; wsServers.rooms[hostRoom].add(ws); ws.send(`ping`);
-                logConsole({ e, ee, 'write': true, 'msg': `${locWeb} OK:\n'${room}'`, });
+                clearTimRec(false); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set(); }; wsServers.rooms[hostRoom].add(ws); logConsole({ e, ee, 'write': true, 'msg': `${locWeb} OK:\n'${room}'`, });
 
                 // LISTENER PARA RETORNAR O 'ws' QUANDO 'messageSend' FOR CHAMADA EM OUTROS ARQUIVOS (SOMENTE NO CLIENT!!!)
                 function getWs(inf = {}) { let { hostRoom, } = inf; if (wsServers.rooms[hostRoom]) { for (let ws of wsServers.rooms[hostRoom]) { if (ws.hostRoom === hostRoom) { return ws; } } }; return null; }
-                listenerMonitorar(`getWs_${locWeb}`, async (/*nomeList, inf*/) => { return getWs({ 'hostRoom': hostRoom, }); });
+                ws.send(`ping`); listenerMonitorar(`getWs_${locWeb}`, async (/*nomeList, inf*/) => { return getWs({ 'hostRoom': hostRoom, }); });
 
                 // LISTENER PARA ENVIAR MENSAGEM DE OUTROS ARQUIVOS (FORA DO WebSocket!!!)
                 listenerMonitorar(`messageSendOrigin_${hostRoom}`, async (nomeList, inf) => {
-                    let { destination, message, secondsAwait, } = inf;
-                    let retMessageSend = await messageSend({ 'destination': destination, 'messageId': true, 'message': message, 'resWs': ws, 'secondsAwait': secondsAwait, }); return retMessageSend;
+                    let { destination, message, secondsAwait, } = inf; let retMessageSend = await messageSend({ destination, 'messageId': true, message, 'resWs': ws, secondsAwait, }); return retMessageSend;
                 });
             };
 
@@ -32,8 +31,7 @@ async function client(inf = {}) {
             ws.onmessage = async (data) => {
                 let message = data.data.toString('utf-8'); let pingPong = message === `${gW.par6}` ? 1 : message === `${gW.par7}` ? 2 : 0;
                 // ÚLTIMA MENSAGEM RECEBIDA
-                ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false;
-                // logConsole({ e, ee, 'write': true, 'msg': `← CLI | ${ws.lastMessage} | ${hostRoom}` });
+                ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false; // logConsole({ e, ee, 'write': true, 'msg': `← CLI | ${ws.lastMessage} | ${hostRoom}` });
                 if (pingPong > 0) { // RECEBIDO: 'PING' ENVIAR 'PONG'
                     if (pingPong === 2) { return; }; ws.send('pong'); // logConsole({ e, ee, 'write': true, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
                 } else { // RECEBIDO: OUTRA MENSAGEM
@@ -42,10 +40,8 @@ async function client(inf = {}) {
                 }
             };
 
-            // # ON ERROR/CLOSE | TEMPO MÁXIMO DE CONEXÃO
-            ws.onerror = () => { clearTimeoutReconnect('error'); }; ws.onclose = () => { clearTimeoutReconnect('close'); };
-            function clearTimeoutReconnect(inf = {}) { clearTimeout(timeoutSecConnect[hostRoom]); reconnect({ 'host': host, 'room': room, 'hostRoom': hostRoom, 'resWs': ws, 'event': inf, }); }
-            timeoutSecConnect[hostRoom] = setTimeout(() => { ws.close(); }, secConnect * 1000);
+            // # ON ERROR/CLOSE | TEMPO MÁXIMO DE CONEXÃO | LIMPAR TIMEOUT DE CONEXÃO
+            ws.onerror = () => { clearTimRec('error'); }; ws.onclose = () => { clearTimRec('close'); }; let c = () => ws.close(); timSecCon[hostRoom] = setTimeout(() => { c(); }, secConnect * 1000);
         }
 
         // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -71,12 +67,10 @@ async function client(inf = {}) {
         };
 
         async function runLis(inf = {}) {
-            let { nomeList, param1, } = inf, { messageId, message, resWs, origin, host, room, } = param1;
+            let { nomeList, param1, } = inf, { messageId, message, resWs, origin, host, room, } = param1; // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
             // logConsole({ e, ee, 'write': true, 'msg': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
-            // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
             let data = {}; try { data = JSON.parse(message); } catch (catchErr) { esLintIgnore = catchErr; }; if (data.fun) { devFun({ e, 'data': data, 'messageId': messageId, 'resWs': resWs, 'destination': origin, }); }
             else if (data.other) { logConsole({ e, ee, 'write': true, 'msg': `OTHER\n${JSON.stringify(data.other)}`, }); }
-            // else { let text = `COMANDO INVÁLIDO`; logConsole({ e, ee, 'write': true, 'msg': `${text}\n\n${message}`, }); notification({ 'keepOld': true, 'ntfy': true, 'title': `# LIST (${gW.devMaster}) [NODEJS]`, text, }); }
         }
 
         // LOOP: CHECAR ÚLTIMA MENSAGEM
