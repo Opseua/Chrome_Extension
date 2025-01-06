@@ -21,7 +21,8 @@ cd\ & !letra!: & cd "!local!"
 
 if "!arg1!"=="APAGAR" ( goto COPIA_APAGAR )
 if "!arg1!"=="CRIAR" ( goto COPIA_CRIAR )
-!fileMsg! "[!local!\!arquivo!]\\nParamentro invalido. Deve ser 'APAGAR' ou 'CRIAR'" & exit
+!fileMsg! "[!local!\!arquivo!]\\nParamentro invalido. Deve ser 'APAGAR' ou 'CRIAR'"
+exit
 
 :COPIA_CRIAR
 rem CRIAR COPIA nodeExe
@@ -62,7 +63,8 @@ for %%a in ("%projects:;=" "%") do (
 		!3_BACKGROUND! /NOCONSOLE ""!fileWindows!\BAT\firewallAllowBlock.bat" "ALLOW" "!destino!" "NAO_MOSTRAR_POPUP""
     )
 )
-!fileMsg! "[!local!\!arquivo!]\\n\\nCopiados: !fileQtdCopy!" & exit
+!fileMsg! "[!local!\!arquivo!]\\n\\nCopiados: !fileQtdCopy!"
+exit
 
 :COPIA_APAGAR
 rem APAGAR OS nodeExe ANTIGOS (EXCETO O PROPRIO 'node.exe')
@@ -89,6 +91,8 @@ for %%F in (*) do (
 		echo [NAO] - !filename!
 	)
 )
-!fileMsg! "[!local!\!arquivo!]\\n\\nTotal de arquivos: !fileQtdAll!\nDeletados: !fileQtdDel!" & exit
+!fileMsg! "[!local!\!arquivo!]\\n\\nTotal de arquivos: !fileQtdAll!\nDeletados: !fileQtdDel!"
+
+exit
 
 

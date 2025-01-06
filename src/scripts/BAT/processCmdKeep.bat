@@ -56,25 +56,21 @@ if not %errorlevel%==0 ( !fileLog! "[!arg5!] = [EXE: NAO - OLD: !ret2! - CALL: !
 
 rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS
 if "!actionRun!"=="OFF" ( 
-	rem powershell.exe -Command "$a = @(); function getId { Param([int]$f); $global:a += $f; Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $f } | ForEach-Object { getId $_.ProcessId } }; $s = Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'cmd.exe' -and $_.CommandLine -like '*!programExe!.exe*' } | Select-Object -ExpandProperty ProcessId; foreach ($i in $s) { getId $i }; foreach ($i in $a) { Stop-Process -Id $i }"
-	if "!usuario!"=="Orlando" ( taskkill /F /FI "WINDOWTITLE eq Administrador:  CMD_!fileScriptFullWithBars!" /T ) else (  taskkill /F /FI "WINDOWTITLE eq Administrator:  CMD_!fileScriptFullWithBars!" /T )
+	if "!usuario!"=="Orlando" ( 
+		taskkill /F /FI "WINDOWTITLE eq Administrador:  CMD_!fileScriptFullWithBars!" /T
+	) else (  
+		taskkill /F /FI "WINDOWTITLE eq Administrator:  CMD_!fileScriptFullWithBars!" /T
+	)
 )
 
 rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
 	if not "!action!"=="!action:HIDE=!" (
-		rem [HIDE]
-		rem !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
-		rem OBRIGATORIO O '/RUNAS'!!!
+		rem [HIDE] OBRIGATORIO O '/RUNAS'!!!
 		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!fileScriptFullWithBars!& !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
 	) else (
-		rem [VIEW]
-		rem !3_BACKGROUND! /NOCONSOLE "cmd.exe /c start "!fileScriptFullWithBars!" /WAIT !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
-		rem OBRIGATORIO O '/RUNAS'!!!
-		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!fileScriptFullWithBars!& start "!fileScriptFullWithBars!" /WAIT !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
-
-		rem JANELA DO LOG POSICIONAR
-		!3_BACKGROUND! /NOCONSOLE "cmd.exe /c ping -n 4 -w 1000 127.0.0.1 > nul & !fileNircmdSetSize! "!fileScriptFullWithBars!" "!action!""
+		rem [VIEW] OBRIGATORIO O '/RUNAS'!!! | JANELA DO LOG POSICIONAR
+		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!fileScriptFullWithBars!& start "!fileScriptFullWithBars!" /WAIT !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!" "cmd.exe /c ping -n 4 -w 1000 127.0.0.1 > nul & !fileNircmdSetSize! !fileScriptFullWithBars! !action!"
 	)
 )
 

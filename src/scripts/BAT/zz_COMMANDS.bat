@@ -202,9 +202,9 @@ if not "!devMaster!"=="!devMaster:OPSEUA=!" (
 		tasklist /fi "ImageName eq SystemInformer.exe" /fo csv 2> nul | find /I "SystemInformer.exe" > nul
 		if "!ERRORLEVEL!"=="0" ( goto BAT_FIM )
 		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "explorer"
-		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE ""!fileWindows!\PORTABLE_Notepad++\notepad++.exe" "!fileWindows!\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt" "-monitor""
+		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt -monitor"
 		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!fileWindows!\PORTABLE_System_Informer\System Informer.lnk""
-		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE /WAIT "cmd.exe /c ""!fileNircmdSetSize!" "This PC" "585 480 695 500""" "cmd.exe /c ""!fileNircmdSetSize!" "System Informer" "890 50 600 400"""
+		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE /WAIT "cmd.exe /c !fileNircmdSetSize! "This PC" "585 480 695 500"" "cmd.exe /c !fileNircmdSetSize! "System Informer" "840 50 600 400""
 	)
 )
 
