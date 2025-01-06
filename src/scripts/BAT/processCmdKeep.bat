@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4" & set "arg5=%~5" & set "arg6=%~6"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\\n\\nNao usar o BAT/BACKGROUND" & exit /b )
+if "!arg1!" == "" ( !fileMsg! "[!local!\!arquivo!]\\n\\nNao usar o BAT/BACKGROUND" & exit /b )
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -23,7 +23,7 @@ rem DEFINIR programExe E programExePath | MUDAR LOCAL DO TERMINAL
 if "!arg5!"=="node" ( set "fileScript=!fileScript!.js" & set "programExePath=!fileWindows!\PORTABLE_NodeJS" )
 if "!arg5!"=="python" ( set "fileScript=!fileScript!.py" & set "programExePath=!fileWindows!\PORTABLE_Python" )
 if "!programExePath!"=="ERRO" ( !fileMsg! "[!local!\!arquivo!]\\n\\nprogramExe deve ser'node' ou 'python'" & exit /b)
-set "programExe=!arg5!!project!_!outrosAdd!" & cd /d !fileProjetos!\!project!
+set "programExe=!arg5!!project!_!outrosAdd!"
 
 rem CHECAR SE O programExe EXISTE
 if not exist "!programExePath!\!programExe!.exe" ( !fileMsg! "[!local!\!arquivo!]\\n\\nprogramExe nao existe\n\n!programExe!.exe" & exit /b )
@@ -65,6 +65,9 @@ if "!actionRun!"=="OFF" (
 
 rem ### → ACAO | INICIAR
 if "!actionRun!"=="ON" (
+	rem ALTERAR LOCAL DO TERMINAL
+	cd /d !fileProjetos!\!project!
+
 	if not "!action!"=="!action:HIDE=!" (
 		rem [HIDE] OBRIGATORIO O '/RUNAS'!!!
 		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!fileScriptFullWithBars!& !programExePath!\!programExe!.exe !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\processCmdKeep.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
