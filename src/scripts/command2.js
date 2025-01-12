@@ -9,7 +9,7 @@ async function command2(inf = {}) {
     };
     await notification(infNotification);
 
-    let infCommandLine = { e, 'command': `${fileProjetos}/Sniffer_Python/src/z_Outros_server/TOGGLE_HIDE.vbs`, 'retInf': true, };
+    let infCommandLine = { e, 'command': `${fileProjetos}/Sniffer_Python/src/z_OUTROS_server/TOGGLE_HIDE.vbs`, 'retInf': true, };
     await commandLine(infCommandLine);
 
     ret['ret'] = true;

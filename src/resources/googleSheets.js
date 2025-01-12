@@ -14,7 +14,7 @@
 // };
 // infGoogleSheets = {
 //     e, 'action': 'lastLin', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
-//     'range': `A1:A10`, // PERÍMETRO
+//     // 'range': `A1:A10`, // PERÍMETRO
 //     // 'range': `A:A`, // COLUNA
 // };
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
@@ -61,11 +61,12 @@ async function googleSheets(inf = {}) {
                 ret['msg'] = `GOOGLE SHEET [SEND]: OK`;
                 ret['ret'] = true;
             } catch (catchErr) {
-                if (JSON.stringify(e).includes(`You are trying to edit a protected`)) {
+                catchErr = JSON.stringify(catchErr); logConsole({ e, ee, 'write': true, 'msg': `ERRO SHEETS\n${catchErr}`, });
+                if (catchErr.includes(`You are trying to edit a protected`)) {
                     ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | RANGE PROTEGIDO`;
                 } else {
                     ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | NÃO ENCONTRADO '${range}' E/OU ID '${id}'`;
-                }; esLintIgnore = catchErr;
+                };
             }
         } else if (action === 'lastLin') {
             // LAST LIN

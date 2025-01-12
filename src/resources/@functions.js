@@ -4,7 +4,7 @@
 // CHECAR SE TEM A CHAVE  if ('chave' in obj){ }
 // CHECAR SE É OBJETO typeof obj === 'object'
 
-// process.exit(); process.cwd();
+// process.exit();
 
 // for (let [index, value,] of array.entries()) { console.log('INDEX', index, 'VALUE', value); };
 

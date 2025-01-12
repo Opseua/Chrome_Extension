@@ -65,7 +65,6 @@ gloWin['googleTranslate'] = (inf) => { let fun = (eng || !eng) ? funImport : fun
 gloWin['htmlToJson'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './htmlToJson.js', 'inf': inf, }); };
 gloWin['log'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './log.js', 'inf': inf, }); };
 gloWin['logConsole'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './logConsole.js', 'inf': inf, }); };
-gloWin['logsDelOld'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './logsDelOld.js', 'inf': inf, }); };
 gloWin['notification'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './notification.js', 'inf': inf, }); };
 gloWin['objFilter'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './objFilter.js', 'inf': inf, }); };
 gloWin['messageReceived'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './messageReceived.js', 'inf': inf, }); };

@@ -1,23 +1,12 @@
 rem COMO USAR
 rem %fileLog% "ISSO SERA ESCRITO"
 
-rem IDENTIFICAR O ARQUIVO E A LOCALIZACAO COMPLETA
+rem BIBLIOTECA NECESSARIA
 Set objFSO = CreateObject("Scripting.FileSystemObject")
-arquivo = objFSO.GetFileName(WScript.ScriptFullName)
-localizacao = objFSO.GetParentFolderName(WScript.ScriptFullName)
-
-rem DIVIDIR O CAMINHO POR '\' | QUANTIDADE DE ARRAYs | ULTIMA PASTA | LETRA DA UNIDADE
-arr = Split(localizacao, ":\")
-letra = arr(0)
-
-Set WshShell = CreateObject("WScript.Shell")
-
-rem PEGAR VARIAVEL DE AMBIENTE
-fileWindows = WshShell.ExpandEnvironmentStrings("%fileWindows%")
 
 If WScript.Arguments.Count = 0 Then
 	rem NENHUM PARAMENTRO PASSADO
-	MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\\n\\nNao usar o VBS"  , "\\n" , Chr(13) ))
+	MsgBox (Replace(  "[" & objFSO.GetParentFolderName(WScript.ScriptFullName) & "\" & objFSO.GetFileName(WScript.ScriptFullName) & "]\\n\\nNENHUM PARAMETRO PASSADO"  , "\\n" , Chr(13) ))
 Else
 	rem PARAMENTROS PASSADOS
     rem  DEFININDO A DATA E HORA ATUAL
@@ -46,33 +35,28 @@ Else
 	rem hora = HoraPadrao12(hora)
 	rem #####################################################################
 	
-	rem #####################################################################
-	rem ESCREVER NO ARQUIVO (CRIAR OU ADICIONAR)
-	Function fileWriteAppend(filePath, textToWrite)
+	Function escreverNoArquivo(pathArquivo, conteudoArquivo, add)
 		Dim attempt, fsoFile
-		Set objFSO = CreateObject("Scripting.FileSystemObject")
 		rem DESATIVAR AVISO DE ERROS
 		On Error GoTo 0
 		For attempt = 1 To 50
 			rem DESATIVAR AVISO DE ERROS TEMPORARIOS
 			On Error Resume Next
-			If Not objFSO.FileExists(filePath) Then
-				rem EXISTE NAO. CRIAR
-				Set fsoFile = objFSO.CreateTextFile(filePath)
+			If Not objFSO.FileExists(pathArquivo) Or Not add Then
+				rem ARQUIVO EXISTE: [NAO] | 'add' False LIMPAR CONTEUDO ANTIGO
+				Set fsoFile = objFSO.CreateTextFile(pathArquivo, True)
 			Else
-				rem EXISTE SIM. ABRIR
-				Set fsoFile = objFSO.OpenTextFile(filePath, 8)
+				rem ARQUIVO EXISTE: [SIM] | 'add' True ADICIONAR NO ARQUIVO
+				Set fsoFile = objFSO.OpenTextFile(pathArquivo, 8)
 			End If
 			rem ESCREVER NO ARQUIVO E FECHAR
-			fsoFile.WriteLine(textToWrite)
-			fsoFile.Close
+			fsoFile.WriteLine(conteudoArquivo): fsoFile.Close
 			If Err.Number = 0 Then
-				rem ERRO NAO. SAIR DO LOOP
+				rem ERRO [NAO] → SAIR DO LOOP
 				Exit For
 			Else
-				rem ERRO SIM. LIMPAR ERRO ATUAL. ESPERAR x MILESSEGUNDOS E VOLTAR PARA O LOOP (ESPERAR NO MAXIMO 5 SEGUNDOS)
-				Err.Clear
-				WScript.Sleep(100)
+				rem ERRO [SIM] → LIMPAR ERRO ATUAL. ESPERAR x MILISSEGUNDOS E VOLTAR PARA O LOOP (ESPERAR NO MAXIMO 5 SEGUNDOS)
+				Err.Clear: WScript.Sleep(100)
 			End If
 		Next
 	End Function
@@ -82,10 +66,16 @@ Else
 	completaData = "z_MES_" & mes & "_DIA_" & dia
     completaHora = hora & ":" & minuto & ":" & segundo & "." & milissegundo & horaAmPm
 
-	pathArquivo = fileWindows & "\BAT\z_log\" & completaData & ".txt"
+	pathArquivo = CreateObject("WScript.Shell").ExpandEnvironmentStrings("%fileWindows%") & "\BAT\z_log\" & completaData & ".txt"
+	
+	rem GERAR A LINHA DE TEXTO
     strLine = completaHora & " - " & Wscript.Arguments.Item(0)
-	fileWriteAppend pathArquivo, strLine
+	
+	rem ESCREVER NO ARQUIVO
+	escreverNoArquivo pathArquivo, strLine, True
 End If
 
 rem ENCERRAR SCRIPT
 Wscript.Quit
+
+

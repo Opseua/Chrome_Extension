@@ -55,7 +55,7 @@ async function file(inf = {}) {
                     }; if (eng) { // CHROME | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                         if (path.includes('%/')) { path = path.split('%/')[1]; } else if (path.includes(':')) { path = path.split(':/')[1]; }; if (rewrite) {
                             try { infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRead(infFile); text = `${retFile.res || ''}${text} `; } catch (catchErr) { esLintIgnore = catchErr; }
-                        }; let blob = new Blob([text,], { type: 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); let downloadOptions = { // 'overwrite' LIMPA | 'uniquify' AA (1), (2)... NO FINAL
+                        }; let blob = new Blob([text,], { type: 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); let downloadOptions = { // 'overwrite' LIMPA | 'uniquify' ADD (1), (2)... NO FINAL
                             url: URL.createObjectURL(blob), filename: path, saveAs: false, conflictAction: 'overwrite',
                         }; chrome.downloads.download(downloadOptions);
                     } else { // NODEJS | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
