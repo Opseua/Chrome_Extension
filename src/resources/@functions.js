@@ -36,8 +36,8 @@
 
 // https://api.hashify.net/hash/md5/hex?value=aaaa
 
-let _fs, cs; let keepGW = eng ? window : global; keepGW['esLintIgnore'] = ''; keepGW['engName'] = (eng) ? 'CHROME' : 'NODEJS'; keepGW['letter'] = 'x'; keepGW['fileProjetos'] = 'x'; keepGW['fileWindows'] = 'x';
-if (!eng) { _fs = await import('fs'); keepGW['_fs'] = _fs; process.noDeprecation = true; }; keepGW['gW'] = {};
+let _fs, cs; let keepGW = eng ? window : global; keepGW['esLintIgnore'] = ''; keepGW['engName'] = (eng) ? 'CHROME' : 'NODEJS'; keepGW['letter'] = 'x'; keepGW['fileProjetos'] = 'x'; keepGW['fileChrome_Extension'] = 'x';
+keepGW['fileWindows'] = 'x'; if (!eng) { _fs = await import('fs'); keepGW['_fs'] = _fs; process.noDeprecation = true; }; keepGW['gW'] = {};
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
 await import('./getPath.js'); let retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket; let devMaster = retGetPath.res.confOk.master;

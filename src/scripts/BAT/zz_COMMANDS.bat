@@ -6,15 +6,15 @@ set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1"
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
 if "!arg1!" == "" ( !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\n\\nNENHUM PARAMETRO PASSADO"" & exit )
 
-rem set "start=ERRO" & set "adm=ERRO" & NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
+NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
 rem echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
 rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
-set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 rem ********************************************************************************************************************************************************
 
-!fileLog! "[COMMANDS] = [### INICIOU ###] (PARS-!arg1!)"
+rem REGISTRAR GATILHO
+!fileLog! "[COMMANDS] = {ADM-!adm!} [### INICIOU ###] (PARS-!arg1!)"
 
 rem ************************** 'ON'      → [OFF] →→→ [ON] (EXCETO Sniffer_Python)
 rem ************************** 'OFF'     → [ON] →→→ [OFF]
@@ -222,7 +222,7 @@ if not "!devMaster!" == "!devMaster:OPSEUA=!" (
 		tasklist /fi "ImageName eq SystemInformer.exe" /fo csv 2> nul | find /I "SystemInformer.exe" > nul
 		if "!ERRORLEVEL!" == "0" ( goto END_CMD )
 		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "explorer" & set "fNSS=!fileNircmdSetSize!"
-		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_log\z_MES_!mes!_DIA_!dia!.txt -monitor"
+		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_log\z_MES_!DATE:~3,2!_DIA_!DATE:~0,2!.txt -monitor"
 		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!fileWindows!\PORTABLE_System_Informer\System Informer.lnk""
 		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fNSS! "This PC" "585 480 695 500" & !fNSS! "System Informer" "880 50 600 400" & !fNSS! "- Notepad++" "-7 545 1050 447""	
 	)
@@ -230,6 +230,6 @@ if not "!devMaster!" == "!devMaster:OPSEUA=!" (
 
 :END_CMD
 
-!fileLog! "[COMMANDS] = FIM"
+!fileLog! "[COMMANDS] = [*** FIM ***]"
 
 

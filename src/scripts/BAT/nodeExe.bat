@@ -6,12 +6,15 @@ set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1"
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
 if "!arg1!" == "" ( !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\n\\nNENHUM PARAMETRO PASSADO"" & exit )
 
-rem set "start=ERRO" & set "adm=ERRO" & NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
+NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
 rem echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
 rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 rem ********************************************************************************************************************************************************
+
+rem REGISTRAR GATILHO
+!fileLog! "[NODE EXE] = {ADM-!adm!} [### INICIOU ###] (PARS-!arg1!)"
 
 rem NAO SUBIR!!!
 if "!arg1!" == "APAGAR" ( goto COPIA_APAGAR )
@@ -87,6 +90,7 @@ if not "!projectsPython!" == "!projectsPython:_=!" (
 	)
 )
 
+!fileLog! "[NODE EXE] = [*** FIM ***] - [COPIADOS [NODEJS]: !fileQtdCopyNode!] - [COPIADOS [PYTHON]: !fileQtdCopyPython!]"
 !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\n\\nCOPIADOS [NODEJS]: !fileQtdCopyNode!\\nCOPIADOS [PYTHON]: !fileQtdCopyPython!"" & exit
 
 rem ---------------------------------------------------------- APAGAR ------------------------------------------------------------------------------
@@ -144,6 +148,7 @@ for %%F in (*) do (
 	)
 )
 
+!fileLog! "[NODE EXE] = [*** FIM ***] - [APAGADOS [NODEJS]: !fileQtdDelNode!] - [APAGADOS [PYTHON]: !fileQtdDelPython!]"
 !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\n\\nAPAGADOS [NODEJS]: !fileQtdDelNode!\\nAPAGADOS [PYTHON]: !fileQtdDelPython!"" & exit
 
 

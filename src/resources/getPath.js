@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 // let infGetPath, retGetPath; // 'isFunction': true
 // infGetPath = { 'e': new Error(), };
 // retGetPath = await getPath(infGetPath); console.log(retGetPath);
@@ -68,7 +70,7 @@ async function getPath(inf = {}) {
         let devMasterDevSlaveDevChildren = `${gW.devMaster}-${gW.devSlave}-${devChildren}`; gW['devChildren'] = devChildren;
         gW['devGet'] = [`${gW.hostPortWeb}/?roo=${devMasterDevSlaveDevChildren}`, `${gW.hostPortLoc}/?roo=${devMasterDevSlaveDevChildren}`,];
     } else {
-        let fPW = `${letter}:/ARQUIVOS`; fileProjetos = `${fPW}/PROJETOS`; fileWindows = `${fPW}/WINDOWS`;
+        let fPW = `${letter}:/ARQUIVOS`; fileProjetos = `${fPW}/PROJETOS`; fileChrome_Extension = `${fPW}/PROJETOS/Chrome_Extension`; fileWindows = `${fPW}/WINDOWS`;
         gW['conf'] = res.conf; gW['root'] = res.root; gW['functions'] = res.functions; gW['project'] = res.project; gW['file'] = res.file; gW['line'] = res.line;
     }
 

@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 // let infFile, retFile; // 'raw': true,         add TRUE → ADICIONAR NO ARQUIVO
 // infFile = { e, 'action': 'relative', 'functionLocal': false, 'path': './PASTA/arquivo.txt', };
 // infFile = { e, 'action': 'write', 'functionLocal': false, 'path': './PASTA/arquivo.txt', 'add': true, 'text': '1234\n', };
@@ -20,7 +22,10 @@ async function file(inf = {}) {
         if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path', }); };
 
         // SUBSTITUIR VARIÁVEIS DE AMBIENTE
-        if (path) { path = path.replace(/[!%](letter|letra)[!%]/g, letter).replace(/[!%](fileProjetos)[!%]/g, fileProjetos).replace(/[!%](fileWindows)[!%]/g, fileWindows); inf.path = path; };
+        if (path && (path.includes('!') || path.includes('%'))) {
+            let a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows;
+            path = path.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d); inf.path = path;
+        };
 
         if (!action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder', 'storage',].includes(action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
         else if (typeof functionLocal !== 'boolean' && action !== 'inf' && !path.includes(':')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'functionLocal'`; }
@@ -155,8 +160,9 @@ async function file(inf = {}) {
 
             async function fileStorage(inf = {}) {
                 let { path, } = inf; let resNew = { 'ret': false, }; try {
-                    let retCommandLine = await commandLine({ e, 'awaitFinish': true, 'command': `fsutil volume diskfree ${path.replace(':', '')}:`, }); if (!retCommandLine.ret) { return retCommandLine; }
-                    resNew['res'] = {}; for (let [index, value,] of retCommandLine.res.split('\n').entries()) {
+                    let retCommandLine = await commandLine({ e, 'awaitFinish': true, 'withCmd': true, 'command': `fsutil volume diskfree ${path.replace(':', '')}:>%fileWindows%/BAT/storage.txt`, });
+                    if (!retCommandLine.ret) { return retCommandLine; }; let retFile = await file({ e, 'action': 'read', 'path': '%fileWindows%/BAT/storage.txt', }); if (!retFile.ret) { return retFile; }
+                    resNew['res'] = {}; for (let [index, value,] of retFile.res.split('\n').entries()) {
                         if (value.includes('Total de bytes da cota dispon') || value.includes('Total de bytes     ') || value.includes('Bytes usados     ') || value.includes('Total de bytes reservados')) {
                             let valueNew = Number(value.replace(/:  /g, ': ').trim().split(': ')[1].split(' ')[0].replace(/\./g, ''));
                             if (value.includes('Total de bytes da cota dispon')) { resNew.res['free'] = valueNew; resNew.res['freeFormated'] = formatBytes(valueNew); }
@@ -165,7 +171,8 @@ async function file(inf = {}) {
                             else if (value.includes('Total de bytes reservados') && resNew.res['used']) { resNew.res['used'] = resNew.res['used'] + valueNew; resNew.res['usedFormated'] = formatBytes(resNew.res['used']); }
                         }
                     }; resNew['ret'] = true; resNew['msg'] = `FILE [STORAGE]: OK`;
-                } catch (catchErr) { resNew['msg'] = `FILE [STORAGE]: ERRO | AO OBTER INFORMAÇÕES DO DISCO '${path}'`; esLintIgnore = catchErr; }; return resNew;
+                } catch (catchErr) { resNew['msg'] = `FILE [STORAGE]: ERRO | AO OBTER INFORMAÇÕES DO DISCO '${path}'`; esLintIgnore = catchErr; };
+                await file({ e, 'action': 'del', 'path': '%fileWindows%/BAT/storage.txt', }); return resNew;
             }
 
             // ****************************************************************************************************************************************
