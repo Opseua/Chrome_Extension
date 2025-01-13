@@ -20,7 +20,7 @@ async function configStorage(inf = {}) {
             inf['path'] = `${letter}:/${gW.root}/${gW.functions}/log/reg.json`; let dt, rf = {}; if (inf[0] === '' || inf[0] === '*') {
                 rf = await file({ e, 'action': 'read', 'path': path, }); if (!rf.ret) { dt = {}; } else { dt = JSON.parse(rf.res).dt; }
             } else { dt = typeof inf[0] === 'object' ? inf[0] : { 'key': inf[0], }; };
-            if (!rf.ret) { rf = await file({ e, 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify({ 'dt': dt, }, null, 2), }); }
+            if (!rf.ret) { rf = await file({ e, 'action': 'write', 'path': path, 'text': JSON.stringify({ 'dt': dt, }, null, 2), }); }
             ret['res'] = dt; ret['ret'] = true; ret['msg'] = 'CS: OK';
         } else {
             let run = false;
@@ -84,7 +84,7 @@ async function configStorage(inf = {}) {
                     else { config = {}; }; if (!key || key === '') { ret['msg'] = `CONFIG: ERRO | INFORMAR A 'key'`; } else if (action === 'set') { // #### CONFIG: SET
                         if (!value && !value === false) { ret['msg'] = `CONFIG: ERRO | INFORMAR O 'value'`; } else {
                             if (key === '*' && typeof value !== 'object') { ret['msg'] = `CONFIG: ERRO | VALOR NAO É OBJETO`; } else if (key === '*') { config = value; } else { config[key] = value; }; if (!ret.msg) {
-                                infFile = { e, 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2), }; retFile = await file(infFile);
+                                infFile = { e, 'action': 'write', 'path': path, 'text': JSON.stringify(config, null, 2), }; retFile = await file(infFile);
                                 ret['ret'] = true; ret['msg'] = `CONFIG SET: OK`; if (returnValueAll) { ret['res'] = config; } else if (returnValueKey) { ret['res'] = config[key]; };
                             }
                         }
@@ -94,7 +94,7 @@ async function configStorage(inf = {}) {
                         } else { ret['msg'] = `CONFIG [GET]: ERRO | CHAVE '${key}' NAO ENCONTRADA`; }
                     } else if (action === 'del') { // #### CONFIG NODE: DEL
                         if (!retFs) { ret['msg'] = `CONFIG [DEL]: ERRO | ARQUIVO '${path}' NAO ENCONTRADO`; } else if (config[key]) {
-                            delete config[key]; infFile = { e, 'action': 'write', 'path': path, 'rewrite': false, 'text': JSON.stringify(config, null, 2), }; retFile = await file(infFile);
+                            delete config[key]; infFile = { e, 'action': 'write', 'path': path, 'text': JSON.stringify(config, null, 2), }; retFile = await file(infFile);
                             ret['msg'] = `CONFIG DEL: OK`; ret['ret'] = true;
                         } else { ret['msg'] = `CONFIG [DEL]: ERRO | CHAVE '${key}' NAO ENCONTRADA`; }; if (returnValueAll) { ret['res'] = config; };
                     }

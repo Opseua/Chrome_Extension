@@ -20,7 +20,7 @@ async function log(inf = {}) {
         } else if (!text) {
             ret['msg'] = `LOG: ERRO | INFORMAR O 'text'`;
         } else {
-            let infFile, houTxt, houFile, minSecMil, pathOk, rewrite = false;
+            let infFile, houTxt, houFile, minSecMil, pathOk, add = false;
             let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`;
             minSecMil = `${time.min}:${time.sec}.${time.mil}`;
             houFile = `${time.hou}:${minSecMil}`;
@@ -36,17 +36,17 @@ async function log(inf = {}) {
                 pathOk = `${pathOk}/${path}`;
             } else if (['log.txt', 'err.txt',].includes(path)) {
                 let pathEnd = unique ? '' : `/${time.hou}.00-${time.hou}.59`;
-                pathOk = `${pathOk}/${mon}/${day}${pathEnd}_${path}`; rewrite = true;
+                pathOk = `${pathOk}/${mon}/${day}${pathEnd}_${path}`; add = true;
             } else {
                 // NÃO ALTERAR PARA O PADRÃO DE 12 HORAS!!! (PORQUE OS ARQUIVOS NÃO FICARIAM EM ORDEM NUMÉRICA)
                 pathOk = `${pathOk}/${mon}/${day}/${houFile.replace(/:/g, '.')}_${path}`;
             }
-            if (rewrite) {
+            if (add) {
                 text = `→ ${houTxt}${fileProject ? ` ${fileProject}` : ''}${fileCall ? ` ${fileCall}` : ''}\n${typeof text === 'object' ? JSON.stringify(text) : text}\n\n`;
             }
             infFile = {
                 e, 'action': 'write', 'raw': !!raw, 'functionLocal': !!functionLocal,
-                'text': text, 'rewrite': rewrite, 'path': pathOk.replace(/:/g, ''),
+                'text': text, 'add': add, 'path': pathOk.replace(/:/g, ''),
             };
             await file(infFile);
             let res = `${letter}:/${gW.root}/${functionLocal ? gW.functions : gW.project}/${pathOk}`;

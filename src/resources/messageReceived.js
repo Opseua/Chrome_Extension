@@ -73,13 +73,13 @@ async function messageReceived(inf = {}) {
             // ---------------- TESTES
             // if (!messageId.includes(`SERVER`)) {
             //     logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${messageId} | [${partesRestantes}] | ← TOTAL ${mensagensPartesRecebida[messageId].partes.join('').length}` });
-            //     file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_RECEBENDO_[${partesRestantes}]_.txt`, 'rewrite': false, 'text': message });
+            //     file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_RECEBENDO_[${partesRestantes}]_.txt`, 'text': message });
             //     if (partesRestantes === 0) {
             //         if (buffer && eng) {
             //             let b = new Array(message.length); for (let i = 0; i < message.length; i++) { b[i] = message.charCodeAt(i); }; let l = new Blob([new Uint8Array(b)], { type: 'application/zip' });
             //             chrome.downloads.download({ url: URL.createObjectURL(l), filename: `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.zip`, }, function () { });
             //         } else {
-            //             file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.${buffer ? 'jpg' : 'txt'}`, 'rewrite': false, 'text': message });
+            //             file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.${buffer ? 'jpg' : 'txt'}`, 'text': message });
             //         }
             //     }
             // }

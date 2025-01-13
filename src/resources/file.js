@@ -1,6 +1,6 @@
-// let infFile, retFile; // 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
+// let infFile, retFile; // 'raw': true,         add TRUE → ADICIONAR NO ARQUIVO
 // infFile = { e, 'action': 'relative', 'functionLocal': false, 'path': './PASTA/arquivo.txt', };
-// infFile = { e, 'action': 'write', 'functionLocal': false, 'path': './PASTA/arquivo.txt', 'rewrite': true, 'text': '1234\n', };
+// infFile = { e, 'action': 'write', 'functionLocal': false, 'path': './PASTA/arquivo.txt', 'add': true, 'text': '1234\n', };
 // infFile = { e, 'action': 'isFolder', 'functionLocal': false, 'path': './PASTA/', };
 // infFile = { e, 'action': 'read', 'functionLocal': false, 'path': './PASTA/arquivo.txt', };
 // infFile = { e, 'action': 'md5', 'functionLocal': false, 'path': './PASTA/arquivo.txt', };
@@ -47,20 +47,20 @@ async function file(inf = {}) {
             }
 
             async function fileWrite(inf = {}) {
-                let { functionLocal, path, rewrite, text, raw, } = inf; let resNew = { 'ret': false, }; if (typeof rewrite !== 'boolean') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'rewrite' TRUE ou FALSE`; }
-                else if (!text || text === '') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'text'`; } else {
+                let { functionLocal, path, add = false, text, raw, } = inf; let resNew = { 'ret': false, };
+                if (!text || text === '') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'text'`; } else {
                     if (raw) { let infRawText = { e, 'obj': text, }; let retRawText = rawText(infRawText); text = retRawText; }
                     else if (typeof text === 'object') { text = JSON.stringify(text); /* STRING / OBJETO / BUFFER */ }; if (path.includes(':')) { if (eng) { path = path.split(':/')[1]; } } else {
                         infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRelative(infFile); path = retFile.res[0];
                     }; if (eng) { // CHROME | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
-                        if (path.includes('%/')) { path = path.split('%/')[1]; } else if (path.includes(':')) { path = path.split(':/')[1]; }; if (rewrite) {
+                        if (path.includes('%/')) { path = path.split('%/')[1]; } else if (path.includes(':')) { path = path.split(':/')[1]; }; if (add) {
                             try { infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRead(infFile); text = `${retFile.res || ''}${text} `; } catch (catchErr) { esLintIgnore = catchErr; }
                         }; let blob = new Blob([text,], { type: 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); let downloadOptions = { // 'overwrite' LIMPA | 'uniquify' ADD (1), (2)... NO FINAL
                             url: URL.createObjectURL(blob), filename: path, saveAs: false, conflictAction: 'overwrite',
                         }; chrome.downloads.download(downloadOptions);
                     } else { // NODEJS | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                         let pathLetter = path.charAt(0); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`); // DENTRO DE UMA PASTA (CRIAR ELA)
-                        if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); }; await _fs.promises.writeFile(path, text, { flag: !rewrite ? 'w' : 'a', });
+                        if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); }; await _fs.promises.writeFile(path, text, { flag: add ? 'a' : 'w', });
                     }; let res = path; resNew['ret'] = true; resNew['msg'] = `FILE[WRITE]: OK`; resNew['res'] = res;
                 }; return resNew;
             }
