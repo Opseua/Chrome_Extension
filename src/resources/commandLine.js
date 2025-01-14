@@ -56,13 +56,11 @@ async function commandLine(inf = {}) {
         }
 
         // SUBSTITUIR VARIÁVEIS DE AMBIENTE
-        if (command.includes('!') || command.includes('%')) {
-            let a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows;
-            command = command.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d);
-        }
+        let a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows;
+        command = command.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d);
 
         await new Promise((resolve) => {
-            let child = _exec(command, async (error, stdout, stderr) => {
+            let child = _exec(command, (error, stdout, stderr) => {
                 if (error) {
                     ret['msg'] = `COMMAND LINE: ERRO | ${error}`;
                     if (stderr) {

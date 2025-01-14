@@ -14,7 +14,7 @@ rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!
 rem ********************************************************************************************************************************************************
 
 rem REGISTRAR GATILHO
-!fileLog! "[COMMANDS] = {ADM-!adm!} [### INICIOU ###] (PARS-!arg1!)"
+!fileLog! "[COMMANDS] = [### INICIOU ###] {ADM-!adm!} (PARS: !arg1!)"
 
 rem ************************** 'ON'      → [OFF] →→→ [ON] (EXCETO Sniffer_Python)
 rem ************************** 'OFF'     → [ON] →→→ [OFF]

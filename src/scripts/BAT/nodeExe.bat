@@ -14,7 +14,7 @@ rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!
 rem ********************************************************************************************************************************************************
 
 rem REGISTRAR GATILHO
-!fileLog! "[NODE EXE] = {ADM-!adm!} [### INICIOU ###] (PARS-!arg1!)"
+!fileLog! "[NODE EXE] = [### INICIOU ###] {ADM-!adm!} (PARS: !arg1!)"
 
 rem NAO SUBIR!!!
 if "!arg1!" == "APAGAR" ( goto COPIA_APAGAR )
