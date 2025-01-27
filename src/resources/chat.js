@@ -64,3 +64,5 @@ async function chat(inf = {}) {
 
 // CHROME | NODEJS
 (eng ? window : global)['chat'] = chat;
+
+

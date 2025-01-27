@@ -43,3 +43,5 @@ async function googleTranslate(inf = {}) {
 
 // CHROME | NODEJS
 (eng ? window : global)['googleTranslate'] = googleTranslate;
+
+

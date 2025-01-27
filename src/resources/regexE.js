@@ -76,3 +76,5 @@ async function regexE(inf = {}) {
 
 // CHROME | NODEJS
 (eng ? window : global)['regexE'] = regexE;
+
+

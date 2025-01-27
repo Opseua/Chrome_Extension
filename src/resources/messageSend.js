@@ -93,3 +93,5 @@ let filaBigFalse = []; let filaBigTrue = []; let sending = false; function envia
 
 // CHROME | NODEJS
 (eng ? window : global)['messageSend'] = messageSend;
+
+

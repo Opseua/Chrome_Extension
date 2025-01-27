@@ -2,7 +2,7 @@
 
 // let infCommandLine, retCommandLine;
 // infCommandLine = {
-//     // e, 'notBackground': false, 'awaitFinish': false,
+//     e, 'notBackground': false, 'awaitFinish': false,
 //     'notAdm': false,
 //     // 'oldBackground': false, 'view': false, 'delay': 0, 'terminalPathAAA': `!letter!:/PASTA 1`,
 //     'withCmd': false,
@@ -87,3 +87,5 @@ async function commandLine(inf = {}) {
 
 // CHROME | NODEJS
 (eng ? window : global)['commandLine'] = commandLine;
+
+

@@ -99,7 +99,6 @@ async function tryRatingSet(inf = {}) {
 // CHROME | NODEJS
 (eng ? window : global)['tryRatingSet'] = tryRatingSet;
 
-
 // let infTryRatingSet, retTryRatingSet;
 // infTryRatingSet = {
 //     'hitApp': `Ratingoftransformedtext`,

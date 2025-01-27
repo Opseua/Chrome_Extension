@@ -78,3 +78,5 @@ async function devFun(inf = {}) {
 
 // CHROME | NODEJS
 (eng ? window : global)['devFun'] = devFun;
+
+

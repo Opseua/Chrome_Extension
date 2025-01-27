@@ -9,12 +9,15 @@ async function getPath(inf = {}) {
     let { devChildren, isFunction, } = inf;
 
     let nd = 'NAO_DEFINIDO', funLetter = `D`, root = eng ? 'chrome-extension' : 'ARQUIVOS/PROJETOS', conf = 'src/config.json', confOk, master = 'src/master.json', functions = eng ? chrome.runtime.id : nd;
-    let project = eng ? 'Downloads/Google Chrome%' : nd, fileOk = nd, line; devChildren = devChildren || nd; let paths = [], stack = inf.e.stack, res;
+    let project = eng ? 'Downloads/Google Chrome%' : nd, fileOk = nd, line; devChildren = devChildren || nd; let paths, pathsNew = false, pathsKeep = [], stack = inf.e.stack, res;
     try {
-        for (let [index, value,] of stack.split('\n').entries()) { if (value.includes(root) && !value.includes('node_modules')) { paths.push(value); } };
+        for (let [index, value,] of stack.split('\n').entries()) { if (value.includes(root) && !value.includes('node_modules')) { pathsKeep.push(value); } };
 
-        // ARQUIVO DA PILHA → [PRIMEIRO]
-        paths = paths[0];
+        // ARQUIVO DA PILHA → [PRIMEIRO] {functions}
+        paths = pathsKeep[0];
+
+        // ARQUIVO DA PILHA → [ÚLTIMO] {project}
+        if (!eng) { try { pathsNew = pathsKeep[pathsKeep.length - 1].replace(/\\/g, '/').split(`${root}/`)[1].split('/')[0]; } catch (catchErr) { esLintIgnore = catchErr; pathsNew = false; }; }
 
         if (eng) {
             // CHROME
@@ -54,7 +57,7 @@ async function getPath(inf = {}) {
                 res['root'] = root;
                 res['confOk'] = confOk;
             } else {
-                res = { 'conf': gW.conf, 'letter': gW.letter, 'root': gW.root, 'functions': gW.functions, 'project': funProject, };
+                res = { 'conf': gW.conf, 'letter': gW.letter, 'root': gW.root, 'functions': gW.functions, 'project': pathsNew || funProject, };
             }
         }
         res['file'] = fileOk; res['line'] = Number(line);
@@ -82,3 +85,5 @@ async function getPath(inf = {}) {
 
 // CHROME | NODEJS
 (eng ? window : global)['getPath'] = getPath;
+
+

@@ -101,3 +101,5 @@ async function openTab(inf = {}) { // NAO USAR
 
 // CHROME | NODEJS
 (eng ? window : global)['tabSearch'] = tabSearch;
+
+

@@ -190,3 +190,5 @@ async function file(inf = {}) {
 
 // CHROME | NODEJS
 (eng ? window : global)['file'] = file;
+
+

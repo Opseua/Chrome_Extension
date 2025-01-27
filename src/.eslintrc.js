@@ -43,7 +43,7 @@ let arrGlobal = [
 
   // [WebSocket]
   // → funções globais
-  'html', 'messageAction', 'roomParams',
+  'html', 'logsDelOld', 'messageAction', 'performanceDev', 'roomParams',
 
   // [Sniffer_Python]
   // → funções globais

@@ -33,8 +33,8 @@ for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\master.json") do (
 
 rem DEVS QUE EXECUTAM O PROJETO E MODO
 set "projects=#WebSocket_server#"
-if not "!devMaster!" == "!devMaster:AWS=!" ( set "atalhoModo=ON_VIEW" & set "projects=!projects! #Chat_Python_server# #URA_Reversa_serverJsf#" )
-if not "!devMaster!" == "!devMaster:OPSEUA=!" ( set "atalhoModo=ON_HIDE" & set "projects=!projects! #Chat_Python_server# #Sniffer_Python_server#" )
+if not "!devMaster!" == "!devMaster:AWS=!" ( set "atalhoModo=ON_VIEW" & set "projects=!projects! #URA_Reversa_serverJsf#" )
+if not "!devMaster!" == "!devMaster:OPSEUA=!" ( set "atalhoModo=ON_HIDE" & set "projects=!projects! #Sniffer_Python_server#" )
 if not "!devMaster!" == "!devMaster:ESTRELAR=!" ( set "atalhoModo=ON_VIEW" & set "projects=!projects! #WebScraper_serverC6# #WebScraper_serverC6_New2# #WebScraper_serverC6_New3# #WebScraper_serverC6_New4# #WebScraper_serverC6_New5#" )
 
 rem Chat_Python (EXECUTAVEL DIFERENTE)
@@ -224,7 +224,8 @@ if not "!devMaster!" == "!devMaster:OPSEUA=!" (
 		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "explorer" & set "fNSS=!fileNircmdSetSize!"
 		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_log\z_MES_!DATE:~3,2!_DIA_!DATE:~0,2!.txt -monitor"
 		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!fileWindows!\PORTABLE_System_Informer\System Informer.lnk""
-		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fNSS! "This PC" "585 480 695 500" & !fNSS! "System Informer" "880 50 600 400" & !fNSS! "- Notepad++" "-7 545 1050 447""	
+		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fNSS! "This PC" "585 480 695 500" & !fNSS! "System Informer" "880 50 600 400" & !fNSS! "- Notepad++" "-7 545 1050 447""
+		ping -n 3 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!nircmd! win normal ititle "- Notepad++""	
 	)
 )
 

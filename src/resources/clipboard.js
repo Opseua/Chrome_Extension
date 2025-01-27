@@ -41,3 +41,5 @@ async function clipboard(inf = {}) {
 
 // CHROME | NODEJS
 (eng ? window : global)['clipboard'] = clipboard;
+
+

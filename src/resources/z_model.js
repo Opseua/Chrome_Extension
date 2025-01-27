@@ -25,3 +25,5 @@ async function model(inf = {}) {
 
 // CHROME | NODEJS
 (eng ? window : global)['model'] = model;
+
+
