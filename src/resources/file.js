@@ -93,7 +93,7 @@ async function file(inf = {}) {
                             if (s.isDirectory()) { let as = await _fs.promises.readdir(txt); for (let a of as) { let c = _path.join(txt, a); await delP(c); }; await _fs.promises.rmdir(txt); }
                             else { await _fs.promises.unlink(txt); };
                         } catch (catchErr) { throw new Error(catchErr); };
-                    }; await delP(path); resNew['msg'] = `FILE [DEL]: OK`; return resNew;
+                    }; await delP(path); resNew['ret'] = true; resNew['msg'] = `FILE [DEL]: OK`; return resNew;
                 } catch (catchErr) { esLintIgnore = catchErr; delete resNew['res']; resNew['msg'] = `FILE [DEL]: ERRO | AO DELETAR '${path}'`; }; return resNew;
             }
 
@@ -147,10 +147,10 @@ async function file(inf = {}) {
             async function fileIsFolder(inf = {}) {
                 let { functionLocal, path, listRead, max = 200, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { infFile = { 'path': path, 'functionLocal': functionLocal, }; retFile = await fileRelative(infFile); path = retFile.res[0]; };
-                    let res = _fs.statSync(path).isDirectory(); resNew['ret'] = true; if (!listRead) { resNew['msg'] = `FILE [IS FOLDER]: OK`; resNew['res'] = res; } else if (res) {
+                    let res = _fs.statSync(path).isDirectory(); resNew['ret'] = true; if (!listRead) { resNew['ret'] = true; resNew['msg'] = `FILE [IS FOLDER]: OK`; resNew['res'] = res; } else if (res) {
                         // USADO SOMENTE NO 'ARQUIVOS WEB' DO SEVIDOR | É PASTA [LISTAR] | É ARQUIVO [LER]
                         infFile = { e, 'action': 'list', 'functionLocal': false, 'path': path, 'max': max, }; retFile = await fileList(infFile); resNew = retFile;
-                    } else { resNew['msg'] = `FILE [IS FOLDER]: OK`; infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRead(infFile); resNew = retFile; }
+                    } else { resNew['ret'] = true; resNew['msg'] = `FILE [IS FOLDER]: OK`; infFile = { 'path': path, 'functionLocal': functionLocal && !eng, }; retFile = await fileRead(infFile); resNew = retFile; }
                 } catch (catchErr) { esLintIgnore = catchErr; delete resNew['res']; resNew['msg'] = `FILE [IS FOLDER]: ERRO | AO CHECAR SE É PASTA '${path}'`; }; return resNew;
             }
 

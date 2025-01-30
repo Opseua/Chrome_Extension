@@ -25,7 +25,7 @@ async function api(inf = {}) {
     try {
         let { method = '', url = false, headers, body = false, max = 20, bodyObject = null, reqE = 0, } = inf;
 
-        // NÃO SUBIR AS LINHAS!!! (PARA SEREM VISUALIZADAS NO GOOGLE APP SCRIPT)
+        // ❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌ NÃO SUBIR AS LINHAS!!! (PARA SEREM VISUALIZADAS NO GOOGLE APP SCRIPT) ❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
         reqE = !['GET', 'POST', 'PUT',].includes(method) ? 1 : !url ? 2 : (['POST', 'PUT',].includes(method) && !body) ? 3 : 0; function cT(t) { clearTimeout(t); };
         // CHECAR SE TEM ERRO
         if (reqE > 0) { ret['msg'] = `API: ERRO | ${reqE === 1 ? `MÉTODOS ACEITOS 'GET', 'POST', 'PUT'` : `INFORMAR O ${reqE === 2 ? `'url'` : `'body'`}`}`; return ret; };
@@ -36,44 +36,33 @@ async function api(inf = {}) {
 
         // REQ: BODY
         if (!['POST', 'PUT',].includes(method)) { body = false; } else {
-            let bodyT = !(typeof body === 'object') ? -1 : Object.keys(body).length;
-            if (!JSON.stringify(reqOpt.headers).toLowerCase().includes('x-www-form-urlencoded')) {
-                // → json/object | text
-                body = bodyT === -1 ? body : JSON.stringify(body);
-            } else {
-                // → x-www-form-urlencoded
+            let bodyT = !(typeof body === 'object') ? -1 : Object.keys(body).length;  // → json/object/text | x-www-form-urlencoded
+            if (!JSON.stringify(reqOpt.headers).toLowerCase().includes('x-www-form-urlencoded')) { body = bodyT === -1 ? body : JSON.stringify(body); } else {
                 if (!(bodyT > 0)) { reqE = 2; } else { body = Object.entries(body).map(([k, v,]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&'); };
             };
-        }
-        // CHECAR SE TEM ERRO
-        if (reqE > 0) { ret['msg'] = `API: ERRO | 'body' VAZIO/NÃO É OBJETO [x-www-form-urlencoded]`; return ret; }
+        } if (reqE > 0) { ret['msg'] = `API: ERRO | 'body' VAZIO/NÃO É OBJETO [x-www-form-urlencoded]`; return ret; }; // CHECAR SE TEM ERRO
 
         // REQ: PREPARAR (GOOGLE | CHROME/NODEJS)
-        if (type) {
-            reqOpt['muteHttpExceptions'] = true; reqOpt['validateHttpsCertificates'] = true; if (body) { reqOpt['payload'] = body; };
-        } else {
+        if (type) { reqOpt['muteHttpExceptions'] = true; reqOpt['validateHttpsCertificates'] = true; if (body) { reqOpt['payload'] = body; }; } else {
             max = max * 1000; let controller = new AbortController(); let signal = controller.signal; reqOpt['signal'] = signal;
             if (body) { reqOpt['body'] = body; let enc = new TextEncoder(); let len = enc.encode(reqOpt.body).length; reqOpt.headers['Content-Length'] = len; };
             timeoutId = setTimeout(() => { reqE = 3; controller.abort(); }, max); // TIMEOUT DE TEMPO MÁXIMO
         }
 
-        // → TENTAR: PROCESSAR REQUISIÇÃO (GOOGLE | CHROME/NODEJS)
-        try { if (type) { req = UrlFetchApp.fetch(url, reqOpt); } else { req = await fetch(url, reqOpt); }; } catch (c) { reqE = 3; ret['msg'] = c; };
-        // LIMPAR TIMEOUT (CHROME/NODEJS) | CHECAR SE TEM ERRO
+        try { // → TENTAR: PROCESSAR REQUISIÇÃO (GOOGLE | CHROME/NODEJS)
+            if (type) { req = UrlFetchApp.fetch(url, reqOpt); } else {
+                req = await fetch(url, reqOpt);
+            };
+        } catch (c) { reqE = 3; ret['msg'] = c; };  // LIMPAR TIMEOUT (CHROME/NODEJS) | CHECAR SE TEM ERRO
         if (!type) { cT(timeoutId); }; if (reqE > 0 && String(ret.msg).includes('AbortError')) { ret['msg'] = `API: ERRO | TEMPO ATINGIDO (NÃO NA FUNÇÃO)`; return ret; }
         else if (reqE > 0) { ret['msg'] = `API: ERRO | AO PROCESSAR REQUISIÇÃO (NÃO NA FUNÇÃO)\n\n${ret.msg}`; return ret; };
 
-        // → TENTAR: PROCESSAR BODY/HEADERS/CODE (GOOGLE | CHROME/NODEJS)
-        try {
-            if (type) {
-                resB = req.getContentText(); Object.entries(req.getAllHeaders()).forEach(([k, v,]) => { resH[String(k).toLowerCase()] = String(v).toLowerCase(); });
-            } else {
+        try { // → TENTAR: PROCESSAR BODY/HEADERS/CODE (GOOGLE | CHROME/NODEJS)
+            if (type) { resB = req.getContentText(); Object.entries(req.getAllHeaders()).forEach(([k, v,]) => { resH[String(k).toLowerCase()] = String(v).toLowerCase(); }); } else {
                 resB = await req.text(); req.headers.forEach((v, k) => { resH[String(k).toLowerCase()] = String(v).toLowerCase(); });
-            };
-            resC = req.status || req.getResponseCode();
+            }; resC = req.status || req.getResponseCode();
         } catch (c) { reqE = 4; ret['msg'] = c; };
-        // CHECAR SE TEM ERRO
-        if (reqE > 0) { ret['msg'] = `API: ERRO | AO PROCESSAR HEADERS/BODY (NÃO NA FUNÇÃO)\n\n${ret.msg}`; return ret; }
+        if (reqE > 0) { ret['msg'] = `API: ERRO | AO PROCESSAR HEADERS/BODY (NÃO NA FUNÇÃO)\n\n${ret.msg}`; return ret; }; // CHECAR SE TEM ERRO
 
         // → TENTAR: FAZER O PARSE DO BODY (SE NECESSÁRIO)
         if (bodyObject && resH['content-type']?.includes('application/json')) { try { let t = JSON.parse(resB); resB = t; } catch (c) { type = c; }; }

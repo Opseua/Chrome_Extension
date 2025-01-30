@@ -20,7 +20,7 @@ async function devFun(inf = {}) {
                 ret['msg'] = `DEV FUN: ERRO | NÃO ACHOU O OBJETO 'ws'`;
             } else {
                 // ENVIAR COMANDO PARA O DESTINO CERTO
-                retMessageSend = await messageSend({ 'destination': destination, 'messageId': true, 'message': message, 'resWs': retListenerAcionar, 'secondsAwait': 0, });
+                retMessageSend = await messageSend({ 'destination': destination, 'message': message, 'resWs': retListenerAcionar, 'secondsAwait': 0, });
                 if (retMessageSend.ret && !data.retInf) {
                     // RESPOSTA NECESSÁRIA [NÃO]
                     ret['ret'] = true;

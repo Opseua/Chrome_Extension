@@ -23,7 +23,7 @@ async function client(inf = {}) {
 
                 // LISTENER PARA ENVIAR MENSAGEM DE OUTROS ARQUIVOS (FORA DO WebSocket!!!)
                 listenerMonitorar(`messageSendOrigin_${hostRoom}`, async (nomeList, inf) => {
-                    let { destination, message, secondsAwait, } = inf; let retMessageSend = await messageSend({ destination, 'messageId': true, message, 'resWs': ws, secondsAwait, }); return retMessageSend;
+                    let { destination, message, secondsAwait, } = inf; let retMessageSend = await messageSend({ destination, message, 'resWs': ws, secondsAwait, }); return retMessageSend;
                 });
             };
 
