@@ -15,13 +15,6 @@ chrome.browserAction.onClicked.addListener(async function (...inf) {
 
 // → BACKUP
 
-// chrome.tabs.onUpdated.addListener(function (...inf) {
-//     [, tabInf, tab] = inf;
-//     if (tab.url == 'https://rating.ewoq.google.com/u/0/home' && tabInf.status == 'complete') {
-//         console.log(`EVENTO: URL aberto 1\n`, tab)
-//     }
-// });
-
 // EXCLUIR DOWNLOAD DA LISTA SE FOR DO BOT E TIVER '[KEEP]' NO TITULO DO ARQUIVO
 // chrome.downloads.onChanged.addListener(async function (...inf) {
 //     let { id } = inf; if (inf[0].state && inf[0].state.current === "complete") {
@@ -60,7 +53,46 @@ chrome.browserAction.onClicked.addListener(async function (...inf) {
 //   console.log(`EVENTO: mensagem recebida\n`, inf)
 // });
 
+// chrome.tabs.onUpdated.addListener(function (...inf) {
+//     let { active, id, index, pinned, selected, status, title, url, } = inf[2];
+//     if (url.includes('www.google.com') && status === 'complete') {
+//         console.log(`EVENTO: URL aberto e 100% carregado na aba\n`, id);
+//     }
+// });
+
+// chrome.webRequest.onBeforeRequest.addListener(
+//     async function (...inf) {
+//         let { requestId, tabId, url, method, } = inf[0];
+//         if (url.includes('.com/api/survey')) { // .com/api/announcement | .com/api/survey
+//             console.log(`EVENTO: requisição iniciada\n`, requestId, tabId, method, url);
+//         }
+//     },
+//     { urls: ['<all_urls>',], }
+// );
+
+chrome.webRequest.onCompleted.addListener(
+    async function (...inf) {
+        let { requestId, tabId, url, method, } = inf[0];
+        if (url.includes('.com/api/survey') || url.includes('.com/api/announcement')) { // .com/api/announcement | .com/api/survey
+            console.log(`EVENTO: requisição concluída\n`, requestId, tabId, method, url);
+
+            // commandLine({ 'notBackground': true, 'command': `!fileWindows!/PORTABLE_Clavier/Clavier.exe /sendkeys "${com}"`, });
+
+            let retChromeActions = await chromeActions({ 'action': 'getBody', 'target': `*.com/app/announcemen*`, }); console.log(retChromeActions);
+
+            // let retFile = await file({ 'action': 'write', 'path': 'arquivoNovo.html', 'text': retChromeActions.res, }); console.log(retFile);
+
+            let des = `127.0.0.1:8889/?roo=OPSEUA-NODEJS-WEBSOCKET-SERVER`;
+            let msgLis = { 'fun': [{ 'securityPass': gW.securityPass, 'retInf': true, 'name': 'file', 'par': { 'action': 'write', 'path': 'arquivoNovo.html', 'text': 'CASA', }, },], };
+            let retMessageSend = await messageSend({ 'destination': des, 'message': msgLis, }); console.log(retMessageSend);
+
+        }
+    },
+    { urls: ['<all_urls>',], }
+);
+
 // NAO POR NADA AQUI!
 
 // ***************** USAR O 'server.js' *****************
+
 

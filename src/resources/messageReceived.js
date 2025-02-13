@@ -7,21 +7,14 @@ setInterval(() => { let c = new Date().getTime(); for (let mesId in mensagensPar
 async function messageReceived(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { host, room, resWs, wsClients, messageId, partesRestantes, message, buffer, origin, destination, } = inf;
+        let { host, room, resWs, wsClients, messageId, partesRestantes = 0, message, buffer = false, origin, destination, } = inf;
 
         messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId;
         partesRestantes = partesRestantes > -99 ? partesRestantes : 0; message = typeof message === 'object' ? JSON.stringify(message) : message; buffer = buffer ? buffer : false;
         origin = origin ? origin.replace('ws://', '') : `${host}/?roo=${room}`; destination = destination ? destination.replace('ws://', '') : 'x';
 
-        // // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
-        // if (Object.keys(mensagensPartesRecebida).length === 0) {
-        //     let mensagensPartesRecebida = {}; let minClearPartsMessages = gW.minClearPartsMessages; setInterval(() => {
-        //         let c = new Date().getTime(); for (let messageId in mensagensPartesRecebida) { if ((c - Number(messageId.split('_')[1])) > minClearPartsMessages * 60000) { delete mensagensPartesRecebida[messageId]; } };
-        //     }, minClearPartsMessages * 60000);
-        // }
-
         if (wsClients) {
-            // ### RECEBIDO NO SERVER
+            // ######################################################################## RECEBIDO NO SERVIDOR ########################################################################
             let wsClientsToSend = [], erroType = 0; let wsClientsArrRoom = []; for (let room in wsClients.rooms) {
                 if (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': room, }) && !JSON.stringify(wsClientsArrRoom).includes(room.split('/')[1])) {
                     wsClientsArrRoom.push(room); // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
@@ -49,12 +42,12 @@ async function messageReceived(inf = {}) {
                         'buffer': buffer,
                         'partesRestantes': partesRestantes,
                         'message': message,
-                    }; // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ENVIANDO MENSAGEM: [${index + 1}/${wsClientsToSend.length}] ${messageId} → ${messageDestination.destination}` });
+                    }; // logConsole({ 'e': e, 'ee': ee, 'msg': `ENVIANDO MENSAGEM: [${index + 1}/${wsClientsToSend.length}] ${messageId} → ${messageDestination.destination}` });
                     value.send(JSON.stringify(messageDestination)); await new Promise(resolve => { setTimeout(resolve, 10); });
                 }
             }
         } else {
-            // ### RECEBIDO NO CLIENT
+            // ######################################################################## RECEBIDO NO CLIENTE ########################################################################
             if (!mensagensPartesRecebida[messageId]) { mensagensPartesRecebida[messageId] = { partes: [], }; }; mensagensPartesRecebida[messageId].partes.push(message); if (partesRestantes === 0) {
                 message = mensagensPartesRecebida[messageId].partes.join(''); message = buffer ? eng ? atob(message) : Buffer.from(message, 'base64') : message; let listName = 'x';
                 if (messageId.includes(`SERVER`) || messageId.includes(`RET-OK`)) {
@@ -66,20 +59,20 @@ async function messageReceived(inf = {}) {
                 }
 
                 // ACIONAR LISTENER
-                // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ACIONANDO LISTENER: '${listName}` });
-                listenerAcionar(`${listName}`, { 'origin': origin, 'messageId': messageId, 'message': message, 'resWs': resWs, 'host': host, 'room': room, });
+                // logConsole({ 'e': e, 'ee': ee, 'msg': `ACIONANDO LISTENER: '${listName}` });
+                listenerAcionar(listName, { 'origin': origin, 'messageId': messageId, 'message': message, 'resWs': resWs, 'host': host, 'room': room, });
             }
 
             // ---------------- TESTES
             // if (!messageId.includes(`SERVER`)) {
-            //     logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${messageId} | [${partesRestantes}] | ← TOTAL ${mensagensPartesRecebida[messageId].partes.join('').length}` });
-            //     file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_RECEBENDO_[${partesRestantes}]_.txt`, 'text': message });
+            //     logConsole({ 'e': e, 'ee': ee, 'msg': `${messageId} | [${partesRestantes}] | ← TOTAL ${mensagensPartesRecebida[messageId].partes.join('').length}` });
+            //     file({ 'e': e, 'action': 'write', 'path': `D:/z_CLIENTE_RECEBENDO_[${partesRestantes}]_.txt`, 'text': message });
             //     if (partesRestantes === 0) {
             //         if (buffer && eng) {
             //             let b = new Array(message.length); for (let i = 0; i < message.length; i++) { b[i] = message.charCodeAt(i); }; let l = new Blob([new Uint8Array(b)], { type: 'application/zip' });
             //             chrome.downloads.download({ url: URL.createObjectURL(l), filename: `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.zip`, }, function () { });
             //         } else {
-            //             file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.${buffer ? 'jpg' : 'txt'}`, 'text': message });
+            //             file({ 'e': e, 'action': 'write', 'path': `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.${buffer ? 'jpg' : 'txt'}`, 'text': message });
             //         }
             //     }
             // }

@@ -8,34 +8,24 @@ async function devFun(inf = {}) {
             // ENCAMINHAR PARA O DEVICE CERTO
             let retMessageSend, retInf = typeof data.retInf === 'boolean' ? data.retInf : data.retInf ? data.retInf : true;
             let destination = gW.devSend;
-            let locWeb = destination.includes('127.0.0.1') ? '[LOC]' : '[WEB]';
             data = { 'securityPass': gW.securityPass, 'retInf': retInf, 'name': data.name, 'par': data.par, };
             data.par['enc'] = true; data.par['e'] = inf.e;
             // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO
             delete data.par.retInf;
             let message = { 'fun': [data,], };
-            // PEGAR 'ws'
-            let retListenerAcionar = await listenerAcionar(`getWs_${locWeb}`, { 'a': 'a', 'b': 'b', });
-            if (!retListenerAcionar) {
-                ret['msg'] = `DEV FUN: ERRO | NÃO ACHOU O OBJETO 'ws'`;
-            } else {
-                // ENVIAR COMANDO PARA O DESTINO CERTO
-                retMessageSend = await messageSend({ 'destination': destination, 'message': message, 'resWs': retListenerAcionar, 'secondsAwait': 0, });
-                if (retMessageSend.ret && !data.retInf) {
-                    // RESPOSTA NECESSÁRIA [NÃO]
-                    ret['ret'] = true;
-                    ret['msg'] = `[ENC] ${data.name}`;
-                } else if (!retMessageSend.ret && data.retInf) {
-                    // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [NÃO]
-                    ret = retMessageSend;
-                } else if (retMessageSend.ret && data.retInf) {
-                    // RESPOSTA NECESSÁRIA [SIM] | RECEBIDO [SIM]
-                    if (!(retMessageSend.ret === true || retMessageSend.ret === false)) {
-                        ret['msg'] = `DEV FUN: ERRO | RESPOSTA DO WEBSOCKET NÃO É OBJETO`;
-                    } else {
-                        ret = JSON.parse(JSON.stringify(retMessageSend).replace('"msg":"', '"msg":"[ENC] '));
-                    }
-                }
+
+            // ENVIAR COMANDO PARA O DESTINO CERTO
+            retMessageSend = await messageSend({ 'destination': destination, 'message': message, });
+            if (!retMessageSend.ret) {
+                // MENSAGEM ENVIADA [NÃO]
+                ret = retMessageSend;
+            } else if (!data.retInf) {
+                // MENSAGEM ENVIADA [SIM] | RESPOSTA NECESSÁRIA [NÃO]
+                ret['ret'] = true;
+                ret['msg'] = `[ENC] ${data.name}`;
+            } else if (data.retInf) {
+                // MENSAGEM ENVIADA [SIM] | RESPOSTA NECESSÁRIA [SIM]
+                ret = JSON.parse(JSON.stringify(retMessageSend).replace('"msg":"', '"msg":"[ENC] '));
             }
         } else {
             // RECEBIDO DO WEBSOCKET
@@ -60,11 +50,11 @@ async function devFun(inf = {}) {
 
                 if (retInf) {
                     // RESPOSTA NECESSÁRIA [SIM]
-                    messageSend({ 'destination': destination, 'messageId': messageId, 'message': ret, 'resWs': resWs, 'secondsAwait': 0, });
+                    messageSend({ 'destination': destination, 'messageId': messageId, 'message': ret, 'resWs': resWs, });
                 }
 
                 if (errAlert) {
-                    let text = `${ret.msg}\n\n${JSON.stringify(data)}`; logConsole({ e, ee, 'write': true, 'msg': `${text}`, });
+                    let text = `${ret.msg}\n\n${JSON.stringify(data)}`; logConsole({ e, ee, 'msg': `${text}`, });
                 }
 
             }

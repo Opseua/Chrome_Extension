@@ -23,7 +23,7 @@ let e = import.meta.url, ee = e;
 async function api(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { method = '', url = false, headers, body = false, max = 20, bodyObject = null, reqE = 0, } = inf;
+        let { method = '', url = false, headers = {}, body = false, max = 20, bodyObject = null, reqE = 0, } = inf;
 
         // ❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌ NÃO SUBIR AS LINHAS!!! (PARA SEREM VISUALIZADAS NO GOOGLE APP SCRIPT) ❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
         reqE = !['GET', 'POST', 'PUT',].includes(method) ? 1 : !url ? 2 : (['POST', 'PUT',].includes(method) && !body) ? 3 : 0; function cT(t) { clearTimeout(t); };
@@ -32,7 +32,7 @@ async function api(inf = {}) {
 
         // REQ: HEADERS
         let req, resC, resH = {}, resB; let reqOpt = { method, 'redirect': 'follow', 'keepalive': true, 'rejectUnauthorized': false, }; let timeoutId;
-        reqOpt['headers'] = {}; if (headers && Object.keys(headers).length > 0) { reqOpt.headers = headers; }; let type = typeof UrlFetchApp !== 'undefined';
+        reqOpt['headers'] = {}; if (Object.keys(headers).length > 0) { reqOpt.headers = headers; }; let type = typeof UrlFetchApp !== 'undefined';
 
         // REQ: BODY
         if (!['POST', 'PUT',].includes(method)) { body = false; } else {

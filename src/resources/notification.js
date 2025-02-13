@@ -12,13 +12,13 @@ let e = import.meta.url, ee = e;
 async function notification(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacy = false, } = inf;
+        let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = true, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacy = false, } = inf;
 
         // [1] → NOTIFICAÇÃO NÃO SOLICITADA | [2] → NOTIFICAÇÃO CHAMADA ret {true} | [msg] NOTIFICAÇÃO CHAMADA ret {false}
         let { devMy, securityPass, devSever, } = gW; let retDAF = {}; let rets = []; let promises = [];
 
         // NTFY
-        if (inf.ntfy) {
+        if (ntfy) {
             promises.push(
                 (async () => {
                     let retA1 = await api({ e, 'method': 'POST', 'url': `https://ntfy.sh/${devMy}?title=${encodeURIComponent(title)}`, 'body': text, 'max': 10, 'bodyObject': true, 'ignoreErr': true, });
@@ -42,7 +42,7 @@ async function notification(inf = {}) {
             // →→→ NO NODEJS
             promises.push(
                 (async () => { // DELETAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
-                    let infTemp = inf; delete infTemp['ntfy']; retDAF = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': infTemp, }, });
+                    let infTemp = inf; infTemp['ntfy'] = false; retDAF = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': infTemp, }, });
                     rets.push({ 'ret': retDAF.ret, 'msg': `[CHROME {DEV FUN}: ${retDAF.ret ? 'OK' : `ERRO | ${retDAF.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}]`, });
                 })()
             );
@@ -73,7 +73,7 @@ async function notification(inf = {}) {
         await Promise.all(promises);
 
         ret['ret'] = rets.length > 0 && rets.every(item => item.ret === true);
-        if (!inf.ntfy && chromeNot) {
+        if (!ntfy && chromeNot) {
             ret['msg'] = `NOTIFICATION: ERRO [VAZIO] = NENHUM DISPOSITIVO`;
         } else {
             ret['msg'] = `${(!eng && !legacy && !chromeNot) ? '[ENC] ' : ''}NOTIFICATION: [${rets.map(item => item.ret ? 'OK' : 'ERRO').join('|')}] = ${rets.map(item => item.msg).join('')}`;

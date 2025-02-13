@@ -37,6 +37,9 @@ async function command1(inf = {}) {
         'title': `Complete Judge`, 'text': retListenerAcionar.msg,
       };
       await notification(infNotification);
+    } else if (/^(?:\D*\d){0,4}\D*$/.test(infTryRatingComplete)) {
+      let p = infTryRatingComplete.replace(/[, \t]/g, '').split('').reduce((t, n) => { if (n === '1') { return t + 1; } else if (n === '2') { return t + 0; } else if (n === '3') { return t - 1; }; return t; }, 1);
+      notification({ 'title': `SRT: AVALIAÇÃO`, 'text': (p === 4 ? '[4/5]' : p < 1 ? 1 : p).toString(), 'duration': 3, 'icon': `icon_3.png`, });
     }
 
     ret['msg'] = `COMMAND 1: OK`;

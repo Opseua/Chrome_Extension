@@ -1,6 +1,8 @@
+// 'ignoreAlert': true,
 // try {
 //     // ***
 //     // CÓDIGO AQUI
+//     aaa;
 //     // ***
 // } catch (catchErr) {
 //     let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
@@ -10,7 +12,7 @@
 async function regexE(inf = {}) {
     let ret = { 'ret': false, };
     try {
-        let { e, concat, } = inf;
+        let { e, ignoreAlert = false, concat = `\n\n#######\n\n`, } = inf;
 
         // IMPORTAR BIBLIOTECA [NODEJS]
         if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path', }); };
@@ -22,13 +24,14 @@ async function regexE(inf = {}) {
         let retGetPath = await getPath({ 'e': e, }); let { root, project, line, } = retGetPath.res; let fileOk = retGetPath.res.file;
 
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
-        let projectFile = `{${project}}\n→ ${fileOk}`;
         let errorOk = {
             'cng': cng, 'cngName': cng === 1 ? 'CHROME' : cng === 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': gW.devMaster,
-            'file': fileOk, 'projectFile': projectFile, 'line': line, 'inf': inf.inf, 'e': e.stack,
+            'projectFile': `🟢 ${project}`, 'file': `🔵 ${fileOk}`, 'line': Number(line), 'inf': inf.inf ? inf.inf.toString() : '___VAZIO___', 'e': e.stack,
         };
 
-        console.error(`\n------------------------------------------------\n\n### ERRO ###\n→ ${projectFile} [${errorOk.line}]\n\n${errorOk.e}\n\n------------------------------------------------\n`);
+        if (!ignoreAlert) {
+            console.log('\x1b[31m%s\x1b[0m', `\n-----------------------------------\n\n### ERRO ###\n${errorOk.projectFile}\n${errorOk.file} [${errorOk.line}]\n\n${errorOk.e}\n\n-----------------------------------\n`);
+        }
 
         // LOG DE ERROS [NODEJS]
         if (errorOk.cng === 2) {
@@ -43,32 +46,35 @@ async function regexE(inf = {}) {
             path = `${letter}:/${root}/${project}/log/JavaScript/${mon}/${day}/${hou}_ERR_${path.replace(/[<>:"\\|?*]/g, '').replace('.js', '')}.txt`;
 
             if (typeof errorOk === 'object') {
-                let raw = ''; let obj = errorOk; concat = concat || `\n\n#######\n\n`;
-                for (let chave in obj) { if (typeof obj[chave] === 'object') { for (let subChave in obj[chave]) { raw += obj[chave][subChave] + concat; } } else { raw += obj[chave] + concat; } };
+                let raw = ''; let obj = errorOk; for (let k in obj) { if (typeof obj[k] === 'object') { for (let subChave in obj[k]) { raw += obj[k][subChave] + concat; } } else { raw += obj[k] + concat; } };
                 text = `${hou}\n${raw}\n\n${text}`;
             }; await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); await _fs.promises.writeFile(path, text, { flag: 'a', });
         }
 
-        // ENVIAR NOTIFICAÇÃO COM O ERRO
-        let retNotification = await notification({
-            'ignoreErr': true,
-            'legacy': true,
-            'keepOld': true,
-            'ntfy': true,
-            'chromeNot': false,
-            'title': `### ERRO (${errorOk.devMaster}) [${errorOk.cngName}]`,
-            'text': `→ ${errorOk.projectFile} [${errorOk.line}]\n\n${errorOk.e}`,
-        });
+        if (!ignoreAlert) {
+            // ENVIAR NOTIFICAÇÃO COM O ERRO
+            let retNotification = await notification({
+                'ignoreErr': true,
+                'legacy': true,
+                'keepOld': true,
+                'ntfy': true,
+                'chromeNot': false,
+                'title': `### ERRO (${errorOk.devMaster}) [${errorOk.cngName}]`,
+                'text': `${errorOk.projectFile}\n${errorOk.file} [${errorOk.line}]\n\n${errorOk.e}`,
+            });
 
-        if (!retNotification.ret) {
-            console.error(`------------------------------------------------\n\n### ERRO REGEXe (NOTIFICATION [LEGACY]) ###\n\n${retNotification.msg}\n\n------------------------------------------------`);
+            if (!retNotification.ret) {
+                console.log('\x1b[31m%s\x1b[0m', `-----------------------------------\n\n### ERRO REGEXe (NOTIFICATION [LEGACY]) ###\n\n${retNotification.msg}\n\n-----------------------------------`);
+            }
         }
 
-        ret['res'] = { 'file': errorOk.file, 'line': errorOk.line, 'projectFile': errorOk.projectFile, 'e': errorOk.e, };
+        ret['res'] = { 'projectFile': errorOk.projectFile, 'file': errorOk.file, 'line': errorOk.line, 'e': errorOk.e, };
         ret['msg'] = `### ERRO ###\n\n→ ${errorOk.projectFile} [${errorOk.line}]\n${errorOk.e}`;
 
     } catch (catchErr) {
-        console.error(`\n------------------------------------------------\n\n### ERRO REGEXe ###\n\n${catchErr.stack}\n\n------------------------------------------------`);
+        if (!inf.ignoreAlert) {
+            console.log('\x1b[31m%s\x1b[0m', `\n-----------------------------------\n\n### ERRO REGEXe ###\n\n${catchErr.stack}\n\n-----------------------------------`);
+        }
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

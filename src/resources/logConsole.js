@@ -1,11 +1,11 @@
 // // 'write' → 'true' ESCREVE NO 'PROJECT/log/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
-// logConsole({ e, ee, 'write': true, 'msg': `Mensagem do console`, });
+// logConsole({ e, ee, 'msg': `Mensagem do console`, });
 
 let e = import.meta.url;
 async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false, }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
     try {
-        let { msg, write, } = inf;
+        let { msg = 'x', write = true, } = inf;
 
         function colorConsole(inf = {}) {
             let { text, } = inf;

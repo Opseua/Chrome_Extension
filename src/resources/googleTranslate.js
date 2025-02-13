@@ -13,9 +13,9 @@ async function googleTranslate(inf = {}) {
 
         let infApi = {
             e,
-            method: 'GET',
-            url: `https://translate.google.com/m?sl=${source}&tl=${target}&q=${encodeURIComponent(text)}&hl=pt-BR`,
-            headers: {},
+            'method': 'GET',
+            'url': `https://translate.google.com/m?sl=${source}&tl=${target}&q=${encodeURIComponent(text)}&hl=pt-BR`,
+            'headers': {},
         };
         let retApi = await api(infApi); if (!retApi.ret) { return retApi; } else { retApi = retApi.res; }
         let res = retApi.body;

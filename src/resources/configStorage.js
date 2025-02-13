@@ -1,7 +1,13 @@
-// let infConfigStorage, retConfigStorage;
-// infConfigStorage = { e, 'action': 'set', 'functionLocal': true, 'key': 'NomeDaChave', 'value': 'Valor da chave', 'returnValueAll': true, 'returnValueKey': true, };
-// infConfigStorage = { e, 'action': 'get', 'functionLocal': true, 'key': 'NomeDaChave', };
-// infConfigStorage = { e, 'action': 'del', 'functionLocal': true, 'key': 'NomeDaChave', 'returnValueAll': true, };
+/* eslint-disable camelcase */
+
+// 'functionLocal': true/CHAVE_AUSENTE → SALVA EM 'PROJETOS/Chrome_Extension/src/config.json'
+// 'functionLocal': false              → SALVA EM 'PROJETOS/__ProjetoAtual__/src/config.json'
+// 'path': `!fileProjetos!/TESTE/arquivoConfig.json`
+// 'path': `./log/arquivoConfig.json`
+// 'path': `!letter!:/PASTA/arquivoConfig.json`
+
+// let infConfigStorage, retConfigStorage; // 'returnValueAll': true, 'returnValueKey': true, 
+// infConfigStorage = { e, 'action': 'set', 'key': 'NomeDaChave', 'value': 'Valor da chave', };
 // retConfigStorage = await configStorage(infConfigStorage); console.log(retConfigStorage);
 
 // let cs;
@@ -14,19 +20,22 @@ let e = import.meta.url, ee = e;
 async function configStorage(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { action, functionLocal, key, value, path, returnValueKey, returnValueAll, } = inf;
+        let { action = false, functionLocal = true, key = false, value = '#_VAZIA_#', path = false, returnValueKey = false, returnValueAll = false, } = inf;
+
+        if (path && (path.includes('!') || path.includes('%'))) {
+            let a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows;
+            path = path.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d);
+        } else if (path && !path.includes(':')) { path = await file({ e, 'action': 'relative', 'path': path, }); path = path.res[0]; }
 
         if (!eng && Array.isArray(inf) && inf.length === 1) { // ### CS
-            inf['path'] = `${letter}:/${gW.root}/${gW.functions}/log/reg.json`; let dt, rf = {}; if (inf[0] === '' || inf[0] === '*') {
-                rf = await file({ e, 'action': 'read', 'path': path, }); if (!rf.ret) { dt = {}; } else { dt = JSON.parse(rf.res).dt; }
-            } else { dt = typeof inf[0] === 'object' ? inf[0] : { 'key': inf[0], }; };
-            if (!rf.ret) { rf = await file({ e, 'action': 'write', 'path': path, 'text': JSON.stringify({ 'dt': dt, }, null, 2), }); }
+            inf['path'] = `${letter}:/${gW.root}/${gW.functions}/log/reg.json`; let dt, rf = {};
+            if (inf[0] === '' || inf[0] === '*') { rf = await file({ e, 'action': 'read', 'path': path, }); if (!rf.ret) { dt = {}; } else { dt = JSON.parse(rf.res).dt; } }
+            else { dt = typeof inf[0] === 'object' ? inf[0] : { 'key': inf[0], }; }; if (!rf.ret) { rf = await file({ e, 'action': 'write', 'path': path, 'text': JSON.stringify({ 'dt': dt, }, null, 2), }); }
             ret['res'] = dt; ret['ret'] = true; ret['msg'] = 'CS: OK';
         } else {
-            let run = false;
-            if (!action || !['set', 'get', 'del',].includes(action)) { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR O 'action'`; }
+            let run = false; if (!action || !['set', 'get', 'del',].includes(action)) { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR O 'action'`; }
             else if ((!key || key === '')) { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR A 'key'`; }
-            else if (action === 'set' && !value) { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR O 'value'`; } else { run = true; }; if (run) {
+            else if (action === 'set' && value === '#_VAZIA_#') { ret['msg'] = `CONFIG STORAGE: ERRO | INFORMAR O 'value'`; } else { run = true; }; if (run) {
                 if (eng) { // CHROME
                     if (action === 'set') {
                         // #### STORAGE: SET
@@ -35,7 +44,7 @@ async function configStorage(inf = {}) {
                                 let data = {}; data[key] = value; chrome.storage.local.set(data, async () => {
                                     if (chrome.runtime.lastError) { ret['msg'] = `STORAGE [SET]: ERRO | ${chrome.runtime.lastError}`; } else {
                                         ret['ret'] = true; ret['msg'] = 'STORAGE SET: OK'; if (returnValueAll || returnValueKey) {
-                                            let retConfigStorage = await configStorage({ e, 'action': 'get', 'functionLocal': true, 'key': returnValueAll ? '*' : key, }); ret['res'] = retConfigStorage.res;
+                                            let retConfigStorage = await configStorage({ e, 'action': 'get', 'key': returnValueAll ? '*' : key, }); ret['res'] = retConfigStorage.res;
                                         }; resolve(ret);
                                     };
                                 });
@@ -76,10 +85,9 @@ async function configStorage(inf = {}) {
                         }; await storageDel(inf);
                     }
                 } else { // ################## NODE
-                    let infFile, retFile, config, retFs = false; if (path && path.includes(':')) { path = path; } else {
-                        infFile = { e, 'action': 'relative', 'path': path || gW.conf, 'functionLocal': !(typeof functionLocal === 'boolean' && !functionLocal), };
-                        retFile = await file(infFile); path = retFile.res[0];
-                    }; try { await _fs.promises.access(path); retFs = true; } catch (catchErr) { esLintIgnore = catchErr; };
+                    let infFile, retFile, config, retFs = false; if (path && path.includes(':')) { path = path; }
+                    else { infFile = { e, 'action': 'relative', 'path': path || gW.conf, 'functionLocal': functionLocal, }; retFile = await file(infFile); path = retFile.res[0]; };
+                    try { await _fs.promises.access(path); retFs = true; } catch (catchErr) { esLintIgnore = catchErr; };
                     if (retFs) { let configFile = await _fs.promises.readFile(path, 'utf8'); config = JSON.parse(configFile); }
                     else { config = {}; }; if (!key || key === '') { ret['msg'] = `CONFIG: ERRO | INFORMAR A 'key'`; } else if (action === 'set') { // #### CONFIG: SET
                         if (!value && !value === false) { ret['msg'] = `CONFIG: ERRO | INFORMAR O 'value'`; } else {
@@ -94,8 +102,7 @@ async function configStorage(inf = {}) {
                         } else { ret['msg'] = `CONFIG [GET]: ERRO | CHAVE '${key}' NAO ENCONTRADA`; }
                     } else if (action === 'del') { // #### CONFIG NODE: DEL
                         if (!retFs) { ret['msg'] = `CONFIG [DEL]: ERRO | ARQUIVO '${path}' NAO ENCONTRADO`; } else if (config[key]) {
-                            delete config[key]; infFile = { e, 'action': 'write', 'path': path, 'text': JSON.stringify(config, null, 2), }; retFile = await file(infFile);
-                            ret['msg'] = `CONFIG DEL: OK`; ret['ret'] = true;
+                            delete config[key]; infFile = { e, 'action': 'write', 'path': path, 'text': JSON.stringify(config, null, 2), }; retFile = await file(infFile); ret['msg'] = `CONFIG DEL: OK`; ret['ret'] = true;
                         } else { ret['msg'] = `CONFIG [DEL]: ERRO | CHAVE '${key}' NAO ENCONTRADA`; }; if (returnValueAll) { ret['res'] = config; };
                     }
                 }

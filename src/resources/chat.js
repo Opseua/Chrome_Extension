@@ -7,7 +7,7 @@
 // * PYTHON
 // telegram               → gpt-4o
 // g4f                    → gpt-4o
-// zukiJourney (12/min)   → gpt-4
+// zukijourney (12/min)   → gpt-4
 // naga (3/min)           → gpt-4                                       [https://naga.ac/dashboard/models]
 
 // let infChat, retChat;
@@ -28,8 +28,8 @@ async function chat(inf = {}) {
             // ######## OPEN.AI
             retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'chatOpenAi', }); if (!retConfigStorage.ret) { return retConfigStorage; } else { retConfigStorage = retConfigStorage.res; }; infApi = {
                 e, 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`, 'headers': { 'Content-Type': 'application/json', 'Authorization': `Bearer ${retConfigStorage.Authorization}`, },
-                'body': { 'model': model || 'gpt-4o-mini', 'messages': [{ 'role': 'user', 'content': messagePrompt, },], 'temperature': 0.7, },
-            }; retApi = await api(infApi); if (!retApi.ret) { return retApi; } else { retApi = retApi.res; }; let res = JSON.parse(retApi.body);
+                'body': { 'model': model || 'gpt-4o-mini', 'messages': [{ 'role': 'user', 'content': messagePrompt, },], 'temperature': 0.7, }, 'bodyObject': true,
+            }; retApi = await api(infApi); if (!retApi.ret) { return retApi; } else { retApi = retApi.res; }; let res = retApi.body;
             if ('choices' in res) {
                 ret['res'] = res.choices[0].message.content;
                 ret['msg'] = `CHAT [OPEN AI]: OK`;
@@ -52,8 +52,8 @@ async function chat(inf = {}) {
             }
         } else {
             retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'chatPython', }); if (!retConfigStorage.ret) { return retConfigStorage; } else { retConfigStorage = retConfigStorage.res; };
-            infApi = { e, 'method': 'POST', 'url': `http://127.0.0.1:${retConfigStorage.portServerHttp}/chat`, 'headers': {}, 'body': inf, }; retApi = await api(infApi);
-            if (!retApi.ret) { return retApi; } else { retApi = retApi.res; if (retApi.body && retApi.body.includes('{"ret": ')) { retApi = JSON.parse(retApi.body); } }; return retApi;
+            infApi = { e, 'method': 'POST', 'url': `http://127.0.0.1:${retConfigStorage.portServerHttp}/chat`, 'headers': {}, 'body': inf, 'bodyObject': true, }; retApi = await api(infApi);
+            if (!retApi.ret) { return retApi; } else { retApi = retApi.res; if (retApi.body) { retApi = retApi.body; } }; return retApi;
         }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];

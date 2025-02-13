@@ -1,17 +1,17 @@
 // let infLog, retLog; // 'raw': true,
 // // (ESCREVE NO MESMO ARQUIVO: NÃO) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/log/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
-// infLog = { e, 'folder': '#_PASTA_#', 'functionLocal': false, 'path': `ARQUIVO.txt`, 'text': `INF AQUI`, };
+// infLog = { e, 'folder': '#_PASTA_#', 'path': `ARQUIVO.txt`, 'text': `INF AQUI`, };
 // // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/log/JavaScript/MES_11_NOV/DIA_27_log.txt
-// infLog = { e, 'folder': 'JavaScript', 'functionLocal': false, 'path': `log.txt`, 'text': `INF AQUI`, 'unique': true, };
+// infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'unique': true, };
 // // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: SIM) → [Chrome_Extension]/log/JavaScript/MES_11_NOV/DIA_27/00.48.10.064_log.txt
-// infLog = { e, 'folder': 'JavaScript', 'functionLocal': false, 'path': `log.txt`, 'text': `INF AQUI`, 'unique': false, };
+// infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'unique': false, };
 // retLog = await log(infLog); console.log(retLog);
 
 let e = import.meta.url, ee = e;
 async function log(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { folder, path, text, raw, functionLocal, fileProject, fileCall, unique, } = inf;
+        let { folder, path, text, raw, functionLocal = false, fileProject, fileCall, unique, } = inf;
 
         if (!folder) {
             ret['msg'] = `LOG: ERRO | INFORMAR O 'folder'`;
@@ -45,7 +45,7 @@ async function log(inf = {}) {
                 text = `→ ${houTxt}${fileProject ? ` ${fileProject}` : ''}${fileCall ? ` ${fileCall}` : ''}\n${typeof text === 'object' ? JSON.stringify(text) : text}\n\n`;
             }
             infFile = {
-                e, 'action': 'write', 'raw': !!raw, 'functionLocal': !!functionLocal,
+                e, 'action': 'write', 'raw': !!raw, 'functionLocal': functionLocal,
                 'text': text, 'add': add, 'path': pathOk.replace(/:/g, ''),
             };
             await file(infFile);

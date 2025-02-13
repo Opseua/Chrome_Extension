@@ -44,7 +44,7 @@ let back = {
             ],
         },
     ],
-};
+}; let err, p = back.destino;
 
 async function backups() {
     // CRIAR PASTA SE NÃO EXISTIR [BACKUP GERAL]
@@ -80,11 +80,15 @@ async function backups() {
         }
     }
 
+    // MENU INICIAR
+    let c = await commandLine({ e, 'awaitFinish': true, 'command': `xcopy "C:/Users/%username%/AppData/Roaming/Microsoft/Windows/Start Menu" "${p}/MENU_INICIAR" /E /H /C /I`, 'withCmd': true, });
+    if (!c.ret) { err = `ERRO | BACKUP ATALHOS MENU INICIAR`; console.log(`${err}`); commandLine({ e, 'command': `"${m}" "${err}"`, }); return; }
+
     // ZIPAR PASTA
-    await new Promise(resolve => { setTimeout(resolve, 500); }); console.log(`ZIPANDO...`); let p = back.destino; let c = `!fileWindows!/PORTABLE_WinRAR/z_OUTROS/PORTABLE_7-Zip/App/7-Zip64/7z.exe`;
+    await new Promise(resolve => { setTimeout(resolve, 500); }); console.log(`ZIPANDO...`); c = `!fileWindows!/PORTABLE_WinRAR/z_OUTROS/PORTABLE_7-Zip/App/7-Zip64/7z.exe`;
     let m = `!fileChrome_Extension!/src/scripts/BAT/fileMsg.vbs`; c = await commandLine({ e, 'awaitFinish': true, 'command': `"${c}" a -tzip "${p}.zip" "${p}/*"`, });
-    if (!c.ret) { console.log(`ERRO | AO ZIPAR`); commandLine({ e, 'command': `"${m}" "ERRO | AO ZIPAR"`, }); } else {
-        let f = await file({ e, 'action': 'del', 'path': p, }); if (!f.ret) { console.log(`ERRO | AO APAGAR PASTA ANTIGA`); commandLine({ e, 'command': `"${m}" "ERRO | AO APAGAR PASTA ANTIGA"`, }); }
+    if (!c.ret) { err = `ERRO | AO ZIPAR`; console.log(`${err}`); commandLine({ e, 'command': `"${m}" "${err}"`, }); return; } else {
+        let f = await file({ e, 'action': 'del', 'path': p, }); if (!f.ret) { err = `ERRO | AO APAGAR PASTA ANTIGA`; console.log(`${err}`); commandLine({ e, 'command': `"${m}" "${err}"`, }); return; }
         else { p = p.split('z_ANTIGOS/')[1]; console.log(`CONCLUIDO → '${p}.zip'`); commandLine({ e, 'command': `"${m}" "CONCLUIDO → '${p}.zip'"`, }); }
     } await new Promise(resolve => { setTimeout(resolve, 1500); });
 

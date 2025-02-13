@@ -4,7 +4,7 @@ await import('./resources/@export.js'); let e = import.meta.url, ee = e;
 async function serverRun(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ e, ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]`, });
+        logConsole({ e, ee, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]`, });
 
         // RESETAR BADGE
         chromeActions({ e, 'action': 'badge', 'text': '', });
@@ -16,7 +16,7 @@ async function serverRun(inf = {}) {
                     if (txt.length > 0) {
                         let d = inf[0]; if (d.byExtensionName && d.byExtensionName.includes('BOT') && !d.filename.includes('[KEEP]')) {
                             setTimeout(function () {
-                                chrome.downloads.erase({ id: d.id, }); // logConsole({ e, ee, 'write': true, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)
+                                chrome.downloads.erase({ id: d.id, }); // logConsole({ e, ee, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)
                             }, 5000);
                         }
                     }
@@ -27,7 +27,7 @@ async function serverRun(inf = {}) {
         // ATALHO PRESSIONADO
         chrome.commands.onCommand.addListener(async function (...inf) {
             try {
-                let infShortcutPressed = { 'shortcut': inf[0], }; // logConsole({ e, ee, 'write': true, 'msg': `ON START: ATALHO PRESSIONADO` })
+                let infShortcutPressed = { 'shortcut': inf[0], }; // logConsole({ e, ee, 'msg': `ON START: ATALHO PRESSIONADO` })
                 if (infShortcutPressed.shortcut === 'atalho_1') {
                     command1({ 'origin': 'chrome', });
 
@@ -35,11 +35,11 @@ async function serverRun(inf = {}) {
                     //     code: `(function () {
                     //             function pw(j, pw, ph, u) {let w = (pw / 100) * j.top.screen.width, h = (ph / 100) * j.top.screen.height; 
                     //             let y = j.top.outerHeight / 2 + j.top.screenY - (h / 2), x = j.top.outerWidth / 2 + j.top.screenX - (w / 2);
-                    //             return j.open(u, '', 'width=' + w + ',height=' + h + ',top=' + y + ',left=' + x); }; pw(window, 30, 35, 'http://127.0.0.1:8889/?act=page&roo=&mes=0'); })();`
+                    //             return j.open(u, '', 'width=' + w + ',height=' + h + ',top=' + y + ',left=' + x); }; pw(window, 30, 35, 'http://127.0.0.1:1234/?act=page&roo=&mes=0'); })();`
                     // });
 
                 }
-                else if (infShortcutPressed.shortcut === 'atalho_2') { command2(); } else { logConsole({ e, ee, 'write': true, 'msg': `ACAO DO ATALHO NAO DEFINIDA`, }); }
+                else if (infShortcutPressed.shortcut === 'atalho_2') { command2(); } else { logConsole({ e, ee, 'msg': `ACAO DO ATALHO NAO DEFINIDA`, }); }
             } catch (catchErr) { await regexE({ 'inf': inf, 'e': catchErr, }); };
         });
 
@@ -72,6 +72,17 @@ async function serverRun(inf = {}) {
         // infTryRatingSet = { 'hitApp': `BroadMatchRatings`, 'process': `good`, } // good acceptable bad
         // retTryRatingSet = await tryRatingSet(infTryRatingSet); console.log(retTryRatingSet);
 
+
+
+        // let message = { fun: [{ securityPass: gW.securityPass, retInf: true, name: 'commandLine', par: { command: 'notepad', awaitFinish: true, action: 'read', path: 'D:/Área de Trabalho/CHAT.txt', }, },], };
+
+        // let infMessageSend, retMessageSend;
+        // infMessageSend = { 'destination': '127.0.0.1:8889/?roo=OPSEUA-NODEJS-WEBSOCKET-SERVER', 'message': message, 'secondsAwaita': 2, };
+        // // infMessageSend = { 'destination': '22.333.444.555:1234/DESTINO_AQUI', 'message': message, };
+        // // infMessageSend = { 'destination': '0.1:1234/DESTINO_AQUI', 'message': message, };
+        // // retMessageSend = await messageSend(infMessageSend); console.log(retMessageSend);
+
+        // retMessageSend = await messageSend(infMessageSend); console.log(retMessageSend);
 
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
