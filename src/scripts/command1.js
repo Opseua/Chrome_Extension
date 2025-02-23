@@ -21,8 +21,7 @@ async function command1(inf = {}) {
       // ENVIAR MENSAGEM COM O COMANDO
       let message = {
         'fun': [{
-          'securityPass': gW.securityPass, 'retInf': true, 'name': 'tryRatingComplete',
-          'par': { 'infTryRatingComplete': infTryRatingComplete, },
+          'securityPass': gW.securityPass, 'retInf': true, 'name': 'tryRatingComplete', 'par': { infTryRatingComplete, },
         },],
       };
 
@@ -32,21 +31,17 @@ async function command1(inf = {}) {
         await clipboard({ e, 'value': retListenerAcionar.res.comments[retListenerAcionar.res.current], });
       }
 
-      let infNotification = {
-        e, 'duration': 2, 'icon': `icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false,
-        'title': `Complete Judge`, 'text': retListenerAcionar.msg,
-      };
-      await notification(infNotification);
+      await notification({ e, 'duration': 2, 'icon': `icon_${retListenerAcionar.ret ? 3 : 2}.png`, 'retInf': false, 'title': `Complete Judge`, 'text': retListenerAcionar.msg, 'ntfy': false, });
     } else if (/^(?:\D*\d){0,4}\D*$/.test(infTryRatingComplete)) {
       let p = infTryRatingComplete.replace(/[, \t]/g, '').split('').reduce((t, n) => { if (n === '1') { return t + 1; } else if (n === '2') { return t + 0; } else if (n === '3') { return t - 1; }; return t; }, 1);
-      notification({ 'title': `SRT: AVALIAÇÃO`, 'text': (p === 4 ? '[4/5]' : p < 1 ? 1 : p).toString(), 'duration': 3, 'icon': `icon_3.png`, });
+      notification({ 'title': `SRT: AVALIAÇÃO`, 'text': (p === 4 ? '[4/5]' : p < 1 ? 1 : p).toString(), 'duration': 3, 'icon': `icon_3.png`, 'ntfy': false, });
     }
 
     ret['msg'] = `COMMAND 1: OK`;
     ret['ret'] = true;
 
   } catch (catchErr) {
-    let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+    let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
   };
 
   return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

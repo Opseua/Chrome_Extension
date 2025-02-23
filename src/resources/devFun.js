@@ -8,14 +8,14 @@ async function devFun(inf = {}) {
             // ENCAMINHAR PARA O DEVICE CERTO
             let retMessageSend, retInf = typeof data.retInf === 'boolean' ? data.retInf : data.retInf ? data.retInf : true;
             let destination = gW.devSend;
-            data = { 'securityPass': gW.securityPass, 'retInf': retInf, 'name': data.name, 'par': data.par, };
+            data = { 'securityPass': gW.securityPass, retInf, 'name': data.name, 'par': data.par, };
             data.par['enc'] = true; data.par['e'] = inf.e;
             // PARA REMOVER O 'retInf' QUE NÃO É NECESSÁRIO
             delete data.par.retInf;
             let message = { 'fun': [data,], };
 
             // ENVIAR COMANDO PARA O DESTINO CERTO
-            retMessageSend = await messageSend({ 'destination': destination, 'message': message, });
+            retMessageSend = await messageSend({ destination, message, });
             if (!retMessageSend.ret) {
                 // MENSAGEM ENVIADA [NÃO]
                 ret = retMessageSend;
@@ -50,7 +50,7 @@ async function devFun(inf = {}) {
 
                 if (retInf) {
                     // RESPOSTA NECESSÁRIA [SIM]
-                    messageSend({ 'destination': destination, 'messageId': messageId, 'message': ret, 'resWs': resWs, });
+                    messageSend({ destination, messageId, 'message': ret, resWs, });
                 }
 
                 if (errAlert) {
@@ -60,7 +60,7 @@ async function devFun(inf = {}) {
             }
         }
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

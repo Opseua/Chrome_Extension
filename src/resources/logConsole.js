@@ -43,14 +43,14 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
             // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
         });
         if (!eng && write) {
-            await log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, 'fileProject': fileProject, 'fileCall': fileCall, 'unique': false, });
+            await log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, fileProject, fileCall, 'unique': false, });
         }
 
         ret['msg'] = `LOG CONSOLE: OK`;
         ret['ret'] = true;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

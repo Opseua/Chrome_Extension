@@ -5,8 +5,8 @@
 //     aaa;
 //     // ***
 // } catch (catchErr) {
-//     let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-//     (async () => { let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res']; })();
+//     let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+//     (async () => { let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res']; })();
 // };
 
 async function regexE(inf = {}) {
@@ -21,11 +21,11 @@ async function regexE(inf = {}) {
         let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2;
 
         // PEGAR O PROJETO, ARQUIVO E LINHA DO ERRO
-        let retGetPath = await getPath({ 'e': e, }); let { root, project, line, } = retGetPath.res; let fileOk = retGetPath.res.file;
+        let retGetPath = await getPath({ e, }); let { root, project, line, } = retGetPath.res; let fileOk = retGetPath.res.file;
 
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
         let errorOk = {
-            'cng': cng, 'cngName': cng === 1 ? 'CHROME' : cng === 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': gW.devMaster,
+            cng, 'cngName': cng === 1 ? 'CHROME' : cng === 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': gW.devMaster,
             'projectFile': `🟢 ${project}`, 'file': `🔵 ${fileOk}`, 'line': Number(line), 'inf': inf.inf ? inf.inf.toString() : '___VAZIO___', 'e': e.stack,
         };
 
@@ -57,8 +57,6 @@ async function regexE(inf = {}) {
                 'ignoreErr': true,
                 'legacy': true,
                 'keepOld': true,
-                'ntfy': true,
-                'chromeNot': false,
                 'title': `### ERRO (${errorOk.devMaster}) [${errorOk.cngName}]`,
                 'text': `${errorOk.projectFile}\n${errorOk.file} [${errorOk.line}]\n\n${errorOk.e}`,
             });

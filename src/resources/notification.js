@@ -85,7 +85,7 @@ async function notification(inf = {}) {
         if (inf.ignoreErr) {
             ret['msg'] = `${(!eng && !inf.legacy && !inf.chromeNot) ? '[ENC] ' : ''}NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`;
         } else {
-            let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+            let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
         }
     };
 

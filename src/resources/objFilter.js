@@ -53,7 +53,7 @@ async function objFilter(inf = {}) {
         if (filters && Array.isArray(filters) && filters.length > 0) {
             for (let [index, value,] of filters.entries()) {
                 if (value && ((value.includes && Array.isArray(value.includes) && value.includes.length > 0) || (value.excludes && Array.isArray(value.excludes) && value.excludes.length > 0))) {
-                    results = filter({ 'results': results, 'filters': value, });
+                    results = filter({ results, 'filters': value, });
                 }
             }
         }
@@ -63,7 +63,7 @@ async function objFilter(inf = {}) {
         ret['res'] = [...new Map(results.map(i => [i.key, i,])).values(),]; // REMOVER DUPLICATAS
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

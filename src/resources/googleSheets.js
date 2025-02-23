@@ -43,46 +43,46 @@ async function googleSheets(inf = {}) {
         if (action === 'get') {
             // →→→ GET
             range = `${tab}!${range}`; try {
-                retSheet = await _sheets.spreadsheets.values.get({ 'spreadsheetId': id, 'range': range, }); retSheet = retSheet.data.values; ret['res'] = retSheet; ret['msg'] = `GOOGLE SHEET [GET]: OK`; ret['ret'] = true;
-            } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [GET]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
+                retSheet = await _sheets.spreadsheets.values.get({ 'spreadsheetId': id, range, }); retSheet = retSheet.data.values; ret['res'] = retSheet; ret['msg'] = `GOOGLE SHEET [GET]: OK`; ret['ret'] = true;
+            } catch (catchErr) { logConsole({ e, ee, 'msg': `ERRO SHEETS\n${catchErr.toString()}`, }); ret['msg'] = `GOOGLE SHEET [GET]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
         } else if (action === 'send') {
             // →→→  SEND
-            let col = range.replace(/[^a-zA-Z]/g, ''), lin = ''; values = { 'values': values, }; if (/[0-9]/.test(range)) { lin = range.replace(/[^0-9]/g, ''); } else if (range.includes('*')) {
+            let col = range.replace(/[^a-zA-Z]/g, ''), lin = ''; values = { values, }; if (/[0-9]/.test(range)) { lin = range.replace(/[^0-9]/g, ''); } else if (range.includes('*')) {
                 range = `${range}:${range}`; range = range.replace(/\*/g, ''); lin = await googleSheets({ e, 'action': 'lastLin', id, tab, range, });
                 if (!lin.ret) { return lin; }; lin = lin.res.lastLineWithData + 1;
             } else { ret['msg'] = `GOOGLE SHEET [SENC]: ERRO | 'range' INVÁLIDO`; return ret; };
             range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`; try {
-                await _sheets.spreadsheets.values.update({ 'spreadsheetId': id, 'range': range, 'valueInputOption': 'USER_ENTERED', 'resource': values, });
+                await _sheets.spreadsheets.values.update({ 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values, });
                 ret['msg'] = `GOOGLE SHEET [SEND]: OK`; ret['ret'] = true;
-            } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
+            } catch (catchErr) { logConsole({ e, ee, 'msg': `ERRO SHEETS\n${catchErr.toString()}`, }); ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
         } else if (action === 'lastLin') {
             // →→→  LAST LIN
             try {
                 if (!googleAppScript) {
                     // CONTANDO PELA QUANTIDADE DE VALORES
-                    range = `${tab}!${range.includes(':') ? range : `${range}:${range}`}`; retSheet = await _sheets.spreadsheets.values.get({ 'spreadsheetId': id, 'range': range, }); retSheet = retSheet.data.values;
+                    range = `${tab}!${range.includes(':') ? range : `${range}:${range}`}`; retSheet = await _sheets.spreadsheets.values.get({ 'spreadsheetId': id, range, }); retSheet = retSheet.data.values;
                     ret['res'] = { 'lastLineWithData': (!retSheet || retSheet.length === 0) ? 0 : retSheet.length, };
                 } else {
                     // GOOGLE APP SCRIPT
                     let infApi = {
                         e, 'method': 'POST', 'headers': { 'Content-Type': 'application/json', }, 'max': 20, 'url': `https://script.google.com/macros/s/${googleAppScriptId}/exec`,
-                        'body': { 'action': 'run', 'name': 'sheetInfTab', 'par': { 'id': id, 'tab': tab, 'range': range, }, }, 'bodyObject': true,
+                        'body': { 'action': 'run', 'name': 'sheetInfTab', 'par': { id, tab, range, }, }, 'bodyObject': true,
                     }; let retApi = await api(infApi); if (!retApi.ret) { return retApi; }; retApi = retApi.res.body; if (!retApi.ret) { return retApi; }; retApi = retApi.res;
                     ret['res'] = { 'lastLineWithData': retApi.lastLineWithData, 'maxLines': retApi.maxLines, };
                 };
                 ret['msg'] = `GOOGLE SHEET [LAST LIN] {${googleAppScript ? 'GOOGLE APP SCRIPT' : 'QTD DE LINHAS'}}: OK`; ret['ret'] = true;
-            } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [LAST LIN]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
+            } catch (catchErr) { logConsole({ e, ee, 'msg': `ERRO SHEETS\n${catchErr.toString()}`, }); ret['msg'] = `GOOGLE SHEET [LAST LIN]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
         }
 
         // TENTAR NOVAMENTE EM CASO DE ERRO | MANTER 'legacy' true PORQUE NO WebScraper O WEBSOCKET NÃO ESTÁ CONECTADO
         if (!ret.ret && attempts < 3) {
-            let text = `TENTATIVA [${attempts}] → ${ret.msg}`; await notification({ e, 'legacy': true, 'ntfy': true, 'title': `# SHEETS (${gW.devMaster}) [NODEJS]`, 'text': text, });
+            let text = `TENTATIVA [${attempts}] → ${ret.msg}`; await notification({ e, 'legacy': true, 'title': `# SHEETS (${gW.devMaster}) [NODEJS]`, text, });
 
             logConsole({ e, ee, 'msg': text, }); let retGoogleSheets = await googleSheets({ ...inf, 'attempts': (attempts + 1), }); ret = retGoogleSheets;
         }
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

@@ -66,7 +66,7 @@ Else
 	completaData = "z_MES_" & mes & "_DIA_" & dia
     completaHora = hora & ":" & minuto & ":" & segundo & "." & milissegundo & horaAmPm
 
-	pathArquivo = CreateObject("WScript.Shell").ExpandEnvironmentStrings("%fileWindows%") & "\BAT\z_log\" & completaData & ".txt"
+	pathArquivo = CreateObject("WScript.Shell").ExpandEnvironmentStrings("%fileWindows%") & "\BAT\z_logs\" & completaData & ".txt"
 	
 	rem GERAR A LINHA DE TEXTO
     strLine = completaHora & " - " & Wscript.Arguments.Item(0)

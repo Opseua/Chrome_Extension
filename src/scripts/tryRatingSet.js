@@ -24,7 +24,7 @@ async function tryRatingSet(inf = {}) {
         if (path || process) {
             rA = process;
             if (path && !process) {
-                let retFile = await file({ e, 'action': 'read', 'path': path, }); if (!retFile.ret) { return retFile; } else { retFile = JSON.parse(retFile.res); };
+                let retFile = await file({ e, 'action': 'read', path, }); if (!retFile.ret) { return retFile; } else { retFile = JSON.parse(retFile.res); };
                 let promptText = acts[hitApp].promptText; let inputs = acts[hitApp].inputs; let promptQuestion = acts[hitApp].promptQuestion;
 
                 let messagePrompt = ``; for (let [index, val,] of inputs.entries()) { let { name, path, } = val; messagePrompt = `${messagePrompt}${name}:\n${getValueByPath(retFile, path)}\n\n`; }
@@ -32,7 +32,7 @@ async function tryRatingSet(inf = {}) {
 
                 let infApi; infApi = {
                     e, 'method': 'POST', 'url': `http://127.0.0.1:8890/chat`, 'max': 10, 'bodyObject': true,
-                    'body': { 'action': 'messageSend', 'provider': 'naga', 'chatIdA': 'chatId', 'model': 'gpt-4o-mini', 'messagePrompt': messagePrompt, },
+                    'body': { 'action': 'messageSend', 'provider': 'naga', 'chatIdA': 'chatId', 'model': 'gpt-4o-mini', messagePrompt, },
                 }; rA = await api(infApi); if (!rA.ret) { return rA; } else { rA = rA.res.body; if (!rA.ret) { return rA; } else { rA = rA.res.response.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, ''); } };
                 console.log('AI →', rA.substring(0, 50));
             }
@@ -80,7 +80,7 @@ async function tryRatingSet(inf = {}) {
                     let infChromeActionsNew = JSON.parse(JSON.stringify(elementsObj[element].infObj).replace(`###_REPLACE_1_###`, `${element1Obj}`));
                     await new Promise(resolve => setTimeout(resolve, randomNumber(...awaitFor) * 1000));
                     console.log(`    ++ AÇÃO++\n    → ${awaitFor.toString()} | ${actionObj} \n    ${value} `);
-                    let infChromeActions = { e, 'action': 'inject', 'target': target, 'fun': chromeActionsNew, 'funInf': { ...infChromeActionsNew, ...{ 'action': actionObj, }, }, };
+                    let infChromeActions = { e, 'action': 'inject', target, 'fun': chromeActionsNew, 'funInf': { ...infChromeActionsNew, ...{ 'action': actionObj, }, }, };
                     let retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { return retChromeActions; }; // console.log(retChromeActions);
                 }
             }
@@ -90,7 +90,7 @@ async function tryRatingSet(inf = {}) {
         ret['msg'] = `TRYRATING SET: OK`;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

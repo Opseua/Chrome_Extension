@@ -14,7 +14,7 @@ async function chromeActions(inf = {}) {
         let retTabS, code = '', retExeS, tabId, divTemp;
 
         if (action === 'badge') {
-            action = chrome.browserAction; if (color) { action.setBadgeBackgroundColor({ 'color': color, }); }; if (text || text === '') { action.setBadgeText({ 'text': text, }); };
+            action = chrome.browserAction; if (color) { action.setBadgeBackgroundColor({ color, }); }; if (text || text === '') { action.setBadgeText({ text, }); };
             ret['msg'] = `CHROME ACTIONS [BADGE]: OK`; ret['ret'] = true;
         } else if (action === 'user') {
             action = chrome.identity; let retGetUser = await new Promise((resolve) => { action.getProfileUserInfo(function (userInfo) { if (userInfo.email) { resolve(userInfo.email); } else { resolve('NAO_DEFINIDO'); } }); });
@@ -23,7 +23,7 @@ async function chromeActions(inf = {}) {
             let retPrompt = prompt(title ? `${title} | Digite o comando:` : `Digite o comando:`);
             if (!retPrompt) { ret['msg'] = `CHROME ACTIONS [PROMPT]: ERRO | PROMPT EM BRANCO`; } else { ret['ret'] = true; ret['msg'] = `CHROME ACTIONS [PROMPT]: OK`; ret['res'] = retPrompt; }
         } else if (action === 'cookie') {
-            let cookiesPromise = new Promise((resolve) => { chrome.cookies.getAll({ 'url': url, }, cookies => { let retCookies = JSON.stringify(cookies); resolve(retCookies); }); }); let retCookies = await cookiesPromise;
+            let cookiesPromise = new Promise((resolve) => { chrome.cookies.getAll({ url, }, cookies => { let retCookies = JSON.stringify(cookies); resolve(retCookies); }); }); let retCookies = await cookiesPromise;
             let cookie = ''; JSON.parse(retCookies).reduce((accumulator, v) => { cookie += `${v.name}=${v.value}; `; return accumulator; }, '');
             if ((cookieSearch) && !(retCookies.toString().includes(cookieSearch))) { ret['msg'] = `CHROME ACTIONS [COOKIE]: ERRO | COOKIE '${cookieSearch}' NAO CONTRADO`; }
             else { ret['ret'] = true; ret['msg'] = `CHROME ACTIONS [COOKIE]: OK`; ret['res'] = { 'array': retCookies, 'concat': cookie, }; }
@@ -87,10 +87,7 @@ async function chromeActions(inf = {}) {
                 code = `(${getBody.toString()})();`;
             } else if (['attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementIsHidden', 'elementGetPath',].includes(action)) {
                 // ATRIBUTO: PEGAR VALOR | ELEMENTO: PEGAR VALOR | ELEMENTO: DEFINIR VALOR | ELEMENTO: CLICAR | DIV: PEGAR (BRUTA)
-                let infElementAction = {
-                    e, 'action': action, 'elementName': elementName, 'elementValue': elementValue, 'attribute': attribute, 'attributeAdd': attributeAdd,
-                    'content': content, 'tag': tag, 'attributeValue': attributeValue, 'attributeValueAdd': attributeValueAdd,
-                };  // INJECT | HTML RENDERIZAR
+                let infElementAction = { e, action, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, }; // INJECT | HTML RENDERIZAR
                 if (targetMode === 'INJECT') { code = `(${elementAction.toString()})(${JSON.stringify(infElementAction)});`; } else { retExeS = elementAction(infElementAction); }
             } else if (action === 'elementGetDiv') {
                 function elementGetDivFun(valor, tagName, attributeName, attributeValue, parentTagName) {
@@ -111,7 +108,7 @@ async function chromeActions(inf = {}) {
                         let elements = attribute ? document.querySelectorAll(`${tag ? tag : ''}[${attribute}${attributeValue ? `="${attributeValue}"` : ''}]`) : document.getElementsByTagName(tag);
                         if (elements && elements.length > 0) { ret = true; break; }; await new Promise(resolve => setTimeout(resolve, 100));
                     }; chrome.runtime.sendMessage(ret);
-                }; code = `(${funAsync.toString()})(${JSON.stringify({ 'awaitElementMil': awaitElementMil, 'tag': tag, 'attribute': attribute, 'attributeValue': attributeValue, })});`;
+                }; code = `(${funAsync.toString()})(${JSON.stringify({ awaitElementMil, tag, attribute, attributeValue, })});`;
             } else if (action === 'inject') {
                 // INJECT
                 if (!(typeof fun === 'function')) {
@@ -143,7 +140,7 @@ async function chromeActions(inf = {}) {
         }
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

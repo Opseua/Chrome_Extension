@@ -16,11 +16,11 @@ async function messageReceived(inf = {}) {
         if (wsClients) {
             // ######################################################################## RECEBIDO NO SERVIDOR ########################################################################
             let wsClientsToSend = [], erroType = 0; let wsClientsArrRoom = []; for (let room in wsClients.rooms) {
-                if (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': room, }) && !JSON.stringify(wsClientsArrRoom).includes(room.split('/')[1])) {
+                if (regex({ e, 'simple': true, 'pattern': destination, 'text': room, }) && !JSON.stringify(wsClientsArrRoom).includes(room.split('/')[1])) {
                     wsClientsArrRoom.push(room); // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
                     wsClientsToSend = wsClientsToSend.concat(Array.from(wsClients.rooms[room]));
                 }
-            }; erroType = wsClientsToSend.length === 0 ? `DESTINO INVÁLIDO` : (regex({ 'e': e, 'simple': true, 'pattern': destination, 'text': origin, }) || origin === destination) ? `DESTINO IGUAL` : 0;
+            }; erroType = wsClientsToSend.length === 0 ? `DESTINO INVÁLIDO` : (regex({ e, 'simple': true, 'pattern': destination, 'text': origin, }) || origin === destination) ? `DESTINO IGUAL` : 0;
 
             // ENVIAR: MENSAGEM STATUS → ORIGEM
             let messageOrigin = {
@@ -36,12 +36,12 @@ async function messageReceived(inf = {}) {
             if (!erroType) {
                 for (let [index, value,] of wsClientsToSend.entries()) {
                     try { message = JSON.parse(message); } catch (catchErr) { esLintIgnore = catchErr; }; let messageDestination = {
-                        'origin': origin,
+                        origin,
                         'destination': `${value.hostRoom}`,
-                        'messageId': messageId,
-                        'buffer': buffer,
-                        'partesRestantes': partesRestantes,
-                        'message': message,
+                        messageId,
+                        buffer,
+                        partesRestantes,
+                        message,
                     }; // logConsole({ 'e': e, 'ee': ee, 'msg': `ENVIANDO MENSAGEM: [${index + 1}/${wsClientsToSend.length}] ${messageId} → ${messageDestination.destination}` });
                     value.send(JSON.stringify(messageDestination)); await new Promise(resolve => { setTimeout(resolve, 10); });
                 }
@@ -60,7 +60,7 @@ async function messageReceived(inf = {}) {
 
                 // ACIONAR LISTENER
                 // logConsole({ 'e': e, 'ee': ee, 'msg': `ACIONANDO LISTENER: '${listName}` });
-                listenerAcionar(listName, { 'origin': origin, 'messageId': messageId, 'message': message, 'resWs': resWs, 'host': host, 'room': room, });
+                listenerAcionar(listName, { origin, messageId, message, resWs, host, room, });
             }
 
             // ---------------- TESTES
@@ -79,7 +79,7 @@ async function messageReceived(inf = {}) {
             // ----------------
         }
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

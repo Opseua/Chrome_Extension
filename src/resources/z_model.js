@@ -8,16 +8,14 @@ async function model(inf = {}) {
     try {
         let { text = 'aaa', folder = 'bbb', } = inf;
 
-        let infRegex, retRegex;
-        infRegex = { e, 'pattern': `UM(.*?)TRES`, 'text': text, 'nada': folder, };
-        retRegex = regex(infRegex); console.log(retRegex);
+        let retRegex = regex({ e, 'pattern': `UM(.*?)TRES`, text, 'nada': folder, }); console.log(retRegex);
 
         ret['res'] = `resposta aqui`;
         ret['msg'] = `MODEL: OK`;
         ret['ret'] = true;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

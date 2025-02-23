@@ -53,7 +53,13 @@ Else
 		End If
 	Else
 		rem SERVIDORES
-		If InStr(windowResize, "WINTP9") Then
+		If InStr(windowResize, "WINTP12") Then
+			windowResize = "1230 650 410 300"
+		ElseIf InStr(windowResize, "WINTP11") Then
+			windowResize = "1230 350 410 300"
+		ElseIf InStr(windowResize, "WINTP10") Then
+			windowResize = "1230 50 410 300"
+		ElseIf InStr(windowResize, "WINTP9") Then
 			windowResize = "825 650 410 300"
 		ElseIf InStr(windowResize, "WINTP8") Then
 			windowResize = "825 350 410 300"
@@ -74,11 +80,21 @@ Else
 		End If
 	End If
 	
+	rem BIBLIOTECAS VBS
+	Set Shell = CreateObject("Shell.Application")
+	Set WshShell = CreateObject("WScript.Shell")
+	nircmd = WshShell.ExpandEnvironmentStrings("%nircmd%")
+	
 	rem (BUSCANDO POR PARTE DO NOME) | (BUSCANDO PELO NOME EXATO)
 	If argsQtd = 2 Then: nircmdPar = "ititle": Else: nircmdPar = "title": End If
 
-	comm = "win setsize " & nircmdPar & " """ & WScript.Arguments.Item(0) & """" & " " & windowResize & ""
-	CreateObject("Shell.Application").ShellExecute CreateObject("WScript.Shell").ExpandEnvironmentStrings("%fileWindows%") & "\BAT\nircmd.exe", comm, , "runas", 1
+	rem POSICIONAR JANELA
+	comm = "win setsize " & nircmdPar & " """ & WScript.Arguments.Item(0) & """ " & windowResize
+	Shell.ShellExecute nircmd, comm, , "runas", 0
+	
+	rem ESPERAR E ATIVAR JANELA (PARA O CHROME NAO FICAR NA FRENTE)
+	comm = "win activate " & "ititle" & " """ & "_WIND" & """"
+	Shell.ShellExecute "cmd", "/c " & "ping -n 3 -w 1000 127.0.0.1 > nul & " & nircmd & " " & comm, , "runas", 0
 	
 End If
 

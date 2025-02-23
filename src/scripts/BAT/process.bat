@@ -1,7 +1,7 @@
 @chcp 65001 & @echo off & setlocal enabledelayedexpansion
 set "letra=%~d0" & set "local=%~dp0"
 set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0"
-set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4" & set "arg5=%~5" & set "arg6=%~6"
+set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4" & set "arg5=%~5" & set "arg6=%~6" & set "arg7=%~7"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
 if "!arg1!" == "" ( !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\n\\nNENHUM PARAMETRO PASSADO"" & exit /b )
@@ -20,6 +20,7 @@ if "!mode!" == "RESTART_STOP" (
 ) else (
 	if not "!mode!" == "RESTART" ( if "!mode!" == "KEEP" ( set "restartOnStop=RESTART" ) else ( set "restartOnStop=RESTART_STOP" ) )
 )
+if "!arg7!" == "FORCE_STOP" ( set "modeNew=!arg7!" ) else ( set "modeNew=!mode!" )
 
 rem DEFINIR programExe E programExePath
 if not "!programExe!" == "!programExe:node=!" ( set "fpA=js" & set "fpB=NodeJS" ) else ( if "!programExe!" == "python" ( set "fpA=py" & set "fpB=Python" ) )
@@ -38,17 +39,17 @@ if "!ret2!" == "TRUE" ( if not "!action!" == "!action:TOGGLE=!" ( set "actionRun
 :IGNORE_IF_ACTION
 
 rem ACTION → NAO DEFINIDA (ENCERRAR)
-if "!actionRun!" == "!actionRun:O=!" ( !fileLog! "[PROCESS] = [exe: EXIT - old: !ret2! - call: !mode! - act: !action! - run: !actionRun!] # !programExe!" & exit /b )
+if "!actionRun!" == "!actionRun:O=!" ( !fileLog! "[PROCESS] = [exe: EXIT - old: !ret2! - call: !modeNew! - act: !action! - run: !actionRun!] # !programExe!" & exit /b )
 
 rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'findstr'!!!)
 !fileLastRun! "!mode!_!action!" "!programExe!"
-findstr /m "SIM" "!fileWindows!\BAT\z_log\logTime_!programExe!.txt" > nul
-if not %ERRORLEVEL%==0 ( !fileLog! "[PROCESS] = [exe: NAO - old: !ret2! - call: !mode! - act: !action! - run: !actionRun!] # !programExe!" & exit /b )
+findstr /m "SIM" "!fileWindows!\BAT\z_logs\logTime_!programExe!.txt" > nul
+if not %ERRORLEVEL%==0 ( !fileLog! "[PROCESS] = [exe: NAO - old: !ret2! - call: !modeNew! - act: !action! - run: !actionRun!] # !programExe!" & exit /b )
 
-rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS
+rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS (NAO SUBIR O 'taskkill'!!!)
 if "!actionRun!" == "OFF" (
-	rem powershell.exe -Command "$a = @(); function getId { Param([int]$f); $global:a += $f; Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $f } | ForEach-Object { getId $_.ProcessId } }; $s = Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'cmd.exe' -and $_.CommandLine -like '*!programExe!.exe*' } | Select-Object -ExpandProperty ProcessId; foreach ($i in $s) { getId $i }; foreach ($i in $a) { Stop-Process -Id $i }"
-	if "!usuario!" == "Orlando" ( taskkill /F /FI "WINDOWTITLE eq Administrador:  CMD_!programExe!_CMD" /T ) else ( taskkill /F /FI "WINDOWTITLE eq Administrator:  CMD_!programExe!_CMD" /T )
+	if "!letra!" == "D" ( set "admName=Administrador" ) else ( set "admName=Administrator" )
+	taskkill /F /FI "WINDOWTITLE eq !admName!:  !programExe!_CMD" /T
 )
 
 rem ### → ACAO | INICIAR
@@ -58,17 +59,15 @@ if "!actionRun!" == "ON" (
 
 	if not "!action!" == "!action:HIDE=!" (
 		rem [HIDE] OBRIGATORIO O '/RUNAS'!!!
-		rem !3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!programExe!_CMD& !programExePath! !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\process.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
-		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!programExe!_CMD& !programExePath! !fileScript! & !3_BACKGROUND! /NOCONSOLE /DELAY=2 "cmd.exe /c echo a" & call !fileChrome_Extension!\src\scripts\BAT\process.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
+		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title !programExe!_CMD& !programExePath! !fileScript! & !3_BACKGROUND! /NOCONSOLE /DELAY=2 "cmd.exe /c echo a" & call !fileChrome_Extension!\src\scripts\BAT\process.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
 	) else (
 		rem [VIEW] OBRIGATORIO O '/RUNAS'!!! | JANELA DO LOG POSICIONAR
-		rem !3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!programExe!_CMD& start "_!programExe!_" /WAIT !programExePath! !fileScript! & ping -n 2 -w 1000 127.0.0.1 > nul & call !fileChrome_Extension!\src\scripts\BAT\process.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!" "cmd.exe /c ping -n 4 -w 1000 127.0.0.1 > nul & !fileNircmdSetSize! _!programExe!_ !action!"
-		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title CMD_!programExe!_CMD& start "_!programExe!_" /WAIT !programExePath! !fileScript! & !3_BACKGROUND! /NOCONSOLE /DELAY=2 "cmd.exe /c echo a" & call !fileChrome_Extension!\src\scripts\BAT\process.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!" "!3_BACKGROUND! /NOCONSOLE /DELAY=4 "cmd.exe /c !fileNircmdSetSize! _!programExe!_ !action! EXATO"
+		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title !programExe!_CMD& start "!programExe!_WIND" /WAIT !programExePath! !fileScript! & !3_BACKGROUND! /NOCONSOLE /DELAY=2 "cmd.exe /c echo a" & call !fileChrome_Extension!\src\scripts\BAT\process.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!" "!3_BACKGROUND! /NOCONSOLE /DELAY=4 "cmd.exe /c !fileNircmdSetSize! !programExe!_WIND !action! EXATO"
 	)
 )
 
 rem LOG E RETORNAR O RESULTADO
-!fileLog! "[PROCESS] = [exe: SIM - old: !ret2! - call: !mode! - act: !action! - run: !actionRun!] # !programExe!"
+!fileLog! "[PROCESS] = [exe: SIM - old: !ret2! - call: !modeNew! - act: !action! - run: !actionRun!] # !programExe!"
 
 rem BAT2 - DEFINIR O VALOR E RETORNAR (USAR '%' NAS VARIAVEIS!!!)
 endlocal & set "ret2=%ret2%" & setlocal enabledelayedexpansion & exit /b

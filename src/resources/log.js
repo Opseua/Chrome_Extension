@@ -20,7 +20,7 @@ async function log(inf = {}) {
         } else if (!text) {
             ret['msg'] = `LOG: ERRO | INFORMAR O 'text'`;
         } else {
-            let infFile, houTxt, houFile, minSecMil, pathOk, add = false;
+            let houTxt, houFile, minSecMil, pathOk, add = false;
             let time = dateHour().res, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`;
             minSecMil = `${time.min}:${time.sec}.${time.mil}`;
             houFile = `${time.hou}:${minSecMil}`;
@@ -44,11 +44,8 @@ async function log(inf = {}) {
             if (add) {
                 text = `→ ${houTxt}${fileProject ? ` ${fileProject}` : ''}${fileCall ? ` ${fileCall}` : ''}\n${typeof text === 'object' ? JSON.stringify(text) : text}\n\n`;
             }
-            infFile = {
-                e, 'action': 'write', 'raw': !!raw, 'functionLocal': functionLocal,
-                'text': text, 'add': add, 'path': pathOk.replace(/:/g, ''),
-            };
-            await file(infFile);
+
+            await file({ e, 'action': 'write', 'raw': !!raw, functionLocal, text, add, 'path': pathOk.replace(/:/g, ''), });
             let res = `${letter}:/${gW.root}/${functionLocal ? gW.functions : gW.project}/${pathOk}`;
 
             ret['res'] = res.replace('%', '');
@@ -57,7 +54,7 @@ async function log(inf = {}) {
         }
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

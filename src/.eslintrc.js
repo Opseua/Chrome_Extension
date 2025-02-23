@@ -2,101 +2,71 @@
 
 // ************** VARIÁVEIS NÃO DECLARADAS [globais] **************
 let arrGlobal = [
-  // FUNÇÃO DE FÁBRICA
-  'console', 'setTimeout', 'setInterval', 'clearTimeout', 'AbortController', 'TextEncoder', 'fetch', 'prompt', 'document', 'XPathResult', 'Blob', 'URL', 'DOMParser', 'atob', 'btoa', ,
-  'alert',
+  // FUNÇÃO NATIVAS
+  'console', 'setTimeout', 'setInterval', 'clearTimeout', 'AbortController', 'TextEncoder', 'fetch', 'prompt', 'document', 'XPathResult', 'Blob', 'URL', 'DOMParser', 'atob', 'btoa',
+  'alert', 'window', 'global', 'MutationObserver', 'Event',
 
-
-  'esLintIgnore',
-  'window', 'global', 'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf',
-  'gW', 'legacy', 'platforms', 'ori', 'des',
+  // VARIÁVEIS GLOBAIS
+  'esLintIgnore', 'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des',
 
   // VARIÁVEIS DO SISTEMA
   'fileChrome_Extension', 'fileProjetos', 'fileWindows',
 
-  // CHROME
-  // ## BIBLIOTECAS / NATIVO
+  // ### BIBLIOTECAS / NATIVO → CHROME
   'chrome',
 
-  // NODEJS
-  // ## BIBLIOTECAS / NATIVO
-  '_WebSocketServer', '_WebSocket', '_fs', '_path', '_url', '_cheerio', '_clipboard', '_http', '_exec', '_google', '_crypto', '_puppeteer', '_net', '_util', '_getFolderSize',
-  'process', 'Buffer', '_parse', '_stackTrace', '_googleapisAuth', '_googleapisSheets',
-  // ## VARIÁVEIS
-  'cs',
-  // ## GLOBAL OBJECT [NOVO]
-  'gO', 'gOList',
-  // ## FUNÇÕES
+  // ### BIBLIOTECAS / NATIVO → NODEJS
+  '_WebSocketServer', '_WebSocket', '_fs', '_path', '_url', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_crypto', '_puppeteer', '_net', '_util', '_getFolderSize', 'process',
+  'Buffer', '_parse', '_stackTrace', '_googleapisAuth', '_googleapisSheets',
+  // GLOBAL OBJECT
+  'gO', 'gOList', 'cs',
+  // FUNÇÕES
   'rateLimiter', 'awaitTimeout', 'randomNumber',
 
-  // GOOGLE 
-  // ## BIBLIOTECAS / NATIVO
+  // ### BIBLIOTECAS / NATIVO → GOOGLE 
   'UrlFetchApp', 'Browser',
 
-  // [Chrome_Extension]
-  // → funções globais
+  // funções globais → [Chrome_Extension]
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
   'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabSearch', 'GPT4js', 'listenerAcionar', 'listenerMonitorar',
-  'chromeActionsNew', 'funImport', 'funGeneric', 'funLibrary', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js',
-  // scripts
-  'background', 'command1', 'command2', 'tryRatingComplete',
+  'chromeActionsNew', 'funImport', 'funGeneric', 'funLibrary', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1', 'command2', 'tryRatingComplete',
 
-  // [WebSocket]
-  // → funções globais
+  // funções globais → [WebSocket]
   'html', 'logsDelOld', 'messageAction', 'performanceDev', 'roomParams',
 
-  // [Sniffer_Python]
-  // → funções globais
+  // funções globais → [Sniffer_Python]
   'ewoq', 'tryRating', 'getResponseTryRating', 'performTask',
 
-  // [URA_Reversa]
-  // → funções globais
+  // funções globais → [URA_Reversa]
   'leadChangeStatus', 'leadGet', 'leads', 'leadsJsf', 'login',
 
-  // [WebScraper]
-  // → funções globais
-  'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData', 'clientImput',
-
+  // funções globais → [WebScraper]
+  'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData',
+  'clientImput',
 ];
 
 // ************** VARIÁVEIS NÃO USADAS **************
 let arrUnused = [
-  // [infNomeFuncao] [infNomeFuncao]
   // 'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',
-  // (for)
-  'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'index4', 'value4', 'event',
-  // (time)
-  'time', 'time1', 'time2', 'hour', 'timeout', 'notificationLegacy',
-  'ee',
-
+  'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'index4', 'value4', 'event', 'time', 'time1', 'time2', 'hour', 'timeout', 'notificationLegacy', 'ee',
   // outros
   'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write',
   'msg', 'sendNtfy', 'e',
-
 ];
 
-
 let arrGlobalObj = {}; for (let variavel of arrGlobal) { arrGlobalObj[variavel] = 'writable'; }
-
 export let jsConfig = [
   {
-
     // PASTAS OU ARQUIVOS IGNORADOS
     'ignores': [
-      // TODA A PASTA
-      // '**/resources/chats/**',
-
-      // PARTE DO NOME DO ARQUIVO
-      // '**/*lipboard.js',
-
-      '**/resources/chats/**',
-      '**/teste*.js',
+      // '**/resources/chats/**', '**/*lipboard.js', // TODA A PASTA | PARTE DO NOME DO ARQUIVO
+      '**/resources/chats/**', '**/teste*.js',
     ],
-
     // VARIÁVEIS GLOBAIS
     'languageOptions': { 'globals': arrGlobalObj, },
 
     'rules': {
+      // ##################################################################################################################################################################
 
       // ********************* [CORREÇÃO AUTOMÁTICA: SIM] ********************* 
 
@@ -107,23 +77,19 @@ export let jsConfig = [
       'eqeqeq': 'error',
 
       // VÍRGULA NO FINAL
-      'comma-dangle': ['error', {
-        'objects': 'always',
-        'arrays': 'always',
-
-        'imports': 'never',
-        'exports': 'never',
-        'functions': 'never',
-      },],
+      'comma-dangle': ['error', { 'objects': 'always', 'arrays': 'always', 'imports': 'never', 'exports': 'never', 'functions': 'never', },],
 
       // 'return' DESNECESSÁRIO
       'no-useless-return': 'error',
 
-      // REDUNÂNCIA → let casa = true; let nova = casa ? true : false
+      // REDUNDÂNCIA → let casa = true; let nova = casa ? true : false
       'no-unneeded-ternary': ['error',],
 
       // 'if' DESNECESSÁRIO
       'no-lonely-if': 'error',
+
+      // REUTILIZAR VARIÁVEIS COM O MESMO NOME DA CHAVE     let key = { 'a': 'b', }; let keyNew = { 'key': key, };  →  let key = { 'a': 'b', }; let keyNew = { key, };
+      'object-shorthand': 'error',
 
       // CHAVES E VALORES COM ASPAS SIMPLES
       'quotes': ['error', 'single', {
@@ -181,8 +147,8 @@ export let jsConfig = [
         'ignoreTemplateLiterals': true, // IGNORAR CRASE
       },],
 
+      // ##################################################################################################################################################################
     },
-
   },
 ];
 

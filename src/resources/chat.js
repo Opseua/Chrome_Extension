@@ -36,7 +36,7 @@ async function chat(inf = {}) {
                 ret['ret'] = true;
             } else { // CHROME
                 if (eng) { retConfigStorage = await configStorage({ e, 'action': 'del', 'key': 'chatOpenAi', }); };
-                notification({ e, 'duration': 4, 'icon': 'notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message, });
+                notification({ e, 'duration': 4, 'icon': 'notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message, 'ntfy': false, });
                 ret['msg'] = `CHAT [OPEN AI]: ERRO | ${res.error.message}`;
             }
         } else if (provider.toLowerCase() === 'nextway') {
@@ -52,11 +52,11 @@ async function chat(inf = {}) {
             }
         } else {
             retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'chatPython', }); if (!retConfigStorage.ret) { return retConfigStorage; } else { retConfigStorage = retConfigStorage.res; };
-            infApi = { e, 'method': 'POST', 'url': `http://127.0.0.1:${retConfigStorage.portServerHttp}/chat`, 'headers': {}, 'body': inf, 'bodyObject': true, }; retApi = await api(infApi);
+            retApi = await api({ e, 'method': 'POST', 'url': `http://127.0.0.1:${retConfigStorage.portServerHttp}/chat`, 'headers': {}, 'body': inf, 'bodyObject': true, });
             if (!retApi.ret) { return retApi; } else { retApi = retApi.res; if (retApi.body) { retApi = retApi.body; } }; return retApi;
         }
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

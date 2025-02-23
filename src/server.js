@@ -9,26 +9,11 @@ async function serverRun(inf = {}) {
         // RESETAR BADGE
         chromeActions({ e, 'action': 'badge', 'text': '', });
 
-        // EXCLUIR DOWNLOAD SE TIVER '[KEEP]' NO TITULO DO ARQUIVO
-        chrome.downloads.onChanged.addListener(async function (...inf) {
-            let { id, } = inf; if (inf[0].state && inf[0].state.current === 'complete') {
-                chrome.downloads.search({ id, }, async function (txt) {
-                    if (txt.length > 0) {
-                        let d = inf[0]; if (d.byExtensionName && d.byExtensionName.includes('BOT') && !d.filename.includes('[KEEP]')) {
-                            setTimeout(function () {
-                                chrome.downloads.erase({ id: d.id, }); // logConsole({ e, ee, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url)
-                            }, 5000);
-                        }
-                    }
-                });
-            }
-        });
-
         // ATALHO PRESSIONADO
         chrome.commands.onCommand.addListener(async function (...inf) {
             try {
-                let infShortcutPressed = { 'shortcut': inf[0], }; // logConsole({ e, ee, 'msg': `ON START: ATALHO PRESSIONADO` })
-                if (infShortcutPressed.shortcut === 'atalho_1') {
+                // logConsole({ e, ee, 'msg': `ON START: ATALHO PRESSIONADO` })
+                if (inf[0] === 'atalho_1') {
                     command1({ 'origin': 'chrome', });
 
                     // chrome.tabs.executeScript({
@@ -38,9 +23,8 @@ async function serverRun(inf = {}) {
                     //             return j.open(u, '', 'width=' + w + ',height=' + h + ',top=' + y + ',left=' + x); }; pw(window, 30, 35, 'http://127.0.0.1:1234/?act=page&roo=&mes=0'); })();`
                     // });
 
-                }
-                else if (infShortcutPressed.shortcut === 'atalho_2') { command2(); } else { logConsole({ e, ee, 'msg': `ACAO DO ATALHO NAO DEFINIDA`, }); }
-            } catch (catchErr) { await regexE({ 'inf': inf, 'e': catchErr, }); };
+                } else if (inf[0] === 'atalho_2') { command2(); } else { logConsole({ e, ee, 'msg': `ACAO DO ATALHO NAO DEFINIDA`, }); }
+            } catch (catchErr) { await regexE({ inf, 'e': catchErr, }); };
         });
 
         // *************************
@@ -84,11 +68,19 @@ async function serverRun(inf = {}) {
 
         // retMessageSend = await messageSend(infMessageSend); console.log(retMessageSend);
 
+
+
+
+        // // ADICIONAR NOVO CHAVE | SALVAR NO STORAGE
+        // let retCS = await configStorage({ e, 'action': 'get', 'key': 'sniffer', }); retCS = retCS.res;
+        // retCS.platforms.TryRating[`z_search20Viewport`] = 'teste'; retCS = await configStorage({ e, 'action': 'set', 'key': 'sniffer', 'value': retCS, });
+
+
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

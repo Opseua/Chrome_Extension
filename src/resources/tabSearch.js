@@ -34,15 +34,15 @@ async function tabSearch(inf = {}) {
                 ret['res'] = result.res;
             } else if (typeof search === 'number') { // ID ret
                 for (let obj of result.res) {
-                    let infRegex = { e, 'pattern': search.toString(), 'text': obj.id.toString(), }; let retRegex = regex(infRegex);
+                    let retRegex = regex({ e, 'pattern': search.toString(), 'text': obj.id.toString(), });
                     if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned, }; break; }
                 }
             } else {
                 for (let obj of result.res) {
-                    let infRegex, retRegex; infRegex = { e, 'pattern': search, 'text': obj.url, }; retRegex = regex(infRegex);
+                    let retRegex; retRegex = regex({ e, 'pattern': search, 'text': obj.url, });
                     // URL ret
                     if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned, }; break; };
-                    infRegex = { e, 'pattern': search, 'text': obj.title, }; retRegex = regex(infRegex);
+                    retRegex = regex({ e, 'pattern': search, 'text': obj.title, });
                     // TITULO ret
                     if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned, }; break; }
                 }
@@ -62,7 +62,7 @@ async function tabSearch(inf = {}) {
         }
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     }
     if (!ret.ret) {
         if (inf.openIfNotExist) {
@@ -84,7 +84,7 @@ async function openTab(inf = {}) { // NAO USAR
 
         active = !!active; pinned = !!pinned; url = url || 'https://www.google.com';
         return await new Promise((resolve) => {
-            chrome.tabs.create({ 'url': url, 'active': active, 'pinned': pinned, }, function (novaAba) {
+            chrome.tabs.create({ url, active, pinned, }, function (novaAba) {
                 chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
                     if (tabId === novaAba.id && changeInfo.status === 'complete') {
                         chrome.tabs.get(novaAba.id, function (tab) {
@@ -95,7 +95,7 @@ async function openTab(inf = {}) { // NAO USAR
             });
         });
     } catch (catchErr) {
-        regexE({ 'inf': inf, 'e': catchErr, });
+        regexE({ inf, 'e': catchErr, });
     }
 };
 

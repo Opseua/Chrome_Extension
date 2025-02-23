@@ -11,13 +11,8 @@ async function googleTranslate(inf = {}) {
         // IMPORTAR BIBLIOTECA [NODEJS]
         if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio', }); };
 
-        let infApi = {
-            e,
-            'method': 'GET',
-            'url': `https://translate.google.com/m?sl=${source}&tl=${target}&q=${encodeURIComponent(text)}&hl=pt-BR`,
-            'headers': {},
-        };
-        let retApi = await api(infApi); if (!retApi.ret) { return retApi; } else { retApi = retApi.res; }
+        let retApi = await api({ e, 'method': 'GET', 'url': `https://translate.google.com/m?sl=${source}&tl=${target}&q=${encodeURIComponent(text)}&hl=pt-BR`, });
+        if (!retApi.ret) { return retApi; } else { retApi = retApi.res; }
         let res = retApi.body;
         let retRegex = regex({ e, 'pattern': 'class="result-container">(.*?)</div>', 'text': res, });
         if (!retRegex.ret) {
@@ -35,7 +30,7 @@ async function googleTranslate(inf = {}) {
         ret['ret'] = true;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

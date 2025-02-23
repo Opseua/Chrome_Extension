@@ -81,7 +81,7 @@ async function api(inf = {}) {
             if (inf.ignoreErr) {
                 ret['msg'] = `API: ERRO | CHAMADA PELA 'regexE'`;
             } else {
-                let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+                let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
             }
         }
     };

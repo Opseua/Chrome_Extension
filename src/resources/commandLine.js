@@ -2,14 +2,14 @@
 
 // let infCommandLine, retCommandLine;
 // infCommandLine = {
-//     e, // 'notBackground': false, 'awaitFinish': false, 'notAdm': false, 'withCmd': false, 'oldBackground': false, 'view': false, 'delay': 0, 'terminalPathAAA': `!letter!:/PASTA 1`,
+//     e, // 'notBackground': false, 'awaitFinish': false, 'notAdm': false, 'withCmd': false, 'oldBackground': false, 'view': false, 'delay': 0, 'terminalPath': `!letter!:/PASTA 1`,
 //     // ****************** NORMAL
 //     'command': `notepad`,
 //     // ****************** CMD {withCmd → true}
 //     // 'command': `notepad & explorer`,
 //     // ****************** (SEM ESPAÇO)
 //     // 'command': `D:/ARQUIVOS/BAT.bat AAA`,
-//     // 'command': `%fileChrome_Extension%/src/scripts/BAT/z_AllOff.vbs`,
+//     // 'command': `%fileChrome_Extension%/src/scripts/BAT/z__AllOff.vbs`,
 //     // 'command': `%fileWindows%/PORTABLE_Notepad++/notepad++.exe D:/AAA.txt`,
 //     // 'command': `!fileProjetos!/WebSocket/src/z_OUTROS_server/OFF.vbs FORCE_STOP`,
 //     // ****************** (COM ESPAÇO)
@@ -76,7 +76,7 @@ async function commandLine(inf = {}) {
         });
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

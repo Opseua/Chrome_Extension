@@ -35,7 +35,7 @@ set "awsNodeJs=WebSocket_server,WebSocket_server" & set "awsPython=Chat_Python_s
 rem ************* ESTRELAR
 set "estrelarNodeJs=WebSocket_server,URA_Reversa_serverJsf,WebScraper_serverC6,WebScraper_serverC6_New2,WebScraper_serverC6_New3,WebScraper_serverC6_New4,WebScraper_serverC6_New5,WebScraper_serverC6_New6,WebScraper_serverC6_New7,WebScraper_serverC6_New8"
 rem ************* OPSEUA
-set "opseuaNodeJs=!awsNodeJs!,!estrelarNodeJs!" & set "opseuaPython=!awsPython!" & set "newstringNodeJs=" & set "newstringPython="
+set "opseuaNodeJs=!awsNodeJs!,!estrelarNodeJs!,Sniffer_Python_server" & set "opseuaPython=!awsPython!,Sniffer_Python_server" & set "newstringNodeJs=" & set "newstringPython="
 
 rem RMEOVER DUPLICATAS (SEPARADOS POR ',') [APENAS DO 'OPSEUA'] {NODEJS/PYTHON}
 for %%a in ("%opseuaNodeJs:,=";"%") DO (

@@ -19,7 +19,7 @@ async function client(inf = {}) {
 
                 // LISTENER PARA RETORNAR O 'ws'
                 function getWs(inf = {}) { let { hostRoom, } = inf; if (wsServers.rooms[hostRoom]) { for (let ws of wsServers.rooms[hostRoom]) { if (ws.hostRoom === hostRoom) { return ws; } } }; return null; }
-                ws.send(`ping`); listenerMonitorar(`getWs_${locWeb}`, async (/*nomeList, inf*/) => { return getWs({ 'hostRoom': hostRoom, }); });
+                ws.send(`ping`); listenerMonitorar(`getWs_${locWeb}`, async (/*nomeList, inf*/) => { return getWs({ hostRoom, }); });
             };
 
             // # ON MESSAGE
@@ -30,8 +30,8 @@ async function client(inf = {}) {
                 if (pingPong > 0) { // RECEBIDO: 'PING' ENVIAR 'PONG'
                     if (pingPong === 2) { return; }; ws.send('pong'); // logConsole({ e, ee, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
                 } else { // RECEBIDO: OUTRA MENSAGEM
-                    try { message = JSON.parse(message); } catch (catchErr) { message = { 'message': message, }; esLintIgnore = catchErr; }; if (!message.message) { message = { 'message': message, }; }
-                    if (ws.lastMessage) { ws.send(`pong`); }; messageReceived({ ...message, 'host': host, 'room': room, 'resWs': ws, 'locWeb': locWeb, });
+                    try { message = JSON.parse(message); } catch (catchErr) { message = { message, }; esLintIgnore = catchErr; }; if (!message.message) { message = { message, }; }
+                    if (ws.lastMessage) { ws.send(`pong`); }; messageReceived({ ...message, host, room, 'resWs': ws, locWeb, });
                 }
             };
 
@@ -44,26 +44,25 @@ async function client(inf = {}) {
         // ### RECONEXÃO | REMOVER SERVIDOR
         function reconnect(inf = {}) {
             let { host, room, hostRoom, resWs, event, } = inf; let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; if (!reconnecting[hostRoom]) {
-                reconnecting[hostRoom] = true; let secReconnect = gW.secReconnect - secConnect + 1; removeSerCli({ 'hostRoom': hostRoom, 'resWs': resWs, msg: `${locWeb} RECONECTADO ${event}:\n${room}`, });
-                setTimeout(() => { reconnecting[hostRoom] = false; connect({ 'hostRoom': hostRoom, }); }, (secReconnect * 1000) - 50); // ← MENOS SEGUNDOS DO TEMPO DE CONEXÃO
+                reconnecting[hostRoom] = true; let secReconnect = gW.secReconnect - secConnect + 1; removeSerCli({ hostRoom, resWs, msg: `${locWeb} RECONECTADO ${event}:\n${room}`, });
+                setTimeout(() => { reconnecting[hostRoom] = false; connect({ hostRoom, }); }, (secReconnect * 1000) - 50); // ← MENOS SEGUNDOS DO TEMPO DE CONEXÃO
             }
         }; function removeSerCli(inf = {}) {
-            let { hostRoom, resWs, msg, } = inf; logConsole({ e, ee, 'msg': msg, }); if (wsServers.rooms[hostRoom]) {
-                wsServers.rooms[hostRoom].delete(resWs); if (wsServers.rooms[hostRoom].size === 0) { delete wsServers.rooms[hostRoom]; }
-            }
+            let { hostRoom, resWs, msg, } = inf; logConsole({ e, ee, msg, });
+            if (wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom].delete(resWs); if (wsServers.rooms[hostRoom].size === 0) { delete wsServers.rooms[hostRoom]; } }
         }
 
         // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → GET [WEB] | GET [LOC]
         let servers = [gW.devGet[0], gW.devGet[1],]; for (let [index, value,] of servers.entries()) {
             if (!value.includes('127.0.0.1') && (gW.project === 'Sniffer_Python' || (!value.includes('USUARIO_0') && value.includes('USUARIO_')))) {
                 // NÃO CONECTAR AO WEBSOCKET
-            } else { connect({ 'hostRoom': value, }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ 'nomeList': nomeList, 'param1': param1, }); }); }
+            } else { connect({ 'hostRoom': value, }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ nomeList, param1, }); }); }
         };
 
         async function runLis(inf = {}) {
             let { nomeList, param1, } = inf, { messageId, message, resWs, origin, host, room, } = param1; // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
             // logConsole({ e, ee, 'msg': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
-            let data = {}; try { data = JSON.parse(message); } catch (catchErr) { esLintIgnore = catchErr; }; if (data.fun) { devFun({ e, 'data': data, 'messageId': messageId, 'resWs': resWs, 'destination': origin, }); }
+            let data = {}; try { data = JSON.parse(message); } catch (catchErr) { esLintIgnore = catchErr; }; if (data.fun) { devFun({ e, data, messageId, resWs, 'destination': origin, }); }
             else if (data.other) { logConsole({ e, ee, 'msg': `OTHER\n${JSON.stringify(data.other)}`, }); }
         }
 
@@ -71,7 +70,7 @@ async function client(inf = {}) {
         let secPing = gW.secPing; function lastMessageReceived() {
             for (let clientSet of Object.values(wsServers.rooms)) {
                 for (let v of clientSet) {
-                    function check(inf = {}) { let { lastMessage, locWeb, room, } = inf; return { 'dif': lastMessage ? Number(dateHour().res.tim) - lastMessage : -99, 'locWeb': locWeb, 'room': room, }; };
+                    function check(inf = {}) { let { lastMessage, locWeb, room, } = inf; return { 'dif': lastMessage ? Number(dateHour().res.tim) - lastMessage : -99, locWeb, room, }; };
                     let retCheck = check(v); if (retCheck.dif > (secPing - 1)) {
                         // logConsole({ e, ee, 'msg': `MENSAGEM ANTIGA → ENVIAR 'PING' ${retCheck.locWeb} '${retCheck.room}'` });
                         v.send('ping'); setTimeout(() => {
@@ -85,7 +84,7 @@ async function client(inf = {}) {
         ret['ret'] = true;
         ret['msg'] = 'CLIENT: OK';
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
     if (!ret.ret) {
         if (eng) { // CHROME

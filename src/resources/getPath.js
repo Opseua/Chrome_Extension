@@ -23,10 +23,10 @@ async function getPath(inf = {}) {
             // CHROME
             paths = paths.split(`${functions}/`)[1]; paths = paths.split(':'); line = paths[1]; fileOk = paths[0];
             if (isFunction) {
-                res = { 'conf': conf, 'letter': funLetter, 'functions': `${functions}`, 'project': project, };
+                res = { conf, 'letter': funLetter, 'functions': `${functions}`, project, };
 
-                // CONFIG.json
-                confOk = await fetch(chrome.runtime.getURL(conf)); confOk = await confOk.text(); confOk = JSON.parse(confOk);
+                // CONFIG.json | ADICIONAR TODO O CONFIG NO STORAGE
+                confOk = await fetch(chrome.runtime.getURL(conf)); confOk = await confOk.text(); confOk = JSON.parse(confOk); chrome.storage.local.set(confOk);
 
                 // MASTER.json
                 master = await fetch(chrome.runtime.getURL(master)); master = await master.text(); master = JSON.parse(master);
@@ -37,14 +37,14 @@ async function getPath(inf = {}) {
                 res['confOk'] = confOk;
 
             } else {
-                res = { 'conf': gW.conf, 'letter': gW.letter, 'root': gW.root, 'functions': gW.functions, 'project': project, };
+                res = { 'conf': gW.conf, 'letter': gW.letter, 'root': gW.root, 'functions': gW.functions, project, };
             }
         } else {
             // NODEJS
             paths = paths.split('file:///')[1].split(':/'); funLetter = paths[0].toUpperCase(); paths = paths[1].split(':'); line = paths[1]; fileOk = paths[0];
             let funProject = fileOk.match(new RegExp('(' + root + '/[^/]+)'))[0]; fileOk = fileOk.split(`${funProject}/`)[1]; funProject = funProject.split(`${root}/`)[1];
             if (isFunction) {
-                res = { 'conf': conf, 'letter': funLetter, 'functions': funProject, 'project': project, }; _fs = await import('fs');
+                res = { conf, 'letter': funLetter, 'functions': funProject, project, }; _fs = await import('fs');
 
                 // CONFIG.json
                 confOk = await _fs.promises.readFile(`${funLetter}:/${root}/${funProject}/${conf}`, 'utf8'); confOk = JSON.parse(confOk);
