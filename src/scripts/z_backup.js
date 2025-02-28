@@ -1,7 +1,7 @@
 await import('../resources/@export.js'); let e = import.meta.url, ee = e;
 
 // IMPORTAR BIBLIOTECA [NODEJS]
-if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path', }); }; if (typeof _fs === 'undefined') { await funLibrary({ 'lib': '_fs', }); };
+if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path', }); } if (typeof _fs === 'undefined') { await funLibrary({ 'lib': '_fs', }); }
 
 async function backups() {
     let m = `!fileChrome_Extension!/src/scripts/BAT/fileMsg.vbs`;
@@ -9,7 +9,7 @@ async function backups() {
         let retDateHour = dateHour().res; retDateHour = `MES ${retDateHour.mon} - DIA ${retDateHour.day} - HORA ${retDateHour.hou}.${retDateHour.min}`;
         let nameMaster = await configStorage({ e, 'action': 'get', 'key': 'master', 'path': `!fileChrome_Extension!/src/master.json`, }); nameMaster = nameMaster.res;
         let back = {
-            'destino': `${letter}:/ARQUIVOS/PROJETOS_2/z_OUTROS/BACKUPS_${nameMaster}/${retDateHour}`,
+            'destino': `${letter}:/ARQUIVOS/PROJETOS/z_OUTROS/BACKUPS_${nameMaster}/${retDateHour}`,
             'backups': [
                 {
                     'pastaPai': `${fileProjetos}`,
@@ -50,20 +50,20 @@ async function backups() {
         }; let err, p = back.destino;
 
         // CRIAR PASTA SE NÃO EXISTIR [BACKUP GERAL]
-        if (!_fs.existsSync(back.destino)) { _fs.mkdirSync(back.destino, { recursive: true, }); }; for (let backup of back.backups) {
+        if (!_fs.existsSync(back.destino)) { _fs.mkdirSync(back.destino, { recursive: true, }); } for (let backup of back.backups) {
             // CRIAR PASTA SE NÃO EXISTIR [BACKUP ATUAL]
-            let pastaBackup = _path.join(back.destino, backup.nomePastaBackup); if (!_fs.existsSync(pastaBackup)) { _fs.mkdirSync(pastaBackup, { recursive: true, }); }; for (let pasta of backup.pastasFilho) {
+            let pastaBackup = _path.join(back.destino, backup.nomePastaBackup); if (!_fs.existsSync(pastaBackup)) { _fs.mkdirSync(pastaBackup, { recursive: true, }); } for (let pasta of backup.pastasFilho) {
                 let origemPasta = _path.join(backup.pastaPai, pasta); let destinoPasta = _path.join(pastaBackup, pasta); if (_fs.existsSync(origemPasta)) {
                     // CRIAR PASTA SE NÃO EXISTIR [BACKUP DESTINO]
-                    if (!_fs.existsSync(destinoPasta)) { _fs.mkdirSync(destinoPasta, { recursive: true, }); }; for (let pastaNeto of backup.copiarPastasNeto) {
+                    if (!_fs.existsSync(destinoPasta)) { _fs.mkdirSync(destinoPasta, { recursive: true, }); } for (let pastaNeto of backup.copiarPastasNeto) {
                         // COPIAR PASTAS
                         let origemSrc = _path.join(origemPasta, pastaNeto); let destinoSrc = _path.join(destinoPasta, pastaNeto);
                         if (_fs.existsSync(origemSrc)) { try { await _fs.promises.cp(origemSrc, destinoSrc, { recursive: true, }); } catch (err) { console.log(`ERRO [PASTA]: ${origemSrc}`, err); } }
-                    }; for (let arquivoNeto of backup.copiarArquivosNeto) {
+                    } for (let arquivoNeto of backup.copiarArquivosNeto) {
                         // COPIAR ARQUIVOS
                         let origemArquivo = _path.join(origemPasta, arquivoNeto); let destinoArquivo = _path.join(destinoPasta, arquivoNeto);
                         if (_fs.existsSync(origemArquivo)) { try { await _fs.promises.copyFile(origemArquivo, destinoArquivo); } catch (err) { console.log(`ERRO [ARQUIVO]: ${origemArquivo}`, err); } }
-                    }; console.log(`OK [${backup.nomePastaBackup}]: ${origemPasta}`);
+                    } console.log(`OK [${backup.nomePastaBackup}]: ${origemPasta}`);
                 }
             }
         }
@@ -82,9 +82,8 @@ async function backups() {
 
     } catch (catchErr) {
         console.log(`ERRO AO FAZER BACKUPS`, '\n', catchErr); commandLine({ e, 'command': `"${m}" "ERRO AO FAZER BACKUPS"`, });
-    };
+    }
 }
-
 backups();
 
 

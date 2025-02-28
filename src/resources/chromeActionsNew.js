@@ -24,13 +24,13 @@ async function chromeActionsNew(inf = {}) {
 
     // AÇÕES | REGEX | ELEMENTOS: PEGAR PATH
     let actions = ['attributeGetName', 'attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDiv', 'elementIsHidden', 'elementGetPath', 'elementHighLight',];
-    function eleRegex(p, t, c) { if (!c) { p = p.toLowerCase(); t = t.toLowerCase(); }; p = p.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*'); return new RegExp(`^${p}$`).test(t); }; let res; let elements;
+    function eleRegex(p, t, c) { if (!c) { p = p.toLowerCase(); t = t.toLowerCase(); } p = p.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*'); return new RegExp(`^${p}$`).test(t); } let res; let elements;
     function eleGetPath(ele) {
         if (ele.tagName === 'BODY') { return '/html/body'; } else {
             let s = Array.from(ele.parentNode.childNodes).filter(e => e.nodeName === ele.nodeName); let idx = s.indexOf(ele);
             return eleGetPath(ele.parentNode) + '/' + ele.tagName.toLowerCase() + (s.length > 1 ? `[${idx + 1}]` : '');
         }
-    };
+    }
 
     if (!actions.includes(action)) { res = 'PARÂMETROS INVÁLIDOS'; } else {
         if (path) {
@@ -39,7 +39,7 @@ async function chromeActionsNew(inf = {}) {
         } else {
             // ELEMENTOS: PEGAR TODOS (QUERY SELECTOR)
             elements = [...document.querySelectorAll('*'),];
-        };
+        }
 
         // ORDENAR FILTRAGEM
         let criteryOrder = Object.keys(inf).filter(value => ['tags', 'attributes', 'contents',].includes(value)); let elementsTemp = elements;
@@ -63,15 +63,15 @@ async function chromeActionsNew(inf = {}) {
                                 let matchValue = !attributeValue ? true : eleRegex(attributeValue.replace(/&quot;/g, '"'), attr.value, useCase);
                                 return matchName && matchValue;
                             });
-                        };
+                        }
                         if (key === 'contents') {
                             let { contentValue, useCase = false, } = criterion;
                             return !contentValue || eleRegex(contentValue, element.textContent.trim(), useCase);
-                        }; return true;
+                        } return true;
                     });
                     if (matchesCriteria) {
                         return includeChildren ? [element, ...Array.from(element.querySelectorAll('*')),] : [element,];
-                    };
+                    }
                     return [];
                 });
             }
@@ -92,11 +92,11 @@ async function chromeActionsNew(inf = {}) {
                 // ELEMENTO: PEGAR VALOR
                 return elements.map(ele => {
                     let r; if (ele.tagName.toLowerCase() === 'select') { r = Array.from(ele.selectedOptions).map(option => option.value); } else if (ele.tagName.toLowerCase() === 'textarea') { r = ele.value; }
-                    else if (ele.type === 'checkbox' || ele.type === 'radio') { r = { 'checked': ele.checked, 'value': ele.value, }; } else { r = ele.value || ele.innerText; }; return Array.isArray(r) ? r : [r,];
+                    else if (ele.type === 'checkbox' || ele.type === 'radio') { r = { 'checked': ele.checked, 'value': ele.value, }; } else { r = ele.value || ele.innerText; } return Array.isArray(r) ? r : [r,];
                 });
             } else if (action === 'elementSetValue') {
                 // ELEMENTO: DEFINIR VALOR
-                return elements.map(ele => { if (ele.type === 'checkbox' || ele.type === 'radio') { ele.checked = elementValue; } else { ele.value = elementValue; }; return [elementValue,]; });
+                return elements.map(ele => { if (ele.type === 'checkbox' || ele.type === 'radio') { ele.checked = elementValue; } else { ele.value = elementValue; } return [elementValue,]; });
             } else if (action === 'elementClick') {
                 // ELEMENTO: CLICAR
                 return elements.map(ele => { ele.click(); return [true,]; });
@@ -114,30 +114,30 @@ async function chromeActionsNew(inf = {}) {
                 async function highLight(ele) {
                     // console.log('tagName', ele.tagName, 'type', ele.type);
                     if (ele.tagName === 'INPUT' && ele.type === 'radio') {
-                        let d = ele; while (d && d.tagName !== 'DIV' && d.tagName !== 'BODY') { d = d.parentElement; }; if (d && d.tagName === 'DIV') {
+                        let d = ele; while (d && d.tagName !== 'DIV' && d.tagName !== 'BODY') { d = d.parentElement; } if (d && d.tagName === 'DIV') {
                             let o = d.style.backgroundColor; d.style.backgroundColor = 'yellow'; await new Promise(resolve => { setTimeout(resolve, 500); }); d.style.backgroundColor = o;
-                        };
-                    } else { let o = ele.style.backgroundColor; ele.style.backgroundColor = 'yellow'; await new Promise(resolve => { setTimeout(resolve, 500); }); ele.style.backgroundColor = o; }; return [true,];
-                }; let resHighLight = []; for (let index = 0; index < elements.length; index++) { let resHigLig = await highLight(elements[index]); resHighLight.push(resHigLig); }; return resHighLight;
+                        }
+                    } else { let o = ele.style.backgroundColor; ele.style.backgroundColor = 'yellow'; await new Promise(resolve => { setTimeout(resolve, 500); }); ele.style.backgroundColor = o; } return [true,];
+                } let resHighLight = []; for (let index = 0; index < elements.length; index++) { let resHigLig = await highLight(elements[index]); resHighLight.push(resHigLig); } return resHighLight;
             }
 
         }
 
         // EXECUTAR AÇÃO
-        if (action) { elements = await eleAction(); };
+        if (action) { elements = await eleAction(); }
 
         // FILTRAR NOVAMENTE
         for (let [index, v,] of reFilter.entries()) {
-            function clear(pat, arr) { return arr.filter(p => { function clear(v) { if (Array.isArray(v)) { return v.some(s => clear(s)); } return eleRegex(pat, v); }; return clear(p); }); }; elements = clear(v, elements);
+            function clear(pat, arr) { return arr.filter(p => { function clear(v) { if (Array.isArray(v)) { return v.some(s => clear(s)); } return eleRegex(pat, v); } return clear(p); }); } elements = clear(v, elements);
         }
 
         let qtdElements = elements.length; res = !elements.flat(Infinity).some(v => v !== undefined) ? false : { qtdElements, res: elements, };
 
-    };
+    }
 
     // return res // RETORNADO PELO 'chrome.runtime.sendMessage';
 
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['chromeActionsNew'] = chromeActionsNew;

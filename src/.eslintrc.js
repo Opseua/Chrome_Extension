@@ -1,13 +1,11 @@
-
-
 // ************** VARIÁVEIS NÃO DECLARADAS [globais] **************
 let arrGlobal = [
   // FUNÇÃO NATIVAS
   'console', 'setTimeout', 'setInterval', 'clearTimeout', 'AbortController', 'TextEncoder', 'fetch', 'prompt', 'document', 'XPathResult', 'Blob', 'URL', 'DOMParser', 'atob', 'btoa',
-  'alert', 'window', 'global', 'MutationObserver', 'Event',
+  'alert', 'window', 'global', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle',
 
   // VARIÁVEIS GLOBAIS
-  'esLintIgnore', 'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des',
+  'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des',
 
   // VARIÁVEIS DO SISTEMA
   'fileChrome_Extension', 'fileProjetos', 'fileWindows',
@@ -28,7 +26,7 @@ let arrGlobal = [
 
   // funções globais → [Chrome_Extension]
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
-  'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabSearch', 'GPT4js', 'listenerAcionar', 'listenerMonitorar',
+  'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar', 'listenerMonitorar',
   'chromeActionsNew', 'funImport', 'funGeneric', 'funLibrary', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1', 'command2', 'tryRatingComplete',
 
   // funções globais → [WebSocket]
@@ -42,7 +40,7 @@ let arrGlobal = [
 
   // funções globais → [WebScraper]
   'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData',
-  'clientImput',
+  'clientImput', 'maquinaInput',
 ];
 
 // ************** VARIÁVEIS NÃO USADAS **************
@@ -91,6 +89,12 @@ export let jsConfig = [
       // REUTILIZAR VARIÁVEIS COM O MESMO NOME DA CHAVE     let key = { 'a': 'b', }; let keyNew = { 'key': key, };  →  let key = { 'a': 'b', }; let keyNew = { key, };
       'object-shorthand': 'error',
 
+      // IF ELSE SEM CHAVES if (foo) foo++  →  if (foo) { foo++; }
+      'curly': 'error',
+
+      // ';' DESNECESSÁRIO
+      'no-extra-semi': 'error',
+
       // CHAVES E VALORES COM ASPAS SIMPLES
       'quotes': ['error', 'single', {
         'allowTemplateLiterals': true, // IGNORAR ENTRE CRASE → let variavel = { 'chave': `NOME ${pessoa} IDADE: 1`}
@@ -99,8 +103,8 @@ export let jsConfig = [
 
       // ********************* [CORREÇÃO AUTOMÁTICA: NÃO] ********************* 
 
-      // VARIÁVEIS NÃO USADAS
-      'no-unused-vars': ['error', { 'varsIgnorePattern': `^(${arrUnused.join('|')})$`, },],
+      // VARIÁVEIS NÃO USADAS E 'catchErr'
+      'no-unused-vars': ['error', { 'varsIgnorePattern': `^(${arrUnused.join('|')})$`, 'caughtErrors': 'none', },],
 
       // VARIÁVEL NÃO DEFINIDA
       'no-undef': 'error',
@@ -125,6 +129,15 @@ export let jsConfig = [
 
       // 'true' NO WHILE
       'no-constant-condition': 'off',
+
+      // CHAVES DUPLICADAS → { bar: "baz", bar: "qux" }
+      'no-dupe-keys': 'error',
+
+      // IF DESNECESSÁRIO
+      'no-self-compare': 'error',
+
+      // IMPORT DUPLICADO
+      'no-duplicate-imports': 'error',
 
       // 'return' OBRIGATÓRIO NA FUNÇÃO
       // 'consistent-return': 'error',

@@ -1,4 +1,4 @@
-// // 'write' → 'true' ESCREVE NO 'PROJECT/log/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
+// // 'write' → 'true' ESCREVE NO 'PROJECT/logs/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
 // logConsole({ e, ee, 'msg': `Mensagem do console`, });
 
 let e = import.meta.url;
@@ -51,10 +51,10 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['logConsole'] = logConsole;

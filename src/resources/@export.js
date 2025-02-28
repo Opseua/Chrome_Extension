@@ -1,11 +1,11 @@
 let eng = (typeof window !== 'undefined'); (eng ? window : global)['eng'] = eng; let gloWin = eng ? window : global; // [true] CHROME | [false] NODEJS
 
-function all2() { }; gloWin['all2'] = all2; // ******************************************************** NÃO USAR !!!
+function all2() { } gloWin['all2'] = all2; // ******************************************************** NÃO USAR !!!
 
 if (!(eng ? window.all1 : global.all1)) {
     // DEFINIR O 'devChildren' → [CHROME] EMAIL DO USUÁRIO | [NODEJS] PRIMEIRO ARQUIVO A SER EXECUTADO (NA MAIORIA DOS CASOS 'server')
     let devC = new Error().stack.split('\n'); devC = devC[devC.length - 1]; let devChildren = devC.includes('.js:') ? devC.match(/\/([^/]+)\.[^/]+$/)[1] : false;
-    if (eng) { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email); }); }); };
+    if (eng) { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email); }); }); }
 
     // @functions
     await import('./@functions.js');
@@ -22,7 +22,7 @@ if (!(eng ? window.all1 : global.all1)) {
 
 // IMPORTAR BIBLIOTECAS [NODE] DINAMICAMENTE QUANDO NECESSÁRIO 
 let qtd2 = 0; async function funLibrary(infOk) {
-    let lib = infOk.lib; qtd2++; if (qtd2 > 30) { console.log(`IMPORTANDO BIBLIOTECA [${eng && lib !== '_WebSocket' ? 'NÃO' : 'SIM'}]...`, lib); }; if (eng && lib !== '_WebSocket') { gloWin[lib] = true; return; };
+    let lib = infOk.lib; qtd2++; if (qtd2 > 30) { console.log(`IMPORTANDO BIBLIOTECA [${eng && lib !== '_WebSocket' ? 'NÃO' : 'SIM'}]...`, lib); } if (eng && lib !== '_WebSocket') { gloWin[lib] = true; return; }
     // NATIVA
     if (lib === '_http') { let { default: http, } = await import('http'); gloWin[lib] = http; }
     else if (lib === '_path') { let path = await import('path'); gloWin[lib] = path; }
@@ -43,7 +43,7 @@ let qtd2 = 0; async function funLibrary(infOk) {
     else if (lib === '_WebSocket') { if (!eng) { let { default: WebSocket, } = await import('ws'); gloWin[lib] = WebSocket; } else { gloWin[lib] = window.WebSocket; } }
     else if (lib === '_WebSocketServer') { let { WebSocketServer, } = await import('ws'); gloWin[lib] = WebSocketServer; }
 
-}; gloWin['funLibrary'] = funLibrary;
+} gloWin['funLibrary'] = funLibrary;
 
 // FUNÇÕES DESSE PROJETO
 gloWin['regexE'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './regexE.js', inf, }); };  // MANTER COMO 1º IMPORT
@@ -69,7 +69,7 @@ gloWin['objFilter'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneri
 gloWin['messageReceived'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './messageReceived.js', inf, }); };
 gloWin['messageSend'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './messageSend.js', inf, }); };
 gloWin['regex'] = (inf) => { let fun = (eng || !eng) ? funImport : funGeneric; return fun({ 'path': './regex.js', inf, }); };
-gloWin['tabSearch'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': './tabSearch.js', inf, }); };
+gloWin['tabAction'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': './tabAction.js', inf, }); };
 
 // SCRIPTS DESSE PROJETO
 gloWin['command1'] = (inf) => { let fun = (eng) ? funImport : funGeneric; return fun({ 'path': '../scripts/command1.js', inf, }); };

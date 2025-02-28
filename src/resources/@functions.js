@@ -1,6 +1,8 @@
 // await new Promise(resolve => { setTimeout(resolve, 2000) });   
 
 // CHECAR SE É ARRAY Array.isArray(retHtmlToJson)   |   CHECAR SE TEM A CHAVE  if ('chave' in obj){ }   |   CHECAR SE É OBJETO typeof obj === 'object'
+// let { key: atribuirNisso, } = { 'key': 'AAA', }; console.log(atribuirNisso);
+// ({ issoJaExiste, } = functionAqui(obj));
 
 // process.exit();
 
@@ -28,8 +30,8 @@
 
 // https://api.hashify.net/hash/md5/hex?value=aaaa
 
-let _fs, cs; let keepGW = eng ? window : global; keepGW['esLintIgnore'] = ''; keepGW['engName'] = (eng) ? 'CHROME' : 'NODEJS'; keepGW['letter'] = 'x'; keepGW['fileProjetos'] = 'x'; keepGW['fileChrome_Extension'] = 'x';
-keepGW['fileWindows'] = 'x'; if (!eng) { _fs = await import('fs'); keepGW['_fs'] = _fs; process.noDeprecation = true; }; keepGW['gW'] = {};
+let _fs, cs; let keepGW = eng ? window : global; keepGW['engName'] = (eng) ? 'CHROME' : 'NODEJS'; keepGW['letter'] = 'x'; keepGW['fileProjetos'] = 'x'; keepGW['fileChrome_Extension'] = 'x';
+keepGW['fileWindows'] = 'x'; if (!eng) { _fs = await import('fs'); keepGW['_fs'] = _fs; process.noDeprecation = true; } keepGW['gW'] = {};
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
 await import('./getPath.js'); let retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket; let devMaster = retGetPath.res.confOk.master;
@@ -54,23 +56,23 @@ gW = { // MANTER APÓS O 'devSend'
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // ############### GLOBAL OBJECT ###############
 // gOList(async function () { console.log('globalObject [import] ALTERADO →', gO.inf) }); gO.inf['NovaChave'] = { 'a': 'b' }; gO.inf['NovaChave'] = ['a', 'b', 'c',]; console.log(gO.inf)
-let gOListener = []; let gOObj = {}; function gOList(listener) { gOListener.push(listener); }; function notificarListeners(prop, value) {
-    if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf); }; for (let listener of gOListener) { listener(prop, value); }
-}; let gO = new Proxy(gOObj, { set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; }, }); gO.inf = {}; // let cs = await configStorage(['']); console.log(cs)
+let gOListener = []; let gOObj = {}; function gOList(listener) { gOListener.push(listener); } function notificarListeners(prop, value) {
+    if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf); } for (let listener of gOListener) { listener(prop, value); }
+} let gO = new Proxy(gOObj, { set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; }, }); gO.inf = {}; // let cs = await configStorage(['']); console.log(cs)
 
 // ############### RATE LIMIT ###############
 // let rate = rateLimiter({ 'max': 3, 'sec': 5 }); function testRate() { console.log(rate.check()); console.log(rate.check()); console.log(rate.check()); console.log(rate.check()) }; testRate();
 function rateLimiter(inf = {}) {
     let { max, sec, } = inf; sec = sec * 1000; let old = [];
-    function check() { let now = Date.now(); let recent = old.filter(timestamp => timestamp >= now - sec); if (recent.length < max) { old.push(now); return true; } else { return false; } }; return { check, };
+    function check() { let now = Date.now(); let recent = old.filter(timestamp => timestamp >= now - sec); if (recent.length < max) { old.push(now); return true; } else { return false; } } return { check, };
 }
 
 // ############### NÚMERO ALEATÓRIO ###############
-function randomNumber(min, max) { return Math.floor(Math.random() * ((typeof max === 'number' ? max : min + 1) - min + 1) + min); }; // console.log(randomNumber(2, 5))
+function randomNumber(min, max) { return Math.floor(Math.random() * ((typeof max === 'number' ? max : min + 1) - min + 1) + min); } // console.log(randomNumber(2, 5))
 
 // ############### LISTENER ###############
 let lists = {}; function listenerMonitorar(namLis, callback) { if (!lists[namLis]) { lists[namLis] = []; } lists[namLis].push(callback); }
-async function listenerAcionar(namLis, inf, call) { if (lists[namLis]) { for (let callFun of lists[namLis]) { let res = await callFun(namLis, inf); if (typeof call === 'function') { call(res); }; return res; } } };
+async function listenerAcionar(namLis, inf, call) { if (lists[namLis]) { for (let callFun of lists[namLis]) { let res = await callFun(namLis, inf); if (typeof call === 'function') { call(res); } return res; } } }
 
 // ############### AWAIT TIMEOUT ###############
 function awaitTimeout(inf = {}) {
@@ -78,17 +80,17 @@ function awaitTimeout(inf = {}) {
         let timeout; listenerMonitorar(listenerName, async (namLis, param1) => { clearTimeout(timeout); resolve({ 'ret': true, 'msg': 'TIMEOUT_FOI_LIMPO', 'res': param1, }); });
         timeout = setTimeout(() => { resolve({ 'ret': false, 'msg': 'TIMEOUT_EXPIROU', }); }, secondsAwait * 1000);
     });
-}; // async function runOk() {  console.log('INICIO'); let retAwaitTimeout = await awaitTimeout({ 'secondsAwait': 5, 'listenerName': 'NOME AQUI' }); console.log(retAwaitTimeout); }; runOk();
+} // async function runOk() {  console.log('INICIO'); let retAwaitTimeout = await awaitTimeout({ 'secondsAwait': 5, 'listenerName': 'NOME AQUI' }); console.log(retAwaitTimeout); }; runOk();
 // async function liberarTimeout() { setTimeout(() => { listenerAcionar('NOME AQUI', 'INF1', 'INF2'); }, 2000);}; liberarTimeout();
 
 // ############### CLEAR CONSOLE ###############
-function clearRun() { if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } }; let msgQtd = 0; keepGW['clearRun'] = clearRun;
+function clearRun() { if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } } let msgQtd = 0; keepGW['clearRun'] = clearRun;
 let clearConsole = console.log; console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n'); } }; clearRun();
 
 // PEGAR O NOME DO ARQUIVO(SEM EXTENSÃO) | IMPORTAR FUNÇÕES DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) | ENCAMINHAR PARA DEVICE
-function funFile(txt) { return txt.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; };
-let qtd1 = 0; async function funImport(infOk) { let { path, inf, } = infOk; qtd1++; let n = funFile(path); if (qtd1 > 30) { console.log('IMPORTANDO...', n); }; await import(`${path}`); return await keepGW[n](inf); };
-async function funGeneric(infOk) { let { path, inf, } = infOk; let n = funFile(path); let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { 'name': n, 'par': inf, }, }); return retDevAndFun; };
+function funFile(txt) { return txt.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; }
+let qtd1 = 0; async function funImport(infOk) { let { path, inf, } = infOk; qtd1++; let n = funFile(path); if (qtd1 > 30) { console.log('IMPORTANDO...', n); } await import(`${path}`); return await keepGW[n](inf); }
+async function funGeneric(infOk) { let { path, inf, } = infOk; let n = funFile(path); let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { 'name': n, 'par': inf, }, }); return retDevAndFun; }
 
 if (eng) { // CHROME
     // ## VARIÁVEIS
@@ -111,7 +113,7 @@ if (eng) { // CHROME
 }
 
 // ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!!
-function all1() { }; (eng ? keepGW : global)['all1'] = all1;
+function all1() { } (eng ? keepGW : global)['all1'] = all1;
 // *****************************************************************************************
 
 // NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'

@@ -35,7 +35,7 @@ async function messageReceived(inf = {}) {
             // ENVIAR: MENSAGEM REAL → DESTINO
             if (!erroType) {
                 for (let [index, value,] of wsClientsToSend.entries()) {
-                    try { message = JSON.parse(message); } catch (catchErr) { esLintIgnore = catchErr; }; let messageDestination = {
+                    try { message = JSON.parse(message); } catch (catchErr) { }; let messageDestination = {
                         origin,
                         'destination': `${value.hostRoom}`,
                         messageId,

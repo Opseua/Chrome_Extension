@@ -1,9 +1,9 @@
 // let infLog, retLog; // 'raw': true,
-// // (ESCREVE NO MESMO ARQUIVO: NÃO) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/log/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
+// // (ESCREVE NO MESMO ARQUIVO: NÃO) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/logs/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
 // infLog = { e, 'folder': '#_PASTA_#', 'path': `ARQUIVO.txt`, 'text': `INF AQUI`, };
-// // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/log/JavaScript/MES_11_NOV/DIA_27_log.txt
+// // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/logs/JavaScript/MES_11_NOV/DIA_27_log.txt
 // infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'unique': true, };
-// // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: SIM) → [Chrome_Extension]/log/JavaScript/MES_11_NOV/DIA_27/00.48.10.064_log.txt
+// // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: SIM) → [Chrome_Extension]/logs/JavaScript/MES_11_NOV/DIA_27/00.48.10.064_log.txt
 // infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'unique': false, };
 // retLog = await log(infLog); console.log(retLog);
 
@@ -31,7 +31,7 @@ async function log(inf = {}) {
             // houTxt = `${time.hou12}:${minSecMil} ${time.houAmPm}`
 
             // NOME DA PASTA + ARQUIVO
-            pathOk = `log/${folder}`;
+            pathOk = `logs/${folder}`;
             if (['reg.txt', 'reg1.txt', 'reg2.txt', 'reset.js',].includes(path)) {
                 pathOk = `${pathOk}/${path}`;
             } else if (['log.txt', 'err.txt',].includes(path)) {
@@ -55,10 +55,10 @@ async function log(inf = {}) {
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['log'] = log;

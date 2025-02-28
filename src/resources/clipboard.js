@@ -9,7 +9,7 @@ async function clipboard(inf = {}) {
         let { value, } = inf;
 
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _clipboardy === 'undefined') { await funLibrary({ 'lib': '_clipboardy', }); };
+        if (typeof _clipboardy === 'undefined') { await funLibrary({ 'lib': '_clipboardy', }); }
 
         if (value === null || value === '') {
             ret['msg'] = `CLIPBOARD: ERRO | INFORMAR O 'value'`;
@@ -27,17 +27,17 @@ async function clipboard(inf = {}) {
             } else {
                 // NODEJS
                 _clipboardy.writeSync(text);
-            };
+            }
             ret['msg'] = 'CLIPBOARD: OK';
             ret['ret'] = true;
 
         }
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['clipboard'] = clipboard;

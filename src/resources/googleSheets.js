@@ -32,7 +32,7 @@ async function googleSheets(inf = {}) {
         // IMPORTAR BIBLIOTECA [NODEJS] {sheets}
         if (typeof _googleapisSheets === 'undefined') {
             await funLibrary({ 'lib': '_googleapisSheets', }); _sheets = _googleapisSheets({ 'version': 'v4', 'auth': _auth, });
-            let retCS = await configStorage({ e, 'action': 'get', 'key': 'googleAppScriptId', }); if (!retCS.ret) { return retCS; }; googleAppScriptId = retCS.res;
+            let retCS = await configStorage({ e, 'action': 'get', 'key': 'googleAppScriptId', }); if (!retCS.ret) { return retCS; } googleAppScriptId = retCS.res;
         }
 
         function identifyErr(err) {
@@ -49,8 +49,8 @@ async function googleSheets(inf = {}) {
             // →→→  SEND
             let col = range.replace(/[^a-zA-Z]/g, ''), lin = ''; values = { values, }; if (/[0-9]/.test(range)) { lin = range.replace(/[^0-9]/g, ''); } else if (range.includes('*')) {
                 range = `${range}:${range}`; range = range.replace(/\*/g, ''); lin = await googleSheets({ e, 'action': 'lastLin', id, tab, range, });
-                if (!lin.ret) { return lin; }; lin = lin.res.lastLineWithData + 1;
-            } else { ret['msg'] = `GOOGLE SHEET [SENC]: ERRO | 'range' INVÁLIDO`; return ret; };
+                if (!lin.ret) { return lin; } lin = lin.res.lastLineWithData + 1;
+            } else { ret['msg'] = `GOOGLE SHEET [SENC]: ERRO | 'range' INVÁLIDO`; return ret; }
             range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`; try {
                 await _sheets.spreadsheets.values.update({ 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values, });
                 ret['msg'] = `GOOGLE SHEET [SEND]: OK`; ret['ret'] = true;
@@ -67,9 +67,9 @@ async function googleSheets(inf = {}) {
                     let infApi = {
                         e, 'method': 'POST', 'headers': { 'Content-Type': 'application/json', }, 'max': 20, 'url': `https://script.google.com/macros/s/${googleAppScriptId}/exec`,
                         'body': { 'action': 'run', 'name': 'sheetInfTab', 'par': { id, tab, range, }, }, 'bodyObject': true,
-                    }; let retApi = await api(infApi); if (!retApi.ret) { return retApi; }; retApi = retApi.res.body; if (!retApi.ret) { return retApi; }; retApi = retApi.res;
+                    }; let retApi = await api(infApi); if (!retApi.ret) { return retApi; } retApi = retApi.res.body; if (!retApi.ret) { return retApi; } retApi = retApi.res;
                     ret['res'] = { 'lastLineWithData': retApi.lastLineWithData, 'maxLines': retApi.maxLines, };
-                };
+                }
                 ret['msg'] = `GOOGLE SHEET [LAST LIN] {${googleAppScript ? 'GOOGLE APP SCRIPT' : 'QTD DE LINHAS'}}: OK`; ret['ret'] = true;
             } catch (catchErr) { logConsole({ e, ee, 'msg': `ERRO SHEETS\n${catchErr.toString()}`, }); ret['msg'] = `GOOGLE SHEET [LAST LIN]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
         }
@@ -83,10 +83,10 @@ async function googleSheets(inf = {}) {
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['googleSheets'] = googleSheets;

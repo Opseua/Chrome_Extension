@@ -9,7 +9,7 @@ async function googleTranslate(inf = {}) {
         let { source, target, text, } = inf;
 
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio', }); };
+        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio', }); }
 
         let retApi = await api({ e, 'method': 'GET', 'url': `https://translate.google.com/m?sl=${source}&tl=${target}&q=${encodeURIComponent(text)}&hl=pt-BR`, });
         if (!retApi.ret) { return retApi; } else { retApi = retApi.res; }
@@ -17,7 +17,7 @@ async function googleTranslate(inf = {}) {
         let retRegex = regex({ e, 'pattern': 'class="result-container">(.*?)</div>', 'text': res, });
         if (!retRegex.ret) {
             return ret;
-        };
+        }
         let dom, $;
         if (eng) { // CHROME
             dom = new DOMParser().parseFromString(retRegex.res['3'], 'text/html').documentElement.textContent;
@@ -31,10 +31,10 @@ async function googleTranslate(inf = {}) {
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['googleTranslate'] = googleTranslate;

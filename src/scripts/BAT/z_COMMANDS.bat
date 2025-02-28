@@ -13,9 +13,9 @@ rem echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims="
 rem ********************************************************************************************************************************************************
 
 rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'findstr'!!!)
-!fileLastRun! "CMD_TOGGLE" "z_Commands"
-findstr /m "SIM" "!fileWindows!\BAT\z_logs\logTime_z_Commands.txt" > nul
-if not %ERRORLEVEL%==0 ( exit )
+!fileLastRun! "CMD_TOGGLE" "z_COMMANDS"
+findstr /m "SIM" "!fileWindows!\BAT\z_logs\logTime_z_COMMANDS.txt" > nul
+if not %errorlevel%==0 ( exit )
 
 rem REGISTRAR GATILHO
 !fileLog! "[COMMANDS] = [### INICIOU ###] {ADM-!adm!} (PARS: !arg1!)"
@@ -44,7 +44,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__pythonChat_Python_server__] {EXECUTAVEL DIFERE
 set "project_zOutros=Chat_Python_server"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq python!project_zOutros!.exe" /fo csv 2> nul | find /I "python!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__pythonChat_Python_server__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	) else ( if not "!action!" == "!action:_RESTART_=!" ( set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
@@ -55,7 +55,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeSniffer_Python_server__] ([se OFF] NENHUMA
 set "project_zOutros=Sniffer_Python_server"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeSniffer_Python_server__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	)
@@ -66,7 +66,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeURA_Reversa_serverJsf__]
 set "project_zOutros=URA_Reversa_serverJsf"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeURA_Reversa_serverJsf__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	) else ( if not "!action!" == "!action:_RESTART_=!" ( set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
@@ -77,7 +77,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6__] ([se OFF] NENHUMA A
 set "project_zOutros=WebScraper_serverC6"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	)
@@ -88,7 +88,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New2__] ([se OFF] NENH
 set "project_zOutros=WebScraper_serverC6_New2"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New2__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	)
@@ -99,7 +99,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New3__] ([se OFF] NENH
 set "project_zOutros=WebScraper_serverC6_New3"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New3__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	)
@@ -110,7 +110,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New4__] ([se OFF] NENH
 set "project_zOutros=WebScraper_serverC6_New4"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New4__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	)
@@ -121,7 +121,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New5__] ([se OFF] NENH
 set "project_zOutros=WebScraper_serverC6_New5"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New5__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	)
@@ -132,7 +132,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New6__] ([se OFF] NENH
 set "project_zOutros=WebScraper_serverC6_New6"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New6__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	)
@@ -143,7 +143,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New7__] ([se OFF] NENH
 set "project_zOutros=WebScraper_serverC6_New7"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New7__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	)
@@ -154,7 +154,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New8__] ([se OFF] NENH
 set "project_zOutros=WebScraper_serverC6_New8"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New8__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	)
@@ -165,7 +165,7 @@ rem EXECUTANDO [SIM] | [NAO] = [__nodeWebSocket_server__]
 set "project_zOutros=WebSocket_server"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!ERRORLEVEL!" == "0" (
+	if "!errorlevel!" == "0" (
 		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebSocket_server__ )
 		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
 	) else ( if not "!action!" == "!action:_RESTART_=!" ( set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
@@ -216,7 +216,7 @@ rem ---------------------------------------------- ABRIR PROGRAMAS E POSICIONAR 
 if not "!devMaster!" == "OPSEUA" ( 
 	if not "!arg1!" == "!arg1:_RESTART_=!" (
 		tasklist /fi "ImageName eq SystemInformer.exe" /fo csv 2> nul | find /I "SystemInformer.exe" > nul
-		if "!ERRORLEVEL!" == "0" ( goto END_CMD )
+		if "!errorlevel!" == "0" ( goto END_CMD )
 		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "explorer" & set "fNSS=!fileNircmdSetSize!"
 		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_logs\z_MES_!DATE:~3,2!_DIA_!DATE:~0,2!.txt -monitor"
 		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!fileWindows!\PORTABLE_System_Informer\SystemInformer.vbs""

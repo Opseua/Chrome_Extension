@@ -29,7 +29,7 @@ async function devFun(inf = {}) {
             }
         } else {
             // RECEBIDO DO WEBSOCKET
-            function label(funName) { return typeof (eng ? window : global)[funName] === 'function'; };
+            function label(funName) { return typeof (eng ? window : global)[funName] === 'function'; }
             for (let [index, value,] of data.fun.entries()) {
                 let { resWs, destination, messageId, } = inf;
                 let retInf = !!value.retInf; let errAlert = false;
@@ -61,10 +61,10 @@ async function devFun(inf = {}) {
         }
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['devFun'] = devFun;

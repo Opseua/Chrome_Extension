@@ -58,13 +58,13 @@ async function notification(inf = {}) {
                             icon = icon.includes('media') ? icon.split('media/')[1] : icon; // ANTIGO → './src/scripts/media/notification_3.png'
                             icon = await fetch(`./src/media/${icon}`).then((v) => v.arrayBuffer()).then((buffer) => btoa(String.fromCharCode(...new Uint8Array(buffer)))); await new Promise((resolve, reject) => {
                                 nots.create({ 'type': 'basic', 'iconUrl': `data:image/png;base64,${icon}`, 'title': title.substring(0, 32), 'message': text.substring(0, 128), buttons, }, (notId) => {
-                                    if (chrome.runtime.lastError) { return reject(chrome.runtime.lastError.message); }; // ENVIAR NOTIFICAÇÃO
+                                    if (chrome.runtime.lastError) { return reject(chrome.runtime.lastError.message); } // ENVIAR NOTIFICAÇÃO
                                     nots.onButtonClicked.addListener((notifId, btnIdx) => { if (notifId === notId) { alert(`BOTÃO ${btnIdx} PRESSIONADO`); } }); // BOTÃO PRESSIONADO
                                     setTimeout(() => { if (notId) { nots.clear(notId); } }, duration * 1000); resolve(true); // NOTIFICAÇÃO: LIMPAR
                                 });
                             }); return true;
-                        } catch (catchErr) { esLintIgnore = catchErr; return false; }
-                    }; let retSN = await sendNotification(); rets.push({ 'ret': retSN, 'msg': `[CHROME: ${retSN ? 'OK' : 'ERRO | AO ENVIAR NOTIFICAÇÃO'}]`, });
+                        } catch (catchErr) { return false; }
+                    } let retSN = await sendNotification(); rets.push({ 'ret': retSN, 'msg': `[CHROME: ${retSN ? 'OK' : 'ERRO | AO ENVIAR NOTIFICAÇÃO'}]`, });
                 })()
             );
         }
@@ -87,10 +87,10 @@ async function notification(inf = {}) {
         } else {
             let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
         }
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['notification'] = notification;

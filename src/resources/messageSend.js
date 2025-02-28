@@ -14,19 +14,19 @@ async function messageSend(inf = {}) {
         let retAwaitTimeout, listenerName; let messageOk, buffer, chunkSize = gW.kbPartsMessage * 1024; if (typeof message === 'object') {
             messageOk = JSON.stringify(message); buffer = messageOk.includes(`"type":"Buffer"`) && messageOk.includes(`"data":[`) && !messageOk.includes(`"ret"`);
             messageOk = buffer ? Buffer.from(message).toString('base64') : messageOk;
-        } else { buffer = false; messageOk = message; }; let messageLength = messageOk.length; let totalChunks = Math.ceil(messageLength / chunkSize);
+        } else { buffer = false; messageOk = message; } let messageLength = messageOk.length; let totalChunks = Math.ceil(messageLength / chunkSize);
         secondsAwait = !messageOk.includes('"retInf":true') ? 0 : secondsAwait > 0 ? secondsAwait : gW.secRetWebSocket; // → TEMPO PADRÃO SE NÃO FOR INFORMADO
         messageId = secondsAwait === 0 ? `${messageId}` : `${messageId}_RET-TRUE`; let locWeb = destination.includes('127.0.0.1') ? '[LOC]' : '[WEB]'; if (!resWs) { // PEGAR 'ws' (CASO NÃO TENHA SIDO PASSADO)
             if (!/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}):(\d{4})/.test(destination)) { ret['msg'] = `MESSAGE SEND: ERRO | 'destination' NÃO FAZ PARTE DO [LOC] NEM [WEB]`; return ret; } else {
                 resWs = (locWeb === '[LOC]' && wsServerLoc) ? wsServerLoc : (locWeb === '[WEB]' && wsServerWeb) ? wsServerWeb : false; if (!resWs) {
-                    let retLA = await listenerAcionar(`getWs_${locWeb}`, { 'a': 'a', }); if (!retLA) { ret['msg'] = `MESSAGE SEND: ERRO | NÃO ACHOU O OBJETO 'ws' ${locWeb}`; return ret; };
+                    let retLA = await listenerAcionar(`getWs_${locWeb}`, { 'a': 'a', }); if (!retLA) { ret['msg'] = `MESSAGE SEND: ERRO | NÃO ACHOU O OBJETO 'ws' ${locWeb}`; return ret; }
                     resWs = retLA; if (locWeb === '[LOC]') { wsServerLoc = resWs; } else { wsServerWeb = resWs; }
                 }
             }
-        }; let host = resWs.host, room = resWs.room; destination = destination ? destination.replace('ws://', '') : 'x'; origin = origin || `${host}/?roo=${room}`; message = messageOk;
+        } let host = resWs.host, room = resWs.room; destination = destination ? destination.replace('ws://', '') : 'x'; origin = origin || `${host}/?roo=${room}`; message = messageOk;
 
         // LISTENER DE RESPOSTA: DEFINIR (SE NECESSÁRIO)
-        if (secondsAwait > 0) { listenerName = `${messageId.replace('_RET-TRUE', '_RET-OK')}`; retAwaitTimeout = awaitTimeout({ secondsAwait, listenerName, }); };
+        if (secondsAwait > 0) { listenerName = `${messageId.replace('_RET-TRUE', '_RET-OK')}`; retAwaitTimeout = awaitTimeout({ secondsAwait, listenerName, }); }
 
         // PREPARAR MENSAGEM: ÚNICA OU EM PARTES
         let messageParts = []; for (let i = 0; i < totalChunks; i++) {
@@ -35,7 +35,7 @@ async function messageSend(inf = {}) {
             // ---------------- TESTES
             // logConsole({ 'e': e, 'ee': ee, 'msg': `${messageId} | [${totalChunks - i - 1}] | → TOTAL ${JSON.stringify(messageParts).length} | DE ${start} ATÉ ${end}` });
             // ----------------
-        };
+        }
 
         // ENVIAR MENSAGEM(s)
         enviarMensagem({ resWs, 'big': !(totalChunks === 1), 'message': messageParts, });
@@ -54,7 +54,7 @@ async function messageSend(inf = {}) {
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
@@ -62,12 +62,12 @@ async function messageSend(inf = {}) {
 let filaBigFalse = []; let filaBigTrue = []; let sending = false; function enviarMensagem(inf = {}) {
     let { resWs, big, message, } = inf; if (big) { if (Array.isArray(message)) { filaBigTrue.push(...message); } else { filaBigTrue.push(message); } }
     else if (Array.isArray(message)) { filaBigFalse.push(...message); } else { filaBigFalse.push(message); } if (!sending) { sending = true; enviarMensagens({ resWs, }); }
-}; function processarFilas() {
+} function processarFilas() {
     if (filaBigFalse.length > 0) { return { big: false, value: filaBigFalse.shift(), }; }
     else if (filaBigTrue.length > 0) { return { big: true, value: filaBigTrue.shift(), }; } else { return { big: false, value: false, }; }
-}; async function enviarMensagens(inf = {}) {
+} async function enviarMensagens(inf = {}) {
     while (true) {
-        let { resWs, } = inf; let { big, value, } = processarFilas(); if (!value) { sending = false; break; }; let { messageId, partesRestantes, secondsAwait, } = value; let message = JSON.stringify(value);
+        let { resWs, } = inf; let { big, value, } = processarFilas(); if (!value) { sending = false; break; } let { messageId, partesRestantes, secondsAwait, } = value; let message = JSON.stringify(value);
         secondsAwait = secondsAwait === 0 ? gW.secRetWebSocket / 2 : secondsAwait / 2;
 
         // LISTENER DE STATUS: DEFINIR
@@ -91,7 +91,7 @@ let filaBigFalse = []; let filaBigTrue = []; let sending = false; function envia
             filaBigFalse = filaBigFalse.filter(item => item.messageId !== messageId); filaBigTrue = filaBigTrue.filter(item => item.messageId !== messageId);
         }
     }
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['messageSend'] = messageSend;

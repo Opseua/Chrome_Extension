@@ -44,7 +44,7 @@ if "!actionRun!" == "!actionRun:O=!" ( !fileLog! "[PROCESS] = [exe: EXIT - old: 
 rem CHECAR A ULTIMA EXECUCAO (NAO SUBIR O 'findstr'!!!)
 !fileLastRun! "!mode!_!action!" "!programExe!"
 findstr /m "SIM" "!fileWindows!\BAT\z_logs\logTime_!programExe!.txt" > nul
-if not %ERRORLEVEL%==0 ( !fileLog! "[PROCESS] = [exe: NAO - old: !ret2! - call: !modeNew! - act: !action! - run: !actionRun!] # !programExe!" & exit /b )
+if not %errorlevel%==0 ( !fileLog! "[PROCESS] = [exe: NAO - old: !ret2! - call: !modeNew! - act: !action! - run: !actionRun!] # !programExe!" & exit /b )
 
 rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS (NAO SUBIR O 'taskkill'!!!)
 if "!actionRun!" == "OFF" (

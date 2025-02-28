@@ -4,7 +4,7 @@
 
 // IMPORTAR OBJETOS COM AS OPÇÕES E RESPOSTAS
 let opts = {}; let imp = ['Search20',];
-for (let [index, v,] of imp.entries()) { await import(`./objects/tryRating/opt_${v}.js`); opts[v] = (eng ? window : global)[`opt_${v}`]; delete (eng ? window : global)[`opt_${v}`]; };
+for (let [index, v,] of imp.entries()) { await import(`./objects/tryRating/opt_${v}.js`); opts[v] = (eng ? window : global)[`opt_${v}`]; delete (eng ? window : global)[`opt_${v}`]; }
 
 let e = import.meta.url, ee = e;
 async function tryRatingComplete(inf = {}) {
@@ -14,10 +14,10 @@ async function tryRatingComplete(inf = {}) {
 
         // PEGAR O NOME DO HIT APP | ############ (XPATH) ELEMENTO: PEGAR VALOR ############
         infChromeActions = { e, 'action': 'elementGetValue', 'target': `*tryrating*`, 'elementName': `//*[@id="app-root"]/div/div[4]/div[2]/div[1]/div/div[1]/div/div[1]/span[2]/span`, };
-        retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { return retChromeActions; }; let hitApp = retChromeActions.res[0].replace(/[^a-zA-Z0-9]/g, '');
+        retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { return retChromeActions; } let hitApp = retChromeActions.res[0].replace(/[^a-zA-Z0-9]/g, '');
 
         // RETORNAR CASO O OBJ DO HITAPP NÃO EXISTA
-        if (!opts[hitApp]) { ret['msg'] = `TRYRATING COMPLETE: ERRO | FALTA O OBJ DO HITAPP '${hitApp}'`; return ret; }; let opt = opts[hitApp];
+        if (!opts[hitApp]) { ret['msg'] = `TRYRATING COMPLETE: ERRO | FALTA O OBJ DO HITAPP '${hitApp}'`; return ret; } let opt = opts[hitApp];
 
         let infOk = {}; if (infTryRatingComplete.includes('{"')) { infOk = JSON.parse(infTryRatingComplete); }
         else if (infTryRatingComplete.includes(' 🟢 ')) { let gM = infTryRatingComplete.split(' 🟢 '); infOk['name'] = gM[0]; infOk['category'] = gM[1]; infOk['address'] = gM[2]; infOk['urlGoogleMaps'] = gM[3]; }
@@ -26,8 +26,8 @@ async function tryRatingComplete(inf = {}) {
         // ETAPA 1: PEGAR A DIV DOS JUDGES
         let judgesDiv = []; for (let index = 0; index < 10; index++) {
             retChromeActions = await chromeActions({ e, 'action': 'elementGetDivXpath', 'target': `*tryrating*`, 'elementName': `${opt.judgeXpath.replace('_INDEX_', index + 1)}`, }); if (!retChromeActions.ret) { break; }
-            else if (!retChromeActions.res[0].startsWith('<div')) { break; } else { judgesDiv.push(retChromeActions.res[0]); };
-        }; if (judgesDiv.length === 0) { ret['msg'] = `JUDGE COMPLETE: ERRO | NENHUM JULGAMENTO ENCONTRADO`; };
+            else if (!retChromeActions.res[0].startsWith('<div')) { break; } else { judgesDiv.push(retChromeActions.res[0]); }
+        } if (judgesDiv.length === 0) { ret['msg'] = `JUDGE COMPLETE: ERRO | NENHUM JULGAMENTO ENCONTRADO`; }
 
         // ETAPA 2: PEGAR VALOR DOS ELEMENTOS
         async function judgeGetValues(inf = {}) {
@@ -38,24 +38,24 @@ async function tryRatingComplete(inf = {}) {
                             // → DIV: PEGAR (BRUTA) *** QUESTION
                             retChromeActions = await chromeActions({ e, 'action': value1.action, 'target': div, 'tag': value1.tag, 'content': value1.content, 'tagFather': value1.tagFather, });
                             if (!retChromeActions.ret) { lastValue = '###'; judgeValues.push({ 'valid': false, 'elementIndex': index, 'elementName': value1.content, 'elementId': '###', 'elementValue': '###', }); }
-                            else { lastValue = retChromeActions.res[0]; };
+                            else { lastValue = retChromeActions.res[0]; }
                         } else if (value1.action === 'attributeGetValue' && lastValue !== '###') {
                             // → ATRIBUTO: PEGAR VALOR
                             retChromeActions = await chromeActions({ e, 'action': value1.action, 'target': lastValue, 'tag': value1.tag, 'attribute': value1.attribute, 'content': value1.content, });
                             if (!retChromeActions.ret) { lastValue = '###'; judgeValues.push({ 'valid': false, 'elementIndex': index, 'elementName': value1.content, 'elementId': '###', 'elementValue': '###', }); }
-                            else { lastValue = retChromeActions.res[0]; };
+                            else { lastValue = retChromeActions.res[0]; }
                         } else if (value1.action === 'elementGetValue' && lastValue !== '###') {
                             // // → ELEMENTO: PEGAR VALOR
                             infChromeActions = {
                                 e, 'action': value1.action, 'target': `*tryrating*`, 'attribute': value1.attribute, 'attributeValue': lastValue,
                                 'attributeAdd': value1.attributeAdd, 'attributeValueAdd': value1.attributeValueAdd,
                             }; retChromeActions = await chromeActions(infChromeActions); let lastValueOld = lastValue; let valid = retChromeActions.ret; let elementName = value.actions[0].content;
-                            if (!retChromeActions.ret) { lastValue = '###'; } else { lastValue = retChromeActions.res[0]; };
+                            if (!retChromeActions.ret) { lastValue = '###'; } else { lastValue = retChromeActions.res[0]; }
                             judgeValues.push({ valid, 'elementIndex': index, elementName, 'elementId': lastValueOld, 'elementValue': lastValue, });
                         }
                     }
                 }
-            }; return { 'ret': true, 'msg': 'JUDGE GET VALUES: OK', 'res': judgeValues, };
+            } return { 'ret': true, 'msg': 'JUDGE GET VALUES: OK', 'res': judgeValues, };
         }
 
         // ETAPA 3: CRIAR AS RESPOSTAS
@@ -63,40 +63,40 @@ async function tryRatingComplete(inf = {}) {
             let { values, } = inf; let judgeResponses = []; for (let [index, value,] of values.entries()) {
                 let breakBoolen = false; for (let [index1, value1,] of opt.judgeOptions.entries()) {
                     for (let [index2, value2,] of value1.actions.entries()) {
-                        if (value1.actionsMode === 'subDiv+content+attributeValue' && value2.action === 'elementGetDiv' && value.elementName === value2.content) { breakBoolen = true; }; if (breakBoolen) {
+                        if (value1.actionsMode === 'subDiv+content+attributeValue' && value2.action === 'elementGetDiv' && value.elementName === value2.content) { breakBoolen = true; } if (breakBoolen) {
                             let response = value1[value.elementValue]; response = response !== undefined ? response : `############## FALTA RESPOSTA: ${value.elementName}`;
                             let valueOk = value; valueOk['elementResponse'] = response; judgeResponses.push(valueOk); break;
                         }
-                    }; if (breakBoolen) { break; }
+                    } if (breakBoolen) { break; }
                 }
-            }; return { 'ret': true, 'msg': 'JUDGE MAKE RESPONSES: OK', 'res': judgeResponses, };
+            } return { 'ret': true, 'msg': 'JUDGE MAKE RESPONSES: OK', 'res': judgeResponses, };
         }
 
         // ETAPA 3: CRIAR COMENTÁRIO (COM AS RESPOSTAS ANTERIORES)
         async function judgeMakeComment(inf = {}) {
             let { indexDiv, responses, } = inf; let comment = ''; let optionsErr = {}; let replaceIs = '#REP#'; for (let [index, value,] of responses.entries()) {
-                if (hitApp === 'Search20') {
-                    if (value.valid && value.elementResponse !== 'AAA') {
-                        if (value.elementName === 'Business/POI is closed or does not exist') { replaceIs = infOk.urlGoogleMaps ? ' or does not exist' : ' is permanently closed or'; }
-                        else if (value.elementName === 'Name Issue' && infOk.name) { optionsErr['name'] = `\n\nCorrect name is:\n${infOk.name}`; }
-                        else if (value.elementName === 'Category Issue' && infOk.category) { optionsErr['category'] = `\n\nThis is the correct category:\n${infOk.category}`; }
-                        else if (value.elementName === 'Address Accuracy' && infOk.address) { optionsErr['address'] = `\n\nCorrect address:\n${infOk.address}`; }; // NÃO UNIR COM O IF A SEGUIR
-                        if (value.elementName !== 'Comment and Link') { comment = `${comment}\n${value.elementResponse}`; } else if (value.elementName === 'Comment and Link') {
-                            if (value.elementValue === '' && judgesValues.current === -1) { judgesValues.current = indexDiv; }; let view = '############## NÃO ENCONTRADA VIEWPORT | USER ##############'; let user = view;
+                let eleName = value.elementName; let eleResp = value.elementResponse; let eleVal = value.elementValue; if (hitApp === 'Search20') {
+                    if (value.valid && eleResp !== 'AAA') {
+                        if (eleName === 'Business/POI is closed or does not exist') { replaceIs = infOk.urlGoogleMaps ? ' or does not exist' : ' is permanently closed or'; }
+                        else if (eleName === 'Name Issue' && infOk.name) { optionsErr['name'] = `\n\n* Correct name is:\n→ ${infOk.name}`; }
+                        else if (eleName === 'Category Issue' && infOk.category) { optionsErr['category'] = `\n\n* This is the correct category:\n→ ${infOk.category}`; }
+                        else if (eleName === 'Address Accuracy' && infOk.address && !eleResp.includes('OK: ')) { optionsErr['address'] = `\n\n* Correct address:\n→ ${infOk.address}`; } // NÃO UNIR COM O IF A SEGUIR
+                        if (eleName !== 'Comment and Link') { comment = `${comment}\n${eleResp}`; } else if (eleName === 'Comment and Link') {
+                            if (eleVal === '' && judgesValues.current === -1) { judgesValues.current = indexDiv; } let view = '############## NÃO ENCONTRADA VIEWPORT | USER ##############'; let user = view;
                             let retCS = await configStorage({ e, 'action': 'get', 'key': 'TryRating_viewportUser', }); if (retCS.res) { retCS = retCS.res; view = retCS.viewport; user = retCS.user; }
-                            comment = `Visualization is ${view} and the user is ${user} of the viewport\n${comment}`; comment = `${comment}${optionsErr.name || ''}${optionsErr.category || ''}${optionsErr.address || ''}`;
+                            comment = `Visualization is ${view} and the user is ${user} of the viewport${comment}`; comment = `${comment}${optionsErr.name || ''}${optionsErr.category || ''}${optionsErr.address || ''}`;
                             comment = `${comment}${infOk.urlGoogleMaps ? `\n\n${infOk.urlGoogleMaps}` : ''}`; comment = comment.replace(replaceIs, '');
                         }
                     }
                 }
-            }; return { 'ret': true, 'msg': 'JUDGE MAKE RESPONSE: OK', 'res': comment, };
+            } return { 'ret': true, 'msg': 'JUDGE MAKE RESPONSE: OK', 'res': comment, };
         }
 
         for (let [index, value,] of judgesDiv.entries()) {
             let retJudgeGetValues = await judgeGetValues({ 'indexDiv': index, 'div': value, }); let retJudgeMakeResponse = await judgeMakeResponse({ 'indexDiv': index, 'values': retJudgeGetValues.res, });
             let retJudgeMakeComment = await judgeMakeComment({ 'indexDiv': index, 'responses': retJudgeMakeResponse.res, });
             judgesValues.comments.push(retJudgeMakeComment.res); judgesValues.responses.push(retJudgeGetValues.res); judgesValues.values.push(retJudgeGetValues.res);
-        };
+        }
 
         if (judgesValues.current === -1) {
             ret['msg'] = `Nenhum julgamento pendente`;
@@ -110,10 +110,10 @@ async function tryRatingComplete(inf = {}) {
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['tryRatingComplete'] = tryRatingComplete;

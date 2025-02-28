@@ -7,7 +7,7 @@ async function htmlToJson(inf = {}) {
         let { html, mode, } = inf;
 
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio', }); };
+        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio', }); }
 
         let $ = _cheerio.load(html); let result = [], headers = [], randomCol = !(mode === 1); let hasHeader = $('table thead').length > 0;
 
@@ -27,10 +27,10 @@ async function htmlToJson(inf = {}) {
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
 (eng ? window : global)['htmlToJson'] = htmlToJson;
