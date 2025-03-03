@@ -32,7 +32,7 @@ async function api(inf = {}) {
 
         // REQ: HEADERS
         let req, resC, resH = {}, resB; let reqOpt = { method, 'redirect': 'follow', 'keepalive': true, 'rejectUnauthorized': false, }; let timeoutId;
-        reqOpt['headers'] = {}; if (Object.keys(headers).length > 0) { reqOpt.headers = headers; } let type = typeof UrlFetchApp !== 'undefined';
+        reqOpt['headers'] = {}; if (Object.keys(headers).length > 0) { reqOpt.headers = headers; } let type = (typeof globalThis.doGet !== 'undefined');
 
         // REQ: BODY
         if (!['POST', 'PUT',].includes(method)) { body = false; } else {
@@ -88,6 +88,6 @@ async function api(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['api'] = api;
+globalThis['api'] = api;
 
 

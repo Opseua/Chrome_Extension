@@ -2,14 +2,14 @@
 // infClipboard = { e, 'value': `Esse é o texto`, };
 // retClipboard = await clipboard(infClipboard); console.log(retClipboard);
 
-let e = import.meta.url, ee = e;
+let e = import.meta.url, ee = e; let libs = false;
 async function clipboard(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { value, } = inf;
-
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _clipboardy === 'undefined') { await funLibrary({ 'lib': '_clipboardy', }); }
+        if (!libs) { await importLibs(['_clipboardy',]); libs = true; }
+
+        let { value, } = inf;
 
         if (value === null || value === '') {
             ret['msg'] = `CLIPBOARD: ERRO | INFORMAR O 'value'`;
@@ -40,6 +40,6 @@ async function clipboard(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['clipboard'] = clipboard;
+globalThis['clipboard'] = clipboard;
 
 

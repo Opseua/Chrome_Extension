@@ -16,6 +16,6 @@ async function command2(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['command2'] = command2;
+globalThis['command2'] = command2;
 
 

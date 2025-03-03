@@ -78,6 +78,6 @@ function regex(inf = {}) { // NÃO POR COMO 'async'!!!
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['regex'] = regex;
+globalThis['regex'] = regex;
 
 

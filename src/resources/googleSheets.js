@@ -18,33 +18,27 @@
 // };
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
-let e = import.meta.url, ee = e; let _auth, _sheets, googleAppScriptId, scopeUrl = 'https://www.googleapis.com/auth/spreadsheets', retSheet;
+let e = import.meta.url, ee = e; let libs = false; let _auth, _sheets, googleAppScriptId, scopeUrl = 'https://www.googleapis.com/auth/spreadsheets', retSheet;
 async function googleSheets(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let { action, id, tab, range, values, attempts = 2, googleAppScript = false, } = inf; let errAll = '';
     try {
-        let { action, id, tab, range, values, attempts = 1, googleAppScript = false, } = inf;
-
-        // IMPORTAR BIBLIOTECA [NODEJS] {auth}
-        if (typeof _googleapisAuth === 'undefined') {
-            await funLibrary({ 'lib': '_googleapisAuth', }); _auth = new _googleapisAuth.GoogleAuth({ 'keyFile': `${letter}:/${gW.root}/${gW.functions}/${gW.conf}`, 'scopes': [scopeUrl,], });
-        }
-
-        // IMPORTAR BIBLIOTECA [NODEJS] {sheets}
-        if (typeof _googleapisSheets === 'undefined') {
-            await funLibrary({ 'lib': '_googleapisSheets', }); _sheets = _googleapisSheets({ 'version': 'v4', 'auth': _auth, });
-            let retCS = await configStorage({ e, 'action': 'get', 'key': 'googleAppScriptId', }); if (!retCS.ret) { return retCS; } googleAppScriptId = retCS.res;
+        // IMPORTAR BIBLIOTECA [NODEJS]
+        if (!libs) {
+            await importLibs(['_googleapisAuth', '_googleapisSheets',]); libs = true; _auth = new _googleapisAuth.GoogleAuth({ 'keyFile': `${letter}:/${gW.root}/${gW.functions}/${gW.conf}`, 'scopes': [scopeUrl,], });
+            _sheets = _googleapisSheets({ 'version': 'v4', 'auth': _auth, }); let r = await configStorage({ e, 'action': 'get', 'key': 'googleAppScriptId', }); if (!r.ret) { return r; } googleAppScriptId = r.res;
         }
 
         function identifyErr(err) {
-            err = err.toString(); return (err.includes('entity was not found') || err.includes('Unable to parse range') || err.includes('contains an invalid argument')) ? 'PLANILHA/ABA NÃO ENCONTRADA' :
-                (err.includes('not have permission') || err.includes('to edit a protected')) ? 'SEM PERMISSÃO' : 'OUTRO PROBLEMA';
+            errAll = err.toString(); return (errAll.includes('entity was not found') || errAll.includes('Unable to parse range')
+                || errAll.includes('contains an invalid argument')) ? 'NÃO ENCONTRADO' : (errAll.includes('not have permission') || errAll.includes('to edit a protected')) ? 'SEM PERMISSÃO' : 'OUTRO ERRO';
         }
 
         if (action === 'get') {
             // →→→ GET
             range = `${tab}!${range}`; try {
                 retSheet = await _sheets.spreadsheets.values.get({ 'spreadsheetId': id, range, }); retSheet = retSheet.data.values; ret['res'] = retSheet; ret['msg'] = `GOOGLE SHEET [GET]: OK`; ret['ret'] = true;
-            } catch (catchErr) { logConsole({ e, ee, 'msg': `ERRO SHEETS\n${catchErr.toString()}`, }); ret['msg'] = `GOOGLE SHEET [GET]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
+            } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [GET]: ERRO | ${identifyErr(catchErr)} '${id}' '${range}'`; }
         } else if (action === 'send') {
             // →→→  SEND
             let col = range.replace(/[^a-zA-Z]/g, ''), lin = ''; values = { values, }; if (/[0-9]/.test(range)) { lin = range.replace(/[^0-9]/g, ''); } else if (range.includes('*')) {
@@ -54,7 +48,7 @@ async function googleSheets(inf = {}) {
             range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`; try {
                 await _sheets.spreadsheets.values.update({ 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values, });
                 ret['msg'] = `GOOGLE SHEET [SEND]: OK`; ret['ret'] = true;
-            } catch (catchErr) { logConsole({ e, ee, 'msg': `ERRO SHEETS\n${catchErr.toString()}`, }); ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
+            } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [SEND]: ERRO | ${identifyErr(catchErr)} '${id}' '${range}'`; }
         } else if (action === 'lastLin') {
             // →→→  LAST LIN
             try {
@@ -71,14 +65,14 @@ async function googleSheets(inf = {}) {
                     ret['res'] = { 'lastLineWithData': retApi.lastLineWithData, 'maxLines': retApi.maxLines, };
                 }
                 ret['msg'] = `GOOGLE SHEET [LAST LIN] {${googleAppScript ? 'GOOGLE APP SCRIPT' : 'QTD DE LINHAS'}}: OK`; ret['ret'] = true;
-            } catch (catchErr) { logConsole({ e, ee, 'msg': `ERRO SHEETS\n${catchErr.toString()}`, }); ret['msg'] = `GOOGLE SHEET [LAST LIN]: ERRO | ${identifyErr(catchErr)} '${range}' '${id}'`; }
+            } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [LAST LIN]: ERRO | ${identifyErr(catchErr)} '${id}' '${range}'`; }
         }
 
         // TENTAR NOVAMENTE EM CASO DE ERRO | MANTER 'legacy' true PORQUE NO WebScraper O WEBSOCKET NÃO ESTÁ CONECTADO
-        if (!ret.ret && attempts < 3) {
-            let text = `TENTATIVA [${attempts}] → ${ret.msg}`; await notification({ e, 'legacy': true, 'title': `# SHEETS (${gW.devMaster}) [NODEJS]`, text, });
+        if (!ret.ret && attempts > 0) {
+            attempts--; let text = `TENTATIVAS RESTANTES [${attempts}] → ${ret.msg}`; await notification({ e, 'legacy': true, 'title': `# SHEETS (${gW.devMaster}) [NODEJS]`, text, });
 
-            logConsole({ e, ee, 'msg': text, }); let retGoogleSheets = await googleSheets({ ...inf, 'attempts': (attempts + 1), }); ret = retGoogleSheets;
+            logConsole({ e, ee, 'msg': `${text}${!text.includes('OUTRO') ? '' : `\n\n*** ERRO SHEETS\n${errAll}`}`, }); let retGoogleSheets = await googleSheets({ ...inf, attempts, }); ret = retGoogleSheets;
         }
 
     } catch (catchErr) {
@@ -89,6 +83,6 @@ async function googleSheets(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['googleSheets'] = googleSheets;
+globalThis['googleSheets'] = googleSheets;
 
 

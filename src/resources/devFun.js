@@ -29,7 +29,7 @@ async function devFun(inf = {}) {
             }
         } else {
             // RECEBIDO DO WEBSOCKET
-            function label(funName) { return typeof (eng ? window : global)[funName] === 'function'; }
+            function label(funName) { return typeof globalThis[funName] === 'function'; }
             for (let [index, value,] of data.fun.entries()) {
                 let { resWs, destination, messageId, } = inf;
                 let retInf = !!value.retInf; let errAlert = false;
@@ -42,7 +42,7 @@ async function devFun(inf = {}) {
                     ret['ret'] = false;
                     ret['msg'] = `DEV FUN: ERRO | FUNÇÃO '${value.name}' NÃO EXITE`;
                 } else {
-                    let name = eng ? window[value.name] : global[value.name]; // CHROME ← : → NODEJS
+                    let name = globalThis[value.name]; // CHROME ← : → NODEJS
                     let infName = value.par;
                     infName['retInf'] = retInf;
                     ret = await name(infName);
@@ -67,6 +67,6 @@ async function devFun(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['devFun'] = devFun;
+globalThis['devFun'] = devFun;
 
 

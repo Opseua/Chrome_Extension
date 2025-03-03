@@ -4,6 +4,7 @@
 // infGetPath = { 'e': new Error(), };
 // retGetPath = await getPath(infGetPath); console.log(retGetPath);
 
+globalThis['gW'] = {};
 async function getPath(inf = {}) {
     let ret = { 'ret': false, };
     let { devChildren, isFunction, } = inf;
@@ -65,8 +66,7 @@ async function getPath(inf = {}) {
         console.log(`\n\n### ERRO GET PATH ###\n\n${catchErr.stack}\n\n`); res = { 'conf': nd, 'letter': nd, 'root': nd, 'functions': nd, 'project': nd, 'file': nd, 'line': 0, };
     }
 
-    letter = res.letter; gW['conf'] = res.conf; gW['letter'] = res.letter; gW['root'] = res.root; gW['functions'] = res.functions;
-    gW['project'] = res.project; gW['file'] = res.file; gW['line'] = res.line;
+    letter = res.letter; gW['conf'] = res.conf; gW['letter'] = res.letter; gW['root'] = res.root; gW['functions'] = res.functions; gW['project'] = res.project; gW['file'] = res.file; gW['line'] = res.line;
 
     if (!isFunction) {
         let devChildrenIndex = gW.devices[1][1][`${res.project}_${devChildren}`]; devChildren = devChildrenIndex > -1 ? gW.devices[1][2][devChildrenIndex] : nd;
@@ -84,6 +84,6 @@ async function getPath(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['getPath'] = getPath;
+globalThis['getPath'] = getPath;
 
 

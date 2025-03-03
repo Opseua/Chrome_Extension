@@ -2,7 +2,7 @@
 
 // IMPORTAR OBJETOS COM AS AÇÕES
 let acts = {}; let imp = ['AIGeneratedTextEvaluationPortuguese', 'BroadMatchRatings', 'Ratingoftransformedtext', 'TextErrorCategorizationptBR',];
-for (let [index, v,] of imp.entries()) { await import(`./objects/tryRating/act_${v}.js`); acts[v] = (eng ? window : global)[`act_${v}`]; delete (eng ? window : global)[`act_${v}`]; }
+for (let [index, v,] of imp.entries()) { await import(`./objects/tryRating/act_${v}.js`); acts[v] = globalThis[`act_${v}`]; delete globalThis[`act_${v}`]; }
 
 let e = import.meta.url, ee = e;
 async function tryRatingSet(inf = {}) {
@@ -97,7 +97,7 @@ async function tryRatingSet(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['tryRatingSet'] = tryRatingSet;
+globalThis['tryRatingSet'] = tryRatingSet;
 
 // let infTryRatingSet, retTryRatingSet;
 // infTryRatingSet = {

@@ -4,7 +4,7 @@
 
 // IMPORTAR OBJETOS COM AS OPÇÕES E RESPOSTAS
 let opts = {}; let imp = ['Search20',];
-for (let [index, v,] of imp.entries()) { await import(`./objects/tryRating/opt_${v}.js`); opts[v] = (eng ? window : global)[`opt_${v}`]; delete (eng ? window : global)[`opt_${v}`]; }
+for (let [index, v,] of imp.entries()) { await import(`./objects/tryRating/opt_${v}.js`); opts[v] = globalThis[`opt_${v}`]; delete globalThis[`opt_${v}`]; }
 
 let e = import.meta.url, ee = e;
 async function tryRatingComplete(inf = {}) {
@@ -116,6 +116,6 @@ async function tryRatingComplete(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['tryRatingComplete'] = tryRatingComplete;
+globalThis['tryRatingComplete'] = tryRatingComplete;
 
 

@@ -147,7 +147,7 @@ async function chromeActions(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['chromeActions'] = chromeActions;
+globalThis['chromeActions'] = chromeActions;
 
 // → HTML para teste em: 'D:\ARQUIVOS\PROJETOS\Chrome_Extension\src\resources\z_HTML.html'
 

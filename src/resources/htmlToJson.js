@@ -1,13 +1,13 @@
 // → NO FINAL DA PÁGINA
 
-let e = import.meta.url, ee = e;
+let e = import.meta.url, ee = e; let libs = false;
 async function htmlToJson(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { html, mode, } = inf;
-
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio', }); }
+        if (!libs) { await importLibs(['_cheerio',]); libs = true; }
+
+        let { html, mode, } = inf;
 
         let $ = _cheerio.load(html); let result = [], headers = [], randomCol = !(mode === 1); let hasHeader = $('table thead').length > 0;
 
@@ -33,7 +33,7 @@ async function htmlToJson(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['htmlToJson'] = htmlToJson;
+globalThis['htmlToJson'] = htmlToJson;
 
 // // 'mode' 1 → CHAVE IGUAL O CABEÇALHO (SE TIVER)
 // // 'mode' 2 → CHAVE ALEATÓRIA

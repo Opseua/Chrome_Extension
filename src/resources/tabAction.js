@@ -89,6 +89,6 @@ async function openTab(inf = {}) { // NAO USAR
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['tabAction'] = tabAction;
+globalThis['tabAction'] = tabAction;
 
 

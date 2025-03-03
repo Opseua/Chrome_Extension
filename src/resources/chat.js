@@ -15,7 +15,7 @@
 // retChat = await chat(infChat); console.log(retChat);
 
 // IMPORTAR PROVEDORES ADICIONAIS
-await import('./chats/@import.js'); (eng ? window : global)['zachey01___gpt4free_js'] = GPT4js; delete (eng ? window : global)['GPT4js'];
+await import('./chats/@import.js'); globalThis['zachey01___gpt4free_js'] = GPT4js; delete globalThis['GPT4js'];
 
 let e = import.meta.url, ee = e;
 async function chat(inf = {}) {
@@ -63,6 +63,6 @@ async function chat(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['chat'] = chat;
+globalThis['chat'] = chat;
 
 

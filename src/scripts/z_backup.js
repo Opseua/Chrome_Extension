@@ -1,7 +1,7 @@
-await import('../resources/@export.js'); let e = import.meta.url, ee = e;
+await import('../resources/@export.js'); let e = import.meta.url, ee = e; let libs = false;
 
 // IMPORTAR BIBLIOTECA [NODEJS]
-if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path', }); } if (typeof _fs === 'undefined') { await funLibrary({ 'lib': '_fs', }); }
+if (!libs) { await importLibs(['_path', '_fs',]); libs = true; }
 
 async function backups() {
     let m = `!fileChrome_Extension!/src/scripts/BAT/fileMsg.vbs`;

@@ -88,10 +88,10 @@
     "runtime"
   ],
   "icons": {
-    "16": "./src/media/icon_3.png",
-    "32": "./src/media/icon_3.png",
-    "48": "./src/media/icon_3.png",
-    "128": "./src/media/icon_3.png"
+    "16": "/src/media/icon_3.png",
+    "32": "/src/media/icon_3.png",
+    "48": "/src/media/icon_3.png",
+    "128": "/src/media/icon_3.png"
   },
   "actionAAA": {
     "default_popup": "popup.html"

@@ -19,14 +19,14 @@
 // };
 // retCommandLine = await commandLine(infCommandLine); console.log(retCommandLine);
 
-let e = import.meta.url, ee = e;
+let e = import.meta.url, ee = e; let libs = false;
 async function commandLine(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { command = false, awaitFinish = false, notAdm = false, notBackground = false, oldBackground = false, view = false, delay = 0, terminalPath = false, withCmd = false, } = inf;
-
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _exec === 'undefined') { await funLibrary({ 'lib': '_exec', }); }
+        if (!libs) { await importLibs(['_exec',]); libs = true; }
+
+        let { command = false, awaitFinish = false, notAdm = false, notBackground = false, oldBackground = false, view = false, delay = 0, terminalPath = false, withCmd = false, } = inf;
 
         if (!command) { ret['msg'] = `COMMAND LINE: ERRO | INFORMAR O 'command'`; return ret; }
 
@@ -83,6 +83,6 @@ async function commandLine(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['commandLine'] = commandLine;
+globalThis['commandLine'] = commandLine;
 
 

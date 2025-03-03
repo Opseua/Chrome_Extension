@@ -6,7 +6,7 @@ Set objFSO = CreateObject("Scripting.FileSystemObject")
 
 If WScript.Arguments.Count = 0 Then
 	rem NENHUM PARAMENTRO PASSADO
-	MsgBox (Replace(  "[" & objFSO.GetParentFolderName(WScript.ScriptFullName) & "\" & objFSO.GetFileName(WScript.ScriptFullName) & "]\\n\\nNENHUM PARAMETRO PASSADO"  , "\\n" , Chr(13) ))
+	MsgBox ( Replace(  "[" & objFSO.GetParentFolderName(WScript.ScriptFullName) & "\" & objFSO.GetFileName(WScript.ScriptFullName) & "]\\n\\nNENHUM PARAMETRO PASSADO"  , "\\n" , Chr(13) ) )
 Else
 	rem PARAMENTROS PASSADOS
     rem  DEFININDO A DATA E HORA ATUAL

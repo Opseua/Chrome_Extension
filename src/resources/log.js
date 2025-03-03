@@ -61,6 +61,6 @@ async function log(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['log'] = log;
+globalThis['log'] = log;
 
 

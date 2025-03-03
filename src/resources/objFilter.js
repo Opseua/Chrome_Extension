@@ -38,7 +38,7 @@ async function objFilter(inf = {}) {
             let resultsOk = []; let { results, filters, } = inf;
             for (let [index, value,] of results.entries()) {
                 let regexRes = [];
-                for (let [index1, value1,] of (filters.includes || filters.excludes).entries()) {
+                for (let [index, value1,] of (filters.includes || filters.excludes).entries()) {
                     let regexRet = regex({ e, 'simple': true, 'pattern': noCaseSensitive ? value1.toLowerCase() : value1, 'text': noCaseSensitive ? value.key.toLowerCase() : value.key, });
                     regexRes.push(filters.includes ? regexRet : !regexRet);
                 }
@@ -70,6 +70,6 @@ async function objFilter(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['objFilter'] = objFilter;
+globalThis['objFilter'] = objFilter;
 
 

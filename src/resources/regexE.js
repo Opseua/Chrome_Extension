@@ -9,16 +9,17 @@
 //     (async () => { let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res']; })();
 // };
 
+let libs = false;
 async function regexE(inf = {}) {
     let ret = { 'ret': false, };
     try {
+        // IMPORTAR BIBLIOTECA [NODEJS]
+        if (!libs) { await importLibs(['_path',]); libs = true; }
+
         let { e, ignoreAlert = false, concat = `\n\n#######\n\n`, } = inf;
 
-        // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path', }); }
-
         // IDENTIFICAR ENGINE
-        let cng = typeof window !== 'undefined' ? 1 : typeof UrlFetchApp !== 'undefined' ? 3 : 2;
+        let cng = (typeof globalThis.alert !== 'undefined') ? 1 : (typeof globalThis.doGet !== 'undefined') ? 3 : 2;
 
         // PEGAR O PROJETO, ARQUIVO E LINHA DO ERRO
         let retGetPath = await getPath({ e, }); let { root, project, line, } = retGetPath.res; let fileOk = retGetPath.res.file;
@@ -26,7 +27,7 @@ async function regexE(inf = {}) {
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
         let errorOk = {
             cng, 'cngName': cng === 1 ? 'CHROME' : cng === 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': gW.devMaster,
-            'projectFile': `🟢 ${project}`, 'file': `🔵 ${fileOk}`, 'line': Number(line), 'inf': inf.inf ? inf.inf.toString() : '___VAZIO___', 'e': e.stack,
+            'projectFile': `🟢 ${!project.includes('/') ? project : 'Chrome_Extension'}`, 'file': `🔵 ${fileOk}`, 'line': Number(line), 'inf': inf.inf ? inf.inf.toString() : '___VAZIO___', 'e': e.stack,
         };
 
         if (!ignoreAlert) {
@@ -79,6 +80,6 @@ async function regexE(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['regexE'] = regexE;
+globalThis['regexE'] = regexE;
 
 

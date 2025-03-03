@@ -30,8 +30,8 @@
 
 // https://api.hashify.net/hash/md5/hex?value=aaaa
 
-let _fs, cs; let keepGW = eng ? window : global; keepGW['engName'] = (eng) ? 'CHROME' : 'NODEJS'; keepGW['letter'] = 'x'; keepGW['fileProjetos'] = 'x'; keepGW['fileChrome_Extension'] = 'x';
-keepGW['fileWindows'] = 'x'; if (!eng) { _fs = await import('fs'); keepGW['_fs'] = _fs; process.noDeprecation = true; } keepGW['gW'] = {};
+let _fs, cs; globalThis['engName'] = (eng) ? 'CHROME' : 'NODEJS'; globalThis['letter'] = 'x'; globalThis['fileProjetos'] = 'x'; globalThis['fileChrome_Extension'] = 'x'; globalThis['fileWindows'] = 'x';
+if (!eng) { _fs = await import('fs'); globalThis['_fs'] = _fs; process.noDeprecation = true; }
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
 await import('./getPath.js'); let retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket; let devMaster = retGetPath.res.confOk.master;
@@ -84,46 +84,39 @@ function awaitTimeout(inf = {}) {
 // async function liberarTimeout() { setTimeout(() => { listenerAcionar('NOME AQUI', 'INF1', 'INF2'); }, 2000);}; liberarTimeout();
 
 // ############### CLEAR CONSOLE ###############
-function clearRun() { if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } } let msgQtd = 0; keepGW['clearRun'] = clearRun;
-let clearConsole = console.log; console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n'); } }; clearRun();
+function clearRun() { if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } } let msgQtd = 0; let clearConsole = console.log;
+console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n'); } }; clearRun();
 
 // PEGAR O NOME DO ARQUIVO(SEM EXTENSÃO) | IMPORTAR FUNÇÕES DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) | ENCAMINHAR PARA DEVICE
 function funFile(txt) { return txt.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; }
-let qtd1 = 0; async function funImport(infOk) { let { path, inf, } = infOk; qtd1++; let n = funFile(path); if (qtd1 > 30) { console.log('IMPORTANDO...', n); } await import(`${path}`); return await keepGW[n](inf); }
+let qtd1 = 0; async function funImport(infOk) { let { path, inf, } = infOk; qtd1++; let n = funFile(path); if (qtd1 > 30) { console.log('IMPORTANDO...', n); } await import(`${path}`); return await globalThis[n](inf); }
 async function funGeneric(infOk) { let { path, inf, } = infOk; let n = funFile(path); let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { 'name': n, 'par': inf, }, }); return retDevAndFun; }
 
-if (eng) { // CHROME
-    // ## VARIÁVEIS
-    keepGW['cs'] = cs;
-    // ## GLOBAL OBJECT [NOVO]
-    keepGW['gO'] = gO; keepGW['gOList'] = gOList;
-    // ## LISTENER
-    keepGW['listenerMonitorar'] = listenerMonitorar; keepGW['listenerAcionar'] = listenerAcionar;
-    // ## FUNÇÕES
-    keepGW['rateLimiter'] = rateLimiter; keepGW['randomNumber'] = randomNumber; keepGW['awaitTimeout'] = awaitTimeout; keepGW['funImport'] = funImport; keepGW['funGeneric'] = funGeneric;
-} else { // NODEJS
-    // ## VARIÁVEIS
-    global['cs'] = cs;
-    // ## GLOBAL OBJECT [NOVO]
-    global['gO'] = gO; global['gOList'] = gOList;
-    // ## LISTENER
-    global['listenerMonitorar'] = listenerMonitorar; global['listenerAcionar'] = listenerAcionar;
-    // ## FUNÇÕES
-    global['rateLimiter'] = rateLimiter; global['randomNumber'] = randomNumber; global['awaitTimeout'] = awaitTimeout; global['funImport'] = funImport; global['funGeneric'] = funGeneric;
-}
+// CALCULAR TEMPO DE INICIALIZAÇÃO
+function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }
+
+// ## VARIÁVEIS
+globalThis['cs'] = cs;
+// ## GLOBAL OBJECT [NOVO]
+globalThis['gO'] = gO; globalThis['gOList'] = gOList;
+// ## LISTENER
+globalThis['listenerMonitorar'] = listenerMonitorar; globalThis['listenerAcionar'] = listenerAcionar;
+// ## FUNÇÕES
+globalThis['rateLimiter'] = rateLimiter; globalThis['randomNumber'] = randomNumber; globalThis['awaitTimeout'] = awaitTimeout; globalThis['funImport'] = funImport; globalThis['funGeneric'] = funGeneric;
+globalThis['clearRun'] = clearRun; globalThis['startupTime'] = startupTime;
 
 // ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!!
-function all1() { } (eng ? keepGW : global)['all1'] = all1;
+function all1() { } globalThis['all1'] = all1;
 // *****************************************************************************************
 
 // NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'
-if (!(eng ? keepGW.all2 : global.all2)) { await import('./@export.js'); }
+if (!globalThis.all2) { await import('./@export.js'); }
 
 // javascript: (function () {
 //     function pw(j, pw, ph, u) {
 //         let w = (pw / 100) * j.top.screen.width, h = (ph / 100) * j.top.screen.height; let y = j.top.outerHeight / 2 + j.top.screenY - (h / 2), x = j.top.outerWidth / 2 + j.top.screenX - (w / 2);
 //         return j.open(u, '', `width=${w},height=${h},top=${y},left=${x}`)
-//     }; pw(window, 40, 40, 'http://12.345.678.910:1234')
+//     }; pw(globalThis, 40, 40, 'http://12.345.678.910:1234')
 // })()
 
 

@@ -77,6 +77,6 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['dateHour'] = dateHour;
+globalThis['dateHour'] = dateHour;
 
 

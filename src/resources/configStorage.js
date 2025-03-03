@@ -117,6 +117,6 @@ async function configStorage(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['configStorage'] = configStorage;
+globalThis['configStorage'] = configStorage;
 
 

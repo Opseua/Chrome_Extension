@@ -2,14 +2,14 @@
 // infGoogleTranslate = { e, 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?`, };
 // retGoogleTranslate = await googleTranslate(infGoogleTranslate); console.log(retGoogleTranslate);
 
-let e = import.meta.url, ee = e;
+let e = import.meta.url, ee = e; let libs = false;
 async function googleTranslate(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { source, target, text, } = inf;
-
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _cheerio === 'undefined') { await funLibrary({ 'lib': '_cheerio', }); }
+        if (!libs) { await importLibs(['_cheerio',]); libs = true; }
+
+        let { source, target, text, } = inf;
 
         let retApi = await api({ e, 'method': 'GET', 'url': `https://translate.google.com/m?sl=${source}&tl=${target}&q=${encodeURIComponent(text)}&hl=pt-BR`, });
         if (!retApi.ret) { return retApi; } else { retApi = retApi.res; }
@@ -37,6 +37,6 @@ async function googleTranslate(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['googleTranslate'] = googleTranslate;
+globalThis['googleTranslate'] = googleTranslate;
 
 

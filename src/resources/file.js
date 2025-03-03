@@ -12,14 +12,14 @@
 // infFile = { e, 'action': 'storage', 'path': 'C:', }; // SEMPRE COMO 'ADM'!!!
 // retFile = await file(infFile); console.log(retFile);
 
-let e = import.meta.url, ee = e;
+let e = import.meta.url, ee = e; let libs = false, libs2 = false, libs3 = false;
 async function file(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { action = false, functionLocal = false, path = false, pathNew = false, } = inf; let retFile;
-
         // IMPORTAR BIBLIOTECA [NODEJS]
-        if (typeof _path === 'undefined') { await funLibrary({ 'lib': '_path', }); }
+        if (!libs) { await importLibs(['_path',]); libs = true; }
+
+        let { action = false, functionLocal = false, path = false, pathNew = false, } = inf; let retFile;
 
         // SUBSTITUIR VARIÁVEIS DE AMBIENTE
         let a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows; let pathAndPathNew = `${path || 'NADA'}#_SPLIT_#${pathNew || 'NADA'}`;
@@ -124,7 +124,7 @@ async function file(inf = {}) {
 
             async function fileMd5(inf = {}) {
                 // IMPORTAR BIBLIOTECA [NODEJS]
-                if (typeof _crypto === 'undefined') { await funLibrary({ 'lib': '_crypto', }); }
+                if (!libs2) { await importLibs(['_crypto',]); libs2 = true; }
 
                 let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } let md5 = _crypto('md5');
@@ -143,7 +143,7 @@ async function file(inf = {}) {
 
             async function fileStorage(inf = {}) {
                 // IMPORTAR BIBLIOTECA [NODEJS]
-                if (typeof _exec === 'undefined') { await funLibrary({ 'lib': '_exec', }); }
+                if (!libs3) { await importLibs(['_exec',]); libs3 = true; }
 
                 let { path, } = inf; let resNew = { 'ret': false, }; try {
                     let retExec = await new Promise((resolve) => { _exec(`fsutil volume diskfree ${path.replace(':', '')}:`, (err, resOk, errm) => { if (err || errm) { resolve(false); } else { resolve(resOk); } }); });
@@ -176,6 +176,6 @@ async function file(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['file'] = file;
+globalThis['file'] = file;
 
 

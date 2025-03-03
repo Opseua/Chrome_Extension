@@ -31,7 +31,7 @@ async function notification(inf = {}) {
         if (legacy && !chromeNot) {
             promises.push(
                 (async () => {
-                    let body = { 'fun': [{ securityPass, retInf, 'name': 'notification', 'par': { title, text, keepOld, chromeNot, duration, icon, buttons, }, },], };
+                    let body = { 'fun': [{ securityPass, retInf, 'name': 'notification', 'par': { title, text, keepOld, chromeNot, duration, icon, buttons, 'ntfy': false, }, },], };
                     let retA2 = await api({ e, 'method': 'POST', 'url': `http://${devSever}`, 'headers': { 'raw': true, }, body, 'bodyObject': true, 'ignoreErr': true, }); retA2 = retA2.ret ? retA2.res.body : retA2;
                     rets.push({ 'ret': retA2.ret, 'msg': `[CHROME {LEGACY}: ${retA2.ret ? 'OK' : `ERRO | ${retA2.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}]`, });
                 })()
@@ -41,8 +41,8 @@ async function notification(inf = {}) {
         if (!eng && !legacy && !chromeNot) {
             // →→→ NO NODEJS
             promises.push(
-                (async () => { // DELETAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
-                    let infTemp = inf; infTemp['ntfy'] = false; retDAF = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': infTemp, }, });
+                (async () => { // IGNORAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
+                    inf['ntfy'] = false; retDAF = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': inf, }, });
                     rets.push({ 'ret': retDAF.ret, 'msg': `[CHROME {DEV FUN}: ${retDAF.ret ? 'OK' : `ERRO | ${retDAF.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}]`, });
                 })()
             );
@@ -93,6 +93,6 @@ async function notification(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['notification'] = notification;
+globalThis['notification'] = notification;
 
 

@@ -10,10 +10,10 @@ If WScript.Arguments.Count <= 1 Then
 
     If WScript.Arguments.Count = 0 Then
 		rem NENHUM PARAMENTRO PASSADO
-		MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\\n\\nNENHUM PARAMETRO PASSADO"  , "\\n" , Chr(13)))
+		MsgBox ( Replace(  "[" & localizacao & "\" & arquivo & "]\\n\\nNENHUM PARAMETRO PASSADO"  , "\\n" , Chr(13)) )
     Else
 		rem PARAMENTROS INVALIDOS
-		MsgBox (Replace(  "[" & localizacao & "\" & arquivo & "]\\n\\nPARAMETROS INVALIDO. Exemplo:\\n" & arquivo & " " & "'MANUAL/RESTART' 'NOME_DO_PROCESSO'"  , "\\n" , Chr(13) ))
+		MsgBox ( Replace(  "[" & localizacao & "\" & arquivo & "]\\n\\nPARAMETROS INVALIDO. Exemplo:\\n" & arquivo & " " & "'MANUAL/RESTART' 'NOME_DO_PROCESSO'"  , "\\n" , Chr(13) ) )
     End If
 Else
     rem DEFINIR VARIAVEIS

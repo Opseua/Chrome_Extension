@@ -2,7 +2,7 @@
 let arrGlobal = [
   // FUNÇÃO NATIVAS
   'console', 'setTimeout', 'setInterval', 'clearTimeout', 'AbortController', 'TextEncoder', 'fetch', 'prompt', 'document', 'XPathResult', 'Blob', 'URL', 'DOMParser', 'atob', 'btoa',
-  'alert', 'window', 'global', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle',
+  'alert', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle',
 
   // VARIÁVEIS GLOBAIS
   'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des',
@@ -26,8 +26,9 @@ let arrGlobal = [
 
   // funções globais → [Chrome_Extension]
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
-  'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar', 'listenerMonitorar',
-  'chromeActionsNew', 'funImport', 'funGeneric', 'funLibrary', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1', 'command2', 'tryRatingComplete',
+  'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar',
+  'listenerMonitorar', 'chromeActionsNew', 'funImport', 'funGeneric', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1',
+  'command2', 'tryRatingComplete', 'startupTime',
 
   // funções globais → [WebSocket]
   'html', 'logsDelOld', 'messageAction', 'performanceDev', 'roomParams',
@@ -45,11 +46,9 @@ let arrGlobal = [
 
 // ************** VARIÁVEIS NÃO USADAS **************
 let arrUnused = [
-  // 'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',
-  'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'index4', 'value4', 'event', 'time', 'time1', 'time2', 'hour', 'timeout', 'notificationLegacy', 'ee',
-  // outros
+  // 'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',  // outros
   'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write',
-  'msg', 'sendNtfy', 'e',
+  'msg', 'sendNtfy', 'e', 'ee', 'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3',
 ];
 
 let arrGlobalObj = {}; for (let variavel of arrGlobal) { arrGlobalObj[variavel] = 'writable'; }

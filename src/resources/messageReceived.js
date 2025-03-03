@@ -2,7 +2,7 @@ let e = import.meta.url, ee = e;
 let mensagensPartesRecebida = {};
 
 let minCle = gW.minClearPartsMessages * 60000; // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
-setInterval(() => { let c = new Date().getTime(); for (let mesId in mensagensPartesRecebida) { if ((c - Number(mesId.split('_')[1])) > minCle) { delete mensagensPartesRecebida[mesId]; } }; }, minCle);
+setInterval(() => { let c = new Date().getTime(); for (let mesId in mensagensPartesRecebida) { if ((c - Number(mesId.split('_')[1])) > minCle) { delete mensagensPartesRecebida[mesId]; } } }, minCle);
 
 async function messageReceived(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
@@ -20,7 +20,7 @@ async function messageReceived(inf = {}) {
                     wsClientsArrRoom.push(room); // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
                     wsClientsToSend = wsClientsToSend.concat(Array.from(wsClients.rooms[room]));
                 }
-            }; erroType = wsClientsToSend.length === 0 ? `DESTINO INVÁLIDO` : (regex({ e, 'simple': true, 'pattern': destination, 'text': origin, }) || origin === destination) ? `DESTINO IGUAL` : 0;
+            } erroType = wsClientsToSend.length === 0 ? `DESTINO INVÁLIDO` : (regex({ e, 'simple': true, 'pattern': destination, 'text': origin, }) || origin === destination) ? `DESTINO IGUAL` : 0;
 
             // ENVIAR: MENSAGEM STATUS → ORIGEM
             let messageOrigin = {
@@ -35,7 +35,7 @@ async function messageReceived(inf = {}) {
             // ENVIAR: MENSAGEM REAL → DESTINO
             if (!erroType) {
                 for (let [index, value,] of wsClientsToSend.entries()) {
-                    try { message = JSON.parse(message); } catch (catchErr) { }; let messageDestination = {
+                    try { message = JSON.parse(message); } catch (catchErr) { } let messageDestination = {
                         origin,
                         'destination': `${value.hostRoom}`,
                         messageId,
@@ -48,7 +48,7 @@ async function messageReceived(inf = {}) {
             }
         } else {
             // ######################################################################## RECEBIDO NO CLIENTE ########################################################################
-            if (!mensagensPartesRecebida[messageId]) { mensagensPartesRecebida[messageId] = { partes: [], }; }; mensagensPartesRecebida[messageId].partes.push(message); if (partesRestantes === 0) {
+            if (!mensagensPartesRecebida[messageId]) { mensagensPartesRecebida[messageId] = { partes: [], }; } mensagensPartesRecebida[messageId].partes.push(message); if (partesRestantes === 0) {
                 message = mensagensPartesRecebida[messageId].partes.join(''); message = buffer ? eng ? atob(message) : Buffer.from(message, 'base64') : message; let listName = 'x';
                 if (messageId.includes(`SERVER`) || messageId.includes(`RET-OK`)) {
                     // RECEBIDO: RETORNO DO SERVIDOR OU RESPOSTA SENDO AGUARDADA
@@ -80,12 +80,12 @@ async function messageReceived(inf = {}) {
         }
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
-};
+}
 
 // CHROME | NODEJS
-(eng ? window : global)['messageReceived'] = messageReceived;
+globalThis['messageReceived'] = messageReceived;
 
 
