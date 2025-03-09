@@ -1,11 +1,10 @@
-await import('../resources/@export.js'); let e = import.meta.url, ee = e; let libs = false;
-
-// IMPORTAR BIBLIOTECA [NODEJS]
-if (!libs) { await importLibs(['_path', '_fs',]); libs = true; }
+await import('../resources/@export.js'); let e = import.meta.url, ee = e; let libs = ['path',];
 
 async function backups() {
     let m = `!fileChrome_Extension!/src/scripts/BAT/fileMsg.vbs`;
     try {
+        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'path', 'l': ['path',], },]); }
+
         let retDateHour = dateHour().res; retDateHour = `MES ${retDateHour.mon} - DIA ${retDateHour.day} - HORA ${retDateHour.hou}.${retDateHour.min}`;
         let nameMaster = await configStorage({ e, 'action': 'get', 'key': 'master', 'path': `!fileChrome_Extension!/src/master.json`, }); nameMaster = nameMaster.res;
         let back = {

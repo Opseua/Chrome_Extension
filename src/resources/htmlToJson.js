@@ -1,11 +1,10 @@
 // → NO FINAL DA PÁGINA
 
-let e = import.meta.url, ee = e; let libs = false;
+let e = import.meta.url, ee = e; let libs = ['cheerio',];
 async function htmlToJson(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        // IMPORTAR BIBLIOTECA [NODEJS]
-        if (!libs) { await importLibs(['_cheerio',]); libs = true; }
+        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'cheerio', 'l': ['cheerio',], },]); }
 
         let { html, mode, } = inf;
 

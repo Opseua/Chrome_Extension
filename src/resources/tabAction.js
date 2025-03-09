@@ -65,9 +65,7 @@ async function tabAction(inf = {}) {
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     }
-    if (!ret.ret) {
-        if (inf.openIfNotExist) { let retOpenTab = await openTab(inf); if ('id' in retOpenTab) { ret['res'] = retOpenTab; ret['msg'] = `TAB ACTION: OK`; ret['ret'] = true; } else { ret['msg'] = retOpenTab; } }
-    }
+    if (!ret.ret) { if (inf.openIfNotExist) { let retOpenTab = await openTab(inf); if ('id' in retOpenTab) { ret['res'] = retOpenTab; ret['msg'] = `TAB ACTION: OK`; ret['ret'] = true; } else { ret['msg'] = retOpenTab; } } }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }

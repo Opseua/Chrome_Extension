@@ -1,7 +1,7 @@
 // APAGAR TODO O CONTEUDO DO STORAGE
 chrome.storage.local.clear(function () { /* console.log('DEL 1'); */ }); chrome.storage.sync.clear(function () { /* console.log('DEL 2'); */ });
 
-import('../server.js');
+import('../server.js'); // NÃO POR COMO await!!!
 
 chrome.browserAction.onClicked.addListener(async function (...inf) {
     console.log(`EVENTO: click no ícone\n`, inf); // chrome.browserAction.setPopup({popup: './popup.html'});
@@ -23,27 +23,27 @@ chrome.downloads.onChanged.addListener(async function (...inf) {
 });
 
 // chrome.commands.onCommand.addListener(async function (...inf) {
-//     console.log(`EVENTO: atalho pressionado\n`, inf)
+//     console.log(`EVENTO: atalho pressionado\n`, inf);
 // });
 
 // chrome.tabs.onActivated.addListener(async function (...inf) {
-//   console.log(`EVENTO: guia ativa alterada\n`, inf)
+//     console.log(`EVENTO: guia ativa alterada\n`, inf);
 // });
 
 // chrome.notifications.onClicked.addListener(async function (...inf) {
-//   console.log(`EVENTO: click na notificação\n`, inf)
-// })
+//     console.log(`EVENTO: click na notificação\n`, inf);
+// });
 
 // chrome.notifications.onButtonClicked.addListener(async function (...inf) {
-//   console.log(`EVENTO: click no botão da notificação\n`, inf)
+//     console.log(`EVENTO: click no botão da notificação\n`, inf);
 // });
 
 // chrome.notifications.onClosed.addListener(async function (...inf) {
-//   console.log(`EVENTO: notificação fechada\n`, inf)
+//     console.log(`EVENTO: notificação fechada\n`, inf);
 // });
 
 // chrome.runtime.onMessage.addListener(async function (...inf) {
-//   console.log(`EVENTO: mensagem recebida\n`, inf)
+//     console.log(`EVENTO: mensagem recebida\n`, inf);
 // });
 
 // chrome.tabs.onUpdated.addListener(function (...inf) {
@@ -75,7 +75,7 @@ chrome.downloads.onChanged.addListener(async function (...inf) {
 
 //             // let retFile = await file({ 'action': 'write', 'path': 'arquivoNovo.html', 'text': retChromeActions.res, }); console.log(retFile);
 
-//             let des = `127.0.0.1:8889/?roo=OPSEUA-NODEJS-WEBSOCKET-SERVER`;
+//             let des = `127.0.0.1:1234/?roo=SALA`;
 //             let msgLis = { 'fun': [{ 'securityPass': gW.securityPass, 'retInf': true, 'name': 'file', 'par': { 'action': 'write', 'path': 'arquivoNovo.html', 'text': 'CASA', }, },], };
 //             let retMessageSend = await messageSend({ 'destination': des, 'message': msgLis, }); console.log(retMessageSend);
 

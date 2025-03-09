@@ -5,7 +5,7 @@ let arrGlobal = [
   'alert', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle',
 
   // VARIÁVEIS GLOBAIS
-  'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des',
+  'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des', 'quebrarCodigo',
 
   // VARIÁVEIS DO SISTEMA
   'fileChrome_Extension', 'fileProjetos', 'fileWindows',
@@ -14,8 +14,8 @@ let arrGlobal = [
   'chrome',
 
   // ### BIBLIOTECAS / NATIVO → NODEJS
-  '_WebSocketServer', '_WebSocket', '_fs', '_path', '_url', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_crypto', '_puppeteer', '_net', '_util', '_getFolderSize', 'process',
-  'Buffer', '_parse', '_stackTrace', '_googleapisAuth', '_googleapisSheets',
+  '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_createHash', '_puppeteer', '_net', '_getFolderSize', 'process',
+  'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard',
   // GLOBAL OBJECT
   'gO', 'gOList', 'cs',
   // FUNÇÕES
@@ -27,8 +27,8 @@ let arrGlobal = [
   // funções globais → [Chrome_Extension]
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
   'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar',
-  'listenerMonitorar', 'chromeActionsNew', 'funImport', 'funGeneric', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1',
-  'command2', 'tryRatingComplete', 'startupTime',
+  'listenerMonitorar', 'chromeActionsNew', 'importFun', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1',
+  'command2', 'tryRatingComplete', 'startupTime', 'crashCode',
 
   // funções globais → [WebSocket]
   'html', 'logsDelOld', 'messageAction', 'performanceDev', 'roomParams',

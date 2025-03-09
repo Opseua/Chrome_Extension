@@ -19,12 +19,11 @@
 // };
 // retCommandLine = await commandLine(infCommandLine); console.log(retCommandLine);
 
-let e = import.meta.url, ee = e; let libs = false;
+let e = import.meta.url, ee = e; let libs = ['exec',];
 async function commandLine(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        // IMPORTAR BIBLIOTECA [NODEJS]
-        if (!libs) { await importLibs(['_exec',]); libs = true; }
+        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'child_process', 'l': ['exec',], },]); }
 
         let { command = false, awaitFinish = false, notAdm = false, notBackground = false, oldBackground = false, view = false, delay = 0, terminalPath = false, withCmd = false, } = inf;
 

@@ -63,12 +63,10 @@ async function tryRatingSet(inf = {}) {
         // EXECUTAR AÇÕES [ELEMENTS POR ELEMENTS]
         for (let [index, val,] of elements.entries()) {
             // VALORES PASSADOS PARA A FUNÇÃO |  VALORES DO OBJ
-            let { element, elements1, } = val; let elementObj = elementsObj[element];
-            console.log(`#### ELEMENTO 1 ####\n'${element}'`);
+            let { element, elements1, } = val; let elementObj = elementsObj[element]; console.log(`#### ELEMENTO 1 ####\n'${element}'`);
             // EXECUTAR AÇÕES [ELEMENTS1 POR ELEMENTS1]
             for (let [index3, val3,] of elements1.entries()) {
-                let { element1, actions, } = val3;
-                console.log(`  *** ELEMENTO 2 ***\n  → '${element1}'`);
+                let { element1, actions, } = val3; console.log(`  *** ELEMENTO 2 ***\n  → '${element1}'`);
                 // EXECUTAR AÇÕES [ACTION POR ACTION]
                 for (let [index4, val4,] of actions.entries()) {
                     // TEMPO RESTANTE
@@ -76,10 +74,8 @@ async function tryRatingSet(inf = {}) {
                     // DEFINIR VALORES PASSADOS OU DO OBJ
                     let element1Obj = elementObj[element1].element1Obj; let actionObj = elementObj[element1].actionsObj[index4].action;
                     let awaitFor = element === 'submit_rating' ? [(timeSec - 10), timeSec,] : val4.awaitFor || elementObj[element1].actionsObj[index4].awaitFor;
-                    let value = val4.value || elementObj[element1].actionsObj[index4].value;
-                    let infChromeActionsNew = JSON.parse(JSON.stringify(elementsObj[element].infObj).replace(`###_REPLACE_1_###`, `${element1Obj}`));
-                    await new Promise(resolve => setTimeout(resolve, randomNumber(...awaitFor) * 1000));
-                    console.log(`    ++ AÇÃO++\n    → ${awaitFor.toString()} | ${actionObj} \n    ${value} `);
+                    let value = val4.value || elementObj[element1].actionsObj[index4].value; let infChromeActionsNew = JSON.parse(JSON.stringify(elementsObj[element].infObj).replace(`###_REPLACE_1_###`, `${element1Obj}`));
+                    await new Promise(resolve => setTimeout(resolve, randomNumber(...awaitFor) * 1000)); console.log(`    ++ AÇÃO++\n    → ${awaitFor.toString()} | ${actionObj} \n    ${value} `);
                     let infChromeActions = { e, 'action': 'inject', target, 'fun': chromeActionsNew, 'funInf': { ...infChromeActionsNew, ...{ 'action': actionObj, }, }, };
                     let retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { return retChromeActions; } // console.log(retChromeActions);
                 }

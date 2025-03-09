@@ -1,34 +1,20 @@
 // await new Promise(resolve => { setTimeout(resolve, 2000) });   
 
-// CHECAR SE É ARRAY Array.isArray(retHtmlToJson)   |   CHECAR SE TEM A CHAVE  if ('chave' in obj){ }   |   CHECAR SE É OBJETO typeof obj === 'object'
+/* CHECAR SE É ARRAY  */ // Array.isArray(retHtmlToJson)   |   CHECAR SE TEM A CHAVE  if ('chave' in obj){ }   |   CHECAR SE É OBJETO typeof obj === 'object'
 // let { key: atribuirNisso, } = { 'key': 'AAA', }; console.log(atribuirNisso);
-// ({ issoJaExiste, } = functionAqui(obj));
-
-// process.exit();
 
 // for (let [index, value,] of array.entries()) { console.log('INDEX', index, 'VALUE', value); };
 
-// ESPERAR E EXECUTAR UMA VEZ
-// setTimeout(() => { console.log('OK'); }, 2000);
+/* ESPERAR E EXECUTAR UMA VEZ */ // setTimeout(() => { console.log('OK'); }, 2000);
 
-// ESPERAR E REPETIR
-// setInterval(() => { console.log('OK'); }, 2000);
+/* ESPERAR E REPETIR */ // setInterval(() => { console.log('OK'); }, 2000);
 
-// TIMEOUT
-// let timeout = setTimeout(() => { console.log('OK'); }, 2000); clearTimeout(timeout);
+/* TIMEOUT */ // let timeout = setTimeout(() => { console.log('OK'); }, 2000); clearTimeout(timeout);
 
-// let obj = { 'a': { 'b': null }, 'c': 'AAA' }; console.log(!!obj.a)
+/* LOOP 99 VEZES */ // for (let index = 0; index < 99; index++) { console.log('INDEX', index); };
 
-// LOOP 99 VEZES
-// for (let index = 0; index < 99; index++) { console.log('INDEX', index); };
-
-// QUALQUER → BASE64 | BASE64 → UTF8
-// let qualquerParaBase64 = Buffer.from('CASAMENTO').toString('base64'); console.log(`qualquerParaBase64 ${qualquerParaBase64}`)
-// let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8'); console.log(`base64ParaUtf8 ${base64ParaUtf8}`)
-
-// cd /d D:\ARQUIVOS\PROJETOS\Sniffer_Python
-
-// https://api.hashify.net/hash/md5/hex?value=aaaa
+/* QUALQUER → BASE64 | BASE64 → UTF8 */ // let qualquerParaBase64 = Buffer.from('CASAMENTO').toString('base64'); console.log(`qualquerParaBase64 ${qualquerParaBase64}`)
+// let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8'); console.log(`base64ParaUtf8 ${base64ParaUtf8}`); cd /d D:\ARQUIVOS\PROJETOS\Sniffer_Python
 
 let _fs, cs; globalThis['engName'] = (eng) ? 'CHROME' : 'NODEJS'; globalThis['letter'] = 'x'; globalThis['fileProjetos'] = 'x'; globalThis['fileChrome_Extension'] = 'x'; globalThis['fileWindows'] = 'x';
 if (!eng) { _fs = await import('fs'); globalThis['_fs'] = _fs; process.noDeprecation = true; }
@@ -55,17 +41,17 @@ gW = { // MANTER APÓS O 'devSend'
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // ############### GLOBAL OBJECT ###############
-// gOList(async function () { console.log('globalObject [import] ALTERADO →', gO.inf) }); gO.inf['NovaChave'] = { 'a': 'b' }; gO.inf['NovaChave'] = ['a', 'b', 'c',]; console.log(gO.inf)
+function crashCode(txt = 'QUEBRANDO CÓDIGO...') { console.log(txt); if (eng) { chrome.management.setEnabled(chrome.runtime.id, false); } else { process.exit(); } } // crashCode()
+
+// ############### GLOBAL OBJECT ###############
 let gOListener = []; let gOObj = {}; function gOList(listener) { gOListener.push(listener); } function notificarListeners(prop, value) {
     if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf); } for (let listener of gOListener) { listener(prop, value); }
 } let gO = new Proxy(gOObj, { set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; }, }); gO.inf = {}; // let cs = await configStorage(['']); console.log(cs)
+// gOList(async function () { console.log('globalObject [import] ALTERADO →', gO.inf) }); gO.inf['NovaChave'] = { 'a': 'b' }; gO.inf['NovaChave'] = ['a', 'b', 'c',]; console.log(gO.inf)
 
 // ############### RATE LIMIT ###############
+function rateLimiter(inf = {}) { let { max, sec, } = inf; let i = sec * 1000, t = []; return { check: () => { let n = Date.now(); t.push(n); while (t[0] < n - i) { t.shift(); } return t.length <= max; }, }; }
 // let rate = rateLimiter({ 'max': 3, 'sec': 5 }); function testRate() { console.log(rate.check()); console.log(rate.check()); console.log(rate.check()); console.log(rate.check()) }; testRate();
-function rateLimiter(inf = {}) {
-    let { max, sec, } = inf; sec = sec * 1000; let old = [];
-    function check() { let now = Date.now(); let recent = old.filter(timestamp => timestamp >= now - sec); if (recent.length < max) { old.push(now); return true; } else { return false; } } return { check, };
-}
 
 // ############### NÚMERO ALEATÓRIO ###############
 function randomNumber(min, max) { return Math.floor(Math.random() * ((typeof max === 'number' ? max : min + 1) - min + 1) + min); } // console.log(randomNumber(2, 5))
@@ -87,30 +73,48 @@ function awaitTimeout(inf = {}) {
 function clearRun() { if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } } let msgQtd = 0; let clearConsole = console.log;
 console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n'); } }; clearRun();
 
-// PEGAR O NOME DO ARQUIVO(SEM EXTENSÃO) | IMPORTAR FUNÇÕES DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) | ENCAMINHAR PARA DEVICE
-function funFile(txt) { return txt.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; }
-let qtd1 = 0; async function funImport(infOk) { let { path, inf, } = infOk; qtd1++; let n = funFile(path); if (qtd1 > 30) { console.log('IMPORTANDO...', n); } await import(`${path}`); return await globalThis[n](inf); }
-async function funGeneric(infOk) { let { path, inf, } = infOk; let n = funFile(path); let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { 'name': n, 'par': inf, }, }); return retDevAndFun; }
-
-// CALCULAR TEMPO DE INICIALIZAÇÃO
+// ############### CALCULAR TEMPO DE INICIALIZAÇÃO ###############
 function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }
 
-// ## VARIÁVEIS
-globalThis['cs'] = cs;
-// ## GLOBAL OBJECT [NOVO]
-globalThis['gO'] = gO; globalThis['gOList'] = gOList;
-// ## LISTENER
-globalThis['listenerMonitorar'] = listenerMonitorar; globalThis['listenerAcionar'] = listenerAcionar;
-// ## FUNÇÕES
-globalThis['rateLimiter'] = rateLimiter; globalThis['randomNumber'] = randomNumber; globalThis['awaitTimeout'] = awaitTimeout; globalThis['funImport'] = funImport; globalThis['funGeneric'] = funGeneric;
-globalThis['clearRun'] = clearRun; globalThis['startupTime'] = startupTime;
+// ############### PATH DA BIBLIOTECA NODEJS ###############
+async function libPath(inf = {}) {
+    let { project: p, libMod: m, libNam: n, } = inf; let mod; mod = await import('path'); let path = mod; mod = await import('module'); let createRequire = mod.createRequire;
+    let r = createRequire(path.resolve(`${fileProjetos}/${p}/node_modules`)).resolve(`${m}${(m === n || !n || !m.includes('@')) ? '' : `/${n}`}`).replace(/\\/g, `/`); return `${r.includes('/') ? 'file:///' : ''}${r}`;
+}
 
-// ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!!
-function all1() { } globalThis['all1'] = all1;
+// {IMPORT FUNÇÕES} → DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) * ENCAMINHAR PARA DEVICE
+let qtd0 = 0; async function importFun(infOk = {}) {
+    let { importOk, path, inf, project, } = infOk; qtd0++; let name = path.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; if (qtd0 > 50) { console.log(`IMPORT FUN: ERRO | EM LOOP!!!`); crashCode(); }
+    if (importOk) { await import((eng ? `${gW.root}://${gW.functions}` : `file://${fileProjetos}/${project === 'NAO_DEFINIDO' ? 'Chrome_Extension' : project}`) + `/${path.replace('./', '')}`); return globalThis[name](inf); }
+    else { let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { name, 'par': inf, }, }); return retDevAndFun; }
+}
+
+// {IMPORT BIBLIOTECAS} → [NODE] DINAMICAMENTE QUANDO NECESSÁRIO 
+let qtd1 = 0; async function importLibs(libs, imports) {
+    /* console.log('ANTES', libs); */ qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP!!!`); crashCode(); } let importsOk = imports.flatMap(o => o.l); if (libs.some(v => importsOk.includes(v))) {
+        for (let v of imports) {
+            let project = v.p; let libMod = v.m; let lbs = v.l; for (let v of lbs) {
+                let libNam = v; if (!globalThis[`_${libNam}`] && (!eng || libNam === 'WebSocket')) {
+                    if (eng) { globalThis[`_${libNam}`] = globalThis[`${libNam}`]; } else {
+                        if (project) { libMod = await libPath({ 'project': project === true ? gW.project : project, libMod, libNam, }); /* console.log('IMPORT LEGACY', libMod);*/ } let mod = await import(libMod);
+                        globalThis[`_${libNam}`] = (libMod === libNam) ? mod : mod[libNam] || mod.default;
+                    }
+                } libs = libs.filter(i => i !== libNam);
+            }
+        }
+    } else { libs = []; } return libs;
+}
+
+Object.assign(globalThis, {
+   /* ## VARIÁVEIS */     cs,
+   /* ## GLOBAL OBJECT */ gO, gOList,
+    /* ## LISTENER */     listenerMonitorar, listenerAcionar,
+    /* ## FUNÇÕES */      rateLimiter, randomNumber, awaitTimeout, importFun, importLibs, clearRun, startupTime, crashCode,
+});
+
+// ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!! | NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'
+function all1() { } globalThis['all1'] = all1; if (!globalThis.all2) { await import('./@export.js'); }
 // *****************************************************************************************
-
-// NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'
-if (!globalThis.all2) { await import('./@export.js'); }
 
 // javascript: (function () {
 //     function pw(j, pw, ph, u) {

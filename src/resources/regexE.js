@@ -9,12 +9,11 @@
 //     (async () => { let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res']; })();
 // };
 
-let libs = false;
+let rate = rateLimiter({ 'max': 5, 'sec': 10, }); let libs = ['path',];
 async function regexE(inf = {}) {
-    let ret = { 'ret': false, };
+    let ret = { 'ret': false, }; if (!rate.check()) { crashCode('REGEXe: ERRO | EM LOOP!!!'); }
     try {
-        // IMPORTAR BIBLIOTECA [NODEJS]
-        if (!libs) { await importLibs(['_path',]); libs = true; }
+        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'path', 'l': ['path',], },]); }
 
         let { e, ignoreAlert = false, concat = `\n\n#######\n\n`, } = inf;
 

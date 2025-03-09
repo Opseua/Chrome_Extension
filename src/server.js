@@ -35,12 +35,12 @@ async function serverRun(inf = {}) {
         await chromeActionsNew();
 
         // function monitorarValorTempo() {
-        //     if (globalThis.observadorAtivo) { return; }; globalThis.observadorAtivo = true;
-        //     function title(t) { let [m, s,] = t.match(/\d+/g).map(Number); document.title = `TryRating ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; };
-        //     let l = [...document.querySelectorAll('.labeled-attribute__label span'),].find(el => el.textContent.trim() === 'Estimated Rating Time'); if (!l) { return; };
-        //     let t = l.closest('.labeled-attribute')?.querySelector('.label-value'); if (!t) { return; }; let p = t.textContent.trim(); title(`INICIAL ${p}`);
-        //     new MutationObserver(() => { let n = t.textContent.trim(); if (n !== p) { p = n; title(`ALTERADO ${n}`); } }).observe(t, { characterData: true, subtree: true, });
-        // }; monitorarValorTempo();
+        //     if (globalThis.observadorAtivo) { return; } globalThis.observadorAtivo = true;
+        //     function title(t) { let [m, s = 0,] = t.match(/\d+/g).map(Number); document.title = `TryRating ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; }
+        //     let l = [...document.querySelectorAll('.labeled-attribute__label span'),].find(el => el.textContent.trim() === 'Estimated Rating Time'); if (!l) { return; }
+        //     let t = l.closest('.labeled-attribute')?.querySelector('.label-value'); if (!t) { return; } let p = t.textContent.trim(); title(`${p} [INI]`);
+        //     new MutationObserver(() => { let n = t.textContent.trim(); if (n !== p) { p = n; title(`${n} [ALT]`); } }).observe(t, { characterData: true, subtree: true, });
+        // } monitorarValorTempo();
 
 
         ret['ret'] = true;

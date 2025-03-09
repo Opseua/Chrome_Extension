@@ -18,15 +18,14 @@
 // };
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
-let e = import.meta.url, ee = e; let libs = false; let _auth, _sheets, googleAppScriptId, scopeUrl = 'https://www.googleapis.com/auth/spreadsheets', retSheet;
+let e = import.meta.url, ee = e; let libs = ['auth', 'sheets',]; let keyFile = `${letter}:/${gW.root}/${gW.functions}/${gW.conf}`, scopeUrl = 'https://www.googleapis.com/auth/spreadsheets', googleAppScriptId, retSheet;
 async function googleSheets(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     let { action, id, tab, range, values, attempts = 2, googleAppScript = false, } = inf; let errAll = '';
     try {
-        // IMPORTAR BIBLIOTECA [NODEJS]
-        if (!libs) {
-            await importLibs(['_googleapisAuth', '_googleapisSheets',]); libs = true; _auth = new _googleapisAuth.GoogleAuth({ 'keyFile': `${letter}:/${gW.root}/${gW.functions}/${gW.conf}`, 'scopes': [scopeUrl,], });
-            _sheets = _googleapisSheets({ 'version': 'v4', 'auth': _auth, }); let r = await configStorage({ e, 'action': 'get', 'key': 'googleAppScriptId', }); if (!r.ret) { return r; } googleAppScriptId = r.res;
+         /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) {
+            libs = await importLibs(libs, [{ 'm': '@googleapis/sheets', 'l': ['auth', 'sheets',], },]); _sheets = _sheets({ 'version': 'v4', 'auth': new _auth.GoogleAuth({ keyFile, 'scopes': [scopeUrl,], }), });
+            let r = await configStorage({ e, 'action': 'get', 'key': 'googleAppScriptId', }); if (!r.ret) { return r; } googleAppScriptId = r.res;
         }
 
         function identifyErr(err) {
