@@ -77,9 +77,9 @@ console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if
 function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }
 
 // ############### PATH DA BIBLIOTECA NODEJS ###############
-async function libPath(inf = {}) {
-    let { project: p, libMod: m, libNam: n, } = inf; let mod; mod = await import('path'); let path = mod; mod = await import('module'); let createRequire = mod.createRequire;
-    let r = createRequire(path.resolve(`${fileProjetos}/${p}/node_modules`)).resolve(`${m}${(m === n || !n || !m.includes('@')) ? '' : `/${n}`}`).replace(/\\/g, `/`); return `${r.includes('/') ? 'file:///' : ''}${r}`;
+let mod; mod = await import('path'); globalThis[`_path`] = mod; mod = await import('module'); globalThis[`_createRequire`] = mod.createRequire; async function libPath(inf = {}) {
+    let { project: p, libMod: m, libNam: n, } = inf;
+    let r = _createRequire(_path.resolve(`${fileProjetos}/${p}/node_modules`)).resolve(`${m}${(m === n || !n || !m.includes('@')) ? '' : `/${n}`}`).replace(/\\/g, `/`); return `${r.includes('/') ? 'file:///' : ''}${r}`;
 }
 
 // {IMPORT FUNÇÕES} → DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) * ENCAMINHAR PARA DEVICE
@@ -95,7 +95,7 @@ let qtd1 = 0; async function importLibs(libs, imports) {
         for (let v of imports) {
             let project = v.p; let libMod = v.m; let lbs = v.l; for (let v of lbs) {
                 let libNam = v; if (!globalThis[`_${libNam}`] && (!eng || libNam === 'WebSocket')) {
-                    if (eng) { globalThis[`_${libNam}`] = globalThis[`${libNam}`]; } else {
+                    /* console.log(`IMPORTANDO`, libNam); */ if (eng) { globalThis[`_${libNam}`] = globalThis[`${libNam}`]; } else {
                         if (project) { libMod = await libPath({ 'project': project === true ? gW.project : project, libMod, libNam, }); /* console.log('IMPORT LEGACY', libMod);*/ } let mod = await import(libMod);
                         globalThis[`_${libNam}`] = (libMod === libNam) ? mod : mod[libNam] || mod.default;
                     }

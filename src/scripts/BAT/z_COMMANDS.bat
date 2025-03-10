@@ -1,7 +1,5 @@
 @chcp 65001 & @echo off & setlocal enabledelayedexpansion
-set "letra=%~d0" & set "local=%~dp0"
-set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set "argString=%*"
-set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1"
+set "local=%~dp0" & set "local=!local:~0,-1!" & set "letra=!local:~0,1!" & set "arquivo=%~nx0" & set "argString=%*" & set "arg1=%~1"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
 if "!arg1!" == "" ( !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\n\\nNENHUM PARAMETRO PASSADO"" & exit )
@@ -210,15 +208,15 @@ if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New7#=!" ( !fileProje
 if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New8#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New8\!atalhoModo!.vbs FALSE & ping -n 4 -w 1000 127.0.0.1 > nul )
 
 rem ---------------------------------------------- ABRIR PROGRAMAS E POSICIONAR SE NECESSARIO --------------------------------------------------------------------
-if not "!devMaster!" == "OPSEUA" ( 
-	if not "!arg1!" == "!arg1:_RESTART_=!" (
-		tasklist /fi "ImageName eq SystemInformer.exe" /fo csv 2> nul | find /I "SystemInformer.exe" > nul
-		if "!errorlevel!" == "0" ( goto END_CMD )
-		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "explorer" & set "fNSS=!fileNircmdSetSize!"
-		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_logs\z_MES_!DATE:~3,2!_DIA_!DATE:~0,2!.txt -monitor"
-		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!fileWindows!\PORTABLE_System_Informer\SystemInformer.vbs""
-		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fNSS! "This PC" "585 480 695 500" & !fNSS! "System Informer" "880 50 600 400" & !fNSS! "- Notepad++" "-7 545 1050 447""
-		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!nircmd! win normal ititle "- Notepad++""	
+if not "!devMaster!" == "OPSEUA" (
+	if not "!arg1!" == "!arg1:_REST=!" (
+		set "fNSS=!fileNircmdSetSize!" & ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_logs\z_MES_!DATE:~3,2!_DIA_!DATE:~0,2!.txt -monitor"
+		if not "!arg1!" == "!arg1:_RESTART_=!" (
+			tasklist /fi "ImageName eq SystemInformer.exe" /fo csv 2> nul | find /I "SystemInformer.exe" > nul
+			if not "!errorlevel!" == "0" ( ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "explorer" & ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!fileWindows!\PORTABLE_System_Informer\SystemInformer.vbs"" )
+		)
+		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!nircmd! win normal ititle "- Notepad++""
+		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fNSS! "This PC" "585 480 695 500" & !fNSS! "System Informer" "585 50 695 400" & !fNSS! "- Notepad++" "-7 545 1050 447" & !nircmd! win activate ititle "- Notepad++""
 	)
 )
 :END_CMD

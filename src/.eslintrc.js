@@ -15,7 +15,7 @@ let arrGlobal = [
 
   // ### BIBLIOTECAS / NATIVO → NODEJS
   '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_createHash', '_puppeteer', '_net', '_getFolderSize', 'process',
-  'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard',
+  'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard', '_createRequire',
   // GLOBAL OBJECT
   'gO', 'gOList', 'cs',
   // FUNÇÕES
