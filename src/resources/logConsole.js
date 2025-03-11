@@ -33,17 +33,18 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
         }
 
         let time = dateHour().res;
-        let fileProject = eng ? 'Chrome' : ee.split('PROJETOS/')[1].split('/')[0];
+        let projectConsole = eng ? 'Chrome' : ee.split('PROJETOS/')[1].split('/')[0];
         let fileCall = ee.split('/').pop();
         msg = typeof msg === 'object' ? JSON.stringify(msg) : msg;
+        let currentDateHour = `${time.hou}:${time.min}:${time.sec}.${time.mil}`;
         colorConsole({
             // FORMATO: 24 HORAS (11h, 12h, 13h, 14h...)
-            'text': `<verde>→ ${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}.${time.mil}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`,
+            'text': `<verde>→ ${time.day}/${time.mon} ${currentDateHour}</verde> <azul>${projectConsole}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`,
             // FORMATO: 12 HORAS (11h, 12h, 01h, 02h...)
-            // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${fileProject}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
+            // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${project}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
         });
         if (!eng && write) {
-            await log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, fileProject, fileCall, 'unique': false, });
+            await log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, projectConsole, fileCall, 'unique': false, currentDateHour, });
         }
 
         ret['msg'] = `LOG CONSOLE: OK`;

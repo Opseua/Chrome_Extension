@@ -18,7 +18,7 @@
 // };
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
-let e = import.meta.url, ee = e; let libs = ['auth', 'sheets',]; let keyFile = `${letter}:/${gW.root}/${gW.functions}/${gW.conf}`, scopeUrl = 'https://www.googleapis.com/auth/spreadsheets', googleAppScriptId, retSheet;
+let e = import.meta.url, ee = e; let libs = ['auth', 'sheets',]; let keyFile = `${fileProjetos}/${gW.functions}/${gW.conf}`, scopeUrl = 'https://www.googleapis.com/auth/spreadsheets', googleAppScriptId, retSheet;
 async function googleSheets(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     let { action, id, tab, range, values, attempts = 2, googleAppScript = false, } = inf; let errAll = '';

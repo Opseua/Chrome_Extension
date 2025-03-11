@@ -16,11 +16,12 @@
 /* QUALQUER → BASE64 | BASE64 → UTF8 */ // let qualquerParaBase64 = Buffer.from('CASAMENTO').toString('base64'); console.log(`qualquerParaBase64 ${qualquerParaBase64}`)
 // let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8'); console.log(`base64ParaUtf8 ${base64ParaUtf8}`); cd /d D:\ARQUIVOS\PROJETOS\Sniffer_Python
 
-let _fs, cs; globalThis['engName'] = (eng) ? 'CHROME' : 'NODEJS'; globalThis['letter'] = 'x'; globalThis['fileProjetos'] = 'x'; globalThis['fileChrome_Extension'] = 'x'; globalThis['fileWindows'] = 'x';
-if (!eng) { _fs = await import('fs'); globalThis['_fs'] = _fs; process.noDeprecation = true; }
+let _fs, cs; globalThis['engName'] = (eng) ? 'CHROME' : 'NODEJS'; globalThis['letter'] = 'x'; globalThis['fileProjetos'] = 'x'; globalThis['fileChrome_Extension'] = 'x'; globalThis['fileWindows'] = 'x'; if (!eng) {
+    process.noDeprecation = true; _fs = await import('fs'); globalThis['_fs'] = _fs; let m; m = await import('path'); globalThis[`_path`] = m; m = await import('module'); globalThis[`_createRequire`] = m.createRequire;
+}
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
-await import('./getPath.js'); let retGetPath = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = retGetPath.res.confOk.webSocket; let devMaster = retGetPath.res.confOk.master;
+await import('./getPath.js'); let rGP = await getPath({ 'e': new Error(), 'isFunction': true, }); let conf = rGP.res.confOk; let devMaster = conf.master; conf = conf.webSocket;
 
 let securityPass = `${conf.securityPass}`; let devicesObjSend = conf.devices[conf.devices.is[engName].sendTo]; let devicesValuesSend = Object.values(devicesObjSend);
 let devicesKeysSend = {}; Object.keys(devicesObjSend).forEach((key, index) => { devicesKeysSend[key] = index; }); let devicesObjGet = conf.devices[engName];
@@ -77,7 +78,7 @@ console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if
 function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }
 
 // ############### PATH DA BIBLIOTECA NODEJS ###############
-let mod; mod = await import('path'); globalThis[`_path`] = mod; mod = await import('module'); globalThis[`_createRequire`] = mod.createRequire; async function libPath(inf = {}) {
+async function libPath(inf = {}) {
     let { project: p, libMod: m, libNam: n, } = inf;
     let r = _createRequire(_path.resolve(`${fileProjetos}/${p}/node_modules`)).resolve(`${m}${(m === n || !n || !m.includes('@')) ? '' : `/${n}`}`).replace(/\\/g, `/`); return `${r.includes('/') ? 'file:///' : ''}${r}`;
 }

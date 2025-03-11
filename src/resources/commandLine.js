@@ -2,7 +2,7 @@
 
 // let infCommandLine, retCommandLine;
 // infCommandLine = {
-//     e, // 'notBackground': false, 'awaitFinish': false, 'notAdm': false, 'withCmd': false, 'oldBackground': false, 'view': false, 'delay': 0, 'terminalPath': `!letter!:/PASTA 1`,
+//     e, // 'notBackground': false, 'awaitFinish': false, 'notAdm': false, 'withCmd': false, 'view': false, 'delay': 0, 'terminalPath': `!letter!:/PASTA 1`,
 //     // ****************** NORMAL
 //     'command': `notepad`,
 //     // ****************** CMD {withCmd → true}
@@ -25,30 +25,23 @@ async function commandLine(inf = {}) {
     try {
         /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'child_process', 'l': ['exec',], },]); }
 
-        let { command = false, awaitFinish = false, notAdm = false, notBackground = false, oldBackground = false, view = false, delay = 0, terminalPath = false, withCmd = false, } = inf;
+        let { command = false, awaitFinish = false, notAdm = false, notBackground = false, view = false, delay = 0, terminalPath = false, withCmd = false, } = inf;
 
         if (!command) { ret['msg'] = `COMMAND LINE: ERRO | INFORMAR O 'command'`; return ret; }
 
         if (!notBackground) {
-            if (oldBackground) {
-                // →→→ 2_BACKGROUND
-                command = awaitFinish ? `${command}` : `${notAdm ? '%2_BACKGROUND_NOT_ADM%' : '%2_BACKGROUND%'} ${command}`;
-            } else {
-                // →→→ 3_BACKGROUND
+            // PARAMETROS
+            let ps = []; if (!view) { ps.push(`/NOCONSOLE`); } if (notAdm) { ps.push(`/NONELEVATED`); } else { ps.push(`/RUNAS`); } if (delay) { ps.push(`/DELAY=${delay}`); } if (awaitFinish) { ps.push(`/WAIT`); }
+            if (terminalPath) { let ter = terminalPath; if (!ter.startsWith(`"`) || !ter.endsWith(`"`)) { ter = `"${ter}"`; } ter = ter.replace(/\//g, `\\`); ps.push(`/D=${ter}`); }
 
-                // PARAMETROS
-                let ps = []; if (!view) { ps.push(`/NOCONSOLE`); } if (notAdm) { ps.push(`/NONELEVATED`); } else { ps.push(`/RUNAS`); } if (delay) { ps.push(`/DELAY=${delay}`); } if (awaitFinish) { ps.push(`/WAIT`); }
-                if (terminalPath) { let ter = terminalPath; if (!ter.startsWith(`"`) || !ter.endsWith(`"`)) { ter = `"${ter}"`; } ter = ter.replace(/\//g, `\\`); ps.push(`/D=${ter}`); }
+            // EXECUTAR COM CMD (EM CASOS ESPECÍFICOS)
+            let includesDoubleQuotes = false; if (command.includes(`.vbs`) || command.includes(`.bat`) || command.includes(`.lnk`)) { includesDoubleQuotes = true; withCmd = true; }
 
-                // EXECUTAR COM CMD (EM CASOS ESPECÍFICOS)
-                let includesDoubleQuotes = false; if (command.includes(`.vbs`) || command.includes(`.bat`) || command.includes(`.lnk`)) { includesDoubleQuotes = true; withCmd = true; }
+            // ADICIONAR ASPAS EM VOLTA (EM CASOS ESPECÍFICOS)
+            if (!withCmd || includesDoubleQuotes) { command = `"${command}"`; }
 
-                // ADICIONAR ASPAS EM VOLTA (EM CASOS ESPECÍFICOS)
-                if (!withCmd || includesDoubleQuotes) { command = `"${command}"`; }
-
-                // COMANDO FINAL
-                command = `"%3_BACKGROUND%"${ps.length > 0 ? ' ' + ps.join(' ') : ''} ${withCmd ? `"cmd.exe /c ${command}"` : `${command}`}`;
-            }
+            // COMANDO FINAL
+            command = `"%3_BACKGROUND%"${ps.length > 0 ? ' ' + ps.join(' ') : ''} ${withCmd ? `"cmd.exe /c ${command}"` : `${command}`}`;
         }
 
         // SUBSTITUIR VARIÁVEIS DE AMBIENTE

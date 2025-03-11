@@ -30,7 +30,7 @@ async function configStorage(inf = {}) {
         } else if (path && !path.includes(':')) { path = await file({ e, 'action': 'relative', path, }); path = path.res[0]; }
 
         if (!eng && Array.isArray(inf) && inf.length === 1) { // ### CS
-            inf['path'] = `${letter}:/${gW.root}/${gW.functions}/logs/reg.json`; let dt, rf = {};
+            inf['path'] = `${fileProjetos}/${gW.functions}/logs/reg.json`; let dt, rf = {};
             if (inf[0] === '' || inf[0] === '*') { rf = await file({ e, 'action': 'read', path, }); if (!rf.ret) { dt = {}; } else { dt = JSON.parse(rf.res).dt; } }
             else { dt = typeof inf[0] === 'object' ? inf[0] : { 'key': inf[0], }; } if (!rf.ret) { rf = await file({ e, 'action': 'write', path, 'text': JSON.stringify({ dt, }, null, 2), }); }
             ret['res'] = dt; ret['ret'] = true; ret['msg'] = 'CS: OK';

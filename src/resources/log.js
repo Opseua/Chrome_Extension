@@ -11,7 +11,7 @@ let e = import.meta.url, ee = e;
 async function log(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { folder, path, text, raw, functionLocal = false, fileProject, fileCall, unique, } = inf;
+        let { folder, path, text, raw, functionLocal = false, projectConsole, fileCall, unique, currentDateHour, } = inf;
 
         if (!folder) {
             ret['msg'] = `LOG: ERRO | INFORMAR O 'folder'`;
@@ -42,13 +42,13 @@ async function log(inf = {}) {
                 pathOk = `${pathOk}/${mon}/${day}/${houFile.replace(/:/g, '.')}_${path}`;
             }
             if (add) {
-                text = `→ ${houTxt}${fileProject ? ` ${fileProject}` : ''}${fileCall ? ` ${fileCall}` : ''}\n${typeof text === 'object' ? JSON.stringify(text) : text}\n\n`;
+                text = `→ ${currentDateHour || houTxt} ${projectConsole || ''}${fileCall ? ` ${fileCall}` : ''}\n${typeof text === 'object' ? JSON.stringify(text) : text}\n\n`;
             }
 
-            await file({ e, 'action': 'write', 'raw': !!raw, functionLocal, text, add, 'path': pathOk.replace(/:/g, ''), });
-            let res = `${letter}:/${gW.root}/${functionLocal ? gW.functions : gW.project}/${pathOk}`;
+            let retFile = await file({ e, 'action': 'write', 'raw': !!raw, functionLocal, text, add, 'path': pathOk.replace(/:/g, ''), });
+            if (!retFile.ret) { return retFile; }
 
-            ret['res'] = res.replace('%', '');
+            ret['res'] = retFile.res;
             ret['msg'] = `LOG: OK`;
             ret['ret'] = true;
         }
