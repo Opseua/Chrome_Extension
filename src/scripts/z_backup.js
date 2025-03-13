@@ -46,7 +46,7 @@ async function backups() {
                     ],
                 },
             ],
-        }; let err, p = back.destino;
+        }; let err, p = back.destino; let n = `%nircmd%`, s = `sendkeypress lwin`, w = `wait 1500`;
 
         // CRIAR PASTA SE NÃO EXISTIR [BACKUP GERAL]
         if (!_fs.existsSync(back.destino)) { _fs.mkdirSync(back.destino, { recursive: true, }); } for (let backup of back.backups) {
@@ -66,6 +66,9 @@ async function backups() {
                 }
             }
         }
+
+        // ABRIR MENU INICIAR → TIRAR PRINT → FECHAR MENU INICIAR
+        await commandLine({ e, 'awaitFinish': true, 'command': `${n} ${s} & ${n} ${w} & ${n} savescreenshot "${p}/screenshot.png" & ${n} ${s}`, 'withCmd': true, });
 
         // MENU INICIAR
         let c = await commandLine({ e, 'awaitFinish': true, 'command': `xcopy "C:/Users/%username%/AppData/Roaming/Microsoft/Windows/Start Menu" "${p}/MENU_INICIAR" /E /H /C /I`, 'withCmd': true, });
