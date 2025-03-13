@@ -1,24 +1,22 @@
-*node_modules*
-*venv*
-*__pycache__*
-*.vscode*
-*.z_tempCodeRunner*
-*.z_temp*
-*.z_CR*
-*.json
-!*package.json*
-*log/*
-*logs/*
+# IGNORAR [SIM] → {TUDO} (MANTER NO INICIO!!!)
+*
+
+# IGNORAR [NAO]
+!/src/
+!/src/**
+
+# IGNORAR [NAO] → {DENTRO DA 'src'}
+!*eslint*
+!manifest.json
+!package.json
+
+# IGNORAR [SIM] → {DENTRO DA 'src'}
 *teste*
-*Teste*
-*TESTE*
-*blueStacks*
-*googleOAuth*
-*package-lock.json*
-*logTime.txt*
-*src/scripts/objects/*
-*sync.ffs_lock
-*_TEMP.js
+*_temp*
+*.json
 *.pac
+/src/scripts/objects/
+*__pycache__/
 
 
+.gitignore
