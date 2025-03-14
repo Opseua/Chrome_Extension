@@ -78,14 +78,14 @@ console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if
 function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }
 
 // ############### PATH DA BIBLIOTECA NODEJS ###############
-function libPath(inf = {}) {
-    let { p, m, l, } = inf; let r = _createRequire(_path.resolve(`${fileProjetos}/${p}/node_modules`)).resolve(`${m}${(m === l || !l || !m.includes('@')) ? '' : `/${l}`}`); return `${r.includes('\\') ? 'file:///' : ''}${r}`;
+function libPath(i = {}) {
+    let { p, m, l, } = i; let r = _createRequire(_path.resolve(`${fileProjetos}/${p}/node_modules`)).resolve(`${m}${(m === l || !l || !m.includes('@')) ? '' : `/${l}`}`); return `${r.includes('\\') ? 'file:///' : ''}${r}`;
 }
 
 // {IMPORT FUNÇÕES} → DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) * ENCAMINHAR PARA DEVICE
 let qtd0 = 0; async function importFun(infOk = {}) {
-    let { importOk, path, inf, project, } = infOk; qtd0++; let name = path.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; if (qtd0 > 50) { console.log(`IMPORT FUN: ERRO | EM LOOP!!!`); crashCode(); }
-    if (importOk) { await import((eng ? `${gW.root}://${gW.functions}` : `file://${fileProjetos}/${project === 'NAO_DEFINIDO' ? 'Chrome_Extension' : project}`) + `/${path.replace('./', '')}`); return globalThis[name](inf); }
+    let { engOk, path, inf, project, } = infOk; qtd0++; let name = path.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; if (qtd0 > 50) { console.log(`IMPORT FUN: ERRO | EM LOOP!!!`); crashCode(); }
+    if (engOk) { await import((eng ? `${gW.root}://${gW.functions}` : `file://${fileProjetos}/${project === 'NAO_DEFINIDO' ? 'Chrome_Extension' : project}`) + `/${path.replace('./', '')}`); return globalThis[name](inf); }
     else { let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { name, 'par': inf, }, }); return retDevAndFun; }
 }
 

@@ -28,7 +28,7 @@ async function chat(inf = {}) {
             // ######## OPEN.AI
             retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'chatOpenAi', }); if (!retConfigStorage.ret) { return retConfigStorage; } else { retConfigStorage = retConfigStorage.res; } infApi = {
                 e, 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`, 'headers': { 'Content-Type': 'application/json', 'Authorization': `Bearer ${retConfigStorage.Authorization}`, },
-                'body': { 'model': model || 'gpt-4o-mini', 'messages': [{ 'role': 'user', 'content': messagePrompt, },], 'temperature': 0.7, }, 'bodyObject': true,
+                'body': { 'model': model || 'gpt-4o-mini', 'messages': [{ 'role': 'user', 'content': messagePrompt, },], 'temperature': 0.7, }, 'object': true,
             }; retApi = await api(infApi); if (!retApi.ret) { return retApi; } else { retApi = retApi.res; } let res = retApi.body;
             if ('choices' in res) {
                 ret['res'] = res.choices[0].message.content;
@@ -52,7 +52,7 @@ async function chat(inf = {}) {
             }
         } else {
             retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'chatPython', }); if (!retConfigStorage.ret) { return retConfigStorage; } else { retConfigStorage = retConfigStorage.res; }
-            retApi = await api({ e, 'method': 'POST', 'url': `http://127.0.0.1:${retConfigStorage.portServerHttp}/chat`, 'headers': {}, 'body': inf, 'bodyObject': true, });
+            retApi = await api({ e, 'method': 'POST', 'url': `http://127.0.0.1:${retConfigStorage.portServerHttp}/chat`, 'headers': {}, 'body': inf, 'object': true, });
             if (!retApi.ret) { return retApi; } else { retApi = retApi.res; if (retApi.body) { retApi = retApi.body; } } return retApi;
         }
     } catch (catchErr) {

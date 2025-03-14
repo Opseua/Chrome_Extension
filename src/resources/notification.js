@@ -21,7 +21,7 @@ async function notification(inf = {}) {
         if (ntfy) {
             promises.push(
                 (async () => {
-                    let retA1 = await api({ e, 'method': 'POST', 'url': `https://ntfy.sh/${devMy}?title=${encodeURIComponent(title)}`, 'body': text, 'max': 10, 'bodyObject': true, 'ignoreErr': true, });
+                    let retA1 = await api({ e, 'method': 'POST', 'url': `https://ntfy.sh/${devMy}?title=${encodeURIComponent(title)}`, 'body': text, 'max': 10, 'object': true, 'ignoreErr': true, });
                     rets.push({ 'ret': retA1.ret, 'msg': `[NTFY: ${retA1.ret ? 'OK' : `ERRO | ${retA1.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}] `, });
                 })()
             );
@@ -32,7 +32,7 @@ async function notification(inf = {}) {
             promises.push(
                 (async () => {
                     let body = { 'fun': [{ securityPass, retInf, 'name': 'notification', 'par': { title, text, keepOld, chromeNot, duration, icon, buttons, 'ntfy': false, }, },], };
-                    let retA2 = await api({ e, 'method': 'POST', 'url': `http://${devSever}`, 'headers': { 'raw': true, }, body, 'bodyObject': true, 'ignoreErr': true, }); retA2 = retA2.ret ? retA2.res.body : retA2;
+                    let retA2 = await api({ e, 'method': 'POST', 'url': `http://${devSever}`, 'headers': { 'raw': true, }, body, 'object': true, 'ignoreErr': true, }); retA2 = retA2.ret ? retA2.res.body : retA2;
                     rets.push({ 'ret': retA2.ret, 'msg': `[CHROME {LEGACY}: ${retA2.ret ? 'OK' : `ERRO | ${retA2.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}]`, });
                 })()
             );

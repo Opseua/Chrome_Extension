@@ -1,15 +1,15 @@
 // let infApi, retApi;
 // infApi = { // ###### → json/object
 //     e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'application/json', },
-//     'body': { 'aaa': 'bbb', }, 'max': 10, 'bodyObject': true,
+//     'body': { 'aaa': 'bbb', }, 'max': 10, 'object': true,
 // };
 // infApi = { // ###### → text
 //     e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'text/plain;charset=UTF-8', },
-//     'body': `Esse é o texto`, 'max': 10, 'bodyObject': true,
+//     'body': `Esse é o texto`, 'max': 10, 'object': true,
 // };
 // infApi = { // ###### → x-www-form-urlencoded
 //     e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'application/x-www-form-urlencoded', },
-//     'body': { 'Chave': 'Valor', }, 'max': 10, 'bodyObject': true,
+//     'body': { 'Chave': 'Valor', }, 'max': 10, 'object': true,
 // };
 // retApi = await api(infApi); console.log(retApi);
 
@@ -23,7 +23,7 @@ let e = import.meta.url, ee = e;
 async function api(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { method = '', url = false, headers = {}, body = false, max = 20, bodyObject = null, reqE = 0, } = inf;
+        let { method = '', url = false, headers = {}, body = false, max = 20, object = null, reqE = 0, } = inf;
 
         // ❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌ NÃO SUBIR AS LINHAS!!! (PARA SEREM VISUALIZADAS NO GOOGLE APP SCRIPT) ❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
         reqE = !['GET', 'POST', 'PUT',].includes(method) ? 1 : !url ? 2 : (['POST', 'PUT',].includes(method) && !body) ? 3 : 0; function cT(t) { clearTimeout(t); }
@@ -63,14 +63,14 @@ async function api(inf = {}) {
         if (reqE > 0) { ret['msg'] = `API: ERRO | AO PROCESSAR HEADERS/BODY (NÃO NA FUNÇÃO)\n\n${ret.msg}`; return ret; } // CHECAR SE TEM ERRO
 
         // → TENTAR: FAZER O PARSE DO BODY (SE NECESSÁRIO)
-        if (bodyObject && resH['content-type']?.includes('application/json')) { try { let t = JSON.parse(resB); resB = t; } catch (c) { type = c; } }
+        if (object && resH['content-type']?.includes('application/json')) { try { let t = JSON.parse(resB); resB = t; } catch (c) { type = c; } }
 
         ret['ret'] = true;
         ret['msg'] = 'API: OK';
         ret['res'] = {
             'code': resC,
             'headers': resH,
-            'bodyObject': bodyObject === null ? null : typeof resB === 'object',
+            'object': object === null ? null : typeof resB === 'object',
             'body': resB,
         };
 
