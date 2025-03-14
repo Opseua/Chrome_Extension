@@ -1,30 +1,30 @@
 // let infGoogleSheets, retGoogleSheets;
 // infGoogleSheets = {
 //     e, 'action': 'get', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
-//     // 'range': `A1`, // CÉLULA ÚNICA
+//     'range': `A1`, // CÉLULA ÚNICA
 //     // 'range': `A1:A2`, // PERÍMETRO
 //     // 'range': `A:A`, // COLUNA
 // };
 // infGoogleSheets = {
 //     e, 'action': 'send', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
-//     // 'range': `A1`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
+//     'range': `A1`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
 //     // 'range': `A*`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'A']
 //     'values': [['a', 'b', 'c', 'd',],],
 // };
 // infGoogleSheets = { // 'googleAppScript': false,
 //     e, 'action': 'lastLin', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
 //     'range': `A1:A10`, // PERÍMETRO
-//     'range': `A:A`, // COLUNA
+//     // 'range': `A:A`, // COLUNA
 // };
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
-let e = import.meta.url, ee = e; let libs = ['auth', 'sheets',]; let keyFile = `${fileProjetos}/${gW.functions}/${gW.conf}`, scopeUrl = 'https://www.googleapis.com/auth/spreadsheets', googleAppScriptId, retSheet;
+let e = import.meta.url, ee = e; let keyFile = `${fileProjetos}/${gW.functions}/${gW.conf}`, scoUrl = 'https://www.googleapis.com/auth/spreadsheets', googleAppScriptId, retSheet; let libs = { '@googleapis/sheets': {}, };
 async function googleSheets(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     let { action, id, tab, range, values, attempts = 2, googleAppScript = false, } = inf; let errAll = '';
     try {
-         /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) {
-            libs = await importLibs(libs, [{ 'm': '@googleapis/sheets', 'l': ['auth', 'sheets',], },]); _sheets = _sheets({ 'version': 'v4', 'auth': new _auth.GoogleAuth({ keyFile, 'scopes': [scopeUrl,], }), });
+        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['@googleapis/sheets']) {
+            libs['@googleapis/sheets'] = { 'auth': 1, 'sheets': 1, }; libs = await importLibs(libs, 'googleSheets'); _sheets = _sheets({ 'version': 'v4', 'auth': new _auth.GoogleAuth({ keyFile, 'scopes': [scoUrl,], }), });
             let r = await configStorage({ e, 'action': 'get', 'key': 'googleAppScriptId', }); if (!r.ret) { return r; } googleAppScriptId = r.res;
         }
 

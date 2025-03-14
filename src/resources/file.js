@@ -12,7 +12,7 @@
 // infFile = { e, 'action': 'storage', 'path': 'C:', }; // SEMPRE COMO 'ADM'!!!
 // retFile = await file(infFile); console.log(retFile);
 
-let e = import.meta.url, ee = e; let libs = ['path', 'createHash', 'exec',];
+let e = import.meta.url, ee = e; let libs = { 'crypto': {}, 'child_process': {}, };
 async function file(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
@@ -36,7 +36,6 @@ async function file(inf = {}) {
                     }
                 } catch (catchErr) { } return ret;
             }
-
             // ****************************************************************************************************************************************
 
             async function fileRelative(inf = {}) {
@@ -51,8 +50,6 @@ async function file(inf = {}) {
             }
 
             async function fileWrite(inf = {}) {
-                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'path', 'l': ['path',], },]); }
-
                 let { functionLocal, path, add = false, text, raw, } = inf; let resNew = { 'ret': false, }; try {
                     if (!text || text === '') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'text'`; } else {
                         if (raw) { let retRawText = rawText({ e, 'obj': text, }); text = retRawText; }
@@ -62,10 +59,10 @@ async function file(inf = {}) {
                             if (path.includes('%/')) { path = path.split('%/')[1]; } else if (path.includes(':')) { path = path.split(':/')[1]; } if (add) {
                                 retFile = await fileRead({ path, 'functionLocal': functionLocal && !eng, }); text = `${retFile.res || ''}${text}`;
                             } let blob = new Blob([text,], { type: 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); // 'overwrite' LIMPA | 'uniquify' ADD (1), (2)... NO FINAL
-                            let downloadOptions = { url: URL.createObjectURL(blob), filename: path, saveAs: false, conflictAction: 'overwrite', }; chrome.downloads.download(downloadOptions);
+                            let downloadOptions = { 'url': URL.createObjectURL(blob), 'filename': path, 'saveAs': false, 'conflictAction': 'overwrite', }; chrome.downloads.download(downloadOptions);
                         } else { // NODEJS | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                             let pathLetter = path.charAt(0); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`); // DENTRO DE UMA PASTA (CRIAR ELA)
-                            if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); } await _fs.promises.writeFile(path, text, { flag: add ? 'a' : 'w', });
+                            if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { 'recursive': true, }); } await _fs.promises.writeFile(path, text, { 'flag': add ? 'a' : 'w', });
                         } resNew['ret'] = true; resNew['msg'] = `FILE [WRITE]: OK`; resNew['res'] = path;
                     }
                 } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [WRITE]: ERRO | AO ESCREVER ARQUIVO '${path}'`; } return resNew;
@@ -83,8 +80,6 @@ async function file(inf = {}) {
             }
 
             async function fileDel(inf = {}) {
-                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'path', 'l': ['path',], },]); }
-
                 let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } async function delP(t) {
                         try {
@@ -96,8 +91,6 @@ async function file(inf = {}) {
             }
 
             async function fileList(inf = {}) {
-                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'path', 'l': ['path',], },]); }
-
                 let { functionLocal, path, max, } = inf; let resNew = { 'ret': false, }; try {
                     if (!max || max === '') { resNew['msg'] = `FILE [LIST]: ERRO | INFORMAR O 'max'`; } else {
                         if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } function getStatus(name) {
@@ -106,7 +99,7 @@ async function file(inf = {}) {
                         } let entries = await _fs.promises.readdir(path), result = [], count = 0, isFolder, stats, size; for (let entry of entries) {
                             if (count >= max) { break; } let fullPath = _path.join(path, entry); try {
                                 let md5 = false; count++; isFolder = _fs.statSync(fullPath).isDirectory(); stats = getStatus(fullPath); if (!isFolder) { size = await _fs.promises.stat(fullPath); size = size.size; }
-                                if (!isFolder && size && size <= (1 * 1024 * 1024)) { retFile = await file({ action: 'md5', path: fullPath, }); md5 = retFile.res; } else if (!isFolder) { md5 = `arquivo muito grande`; }
+                                if (!isFolder && size && size <= (1 * 1024 * 1024)) { retFile = await fileMd5({ 'path': fullPath, }); md5 = retFile.res; } else if (!isFolder) { md5 = `arquivo muito grande`; }
                                 result.push({ 'ret': true, isFolder, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), 'edit': stats.mtime.toISOString(), 'size': size ? formatBytes(size) : false, md5, });
                             } catch (catchErr) { result.push({ 'ret': false, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), }); }
                         } let retOrder = result.sort((a, b) => { if (a.isFolder && !b.isFolder) { return -1; } else if (!a.isFolder && b.isFolder) { return 1; } else { return a.name.localeCompare(b.name); } });
@@ -116,19 +109,17 @@ async function file(inf = {}) {
             }
 
             async function fileChange(inf = {}) {
-                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'path', 'l': ['path',], },]); }
-
                 let { functionLocal, path, pathNew, } = inf; let resNew = { 'ret': false, }; try {
                     if (!pathNew || pathNew === '') { resNew['msg'] = `FILE [CHANGE]: ERRO | INFORMAR O 'pathNew'`; } else {
                         pathNew = pathNew.replace(/!letter!/g, letter); if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; }
                         if (!pathNew.includes(':')) { retFile = await fileRelative({ 'path': pathNew, functionLocal, }); pathNew = retFile.res[0]; }
-                        await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true, }); await _fs.promises.rename(path, pathNew); resNew['ret'] = true; resNew['msg'] = `FILE [CHANGE]: OK`; resNew['res'] = pathNew;
+                        await _fs.promises.mkdir(_path.dirname(pathNew), { 'recursive': true, }); await _fs.promises.rename(path, pathNew); resNew['ret'] = true; resNew['msg'] = `FILE [CHANGE]: OK`; resNew['res'] = pathNew;
                     }
                 } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [CHANGE]: ERRO | AO MOVER ARQUIVO '${path}'`; } return resNew;
             }
 
             async function fileMd5(inf = {}) {
-                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'crypto', 'l': ['createHash',], },]); }
+                /* IMPORTAR BIBLIOTECA [NODEJS] */  if (libs['crypto']) { libs['crypto']['createHash'] = 1; libs = await importLibs(libs, 'fileMd5'); }
 
                 let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } let fileContent = await _fs.promises.readFile(path);
@@ -146,10 +137,10 @@ async function file(inf = {}) {
             }
 
             async function fileStorage(inf = {}) {
-                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'child_process', 'l': ['exec',], },]); }
+                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['child_process']) { libs['child_process']['exec'] = 1; libs = await importLibs(libs, 'fileStorage'); }
 
                 let { path, } = inf; let resNew = { 'ret': false, }; try {
-                    let rExec = await new Promise((resolve) => { _exec.exec(`fsutil volume diskfree ${path.replace(':', '')}:`, (err, resOk, errm) => { if (err || errm) { resolve(false); } else { resolve(resOk); } }); });
+                    let rExec = await new Promise((resolve) => { _exec(`fsutil volume diskfree ${path.replace(':', '')}:`, (err, resOk, errm) => { if (err || errm) { resolve(false); } else { resolve(resOk); } }); });
                     resNew['res'] = {}; for (let [index, value,] of rExec.split('\n').entries()) {
                         if (value.includes('Total de bytes da cota dispon') || value.includes('Total de bytes     ') || value.includes('Bytes usados     ') || value.includes('Total de bytes reservados')) {
                             let valueNew = Number(value.replace(/:  /g, ': ').trim().split(': ')[1].split(' ')[0].replace(/\./g, ''));
@@ -163,7 +154,6 @@ async function file(inf = {}) {
             }
 
             // ****************************************************************************************************************************************
-
             if (action === 'write') { return await fileWrite(inf); } else if (action === 'read') { return await fileRead(inf); } else if (action === 'del' && !eng) { return await fileDel(inf); }
             else if (action === 'relative') { return await fileRelative(inf); } else if (action === 'list' && !eng) { return await fileList(inf); }
             else if (action === 'change' && !eng) { return await fileChange(inf); } else if (action === 'md5' && !eng) { return await fileMd5(inf); }

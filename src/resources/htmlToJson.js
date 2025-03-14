@@ -1,12 +1,12 @@
 // → NO FINAL DA PÁGINA
 
-let e = import.meta.url, ee = e; let libs = ['cheerio',];
+let e = import.meta.url, ee = e; let libs = { 'cheerio': {}, };
 async function htmlToJson(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'cheerio', 'l': ['cheerio',], },]); }
+        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['cheerio']) { libs['cheerio']['cheerio'] = 1; libs = await importLibs(libs, 'htmlToJson'); }
 
-        let { html, mode, } = inf;
+        let { html, mode, object = false, } = inf;
 
         let $ = _cheerio.load(html); let result = [], headers = [], randomCol = !(mode === 1); let hasHeader = $('table thead').length > 0;
 
@@ -22,7 +22,7 @@ async function htmlToJson(inf = {}) {
 
         ret['ret'] = true;
         ret['msg'] = `HTML TO JSON: OK`;
-        ret['res'] = JSON.stringify(result);
+        ret['res'] = object ? result : JSON.stringify(result);
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
@@ -40,7 +40,7 @@ globalThis['htmlToJson'] = htmlToJson;
 
 // let infHtmlToJson, retHtmlToJson;
 // infHtmlToJson = {
-//     e, 'mode': 1,
+//     e, 'mode': 1, 'object': true,
 //     // TEM O CABEÇALHO [SIM]
 //     html:
 //         `
@@ -74,7 +74,7 @@ globalThis['htmlToJson'] = htmlToJson;
 // }
 
 // infHtmlToJson = {
-//     e, 'mode': 2,
+//     e, 'mode': 2, 'object': true,
 //     // TEM O CABEÇALHO [NÃO]
 //     html:
 //         `
@@ -101,7 +101,7 @@ globalThis['htmlToJson'] = htmlToJson;
 // }
 
 // infHtmlToJson = {
-//     e, 'mode': 3,
+//     e, 'mode': 3, 'object': true,
 //     // TEM O CABEÇALHO [SIM → PRIMEIRO VALOR]
 //     html:
 //         `
@@ -131,4 +131,4 @@ globalThis['htmlToJson'] = htmlToJson;
 //     </table>
 //     `,
 // }
-// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson.res);
+// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson);

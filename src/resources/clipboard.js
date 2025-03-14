@@ -2,11 +2,11 @@
 // infClipboard = { e, 'value': `Esse é o texto`, };
 // retClipboard = await clipboard(infClipboard); console.log(retClipboard);
 
-let e = import.meta.url, ee = e; let libs = ['clipboard',];
+let e = import.meta.url, ee = e; let libs = { 'clipboardy': {}, };
 async function clipboard(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'clipboardy', 'l': ['clipboard',], },]); }
+        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['clipboardy']) { libs['clipboardy']['clipboard'] = 1; libs = await importLibs(libs, 'clipboard'); }
 
         let { value, } = inf;
 

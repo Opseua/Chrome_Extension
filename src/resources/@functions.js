@@ -78,9 +78,8 @@ console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if
 function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }
 
 // ############### PATH DA BIBLIOTECA NODEJS ###############
-async function libPath(inf = {}) {
-    let { project: p, libMod: m, libNam: n, } = inf;
-    let r = _createRequire(_path.resolve(`${fileProjetos}/${p}/node_modules`)).resolve(`${m}${(m === n || !n || !m.includes('@')) ? '' : `/${n}`}`).replace(/\\/g, `/`); return `${r.includes('/') ? 'file:///' : ''}${r}`;
+function libPath(inf = {}) {
+    let { p, m, l, } = inf; let r = _createRequire(_path.resolve(`${fileProjetos}/${p}/node_modules`)).resolve(`${m}${(m === l || !l || !m.includes('@')) ? '' : `/${l}`}`); return `${r.includes('\\') ? 'file:///' : ''}${r}`;
 }
 
 // {IMPORT FUNÇÕES} → DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) * ENCAMINHAR PARA DEVICE
@@ -91,26 +90,24 @@ let qtd0 = 0; async function importFun(infOk = {}) {
 }
 
 // {IMPORT BIBLIOTECAS} → [NODE] DINAMICAMENTE QUANDO NECESSÁRIO 
-let qtd1 = 0; async function importLibs(libs, imports) {
-    /* console.log('ANTES', libs); */ qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP!!!`); crashCode(); } let importsOk = imports.flatMap(o => o.l); if (libs.some(v => importsOk.includes(v))) {
-        for (let v of imports) {
-            let project = v.p; let libMod = v.m; let lbs = v.l; for (let v of lbs) {
-                let libNam = v; if (!globalThis[`_${libNam}`] && (!eng || libNam === 'WebSocket')) {
-                    /* console.log(`IMPORTANDO`, libNam); */ if (eng) { globalThis[`_${libNam}`] = globalThis[`${libNam}`]; } else {
-                        if (project) { libMod = await libPath({ 'project': project === true ? gW.project : project, libMod, libNam, }); /* console.log('IMPORT LEGACY', libMod);*/ } let mod = await import(libMod);
-                        globalThis[`_${libNam}`] = (libMod === libNam) ? mod : mod[libNam] || mod.default;
-                    }
-                } libs = libs.filter(i => i !== libNam);
+let qtd1 = 0; async function importLibs(libs) {
+    let libsTemp = libs; qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [1]!!!`); crashCode(); } for (let m in libs) {
+        qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [2]!!!`); crashCode(); } for (let l in libs[m]) {
+            qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [3]!!!`); crashCode(); } let mL = false; if (l !== 'pro') {
+                let pro = libs[m]['pro'] === true ? gW.project : libs[m]['pro']; let b0 = libs[m][l] === 1; let b1 = globalThis[`_${l}`]; if (b0 && !b1) {
+                    mL = true; if (!eng) { mL = await import(pro ? libPath({ 'p': pro, m, l, }).replace(/\\/g, `/`) : m); } globalThis[`_${l}`] = eng ? globalThis[`${l}`] : (m === l) ? mL : mL[l] || mL.default;
+                } if (globalThis[`_${l}`]) { delete libsTemp?.[m]?.['pro']; delete libsTemp?.[m]?.[l], Object.keys(libsTemp[m] || {}).length || delete libsTemp[m]; }
+                // console.log(`${mL ? '✅' : '❌'} | EXISTE (${b1 ? 'SIM' : 'NAO'}) | (${m}) [${l}]${pro ? ' {LEGACY}' : ''} | _(${act})_ |`, JSON.stringify(libsTemp));
             }
         }
-    } else { libs = []; } return libs;
+    } return libsTemp;
 }
 
 Object.assign(globalThis, {
    /* ## VARIÁVEIS */     cs,
    /* ## GLOBAL OBJECT */ gO, gOList,
     /* ## LISTENER */     listenerMonitorar, listenerAcionar,
-    /* ## FUNÇÕES */      rateLimiter, randomNumber, awaitTimeout, importFun, importLibs, clearRun, startupTime, crashCode,
+    /* ## FUNÇÕES */      crashCode, rateLimiter, randomNumber, awaitTimeout, clearRun, startupTime, importFun, importLibs,
 });
 
 // ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!! | NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'

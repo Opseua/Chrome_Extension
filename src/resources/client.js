@@ -1,8 +1,8 @@
-let e = import.meta.url, ee = e; let libs = ['WebSocket',]; let wsServers = { 'rooms': {}, }, reconnecting = {}, timSecCon = {}, secConnect = gW.secConnect;
+let e = import.meta.url, ee = e; let wsServers = { 'rooms': {}, }, reconnecting = {}, timSecCon = {}, secConnect = gW.secConnect; let libs = { 'ws': {}, };
 async function client(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-         /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs.length > 0) { libs = await importLibs(libs, [{ 'm': 'ws', 'l': ['WebSocket',], },]); } // OK
+        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['ws']) { libs['ws']['WebSocket'] = 1; libs = await importLibs(libs, 'client'); }
 
         // ### CONEXÃO
         function connect(inf = {}) {
