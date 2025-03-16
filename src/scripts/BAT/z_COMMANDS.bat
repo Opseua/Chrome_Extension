@@ -210,13 +210,12 @@ if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New8#=!" ( !fileProje
 rem ---------------------------------------------- ABRIR PROGRAMAS E POSICIONAR SE NECESSARIO --------------------------------------------------------------------
 if not "!devMaster!" == "OPSEUA" (
 	if not "!arg1!" == "!arg1:_REST=!" (
-		set "fNSS=!fileNircmdSetSize!" & ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_logs\z_MES_!DATE:~3,2!_DIA_!DATE:~0,2!.txt -monitor"
-		if not "!arg1!" == "!arg1:_RESTART_=!" (
-			tasklist /fi "ImageName eq SystemInformer.exe" /fo csv 2> nul | find /I "SystemInformer.exe" > nul
-			if not "!errorlevel!" == "0" ( ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "explorer" & ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!fileWindows!\PORTABLE_System_Informer\SystemInformer.vbs"" )
-		)
-		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "!nircmd! win normal ititle "- Notepad++""
-		ping -n 4 -w 1000 127.0.0.1 > nul & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fNSS! "This PC" "585 480 695 500" & !fNSS! "System Informer" "585 50 695 400" & !fNSS! "- Notepad++" "-7 545 1050 447" & !nircmd! win activate ititle "- Notepad++""
+		set "c1=!nircmd! win normal ititle" & set "c2=!nircmd! win setsize ititle" & set "c3=!nircmd! win min ititle"
+		if "!devMaster!" == "AWS" ( set "res1=-7 543 1050 447" & set "res2=585 50 695 400" & set "res3=585 480 695 500" ) else ( set "res1=-2 564 1050 447" & set "res2=970 80 695 400" & set "res3=970 500 695 500" )
+		!3_BACKGROUND! /NOCONSOLE "!fileWindows!\PORTABLE_Notepad++\notepad++.exe !fileWindows!\BAT\z_logs\z_MES_!DATE:~3,2!_DIA_!DATE:~0,2!.txt -monitor" & ping -n 4 -w 1000 127.0.0.1 > nul
+		tasklist /fi "ImageName eq SystemInformer.exe" /fo csv 2> nul | find /I "SystemInformer.exe" > nul
+		if not "!errorlevel!" == "0" ( !3_BACKGROUND! /NOCONSOLE "explorer" & !3_BACKGROUND! /NOCONSOLE "cmd.exe /c "!fileWindows!\PORTABLE_System_Informer\SystemInformer.vbs"" & ping -n 4 -w 1000 127.0.0.1 > nul )
+		!3_BACKGROUND! /NOCONSOLE "cmd.exe /c !c1! "- Notepad+" & !c2! "- Notepad++" !res1! & !c2! "System Informer" !res2! & !c2! "This PC" !res3! & !c3! "- Notepad+" & !c1! "- Notepad+" & !c3! "_WIND" & !c1! "_WIND""
 	)
 )
 :END_CMD

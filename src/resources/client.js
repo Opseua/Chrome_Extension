@@ -2,7 +2,7 @@ let e = import.meta.url, ee = e; let wsServers = { 'rooms': {}, }, reconnecting 
 async function client(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['ws']) { libs['ws']['WebSocket'] = 1; libs = await importLibs(libs, 'client'); }
+        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['ws']) { libs['ws'] = { 'WebSocket': 1, 'pro': 'WebSocket', }; libs = await importLibs(libs, 'client'); }
 
         // ### CONEXÃO
         function connect(inf = {}) {

@@ -79,7 +79,7 @@ function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m 
 
 // ############### PATH DA BIBLIOTECA NODEJS ###############
 function libPath(i = {}) {
-    let { p, m, l, } = i; let r = _createRequire(_path.resolve(`${fileProjetos}/${p}/node_modules`)).resolve(`${m}${(m === l || !l || !m.includes('@')) ? '' : `/${l}`}`); return `${r.includes('\\') ? 'file:///' : ''}${r}`;
+    let { p, m, l, } = i; p = `${fileProjetos}/${p}/node_modules/${m}${m.includes('@') ? `/${l}` : ``}`; p = `file:///${p}/${JSON.parse(_fs.readFileSync(`${p}/package.json`)).main.replace(/^(\.\/|\/)/, '')}`; return p;
 }
 
 // {IMPORT FUNÇÕES} → DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) * ENCAMINHAR PARA DEVICE
@@ -90,17 +90,17 @@ let qtd0 = 0; async function importFun(infOk = {}) {
 }
 
 // {IMPORT BIBLIOTECAS} → [NODE] DINAMICAMENTE QUANDO NECESSÁRIO 
-let qtd1 = 0; async function importLibs(libs) {
-    let libsTemp = libs; qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [1]!!!`); crashCode(); } for (let m in libs) {
+let qtd1 = 0; async function importLibs(...args) {
+    let libs = args[0]; let libsTem = libs; qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [1]!!!`); crashCode(); } for (let m in libs) {
         qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [2]!!!`); crashCode(); } for (let l in libs[m]) {
             qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [3]!!!`); crashCode(); } let mL = false; if (l !== 'pro') {
                 let pro = libs[m]['pro'] === true ? gW.project : libs[m]['pro']; let b0 = libs[m][l] === 1; let b1 = globalThis[`_${l}`]; if (b0 && !b1) {
-                    mL = true; if (!eng) { mL = await import(pro ? libPath({ 'p': pro, m, l, }).replace(/\\/g, `/`) : m); } globalThis[`_${l}`] = eng ? globalThis[`${l}`] : (m === l) ? mL : mL[l] || mL.default;
-                } if (globalThis[`_${l}`]) { delete libsTemp?.[m]?.['pro']; delete libsTemp?.[m]?.[l], Object.keys(libsTemp[m] || {}).length || delete libsTemp[m]; }
-                // console.log(`${mL ? '✅' : '❌'} | EXISTE (${b1 ? 'SIM' : 'NAO'}) | (${m}) [${l}]${pro ? ' {LEGACY}' : ''} | _(${act})_ |`, JSON.stringify(libsTemp));
+                    mL = true; if (!eng) { mL = await import(pro ? libPath({ 'p': pro, m, l, }) : m); } globalThis[`_${l}`] = eng ? globalThis[`${l}`] : (m === l) ? mL : mL[l] || mL.default[l] || mL.default;
+                } if (globalThis[`_${l}`]) { Object.keys(libsTem[m] || {}).length === 2 && libsTem?.[m]?.pro && delete libsTem[m].pro; delete libsTem?.[m]?.[l], Object.keys(libsTem[m] || {}).length || delete libsTem[m]; }
+                // console.log(`${mL ? '✅' : '❌'} | EXISTE (${b1 ? 'SIM' : 'NAO'}) | (${m}${pro && !eng ? '⚠️ ' : ''}) [${l}] | _(${args[1]})_ |`, JSON.stringify(libsTem));
             }
         }
-    } return libsTemp;
+    } return libsTem;
 }
 
 Object.assign(globalThis, {
