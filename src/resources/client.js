@@ -13,7 +13,7 @@ async function client(inf = {}) {
             // # ON OPEN
             ws.onopen = async () => {
                 // LIMPAR TIMEOUT DE CONEXÃO | SALA [ADICIONAR] | ENVIAR PING DE INÍCIO DE CONEXÃO
-                clearTimRec(false); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set(); } wsServers.rooms[hostRoom].add(ws); logConsole({ e, ee, 'msg': `${locWeb} OK:\n'${room}'`, });
+                clearTimRec(false); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set(); } wsServers.rooms[hostRoom].add(ws); logConsole({ e, ee, 'txt': `${locWeb} OK:\n'${room}'`, });
 
                 // LISTENER PARA RETORNAR O 'ws'
                 function getWs(inf = {}) { let { hostRoom, } = inf; if (wsServers.rooms[hostRoom]) { for (let ws of wsServers.rooms[hostRoom]) { if (ws.hostRoom === hostRoom) { return ws; } } } return null; }
@@ -24,9 +24,9 @@ async function client(inf = {}) {
             ws.onmessage = async (data) => {
                 let message = data.data.toString('utf-8'); let pingPong = message === `ping` ? 1 : message === `pong` ? 2 : 0;
                 // ÚLTIMA MENSAGEM RECEBIDA
-                ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false; // logConsole({ e, ee, 'msg': `← CLI | ${ws.lastMessage} | ${hostRoom}` });
+                ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false; // logConsole({ e, ee, 'txt': `← CLI | ${ws.lastMessage} | ${hostRoom}` });
                 if (pingPong > 0) { // RECEBIDO: 'PING' ENVIAR 'PONG'
-                    if (pingPong === 2) { return; } ws.send('pong'); // logConsole({ e, ee, 'msg': `RECEBEU PING ${locWeb} '${room}'` });
+                    if (pingPong === 2) { return; } ws.send('pong'); // logConsole({ e, ee, 'txt': `RECEBEU PING ${locWeb} '${room}'` });
                 } else { // RECEBIDO: OUTRA MENSAGEM
                     try { message = JSON.parse(message); } catch (catchErr) { message = { message, }; } if (!message.message) { message = { message, }; }
                     if (ws.lastMessage) { ws.send(`pong`); } messageReceived({ ...message, host, room, 'resWs': ws, locWeb, });
@@ -46,7 +46,7 @@ async function client(inf = {}) {
                 setTimeout(() => { reconnecting[hostRoom] = false; connect({ hostRoom, }); }, (secReconnect * 1000) - 50); // ← MENOS SEGUNDOS DO TEMPO DE CONEXÃO
             }
         } function removeSerCli(inf = {}) {
-            let { hostRoom, resWs, msg, } = inf; logConsole({ e, ee, msg, });
+            let { hostRoom, resWs, msg, } = inf; logConsole({ e, ee, 'txt': msg, });
             if (wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom].delete(resWs); if (wsServers.rooms[hostRoom].size === 0) { delete wsServers.rooms[hostRoom]; } }
         }
 
@@ -59,9 +59,9 @@ async function client(inf = {}) {
 
         async function runLis(inf = {}) {
             let { nomeList, param1, } = inf, { messageId, message, resWs, origin, host, room, } = param1; // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
-            // logConsole({ e, ee, 'msg': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
+            // logConsole({ e, ee, 'txt': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
             let data = {}; try { data = JSON.parse(message); } catch (catchErr) { } if (data.fun) { devFun({ e, data, messageId, resWs, 'destination': origin, }); }
-            else if (data.other) { logConsole({ e, ee, 'msg': `OTHER\n${JSON.stringify(data.other)}`, }); }
+            else if (data.other) { logConsole({ e, ee, 'txt': `OTHER\n${JSON.stringify(data.other)}`, }); }
         }
 
         // LOOP: CHECAR ÚLTIMA MENSAGEM
@@ -70,9 +70,9 @@ async function client(inf = {}) {
                 for (let v of clientSet) {
                     function check(inf = {}) { let { lastMessage, locWeb, room, } = inf; return { 'dif': lastMessage ? Number(dateHour().res.tim) - lastMessage : -99, locWeb, room, }; }
                     let retCheck = check(v); if (retCheck.dif > (secPing - 1)) {
-                        // logConsole({ e, ee, 'msg': `MENSAGEM ANTIGA → ENVIAR 'PING' ${retCheck.locWeb} '${retCheck.room}'` });
+                        // logConsole({ e, ee, 'txt': `MENSAGEM ANTIGA → ENVIAR 'PING' ${retCheck.locWeb} '${retCheck.room}'` });
                         v.send('ping'); setTimeout(() => {
-                            retCheck = check(v); if (retCheck.dif > (secPing - 1)) { logConsole({ e, ee, 'msg': `DESCONECTAR [PING ${retCheck.dif}] ${retCheck.locWeb} '${retCheck.room}'`, }); v.close(); }
+                            retCheck = check(v); if (retCheck.dif > (secPing - 1)) { logConsole({ e, ee, 'txt': `DESCONECTAR [PING ${retCheck.dif}] ${retCheck.locWeb} '${retCheck.room}'`, }); v.close(); }
                         }, gW.secPingTimeout * 1000);
                     }
                 }

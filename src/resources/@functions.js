@@ -1,9 +1,12 @@
-// await new Promise(resolve => { setTimeout(resolve, 2000) });   
+// await new Promise(r => setTimeout(r, 2000));
 
 /* CHECAR SE É ARRAY  */ // Array.isArray(retHtmlToJson)   |   CHECAR SE TEM A CHAVE  if ('chave' in obj){ }   |   CHECAR SE É OBJETO typeof obj === 'object'
-// let { key: atribuirNisso, } = { 'key': 'AAA', }; console.log(atribuirNisso);
+// let { key: atribuirNisso, } = { 'key': 'AAA', }; console.log(atribuirNisso); let arrNew = arr.map((v, index) => ({ index, providerOk: v.provider, actionOk: v.action, })); // PODE REATRIBUIR NA MESMA VARIÁVEL
+// let ret = rets.some(v => v.ret === true)); let ret = rets.every(v => v.ret === true)); 
 
 // for (let [index, value,] of array.entries()) { console.log('INDEX', index, 'VALUE', value); };
+
+/* FORMATAR EM '0001' */ // number = String(number).padStart(4, '0'); 
 
 /* ESPERAR E EXECUTAR UMA VEZ */ // setTimeout(() => { console.log('OK'); }, 2000);
 
@@ -38,6 +41,7 @@ let devSever = `${hostPort}${devMaster}-${devices[eng ? 0 : 1][0]}-${devices[eng
 gW = { // MANTER APÓS O 'devSend'
     ...gW, securityPass, 'serverWeb': serverWeb.host, portWeb, 'serverLoc': serverLoc.host, portLoc, devMaster, 'devSlave': engName, devSend, devices, hostPortWeb, hostPortLoc, secConnect, secReconnect,
     secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, devSever, par1, par2, par3, par4, par5, par8, par9, par10, par11, par12, 'pages': false, par13,
+    firstFileCall: sP.split('/').pop().replace('_TEMP', '').replace('.js', ''), // ← DISPONÍVEL APENAS NO 'WebScraper' →→→ 'New2', 'New3', 'New4'...
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -17,17 +17,17 @@
 // IMPORTAR PROVEDORES ADICIONAIS
 await import('./chats/@import.js'); globalThis['zachey01___gpt4free_js'] = GPT4js; delete globalThis['GPT4js'];
 
-let e = import.meta.url, ee = e;
+let e = import.meta.url, ee = e; let objOpenAi = false, objChatPython = false;
 async function chat(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { provider, model, messagePrompt, } = inf;
+        let provider = '', model, messagePrompt; let infIsArray = Array.isArray(inf); if (!infIsArray) { ({ provider, model, messagePrompt, } = inf); }
 
-        let retConfigStorage, retApi, infApi;
+        let retApi, infApi;
         if (provider === 'openAi') {
             // ######## OPEN.AI
-            retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'chatOpenAi', }); if (!retConfigStorage.ret) { return retConfigStorage; } else { retConfigStorage = retConfigStorage.res; } infApi = {
-                e, 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`, 'headers': { 'Content-Type': 'application/json', 'Authorization': `Bearer ${retConfigStorage.Authorization}`, },
+            if (objOpenAi === false) { objOpenAi = await configStorage({ e, 'action': 'get', 'key': 'chatOpenAi', }); if (!objOpenAi.ret) { return objOpenAi; } else { objOpenAi = objOpenAi.res; } } infApi = {
+                e, 'method': 'POST', 'url': `https://api.openai.com/v1/chat/completions`, 'headers': { 'Content-Type': 'application/json', 'Authorization': `Bearer ${objOpenAi.Authorization}`, },
                 'body': { 'model': model || 'gpt-4o-mini', 'messages': [{ 'role': 'user', 'content': messagePrompt, },], 'temperature': 0.7, }, 'object': true,
             }; retApi = await api(infApi); if (!retApi.ret) { return retApi; } else { retApi = retApi.res; } let res = retApi.body;
             if ('choices' in res) {
@@ -35,12 +35,10 @@ async function chat(inf = {}) {
                 ret['msg'] = `CHAT [OPEN AI]: OK`;
                 ret['ret'] = true;
             } else { // CHROME
-                if (eng) { retConfigStorage = await configStorage({ e, 'action': 'del', 'key': 'chatOpenAi', }); }
-                notification({ e, 'duration': 4, 'icon': 'notification_3.png', 'title': `ERRO AO PESQUISAR NO CHATGPT`, 'text': res.error.message, 'ntfy': false, });
                 ret['msg'] = `CHAT [OPEN AI]: ERRO | ${res.error.message}`;
             }
-        } else if (provider.toLowerCase() === 'nextway') {
-            // ######## GITHUB
+        } else if (provider === 'nextWay') {
+            // ######## GPT4js
             provider = 'Nextway'; let pass = false; messagePrompt = Array.isArray(messagePrompt) ? messagePrompt : [{ 'role': 'user', 'content': messagePrompt, },];
             try { let pro = zachey01___gpt4free_js.createProvider(provider); pass = await pro.chatCompletion(messagePrompt, { provider, 'model': model || 'gpt-4o-free', }); } catch (catchErr) { }
             if (!pass) {
@@ -51,9 +49,17 @@ async function chat(inf = {}) {
                 ret['res'] = pass;
             }
         } else {
-            retConfigStorage = await configStorage({ e, 'action': 'get', 'key': 'chatPython', }); if (!retConfigStorage.ret) { return retConfigStorage; } else { retConfigStorage = retConfigStorage.res; }
-            retApi = await api({ e, 'method': 'POST', 'url': `http://127.0.0.1:${retConfigStorage.portServerHttp}/chat`, 'headers': {}, 'body': inf, 'object': true, });
+            // ######## Python [G4f/GitHub/Telegram]
+            if (objChatPython === false) { objChatPython = await configStorage({ e, 'action': 'get', 'key': 'chatPython', }); if (!objChatPython.ret) { return objChatPython; } else { objChatPython = objChatPython.res; } }
+            retApi = await api({ e, 'method': 'POST', 'url': `http://127.0.0.1:${objChatPython.portServerHttp}/chat`, 'body': inf, 'object': true, });
             if (!retApi.ret) { return retApi; } else { retApi = retApi.res; if (retApi.body) { retApi = retApi.body; } } return retApi;
+            // if (objChatPython === false) { objChatPython = await configStorage({ e, 'action': 'get', 'key': 'chatPython', }); if (!objChatPython.ret) { return objChatPython; } else { objChatPython = objChatPython.res; } }
+            // infApi = (infIsArray ? inf : [inf,]).map((v) => ({ e, 'method': 'POST', 'url': `http://127.0.0.1:${objChatPython.portServerHttp}/chat`, 'object': true, 'max': inf.max, 'body': { ...v, }, }));
+            // retApi = await api(infApi); if (!retApi.ret) { return retApi; } retApi = retApi.res;
+            // retApi = retApi.map((v) => ({ 'index': v.index, 'ret': !v.ret ? false : v.res.body.ret, 'msg:': !v.ret ? v.msg : v.res.body.msg, ...(v?.res?.body?.ret && { 'res': v.res.body.res, }), }));
+            // ret['ret'] = retApi.some(v => v.ret === true);
+            // ret['msg'] = `CHAT [PYTHON]: ${ret.ret ? 'OK' : `ERRO |${!infIsArray ? retApi[0].msg : ' ***'}`}`;
+            // if (ret.ret) { ret['res'] = !infIsArray ? retApi[0].res : retApi; }
         }
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];

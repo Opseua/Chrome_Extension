@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-// → NO FINAL DA PÁGINA
+// → NO FINAL DO ARQUIVO
 
 let e = import.meta.url, ee = e;
 async function chromeActions(inf = {}) {
@@ -103,7 +103,7 @@ async function chromeActions(inf = {}) {
             } else if (action === 'elementAwait') {
                 // AGUARDAR ELEMENTO
                 async function funAsync(inf = {}) { // OBRIGATÓRIO TER O 'await'!!!
-                    let { awaitElementMil, tag, attribute, attributeValue, } = inf; await new Promise(resolve => { setTimeout(resolve, 100); }); let start = Date.now();
+                    let { awaitElementMil, tag, attribute, attributeValue, } = inf; await new Promise(r => { setTimeout(r, 100); }); let start = Date.now();
                     let ret = false; while (Date.now() - start < awaitElementMil) {
                         let elements = attribute ? document.querySelectorAll(`${tag ? tag : ''}[${attribute}${attributeValue ? `="${attributeValue}"` : ''}]`) : document.getElementsByTagName(tag);
                         if (elements && elements.length > 0) { ret = true; break; } await new Promise(resolve => setTimeout(resolve, 100));
@@ -115,8 +115,8 @@ async function chromeActions(inf = {}) {
                     code = fun;
                 } else {
                     function addAsyncSendMessage(string) { // ADICIONAR DELAY E 'chrome.runtime.sendMessage' (SE NECESSÁRIO)
-                        string = string.replace(/(\r\n|\n|\r)/gm, '#_BREAK_#'); if (!string.includes('await new Promise(resolve => { setTimeout(resolve, 100) })')) {
-                            string = string.replace(/(async function\s+\w+\s*\([^\)]*\)\s*\{)/, '$1 ;await new Promise(resolve => { setTimeout(resolve, 100) });');
+                        string = string.replace(/(\r\n|\n|\r)/gm, '#_BREAK_#'); if (!string.includes('await new Promise(r=> { setTimeout(r, 100) })')) {
+                            string = string.replace(/(async function\s+\w+\s*\([^\)]*\)\s*\{)/, '$1 ;await new Promise(r=> { setTimeout(r, 100) });');
                         } if (!string.includes('chrome.runtime.sendMessage(')) { string = string.replace(/\}\s*$/, `;chrome.runtime.sendMessage(res); }`); } return string.replace(/#_BREAK_#/gm, '\n');
                     } fun = addAsyncSendMessage(fun.toString()); code = `(${fun})(${JSON.stringify(funInf)});`;
                 }
@@ -222,7 +222,7 @@ globalThis['chromeActions'] = chromeActions;
 // function funTeste(funInf) { console.log('OK', funInf); return true; }; let funInf = { 'A': 'B' };
 
 // // → INJECT: ASYNC [SIM] (OBRIGATÓRIO O DELAY DE 100 MILESSEUNGOS NO INÍCIO!!!)
-// async function funTeste(funInf) { await new Promise(resolve => { setTimeout(resolve, 100) }); console.log('OK', funInf); funInf = true; chrome.runtime.sendMessage(funInf); }; let funInf = { 'A': 'B' };
+// async function funTeste(funInf) { await new Promise(r=> { setTimeout(r, 100) }); console.log('OK', funInf); funInf = true; chrome.runtime.sendMessage(funInf); }; let funInf = { 'A': 'B' };
 
 // infChromeActions = { e, 'action': 'inject', 'target': `*file:///*`, 'fun': funTeste, 'funInf': funInf, };
 

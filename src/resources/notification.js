@@ -72,21 +72,17 @@ async function notification(inf = {}) {
         // EXECUTAR TODAS AS AÇÕES DE UMA SÓ VEZ E AGUARDAR O RETORNO DE TODAS
         await Promise.all(promises);
 
-        ret['ret'] = rets.length > 0 && rets.every(item => item.ret === true);
+        ret['ret'] = (rets.length > 0 && rets.some(v => v.ret === true));
         if (!ntfy && chromeNot) {
             ret['msg'] = `NOTIFICATION: ERRO [VAZIO] = NENHUM DISPOSITIVO`;
         } else {
-            ret['msg'] = `${(!eng && !legacy && !chromeNot) ? '[ENC] ' : ''}NOTIFICATION: [${rets.map(item => item.ret ? 'OK' : 'ERRO').join('|')}] = ${rets.map(item => item.msg).join('')}`;
+            ret['msg'] = `${(!eng && !legacy && !chromeNot) ? '[ENC] ' : ''}NOTIFICATION: [${rets.map(v => v.ret ? 'OK' : 'ERRO').join('|')}] = ${rets.map(v => v.msg).join('')}`;
         }
-
         if (typeof ret.msg === 'string') { ret['msg'] = ret.msg.trim(); }
 
     } catch (catchErr) {
-        if (inf.ignoreErr) {
-            ret['msg'] = `${(!eng && !inf.legacy && !inf.chromeNot) ? '[ENC] ' : ''}NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`;
-        } else {
-            let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-        }
+        if (inf.ignoreErr) { ret['msg'] = `${(!eng && !inf.legacy && !inf.chromeNot) ? '[ENC] ' : ''}NOTIFICATION: ERRO | CHAMADA PELA 'regexE'`; }
+        else { let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res']; }
     }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

@@ -42,8 +42,8 @@ async function messageReceived(inf = {}) {
                         buffer,
                         partesRestantes,
                         message,
-                    }; // logConsole({ 'e': e, 'ee': ee, 'msg': `ENVIANDO MENSAGEM: [${index + 1}/${wsClientsToSend.length}] ${messageId} → ${messageDestination.destination}` });
-                    value.send(JSON.stringify(messageDestination)); await new Promise(resolve => { setTimeout(resolve, 10); });
+                    }; // logConsole({ e, ee, 'txt': `ENVIANDO MENSAGEM: [${index + 1}/${wsClientsToSend.length}] ${messageId} → ${messageDestination.destination}` });
+                    value.send(JSON.stringify(messageDestination)); await new Promise(r => { setTimeout(r, 10); });
                 }
             }
         } else {
@@ -59,13 +59,13 @@ async function messageReceived(inf = {}) {
                 }
 
                 // ACIONAR LISTENER
-                // logConsole({ 'e': e, 'ee': ee, 'msg': `ACIONANDO LISTENER: '${listName}` });
+                // logConsole({ e, ee, 'txt': `ACIONANDO LISTENER: '${listName}` });
                 listenerAcionar(listName, { origin, messageId, message, resWs, host, room, });
             }
 
             // ---------------- TESTES
             // if (!messageId.includes(`SERVER`)) {
-            //     logConsole({ 'e': e, 'ee': ee, 'msg': `${messageId} | [${partesRestantes}] | ← TOTAL ${mensagensPartesRecebida[messageId].partes.join('').length}` });
+            //     logConsole({ e, ee, 'txt': `${messageId} | [${partesRestantes}] | ← TOTAL ${mensagensPartesRecebida[messageId].partes.join('').length}` });
             //     file({ 'e': e, 'action': 'write', 'path': `D:/z_CLIENTE_RECEBENDO_[${partesRestantes}]_.txt`, 'text': message });
             //     if (partesRestantes === 0) {
             //         if (buffer && eng) {

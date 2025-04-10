@@ -33,7 +33,7 @@ async function messageSend(inf = {}) {
             let start = i * chunkSize; let end = Math.min(start + chunkSize, messageLength); let chunk = message.slice(start, end);
             messageParts.push({ origin, destination, messageId, buffer, 'partesRestantes': totalChunks - i - 1, secondsAwait, 'message': chunk, });
             // ---------------- TESTES
-            // logConsole({ 'e': e, 'ee': ee, 'msg': `${messageId} | [${totalChunks - i - 1}] | → TOTAL ${JSON.stringify(messageParts).length} | DE ${start} ATÉ ${end}` });
+            // logConsole({ e, ee, 'txt': `${messageId} | [${totalChunks - i - 1}] | → TOTAL ${JSON.stringify(messageParts).length} | DE ${start} ATÉ ${end}` });
             // ----------------
         }
 
@@ -77,7 +77,7 @@ let filaBigFalse = []; let filaBigTrue = []; let sending = false; function envia
         resWs.send(message);
 
         // ---------------- TESTES
-        // logConsole({ 'e': e, 'ee': ee, 'msg': `[${(filaBigFalse.length + filaBigTrue.length).toString().padStart(2, '0')}] | ENVIADA ${big ? 'GRANDE' : 'PEQUENA'} ${messageId}` });
+        // logConsole({ e, ee, 'txt': `[${(filaBigFalse.length + filaBigTrue.length).toString().padStart(2, '0')}] | ENVIADA ${big ? 'GRANDE' : 'PEQUENA'} ${messageId}` });
         // file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_ENVIANDO_[${partesRestantes}]_.txt`, 'text': message });
         // ----------------
 

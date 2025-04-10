@@ -14,7 +14,7 @@ chrome.downloads.onChanged.addListener(async function (...inf) {
             if (txt.length > 0) {
                 let d = inf[0]; if (d.byExtensionName && d.byExtensionName.includes('BOT')) {
                     /* console.log(`EVENTO: download do BOT concluído\n`, downloadItem) */ if (!d.filename.includes('[KEEP]')) {
-                        setTimeout(function () { chrome.downloads.erase({ id: d.id, }); /* logConsole({ e, ee, 'msg': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url) */ }, 5000);
+                        setTimeout(function () { chrome.downloads.erase({ id: d.id, }); /* logConsole({ e, ee, 'txt': `DOWNLOAD REMOVIDO DA LISTA` }); URL.revokeObjectURL(d.url) */ }, 5000);
                     }
                 }
             }

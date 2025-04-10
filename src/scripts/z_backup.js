@@ -1,8 +1,10 @@
-await import('../resources/@export.js'); let e = import.meta.url, ee = e;
+let startup = new Date(); globalThis['sP'] = import.meta.url; await import('../resources/@export.js'); let e = sP, ee = e;
 
 async function backups() {
     let m = `!fileChrome_Extension!/src/scripts/BAT/fileMsg.vbs`;
     try {
+        logConsole({ e, ee, 'txt': `**************** SERVER **************** [${startupTime(startup, new Date())}]`, });
+
         let retDateHour = dateHour().res; retDateHour = `MES ${retDateHour.mon} - DIA ${retDateHour.day} - HORA ${retDateHour.hou}.${retDateHour.min}`;
         let nameMaster = await configStorage({ e, 'action': 'get', 'key': 'master', 'path': `!fileChrome_Extension!/src/master.json`, }); nameMaster = nameMaster.res;
         let back = {
@@ -40,7 +42,7 @@ async function backups() {
                         'RECORRENTES',
                     ],
                     'copiarArquivosNeto': [
-                        'clearTemp.bat', 'firewallAllowBlock.bat', '1_SET_VARS.vbs', '2_SCRIPT.bat',
+                        'clearTemp.bat', 'firewallAllowBlockDelete.ps1', '1_SET_VARS.vbs', '2_SCRIPT.bat',
                     ],
                 },
             ],
@@ -73,12 +75,12 @@ async function backups() {
         if (!c.ret) { err = `ERRO | BACKUP ATALHOS MENU INICIAR`; console.log(`${err}`); commandLine({ e, 'command': `"${m}" "${err}"`, }); return; }
 
         // ZIPAR PASTA
-        await new Promise(resolve => { setTimeout(resolve, 500); }); console.log(`ZIPANDO...`); c = `!fileWindows!/PORTABLE_WinRAR/z_OUTROS/PORTABLE_7-Zip/App/7-Zip64/7z.exe`;
+        await new Promise(r => { setTimeout(r, 500); }); console.log(`ZIPANDO...`); c = `!fileWindows!/PORTABLE_WinRAR/z_OUTROS/PORTABLE_7-Zip/App/7-Zip64/7z.exe`;
         c = await commandLine({ e, 'awaitFinish': true, 'command': `"${c}" a -tzip "${p}.zip" "${p}/*"`, });
         if (!c.ret) { err = `ERRO | AO ZIPAR`; console.log(`${err}`); commandLine({ e, 'command': `"${m}" "${err}"`, }); return; } else {
             let f = await file({ e, 'action': 'del', 'path': p, }); if (!f.ret) { err = `ERRO | AO APAGAR PASTA ANTIGA`; console.log(`${err}`); commandLine({ e, 'command': `"${m}" "${err}"`, }); return; }
             else { p = p.split('/').pop(); console.log(`CONCLUIDO → '${p}.zip'`); commandLine({ e, 'command': `"${m}" "CONCLUIDO → '${p}.zip'"`, }); }
-        } await new Promise(resolve => { setTimeout(resolve, 1500); });
+        } await new Promise(r => { setTimeout(r, 1500); });
 
     } catch (catchErr) {
         console.log(`ERRO AO FAZER BACKUPS`, '\n', catchErr); commandLine({ e, 'command': `"${m}" "ERRO AO FAZER BACKUPS"`, });

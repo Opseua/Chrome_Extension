@@ -1,4 +1,4 @@
-// → NO FINAL DA PÁGINA
+// → NO FINAL DO ARQUIVO
 
 // IMPORTAR OBJETOS COM AS AÇÕES
 let acts = {}; let imp = ['AIGeneratedTextEvaluationPortuguese', 'BroadMatchRatings', 'Ratingoftransformedtext', 'TextErrorCategorizationptBR',];

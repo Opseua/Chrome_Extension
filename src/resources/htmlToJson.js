@@ -1,4 +1,4 @@
-// → NO FINAL DA PÁGINA
+// → NO FINAL DO ARQUIVO
 
 let e = import.meta.url, ee = e; let libs = { 'cheerio': {}, };
 async function htmlToJson(inf = {}) {

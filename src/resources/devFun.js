@@ -54,7 +54,7 @@ async function devFun(inf = {}) {
                 }
 
                 if (errAlert) {
-                    let text = `${ret.msg}\n\n${JSON.stringify(data)}`; logConsole({ e, ee, 'msg': `${text}`, });
+                    let text = `${ret.msg}\n\n${JSON.stringify(data)}`; logConsole({ e, ee, 'txt': `${text}`, });
                 }
 
             }

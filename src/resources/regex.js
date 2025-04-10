@@ -54,6 +54,8 @@ function regex(inf = {}) { // NÃO POR COMO 'async'!!!
                     ret['msg'] = `REGEX: OK`;
                     ret['res'] = res;
                     ret['ret'] = true;
+                } else {
+                    ret['msg'] = `REGEX: OK | NENHUM PADRÃO ENCONTRADO`;
                 }
             } else {
                 pattern = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');

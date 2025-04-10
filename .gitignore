@@ -18,4 +18,8 @@
 /src/scripts/objects/
 *__pycache__/
 
-
+##### FILTRO VS Code #####
+# arquivos a serem incluídos
+# →   *.js,*.py,*.vbs,*.bat,*.ps1,*.txt,*.json
+# arquivos a serem excluídos
+# →   **PORTABLE_FreeFileSync/Logs

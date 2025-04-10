@@ -15,7 +15,7 @@ if "!arg1!" == "APAGAR" ( goto COPIA_APAGAR ) else ( if "!arg1!" == "CRIAR" ( go
 
 :COPIA_CRIAR
 rem IDENTIFICAR O DEVMASTER PELO CONFIG (NAO SUBIR!!!)
-set "devMaster=ERRO" & set "projectsNode=#" & set "projectsPython=#"
+set "devMaster=ERRO" & set "nodeJsProjects=#" & set "pythonProjects=#"
 for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\master.json") do ( 
 	set "conteudo=%%a"
 	set "conteudo=!conteudo:"=!"
@@ -26,59 +26,66 @@ for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\master.json") do (
 :DEVMASTER_ENCONTRADO
 
 rem ************* AWS
-set "awsNodeJs=WebSocket_server,WebSocket_server" & set "awsPython=Chat_Python_server"
+rem set "nodeJsAws=WebSocket_server" & set "pythonAws=Chat_Python_server"
+set "nodeJsAws=WebSocket_server" & set "pythonAws="
 rem ************* ESTRELAR
-set "estrelarNodeJs=WebSocket_server,URA_Reversa_serverJsf,WebScraper_serverC6,WebScraper_serverC6_New2,WebScraper_serverC6_New3,WebScraper_serverC6_New4,WebScraper_serverC6_New5,WebScraper_serverC6_New6,WebScraper_serverC6_New7,WebScraper_serverC6_New8"
+set "nodeJsEstrelar=WebSocket_server,URA_Reversa_serverJsf,WebScraper_serverC6,WebScraper_serverC6_New2,WebScraper_serverC6_New3,WebScraper_serverC6_New4,WebScraper_serverC6_New5,WebScraper_serverC6_New6,WebScraper_serverC6_New7,WebScraper_serverC6_New8"
 rem ************* OPSEUA
-set "opseuaNodeJs=!awsNodeJs!,!estrelarNodeJs!,Sniffer_Python_server" & set "opseuaPython=!awsPython!,Sniffer_Python_server" & set "newstringNodeJs=" & set "newstringPython="
+set "nodeJsOpseua=!nodeJsAws!,!nodeJsEstrelar!,Sniffer_Python_server" & set "pythonOpseua=!pythonAws!,Sniffer_Python_server"
 
-rem RMEOVER DUPLICATAS (SEPARADOS POR ',') [APENAS DO 'OPSEUA'] {NODEJS/PYTHON}
-for %%a in ("%opseuaNodeJs:,=";"%") DO (
-    if not !test%%~a!==TRUE (
-        set test%%~a=TRUE
-		if "!newstringNodeJs!"=="" ( set "newstringNodeJs=%%~a" ) else ( set "newstringNodeJs=!newstringNodeJs!,%%~a"  )
+rem ************* AWS | ESTRELAR | OPSEUA
+if not "!devMaster!" == "!devMaster:AWS=!" ( set "nodeJsOk=!nodeJsAws!" & set "pythonOk=!pythonAws!" )
+if not "!devMaster!" == "!devMaster:ESTRELAR=!" ( set "nodeJsOk=!nodeJsEstrelar!" )
+if not "!devMaster!" == "!devMaster:OPSEUA=!" ( set "nodeJsOk=!nodeJsOpseua!" & set "pythonOk=!pythonOpseua!" )
+
+rem REMOVER DUPLICATAS (SEPARADOS POR ',') [NODEJS/PYTHON]
+for %%a in ("%nodeJsOk:,=";"%") DO (
+    if not !testA%%~a!==TRUE (
+        set testA%%~a=TRUE
+		if "!nodeJsProjects!"=="" ( set "nodeJsProjects=%%~a" ) else ( set "nodeJsProjects=!nodeJsProjects!,%%~a"  )
     )
 )
-for %%a in ("%opseuaPython:,=";"%") DO (
-    if not !test%%~a!==TRUE (
-        set test%%~a=TRUE
-        if "!newstringPython!"=="" ( set "newstringPython=%%~a" ) else ( set "newstringPython=!newstringPython!,%%~a"  )
+for %%a in ("%pythonOk:,=";"%") DO (
+    if not !testB%%~a!==TRUE (
+        set testB%%~a=TRUE
+        if "!pythonProjects!"=="" ( set "pythonProjects=%%~a" ) else ( set "pythonProjects=!pythonProjects!,%%~a"  )
     )
 )
 
-rem ************* AWS
-if not "!devMaster!" == "!devMaster:AWS=!" ( set "projectsNode=!awsNodeJs!" & set "projectsPython=!awsPython!" )
-rem ************* ESTRELAR
-if not "!devMaster!" == "!devMaster:ESTRELAR=!" ( set "projectsNode=!estrelarNodeJs!" )
-rem ************* OPSEUA
-if not "!devMaster!" == "!devMaster:OPSEUA=!" ( set "projectsNode=!newstringNodeJs!" & set "projectsPython=!newstringPython!" )
+rem REMOVER VIRGULAS DESNECESSARIAS [NODEJS/PYTHON]
+set "nodeJsOk=" & set "pythonOk="
+for %%A in (!nodeJsProjects!) do ( if not "%%A"=="" ( if defined nodeJsOk ( set "nodeJsOk=!nodeJsOk!,%%A" ) else ( set "nodeJsOk=%%A" ) ) )
+for %%A in (!pythonProjects!) do ( if not "%%A"=="" ( if defined pythonOk ( set "pythonOk=!pythonOk!,%%A" ) else ( set "pythonOk=%%A" ) ) )
+set "nodeJsProjects=!nodeJsOk:#,=!" & set "pythonProjects=!pythonOk:#,=!"
 
 rem ---------------------------------------------------------- CRIAR ------------------------------------------------------------------------------
 
 rem → ************* ALTERAR LOCAL DO TERMINAL PARA A PASTA DO NODEJS (CRIAR | FIREWALL [PERMITIR])
 set fileQtdCopyNode=0 & set "fileNameCopyNode= "
-if not "!projectsNode!" == "!projectsNode:_=!" ( 
-	set "projectsNode=!projectsNode!," & cd /d !fileWindows!\PORTABLE_NodeJS
-	for %%a in ("%projectsNode:,=" "%") do (
+if not "!nodeJsProjects!" == "!nodeJsProjects:_=!" ( 
+	set "nodeJsProjects=!nodeJsProjects!," & cd /d !fileWindows!\PORTABLE_NodeJS
+	powershell "!fileWindows!\BAT\firewallAllowBlockDelete.ps1" "ALLOW" "!cd!\node.exe"
+	for %%a in ("%nodeJsProjects:,=" "%") do (
 		if not exist "!cd!\node%%~a.exe" (
 			set /a fileQtdCopyNode+=1 & set "fileNameCopyNode=!fileNameCopyNode!node%%~a.exe "
 			set "destino=!cd!\node%%~a.exe"
 			echo F|xcopy /Q /Y /F "!cd!\node.exe" "!destino!"
-			!3_BACKGROUND! /NOCONSOLE ""!fileWindows!\BAT\firewallAllowBlock.bat" "ALLOW" "!destino!" "NAO_MOSTRAR_POPUP""
+			powershell "!fileWindows!\BAT\firewallAllowBlockDelete.ps1" "ALLOW" "!destino!"
 		)
 	)
 )
 
 rem → ************* ALTERAR LOCAL DO TERMINAL PARA A PASTA DO PYTHON (CRIAR | FIREWALL [PERMITIR])
 set fileQtdCopyPython=0 & set "fileNameCopyPython= "
-if not "!projectsPython!" == "!projectsPython:_=!" ( 
-	set "projectsPython=!projectsPython!," & cd /d !fileWindows!\PORTABLE_Python
-	for %%a in ("%projectsPython:,=" "%") do (
+if not "!pythonProjects!" == "!pythonProjects:_=!" ( 
+	set "pythonProjects=!pythonProjects!," & cd /d !fileWindows!\PORTABLE_Python
+	powershell "!fileWindows!\BAT\firewallAllowBlockDelete.ps1" "ALLOW" "!cd!\python.exe"
+	for %%a in ("%pythonProjects:,=" "%") do (
 		if not exist "!cd!\python%%~a.exe" (
 			set /a fileQtdCopyPython+=1 & set "fileNameCopyPython=!fileNameCopyPython!python%%~a.exe "
 			set "destino=!cd!\python%%~a.exe"
 			echo F|xcopy /Q /Y /F "!cd!\python.exe" "!destino!"
-			!3_BACKGROUND! /NOCONSOLE ""!fileWindows!\BAT\firewallAllowBlock.bat" "ALLOW" "!destino!" "NAO_MOSTRAR_POPUP""
+			powershell "!fileWindows!\BAT\firewallAllowBlockDelete.ps1" "ALLOW" "!destino!"
 		)
 	)
 )
@@ -91,6 +98,7 @@ rem ---------------------------------------------------------- APAGAR ----------
 :COPIA_APAGAR
 rem → ************* ALTERAR LOCAL DO TERMINAL PARA A PASTA DO NODEJS (APAGAR (EXCETO O PROPRIO) | FIREWALL [APAGAR REGRA])
 set fileQtdAllNode=0 & set fileQtdDelNode=0 & set "fileNamedDelNode= " & cd /d !fileWindows!\PORTABLE_NodeJS
+powershell "!fileWindows!\BAT\firewallAllowBlockDelete.ps1" "DELETE" "!cd!\node.exe"
 for %%F in (*) do (
 	set /a fileQtdAllNode+=1
     set "filename=%%~nxF"
@@ -99,7 +107,7 @@ for %%F in (*) do (
 			if /I not "!filename!" == "node.exe" (
 				set /a fileQtdDelNode+=1
 				del /f "!cd!\!filename!" & set "fileNamedDelNode=!fileNamedDelNode!!filename! "
-				!3_BACKGROUND! /NOCONSOLE ""!fileWindows!\BAT\firewallAllowBlock.bat" "DEL" "!cd!\!filename!" "NAO_MOSTRAR_POPUP""
+				powershell "!fileWindows!\BAT\firewallAllowBlockDelete.ps1" "DELETE" "!cd!\!filename!"
 			)
 		) 
 	)
@@ -107,6 +115,7 @@ for %%F in (*) do (
 
 rem → ************* ALTERAR LOCAL DO TERMINAL PARA A PASTA DO PYTHON (APAGAR (EXCETO O PROPRIO) | FIREWALL [APAGAR REGRA])
 set fileQtdAllPython=0 & set fileQtdDelPython=0 & set "fileNamedDelPython= " & cd /d !fileWindows!\PORTABLE_Python
+powershell "!fileWindows!\BAT\firewallAllowBlockDelete.ps1" "DELETE" "!cd!\python.exe"
 for %%F in (*) do (
 	set /a fileQtdAllPython+=1
     set "filename=%%~nxF"
@@ -116,7 +125,7 @@ for %%F in (*) do (
 				if /I not "!filename!" == "pythonw.exe" (
 					set /a fileQtdDelPython+=1
 					del /f "!cd!\!filename!" & set "fileNamedDelPython=!fileNamedDelPython!!filename! "
-					!3_BACKGROUND! /NOCONSOLE ""!fileWindows!\BAT\firewallAllowBlock.bat" "DEL" "!cd!\!filename!" "NAO_MOSTRAR_POPUP""
+					powershell "!fileWindows!\BAT\firewallAllowBlockDelete.ps1" "DELETE" "!cd!\!filename!"
 				)
 			)
 		)

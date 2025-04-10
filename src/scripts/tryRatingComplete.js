@@ -78,14 +78,15 @@ async function tryRatingComplete(inf = {}) {
                 let eleName = value.elementName; let eleResp = value.elementResponse; let eleVal = value.elementValue; if (hitApp === 'Search20') {
                     if (value.valid && eleResp !== 'AAA') {
                         if (eleName === 'Business/POI is closed or does not exist') { replaceIs = infOk.urlGoogleMaps ? ' or does not exist' : ' is permanently closed or'; }
-                        else if (eleName === 'Name Issue' && infOk.name) { optionsErr['name'] = `\n\n* Correct name is:\n→ ${infOk.name}`; }
-                        else if (eleName === 'Category Issue' && infOk.category) { optionsErr['category'] = `\n\n* This is the correct category:\n→ ${infOk.category}`; }
-                        else if (eleName === 'Address Accuracy' && infOk.address && !eleResp.includes('OK: ')) { optionsErr['address'] = `\n\n* Correct address:\n→ ${infOk.address}`; } // NÃO UNIR COM O IF A SEGUIR
+                        else if (eleName === 'Name Issue' && infOk.name) { optionsErr['name'] = `CORRECT NAME IS:\n* ${infOk.name}\n`; }
+                        else if (eleName === 'Category Issue' && infOk.category) { optionsErr['category'] = `THIS IS THE CORRECT CATEGORY:\n* ${infOk.category}\n`; }
+                        else if (eleName === 'Address Accuracy' && infOk.address && !eleResp.includes('OK: ')) { optionsErr['address'] = `CORRECT ADDRESS:\n* ${infOk.address}\n`; } // NÃO UNIR COM O IF A SEGUIR
                         if (eleName !== 'Comment and Link') { comment = `${comment}\n${eleResp}`; } else if (eleName === 'Comment and Link') {
                             if (eleVal === '' && judgesValues.current === -1) { judgesValues.current = indexDiv; } let view = '############## NÃO ENCONTRADA VIEWPORT | USER ##############'; let user = view;
                             let retCS = await configStorage({ e, 'action': 'get', 'key': 'TryRating_viewportUser', }); if (retCS.res) { retCS = retCS.res; view = retCS.viewport; user = retCS.user; }
-                            comment = `Visualization is ${view} and the user is ${user} of the viewport${comment}`; comment = `${comment}${optionsErr.name || ''}${optionsErr.category || ''}${optionsErr.address || ''}`;
-                            comment = `${comment}${infOk.urlGoogleMaps ? `\n\n${infOk.urlGoogleMaps}` : ''}`; comment = comment.replace(replaceIs, '');
+                            comment = `Visualization is ${view} and the user is ${user} of the viewport\n${comment}`; let correct = optionsErr.name || optionsErr.category || optionsErr.address;
+                            comment = `${comment}${correct ? '\n\n' : ''}${optionsErr.name || ''}${optionsErr.category || ''}${optionsErr.address || ''}`;
+                            comment = `${comment}${infOk.urlGoogleMaps ? `${correct ? '\n' : '\n\n'}${infOk.urlGoogleMaps}` : ''}`; comment = comment.replace(replaceIs, '');
                         }
                     }
                 }

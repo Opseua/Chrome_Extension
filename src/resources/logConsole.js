@@ -1,11 +1,11 @@
-// // 'write' → 'true' ESCREVE NO 'PROJECT/logs/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
-// logConsole({ e, ee, 'msg': `Mensagem do console`, });
+// 'write' → 'true' ESCREVE NO 'PROJECT/logs/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
+// logConsole({ e, ee, 'txt': `Mensagem do console`, });
 
 let e = import.meta.url;
 async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false, }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
     try {
-        let { msg = 'x', write = true, } = inf;
+        let { txt = 'x', write = true, } = inf;
 
         function colorConsole(inf = {}) {
             let { text, } = inf;
@@ -34,17 +34,20 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
 
         let time = dateHour().res;
         let projectConsole = eng ? 'Chrome' : ee.split('PROJETOS/')[1].split('/')[0];
-        let fileCall = ee.split('/').pop();
-        msg = typeof msg === 'object' ? JSON.stringify(msg) : msg;
+        let fileCall = ee.split('/').pop().replace('_TEMP', '');
+        txt = typeof txt === 'object' ? JSON.stringify(txt) : txt;
         let currentDateHour = `${time.hou}:${time.min}:${time.sec}.${time.mil}`;
         colorConsole({
             // FORMATO: 24 HORAS (11h, 12h, 13h, 14h...)
-            'text': `<verde>→ ${time.day}/${time.mon} ${currentDateHour}</verde> <azul>${projectConsole}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`,
+            'text': `<verde>→ ${time.day}/${time.mon} ${currentDateHour}</verde> <azul>${projectConsole}</azul> <amarelo>${fileCall}</amarelo>\n${txt}\n`,
             // FORMATO: 12 HORAS (11h, 12h, 01h, 02h...)
-            // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${project}</azul> <amarelo>${fileCall}</amarelo>\n${msg}\n`
+            // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${project}</azul> <amarelo>${fileCall}</amarelo>\n${txt}\n`
         });
         if (!eng && write) {
-            await log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': msg, projectConsole, fileCall, 'unique': false, currentDateHour, });
+            await log({
+                e, 'folder': 'JavaScript', 'path': `log${gW.firstFileCall === 'server' ? '' : `_${gW.firstFileCall.replace('server', '')}`}.txt`,
+                'text': txt, projectConsole, fileCall, 'byDay': false, currentDateHour,
+            });
         }
 
         ret['msg'] = `LOG CONSOLE: OK`;

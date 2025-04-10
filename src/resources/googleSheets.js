@@ -18,13 +18,13 @@
 // };
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
-let e = import.meta.url, ee = e; let keyFile = `${fileProjetos}/${gW.functions}/${gW.conf}`, scoUrl = 'https://www.googleapis.com/auth/spreadsheets', googleAppScriptId, retSheet; let libs = { '@googleapis/sheets': {}, };
+let e = import.meta.url, ee = e; let keyFile = `${fileProjetos}/${gW.functions}/${gW.conf}`, scopes = ['https://www.googleapis.com/auth/spreadsheets',], googleAppScriptId, retSheet; let libs = { '@googleapis/sheets': {}, };
 async function googleSheets(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     let { action, id, tab, range, values, attempts = 2, googleAppScript = false, } = inf; let errAll = '';
     try {
         /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['@googleapis/sheets']) {
-            libs['@googleapis/sheets'] = { 'auth': 1, 'sheets': 1, }; libs = await importLibs(libs, 'googleSheets'); _sheets = _sheets({ 'version': 'v4', 'auth': new _auth.GoogleAuth({ keyFile, 'scopes': [scoUrl,], }), });
+            libs['@googleapis/sheets'] = { 'sheets': 1, 'auth': 1, }; libs = await importLibs(libs, 'googleSheets'); _sheets = await _sheets({ version: 'v4', auth: (await new _auth.GoogleAuth({ keyFile, scopes, })), });
             let r = await configStorage({ e, 'action': 'get', 'key': 'googleAppScriptId', }); if (!r.ret) { return r; } googleAppScriptId = r.res;
         }
 
@@ -68,10 +68,9 @@ async function googleSheets(inf = {}) {
         }
 
         // TENTAR NOVAMENTE EM CASO DE ERRO | MANTER 'legacy' true PORQUE NO WebScraper O WEBSOCKET NÃO ESTÁ CONECTADO
-        if (!ret.ret && attempts > 0) {
-            attempts--; let text = `TENTATIVAS RESTANTES [${attempts}] → ${ret.msg}`; await notification({ e, 'legacy': true, 'title': `# SHEETS (${gW.devMaster}) [NODEJS]`, text, });
-
-            logConsole({ e, ee, 'msg': `${text}${!text.includes('OUTRO') ? '' : `\n\n*** ERRO SHEETS\n${errAll}`}`, }); let retGoogleSheets = await googleSheets({ ...inf, attempts, }); ret = retGoogleSheets;
+        if (!ret.ret) {
+            attempts--; let text = `TENTATIVAS RESTANTES [${attempts}] → ${ret.msg}`; if (attempts === 0) { await notification({ e, 'legacy': true, 'title': `# SHEETS (${gW.devMaster}) [NODEJS]`, text, }); }
+            logConsole({ e, ee, 'txt': `${text}${!text.includes('OUTRO') ? '' : `\n\n*** ERRO SHEETS\n${errAll}`}`, }); if (attempts > 0) { let r = await googleSheets({ ...inf, attempts, }); ret = r; }
         }
 
     } catch (catchErr) {

@@ -5,7 +5,7 @@ let arrGlobal = [
   'alert', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle',
 
   // VARIÁVEIS GLOBAIS
-  'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des', 'quebrarCodigo', 'portStopwatch',
+  'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des', 'quebrarCodigo', 'portStopwatch', 'sP',
 
   // VARIÁVEIS DO SISTEMA
   'fileChrome_Extension', 'fileProjetos', 'fileWindows',
@@ -15,7 +15,7 @@ let arrGlobal = [
 
   // ### BIBLIOTECAS / NATIVO → NODEJS
   '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_createHash', '_puppeteer', '_net', '_getFolderSize', 'process',
-  'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard', '_createRequire',
+  'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard', '_createRequire', '_axios', '_createWriteStream', '_getVideoDurationInSeconds', '_https',
   // GLOBAL OBJECT
   'gO', 'gOList', 'cs',
   // FUNÇÕES
@@ -26,12 +26,12 @@ let arrGlobal = [
 
   // funções globais → [Chrome_Extension]
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
-  'log', 'logConsole', 'logsDelOld', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar',
+  'log', 'logConsole', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar',
   'listenerMonitorar', 'chromeActionsNew', 'importFun', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1',
   'command2', 'tryRatingComplete', 'startupTime', 'crashCode',
 
   // funções globais → [WebSocket]
-  'html', 'logsDelOld', 'messageAction', 'performanceDev', 'roomParams',
+  'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
 
   // funções globais → [Sniffer_Python]
   'ewoq', 'tryRating', 'getResponseTryRating', 'performTask',
@@ -48,7 +48,7 @@ let arrGlobal = [
 let arrUnused = [
   // 'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',  // outros
   'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write',
-  'msg', 'sendNtfy', 'e', 'ee', 'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3',
+  'msg', 'sendNtfy', 'e', 'ee', 'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'stdout',
 ];
 
 let arrGlobalObj = {}; for (let variavel of arrGlobal) { arrGlobalObj[variavel] = 'writable'; }

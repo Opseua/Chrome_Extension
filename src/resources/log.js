@@ -2,16 +2,16 @@
 // // (ESCREVE NO MESMO ARQUIVO: NÃO) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/logs/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
 // infLog = { e, 'folder': '#_PASTA_#', 'path': `ARQUIVO.txt`, 'text': `INF AQUI`, };
 // // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: NAO) → [Chrome_Extension]/logs/JavaScript/MES_11_NOV/DIA_27_log.txt
-// infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'unique': true, };
+// infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'byDay': true, };
 // // (ESCREVE NO MESMO ARQUIVO: SIM) | (CRIA UM NOVO POR HORA: SIM) → [Chrome_Extension]/logs/JavaScript/MES_11_NOV/DIA_27/00.48.10.064_log.txt
-// infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'unique': false, };
+// infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'byDay': false, };
 // retLog = await log(infLog); console.log(retLog);
 
 let e = import.meta.url, ee = e;
 async function log(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { folder, path, text, raw, functionLocal = false, projectConsole, fileCall, unique, currentDateHour, } = inf;
+        let { folder, path, text, raw, functionLocal = false, projectConsole, fileCall, byDay, currentDateHour, } = inf;
 
         if (!folder) {
             ret['msg'] = `LOG: ERRO | INFORMAR O 'folder'`;
@@ -34,8 +34,8 @@ async function log(inf = {}) {
             pathOk = `logs/${folder}`;
             if (['reg.txt', 'reg1.txt', 'reg2.txt', 'reset.js',].includes(path)) {
                 pathOk = `${pathOk}/${path}`;
-            } else if (['log.txt', 'err.txt',].includes(path)) {
-                let pathEnd = unique ? '' : `/${time.hou}.00-${time.hou}.59`;
+            } else if (['log.txt', 'err.txt',].includes(path) || (path.includes('log') && path.includes('.txt'))) {
+                let pathEnd = byDay ? '' : `/${time.hou}.00-${time.hou}.59`;
                 pathOk = `${pathOk}/${mon}/${day}${pathEnd}_${path}`; add = true;
             } else {
                 // NÃO ALTERAR PARA O PADRÃO DE 12 HORAS!!! (PORQUE OS ARQUIVOS NÃO FICARIAM EM ORDEM NUMÉRICA)

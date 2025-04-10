@@ -115,9 +115,9 @@ async function chromeActionsNew(inf = {}) {
                     // console.log('tagName', ele.tagName, 'type', ele.type);
                     if (ele.tagName === 'INPUT' && ele.type === 'radio') {
                         let d = ele; while (d && d.tagName !== 'DIV' && d.tagName !== 'BODY') { d = d.parentElement; } if (d && d.tagName === 'DIV') {
-                            let o = d.style.backgroundColor; d.style.backgroundColor = 'yellow'; await new Promise(resolve => { setTimeout(resolve, 500); }); d.style.backgroundColor = o;
+                            let o = d.style.backgroundColor; d.style.backgroundColor = 'yellow'; await new Promise(r => { setTimeout(r, 500); }); d.style.backgroundColor = o;
                         }
-                    } else { let o = ele.style.backgroundColor; ele.style.backgroundColor = 'yellow'; await new Promise(resolve => { setTimeout(resolve, 500); }); ele.style.backgroundColor = o; } return [true,];
+                    } else { let o = ele.style.backgroundColor; ele.style.backgroundColor = 'yellow'; await new Promise(r => { setTimeout(r, 500); }); ele.style.backgroundColor = o; } return [true,];
                 } let resHighLight = []; for (let index = 0; index < elements.length; index++) { let resHigLig = await highLight(elements[index]); resHighLight.push(resHigLig); } return resHighLight;
             }
 
