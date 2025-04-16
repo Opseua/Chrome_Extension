@@ -119,7 +119,7 @@ async function file(inf = {}) {
             }
 
             async function fileMd5(inf = {}) {
-                /* IMPORTAR BIBLIOTECA [NODEJS] */  if (libs['crypto']) { libs['crypto']['createHash'] = 1; libs = await importLibs(libs, 'fileMd5'); }
+                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['crypto']) { libs['crypto']['createHash'] = 1; libs = await importLibs(libs, 'fileMd5'); }
 
                 let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } let fileContent = await _fs.promises.readFile(path);

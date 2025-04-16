@@ -1,11 +1,12 @@
-// 'write' → 'true' ESCREVE NO 'PROJECT/logs/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!!)
+// 'write' → 'true' ESCREVE NO 'PROJECT/logs/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!! DO CONTRÁRIO FICA LENTO ESPERANDO SALVAR NO ARQUIVO)
+// 'breakLine' → 'false' NÃO ADICIONAR QUEBRA DE LINHA
 // logConsole({ e, ee, 'txt': `Mensagem do console`, });
 
 let e = import.meta.url;
 async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false, }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
     try {
-        let { txt = 'x', write = true, } = inf;
+        let { txt = 'x', write = true, breakLine = true, } = inf;
 
         function colorConsole(inf = {}) {
             let { text, } = inf;
@@ -36,17 +37,22 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
         let projectConsole = eng ? 'Chrome' : ee.split('PROJETOS/')[1].split('/')[0];
         let fileCall = ee.split('/').pop().replace('_TEMP', '');
         txt = typeof txt === 'object' ? JSON.stringify(txt) : txt;
-        let currentDateHour = `${time.hou}:${time.min}:${time.sec}.${time.mil}`;
+        let { day, mon, hou, min, sec, mil, /* hou12, houAmPm, */ } = time;
+        let currentDateHour = `${hou}:${min}:${sec}.${mil}`;
+        let breakLineSta = breakLine ? '\n' : ' '; let breakLineEnd = breakLine ? '\n' : '';
         colorConsole({
             // FORMATO: 24 HORAS (11h, 12h, 13h, 14h...)
-            'text': `<verde>→ ${time.day}/${time.mon} ${currentDateHour}</verde> <azul>${projectConsole}</azul> <amarelo>${fileCall}</amarelo>\n${txt}\n`,
+            'text': `<verde>→ ${day}/${mon} ${currentDateHour}</verde> <azul>${projectConsole}</azul> <amarelo>${fileCall}</amarelo>${breakLineSta}${txt}${breakLineEnd}`,
             // FORMATO: 12 HORAS (11h, 12h, 01h, 02h...)
-            // 'text': `<verde>→ ${time.day}/${time.mon} ${time.hou12}:${time.min}:${time.sec}.${time.mil} ${time.houAmPm}</verde> <azul>${project}</azul> <amarelo>${fileCall}</amarelo>\n${txt}\n`
+            // 'text': `<verde>→ ${day}/${mon} ${hou12}:${min}:${sec}.${mil} ${houAmPm}</verde> <azul>${project}</azul> <amarelo>${fileCall}</amarelo>${breakLineSta}${txt}${breakLineEnd}`
         });
         if (!eng && write) {
             await log({
+                // PRIMEIRO ARQUIVO EXECUTADO NO NODEJS 'server.js'       → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log.txt
+                // PRIMEIRO ARQUIVO EXECUTADO NO NODEJS 'serverCarro.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_Carro.txt
+                // PRIMEIRO ARQUIVO EXECUTADO NO NODEJS 'nomeArquivo.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_nomeArquivo.txt
                 e, 'folder': 'JavaScript', 'path': `log${gW.firstFileCall === 'server' ? '' : `_${gW.firstFileCall.replace('server', '')}`}.txt`,
-                'text': txt, projectConsole, fileCall, 'byDay': false, currentDateHour,
+                'text': txt, projectConsole, fileCall, 'byHour': true, currentDateHour,
             });
         }
 

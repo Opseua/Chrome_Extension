@@ -1,4 +1,4 @@
-// let infApi, retApi;
+// let infApi, retApi; 'buffer' → true
 // infApi = { // ###### → json/object
 //     e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'application/json', },
 //     'body': { 'aaa': 'bbb', }, 'max': 10, 'object': true, 'hideHeaders': true,

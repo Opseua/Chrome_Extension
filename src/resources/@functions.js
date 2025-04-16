@@ -3,6 +3,7 @@
 /* CHECAR SE É ARRAY  */ // Array.isArray(retHtmlToJson)   |   CHECAR SE TEM A CHAVE  if ('chave' in obj){ }   |   CHECAR SE É OBJETO typeof obj === 'object'
 // let { key: atribuirNisso, } = { 'key': 'AAA', }; console.log(atribuirNisso); let arrNew = arr.map((v, index) => ({ index, providerOk: v.provider, actionOk: v.action, })); // PODE REATRIBUIR NA MESMA VARIÁVEL
 // let ret = rets.some(v => v.ret === true)); let ret = rets.every(v => v.ret === true)); 
+// let string = 'a/b/c/d'; console.log(string.split('/').reverse()[0]); console.log(string.split('/').reverse()[1]); console.log(string.split('/').reverse()[2]); // SPLIT POR '/' E PEGAR A PARTIR DO ÚLTIMO ÍNDICE
 
 // for (let [index, value,] of array.entries()) { console.log('INDEX', index, 'VALUE', value); };
 
@@ -88,7 +89,7 @@ function libPath(i = {}) {
 
 // {IMPORT FUNÇÕES} → DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) * ENCAMINHAR PARA DEVICE
 let qtd0 = 0; async function importFun(infOk = {}) {
-    let { engOk, path, inf, project, } = infOk; qtd0++; let name = path.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; if (qtd0 > 50) { console.log(`IMPORT FUN: ERRO | EM LOOP!!!`); crashCode(); }
+    let { engOk, path, inf, project, } = infOk; qtd0++; let name = path.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; if (qtd0 > 50) { console.log(`IMPORT FUN: ERRO | EM LOOP!!! '${path}'`); crashCode(); }
     if (engOk) { await import((eng ? `${gW.root}://${gW.functions}` : `file://${fileProjetos}/${project === 'NAO_DEFINIDO' ? 'Chrome_Extension' : project}`) + `/${path.replace('./', '')}`); return globalThis[name](inf); }
     else { let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { name, 'par': inf, }, }); return retDevAndFun; }
 }

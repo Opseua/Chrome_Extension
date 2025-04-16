@@ -15,7 +15,7 @@ let arrGlobal = [
 
   // ### BIBLIOTECAS / NATIVO → NODEJS
   '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_createHash', '_puppeteer', '_net', '_getFolderSize', 'process',
-  'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard', '_createRequire', '_axios', '_createWriteStream', '_getVideoDurationInSeconds', '_https',
+  'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard', '_createRequire', '_axios', '_createWriteStream', '_getVideoDurationInSeconds', '_https', '_m3u8Parser',
   // GLOBAL OBJECT
   'gO', 'gOList', 'cs',
   // FUNÇÕES
@@ -30,9 +30,6 @@ let arrGlobal = [
   'listenerMonitorar', 'chromeActionsNew', 'importFun', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1',
   'command2', 'tryRatingComplete', 'startupTime', 'crashCode',
 
-  // funções globais → [WebSocket]
-  'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
-
   // funções globais → [Sniffer_Python]
   'ewoq', 'tryRating', 'getResponseTryRating', 'performTask',
 
@@ -41,7 +38,10 @@ let arrGlobal = [
 
   // funções globais → [WebScraper]
   'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData',
-  'clientImput', 'maquinaInput',
+  'clientImput', 'maquinaInput', 'screenshot',
+
+  // funções globais → [WebSocket]
+  'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
 ];
 
 // ************** VARIÁVEIS NÃO USADAS **************
