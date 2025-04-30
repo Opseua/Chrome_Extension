@@ -31,7 +31,7 @@ set "nodeJsAws=WebSocket_server" & set "pythonAws="
 rem ************* ESTRELAR
 set "nodeJsEstrelar=WebSocket_server,URA_Reversa_serverJsf,WebScraper_serverC6,WebScraper_serverC6_New2,WebScraper_serverC6_New3,WebScraper_serverC6_New4,WebScraper_serverC6_New5,WebScraper_serverC6_New6,WebScraper_serverC6_New7,WebScraper_serverC6_New8"
 rem ************* OPSEUA
-set "nodeJsOpseua=!nodeJsAws!,!nodeJsEstrelar!,Sniffer_Python_server" & set "pythonOpseua=!pythonAws!,Sniffer_Python_server"
+set "nodeJsOpseua=!nodeJsAws!,!nodeJsEstrelar!,IPTV_server;Sniffer_Python_server" & set "pythonOpseua=!pythonAws!,Sniffer_Python_server"
 
 rem ************* AWS | ESTRELAR | OPSEUA
 if not "!devMaster!" == "!devMaster:AWS=!" ( set "nodeJsOk=!nodeJsAws!" & set "pythonOk=!pythonAws!" )

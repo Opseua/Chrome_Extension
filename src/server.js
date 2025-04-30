@@ -3,7 +3,7 @@ let startup = new Date(); globalThis['sP'] = import.meta.url; await import('./re
 async function serverRun(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ e, ee, 'txt': `**************** SERVER **************** [${startupTime(startup, new Date())}]`, });
+        await logConsole({ e, ee, 'txt': `**************** SERVER **************** [${startupTime(startup, new Date())}]`, });
 
         // IMPEDIR 'serverRun' DE INICIAR
         async function notRun() { await new Promise(r => setTimeout(r, 15 * 1000)); await notRun(); } if (gW.devMaster === 'NOTE_HP') { await notRun(); }

@@ -44,7 +44,7 @@ let arrGlobal = [
   'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
 
   // funções globais → [IPTV]
-  'parseM3u',
+  'parseM3u', 'chunksOrder', 'redeCanais',
 ];
 
 // ************** VARIÁVEIS NÃO USADAS **************

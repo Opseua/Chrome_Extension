@@ -25,7 +25,7 @@ chrome.downloads.onChanged.addListener(async function (...inf) {
 // FECHAR ABA DESNECESSÁRIA
 chrome.tabs.onUpdated.addListener(function (...inf) {
     let { id, url, } = inf[2]; if (url.includes('.msftconnecttest.com') || url.includes('.netcombowifi.com')) {
-        setTimeout(() => { chrome.tabs.remove(id, () => { if (chrome.runtime.lastError) { } }); }, (15 * 1000));
+        setTimeout(() => { chrome.tabs.remove(id, () => { if (chrome.runtime.lastError) { } }); }, (30 * 1000));
     }
 });
 
