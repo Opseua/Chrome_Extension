@@ -58,7 +58,7 @@ async function googleSheets(inf = {}) {
                 } else {
                     // GOOGLE APP SCRIPT
                     let infApi = {
-                        e, 'method': 'POST', 'headers': { 'Content-Type': 'application/json', }, 'max': 20, 'url': `https://script.google.com/macros/s/${googleAppScriptId}/exec`,
+                        e, 'method': 'POST', 'headers': { 'Content-Type': 'application/json', }, 'maxConnect': 20, 'url': `https://script.google.com/macros/s/${googleAppScriptId}/exec`,
                         'body': { 'action': 'run', 'name': 'sheetInfTab', 'par': { id, tab, range, }, }, 'object': true,
                     }; let retApi = await api(infApi); if (!retApi.ret) { return retApi; } retApi = retApi.res.body; if (!retApi.ret) { return retApi; } retApi = retApi.res;
                     ret['res'] = { 'lastLineWithData': retApi.lastLineWithData, 'maxLines': retApi.maxLines, };

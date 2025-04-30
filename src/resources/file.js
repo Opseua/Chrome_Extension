@@ -16,10 +16,10 @@ let e = import.meta.url, ee = e; let libs = { 'crypto': {}, 'child_process': {},
 async function file(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let { action = false, functionLocal = false, path = false, pathNew = false, } = inf; let retFile;
+        let { action = false, functionLocal = false, path = false, pathNew = false, } = inf;
 
         // SUBSTITUIR VARIÁVEIS DE AMBIENTE
-        let a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows; let pathAndPathNew = `${path || 'NADA'}#_SPLIT_#${pathNew || 'NADA'}`;
+        let retFile, a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows; let pathAndPathNew = `${path || 'NADA'}#_SPLIT_#${pathNew || 'NADA'}`;
         pathAndPathNew = pathAndPathNew.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d).split('#_SPLIT_#');
         path = pathAndPathNew[0] === 'NADA' ? false : pathAndPathNew[0]; inf.path = path; pathNew = pathAndPathNew[1] === 'NADA' ? false : pathAndPathNew[1]; inf.pathNew = pathNew;
 

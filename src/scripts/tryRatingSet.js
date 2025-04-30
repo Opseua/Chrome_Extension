@@ -31,7 +31,7 @@ async function tryRatingSet(inf = {}) {
                 messagePrompt = `${promptText}\n${messagePrompt}${promptQuestion}\n\n`; // console.log(messagePrompt); // PROMPT INICIAL | PROMPT QUESTION
 
                 let infApi; infApi = {
-                    e, 'method': 'POST', 'url': `http://127.0.0.1:8884/chat`, 'max': 10, 'object': true, 'body': { 'action': 'messageSend', 'provider': 'naga', 'chatIdA': 'chatId', 'model': 'gpt-4o-mini', messagePrompt, },
+                    e, 'method': 'POST', 'url': `http://127.0.0.1:8884/chat`, 'maxConnect': 10, 'object': true, 'body': { 'action': 'messageSend', 'provider': 'naga', 'chatIdA': 'chatId', 'model': 'gpt-4o-mini', messagePrompt, },
                 }; rA = await api(infApi); if (!rA.ret) { return rA; } else { rA = rA.res.body; if (!rA.ret) { return rA; } else { rA = rA.res.response.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, ''); } }
                 console.log('AI →', rA.substring(0, 50));
             }

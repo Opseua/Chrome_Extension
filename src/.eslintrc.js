@@ -42,6 +42,9 @@ let arrGlobal = [
 
   // funções globais → [WebSocket]
   'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
+
+  // funções globais → [IPTV]
+  'parseM3u',
 ];
 
 // ************** VARIÁVEIS NÃO USADAS **************

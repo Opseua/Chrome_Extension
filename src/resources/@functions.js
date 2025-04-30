@@ -17,7 +17,7 @@
 
 /* LOOP 99 VEZES */ // for (let index = 0; index < 99; index++) { console.log('INDEX', index); };
 
-/* QUALQUER → BASE64 | BASE64 → UTF8 */ // let qualquerParaBase64 = Buffer.from('CASAMENTO').toString('base64'); console.log(`qualquerParaBase64 ${qualquerParaBase64}`)
+/* QUALQUER → BASE64 | BASE64 → UTF8 */ // let qualquerParaBase64 = Buffer.from('CASAMENTO').toString('base64'); console.log(`qualquerParaBase64 ${qualquerParaBase64}`) // npm prune (REMOVER BIBLIOTECAS DESNCESSÁRIAS)
 // let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8'); console.log(`base64ParaUtf8 ${base64ParaUtf8}`); cd /d D:\ARQUIVOS\PROJETOS\Sniffer_Python
 
 let _fs, cs; globalThis['engName'] = (eng) ? 'CHROME' : 'NODEJS'; globalThis['letter'] = 'x'; globalThis['fileProjetos'] = 'x'; globalThis['fileChrome_Extension'] = 'x'; globalThis['fileWindows'] = 'x'; if (!eng) {

@@ -22,6 +22,13 @@ chrome.downloads.onChanged.addListener(async function (...inf) {
     }
 });
 
+// FECHAR ABA DESNECESSÁRIA
+chrome.tabs.onUpdated.addListener(function (...inf) {
+    let { id, url, } = inf[2]; if (url.includes('.msftconnecttest.com') || url.includes('.netcombowifi.com')) {
+        setTimeout(() => { chrome.tabs.remove(id, () => { if (chrome.runtime.lastError) { } }); }, (15 * 1000));
+    }
+});
+
 // chrome.commands.onCommand.addListener(async function (...inf) {
 //     console.log(`EVENTO: atalho pressionado\n`, inf);
 // });
@@ -59,8 +66,7 @@ chrome.downloads.onChanged.addListener(async function (...inf) {
 //         if (url.includes('.com/api/survey')) { // .com/api/announcement | .com/api/survey
 //             console.log(`EVENTO: requisição iniciada\n`, requestId, tabId, method, url);
 //         }
-//     },
-//     { urls: ['<all_urls>',], }
+//     }, { urls: ['<all_urls>',], }
 // );
 
 // chrome.webRequest.onCompleted.addListener(
@@ -70,18 +76,12 @@ chrome.downloads.onChanged.addListener(async function (...inf) {
 //             console.log(`EVENTO: requisição concluída\n`, requestId, tabId, method, url);
 
 //             // commandLine({ 'notBackground': true, 'command': `!fileWindows!/PORTABLE_Clavier/Clavier.exe /sendkeys "${com}"`, });
-
 //             let retChromeActions = await chromeActions({ 'action': 'getBody', 'target': `*.com/app/announcemen*`, }); console.log(retChromeActions);
-
 //             // let retFile = await file({ 'action': 'write', 'path': 'arquivoNovo.html', 'text': retChromeActions.res, }); console.log(retFile);
-
-//             let des = `127.0.0.1:1234/?roo=SALA`;
 //             let msgLis = { 'fun': [{ 'securityPass': gW.securityPass, 'retInf': true, 'name': 'file', 'par': { 'action': 'write', 'path': 'arquivoNovo.html', 'text': 'CASA', }, },], };
-//             let retMessageSend = await messageSend({ 'destination': des, 'message': msgLis, }); console.log(retMessageSend);
-
+//             let retMessageSend = await messageSend({ 'destination': `127.0.0.1:1234/?roo=SALA`, 'message': msgLis, }); console.log(retMessageSend);
 //         }
-//     },
-//     { urls: ['<all_urls>',], }
+//     }, { urls: ['<all_urls>',], }
 // );
 
 // NAO POR NADA AQUI!

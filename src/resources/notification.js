@@ -21,7 +21,7 @@ async function notification(inf = {}) {
         if (ntfy) {
             promises.push(
                 (async () => {
-                    let retA1 = await api({ e, 'method': 'POST', 'url': `https://ntfy.sh/${devMy}?title=${encodeURIComponent(title)}`, 'body': text, 'max': 10, 'object': true, 'ignoreErr': true, });
+                    let retA1 = await api({ e, 'method': 'POST', 'url': `https://ntfy.sh/${devMy}?title=${encodeURIComponent(title)}`, 'body': text, 'maxConnect': 10, 'object': true, 'ignoreErr': true, });
                     rets.push({ 'ret': retA1.ret, 'msg': `[NTFY: ${retA1.ret ? 'OK' : `ERRO | ${retA1.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}] `, });
                 })()
             );
