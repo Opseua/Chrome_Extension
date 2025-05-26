@@ -13,7 +13,7 @@ let arrGlobal = [
   // ### BIBLIOTECAS / NATIVO → CHROME
   'chrome',
 
-  // ### BIBLIOTECAS / NATIVO → NODEJS
+  // ### BIBLIOTECAS / NATIVO → NODE
   '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_createHash', '_puppeteer', '_net', '_getFolderSize', 'process',
   'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard', '_createRequire', '_axios', '_createWriteStream', '_getVideoDurationInSeconds', '_https', '_m3u8Parser',
   // GLOBAL OBJECT

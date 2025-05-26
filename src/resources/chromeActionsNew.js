@@ -139,7 +139,7 @@ async function chromeActionsNew(inf = {}) {
 
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['chromeActionsNew'] = chromeActionsNew;
 
 

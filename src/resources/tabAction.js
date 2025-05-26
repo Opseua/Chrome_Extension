@@ -86,7 +86,7 @@ async function openTab(inf = {}) { // NAO USAR
     } catch (catchErr) { regexE({ inf, 'e': catchErr, }); }
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['tabAction'] = tabAction;
 
 

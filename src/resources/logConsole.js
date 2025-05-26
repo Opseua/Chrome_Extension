@@ -48,9 +48,9 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
         });
         if (!eng && write) {
             await log({
-                // PRIMEIRO ARQUIVO EXECUTADO NO NODEJS 'server.js'       → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log.txt
-                // PRIMEIRO ARQUIVO EXECUTADO NO NODEJS 'serverCarro.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_Carro.txt
-                // PRIMEIRO ARQUIVO EXECUTADO NO NODEJS 'nomeArquivo.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_nomeArquivo.txt
+                // PRIMEIRO ARQUIVO EXECUTADO NO NODE 'server.js'       → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log.txt
+                // PRIMEIRO ARQUIVO EXECUTADO NO NODE 'serverCarro.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_Carro.txt
+                // PRIMEIRO ARQUIVO EXECUTADO NO NODE 'nomeArquivo.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_nomeArquivo.txt
                 e, 'folder': 'JavaScript', 'path': `log${gW.firstFileCall === 'server' ? '' : `_${gW.firstFileCall.replace('server', '')}`}.txt`,
                 'text': txt, projectConsole, fileCall, 'byHour': true, currentDateHour,
             });
@@ -66,7 +66,7 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['logConsole'] = logConsole;
 
 

@@ -6,7 +6,7 @@ let e = import.meta.url, ee = e; let libs = { 'clipboardy': {}, };
 async function clipboard(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['clipboardy']) { libs['clipboardy']['clipboard'] = 1; libs = await importLibs(libs, 'clipboard'); }
+        /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['clipboardy']) { libs['clipboardy']['clipboard'] = 1; libs = await importLibs(libs, 'clipboard'); }
 
         let { value, } = inf;
 
@@ -24,7 +24,7 @@ async function clipboard(inf = {}) {
                 element.select(); document.execCommand('copy');
                 document.body.removeChild(element);
             } else {
-                // NODEJS
+                // NODE
                 _clipboard.writeSync(text);
             }
             ret['msg'] = 'CLIPBOARD: OK';
@@ -38,7 +38,7 @@ async function clipboard(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['clipboard'] = clipboard;
 
 

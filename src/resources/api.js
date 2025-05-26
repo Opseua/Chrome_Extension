@@ -49,13 +49,13 @@ async function api(inf = {}) {
             else if (!(bodyT > 0)) { reqE = 2; } else { body = Object.entries(body).map(([k, v,]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&'); }
         } if (reqE > 0) { ret['msg'] = `API: ERRO | 'body' VAZIO/NÃO É OBJETO [x-www-form-urlencoded]`; return ret; }
 
-        // REQ: PREPARAR (GOOGLE | CHROME/NODEJS)
+        // REQ: PREPARAR (GOOGLE | CHROME/NODE)
         if (type) { reqOpt['muteHttpExceptions'] = true; reqOpt['validateHttpsCertificates'] = true; if (body) { reqOpt['payload'] = body; } } else {
             controller = controller || new AbortController(); reqOpt['signal'] = controller.signal;
             if (body) { reqOpt['body'] = body; let enc = new TextEncoder(); let len = enc.encode(reqOpt.body).length; reqOpt.headers['Content-Length'] = len; }
         }
 
-        // → REQ: PROCESSAR (GOOGLE | CHROME/NODEJS) | LIMPAR TIMEOUT (CHROME/NODEJS)
+        // → REQ: PROCESSAR (GOOGLE | CHROME/NODE) | LIMPAR TIMEOUT (CHROME/NODE)
         if (type) { try { req = UrlFetchApp.fetch(url, reqOpt); } catch (c) { reqE = 3; ret['msg'] = c; } } else {
             async function fetchComTimeout() {
                 let cnt = false; return new Promise((resolve) => {
@@ -71,7 +71,7 @@ async function api(inf = {}) {
         if (reqE === 1 || reqE === 2) { ret['msg'] = `API: ERRO | TEMPO MÁXIMO DE ${reqE === 1 ? 'CONEXÃO' : 'RESPOSTA'} ATINGIDO`; return ret; }
         else if (reqE > 0) { ret['msg'] = `API: ERRO | AO PROCESSAR REQUISIÇÃO → ${ret.msg}`; return ret; } let keyValLowCase = v => typeof v === 'string' ? v.toLowerCase() : v;
 
-        try { // RES: PROCESSAR CODE/BODY/HEADERS/URL (GOOGLE | CHROME/NODEJS) | CHECAR SE TEM ERRO
+        try { // RES: PROCESSAR CODE/BODY/HEADERS/URL (GOOGLE | CHROME/NODE) | CHECAR SE TEM ERRO
             resC = req.cod || req.getResponseCode(); resB = type ? req.getContentText() : req.bod; resH = {}; (type ? Object.entries(req.getAllHeaders()) :
                 [...req.hea,]).forEach(([k, v,]) => resH[keyValLowCase(k)] = v); resU = req.url || resH['X-Final-Url']; delete resH['X-Final-Url']; resT = resU && new URL(resU).origin;
         } catch (c) { reqE = 4; ret['msg'] = c; } if (reqE > 0) { ret['msg'] = `API: ERRO | AO PROCESSAR CODE/URL/HEADERS/BODY → ${ret.msg}`; return ret; }
@@ -98,7 +98,7 @@ async function api(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['api'] = api;
 
 

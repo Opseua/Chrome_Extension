@@ -42,7 +42,7 @@ async function devFun(inf = {}) {
                     ret['ret'] = false;
                     ret['msg'] = `DEV FUN: ERRO | FUNÇÃO '${value.name}' NÃO EXITE`;
                 } else {
-                    let name = globalThis[value.name]; // CHROME ← : → NODEJS
+                    let name = globalThis[value.name]; // CHROME ← : → NODE
                     let infName = value.par;
                     infName['retInf'] = retInf;
                     ret = await name(infName);
@@ -66,7 +66,7 @@ async function devFun(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['devFun'] = devFun;
 
 

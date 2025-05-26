@@ -1,20 +1,20 @@
 // let infGoogleSheets, retGoogleSheets;
 // infGoogleSheets = {
-//     e, 'action': 'get', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
-//     'range': `A1`, // CÉLULA ÚNICA
-//     // 'range': `A1:A2`, // PERÍMETRO
-//     // 'range': `A:A`, // COLUNA
+//     e, 'action': 'get', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'abaNome',
+//     'range': `xx`, // 'A1' → CÉLULA ÚNICA | 'A1:A2' → PERÍMETRO | 'A:A' → COLUNA
 // };
 // infGoogleSheets = {
-//     e, 'action': 'send', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
-//     'range': `A1`, // FUNÇÃO JÁ CALCULA A ÚLTIMA COLUNA DE ACORDO COM O 'values'
-//     // 'range': `A*`, // ÚLTIMA LINHA EM BRANCO DA [COLUNA 'A']
+//     e, 'action': 'send', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'abaNome',
+//     'range': `xx`, // 'A1' → JÁ CALCULA A ÚLTIMA COLUNA | 'A*' →  ÚLTIMA LINHA EM BRANCO DA COLUNA
 //     'values': [['a', 'b', 'c', 'd',],],
 // };
 // infGoogleSheets = { // 'googleAppScript': false,
-//     e, 'action': 'lastLin', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'MASTER',
-//     'range': `A1:A10`, // PERÍMETRO
-//     // 'range': `A:A`, // COLUNA
+//     e, 'action': 'lastLin', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'abaNome',
+//     'range': `A1:A10`, // 'A1:A10' → PERÍMETRO | 'A:A' → COLUNA
+// };
+// infGoogleSheets = {
+//     e, 'action': 'addLines', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'abaNome',
+//     'values': [['A1', 'B1', 'C1',], ['A2', 'B2', 'C2',],], // ADICIONAR DUAS LINHAS A PARTIR DA COLUNA 'A'
 // };
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
@@ -23,7 +23,7 @@ async function googleSheets(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     let { action, id, tab, range, values, attempts = 2, googleAppScript = false, } = inf; let errAll = '';
     try {
-        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['@googleapis/sheets']) {
+        /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['@googleapis/sheets']) {
             libs['@googleapis/sheets'] = { 'sheets': 1, 'auth': 1, }; libs = await importLibs(libs, 'googleSheets'); _sheets = await _sheets({ version: 'v4', auth: (await new _auth.GoogleAuth({ keyFile, scopes, })), });
             let r = await configStorage({ e, 'action': 'get', 'key': 'googleAppScriptId', }); if (!r.ret) { return r; } googleAppScriptId = r.res;
         }
@@ -41,8 +41,7 @@ async function googleSheets(inf = {}) {
         } else if (action === 'send') {
             // →→→  SEND
             let col = range.replace(/[^a-zA-Z]/g, ''), lin = ''; values = { values, }; if (/[0-9]/.test(range)) { lin = range.replace(/[^0-9]/g, ''); } else if (range.includes('*')) {
-                range = `${range}:${range}`; range = range.replace(/\*/g, ''); lin = await googleSheets({ e, 'action': 'lastLin', id, tab, range, });
-                if (!lin.ret) { return lin; } lin = lin.res.lastLineWithData + 1;
+                range = `${range}:${range}`; range = range.replace(/\*/g, ''); lin = await googleSheets({ e, 'action': 'lastLin', id, tab, range, }); if (!lin.ret) { return lin; } lin = lin.res.lastLineWithData + 1;
             } else { ret['msg'] = `GOOGLE SHEET [SENC]: ERRO | 'range' INVÁLIDO`; return ret; }
             range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`; try {
                 await _sheets.spreadsheets.values.update({ 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values, });
@@ -65,11 +64,19 @@ async function googleSheets(inf = {}) {
                 }
                 ret['msg'] = `GOOGLE SHEET [LAST LIN] {${googleAppScript ? 'GOOGLE APP SCRIPT' : 'QTD DE LINHAS'}}: OK`; ret['ret'] = true;
             } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [LAST LIN]: ERRO | ${identifyErr(catchErr)} '${id}' '${range}'`; }
+        } else if (action === 'addLines') {
+            // →→→  ADD LINE (append automático)
+            if (!values || !Array.isArray(values) || !Array.isArray(values[0])) { ret['msg'] = `GOOGLE SHEET [ADD LINE]: ERRO | 'values' INVÁLIDO/NÃO É ARRAY`; return ret; } range = tab; try {
+                await _sheets.spreadsheets.values.append({ 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'insertDataOption': 'INSERT_ROWS', 'resource': { values, }, });
+                ret['msg'] = `GOOGLE SHEET [ADD LINES]: OK`; ret['ret'] = true;
+            } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [ADD LINES]: ERRO | ${identifyErr(catchErr)} '${id}' '${range}'`; }
+        } else {
+            ret['msg'] = `GOOGLE SHEET: ERRO | 'action' INVÁLIDO`; return ret;
         }
 
         // TENTAR NOVAMENTE EM CASO DE ERRO | MANTER 'legacy' true PORQUE NO WebScraper O WEBSOCKET NÃO ESTÁ CONECTADO
         if (!ret.ret) {
-            attempts--; let text = `TENTATIVAS RESTANTES [${attempts}] → ${ret.msg}`; if (attempts === 0) { await notification({ e, 'legacy': true, 'title': `# SHEETS (${gW.devMaster}) [NODEJS]`, text, }); }
+            attempts--; let text = `TENTATIVAS RESTANTES [${attempts}] → ${ret.msg}`; if (attempts === 0) { await notification({ e, 'legacy': true, 'title': `# SHEETS (${gW.devMaster}) [NODE]`, text, }); }
             logConsole({ e, ee, 'txt': `${text}${!text.includes('OUTRO') ? '' : `\n\n*** ERRO SHEETS\n${errAll}`}`, }); if (attempts > 0) { let r = await googleSheets({ ...inf, attempts, }); ret = r; }
         }
 
@@ -80,7 +87,7 @@ async function googleSheets(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['googleSheets'] = googleSheets;
 
 

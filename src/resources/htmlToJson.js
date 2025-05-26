@@ -4,7 +4,7 @@ let e = import.meta.url, ee = e; let libs = { 'cheerio': {}, };
 async function htmlToJson(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['cheerio']) { libs['cheerio']['cheerio'] = 1; libs = await importLibs(libs, 'htmlToJson'); }
+        /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['cheerio']) { libs['cheerio']['cheerio'] = 1; libs = await importLibs(libs, 'htmlToJson'); }
 
         let { html, mode, object = false, } = inf;
 
@@ -31,7 +31,7 @@ async function htmlToJson(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['htmlToJson'] = htmlToJson;
 
 // // 'mode' 1 → CHAVE IGUAL O CABEÇALHO (SE TIVER)

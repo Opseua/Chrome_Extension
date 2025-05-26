@@ -23,7 +23,7 @@ async function regexE(inf = {}) {
 
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
         let errorOk = {
-            cng, 'cngName': cng === 1 ? 'CHROME' : cng === 2 ? 'NODEJS' : 'GOOGLE', 'devMaster': gW.devMaster,
+            cng, 'cngName': cng === 1 ? 'CHROME' : cng === 2 ? 'NODE' : 'GOOGLE', 'devMaster': gW.devMaster,
             'projectFile': `🟢 ${!project.includes('/') ? project : 'Chrome_Extension'}`, 'file': `🔵 ${fileOk}`, 'line': Number(line), 'inf': inf.inf ? inf.inf.toString() : '___VAZIO___', 'e': e.stack,
         };
 
@@ -31,7 +31,7 @@ async function regexE(inf = {}) {
             console.log('\x1b[31m%s\x1b[0m', `\n-----------------------------------\n\n### ERRO ###\n${errorOk.projectFile}\n${errorOk.file} [${errorOk.line}]\n\n${errorOk.e}\n\n-----------------------------------\n`);
         }
 
-        // LOG DE ERROS [NODEJS]
+        // LOG DE ERROS [NODE]
         if (errorOk.cng === 2) {
             let dt1 = new Date(); dt1.setSeconds(new Date().getSeconds()).setSeconds; let dt2 = Date.now(); let dtRes = {
                 'day': String(dt1.getDate()).padStart(2, '0'), 'mon': String(dt1.getMonth() + 1).padStart(2, '0'), 'yea': String(dt1.getFullYear()), 'hou': String(dt1.getHours()).padStart(2, '0'),
@@ -76,7 +76,7 @@ async function regexE(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['regexE'] = regexE;
 
 

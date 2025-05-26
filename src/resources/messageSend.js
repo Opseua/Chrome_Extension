@@ -93,7 +93,7 @@ let filaBigFalse = []; let filaBigTrue = []; let sending = false; function envia
     }
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['messageSend'] = messageSend;
 
 

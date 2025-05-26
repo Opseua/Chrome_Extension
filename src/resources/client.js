@@ -2,7 +2,7 @@ let e = import.meta.url, ee = e; let wsServers = { 'rooms': {}, }, reconnecting 
 async function client(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['ws']) { libs['ws'] = { 'WebSocket': 1, 'pro': 'WebSocket', }; libs = await importLibs(libs, 'client'); }
+        /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['ws']) { libs['ws'] = { 'WebSocket': 1, 'pro': 'WebSocket', }; libs = await importLibs(libs, 'client'); }
 
         // ### CONEXÃO
         function connect(inf = {}) {
@@ -87,13 +87,13 @@ async function client(inf = {}) {
     if (!ret.ret) {
         if (eng) { // CHROME
             configStorage({ e, 'action': 'del', 'key': 'webSocket', });
-        } else { // NODEJS
-            log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `SERVER NODEJS: ${ret.msg}`, });
+        } else { // NODE
+            log({ e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `SERVER NODE: ${ret.msg}`, });
         }
     }
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['client'] = client;
 
 

@@ -146,7 +146,7 @@ async function chromeActions(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['chromeActions'] = chromeActions;
 
 // → HTML para teste em: 'D:\ARQUIVOS\PROJETOS\Chrome_Extension\src\resources\z_HTML.html'

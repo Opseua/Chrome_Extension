@@ -41,7 +41,7 @@ async function getPath(inf = {}) {
                 res = { 'conf': gW.conf, 'letter': gW.letter, 'root': gW.root, 'functions': gW.functions, project, };
             }
         } else {
-            // NODEJS
+            // NODE
             paths = paths.split('file:///')[1].split(':/'); funLetter = paths[0].toUpperCase(); paths = paths[1].split(':'); line = paths[1]; fileOk = paths[0];
             let funProject = fileOk.match(new RegExp('(' + root + '/[^/]+)'))[0]; fileOk = fileOk.split(`${funProject}/`)[1]; funProject = funProject.split(`${root}/`)[1];
             if (isFunction) {
@@ -83,7 +83,7 @@ async function getPath(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['getPath'] = getPath;
 
 

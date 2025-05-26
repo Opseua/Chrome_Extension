@@ -1,9 +1,9 @@
-globalThis.eng = (typeof globalThis.alert !== 'undefined'); // [true] CHROME | [false] NODEJS
+globalThis.eng = (typeof globalThis.alert !== 'undefined'); // [true] CHROME | [false] NODE
 
 function all2() { } globalThis['all2'] = all2; // ******************************************************** NÃO USAR !!!
 
 if (!globalThis.all1) {
-    // DEFINIR O 'devChildren' → [CHROME] EMAIL DO USUÁRIO | [NODEJS] PRIMEIRO ARQUIVO A SER EXECUTADO (NA MAIORIA DOS CASOS 'server')
+    // DEFINIR O 'devChildren' → [CHROME] EMAIL DO USUÁRIO | [NODE] PRIMEIRO ARQUIVO A SER EXECUTADO (NA MAIORIA DOS CASOS 'server')
     let devC = new Error().stack.split('\n'); devC = devC[devC.length - 1]; let devChildren = devC.includes('.js:') ? devC.match(/\/([^/]+)\.[^/]+$/)[1] : false;
     if (eng) { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email); }); }); }
 
@@ -52,7 +52,7 @@ globalThis['tryRatingComplete'] = (inf) => { return importFun({ 'engOk': (eng), 
 globalThis['tryRatingSet'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/scripts/tryRatingSet.js', inf, project, }); };
 
 // AGUARDAR IMPORT DE FUNÇÕES NÃO ASYNC **************
-let e = import.meta.url, ee = e; await dateHour('Wed Jan 11 2024 22:33:44 GMT-0300 (Horário Padrão de Brasília)'); await regex({ e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES`, });
+let e = import.meta.url, ee = e; await dateHour(); await regex({ e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES`, });
 //  **************
 
 

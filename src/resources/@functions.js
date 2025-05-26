@@ -6,6 +6,7 @@
 // let string = 'a/b/c/d'; console.log(string.split('/').reverse()[0]); console.log(string.split('/').reverse()[1]); console.log(string.split('/').reverse()[2]); // SPLIT POR '/' E PEGAR A PARTIR DO ÚLTIMO ÍNDICE
 
 // for (let [index, value,] of array.entries()) { console.log('INDEX', index, 'VALUE', value); };
+// let obj = { 'keyA': 'valueA', 'keyB': 'valueB', 'keyC': 'valueC' }; for (let key in obj) { console.log(key); console.log(obj[key]); }
 
 /* FORMATAR EM '0001' */ // number = String(number).padStart(4, '0'); 
 
@@ -20,7 +21,7 @@
 /* QUALQUER → BASE64 | BASE64 → UTF8 */ // let qualquerParaBase64 = Buffer.from('CASAMENTO').toString('base64'); console.log(`qualquerParaBase64 ${qualquerParaBase64}`) // npm prune (REMOVER BIBLIOTECAS DESNCESSÁRIAS)
 // let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8'); console.log(`base64ParaUtf8 ${base64ParaUtf8}`); cd /d D:\ARQUIVOS\PROJETOS\Sniffer_Python
 
-let _fs, cs; globalThis['engName'] = (eng) ? 'CHROME' : 'NODEJS'; globalThis['letter'] = 'x'; globalThis['fileProjetos'] = 'x'; globalThis['fileChrome_Extension'] = 'x'; globalThis['fileWindows'] = 'x'; if (!eng) {
+let _fs, cs; globalThis['engName'] = (eng) ? 'CHROME' : 'NODE'; globalThis['letter'] = 'x'; globalThis['fileProjetos'] = 'x'; globalThis['fileChrome_Extension'] = 'x'; globalThis['fileWindows'] = 'x'; if (!eng) {
     process.noDeprecation = true; _fs = await import('fs'); globalThis['_fs'] = _fs; let m; m = await import('path'); globalThis[`_path`] = m; m = await import('module'); globalThis[`_createRequire`] = m.createRequire;
 }
 
@@ -82,7 +83,7 @@ console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if
 // ############### CALCULAR TEMPO DE INICIALIZAÇÃO ###############
 function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }
 
-// ############### PATH DA BIBLIOTECA NODEJS ###############
+// ############### PATH DA BIBLIOTECA NODE ###############
 function libPath(i = {}) {
     let { p, m, l, } = i; p = `${fileProjetos}/${p}/node_modules/${m}${m.includes('@') ? `/${l}` : ``}`; p = `file:///${p}/${JSON.parse(_fs.readFileSync(`${p}/package.json`)).main.replace(/^(\.\/|\/)/, '')}`; return p;
 }

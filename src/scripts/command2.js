@@ -15,7 +15,7 @@ async function command2(inf = {}) {
   return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['command2'] = command2;
 
 

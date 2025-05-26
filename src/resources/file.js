@@ -60,7 +60,7 @@ async function file(inf = {}) {
                                 retFile = await fileRead({ path, 'functionLocal': functionLocal && !eng, }); text = `${retFile.res || ''}${text}`;
                             } let blob = new Blob([text,], { type: 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); // 'overwrite' LIMPA | 'uniquify' ADD (1), (2)... NO FINAL
                             let downloadOptions = { 'url': URL.createObjectURL(blob), 'filename': path, 'saveAs': false, 'conflictAction': 'overwrite', }; chrome.downloads.download(downloadOptions);
-                        } else { // NODEJS | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
+                        } else { // NODE | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                             let pathLetter = path.charAt(0); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`); // DENTRO DE UMA PASTA (CRIAR ELA)
                             if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { 'recursive': true, }); } await _fs.promises.writeFile(path, text, { 'flag': add ? 'a' : 'w', });
                         } resNew['ret'] = true; resNew['msg'] = `FILE [WRITE]: OK`; resNew['res'] = path;
@@ -73,7 +73,7 @@ async function file(inf = {}) {
                     let retFetch; if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } if (eng) { // CHROME
                         if (!functionLocal) { path = `file:///${path}`; } path = path.replace('%', ''); // ENCODIFICAR PATH *********************
                         let pathParts = path.replace('file:///', '').split(':/'); path = (path.includes('file:///') ? 'file:///' : '') + pathParts[0] + ':/' + pathParts[1].split('/').map(encodeURIComponent).join('/');
-                        retFetch = await fetch(path); retFetch = await retFetch.text(); if (retFetch.includes('The Chromium Authors')) { throw new Error('erro'); } // NODEJS
+                        retFetch = await fetch(path); retFetch = await retFetch.text(); if (retFetch.includes('The Chromium Authors')) { throw new Error('erro'); } // NODE
                     } else { let s = await _fs.promises.stat(path); retFetch = await _fs.promises.readFile(path, path.match(/\.(jpg|jpeg|png|ico)$/) || (s.size >= (gW.kbPartsMessage * 1024)) ? undefined : 'utf8'); }
                     resNew['ret'] = true; resNew['msg'] = `FILE [READ]: OK`; resNew['res'] = retFetch;
                 } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [READ]: ERRO | AO LER ARQUIVO '${path}'`; } return resNew;
@@ -119,7 +119,7 @@ async function file(inf = {}) {
             }
 
             async function fileMd5(inf = {}) {
-                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['crypto']) { libs['crypto']['createHash'] = 1; libs = await importLibs(libs, 'fileMd5'); }
+                /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['crypto']) { libs['crypto']['createHash'] = 1; libs = await importLibs(libs, 'fileMd5'); }
 
                 let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } let fileContent = await _fs.promises.readFile(path);
@@ -137,7 +137,7 @@ async function file(inf = {}) {
             }
 
             async function fileStorage(inf = {}) {
-                /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['child_process']) { libs['child_process']['exec'] = 1; libs = await importLibs(libs, 'fileStorage'); }
+                /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['child_process']) { libs['child_process']['exec'] = 1; libs = await importLibs(libs, 'fileStorage'); }
 
                 let { path, } = inf; let resNew = { 'ret': false, }; try {
                     let rExec = await new Promise((resolve) => { _exec(`fsutil volume diskfree ${path.replace(':', '')}:`, (err, resOk, errm) => { if (err || errm) { resolve(false); } else { resolve(resOk); } }); });
@@ -168,7 +168,7 @@ async function file(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['file'] = file;
 
 

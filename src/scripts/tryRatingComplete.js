@@ -116,7 +116,7 @@ async function tryRatingComplete(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['tryRatingComplete'] = tryRatingComplete;
 
 

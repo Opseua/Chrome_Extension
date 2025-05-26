@@ -18,7 +18,7 @@ if "!mode!" == "RESTART_STOP" (
 if "!arg7!" == "FORCE_STOP" ( set "modeNew=!arg7!" ) else ( set "modeNew=!mode!" )
 
 rem DEFINIR programExe E programExePath
-if not "!programExe!" == "!programExe:node=!" ( set "fpA=js" & set "fpB=NodeJS" ) else ( if "!programExe!" == "python" ( set "fpA=py" & set "fpB=Python" ) )
+if not "!programExe!" == "!programExe:node=!" ( set "fpA=js" & set "fpB=Node" ) else ( if "!programExe!" == "python" ( set "fpA=py" & set "fpB=Python" ) )
 set "programExe=!programExe!!project!_!outrosAdd!" & set "fileScript=!fileProjetos!\!project!\src\!outrosAdd!.!fpA!" & set "programExePath=!fileWindows!\PORTABLE_!fpB!\!programExe!.exe"
 
 rem CHECAR SE O programExe EXISTE

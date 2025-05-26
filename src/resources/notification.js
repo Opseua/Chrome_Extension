@@ -3,7 +3,7 @@
 // infNotification = { e, 'retInf': false, 'title': `TITULO`, 'text': `TEXTO`, 'keepOld': true, 'ntfy': true, 'chromeNot': false, 'legacy': false, }; // 'legacy' PELO HTTP POST NÃO!!!
 // retNotification = await notification(infNotification); console.log(retNotification);
 
-// // → 'duration': 5 | ERROS ( 'regexE' [crash NodeJS] )
+// // → 'duration': 5 | ERROS ( 'regexE' [crash Node] )
 // // → 'duration': 4 | AVISOS/ALERTAS ( 'ERRO AO PESQUISAR NO CHATGPT' / 'BLIND' [tem a resposta]/[não tem a resposta] )
 // // → 'duration': 3 | COMUNICADOS ( 'NOVA TASK' / 'NÃO É BLIND / REPORT DE TAREFAS )
 // // → 'duration': 2 | COMUNICADOS ( 'SNIFFER [ativado/desativado' )
@@ -39,7 +39,7 @@ async function notification(inf = {}) {
         }
 
         if (!eng && !legacy && !chromeNot) {
-            // →→→ NO NODEJS
+            // →→→ NO NODE
             promises.push(
                 (async () => { // IGNORAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
                     inf['ntfy'] = false; retDAF = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': inf, }, });
@@ -88,7 +88,7 @@ async function notification(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['notification'] = notification;
 
 

@@ -23,7 +23,7 @@ let e = import.meta.url, ee = e; let libs = { 'child_process': {}, };
 async function commandLine(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODEJS] */ if (libs['child_process']) { libs['child_process']['exec'] = 1; libs = await importLibs(libs, 'commandLine'); }
+        /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['child_process']) { libs['child_process']['exec'] = 1; libs = await importLibs(libs, 'commandLine'); }
 
         let { command = false, awaitFinish = false, notAdm = false, notBackground = false, view = false, delay = 0, terminalPath = false, withCmd = false, } = inf;
 
@@ -74,7 +74,7 @@ async function commandLine(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 }
 
-// CHROME | NODEJS
+// CHROME | NODE
 globalThis['commandLine'] = commandLine;
 
 
