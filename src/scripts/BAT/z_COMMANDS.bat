@@ -29,7 +29,7 @@ rem ****************************************************************************
 rem DEVS QUE EXECUTAM O PROJETO E MODO
 if not "!devMaster!" == "!devMaster:AWS=!" ( set "devMaster=AWS" & set "atalhoModo=ON_VIEW" & set "projects=#WebSocket_server# #Chat_Python#" & goto PROJETOS_ENCONTRADO )
 if not "!devMaster!" == "!devMaster:OPSEUA=!" ( set "devMaster=OPSEUA" & set "atalhoModo=ON_HIDE" & set "projects=#WebSocket_server# #Sniffer_Python_server#" & goto PROJETOS_ENCONTRADO )
-if not "!devMaster!" == "!devMaster:ESTRELAR=!" ( set "devMaster=ESTRELAR" & set "atalhoModo=ON_VIEW" & set "projects=#WebSocket_server# #URA_Reversa_serverJsf# #WebScraper_serverC6# #WebScraper_serverC6_New2# #WebScraper_serverC6_New3# #WebScraper_serverC6_New4# #WebScraper_serverC6_New5# #WebScraper_serverC6_New6# #WebScraper_serverC6_New7# #WebScraper_serverC6_New8#" & goto PROJETOS_ENCONTRADO )
+if not "!devMaster!" == "!devMaster:ESTRELAR=!" ( set "devMaster=ESTRELAR" & set "atalhoModo=ON_VIEW" & set "projects=#WebSocket_server# #URA_Reversa_serverJsf# #WebScraper_serverC6# #WebScraper_serverC6_New2# #WebScraper_serverC6_New3#" & goto PROJETOS_ENCONTRADO )
 !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\nDEVMASTER NAO ENCONTRADO!"" & exit
 :PROJETOS_ENCONTRADO
 
@@ -101,61 +101,6 @@ if not "!projects!" == "!projects:#%project_zOutros%#=!" (
 )
 :IGNORAR_IF-__nodeWebScraper_serverC6_New3__
 
-rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New4__] ([se OFF] NENHUMA ACAO)
-set "project_zOutros=WebScraper_serverC6_New4"
-if not "!projects!" == "!projects:#%project_zOutros%#=!" (
-	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!errorlevel!" == "0" (
-		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New4__ )
-		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
-	)
-)
-:IGNORAR_IF-__nodeWebScraper_serverC6_New4__
-
-rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New5__] ([se OFF] NENHUMA ACAO)
-set "project_zOutros=WebScraper_serverC6_New5"
-if not "!projects!" == "!projects:#%project_zOutros%#=!" (
-	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!errorlevel!" == "0" (
-		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New5__ )
-		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
-	)
-)
-:IGNORAR_IF-__nodeWebScraper_serverC6_New5__
-
-rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New6__] ([se OFF] NENHUMA ACAO)
-set "project_zOutros=WebScraper_serverC6_New6"
-if not "!projects!" == "!projects:#%project_zOutros%#=!" (
-	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!errorlevel!" == "0" (
-		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New6__ )
-		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
-	)
-)
-:IGNORAR_IF-__nodeWebScraper_serverC6_New6__
-
-rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New7__] ([se OFF] NENHUMA ACAO)
-set "project_zOutros=WebScraper_serverC6_New7"
-if not "!projects!" == "!projects:#%project_zOutros%#=!" (
-	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!errorlevel!" == "0" (
-		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New7__ )
-		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
-	)
-)
-:IGNORAR_IF-__nodeWebScraper_serverC6_New7__
-
-rem EXECUTANDO [SIM] | [NAO] = [__nodeWebScraper_serverC6_New8__] ([se OFF] NENHUMA ACAO)
-set "project_zOutros=WebScraper_serverC6_New8"
-if not "!projects!" == "!projects:#%project_zOutros%#=!" (
-	tasklist /fi "ImageName eq node!project_zOutros!.exe" /fo csv 2> nul | find /I "node!project_zOutros!.exe" > nul
-	if "!errorlevel!" == "0" (
-		if not "!action!" == "!action:_OFF_=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & goto IGNORAR_IF-__nodeWebScraper_serverC6_New8__ )
-		if not "!projects!" == "!projects:#%project_zOutros%#=!" ( if not "!action!" == "!action:_REST=!" ( set "projectsOff=!projectsOff!#!project_zOutros!# " & set "projectsOn=!projectsOn!#!project_zOutros!# " ) )
-	)
-)
-:IGNORAR_IF-__nodeWebScraper_serverC6_New8__
-
 rem EXECUTANDO [SIM] | [NAO] = [__nodeWebSocket_server__]
 set "project_zOutros=WebSocket_server"
 if not "!projects!" == "!projects:#%project_zOutros%#=!" (
@@ -179,11 +124,7 @@ rem → WebScraper [C6]
 if not "!projectsOff!" == "!projectsOff:#WebScraper_serverC6#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6\OFF.vbs TRUE & ping -n 4 -w 1000 127.0.0.1 > nul )
 if not "!projectsOff!" == "!projectsOff:#WebScraper_serverC6_New2#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New2\OFF.vbs TRUE & ping -n 4 -w 1000 127.0.0.1 > nul )
 if not "!projectsOff!" == "!projectsOff:#WebScraper_serverC6_New3#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New3\OFF.vbs TRUE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOff!" == "!projectsOff:#WebScraper_serverC6_New4#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New4\OFF.vbs TRUE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOff!" == "!projectsOff:#WebScraper_serverC6_New5#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New5\OFF.vbs TRUE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOff!" == "!projectsOff:#WebScraper_serverC6_New6#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New6\OFF.vbs TRUE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOff!" == "!projectsOff:#WebScraper_serverC6_New7#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New7\OFF.vbs TRUE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOff!" == "!projectsOff:#WebScraper_serverC6_New8#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New8\OFF.vbs TRUE & ping -n 4 -w 1000 127.0.0.1 > nul )
+
 rem → WebSocket (MANTER COMO ULTIMO)
 if not "!projectsOff!" == "!projectsOff:#WebSocket_server#=!" ( !fileProjetos!\WebSocket\src\z_OUTROS_server\OFF.vbs TRUE & ping -n 5 -w 1000 127.0.0.1 > nul )
 
@@ -201,11 +142,6 @@ rem → WebScraper [C6]
 if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6\!atalhoModo!.vbs FALSE & ping -n 4 -w 1000 127.0.0.1 > nul )
 if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New2#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New2\!atalhoModo!.vbs FALSE & ping -n 4 -w 1000 127.0.0.1 > nul )
 if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New3#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New3\!atalhoModo!.vbs FALSE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New4#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New4\!atalhoModo!.vbs FALSE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New5#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New5\!atalhoModo!.vbs FALSE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New6#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New6\!atalhoModo!.vbs FALSE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New7#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New7\!atalhoModo!.vbs FALSE & ping -n 4 -w 1000 127.0.0.1 > nul )
-if not "!projectsOn!" == "!projectsOn:#WebScraper_serverC6_New8#=!" ( !fileProjetos!\WebScraper\src\z_OUTROS_serverC6_New8\!atalhoModo!.vbs FALSE & ping -n 4 -w 1000 127.0.0.1 > nul )
 
 rem ---------------------------------------------- ABRIR PROGRAMAS E POSICIONAR SE NECESSARIO --------------------------------------------------------------------
 if not "!devMaster!" == "OPSEUA" (

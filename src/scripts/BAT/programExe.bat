@@ -28,7 +28,7 @@ for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\master.json") do (
 rem ************* AWS
 set "nodeAws=WebSocket_server" & set "pythonAws="
 rem ************* ESTRELAR
-set "nodeEstrelar=WebSocket_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2" & set "pythonEstrelar="
+set "nodeEstrelar=WebSocket_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverC6_New3" & set "pythonEstrelar="
 rem ************* OPSEUA
 set "nodeOpseua=!nodeAws!;!nodeEstrelar!;IPTV_server;Sniffer_Python_server" & set "pythonOpseua=!pythonAws!;Sniffer_Python_server"
 
