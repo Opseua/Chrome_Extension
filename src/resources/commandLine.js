@@ -19,7 +19,7 @@
 // };
 // retCommandLine = await commandLine(infCommandLine); console.log(retCommandLine);
 
-let e = import.meta.url, ee = e; let libs = { 'child_process': {}, };
+let e = currentFile(), ee = e; let libs = { 'child_process': {}, };
 async function commandLine(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

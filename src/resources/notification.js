@@ -8,7 +8,7 @@
 // // → 'duration': 3 | COMUNICADOS ( 'NOVA TASK' / 'NÃO É BLIND / REPORT DE TAREFAS )
 // // → 'duration': 2 | COMUNICADOS ( 'SNIFFER [ativado/desativado' )
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function notification(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

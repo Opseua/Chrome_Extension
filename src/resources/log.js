@@ -7,7 +7,7 @@
 // infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'byHour': true, };
 // retLog = await log(infLog); console.log(retLog);
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function log(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

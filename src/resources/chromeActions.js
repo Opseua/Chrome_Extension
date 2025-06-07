@@ -2,7 +2,7 @@
 
 // → NO FINAL DO ARQUIVO
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function chromeActions(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

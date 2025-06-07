@@ -2,10 +2,10 @@
 let arrGlobal = [
   // FUNÇÃO NATIVAS
   'console', 'setTimeout', 'setInterval', 'clearTimeout', 'AbortController', 'TextEncoder', 'fetch', 'prompt', 'document', 'XPathResult', 'Blob', 'URL', 'DOMParser', 'atob', 'btoa',
-  'alert', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle',
+  'alert', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle', 'alertConsole', 'currentFile', 'NodeFilter', 'Node', 'MouseEvent', 'window',
 
   // VARIÁVEIS GLOBAIS
-  'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des', 'quebrarCodigo', 'portStopwatch', 'sP',
+  'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des', 'portStopwatch', 'sP',
 
   // VARIÁVEIS DO SISTEMA
   'fileChrome_Extension', 'fileProjetos', 'fileWindows',
@@ -38,7 +38,7 @@ let arrGlobal = [
 
   // funções globais → [WebScraper]
   'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData',
-  'clientImput', 'maquinaInput', 'screenshot',
+  'clientImput', 'maquinaInput', 'screenshot', 'elementAction',
 
   // funções globais → [WebSocket]
   'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',

@@ -1,4 +1,4 @@
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 let mensagensPartesRecebida = {};
 
 let minCle = gW.minClearPartsMessages * 60000; // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS

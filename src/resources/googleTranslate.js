@@ -2,7 +2,7 @@
 // infGoogleTranslate = { e, 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?`, };
 // retGoogleTranslate = await googleTranslate(infGoogleTranslate); console.log(retGoogleTranslate);
 
-let e = import.meta.url, ee = e; let libs = { 'cheerio': {}, };
+let e = currentFile(), ee = e; let libs = { 'cheerio': {}, };
 async function googleTranslate(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

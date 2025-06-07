@@ -1,18 +1,18 @@
 /* eslint-disable camelcase */
 
 // let infFile, retFile; // 'add': true, 'functionLocal': true
-// infFile = { e, 'action': 'relative', 'path': './PASTA/arquivo.txt', };
-// infFile = { e, 'action': 'write', 'path': './PASTA/arquivo.txt', 'add': true, 'text': '1234\n', };
-// infFile = { e, 'action': 'isFolder', 'path': './PASTA/', };
-// infFile = { e, 'action': 'read', 'path': './PASTA/arquivo.txt', };
-// infFile = { e, 'action': 'md5', 'path': './PASTA/arquivo.txt', };
-// infFile = { e, 'action': 'change', 'path': './PASTA/arquivo.txt', 'pathNew': './PASTA/arquivo2.txt', };
-// infFile = { e, 'action': 'list', 'path': './PASTA', 'max': 10, };
-// infFile = { e, 'action': 'del', 'path': './PASTA', };
-// infFile = { e, 'action': 'storage', 'path': 'C:', }; // SEMPRE COMO 'ADM'!!!
+// infFile = { e, 'action': 'relative', 'path': `./PASTA/arquivo.txt`, };
+// infFile = { e, 'action': 'write', 'path': `./PASTA/arquivo.txt`, 'add': true, 'text': `1234\n`, };
+// infFile = { e, 'action': 'isFolder', 'path': `./PASTA/`, };
+// infFile = { e, 'action': 'read', 'path': `./PASTA/arquivo.txt`, };
+// infFile = { e, 'action': 'md5', 'path': `./PASTA/arquivo.txt`, };
+// infFile = { e, 'action': 'change', 'path': `./PASTA/arquivo.txt`, 'pathNew': `./PASTA/arquivo2.txt`, };
+// infFile = { e, 'action': 'list', 'path': `./PASTA`, 'max': 10, };
+// infFile = { e, 'action': 'del', 'path': `./PASTA`, };
+// infFile = { e, 'action': 'storage', 'path': `C:`, }; // SEMPRE COMO 'ADM'!!!
 // retFile = await file(infFile); console.log(retFile);
 
-let e = import.meta.url, ee = e; let libs = { 'crypto': {}, 'child_process': {}, };
+let e = currentFile(), ee = e; let libs = { 'crypto': {}, 'child_process': {}, };
 async function file(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
@@ -62,7 +62,7 @@ async function file(inf = {}) {
                             let downloadOptions = { 'url': URL.createObjectURL(blob), 'filename': path, 'saveAs': false, 'conflictAction': 'overwrite', }; chrome.downloads.download(downloadOptions);
                         } else { // NODE | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                             let pathLetter = path.charAt(0); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`); // DENTRO DE UMA PASTA (CRIAR ELA)
-                            if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { 'recursive': true, }); } await _fs.promises.writeFile(path, text, { 'flag': add ? 'a' : 'w', });
+                            if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); } await _fs.promises.writeFile(path, text, { flag: add ? 'a' : 'w', encoding: 'utf8', });
                         } resNew['ret'] = true; resNew['msg'] = `FILE [WRITE]: OK`; resNew['res'] = path;
                     }
                 } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [WRITE]: ERRO | AO ESCREVER ARQUIVO '${path}'`; } return resNew;

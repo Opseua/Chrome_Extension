@@ -5,7 +5,7 @@
 // infRegex = { 'simple': true, 'pattern': `*DOIS*`, 'text': `UMDOISTRES`, };
 // retRegex = regex(infRegex); console.log(retRegex);
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 function regex(inf = {}) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

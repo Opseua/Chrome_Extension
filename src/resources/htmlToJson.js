@@ -1,6 +1,6 @@
 // → NO FINAL DO ARQUIVO
 
-let e = import.meta.url, ee = e; let libs = { 'cheerio': {}, };
+let e = currentFile(), ee = e; let libs = { 'cheerio': {}, };
 async function htmlToJson(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

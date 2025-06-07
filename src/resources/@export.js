@@ -1,4 +1,4 @@
-globalThis.eng = (typeof globalThis.alert !== 'undefined'); // [true] CHROME | [false] NODE
+globalThis['eng'] = (typeof globalThis.alert !== 'undefined'); // [true] CHROME | [false] NODE
 
 function all2() { } globalThis['all2'] = all2; // ******************************************************** NÃO USAR !!!
 
@@ -52,7 +52,7 @@ globalThis['tryRatingComplete'] = (inf) => { return importFun({ 'engOk': (eng), 
 globalThis['tryRatingSet'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/scripts/tryRatingSet.js', inf, project, }); };
 
 // AGUARDAR IMPORT DE FUNÇÕES NÃO ASYNC **************
-let e = import.meta.url, ee = e; await dateHour(); await regex({ e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES`, });
+let e = currentFile(), ee = e; await dateHour(); await regex({ e, 'pattern': `UM(.*?)TRES`, 'text': `UMDOISTRES`, });
 //  **************
 
 

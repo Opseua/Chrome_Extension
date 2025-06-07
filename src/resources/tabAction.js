@@ -3,7 +3,7 @@
 // infTabAction = { e, 'search': `*google*`, 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': `https://www.google.com/`, };
 // retTabAction = await tabAction(infTabAction); console.log(retTabAction);
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function tabAction(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

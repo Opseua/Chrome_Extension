@@ -19,7 +19,7 @@
 
 // TESTAR REQUISIÇÃO E TEMPO DE RESPOSTA → https://httpstat.us/200?sleep=5000
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function api(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

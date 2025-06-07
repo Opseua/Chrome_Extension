@@ -2,7 +2,7 @@
 // infModel = { e, 'chaveUm': 'valorUm', 'chaveDois': 'valorDois' }
 // retModel = await model(infModel); console.log(retModel)
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function model(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

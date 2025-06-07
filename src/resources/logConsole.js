@@ -2,7 +2,7 @@
 // 'breakLine' → 'false' NÃO ADICIONAR QUEBRA DE LINHA
 // logConsole({ e, ee, 'txt': `Mensagem do console`, });
 
-let e = import.meta.url;
+let e = currentFile();
 async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
     let ret = { 'ret': false, }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
     try {

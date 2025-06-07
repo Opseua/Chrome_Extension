@@ -3,7 +3,7 @@
 // infMessageSend = { 'destination': '127.0.0.1:1234/?roo=DESTINO_AQUI', 'message': message, 'secondsAwait': 0, };
 // retMessageSend = await messageSend(infMessageSend); console.log(retMessageSend);
 
-let e = import.meta.url, ee = e; let wsServerLoc = null, wsServerWeb = null;
+let e = currentFile(), ee = e; let wsServerLoc = null, wsServerWeb = null;
 async function messageSend(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

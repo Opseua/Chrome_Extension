@@ -4,7 +4,7 @@
 // infObjFilter = { e, 'obj': obj, 'noCaseSensitive': true, 'values': ['CArro',], 'filters': [{ 'includes': ['*cadeira*',], }, { 'excludes': ['*cadeira.comida*',], },], };
 // retObjFilter = await objFilter(infObjFilter); console.log(retObjFilter);
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function objFilter(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

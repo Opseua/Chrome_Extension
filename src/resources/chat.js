@@ -17,7 +17,7 @@
 // IMPORTAR PROVEDORES ADICIONAIS
 await import('./chats/@import.js'); globalThis['zachey01___gpt4free_js'] = GPT4js; delete globalThis['GPT4js'];
 
-let e = import.meta.url, ee = e; let objOpenAi = false, objChatPython = false;
+let e = currentFile(), ee = e; let objOpenAi = false, objChatPython = false;
 async function chat(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

@@ -6,7 +6,7 @@
 let opts = {}; let imp = ['Search20',];
 for (let [index, v,] of imp.entries()) { await import(`./objects/tryRating/opt_${v}.js`); opts[v] = globalThis[`opt_${v}`]; delete globalThis[`opt_${v}`]; }
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function tryRatingComplete(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
@@ -19,9 +19,9 @@ async function tryRatingComplete(inf = {}) {
         // RETORNAR CASO O OBJ DO HITAPP NÃO EXISTA
         if (!opts[hitApp]) { ret['msg'] = `TRYRATING COMPLETE: ERRO | FALTA O OBJ DO HITAPP '${hitApp}'`; return ret; } let opt = opts[hitApp];
 
-        let infOk = {}; if (infTryRatingComplete.includes('{"')) { infOk = JSON.parse(infTryRatingComplete); }
-        else if (infTryRatingComplete.includes(' 🟢 ')) { let gM = infTryRatingComplete.split(' 🟢 '); infOk['name'] = gM[0]; infOk['category'] = gM[1]; infOk['address'] = gM[2]; infOk['urlGoogleMaps'] = gM[3]; }
-        else if (hitApp === 'Search20') { let gM = infTryRatingComplete; infOk['urlGoogleMaps'] = gM.includes('https://maps.app.goo.gl/') ? gM : false; }
+        let infOk = {}; if (infTryRatingComplete.includes('{"')) { infOk = JSON.parse(infTryRatingComplete); } else if (infTryRatingComplete.includes('🟢')) {
+            let gM = infTryRatingComplete.replace(/🔴|🔵/g, '🟢').split('🟢').map(x => x.trim()); infOk['name'] = gM[0]; infOk['category'] = gM[1]; infOk['address'] = gM[2]; infOk['urlGoogleMaps'] = gM[3];
+        } else if (hitApp === 'Search20') { let gM = infTryRatingComplete; infOk['urlGoogleMaps'] = gM.includes('https://maps.app.goo.gl/') ? gM : false; }
 
         // ETAPA 1: PEGAR A DIV DOS JUDGES
         let judgesDiv = []; for (let index = 0; index < 10; index++) {

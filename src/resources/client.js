@@ -1,4 +1,4 @@
-let e = import.meta.url, ee = e; let wsServers = { 'rooms': {}, }, reconnecting = {}, timSecCon = {}, secConnect = gW.secConnect; let libs = { 'ws': {}, };
+let e = currentFile(), ee = e; let wsServers = { 'rooms': {}, }, reconnecting = {}, timSecCon = {}, secConnect = gW.secConnect; let libs = { 'ws': {}, };
 async function client(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

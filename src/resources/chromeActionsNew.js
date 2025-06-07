@@ -18,7 +18,7 @@
 
 // retChromeActionsNew = await chromeActions({ e, 'action': 'inject', 'target': `*z_HTML.html*`, 'fun': chromeActionsNew, 'funInf': infChromeActionsNew, }); console.log(retChromeActionsNew);
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function chromeActionsNew(inf = {}) {
     let { tags = [], attributes = [], contents = [], action, elementValue, path = false, reFilter = [], } = inf;
 

@@ -4,7 +4,7 @@
 let acts = {}; let imp = ['AIGeneratedTextEvaluationPortuguese', 'BroadMatchRatings', 'Ratingoftransformedtext', 'TextErrorCategorizationptBR',];
 for (let [index, v,] of imp.entries()) { await import(`./objects/tryRating/act_${v}.js`); acts[v] = globalThis[`act_${v}`]; delete globalThis[`act_${v}`]; }
 
-let e = import.meta.url, ee = e;
+let e = currentFile(), ee = e;
 async function tryRatingSet(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {

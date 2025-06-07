@@ -36,13 +36,13 @@ let portLoc = `${serverLoc.port}`; let hostPortLoc = `${hostLoc}:${portLoc}`; le
 let hostPortWeb = `${hostWeb}:${portWeb}`; let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing;
 let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop; let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages; let devMy = conf.devMy;
 let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`; let par5 = `${securityPass}-${conf.par5}`;
-let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`; let par10 = `${securityPass}-${conf.par10}`; let par11 = `${conf.par11}`; let par12 = `${conf.par12}`;
-let par13 = `${conf.par13}`; let hostPort = `${letter === 'D' ? hostPortLoc : hostPortWeb}/?roo=`; let devSend = `${hostPort}${devMy}-${devices[0][0]}-${devices[0][2][0]}`;
+let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`; let par10 = `${securityPass}-${conf.par10}`; let par11 = `${conf.par11}`;
+let hostPort = `${letter === 'D' ? hostPortLoc : hostPortWeb}/?roo=`; let devSend = `${hostPort}${devMy}-${devices[0][0]}-${devices[0][2][0]}`;
 let devSever = `${hostPort}${devMaster}-${devices[eng ? 0 : 1][0]}-${devices[eng ? 0 : 1][2][0]}`;
 
 gW = { // MANTER APÓS O 'devSend'
     ...gW, securityPass, 'serverWeb': serverWeb.host, portWeb, 'serverLoc': serverLoc.host, portLoc, devMaster, 'devSlave': engName, devSend, devices, hostPortWeb, hostPortLoc, secConnect, secReconnect,
-    secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, devSever, par1, par2, par3, par4, par5, par8, par9, par10, par11, par12, 'pages': false, par13,
+    secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, devSever, par1, par2, par3, par4, par5, par8, par9, par10, par11,
     firstFileCall: sP.split('/').pop().replace('_TEMP', '').replace('.js', ''), // ← DISPONÍVEL APENAS NO 'WebScraper' →→→ 'New2', 'New3', 'New4'...
 };
 
@@ -77,8 +77,8 @@ function awaitTimeout(inf = {}) {
 // async function liberarTimeout() { setTimeout(() => { listenerAcionar('NOME AQUI', 'INF1', 'INF2'); }, 2000);}; liberarTimeout();
 
 // ############### CLEAR CONSOLE ###############
-function clearRun() { if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } } let msgQtd = 0; let clearConsole = console.log;
-console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n'); } }; clearRun();
+function clearRun() { if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } } let msgQtd = 0; let clearConsole = console.log; // clearRun();
+console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n'); } };
 
 // ############### CALCULAR TEMPO DE INICIALIZAÇÃO ###############
 function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }

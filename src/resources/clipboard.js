@@ -2,7 +2,7 @@
 // infClipboard = { e, 'value': `Esse é o texto`, };
 // retClipboard = await clipboard(infClipboard); console.log(retClipboard);
 
-let e = import.meta.url, ee = e; let libs = { 'clipboardy': {}, };
+let e = currentFile(), ee = e; let libs = { 'clipboardy': {}, };
 async function clipboard(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
