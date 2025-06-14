@@ -16,6 +16,7 @@ let arrGlobal = [
   // ### BIBLIOTECAS / NATIVO → NODE
   '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_createHash', '_puppeteer', '_net', '_getFolderSize', 'process',
   'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard', '_createRequire', '_axios', '_createWriteStream', '_getVideoDurationInSeconds', '_https', '_m3u8Parser',
+  '_createServer', '_createInterface',
   // GLOBAL OBJECT
   'gO', 'gOList', 'cs',
   // FUNÇÕES
@@ -31,7 +32,7 @@ let arrGlobal = [
   'command2', 'tryRatingComplete', 'startupTime', 'crashCode',
 
   // funções globais → [Sniffer_Python]
-  'ewoq', 'tryRating', 'getResponseTryRating', 'performTask',
+  'ewoq', 'tryRating', 'getResponseTryRating', 'performTask', 'correiosServer',
 
   // funções globais → [URA_Reversa]
   'leadChangeStatus', 'leadGet', 'leads', 'leadsJsf', 'login',
@@ -51,7 +52,7 @@ let arrGlobal = [
 let arrUnused = [
   // 'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',  // outros
   'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write',
-  'msg', 'sendNtfy', 'e', 'ee', 'index', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'stdout',
+  'msg', 'sendNtfy', 'e', 'ee', 'index', 'idx', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'stdout',
 ];
 
 let arrGlobalObj = {}; for (let variavel of arrGlobal) { arrGlobalObj[variavel] = 'writable'; }
