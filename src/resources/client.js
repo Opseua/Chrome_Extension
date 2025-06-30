@@ -50,16 +50,17 @@ async function client(inf = {}) {
             if (wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom].delete(resWs); if (wsServers.rooms[hostRoom].size === 0) { delete wsServers.rooms[hostRoom]; } }
         }
 
-        // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → GET [WEB] | GET [LOC]
-        let servers = [gW.devGet[0], gW.devGet[1],]; for (let [index, value,] of servers.entries()) {
+        // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → GET [WEB] | GET [LOC] | {ESTRELAR}
+        let servers = []; if (gW.devMaster !== 'ESTRELAR') { servers = [gW.devGet[0], gW.devGet[1],]; } else {
+            let serverWebEstrelar = `${gW.serverWebEstrelar}:${gW.devGet[0].split(':')[1]}`; servers = [gW.devGet[0], gW.devGet[1], serverWebEstrelar,]; // ESTRELAR
+        } for (let [index, value,] of servers.entries()) {
             if (!value.includes('127.0.0.1') && (gW.project === 'Sniffer_Python' || (!value.includes('USUARIO_0') && value.includes('USUARIO_')))) {
                 // NÃO CONECTAR AO WEBSOCKET
             } else { connect({ 'hostRoom': value, }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ nomeList, param1, }); }); }
         }
 
         async function runLis(inf = {}) {
-            let { nomeList, param1, } = inf, { messageId, message, resWs, origin, host, room, } = param1; // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
-            // logConsole({ e, ee, 'txt': `LIS: ${nomeList} | HOST: ${host} | ROOM: ${room} | ${messageId}\nORIGEM: ${origin} | MES:\n${message.length > 50000 ? 'MUITO GRANDE' : message}` });
+            let { param1, } = inf, { messageId, message, resWs, origin, } = param1; // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
             let data = {}; try { data = JSON.parse(message); } catch (catchErr) { } if (data.fun) { devFun({ e, data, messageId, resWs, 'destination': origin, }); }
             else if (data.other) { logConsole({ e, ee, 'txt': `OTHER\n${JSON.stringify(data.other)}`, }); }
         }
@@ -70,7 +71,6 @@ async function client(inf = {}) {
                 for (let v of clientSet) {
                     function check(inf = {}) { let { lastMessage, locWeb, room, } = inf; return { 'dif': lastMessage ? Number(dateHour().res.tim) - lastMessage : -99, locWeb, room, }; }
                     let retCheck = check(v); if (retCheck.dif > (secPing - 1)) {
-                        // logConsole({ e, ee, 'txt': `MENSAGEM ANTIGA → ENVIAR 'PING' ${retCheck.locWeb} '${retCheck.room}'` });
                         v.send('ping'); setTimeout(() => {
                             retCheck = check(v); if (retCheck.dif > (secPing - 1)) { logConsole({ e, ee, 'txt': `DESCONECTAR [PING ${retCheck.dif}] ${retCheck.locWeb} '${retCheck.room}'`, }); v.close(); }
                         }, gW.secPingTimeout * 1000);
