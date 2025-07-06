@@ -1,11 +1,12 @@
 /* eslint-disable camelcase */
 
-// let infFile, retFile; // 'add': true, 'functionLocal': true
+// let infFile, retFile; // 'add': true, 'functionLocal': true, 'encoding': false (conteudo é buffer) | 'latin1' [padrão 'utf8']
 // infFile = { e, 'action': 'relative', 'path': `./PASTA/arquivo.txt`, };
-// infFile = { e, 'action': 'write', 'path': `./PASTA/arquivo.txt`, 'add': true, 'text': `1234\n`, };
+// infFile = { e, 'action': 'write', 'path': `./PASTA/arquivo.txt`, 'add': true, 'content': `1234\n`, };
 // infFile = { e, 'action': 'isFolder', 'path': `./PASTA/`, };
 // infFile = { e, 'action': 'read', 'path': `./PASTA/arquivo.txt`, };
 // infFile = { e, 'action': 'md5', 'path': `./PASTA/arquivo.txt`, };
+// infFile = { e, 'action': 'copy', 'path': `./PASTA/arquivo.txt`, 'pathNew': `./PASTA/arquivoCopy.txt`, };
 // infFile = { e, 'action': 'change', 'path': `./PASTA/arquivo.txt`, 'pathNew': `./PASTA/arquivo2.txt`, };
 // infFile = { e, 'action': 'list', 'path': `./PASTA`, 'max': 10, };
 // infFile = { e, 'action': 'del', 'path': `./PASTA`, };
@@ -23,7 +24,7 @@ async function file(inf = {}) {
         pathAndPathNew = pathAndPathNew.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d).split('#_SPLIT_#');
         path = pathAndPathNew[0] === 'NADA' ? false : pathAndPathNew[0]; inf.path = path; pathNew = pathAndPathNew[1] === 'NADA' ? false : pathAndPathNew[1]; inf.pathNew = pathNew;
 
-        if (!action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'md5', 'isFolder', 'storage',].includes(action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
+        if (!action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'copy', 'md5', 'isFolder', 'storage',].includes(action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
         else if (typeof functionLocal !== 'boolean' && action !== 'inf' && !path.includes(':')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'functionLocal'`; }
         else if (action !== 'inf' && (!path || path === '')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'path'`; } else {
             function formatBytes(b, d = 2) {
@@ -50,31 +51,40 @@ async function file(inf = {}) {
             }
 
             async function fileWrite(inf = {}) {
-                let { functionLocal, path, add = false, text, raw, } = inf; let resNew = { 'ret': false, }; try {
-                    if (!text || text === '') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'text'`; } else {
-                        if (raw) { let retRawText = rawText({ e, 'obj': text, }); text = retRawText; }
-                        else if (typeof text === 'object') { text = JSON.stringify(text); /* STRING / OBJETO / BUFFER */ } if (path.includes(':')) { if (eng) { path = path.split(':/')[1]; } } else {
+                let { functionLocal, path, add = false, content, text, raw, encoding = 'utf8', } = inf;
+
+                // REMOVER DEPOIS (ALERTA DE CHAVE ANTIGA)
+                if (text && !path.includes(`:/ARQUIVOS/PROJETOS/WebSocket/logs/Registros/MES_0`)) {
+                    content = text; notification({ e, 'legacy': true, 'ignoreErr': true, 'title': `ALERTA FILE!`, 'text': `(${gW.devMaster}) [${gW.devSlave}] {${gW.project}}\nPATH:\n${path}`, });
+                    await log({ e, 'byHour': true, 'folder': 'JavaScript', 'path': `FILE_ERRO_CHAVE.txt`, 'text': `PATH:\n${path}\n\nTEXT:\n${content.toString()}`, });
+                }
+
+                let resNew = { 'ret': false, }; try {
+                    if (!content || content === '') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'content'`; } else {
+                        if (raw) { content = rawText({ e, 'obj': content, }); /* RAW */ } else if (encoding && typeof content === 'object') { content = JSON.stringify(content); /* OBJETO */ }
+                        if (path.includes(':')) { if (eng) { path = path.split(':/')[1]; } } else {
                             retFile = await fileRelative({ path, 'functionLocal': functionLocal && !eng, }); path = retFile.res[0];
                         } if (eng) { // CHROME | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                             if (path.includes('%/')) { path = path.split('%/')[1]; } else if (path.includes(':')) { path = path.split(':/')[1]; } if (add) {
-                                retFile = await fileRead({ path, 'functionLocal': functionLocal && !eng, }); text = `${retFile.res || ''}${text}`;
-                            } let blob = new Blob([text,], { type: 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); // 'overwrite' LIMPA | 'uniquify' ADD (1), (2)... NO FINAL
+                                retFile = await fileRead({ path, 'functionLocal': functionLocal && !eng, }); content = `${retFile.res || ''}${content}`;
+                            } let blob = new Blob([content,], { type: 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); // 'overwrite' LIMPA | 'uniquify' ADD (1), (2)... NO FINAL
                             let downloadOptions = { 'url': URL.createObjectURL(blob), 'filename': path, 'saveAs': false, 'conflictAction': 'overwrite', }; chrome.downloads.download(downloadOptions);
                         } else { // NODE | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                             let pathLetter = path.charAt(0); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`); // DENTRO DE UMA PASTA (CRIAR ELA)
-                            if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); } await _fs.promises.writeFile(path, text, { flag: add ? 'a' : 'w', encoding: 'utf8', });
+                            if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); }
+                            let options = { 'flag': add ? 'a' : 'w', }; if (encoding) { options['encoding'] = encoding; } await _fs.promises.writeFile(path, content, options);
                         } resNew['ret'] = true; resNew['msg'] = `FILE [WRITE]: OK`; resNew['res'] = path;
                     }
                 } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [WRITE]: ERRO | AO ESCREVER ARQUIVO '${path}'`; } return resNew;
             }
 
             async function fileRead(inf = {}) {
-                let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
+                let { functionLocal, path, encoding = 'utf8', } = inf; let resNew = { 'ret': false, }; try {
                     let retFetch; if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } if (eng) { // CHROME
                         if (!functionLocal) { path = `file:///${path}`; } path = path.replace('%', ''); // ENCODIFICAR PATH *********************
                         let pathParts = path.replace('file:///', '').split(':/'); path = (path.includes('file:///') ? 'file:///' : '') + pathParts[0] + ':/' + pathParts[1].split('/').map(encodeURIComponent).join('/');
                         retFetch = await fetch(path); retFetch = await retFetch.text(); if (retFetch.includes('The Chromium Authors')) { throw new Error('erro'); } // NODE
-                    } else { let s = await _fs.promises.stat(path); retFetch = await _fs.promises.readFile(path, path.match(/\.(jpg|jpeg|png|ico)$/) || (s.size >= (gW.kbPartsMessage * 1024)) ? undefined : 'utf8'); }
+                    } else { let options = path.match(/\.(jpg|jpeg|png|ico)$/) ? undefined : encoding || undefined; retFetch = await _fs.promises.readFile(path, options); }
                     resNew['ret'] = true; resNew['msg'] = `FILE [READ]: OK`; resNew['res'] = retFetch;
                 } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [READ]: ERRO | AO LER ARQUIVO '${path}'`; } return resNew;
             }
@@ -109,18 +119,18 @@ async function file(inf = {}) {
             }
 
             async function fileChange(inf = {}) {
-                let { functionLocal, path, pathNew, } = inf; let resNew = { 'ret': false, }; try {
+                let { functionLocal, path, pathNew, action, } = inf; let resNew = { 'ret': false, }; try {
                     if (!pathNew || pathNew === '') { resNew['msg'] = `FILE [CHANGE]: ERRO | INFORMAR O 'pathNew'`; } else {
                         pathNew = pathNew.replace(/!letter!/g, letter); if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; }
                         if (!pathNew.includes(':')) { retFile = await fileRelative({ 'path': pathNew, functionLocal, }); pathNew = retFile.res[0]; }
-                        await _fs.promises.mkdir(_path.dirname(pathNew), { 'recursive': true, }); await _fs.promises.rename(path, pathNew); resNew['ret'] = true; resNew['msg'] = `FILE [CHANGE]: OK`; resNew['res'] = pathNew;
+                        await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true, }); if (action === 'change') { await _fs.promises.rename(path, pathNew); /* MOVER */ }
+                        else { await _fs.promises.copyFile(path, pathNew); /* COPIAR */ } resNew['ret'] = true; resNew['msg'] = `FILE [CHANGE]: OK`; resNew['res'] = pathNew;
                     }
                 } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [CHANGE]: ERRO | AO MOVER ARQUIVO '${path}'`; } return resNew;
             }
 
             async function fileMd5(inf = {}) {
                 /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['crypto']) { libs['crypto']['createHash'] = 1; libs = await importLibs(libs, 'fileMd5'); }
-
                 let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } let fileContent = await _fs.promises.readFile(path);
                     let md5 = _createHash('md5').update(fileContent).digest('hex'); let res = md5; resNew['ret'] = true; resNew['msg'] = `FILE [MD5]: OK`; resNew['res'] = res;
@@ -138,7 +148,6 @@ async function file(inf = {}) {
 
             async function fileStorage(inf = {}) {
                 /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['child_process']) { libs['child_process']['exec'] = 1; libs = await importLibs(libs, 'fileStorage'); }
-
                 let { path, } = inf; let resNew = { 'ret': false, }; try {
                     let rExec = await new Promise((resolve) => { _exec(`fsutil volume diskfree ${path.replace(':', '')}:`, (err, resOk, errm) => { if (err || errm) { resolve(false); } else { resolve(resOk); } }); });
                     resNew['res'] = {}; for (let [index, value,] of rExec.split('\n').entries()) {
@@ -156,7 +165,7 @@ async function file(inf = {}) {
             // ****************************************************************************************************************************************
             if (action === 'write') { return await fileWrite(inf); } else if (action === 'read') { return await fileRead(inf); } else if (action === 'del' && !eng) { return await fileDel(inf); }
             else if (action === 'relative') { return await fileRelative(inf); } else if (action === 'list' && !eng) { return await fileList(inf); }
-            else if (action === 'change' && !eng) { return await fileChange(inf); } else if (action === 'md5' && !eng) { return await fileMd5(inf); }
+            else if (['change', 'copy',].includes(action) && !eng) { return await fileChange(inf); } else if (action === 'md5' && !eng) { return await fileMd5(inf); }
             else if (action === 'isFolder' && !eng) { return await fileIsFolder(inf); } else if (action === 'storage' && !eng) { return await fileStorage(inf); }
             ret['msg'] = `FILE: ERRO | ACTION '${action}' NÃO DISPONÍVEL NO AMBIENTE`;
         }

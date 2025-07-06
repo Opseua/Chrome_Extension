@@ -78,7 +78,7 @@ let filaBigFalse = []; let filaBigTrue = []; let sending = false; function envia
 
         // ---------------- TESTES
         // logConsole({ e, ee, 'txt': `[${(filaBigFalse.length + filaBigTrue.length).toString().padStart(2, '0')}] | ENVIADA ${big ? 'GRANDE' : 'PEQUENA'} ${messageId}` });
-        // file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_ENVIANDO_[${partesRestantes}]_.txt`, 'text': message });
+        // file({ 'e': e, 'action': 'write', 'functionLocal': false, 'path': `D:/z_CLIENTE_ENVIANDO_[${partesRestantes}]_.txt`, 'content': message });
         // ----------------
 
         // LISTENER DE STATUS: MONITORAR

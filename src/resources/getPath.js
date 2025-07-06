@@ -27,7 +27,8 @@ async function getPath(inf = {}) {
                 res = { conf, 'letter': funLetter, 'functions': `${functions}`, project, };
 
                 // CONFIG.json | ADICIONAR TODO O CONFIG NO STORAGE
-                confOk = await fetch(chrome.runtime.getURL(conf)); confOk = await confOk.text(); confOk = JSON.parse(confOk); chrome.storage.local.set(confOk);
+                confOk = await fetch(chrome.runtime.getURL(conf)); confOk = await confOk.text(); confOk = JSON.parse(confOk);
+                await new Promise((resolve) => { chrome.storage.local.set(confOk, async () => { resolve(true); }); }); // STORAGE: DEFINIR
 
                 // MASTER.json
                 master = await fetch(chrome.runtime.getURL(master)); master = await master.text(); master = JSON.parse(master);

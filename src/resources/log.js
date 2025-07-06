@@ -48,7 +48,7 @@ async function log(inf = {}) {
                 text = `→ ${currentDateHour || houTxt} ${projectConsole || ''}${fileCall ? ` ${fileCall}` : ''}\n${typeof text === 'object' ? JSON.stringify(text) : text}\n\n`;
             }
 
-            let retFile = await file({ e, 'action': 'write', 'raw': !!raw, functionLocal, text, add, 'path': pathOk.replace(/:/g, ''), });
+            let retFile = await file({ e, 'action': 'write', 'raw': !!raw, functionLocal, 'content': text, add, 'path': pathOk.replace(/:/g, ''), });
             if (!retFile.ret) { return retFile; }
 
             ret['res'] = retFile.res;

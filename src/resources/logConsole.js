@@ -1,4 +1,4 @@
-// 'write' → 'true' ESCREVE NO 'PROJECT/logs/JavaScript/log.txt' A MENSAGEM (ASYNC NÃO!!! DO CONTRÁRIO FICA LENTO ESPERANDO SALVAR NO ARQUIVO)
+// 'write' → 'false' NÃO ESCREVER NOS logs A MENSAGEM (ASYNC NÃO!!! DO CONTRÁRIO FICA LENTO ESPERANDO SALVAR NO ARQUIVO)
 // 'breakLine' → 'false' NÃO ADICIONAR QUEBRA DE LINHA
 // logConsole({ e, ee, 'txt': `Mensagem do console`, });
 

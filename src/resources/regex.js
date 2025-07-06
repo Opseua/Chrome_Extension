@@ -1,8 +1,7 @@
 // let infRegex, retRegex;
-// infRegex = { 'pattern': `UM(.*?)TRES`, 'text': `UMdoisTRESquatroTRES`, };
-// infRegex = { 'pattern': `UM(*)TRES`, 'text': `UMdoisTRESquatroTRES`, }; // NOVO MODO
-// infRegex = { 'pattern': `UM(*)TRES`, 'text': `UM\n___doisTRESquatroTRES`, }; // NOVO MODO
-// infRegex = { 'simple': true, 'pattern': `*DOIS*`, 'text': `UMDOISTRES`, };
+// infRegex = { 'pattern': `UM(*)TRES`, 'text': `UMdoisTRESquatroTRES`, };
+// infRegex = { 'pattern': `UM(*)TRES`, 'text': `UM\n___doisTRESquatroTRES`, };
+// infRegex = { 'pattern': `*DOIS*`, 'text': `UMDOISTRES`, 'simple': true, };
 // retRegex = regex(infRegex); console.log(retRegex);
 
 let e = currentFile(), ee = e;
@@ -11,6 +10,11 @@ function regex(inf = {}) { // NÃO POR COMO 'async'!!!
     try {
         let { pattern, text, simple, } = inf;
 
+        // ESCAPAR REGEX
+        function regexEscape(t, m) {
+            if (!m) { t = t.replace(/[*.+?^${}()|[\]\\]/g, '\\$&'); } else { t = t.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*'); } return t;
+        }
+
         if (!pattern) {
             ret['msg'] = `REGEX: ERRO | INFORMAR O 'pattern'`;
         } else if (!text) {
@@ -18,12 +22,12 @@ function regex(inf = {}) { // NÃO POR COMO 'async'!!!
         } else {
             pattern = pattern.replace('(*)', '(.*?)');
             if (pattern.includes('(.*?)')) {
-                let res = {}; let ok = false; let patternSplit = pattern.split('(.*?)');
-                let split1 = patternSplit[0].replace(/[*.+?^${}()|[\]\\]/g, '\\$&');
-                let split2 = patternSplit[1].replace(/[*.+?^${}()|[\]\\]/g, '\\$&'); let result1 = text.match(`${split1}(.*?)${split2}`);
-                let result2 = text.match(`(?<=${split1})(.+)(?=${split2})`); let result3 = text.match(`${split1}([\\s\\S]*?)${split2}`);
-                let result4 = text.match(`(?<=${split1})([\\s\\S]+)(?=${split2})`); let matches = text.match(new RegExp(split1 + '(.*?)' + split2, 'g'));
-                let result5 = matches ? matches.map(function (match) { return match.replace(new RegExp(split1 + '|' + split2, 'g'), ''); }) : [];
+                let res = {}; let ok = false; let patternSplit = pattern.split('(.*?)'); let split1 = regexEscape(patternSplit[0]);
+                let split2 = regexEscape(patternSplit[1]); let result1 = text.match(`${split1}(.*?)${split2}`); let result2 = text.match(`(?<=${split1})(.+)(?=${split2})`);
+                let result3 = text.match(`${split1}([\\s\\S]*?)${split2}`); let result4 = text.match(`(?<=${split1})([\\s\\S]+)(?=${split2})`);
+                let result5 = text.match(new RegExp(split1 + '(.*?)' + split2, 'g'));
+                result5 = result5 ? result5.map(function (match) { return match.replace(new RegExp(split1 + '|' + split2, 'g'), ''); }) : [];
+
                 res['0'] = `res.['1'] → [-|<] | res.['2'] → [-|>] | res.['3'] → [^|<] | res.['4'] → [^|>] | res.['5'] → [-|< ALL]`;
                 if (result1 && result1.length > 0) {
                     res['1'] = result1[1]; ok = true;
@@ -58,7 +62,7 @@ function regex(inf = {}) { // NÃO POR COMO 'async'!!!
                     ret['msg'] = `REGEX: OK | NENHUM PADRÃO ENCONTRADO`;
                 }
             } else {
-                pattern = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+                pattern = regexEscape(pattern, true);
                 let result = new RegExp(`^${pattern}$`).test(text);
                 if (simple) {
                     return result;

@@ -2,7 +2,7 @@
 let arrGlobal = [
   // FUNÇÃO NATIVAS
   'console', 'setTimeout', 'setInterval', 'clearTimeout', 'AbortController', 'TextEncoder', 'fetch', 'prompt', 'document', 'XPathResult', 'Blob', 'URL', 'DOMParser', 'atob', 'btoa',
-  'alert', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle', 'alertConsole', 'currentFile', 'NodeFilter', 'Node', 'MouseEvent', 'window',
+  'alert', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle', 'alertConsole', 'currentFile', 'NodeFilter', 'Node', 'MouseEvent', 'window', 'navigator',
 
   // VARIÁVEIS GLOBAIS
   'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des', 'portStopwatch', 'sP',
@@ -32,7 +32,7 @@ let arrGlobal = [
   'command2', 'tryRatingComplete', 'startupTime', 'crashCode',
 
   // funções globais → [Sniffer_Python]
-  'ewoq', 'tryRating', 'getResponseTryRating', 'performTask', 'correiosServer',
+  'ewoq', 'scilliance', 'tryRating', 'getResponseTryRating', 'performTask', 'correiosServer',
 
   // funções globais → [URA_Reversa]
   'leadChangeStatus', 'leadGet', 'leads', 'leadsJsf', 'login',
