@@ -17,8 +17,12 @@ function regex(inf = {}) { // NÃO POR COMO 'async'!!!
 
         if (!pattern) {
             ret['msg'] = `REGEX: ERRO | INFORMAR O 'pattern'`;
+        } else if (!(typeof pattern === 'string')) {
+            ret['msg'] = `REGEX: ERRO | INFORMAR O 'pattern' EM STRING`;
         } else if (!text) {
             ret['msg'] = `REGEX: ERRO | INFORMAR O 'text'`;
+        } else if (!(typeof text === 'string')) {
+            ret['msg'] = `REGEX: ERRO | INFORMAR O 'text' EM STRING`;
         } else {
             pattern = pattern.replace('(*)', '(.*?)');
             if (pattern.includes('(.*?)')) {
@@ -28,7 +32,7 @@ function regex(inf = {}) { // NÃO POR COMO 'async'!!!
                 let result5 = text.match(new RegExp(split1 + '(.*?)' + split2, 'g'));
                 result5 = result5 ? result5.map(function (match) { return match.replace(new RegExp(split1 + '|' + split2, 'g'), ''); }) : [];
 
-                res['0'] = `res.['1'] → [-|<] | res.['2'] → [-|>] | res.['3'] → [^|<] | res.['4'] → [^|>] | res.['5'] → [-|< ALL]`;
+                res['0'] = `['1'] → (-|<) @@@ ['2'] → (-|>) @@@ ['3'] → (^|<) @@@ ['4'] → (^|>) @@@ ['5'] → (-|< ALL)`;
                 if (result1 && result1.length > 0) {
                     res['1'] = result1[1]; ok = true;
                 } else {

@@ -9,13 +9,9 @@
 // let obj = { 'keyA': 'valueA', 'keyB': 'valueB', 'keyC': 'valueC' }; for (let key in obj) { console.log(key); console.log(obj[key]); }
 
 /* FORMATAR EM '0001' */ // number = String(number).padStart(4, '0'); 
-
 /* ESPERAR E EXECUTAR UMA VEZ */ // setTimeout(() => { console.log('OK'); }, 2000);
-
 /* ESPERAR E REPETIR */ // setInterval(() => { console.log('OK'); }, 2000);
-
 /* TIMEOUT */ // let timeout = setTimeout(() => { console.log('OK'); }, 2000); clearTimeout(timeout);
-
 /* LOOP 99 VEZES */ // for (let index = 0; index < 99; index++) { console.log('INDEX', index); };
 
 /* QUALQUER → BASE64 | BASE64 → UTF8 */ // let qualquerParaBase64 = Buffer.from('CASAMENTO').toString('base64'); console.log(`qualquerParaBase64 ${qualquerParaBase64}`) // npm prune (REMOVER BIBLIOTECAS DESNCESSÁRIAS)
@@ -36,14 +32,14 @@ let portLoc = `${serverLoc.port}`; let hostPortLoc = `${hostLoc}:${portLoc}`; le
 let portWeb = `${serverWeb.port}`; let hostPortWeb = `${hostWeb}:${portWeb}`; let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing;
 let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop; let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages; let devMy = conf.devMy;
 let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`; let par5 = `${securityPass}-${conf.par5}`;
-let par8 = `${securityPass}-${conf.par8}`; let par9 = `${securityPass}-${conf.par9}`; let par10 = `${securityPass}-${conf.par10}`; let par11 = `${conf.par11}`;
+let par6 = `${securityPass}-${conf.par6}`; let par7 = `${securityPass}-${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`; let par9 = `${conf.par9}`;
 let hostPort = `${letter === 'D' ? hostPortLoc : hostPortWeb}/?roo=`; let devSend = `${hostPort}${devMy}-${devices[0][0]}-${devices[0][2][0]}`;
 let devSever = `${hostPort}${devMaster}-${devices[eng ? 0 : 1][0]}-${devices[eng ? 0 : 1][2][0]}`;
 
 gW = { // MANTER APÓS O 'devSend'
     ...gW, securityPass, 'serverWeb': serverWeb.host, portWeb, 'serverLoc': serverLoc.host, serverWebEstrelar, portLoc, devMaster, 'devSlave': engName, devSend, devices, hostPortWeb, hostPortLoc, secConnect, secReconnect,
-    secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, devSever, par1, par2, par3, par4, par5, par8, par9, par10, par11,
-    firstFileCall: sP.split('/').pop().replace('_TEMP', '').replace('.js', ''), // ← DISPONÍVEL APENAS NO 'WebScraper' →→→ 'New2', 'New3', 'New4'...
+    secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, devSever, par1, par2, par3, par4, par5, par6, par7, par8, par9,
+    'firstFileCall': sP.split('/').pop().replace('_TEMP', '').replace('.js', ''), // ← DISPONÍVEL APENAS NO 'WebScraper' →→→ 'New2', 'New3', 'New4'...
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -57,8 +53,10 @@ let gOListener = []; let gOObj = {}; function gOList(listener) { gOListener.push
 // gOList(async function () { console.log('globalObject [import] ALTERADO →', gO.inf) }); gO.inf['NovaChave'] = { 'a': 'b' }; gO.inf['NovaChave'] = ['a', 'b', 'c',]; console.log(gO.inf)
 
 // ############### RATE LIMIT ###############
-function rateLimiter(inf = {}) { let { max, sec, } = inf; let i = sec * 1000, t = []; return { check: () => { let n = Date.now(); t.push(n); while (t[0] < n - i) { t.shift(); } return t.length <= max; }, }; }
-// let rate = rateLimiter({ 'max': 3, 'sec': 5 }); function testRate() { console.log(rate.check()); console.log(rate.check()); console.log(rate.check()); console.log(rate.check()) }; testRate();
+function rateLimiter(inf = {}) {
+    let { max, sec, } = inf; let i = sec * 1000, t = [], b = 'BLOQUEADO ATÉ ', r, m, f = ts => new Date(ts).toLocaleString('pt-BR').replace(/^(\d{2}\/\d{2}).*?(\d{2}:\d{2}:\d{2}).*$/, '$1 $2');
+    return { check: () => { let n = Date.now(); while (t[0] < n - i) { t.shift(); } r = t.length < max; if (r) { t.push(n); m = 'PERMITIDO'; } else { m = b + f(t[0] + i); } return { ret: r, msg: m, }; }, };
+} // let rate = rateLimiter({ 'max': 3, 'sec': 5 }); function testRate() { console.log(rate.check()); console.log(rate.check()); console.log(rate.check()); console.log(rate.check()) }; testRate();
 
 // ############### NÚMERO ALEATÓRIO ###############
 function randomNumber(min, max) { return Math.floor(Math.random() * ((typeof max === 'number' ? max : min + 1) - min + 1) + min); } // console.log(randomNumber(2, 5))
@@ -80,11 +78,8 @@ function awaitTimeout(inf = {}) {
 function clearRun() { if (eng) { console.clear(); } else { process.stdout.write('\u001b[2J\u001b[0;0H'); process.stdout.write('\x1Bc'); } } let msgQtd = 0; let clearConsole = console.log; clearRun();
 console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n'); } };
 
-// ############### CALCULAR TEMPO DE INICIALIZAÇÃO ###############
-function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }
-
-// ############### PATH DA BIBLIOTECA NODE ###############
-function libPath(i = {}) {
+// ############### CALCULAR TEMPO DE INICIALIZAÇÃO | PATH DA BIBLIOTECA NODE ###############
+function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; } function libPath(i = {}) {
     let { p, m, l, } = i; p = `${fileProjetos}/${p}/node_modules/${m}${m.includes('@') ? `/${l}` : ``}`; p = `file:///${p}/${JSON.parse(_fs.readFileSync(`${p}/package.json`)).main.replace(/^(\.\/|\/)/, '')}`; return p;
 }
 
@@ -109,11 +104,26 @@ let qtd1 = 0; async function importLibs(...args) {
     } return libsTem;
 }
 
+// SUBSTITUIR VARIÁVEIS
+function replaceVars(inf = {}) {
+    // eslint-disable-next-line camelcase
+    let { content = '', } = inf; let a = letter, b = fileProjetos, c = fileChrome_Extension, d = fileWindows;
+    return content.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d);
+}
+
+// PEGAR PARTE DE TEXTO DE STRING
+function stringGet(t, m, x, y = 0) {
+    let s = String(t); if (!x) { x = 1; } if (m === '>') { return s.slice(0, x); } if (m === '<') { return s.slice(-x); } if (m === '>|') { return s.slice(x - 1, y); }
+    if (m === '|<') { return s.slice(s.length - y, s.length - x + 1); } if (m === '>+') { return s.slice(x - 1, x - 1 + y + 1); }
+    if (m === '+<') { let f = s.length - x + 1; return s.slice(Math.max(0, f - y - 1), f); } return '';
+} // let s = '123456789'; console.log(stringGet(s, '>', 3)); /* 123 */ console.log(stringGet(s, '<', 3)); /* 789 */ console.log(stringGet(s, '>|', 2, 5)); /* 2345 */ console.log(stringGet(s, '|<', 2, 5)); /* 5678 */
+// console.log(stringGet(s, '>+', 3, 2)); /* 345 */ console.log(stringGet(s, '>+', 3, 999)); /* 3456789 */ console.log(stringGet(s, '+<', 3, 2)); /* 567 */ console.log(stringGet(s, '+<', 3, 999)); /* 567 */
+
 Object.assign(globalThis, {
    /* ## VARIÁVEIS */     cs,
    /* ## GLOBAL OBJECT */ gO, gOList,
     /* ## LISTENER */     listenerMonitorar, listenerAcionar,
-    /* ## FUNÇÕES */      crashCode, rateLimiter, randomNumber, awaitTimeout, clearRun, startupTime, importFun, importLibs,
+    /* ## FUNÇÕES */      crashCode, rateLimiter, randomNumber, awaitTimeout, clearRun, startupTime, importFun, importLibs, replaceVars, stringGet,
 });
 
 // ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!! | NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'

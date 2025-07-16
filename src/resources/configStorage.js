@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+
 
 // 'functionLocal': true/CHAVE_AUSENTE → SALVA EM 'PROJETOS/Chrome_Extension/src/config.json'
 // 'functionLocal': false              → SALVA EM 'PROJETOS/__ProjetoAtual__/src/config.json'
@@ -39,8 +39,7 @@ async function configStorage(inf = {}) {
         }
 
         if (path && (path.includes('!') || path.includes('%'))) {
-            let a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows;
-            path = path.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d);
+            path = replaceVars({ 'content': path, });
         } else if (path && !path.includes(':')) { path = await file({ e, 'action': 'relative', path, functionLocal, }); path = path.res[0]; }
 
         if (!eng && Array.isArray(inf) && inf.length === 1) { // ### CS

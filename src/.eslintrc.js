@@ -16,7 +16,7 @@ let arrGlobal = [
   // ### BIBLIOTECAS / NATIVO → NODE
   '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_createHash', '_puppeteer', '_net', '_getFolderSize', 'process',
   'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard', '_createRequire', '_axios', '_createWriteStream', '_getVideoDurationInSeconds', '_https', '_m3u8Parser',
-  '_createServer', '_createInterface',
+  '_createServer', '_createInterface', '_zlib',
   // GLOBAL OBJECT
   'gO', 'gOList', 'cs',
   // FUNÇÕES
@@ -28,8 +28,8 @@ let arrGlobal = [
   // funções globais → [Chrome_Extension]
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
   'log', 'logConsole', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar',
-  'listenerMonitorar', 'chromeActionsNew', 'importFun', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1',
-  'command2', 'tryRatingComplete', 'startupTime', 'crashCode',
+  'listenerMonitorar', 'chromeActionsNew', 'importFun', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1', 'audioTranscribe',
+  'command2', 'tryRatingComplete', 'startupTime', 'crashCode', 'replaceVars', 'stringGet',
 
   // funções globais → [Sniffer_Python]
   'ewoq', 'scilliance', 'tryRating', 'getResponseTryRating', 'performTask', 'correiosServer',
@@ -39,7 +39,7 @@ let arrGlobal = [
 
   // funções globais → [WebScraper]
   'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData',
-  'clientImput', 'maquinaInput', 'screenshot', 'elementAction',
+  'clientImput', 'maquinaInput', 'screenshot', 'elementAction', 'newAccounts',
 
   // funções globais → [WebSocket]
   'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',

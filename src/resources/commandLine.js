@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+
 
 // let infCommandLine, retCommandLine;
 // infCommandLine = {
@@ -45,8 +45,7 @@ async function commandLine(inf = {}) {
         }
 
         // SUBSTITUIR VARIÁVEIS DE AMBIENTE
-        let a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows;
-        command = command.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d);
+        command = replaceVars({ 'content': command, });
 
         await new Promise((resolve) => {
             let child = _exec(command, (error, stdout, stderr) => {

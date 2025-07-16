@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+
 
 // let infFile, retFile; // 'add': true, 'functionLocal': true, 'encoding': false (conteudo é buffer) | 'latin1' [padrão 'utf8']
 // infFile = { e, 'action': 'relative', 'path': `./PASTA/arquivo.txt`, };
@@ -20,8 +20,7 @@ async function file(inf = {}) {
         let { action = false, functionLocal = false, path = false, pathNew = false, } = inf;
 
         // SUBSTITUIR VARIÁVEIS DE AMBIENTE
-        let retFile, a = letter; let b = fileProjetos; let c = fileChrome_Extension; let d = fileWindows; let pathAndPathNew = `${path || 'NADA'}#_SPLIT_#${pathNew || 'NADA'}`;
-        pathAndPathNew = pathAndPathNew.replace(/[!%](letter|letra)[!%]/g, a).replace(/[!%](fileProjetos)[!%]/g, b).replace(/[!%](fileChrome_Extension)[!%]/g, c).replace(/[!%](fileWindows)[!%]/g, d).split('#_SPLIT_#');
+        let retFile, pathAndPathNew = `${path || 'NADA'}#_SPLIT_#${pathNew || 'NADA'}`; pathAndPathNew = replaceVars({ 'content': pathAndPathNew, }).split('#_SPLIT_#');
         path = pathAndPathNew[0] === 'NADA' ? false : pathAndPathNew[0]; inf.path = path; pathNew = pathAndPathNew[1] === 'NADA' ? false : pathAndPathNew[1]; inf.pathNew = pathNew;
 
         if (!action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'copy', 'md5', 'isFolder', 'storage',].includes(action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
@@ -120,13 +119,13 @@ async function file(inf = {}) {
 
             async function fileChange(inf = {}) {
                 let { functionLocal, path, pathNew, action, } = inf; let resNew = { 'ret': false, }; try {
-                    if (!pathNew || pathNew === '') { resNew['msg'] = `FILE [CHANGE]: ERRO | INFORMAR O 'pathNew'`; } else {
+                    if (!pathNew || pathNew === '') { resNew['msg'] = `FILE [${action.toUpperCase()}]: ERRO | INFORMAR O 'pathNew'`; } else {
                         pathNew = pathNew.replace(/!letter!/g, letter); if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; }
                         if (!pathNew.includes(':')) { retFile = await fileRelative({ 'path': pathNew, functionLocal, }); pathNew = retFile.res[0]; }
                         await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true, }); if (action === 'change') { await _fs.promises.rename(path, pathNew); /* MOVER */ }
-                        else { await _fs.promises.copyFile(path, pathNew); /* COPIAR */ } resNew['ret'] = true; resNew['msg'] = `FILE [CHANGE]: OK`; resNew['res'] = pathNew;
+                        else { await _fs.promises.copyFile(path, pathNew); /* COPIAR */ } resNew['ret'] = true; resNew['msg'] = `FILE [${action.toUpperCase()}]: OK`; resNew['res'] = pathNew;
                     }
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [CHANGE]: ERRO | AO MOVER ARQUIVO '${path}'`; } return resNew;
+                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [${action.toUpperCase()}]: ERRO | AO MOVER/COPIAR ARQUIVO '${path}'`; } return resNew;
             }
 
             async function fileMd5(inf = {}) {

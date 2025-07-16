@@ -1,10 +1,7 @@
-// let infApi, retApi; // 'object' → true | 'maxConnect'/'maxResponse' → 10 | 'buffer' → true | 'hideHeaders' → false ### PUT → atualiza tudo | PATCH → atualiza apenas uma parte
-// // ###### → json/object
-// infApi = { e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'application/json', }, 'body': { 'aaa': 'bbb', }, };
-// // ###### → text
-// infApi = { e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'text/plain;charset=UTF-8', }, 'body': `Esse é o texto`, };
-// // ###### → x-www-form-urlencoded
-// infApi = { e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'application/x-www-form-urlencoded', }, 'body': { 'key': 'value', }, };
+// let infApi, retApi; // 'object': true | 'maxConnect'/'maxResponse': 10 | 'bodyReqRaw'/'bodyResRaw': true (antigo buffer) [Buffer.from(retApi.res.body)] | 'hideHeaders': false
+// infApi = { e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'application/json', }, 'body': { 'aaa': 'bbb', }, }; // ### json/object
+// infApi = { e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'application/x-www-form-urlencoded', }, 'body': { 'key': 'value', }, }; // ### x-www-form-urlencoded
+// infApi = { e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'text/plain;charset=UTF-8', }, 'body': `Esse é o texto`, }; // ### text
 // infApi = [
 //     2, // ESPERAR APENAS PELAS x PRIMEIRAS REQUISIÇÕES CONCLUÍDAS OU 0 PARA TODAS
 //     { 'method': 'GET', 'url': `https://httpstat.us/200?sleep=4000`, 'headers': { 'Content-Type': 'application/json', }, },
@@ -17,7 +14,7 @@
 //     .then(res => { console.log('RES CODE:', res.status); console.log('RES HEADERS:', [...res.headers.entries(),]); return res.text(); })
 //     .then(body => { console.log('RES BODY:', body); }).catch(error => { console.error('RESPONSE error:', error); });
 
-// TESTAR REQUISIÇÃO E TEMPO DE RESPOSTA → https://httpstat.us/200?sleep=5000
+// PUT → atualiza tudo | PATCH → atualiza apenas uma parte | TESTAR REQUISIÇÃO E TEMPO DE RESPOSTA → https://httpstat.us/200?sleep=5000
 
 let e = currentFile(), ee = e;
 async function api(inf = {}) {
@@ -32,7 +29,7 @@ async function api(inf = {}) {
                 }); await Promise.race(f); while (r.length < m && r.length < q.length) { await new Promise(resolve => setTimeout(resolve, 50)); } return r.slice(0, m);
             } let m = 1; let i = inf.findIndex(v => typeof v === 'number'); if (i !== -1) { m = inf.splice(i, 1)[0]; } m = m === 0 ? inf.length : m;
             let s = await apiMulti(m, inf); let t = Array.isArray(s) ? s.some(v => v.ret) : s.ret; return { t, 'msg': `API [MULTI]: ${t ? 'OK' : 'ERRO | ***'}`, s, };
-        } let { method = '', url = false, headers = {}, body = false, maxConnect = 20, maxResponse = 20, object = false, controller = false, hideHeaders = true, buffer = false, } = inf;
+        } let { method = '', url, headers = {}, body, maxConnect = 20, maxResponse = 20, object = false, controller, hideHeaders = true, bodyResRaw, bodyReqRaw, } = inf;
 
         // ❌❌❌❌❌❌❌❌❌❌❌❌ NÃO SUBIR AS LINHAS!!! (PARA SEREM VISUALIZADAS NO GOOGLE APP SCRIPT) | CHECAR SE TEM ERRO ❌❌❌❌❌❌❌❌❌❌❌❌
         reqE = !['GET', 'POST', 'PUT', 'DELETE', 'PATCH',].includes(method) ? 1 : !url ? 2 : (['POST', 'PUT', 'PATCH',].includes(method) && !body) ? 3 : 0;
@@ -43,8 +40,8 @@ async function api(inf = {}) {
         reqOpt['headers'] = {}; if (Object.keys(headers).length > 0) { reqOpt.headers = headers; } function cT() { if (timC) { clearTimeout(timC); } if (timR) { clearTimeout(timR); } }
 
         // REQ: BODY | CHECAR SE TEM ERRO
-        if (!['POST', 'PUT', 'PATCH',].includes(method)) { body = false; } else {
-            let bodyT = !(typeof body === 'object') ? -1 : Object.keys(body).length; // → json/object/text | x-www-form-urlencoded
+        if (!['POST', 'PUT', 'PATCH',].includes(method)) { body = false; } else if (!bodyReqRaw) {
+            let bodyT = !(typeof body === 'object') ? -1 : Object.keys(body).length; // → json/object | x-www-form-urlencoded
             if (!JSON.stringify(reqOpt.headers).toLowerCase().includes('x-www-form-urlencoded')) { body = bodyT === -1 ? body : JSON.stringify(body); }
             else if (!(bodyT > 0)) { reqE = 2; } else { body = Object.entries(body).map(([k, v,]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&'); }
         } if (reqE > 0) { ret['msg'] = `API: ERRO | 'body' VAZIO/NÃO É OBJETO [x-www-form-urlencoded]`; return ret; }
@@ -52,7 +49,24 @@ async function api(inf = {}) {
         // REQ: PREPARAR (GOOGLE | CHROME/NODE)
         if (type) { reqOpt['muteHttpExceptions'] = true; reqOpt['validateHttpsCertificates'] = true; if (body) { reqOpt['payload'] = body; } } else {
             controller = controller || new AbortController(); reqOpt['signal'] = controller.signal;
-            if (body) { reqOpt['body'] = body; let enc = new TextEncoder(); let len = enc.encode(reqOpt.body).length; reqOpt.headers['Content-Length'] = len; }
+            if (body) {
+                reqOpt['body'] = body;
+                // let enc = new TextEncoder(); let len = enc.encode(reqOpt.body).length; reqOpt.headers['Content-Length'] = len;
+
+                // if (bodyReqRaw) {
+                //     if (typeof Buffer !== 'undefined' && Buffer.isBuffer(body)) {
+                //         reqOpt.headers['Content-Length'] = body.length;
+                //     } else if (body instanceof ArrayBuffer || ArrayBuffer.isView(body)) {
+                //         reqOpt.headers['Content-Length'] = body.byteLength || body.length;
+                //     }
+                //     // ⚠️ não defina Content-Length se for blob ou stream (fetch cuida)
+                // } else {
+                //     let enc = new TextEncoder();
+                //     let len = enc.encode(reqOpt.body).length;
+                //     reqOpt.headers['Content-Length'] = len;
+                // }
+
+            }
         }
 
         // → REQ: PROCESSAR (GOOGLE | CHROME/NODE) | LIMPAR TIMEOUT (CHROME/NODE)
@@ -61,7 +75,7 @@ async function api(inf = {}) {
                 let cnt = false; return new Promise((resolve) => {
                     timC = setTimeout(() => { if (!cnt) { controller.abort(); cT(); reqE = 1; resolve(false); } }, (maxConnect * 1000)); fetch(url, reqOpt).then(async req => {
                         cnt = true; clearTimeout(timC); timR = setTimeout(() => { controller.abort(); cT(); reqE = 2; resolve(false); }, (maxResponse * 1000));
-                        let resB = await req[buffer ? 'arrayBuffer' : 'text'](); cT(); resolve({ cod: req.status, url: req.url, hea: req.headers, bod: resB, });
+                        let resB = await req[bodyResRaw ? 'arrayBuffer' : 'text'](); cT(); resolve({ cod: req.status, url: req.url, hea: req.headers, bod: resB, });
                     }).catch(err => { cT(); if (err.name === 'AbortError') { return; } reqE = 3; ret['msg'] = err; resolve(false); });
                 });
             } req = await fetchComTimeout();
