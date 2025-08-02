@@ -1,5 +1,3 @@
-
-
 // let infFile, retFile; // 'add': true, 'functionLocal': true, 'encoding': false (conteudo é buffer) | 'latin1' [padrão 'utf8']
 // infFile = { e, 'action': 'relative', 'path': `./PASTA/arquivo.txt`, };
 // infFile = { e, 'action': 'write', 'path': `./PASTA/arquivo.txt`, 'add': true, 'content': `1234\n`, };
@@ -28,15 +26,14 @@ async function file(inf = {}) {
         else if (action !== 'inf' && (!path || path === '')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'path'`; } else {
             function formatBytes(b, d = 2) {
                 if (b === 0) { return '0 Bytes'; } let i = Math.floor(Math.log(b) / Math.log(1024)); return parseFloat((b / Math.pow(1024, i)).toFixed(d < 0 ? 0 : d)) + ' ' + ['bytes', 'KB', 'MB', 'GB',][i];
-            } function rawText(inf = {}) {
+            } function typeEncoding(e) { e = e === false ? undefined : e === true || !e ? 'utf8' : e; return e; } function rawText(inf = {}) {
                 let { obj, concat, } = inf; let ret = ''; try {
                     if ((/<!.* html>.*<\/html>/s.test(obj) || !(typeof obj === 'object'))) { return obj; } else {
                         let raw = ''; concat = concat || `\n\n######################################################################\n\n`;
                         for (let c in obj) { if (typeof obj[c] === 'object') { for (let sC in obj[c]) { raw += obj[c][sC] + concat; } } else { raw += obj[c] + concat; } } ret = `${JSON.stringify(obj)}\n\n\n\n${raw}`;
                     }
                 } catch (catchErr) { } return ret;
-            }
-            // ****************************************************************************************************************************************
+            } // ****************************************************************************************************************************************
 
             async function fileRelative(inf = {}) {
                 let { path, functionLocal, } = inf; let resNew = { 'ret': false, }; try {
@@ -50,15 +47,7 @@ async function file(inf = {}) {
             }
 
             async function fileWrite(inf = {}) {
-                let { functionLocal, path, add = false, content, text, raw, encoding = 'utf8', } = inf;
-
-                // REMOVER DEPOIS (ALERTA DE CHAVE ANTIGA)
-                if (text && !path.includes(`:/ARQUIVOS/PROJETOS/WebSocket/logs/Registros/MES_0`)) {
-                    content = text; notification({ e, 'legacy': true, 'ignoreErr': true, 'title': `ALERTA FILE!`, 'text': `(${gW.devMaster}) [${gW.devSlave}] {${gW.project}}\nPATH:\n${path}`, });
-                    await log({ e, 'byHour': true, 'folder': 'JavaScript', 'path': `FILE_ERRO_CHAVE.txt`, 'text': `PATH:\n${path}\n\nTEXT:\n${content.toString()}`, });
-                }
-
-                let resNew = { 'ret': false, }; try {
+                let { functionLocal, path, add = false, content, raw, encoding, } = inf; encoding = typeEncoding(encoding); let resNew = { 'ret': false, }; try {
                     if (!content || content === '') { resNew['msg'] = `FILE [WRITE]: ERRO | INFORMAR O 'content'`; } else {
                         if (raw) { content = rawText({ e, 'obj': content, }); /* RAW */ } else if (encoding && typeof content === 'object') { content = JSON.stringify(content); /* OBJETO */ }
                         if (path.includes(':')) { if (eng) { path = path.split(':/')[1]; } } else {
@@ -78,12 +67,12 @@ async function file(inf = {}) {
             }
 
             async function fileRead(inf = {}) {
-                let { functionLocal, path, encoding = 'utf8', } = inf; let resNew = { 'ret': false, }; try {
+                let { functionLocal, path, encoding, } = inf; encoding = typeEncoding(encoding); let resNew = { 'ret': false, }; try {
                     let retFetch; if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } if (eng) { // CHROME
                         if (!functionLocal) { path = `file:///${path}`; } path = path.replace('%', ''); // ENCODIFICAR PATH *********************
                         let pathParts = path.replace('file:///', '').split(':/'); path = (path.includes('file:///') ? 'file:///' : '') + pathParts[0] + ':/' + pathParts[1].split('/').map(encodeURIComponent).join('/');
                         retFetch = await fetch(path); retFetch = await retFetch.text(); if (retFetch.includes('The Chromium Authors')) { throw new Error('erro'); } // NODE
-                    } else { let options = path.match(/\.(jpg|jpeg|png|ico)$/) ? undefined : encoding || undefined; retFetch = await _fs.promises.readFile(path, options); }
+                    } else { let options = path.match(/\.(jpg|jpeg|png|ico)$/) ? undefined : encoding; retFetch = await _fs.promises.readFile(path, options); }
                     resNew['ret'] = true; resNew['msg'] = `FILE [READ]: OK`; resNew['res'] = retFetch;
                 } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [READ]: ERRO | AO LER ARQUIVO '${path}'`; } return resNew;
             }
@@ -173,7 +162,7 @@ async function file(inf = {}) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     }
 
-    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
 }
 
 // CHROME | NODE

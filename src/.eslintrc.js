@@ -32,7 +32,7 @@ let arrGlobal = [
   'command2', 'tryRatingComplete', 'startupTime', 'crashCode', 'replaceVars', 'stringGet',
 
   // funções globais → [Sniffer_Python]
-  'ewoq', 'scilliance', 'tryRating', 'getResponseTryRating', 'performTask', 'correiosServer',
+  'ewoq', 'scilliance', 'tryRating', 'getResponseTryRating', 'performTask', 'correiosServer', 'targetAlert',
 
   // funções globais → [URA_Reversa]
   'leadChangeStatus', 'leadGet', 'leads', 'leadsJsf', 'login',
@@ -61,7 +61,7 @@ export let jsConfig = [
     // PASTAS OU ARQUIVOS IGNORADOS
     'ignores': [
       // '**/resources/chats/**', '**/*lipboard.js', // TODA A PASTA | PARTE DO NOME DO ARQUIVO
-      '**/resources/chats/**', '**/teste*.js',
+      '**/resources/chats/**', // '**/teste*.js',
     ],
     // VARIÁVEIS GLOBAIS
     'languageOptions': { 'globals': arrGlobalObj, },

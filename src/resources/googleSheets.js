@@ -1,19 +1,19 @@
 // let infGoogleSheets, retGoogleSheets;
 // infGoogleSheets = {
-//     e, 'action': 'get', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'abaNome',
+//     e, 'action': 'get', 'id': `1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q`, 'tab': `abaNome`,
 //     'range': `xx`, // 'A1' → CÉLULA ÚNICA | 'A1:A2' → PERÍMETRO | 'A:A' → COLUNA
 // };
 // infGoogleSheets = {
-//     e, 'action': 'send', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'abaNome',
+//     e, 'action': 'send', 'id': `1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q`, 'tab': `abaNome`,
 //     'range': `xx`, // 'A1' → JÁ CALCULA A ÚLTIMA COLUNA | 'A*' →  ÚLTIMA LINHA EM BRANCO DA COLUNA
 //     'values': [['a', 'b', 'c', 'd',],],
 // };
 // infGoogleSheets = { // 'googleAppScript': false,
-//     e, 'action': 'lastLin', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'abaNome',
+//     e, 'action': 'lastLin', 'id': `1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q`, 'tab': `abaNome`,
 //     'range': `A1:A10`, // 'A1:A10' → PERÍMETRO | 'A:A' → COLUNA
 // };
 // infGoogleSheets = {
-//     e, 'action': 'addLines', 'id': '1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q', 'tab': 'abaNome',
+//     e, 'action': 'addLines', 'id': `1BKI7XsKTq896JcA-PLnrSIbyIK1PaakiAtoseWmML-Q`, 'tab': `abaNome`,
 //     'values': [['A1', 'B1', 'C1',], ['A2', 'B2', 'C2',],], // ADICIONAR DUAS LINHAS A PARTIR DA COLUNA 'A'
 // };
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
@@ -84,7 +84,7 @@ async function googleSheets(inf = {}) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     }
 
-    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
 }
 
 // CHROME | NODE

@@ -67,7 +67,7 @@ async function tabAction(inf = {}) {
     }
     if (!ret.ret) { if (inf.openIfNotExist) { let retOpenTab = await openTab(inf); if ('id' in retOpenTab) { ret['res'] = retOpenTab; ret['msg'] = `TAB ACTION: OK`; ret['ret'] = true; } else { ret['msg'] = retOpenTab; } } }
 
-    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
 }
 
 async function openTab(inf = {}) { // NAO USAR

@@ -43,7 +43,7 @@ if not %errorlevel%==0 ( !fileLog! "[PROCESS] = [exe: NAO - old: !ret2! - call: 
 
 rem ### → ACAO | PARAR [FORCADO] PILHA DE PROCESSOS (NAO SUBIR O 'taskkill'!!!)
 if "!actionRun!" == "OFF" (
-	if "!letra!" == "D" ( set "admName=Administrador" ) else ( set "admName=Administrator" )
+	if "!sistemaTipo!" == "OUTROS" ( set "admName=Administrador" ) else ( set "admName=Administrator" )
 	taskkill /F /FI "WINDOWTITLE eq !admName!:  !programExe!_CMD" /T
 )
 

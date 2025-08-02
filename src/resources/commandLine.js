@@ -1,8 +1,6 @@
-
-
 // let infCommandLine, retCommandLine;
 // infCommandLine = {
-//     e, // 'notBackground': false, 'awaitFinish': false, 'notAdm': false, 'withCmd': false, 'view': false, 'delay': 0, 'terminalPath': `!letter!:/PASTA 1`,
+//     e, // 'notBackground': true, 'awaitFinish': true, 'notAdm': true, 'withCmd': true, 'view': false, 'delay': 0, 'terminalPath': `!letter!:/PASTA 1`, 'notReplaceVars': true,
 //     // ****************** NORMAL
 //     'command': `notepad`,
 //     // ****************** CMD {withCmd → true}
@@ -25,7 +23,7 @@ async function commandLine(inf = {}) {
     try {
         /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['child_process']) { libs['child_process']['exec'] = 1; libs = await importLibs(libs, 'commandLine'); }
 
-        let { command = false, awaitFinish = false, notAdm = false, notBackground = false, view = false, delay = 0, terminalPath = false, withCmd = false, } = inf;
+        let { command = false, awaitFinish = false, notAdm = false, notBackground = false, view = false, delay = 0, terminalPath = false, withCmd = false, notReplaceVars = false, } = inf;
 
         if (!command) { ret['msg'] = `COMMAND LINE: ERRO | INFORMAR O 'command'`; return ret; }
 
@@ -44,8 +42,10 @@ async function commandLine(inf = {}) {
             command = `"%3_BACKGROUND%"${ps.length > 0 ? ' ' + ps.join(' ') : ''} ${withCmd ? `"cmd.exe /c ${command}"` : `${command}`}`;
         }
 
-        // SUBSTITUIR VARIÁVEIS DE AMBIENTE
-        command = replaceVars({ 'content': command, });
+        // SUBSTITUIR VARIÁVEIS DE AMBIENTE (SE NÃO FOR TRUE)
+        if (!notReplaceVars) {
+            command = replaceVars({ 'content': command, });
+        }
 
         await new Promise((resolve) => {
             let child = _exec(command, (error, stdout, stderr) => {
@@ -70,7 +70,7 @@ async function commandLine(inf = {}) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     }
 
-    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
 }
 
 // CHROME | NODE

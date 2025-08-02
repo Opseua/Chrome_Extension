@@ -31,14 +31,14 @@ let devices = [[conf.devices.is[engName].sendTo, devicesKeysSend, devicesValuesS
 let portLoc = `${serverLoc.port}`; let hostPortLoc = `${hostLoc}:${portLoc}`; let serverWeb = conf.server['2']; let serverWebEstrelar = conf.server['3'].host; let hostWeb = `${serverWeb.host}`;
 let portWeb = `${serverWeb.port}`; let hostPortWeb = `${hostWeb}:${portWeb}`; let secConnect = conf.secConnect; let secReconnect = conf.secReconnect; let secRetWebSocket = conf.secRetWebSocket; let secPing = conf.secPing;
 let secPingTimeout = conf.secPingTimeout; let secLoop = conf.secLoop; let kbPartsMessage = conf.kbPartsMessage; let minClearPartsMessages = conf.minClearPartsMessages; let devMy = conf.devMy;
-let par1 = `${securityPass}-${conf.par1}`; let par2 = `${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`; let par5 = `${securityPass}-${conf.par5}`;
-let par6 = `${securityPass}-${conf.par6}`; let par7 = `${securityPass}-${conf.par7}`; let par8 = `${securityPass}-${conf.par8}`; let par9 = `${conf.par9}`;
+let par0 = `${conf.par0}`; let par1 = `${securityPass}-${conf.par1}`; let par2 = `${securityPass}-${conf.par2}`; let par3 = `${securityPass}-${conf.par3}`; let par4 = `${securityPass}-${conf.par4}`;
+let par5 = `${securityPass}-${conf.par5}`; let par6 = `${securityPass}-${conf.par6}`; let par7 = `${securityPass}-${conf.par7}`; let par8 = `${conf.par8}`;
 let hostPort = `${letter === 'D' ? hostPortLoc : hostPortWeb}/?roo=`; let devSend = `${hostPort}${devMy}-${devices[0][0]}-${devices[0][2][0]}`;
 let devSever = `${hostPort}${devMaster}-${devices[eng ? 0 : 1][0]}-${devices[eng ? 0 : 1][2][0]}`;
 
 gW = { // MANTER APÓS O 'devSend'
     ...gW, securityPass, 'serverWeb': serverWeb.host, portWeb, 'serverLoc': serverLoc.host, serverWebEstrelar, portLoc, devMaster, 'devSlave': engName, devSend, devices, hostPortWeb, hostPortLoc, secConnect, secReconnect,
-    secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, devSever, par1, par2, par3, par4, par5, par6, par7, par8, par9,
+    secRetWebSocket, secPing, secPingTimeout, secLoop, kbPartsMessage, minClearPartsMessages, devMy, devSever, par0, par1, par2, par3, par4, par5, par6, par7, par8,
     'firstFileCall': sP.split('/').pop().replace('_TEMP', '').replace('.js', ''), // ← DISPONÍVEL APENAS NO 'WebScraper' →→→ 'New2', 'New3', 'New4'...
 };
 

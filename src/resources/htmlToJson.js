@@ -28,7 +28,7 @@ async function htmlToJson(inf = {}) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     }
 
-    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
 }
 
 // CHROME | NODE
@@ -42,7 +42,7 @@ globalThis['htmlToJson'] = htmlToJson;
 // infHtmlToJson = {
 //     e, 'mode': 1, 'object': true,
 //     // TEM O CABEÇALHO [SIM]
-//     html:
+//     'html':
 //         `
 //     <table>
 //         <thead>
@@ -76,7 +76,7 @@ globalThis['htmlToJson'] = htmlToJson;
 // infHtmlToJson = {
 //     e, 'mode': 2, 'object': true,
 //     // TEM O CABEÇALHO [NÃO]
-//     html:
+//     'html':
 //         `
 //     <table>
 //         <tbody>
@@ -103,7 +103,7 @@ globalThis['htmlToJson'] = htmlToJson;
 // infHtmlToJson = {
 //     e, 'mode': 3, 'object': true,
 //     // TEM O CABEÇALHO [SIM → PRIMEIRO VALOR]
-//     html:
+//     'html':
 //         `
 //     <table>
 //         <tbody>

@@ -8,9 +8,9 @@
 // // → 'duration': 3 | COMUNICADOS ( 'NOVA TASK' / 'NÃO É BLIND / REPORT DE TAREFAS )
 // // → 'duration': 2 | COMUNICADOS ( 'SNIFFER [ativado/desativado' )
 
-let e = currentFile(), ee = e;
+let e = currentFile(), ee = e; let rate = rateLimiter({ 'max': 5, 'sec': 5, });
 async function notification(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e; if (!rate.check().ret) { crashCode('notification: MUITAS CHAMADAS!!!'); }
     try {
         let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = true, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacy = false, } = inf;
 
@@ -85,7 +85,7 @@ async function notification(inf = {}) {
         else { let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res']; }
     }
 
-    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
 }
 
 // CHROME | NODE

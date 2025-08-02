@@ -64,7 +64,8 @@ async function getPath(inf = {}) {
         }
         res['file'] = fileOk; res['line'] = Number(line);
     } catch (catchErr) {
-        console.log(`\n\n### ERRO GET PATH ###\n\n${catchErr.stack}\n\n`); res = { 'conf': nd, 'letter': nd, 'root': nd, 'functions': nd, 'project': nd, 'file': nd, 'line': 0, };
+        console.log(`\n\n### ERRO GET PATH ###\n\n${catchErr.stack}\n\n${pathsKeep}\n\n${catchErr.toString()}\n\n${inf.toString()}`);
+        res = { 'conf': nd, 'letter': nd, 'root': nd, 'functions': nd, 'project': nd, 'file': nd, 'line': 0, };
     }
 
     letter = res.letter; gW['conf'] = res.conf; gW['letter'] = res.letter; gW['root'] = res.root; gW['functions'] = res.functions; gW['project'] = res.project; gW['file'] = res.file; gW['line'] = res.line;
@@ -81,7 +82,7 @@ async function getPath(inf = {}) {
     ret['ret'] = true;
     ret['msg'] = `GET PATH: OK`;
     ret['res'] = res;
-    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
 }
 
 // CHROME | NODE
