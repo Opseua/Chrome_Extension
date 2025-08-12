@@ -91,7 +91,7 @@ async function api(inf = {}) {
         } catch (c) { reqE = 4; ret['msg'] = c; } if (reqE > 0) { ret['msg'] = `API: ERRO | AO PROCESSAR CODE/URL/HEADERS/BODY → ${ret.msg}`; return ret; }
 
         // → RES: FAZER O PARSE DO BODY (SE NECESSÁRIO)
-        if (resH['content-type']?.includes('application/json')) { typeB = false; if (object) { try { let t = JSON.parse(resB); resB = t; typeB = true; } catch (c) { } } }
+        if (resH['content-type']?.includes('application/json')) { typeB = false; if (object) { try { let t = JSON.parse(resB); resB = t; typeB = true; } catch { } } }
 
         ret['ret'] = true;
         ret['msg'] = 'API: OK';

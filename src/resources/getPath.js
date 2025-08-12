@@ -18,7 +18,7 @@ async function getPath(inf = {}) {
         paths = pathsKeep[0];
 
         // ARQUIVO DA PILHA → [ÚLTIMO] {project}
-        if (!eng) { try { pathsNew = pathsKeep[pathsKeep.length - 1].replace(/\\/g, '/').split(`${root}/`)[1].split('/')[0]; } catch (catchErr) { pathsNew = false; } }
+        if (!eng) { try { pathsNew = pathsKeep[pathsKeep.length - 1].replace(/\\/g, '/').split(`${root}/`)[1].split('/')[0]; } catch { pathsNew = false; } }
 
         if (eng) {
             // CHROME

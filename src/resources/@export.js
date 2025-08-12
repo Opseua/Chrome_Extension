@@ -35,7 +35,7 @@ globalThis['devFun'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'pa
 // globalThis['getPath'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/getPath.js', inf, project, }); }; // IMPORTADO NO TOPO
 globalThis['googleSheets'] = (inf) => { return importFun({ 'engOk': (!eng), 'path': './src/resources/googleSheets.js', inf, project, }); };
 globalThis['googleTranslate'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/googleTranslate.js', inf, project, }); };
-globalThis['htmlToJson'] = (inf) => { return importFun({ 'engOk': (!eng), 'path': './src/resources/htmlToJson.js', inf, project, }); };
+globalThis['htmlToJson'] = (inf) => { return importFun({ 'engOk': (true), 'path': './src/resources/htmlToJson.js', inf, project, }); };
 globalThis['log'] = (inf) => { return importFun({ 'engOk': (!eng), 'path': './src/resources/log.js', inf, project, }); };
 globalThis['logConsole'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/logConsole.js', inf, project, }); };
 globalThis['notification'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/notification.js', inf, project, }); };

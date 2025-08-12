@@ -3,6 +3,7 @@ let arrGlobal = [
   // FUNÇÃO NATIVAS
   'console', 'setTimeout', 'setInterval', 'clearTimeout', 'AbortController', 'TextEncoder', 'fetch', 'prompt', 'document', 'XPathResult', 'Blob', 'URL', 'DOMParser', 'atob', 'btoa',
   'alert', 'MutationObserver', 'Event', 'clearInterval', 'KeyboardEvent', 'getComputedStyle', 'alertConsole', 'currentFile', 'NodeFilter', 'Node', 'MouseEvent', 'window', 'navigator',
+  'XmlService',
 
   // VARIÁVEIS GLOBAIS
   'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des', 'portStopwatch', 'sP',
@@ -42,20 +43,20 @@ let arrGlobal = [
   'clientImput', 'maquinaInput', 'screenshot', 'elementAction', 'newAccounts',
 
   // funções globais → [WebSocket]
-  'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
+  'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams', 'timGetOrderDetails',
 
   // funções globais → [IPTV]
   'parseM3u', 'chunksOrder', 'redeCanais',
-];
+],
 
-// ************** VARIÁVEIS NÃO USADAS **************
-let arrUnused = [
-  // 'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',  // outros
-  'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write',
-  'msg', 'sendNtfy', 'e', 'ee', 'index', 'idx', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'stdout',
-];
+  // ************** VARIÁVEIS NÃO USADAS **************
+  arrUnused = [
+    // 'inf[A-Z0-9].+?', 'ret[A-Z0-9].+?',  // outros
+    'dev1', 'dev2', 'dev3', 'dev4', 'lin', 'browser', 'tipo', 'element', 'cookies', '_stackTrace', 'nomeList', 'param1', 'param2', 'ret', 'res', 'host', 'room', 'teste', 'big', 'write',
+    'msg', 'sendNtfy', 'e', 'ee', 'index', 'idx', 'value', 'index1', 'value1', 'index2', 'value2', 'index3', 'value3', 'stdout',
+  ],
 
-let arrGlobalObj = {}; for (let variavel of arrGlobal) { arrGlobalObj[variavel] = 'writable'; }
+  arrGlobalObj = {}; for (let variavel of arrGlobal) { arrGlobalObj[variavel] = 'writable'; }
 export let jsConfig = [
   {
     // PASTAS OU ARQUIVOS IGNORADOS

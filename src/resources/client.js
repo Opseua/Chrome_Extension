@@ -2,7 +2,7 @@ let e = currentFile(), ee = e; let wsServers = { 'rooms': {}, }, reconnecting = 
 async function client(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['ws']) { libs['ws'] = { 'WebSocket': 1, 'pro': 'WebSocket', }; libs = await importLibs(libs, 'client'); }
+        /* IMPORTAR BIBLIOTECA [CHROME/NODE] */ if (libs['ws']) { libs['ws'] = { 'WebSocket': 1, 'pro': 'WebSocket', }; libs = await importLibs(libs, 'client'); }
 
         // ### CONEXÃO
         function connect(inf = {}) {
@@ -28,7 +28,7 @@ async function client(inf = {}) {
                 if (pingPong > 0) { // RECEBIDO: 'PING' ENVIAR 'PONG'
                     if (pingPong === 2) { return; } ws.send('pong'); // logConsole({ e, ee, 'txt': `RECEBEU PING ${locWeb} '${room}'` });
                 } else { // RECEBIDO: OUTRA MENSAGEM
-                    try { message = JSON.parse(message); } catch (catchErr) { message = { message, }; } if (!message.message) { message = { message, }; }
+                    try { message = JSON.parse(message); } catch { message = { message, }; } if (!message.message) { message = { message, }; }
                     if (ws.lastMessage) { ws.send(`pong`); } messageReceived({ ...message, host, room, 'resWs': ws, locWeb, });
                 }
             };
@@ -61,7 +61,7 @@ async function client(inf = {}) {
 
         async function runLis(inf = {}) {
             let { param1, } = inf, { messageId, message, resWs, origin, } = param1; // FUN | OTHER | MENSAGEM NÃO IDENTIFICADA
-            let data = {}; try { data = JSON.parse(message); } catch (catchErr) { } if (data.fun) { devFun({ e, data, messageId, resWs, 'destination': origin, }); }
+            let data = {}; try { data = JSON.parse(message); } catch { } if (data.fun) { devFun({ e, data, messageId, resWs, 'destination': origin, }); }
             else if (data.other) { logConsole({ e, ee, 'txt': `OTHER\n${JSON.stringify(data.other)}`, }); }
         }
 

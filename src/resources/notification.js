@@ -15,7 +15,7 @@ async function notification(inf = {}) {
         let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = true, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacy = false, } = inf;
 
         // [1] → NOTIFICAÇÃO NÃO SOLICITADA | [2] → NOTIFICAÇÃO CHAMADA ret {true} | [msg] NOTIFICAÇÃO CHAMADA ret {false}
-        let { devMy, securityPass, devSever, } = gW; let retDAF = {}; let rets = []; let promises = [];
+        let { devMy, securityPass, devSever, } = gW, retDAF = {}, rets = []; let promises = [];
 
         // NTFY
         if (ntfy) {
@@ -63,7 +63,7 @@ async function notification(inf = {}) {
                                     setTimeout(() => { if (notId) { nots.clear(notId); } }, duration * 1000); resolve(true); // NOTIFICAÇÃO: LIMPAR
                                 });
                             }); return true;
-                        } catch (catchErr) { return false; }
+                        } catch { return false; }
                     } let retSN = await sendNotification(); rets.push({ 'ret': retSN, 'msg': `[CHROME: ${retSN ? 'OK' : 'ERRO | AO ENVIAR NOTIFICAÇÃO'}]`, });
                 })()
             );

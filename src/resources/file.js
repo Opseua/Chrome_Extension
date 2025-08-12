@@ -32,7 +32,7 @@ async function file(inf = {}) {
                         let raw = ''; concat = concat || `\n\n######################################################################\n\n`;
                         for (let c in obj) { if (typeof obj[c] === 'object') { for (let sC in obj[c]) { raw += obj[c][sC] + concat; } } else { raw += obj[c] + concat; } } ret = `${JSON.stringify(obj)}\n\n\n\n${raw}`;
                     }
-                } catch (catchErr) { } return ret;
+                } catch { } return ret;
             } // ****************************************************************************************************************************************
 
             async function fileRelative(inf = {}) {
@@ -43,7 +43,7 @@ async function file(inf = {}) {
                         while (pathFull.length > 0 && relativeParts[0] === '..') { pathFull.pop(); relativeParts.shift(); } let retRel = pathFull.concat(relativeParts).join('/');
                         if (retRel.endsWith('/.')) { retRel = retRel.slice(0, -2); } else if (retRel.endsWith('.') || retRel.endsWith('/')) { retRel = retRel.slice(0, -1); } return retRel;
                     } let res = [`${eng && functionLocal ? '' : `${letter}:/`}${runPath(path, !!functionLocal)}`,]; resNew['ret'] = true; resNew['msg'] = `FILE [RELATIVE]: OK`; resNew['res'] = res; return resNew;
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [RELATIVE]: ERRO | AO CRIAR PATH RELATIVO '${path}'`; } return resNew;
+                } catch { delete resNew['res']; resNew['msg'] = `FILE [RELATIVE]: ERRO | AO CRIAR PATH RELATIVO '${path}'`; } return resNew;
             }
 
             async function fileWrite(inf = {}) {
@@ -63,7 +63,7 @@ async function file(inf = {}) {
                             let options = { 'flag': add ? 'a' : 'w', }; if (encoding) { options['encoding'] = encoding; } await _fs.promises.writeFile(path, content, options);
                         } resNew['ret'] = true; resNew['msg'] = `FILE [WRITE]: OK`; resNew['res'] = path;
                     }
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [WRITE]: ERRO | AO ESCREVER ARQUIVO '${path}'`; } return resNew;
+                } catch { delete resNew['res']; resNew['msg'] = `FILE [WRITE]: ERRO | AO ESCREVER ARQUIVO '${path}'`; } return resNew;
             }
 
             async function fileRead(inf = {}) {
@@ -74,7 +74,7 @@ async function file(inf = {}) {
                         retFetch = await fetch(path); retFetch = await retFetch.text(); if (retFetch.includes('The Chromium Authors')) { throw new Error('erro'); } // NODE
                     } else { let options = path.match(/\.(jpg|jpeg|png|ico)$/) ? undefined : encoding; retFetch = await _fs.promises.readFile(path, options); }
                     resNew['ret'] = true; resNew['msg'] = `FILE [READ]: OK`; resNew['res'] = retFetch;
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [READ]: ERRO | AO LER ARQUIVO '${path}'`; } return resNew;
+                } catch { delete resNew['res']; resNew['msg'] = `FILE [READ]: ERRO | AO LER ARQUIVO '${path}'`; } return resNew;
             }
 
             async function fileDel(inf = {}) {
@@ -85,7 +85,7 @@ async function file(inf = {}) {
                             else { await _fs.promises.unlink(t); }
                         } catch (catchErr) { throw new Error(catchErr); }
                     } await delP(path); resNew['ret'] = true; resNew['msg'] = `FILE [DEL]: OK`; return resNew;
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [DEL]: ERRO | AO DELETAR '${path}'`; } return resNew;
+                } catch { delete resNew['res']; resNew['msg'] = `FILE [DEL]: ERRO | AO DELETAR '${path}'`; } return resNew;
             }
 
             async function fileList(inf = {}) {
@@ -99,11 +99,11 @@ async function file(inf = {}) {
                                 let md5 = false; count++; isFolder = _fs.statSync(fullPath).isDirectory(); stats = getStatus(fullPath); if (!isFolder) { size = await _fs.promises.stat(fullPath); size = size.size; }
                                 if (!isFolder && size && size <= (1 * 1024 * 1024)) { retFile = await fileMd5({ 'path': fullPath, }); md5 = retFile.res; } else if (!isFolder) { md5 = `arquivo muito grande`; }
                                 result.push({ 'ret': true, isFolder, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), 'edit': stats.mtime.toISOString(), 'size': size ? formatBytes(size) : false, md5, });
-                            } catch (catchErr) { result.push({ 'ret': false, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), }); }
+                            } catch { result.push({ 'ret': false, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), }); }
                         } let retOrder = result.sort((a, b) => { if (a.isFolder && !b.isFolder) { return -1; } else if (!a.isFolder && b.isFolder) { return 1; } else { return a.name.localeCompare(b.name); } });
                         let res = retOrder; resNew['ret'] = true; resNew['msg'] = `FILE [LIST]: OK`; resNew['res'] = res;
                     }
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [LIST]: ERRO | AO LISTAR '${path}'`; } return resNew;
+                } catch { delete resNew['res']; resNew['msg'] = `FILE [LIST]: ERRO | AO LISTAR '${path}'`; } return resNew;
             }
 
             async function fileChange(inf = {}) {
@@ -114,7 +114,7 @@ async function file(inf = {}) {
                         await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true, }); if (action === 'change') { await _fs.promises.rename(path, pathNew); /* MOVER */ }
                         else { await _fs.promises.copyFile(path, pathNew); /* COPIAR */ } resNew['ret'] = true; resNew['msg'] = `FILE [${action.toUpperCase()}]: OK`; resNew['res'] = pathNew;
                     }
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [${action.toUpperCase()}]: ERRO | AO MOVER/COPIAR ARQUIVO '${path}'`; } return resNew;
+                } catch { delete resNew['res']; resNew['msg'] = `FILE [${action.toUpperCase()}]: ERRO | AO MOVER/COPIAR ARQUIVO '${path}'`; } return resNew;
             }
 
             async function fileMd5(inf = {}) {
@@ -122,7 +122,7 @@ async function file(inf = {}) {
                 let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } let fileContent = await _fs.promises.readFile(path);
                     let md5 = _createHash('md5').update(fileContent).digest('hex'); let res = md5; resNew['ret'] = true; resNew['msg'] = `FILE [MD5]: OK`; resNew['res'] = res;
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [MD5]: ERRO | AO CHECAR MD5 '${path}'`; } return resNew;
+                } catch { delete resNew['res']; resNew['msg'] = `FILE [MD5]: ERRO | AO CHECAR MD5 '${path}'`; } return resNew;
             }
 
             async function fileIsFolder(inf = {}) {
@@ -131,7 +131,7 @@ async function file(inf = {}) {
                     let res = _fs.statSync(path).isDirectory(); resNew['ret'] = true; if (!listRead) { resNew['ret'] = true; resNew['msg'] = `FILE [IS FOLDER]: OK`; resNew['res'] = res; } else if (res) {
                         retFile = await fileList({ e, 'action': 'list', path, max, }); resNew = retFile; // USADO SOMENTE NO 'ARQUIVOS WEB' DO SEVIDOR | É PASTA [LISTAR] | É ARQUIVO [LER]
                     } else { resNew['ret'] = true; resNew['msg'] = `FILE [IS FOLDER]: OK`; retFile = await fileRead({ path, 'functionLocal': functionLocal && !eng, }); resNew = retFile; }
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [IS FOLDER]: ERRO | AO CHECAR SE É PASTA '${path}'`; } return resNew;
+                } catch { delete resNew['res']; resNew['msg'] = `FILE [IS FOLDER]: ERRO | AO CHECAR SE É PASTA '${path}'`; } return resNew;
             }
 
             async function fileStorage(inf = {}) {
@@ -147,7 +147,7 @@ async function file(inf = {}) {
                             else if (value.includes('Total de bytes reservados') && resNew.res['used']) { resNew.res['used'] = resNew.res['used'] + valueNew; resNew.res['usedFormated'] = formatBytes(resNew.res['used']); }
                         }
                     } resNew['ret'] = true; resNew['msg'] = `FILE [STORAGE]: OK`;
-                } catch (catchErr) { delete resNew['res']; resNew['msg'] = `FILE [STORAGE]: ERRO | AO OBTER INFORMAÇÕES DO DISCO '${path}'`; } return resNew;
+                } catch { delete resNew['res']; resNew['msg'] = `FILE [STORAGE]: ERRO | AO OBTER INFORMAÇÕES DO DISCO '${path}'`; } return resNew;
             }
 
             // ****************************************************************************************************************************************

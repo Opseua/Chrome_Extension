@@ -4,21 +4,40 @@ let e = currentFile(), ee = e; let libs = { 'cheerio': {}, };
 async function htmlToJson(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['cheerio']) { libs['cheerio']['cheerio'] = 1; libs = await importLibs(libs, 'htmlToJson'); }
+        /* IMPORTAR BIBLIOTECA [NODE] */ if (!eng && libs['cheerio']) { libs['cheerio']['cheerio'] = 1; libs = await importLibs(libs, 'htmlToJson'); }
 
-        let { html, mode, object = false, } = inf;
+        let { html, mode = 'new', object = true, } = inf; let result = [];
 
-        let $ = _cheerio.load(html); let result = [], headers = [], randomCol = !(mode === 1); let hasHeader = $('table thead').length > 0;
+        if (mode !== 'new') {
 
-        // SE CONTEM O CABEÇALHO 
-        if (hasHeader) { $('table thead th').each((i, header) => { headers.push(randomCol ? `col${i + 1}` : $(header).text().trim()); }); }
-        $('table tbody tr').each((index, row) => {
-            let rowData = {}; $(row).find('td').each((i, cell) => { let key = hasHeader ? headers[i] : `col${i + 1}`; rowData[key] = $(cell).text().trim(); });
-            if (!hasHeader && index === 0) { result.push(Object.fromEntries(Object.entries(rowData).map(([key, value,]) => [key, value,]))); }
-            else { result.push(rowData); }
-        });
+            // ############## REMOVER ISSO E USAR APENAS O NOVO MÉTODO ##############
 
-        if (mode === 3) { let keys = Object.values(result[0]); result = result.slice(1).map(obj => { let newObj = {}; keys.forEach((key, index) => { newObj[key] = obj[`col${index + 1}`]; }); return newObj; }); }
+            // MODO ANTIGO (ORIGINAL)
+            let $ = _cheerio.load(html); let headers = [], randomCol = !(mode === 1); let hasHeader = $('table thead').length > 0;
+
+            // SE CONTEM O CABEÇALHO 
+            if (hasHeader) { $('table thead th').each((i, header) => { headers.push(randomCol ? `col${i + 1}` : $(header).text().trim()); }); }
+            $('table tbody tr').each((index, row) => {
+                let rowData = {}; $(row).find('td').each((i, cell) => { let key = hasHeader ? headers[i] : `col${i + 1}`; rowData[key] = $(cell).text().trim(); });
+                if (!hasHeader && index === 0) { result.push(Object.fromEntries(Object.entries(rowData).map(([key, value,]) => [key, value,]))); } else { result.push(rowData); }
+            }); if (mode === 3) {
+                let keys = Object.values(result[0]); result = result.slice(1).map(obj => { let newObj = {}; keys.forEach((key, index) => { newObj[key] = obj[`col${index + 1}`]; }); return newObj; });
+            }
+        } else {
+            // MODO NOVO (CHROME/NODE/GOOGLE)
+            let linhas = [], trMatches = html.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []; for (let i = 0; i < trMatches.length; i++) {
+                let tr = trMatches[i], tdMatches = tr.match(/<(td|th)[^>]*>([\s\S]*?)<\/\1>/gi) || [], colunas = [];
+                for (let j = 0; j < tdMatches.length; j++) { let conteudo = tdMatches[j].replace(/<\/?[^>]+>/g, '').trim(); colunas.push(conteudo); } linhas.push(colunas);
+            }
+            // ORGANIZAR RETORNO
+            function formatParsedTable(parsedData) {
+                if (!Array.isArray(parsedData) || parsedData.length === 0) { return []; }
+                let maxCols = 0; for (let i = 0; i < parsedData.length; i++) { if (parsedData[i].length > maxCols) { maxCols = parsedData[i].length; } }
+                let headerRow = parsedData[0], headerObj = {}; for (let i = 0; i < maxCols; i++) { headerObj[`col${i + 1}`] = headerRow[i] || `col${i + 1}`; } result.push(headerObj);
+                for (let i = 1; i < parsedData.length; i++) { let row = parsedData[i], obj = {}; for (let j = 0; j < maxCols; j++) { obj[`col${j + 1}`] = row[j] || ''; } result.push(obj); } return result;
+            }
+            result = formatParsedTable(linhas);
+        }
 
         ret['ret'] = true;
         ret['msg'] = `HTML TO JSON: OK`;
@@ -34,13 +53,9 @@ async function htmlToJson(inf = {}) {
 // CHROME | NODE
 globalThis['htmlToJson'] = htmlToJson;
 
-// // 'mode' 1 → CHAVE IGUAL O CABEÇALHO (SE TIVER)
-// // 'mode' 2 → CHAVE ALEATÓRIA
-// // 'mode' 3 → CHAVE IGUAL AO PRIMEIRO VALOR DA TABELA
-
 // let infHtmlToJson, retHtmlToJson;
 // infHtmlToJson = {
-//     e, 'mode': 1, 'object': true,
+//     e,
 //     // TEM O CABEÇALHO [SIM]
 //     'html':
 //         `
@@ -70,11 +85,11 @@ globalThis['htmlToJson'] = htmlToJson;
 //             </tr>
 //         </tbody>
 //     </table>
-//     `
-// }
+//     `,
+// };
 
 // infHtmlToJson = {
-//     e, 'mode': 2, 'object': true,
+//     e,
 //     // TEM O CABEÇALHO [NÃO]
 //     'html':
 //         `
@@ -98,37 +113,6 @@ globalThis['htmlToJson'] = htmlToJson;
 //         </tbody>
 //     </table>
 //     `,
-// }
+// };
 
-// infHtmlToJson = {
-//     e, 'mode': 3, 'object': true,
-//     // TEM O CABEÇALHO [SIM → PRIMEIRO VALOR]
-//     'html':
-//         `
-//     <table>
-//         <tbody>
-//             <tr>
-//                 <td>VALOR 1</td>
-//                 <td>VALOR 2</td>
-//                 <td>VALOR 3</td>
-//             </tr>
-//             <tr>
-//                 <td>Amanda</td>
-//                 <td>20</td>
-//                 <td>Brasil</td>
-//             </tr>
-//             <tr>
-//                 <td>Brenda</td>
-//                 <td>25</td>
-//                 <td>EUA</td>
-//             </tr>
-//             <tr>
-//                 <td>Carlos</td>
-//                 <td>30</td>
-//                 <td>Japão</td>
-//             </tr>
-//         </tbody>
-//     </table>
-//     `,
-// }
 // retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson);

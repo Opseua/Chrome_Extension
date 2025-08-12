@@ -1,3 +1,4 @@
+# CONFIGURAR gitIgnore GLOBAL → git config --global core.excludesfile "D:\ARQUIVOS\PROJETOS\Chrome_Extension\.gitignore"
 # IGNORAR [SIM] → {TUDO} (MANTER NO INICIO!!!)
 *
 

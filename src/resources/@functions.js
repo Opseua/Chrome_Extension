@@ -1,6 +1,6 @@
 // await new Promise(r => setTimeout(r, 2000));
 
-/* CHECAR SE É ARRAY  */ // Array.isArray(retHtmlToJson)   |   CHECAR SE TEM A CHAVE  if ('chave' in obj){ }   |   CHECAR SE É OBJETO typeof obj === 'object'
+/* CHECAR SE É ARRAY  */ // Array.isArray(['a', 'b', ])   |   CHECAR SE TEM A CHAVE  if ('chave' in obj){ }   |   CHECAR SE É OBJETO typeof obj === 'object'
 // let { key: atribuirNisso, } = { 'key': 'AAA', }; console.log(atribuirNisso); let arrNew = arr.map((v, index) => ({ index, providerOk: v.provider, actionOk: v.action, })); // PODE REATRIBUIR NA MESMA VARIÁVEL
 // let ret = rets.some(v => v.ret === true)); let ret = rets.every(v => v.ret === true)); 
 // let string = 'a/b/c/d'; console.log(string.split('/').reverse()[0]); console.log(string.split('/').reverse()[1]); console.log(string.split('/').reverse()[2]); // SPLIT POR '/' E PEGAR A PARTIR DO ÚLTIMO ÍNDICE
@@ -16,6 +16,8 @@
 
 /* QUALQUER → BASE64 | BASE64 → UTF8 */ // let qualquerParaBase64 = Buffer.from('CASAMENTO').toString('base64'); console.log(`qualquerParaBase64 ${qualquerParaBase64}`) // npm prune (REMOVER BIBLIOTECAS DESNCESSÁRIAS)
 // let base64ParaUtf8 = Buffer.from(qualquerParaBase64, 'base64').toString('utf8'); console.log(`base64ParaUtf8 ${base64ParaUtf8}`); cd /d D:\ARQUIVOS\PROJETOS\Sniffer_Python
+
+// let engType = typeof document !== 'undefined' ? 1 : typeof global !== 'undefined' ? 2 : 3; // 1 → NAVEGADOR | 2 → NODE | 3 → GOOGLE APP SCRIPT
 
 let _fs, cs; globalThis['engName'] = (eng) ? 'CHROME' : 'NODE'; globalThis['letter'] = 'x'; globalThis['fileProjetos'] = 'x'; globalThis['fileChrome_Extension'] = 'x'; globalThis['fileWindows'] = 'x'; if (!eng) {
     process.noDeprecation = true; _fs = await import('fs'); globalThis['_fs'] = _fs; let m; m = await import('path'); globalThis[`_path`] = m; m = await import('module'); globalThis[`_createRequire`] = m.createRequire;
@@ -47,7 +49,7 @@ gW = { // MANTER APÓS O 'devSend'
 function crashCode(txt = 'QUEBRANDO CÓDIGO...') { console.log(txt); if (eng) { chrome.management.setEnabled(chrome.runtime.id, false); } else { process.exit(); } } // crashCode()
 
 // ############### GLOBAL OBJECT ###############
-let gOListener = []; let gOObj = {}; function gOList(listener) { gOListener.push(listener); } function notificarListeners(prop, value) {
+let gOListener = [], gOObj = {}; function gOList(listener) { gOListener.push(listener); } function notificarListeners(prop, value) {
     if (gO.inf.alert) { console.log('globalObject [export] ALTERADO →', gO.inf); } for (let listener of gOListener) { listener(prop, value); }
 } let gO = new Proxy(gOObj, { set(target, prop, value) { target[prop] = value; notificarListeners(prop, value); return true; }, }); gO.inf = {}; // let cs = await configStorage(['']); console.log(cs)
 // gOList(async function () { console.log('globalObject [import] ALTERADO →', gO.inf) }); gO.inf['NovaChave'] = { 'a': 'b' }; gO.inf['NovaChave'] = ['a', 'b', 'c',]; console.log(gO.inf)
@@ -79,7 +81,7 @@ function clearRun() { if (eng) { console.clear(); } else { process.stdout.write(
 console.log = function () { clearConsole.apply(console, arguments); msgQtd++; if (msgQtd >= 100) { clearRun(); msgQtd = 0; console.log('CONSOLE LIMPO!\n'); } };
 
 // ############### CALCULAR TEMPO DE INICIALIZAÇÃO | PATH DA BIBLIOTECA NODE ###############
-function startupTime(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; } function libPath(i = {}) {
+function startupTime(b, c) { let a = c - b, s = Math.floor(a / 1000), m = a % 1000, f = m.toString().padStart(3, '0'); return `${s}.${f}`; } function libPath(i = {}) {
     let { p, m, l, } = i; p = `${fileProjetos}/${p}/node_modules/${m}${m.includes('@') ? `/${l}` : ``}`; p = `file:///${p}/${JSON.parse(_fs.readFileSync(`${p}/package.json`)).main.replace(/^(\.\/|\/)/, '')}`; return p;
 }
 
@@ -92,16 +94,16 @@ let qtd0 = 0; async function importFun(infOk = {}) {
 
 // {IMPORT BIBLIOTECAS} → [NODE] DINAMICAMENTE QUANDO NECESSÁRIO 
 let qtd1 = 0; async function importLibs(...args) {
-    let libs = args[0]; let libsTem = libs; qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [1]!!!`); crashCode(); } for (let m in libs) {
+    let libs = args[0], libsT = libs; qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [1]!!!`); crashCode(); } for (let m in libs) {
         qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [2]!!!`); crashCode(); } for (let l in libs[m]) {
             qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [3]!!!`); crashCode(); } let mL = false; if (l !== 'pro') {
-                let pro = libs[m]['pro'] === true ? gW.project : libs[m]['pro']; let b0 = libs[m][l] === 1; let b1 = globalThis[`_${l}`]; if (b0 && !b1) {
+                let pro = libs[m]['pro'] === true ? gW.project : libs[m]['pro'], b0 = libs[m][l] === 1, b1 = globalThis[`_${l}`]; if (b0 && !b1) {
                     mL = true; if (!eng) { mL = await import(pro ? libPath({ 'p': pro, m, l, }) : m); } globalThis[`_${l}`] = eng ? globalThis[`${l}`] : (m === l) ? mL : mL[l] || mL.default[l] || mL.default;
-                } if (globalThis[`_${l}`]) { Object.keys(libsTem[m] || {}).length === 2 && libsTem?.[m]?.pro && delete libsTem[m].pro; delete libsTem?.[m]?.[l], Object.keys(libsTem[m] || {}).length || delete libsTem[m]; }
-                // console.log(`${mL ? '✅' : '❌'} | EXISTE (${b1 ? 'SIM' : 'NAO'}) | (${m}${pro && !eng ? '⚠️ ' : ''}) [${l}] | _(${args[1]})_ |`, JSON.stringify(libsTem));
+                } if (globalThis[`_${l}`]) { Object.keys(libsT[m] || {}).length === 2 && libsT?.[m]?.pro && delete libsT[m].pro; delete libsT?.[m]?.[l], Object.keys(libsT[m] || {}).length || delete libsT[m]; }
+                // console.log(`${mL ? '✅' : '❌'} | EXISTE (${b1 ? 'SIM' : 'NAO'}) | (${m}${pro && !eng ? '⚠️ ' : ''}) [${l}] | _(${args[1]})_ |`, JSON.stringify(libsT));
             }
         }
-    } return libsTem;
+    } return libsT;
 }
 
 // SUBSTITUIR VARIÁVEIS
