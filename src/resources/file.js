@@ -11,9 +11,9 @@
 // infFile = { e, 'action': 'storage', 'path': `C:`, }; // SEMPRE COMO 'ADM'!!!
 // retFile = await file(infFile); console.log(retFile);
 
-let e = currentFile(), ee = e; let libs = { 'crypto': {}, 'child_process': {}, };
+let e = currentFile(new Error()), ee = e; let libs = { 'crypto': {}, 'child_process': {}, };
 async function file(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         let { action = false, functionLocal = false, path = false, pathNew = false, } = inf;
 
@@ -37,7 +37,7 @@ async function file(inf = {}) {
 
             async function fileRelative(inf = {}) {
                 let { path, functionLocal, } = inf; let resNew = { 'ret': false, }; try {
-                    let relative = path; let relativeParts; function runPath(pp, par) {
+                    let relative = path, relativeParts; function runPath(pp, par) {
                         if (pp.startsWith('./')) { pp = pp.slice(2); } else if (relative.startsWith('/')) { pp = pp.slice(1); }
                         par = par ? `${gW.root}${eng ? ':/' : ''}/${gW.functions}` : `${eng ? `` : `${gW.root}/`}${gW.project}`; let pathFull = par.split('/'); relativeParts = pp.split('/');
                         while (pathFull.length > 0 && relativeParts[0] === '..') { pathFull.pop(); relativeParts.shift(); } let retRel = pathFull.concat(relativeParts).join('/');
@@ -121,7 +121,7 @@ async function file(inf = {}) {
                 /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['crypto']) { libs['crypto']['createHash'] = 1; libs = await importLibs(libs, 'fileMd5'); }
                 let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } let fileContent = await _fs.promises.readFile(path);
-                    let md5 = _createHash('md5').update(fileContent).digest('hex'); let res = md5; resNew['ret'] = true; resNew['msg'] = `FILE [MD5]: OK`; resNew['res'] = res;
+                    let md5 = _createHash('md5').update(fileContent).digest('hex'), res = md5; resNew['ret'] = true; resNew['msg'] = `FILE [MD5]: OK`; resNew['res'] = res;
                 } catch { delete resNew['res']; resNew['msg'] = `FILE [MD5]: ERRO | AO CHECAR MD5 '${path}'`; } return resNew;
             }
 

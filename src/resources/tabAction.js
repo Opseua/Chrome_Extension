@@ -1,89 +1,92 @@
-// let infTabAction, retTabAction; // 'ATIVA', 'TODAS', '*google*' ou 12345678 (ID)
-// infTabAction = { e, 'action': `changeTitle`, 'search': `*google*`, 'title': 'Novo Título', };
-// infTabAction = { e, 'search': `*google*`, 'openIfNotExist': true, 'active': true, 'pinned': false, 'url': `https://www.google.com/`, };
+// let infTabAction, retTabAction; // [search] → 'ATIVA', 'TODAS', '*www.google.com*' ou 12345678 (ID)
+// infTabAction = {
+//     'search': '*www.google.com*', 'active': false, 'pinned': false, 'index': 0, 'close': false, 'title': 'Novo título da aba',
+//     // 'openOrReload': 'https://www.google.com', // 'https://www.google.com': [SE EXISTIR: NÃO] → open | true: [SE EXISTIR: SIM] → reload | 'https://www.bing.com': [SE EXISTIR: SIM] → navegate
+// };
 // retTabAction = await tabAction(infTabAction); console.log(retTabAction);
 
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function tabAction(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
-        let { action = '', search = '', title = 'VAZIO', } = inf; let result = {};
+        let { search = '_NAO_INFORMADO_', openOrReload, active, pinned, index, title, close, } = inf;
 
-        if (action === 'changeTitle') { // ALTERAR TÍTULO
-            let retTabAction = await tabAction({ e, search, }); if (!retTabAction.ret) { return retTabAction; } function funTeste(funInf) { document.title = funInf.title; return true; }
-            let retChromeActions = await chromeActions({ e, 'action': 'inject', 'target': `*tryrating*`, 'fun': funTeste, 'funInf': { title, }, });
-            if (retChromeActions.ret) { retChromeActions.msg = `TAB ACTION [CHANGE TITLE]: OK`; } return retChromeActions;
-        } else if (search === 'ATIVA') { // ATIVA search
-            result = await new Promise(resolve => {
-                chrome.tabs.query({ active: true, currentWindow: true, }, function (tabs) {
-                    if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {
-                        let tab = tabs[0]; let abaInf = { 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned, }; resolve({ 'res': abaInf, });
-                    } else { resolve(result); }
-                });
-            });
-        } else {
-            result = await new Promise(resolve => {
-                chrome.tabs.query({}, function (tabs) {
-                    if (!(typeof tabs === 'undefined') && (tabs.length > 0)) {
-                        let abaInf = tabs.map(function (tab) { return { 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned, }; }); resolve({ 'res': abaInf, });
-                    } else { resolve(result); }
+        let tabsIdFound = []; async function getTabsInfo(tabId) {
+            return new Promise(resolve => {
+                c.query({}, tabs => {
+                    let res = []; for (let t of tabs) {
+                        if (tabId === null || t.id === tabId) {
+                            let d = dateHour(t.lastAccessed).res; d = `${d.yea}_${d.mon}_${d.day}-${d.hou}.${d.min}.${d.sec}`;
+                            res.push({ 'id': t.id, 'title': t.title, 'url': t.url, 'active': t.active, 'index': t.index, 'pinned': t.pinned, 'incognito': t.incognito, 'lastAccessed': d, 'status': t.status, });
+                        }
+                    } resolve(res);
                 });
             });
         }
-        if ('res' in result) { // ATIVA ret
-            if (search === 'ATIVA') {
-                ret['res'] = { 'id': result.res.id, 'title': result.res.title, 'url': result.res.url, 'active': result.res.active, 'index': result.res.index, 'pinned': result.res.pinned, };
-            } else if (search === 'TODAS') { // TODAS ret
-                ret['res'] = result.res;
-            } else if (typeof search === 'number') { // ID ret
-                for (let obj of result.res) {
-                    let retRegex = regex({ e, 'pattern': search.toString(), 'text': obj.id.toString(), });
-                    if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned, }; break; }
+
+        // ABA(s): BUSCAR
+        let newTab, c = chrome.tabs, res = [], tabs = await new Promise(resolve => c.query({}, resolve)); if (search === 'ATIVA') { let tab = tabs.find(t => t.active); if (tab) { tabsIdFound.push({ ...tab, }); } }
+        else if (search === 'TODAS') { tabsIdFound = tabs.map(t => ({ ...t, })); } else if (typeof search === 'number') { let tab = tabs.find(t => t.id === search); if (tab) { tabsIdFound.push({ ...tab, }); } }
+        else if (typeof search === 'string' && search) { for (let t of tabs) { if (regex({ e, pattern: search, text: t.url, }).ret || regex({ e, pattern: search, text: t.title, }).ret) { tabsIdFound.push({ ...t, }); } } }
+
+        // (SE NECESSÁRIO) ABA: ABRIR
+        let u = openOrReload; if (typeof u === 'string' && !u.includes('chrome') && !u.includes('://')) { openOrReload = `https://${u}`; } if (tabsIdFound.length === 0 && openOrReload && typeof openOrReload === 'string') {
+            let t = await new Promise(resolve => c.create({ url: openOrReload, active: !!active, pinned: !!pinned, ...(typeof index === 'number' ? { index, } : {}), }, resolve)); newTab = t.id; tabsIdFound.push({ ...t, });
+        }
+
+        let cActive = typeof active === 'boolean' ? active : 0, cPinned = typeof pinned === 'boolean' ? pinned : 0, cTitle = title && typeof title === 'string' ? title : 0;
+        let cClose = typeof close === 'boolean' ? close : 0, change = (tabsIdFound.length > 0 && openOrReload) || cActive !== 0 || cPinned !== 0 || typeof index === 'number' || cTitle !== 0 || cClose !== 0;
+        for (let [idx, value,] of tabsIdFound.entries()) {
+            // (SE NECESSÁRIO) ABA: ALTERAR
+            let { id, url, status, } = value;
+            if (change) {
+                // → [navegar/regarregar]
+                if (!newTab && openOrReload) {
+                    if (typeof openOrReload === 'string') { c.update(id, { 'url': openOrReload, }); } else { c.reload(id, { 'bypassCache': false, }); }
                 }
-            } else {
-                for (let obj of result.res) {
-                    let retRegex; retRegex = regex({ e, 'pattern': search, 'text': obj.url, }); // URL ret
-                    if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned, }; break; }
-                    retRegex = regex({ e, 'pattern': search, 'text': obj.title, }); // TITULO ret
-                    if (retRegex.ret) { ret['res'] = { 'id': obj.id, 'title': obj.title, 'url': obj.url, 'active': obj.active, 'index': obj.index, 'pinned': obj.pinned, }; break; }
+                // → [ativa E/OU fixada]
+                if (cActive !== 0 || cPinned !== 0) {
+                    await new Promise(resolve => c.update(id, { ...(cActive !== 0 ? { 'active': cActive, } : {}), ...(cPinned !== 0 ? { 'pinned': cPinned, } : {}), }, resolve));
+                }
+                // → [índice]
+                if (typeof index === 'number') {
+                    await new Promise(resolve => c.move(id, { index, }, resolve));
+                }
+                // *** AGUARDAR TERMINAR DE CARREGAR ***
+                cTitle = cTitle !== 0 && !url.includes('chrome://version') ? cTitle : false;
+                if (status !== 'complete' && (cClose || cTitle)) {
+                    await new Promise(resolve => {
+                        let resolved = false, listener = (tabIdUpdated, changeInfo) => {
+                            if (tabIdUpdated === id && changeInfo.status === 'complete') { if (!resolved) { resolved = true; c.onUpdated.removeListener(listener); resolve(); } }
+                        }; c.onUpdated.addListener(listener); setTimeout(() => { if (!resolved) { resolved = true; c.onUpdated.removeListener(listener); resolve(); } }, 15000);
+                    });
+                }
+                // → [título]
+                if (cTitle) {
+                    await new Promise(resolve => { c.executeScript(id, { 'code': `document.title = ${JSON.stringify(cTitle)};`, }, () => resolve()); });
                 }
             }
-            if ('res' in ret) {
-                ret['msg'] = `TAB ACTION: OK`;
-                ret['ret'] = true;
-            } else if (typeof search === 'number') {
-                ret['msg'] = `TAB SEARCH: ERRO | ABA ID '${search}' NAO ENCONTRADA`;
-            } else {
-                ret['msg'] = `TAB SEARCH: ERRO | ABA '${search}' NAO ENCONTRADA`;
+            // PEGAR INFORMAÇÃO DA ABA (ANTES DE FECHAR!!!)
+            res.push(...(await getTabsInfo(id)));
+            // → (SE NECESSÁRIO) [fechar]
+            if (cClose && change) {
+                await new Promise(resolve => c.remove(id, resolve));
             }
-        } else if (search === 'ATIVA' || search === 'TODAS') {
-            ret['msg'] = `TAB SEARCH: ERRO | NENHUM ABA ATIVA`;
-        } else {
+        }
+
+        if (tabsIdFound.length === 0) {
             ret['msg'] = `TAB SEARCH: ERRO | ABA '${search}' NAO ENCONTRADA`;
+        } else {
+            ret['ret'] = true;
+            ret['msg'] = `TAB SEARCH: OK`;
+            ret['res'] = res;
         }
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     }
-    if (!ret.ret) { if (inf.openIfNotExist) { let retOpenTab = await openTab(inf); if ('id' in retOpenTab) { ret['res'] = retOpenTab; ret['msg'] = `TAB ACTION: OK`; ret['ret'] = true; } else { ret['msg'] = retOpenTab; } } }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
-}
-
-async function openTab(inf = {}) { // NAO USAR
-    try {
-        let { active, pinned, url, } = inf; active = !!active; pinned = !!pinned; url = url || 'https://www.google.com'; return await new Promise((resolve) => {
-            chrome.tabs.create({ url, active, pinned, }, function (novaAba) {
-                chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
-                    if (tabId === novaAba.id && changeInfo.status === 'complete') {
-                        chrome.tabs.get(novaAba.id, function (tab) {
-                            chrome.tabs.onUpdated.removeListener(listener); resolve({ 'id': tab.id, 'title': tab.title, 'url': tab.url, 'active': tab.active, 'index': tab.index, 'pinned': tab.pinned, });
-                        });
-                    }
-                });
-            });
-        });
-    } catch (catchErr) { regexE({ inf, 'e': catchErr, }); }
 }
 
 // CHROME | NODE

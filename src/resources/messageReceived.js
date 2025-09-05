@@ -1,11 +1,9 @@
-let e = currentFile(), ee = e;
-let mensagensPartesRecebida = {};
-
-let minCle = gW.minClearPartsMessages * 60000; // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
+let mensagensPartesRecebida = {}; let minCle = gW.minClearPartsMessages * 60000; // LOOP: APAGAR PARTE ANTIGAS DAS MENSAGENS
 setInterval(() => { let c = new Date().getTime(); for (let mesId in mensagensPartesRecebida) { if ((c - Number(mesId.split('_')[1])) > minCle) { delete mensagensPartesRecebida[mesId]; } } }, minCle);
 
+let e = currentFile(new Error()), ee = e;
 async function messageReceived(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         let { host, room, resWs, wsClients, messageId, partesRestantes = 0, message, buffer = false, origin, destination, } = inf;
 
@@ -15,7 +13,7 @@ async function messageReceived(inf = {}) {
 
         if (wsClients) {
             // ######################################################################## RECEBIDO NO SERVIDOR ########################################################################
-            let wsClientsToSend = [], erroType = 0; let wsClientsArrRoom = []; for (let room in wsClients.rooms) {
+            let wsClientsToSend = [], erroType = 0, wsClientsArrRoom = []; for (let room in wsClients.rooms) {
                 if (regex({ e, 'simple': true, 'pattern': destination, 'text': room, }) && !JSON.stringify(wsClientsArrRoom).includes(room.split('/')[1])) {
                     wsClientsArrRoom.push(room); // 'wsClientsArrRoom' USADO PARA EVITAR QUE O CLIENTE CONECTADO NO 'LOC' E 'WEB' AO MESMO TEMPO RECEBA A MENSAGEM NOS DOIS
                     wsClientsToSend = wsClientsToSend.concat(Array.from(wsClients.rooms[room]));

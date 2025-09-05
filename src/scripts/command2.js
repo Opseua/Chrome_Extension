@@ -1,6 +1,6 @@
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function command2(inf = {}) {
-  let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+  let ret = { 'ret': false, }; e = inf.e || e;
   try {
     await notification({ 'duration': 2, 'icon': 'icon_3.png', 'title': `AGUARDE...`, 'text': `Alternando sniffer`, 'ntfy': false, });
 

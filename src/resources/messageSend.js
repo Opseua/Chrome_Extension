@@ -1,26 +1,27 @@
-// let infMessageSend, retMessageSend;
-// let message = { 'fun': [{ 'securityPass': gW.securityPass, 'retInf': true, 'name': 'notification', 'par': { 'duration': 3, 'title': 'TITULO', 'text': 'TEXTO', }, },], };
-// infMessageSend = { 'destination': '127.0.0.1:1234/?roo=DESTINO_AQUI', 'message': message, 'secondsAwait': 0, };
+// let infMessageSend, retMessageSend, message;
+// message = { 'fun': [{ 'securityPass': gW.securityPass, 'retInf': true, 'name': 'notification', 'par': { 'duration': 3, 'title': 'TITULO', 'text': 'TEXTO', }, },], };
+// infMessageSend = { 'destination': '127.0.0.1:1234/?roo=DESTINO_AQUI', 'message': `${message}`, 'secondsAwait': 0, };
 // retMessageSend = await messageSend(infMessageSend); console.log(retMessageSend);
 
-let e = currentFile(), ee = e; let wsServerLoc = null, wsServerWeb = null;
+let e = currentFile(new Error()), ee = e; let wsServerLoc = null, wsServerWeb = {};
 async function messageSend(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
-        // let { resWs, messageId, secondsAwait, destination, origin, message, } = inf;
         let { resWs = false, messageId = true, secondsAwait = 0, destination = 'x', origin = false, message = {}, } = inf;
 
         messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId.replace('_RET-TRUE', '_RET-OK');
-        let retAwaitTimeout, listenerName; let messageOk, buffer, chunkSize = gW.kbPartsMessage * 1024; if (typeof message === 'object') {
+        let retAwaitTimeout, listenerName, messageOk, buffer, chunkSize = gW.kbPartsMessage * 1024; if (typeof message === 'object') {
             messageOk = JSON.stringify(message); buffer = messageOk.includes(`"type":"Buffer"`) && messageOk.includes(`"data":[`) && !messageOk.includes(`"ret"`);
             messageOk = buffer ? Buffer.from(message).toString('base64') : messageOk;
-        } else { buffer = false; messageOk = message; } let messageLength = messageOk.length; let totalChunks = Math.ceil(messageLength / chunkSize);
+        } else { buffer = false; messageOk = message; } let messageLength = messageOk.length, totalChunks = Math.ceil(messageLength / chunkSize);
         secondsAwait = !messageOk.includes('"retInf":true') ? 0 : secondsAwait > 0 ? secondsAwait : gW.secRetWebSocket; // → TEMPO PADRÃO SE NÃO FOR INFORMADO
-        messageId = secondsAwait === 0 ? `${messageId}` : `${messageId}_RET-TRUE`; let locWeb = destination.includes('127.0.0.1') ? '[LOC]' : '[WEB]'; if (!resWs) { // PEGAR 'ws' (CASO NÃO TENHA SIDO PASSADO)
-            if (!/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}):(\d{4})/.test(destination)) { ret['msg'] = `MESSAGE SEND: ERRO | 'destination' NÃO FAZ PARTE DO [LOC] NEM [WEB]`; return ret; } else {
-                resWs = (locWeb === '[LOC]' && wsServerLoc) ? wsServerLoc : (locWeb === '[WEB]' && wsServerWeb) ? wsServerWeb : false; if (!resWs) {
-                    let retLA = await listenerAcionar(`getWs_${locWeb}`, { 'a': 'a', }); if (!retLA) { ret['msg'] = `MESSAGE SEND: ERRO | NÃO ACHOU O OBJETO 'ws' ${locWeb}`; return ret; }
-                    resWs = retLA; if (locWeb === '[LOC]') { wsServerLoc = resWs; } else { wsServerWeb = resWs; }
+        messageId = secondsAwait === 0 ? `${messageId}` : `${messageId}_RET-TRUE`;
+
+        let locWeb = destination.includes('127.0.0.1') ? '[LOC]' : '[WEB]'; if (!resWs) { // PEGAR 'ws' (CASO NÃO TENHA SIDO PASSADO)
+            if (!/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}):(\d{4})/.test(destination)) { ret['msg'] = `MESSAGE SEND: ERRO | 'destination' NÃO É UM IP E PORTA VÁLIDO`; return ret; } else {
+                let hostOnly = destination.split('/')[0]; resWs = (locWeb === '[LOC]' && wsServerLoc) ? wsServerLoc : (locWeb === '[WEB]' && wsServerWeb[hostOnly]) ? wsServerWeb[hostOnly] : false; if (!resWs) {
+                    let retLA = await listenerAcionar(`getWs_${hostOnly}`, { 'a': 'a', }); if (!retLA) { ret['msg'] = `MESSAGE SEND: ERRO | NÃO ACHOU O OBJETO 'ws' ${locWeb} (${hostOnly})`; return ret; }
+                    resWs = retLA; if (locWeb === '[LOC]') { wsServerLoc = resWs; } else { wsServerWeb[hostOnly] = resWs; }
                 }
             }
         } let host = resWs.host, room = resWs.room; destination = destination ? destination.replace('ws://', '') : 'x'; origin = origin || `${host}/?roo=${room}`; message = messageOk;
@@ -30,7 +31,7 @@ async function messageSend(inf = {}) {
 
         // PREPARAR MENSAGEM: ÚNICA OU EM PARTES
         let messageParts = []; for (let i = 0; i < totalChunks; i++) {
-            let start = i * chunkSize; let end = Math.min(start + chunkSize, messageLength); let chunk = message.slice(start, end);
+            let start = i * chunkSize, end = Math.min(start + chunkSize, messageLength), chunk = message.slice(start, end);
             messageParts.push({ origin, destination, messageId, buffer, 'partesRestantes': totalChunks - i - 1, secondsAwait, 'message': chunk, });
             // ---------------- TESTES
             // logConsole({ e, ee, 'txt': `${messageId} | [${totalChunks - i - 1}] | → TOTAL ${JSON.stringify(messageParts).length} | DE ${start} ATÉ ${end}` });
@@ -59,7 +60,7 @@ async function messageSend(inf = {}) {
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
 }
 
-let filaBigFalse = []; let filaBigTrue = []; let sending = false; function enviarMensagem(inf = {}) {
+let filaBigFalse = [], filaBigTrue = [], sending = false; function enviarMensagem(inf = {}) {
     let { resWs, big, message, } = inf; if (big) { if (Array.isArray(message)) { filaBigTrue.push(...message); } else { filaBigTrue.push(message); } }
     else if (Array.isArray(message)) { filaBigFalse.push(...message); } else { filaBigFalse.push(message); } if (!sending) { sending = true; enviarMensagens({ resWs, }); }
 } function processarFilas() {

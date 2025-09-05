@@ -10,7 +10,7 @@ async function getPath(inf = {}) {
     let { devChildren, isFunction, } = inf;
 
     let nd = 'NAO_DEFINIDO', funLetter = `D`, root = eng ? 'chrome-extension' : 'ARQUIVOS/PROJETOS', conf = 'src/config.json', confOk, master = 'src/master.json', functions = eng ? chrome.runtime.id : nd;
-    let project = eng ? 'Downloads/Google Chrome%' : nd, fileOk = nd, line; devChildren = devChildren || nd; let paths, pathsNew = false, pathsKeep = [], stack = inf.e.stack, res;
+    let project = eng ? 'Downloads/Google Chrome%' : nd, fileOk = nd, line, paths, pathsNew = false, pathsKeep = [], stack = inf.e.stack, res; devChildren = devChildren || nd;
     try {
         for (let [index, value,] of stack.split('\n').entries()) { if (value.includes(root) && !value.includes('node_modules')) { pathsKeep.push(value); } }
 
@@ -46,7 +46,7 @@ async function getPath(inf = {}) {
             paths = paths.split('file:///')[1].split(':/'); funLetter = paths[0].toUpperCase(); paths = paths[1].split(':'); line = paths[1]; fileOk = paths[0];
             let funProject = fileOk.match(new RegExp('(' + root + '/[^/]+)'))[0]; fileOk = fileOk.split(`${funProject}/`)[1]; funProject = funProject.split(`${root}/`)[1];
             if (isFunction) {
-                res = { conf, 'letter': funLetter, 'functions': funProject, project, }; _fs = await import('fs');
+                res = { conf, 'letter': funLetter, 'functions': funProject, project, };
 
                 // CONFIG.json
                 confOk = await _fs.promises.readFile(`${funLetter}:/${root}/${funProject}/${conf}`, 'utf8'); confOk = JSON.parse(confOk);

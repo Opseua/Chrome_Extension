@@ -7,9 +7,9 @@
 // infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'byHour': true, };
 // retLog = await log(infLog); console.log(retLog);
 
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function log(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         let { folder, path, text, raw, functionLocal = false, projectConsole, fileCall, byHour, currentDateHour, } = inf;
 

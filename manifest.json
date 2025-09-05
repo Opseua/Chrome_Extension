@@ -88,15 +88,14 @@
     "runtime"
   ],
   "icons": {
-    "16": "/src/media/icon_3.png",
-    "32": "/src/media/icon_3.png",
-    "48": "/src/media/icon_3.png",
-    "128": "/src/media/icon_3.png"
+    "16": "./src/media/icon_3.png",
+    "32": "./src/media/icon_3.png",
+    "48": "./src/media/icon_3.png",
+    "128": "./src/media/icon_3.png"
   },
-  "actionAAA": {
-    "default_popup": "popup.html"
+  "browser_action": {
+    "default_popupAAA": "./src/media/popup.html"
   },
-  "browser_action": {},
   "background": {
     "scripts": [
       "./src/scripts/background.js"
@@ -120,10 +119,10 @@
   "content_scripts": [
     {
       "js": [
-        "src/media/floatingButton/floating.js"
+        "./src/media/floatingButton/floating.js"
       ],
       "css": [
-        "src/media/floatingButton/styles.css"
+        "./src/media/floatingButton/styles.css"
       ],
       "matches": [
         "https://www.AAA.com/AAA*"

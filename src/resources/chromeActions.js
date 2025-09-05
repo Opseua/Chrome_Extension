@@ -2,9 +2,9 @@
 
 // → NO FINAL DO ARQUIVO
 
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function chromeActions(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         let {
             action, color, text, title, url, cookieSearch, target, elementName, elementValue, attribute,
@@ -27,17 +27,17 @@ async function chromeActions(inf = {}) {
             let cookie = ''; JSON.parse(retCookies).reduce((accumulator, v) => { cookie += `${v.name}=${v.value}; `; return accumulator; }, '');
             if ((cookieSearch) && !(retCookies.toString().includes(cookieSearch))) { ret['msg'] = `CHROME ACTIONS [COOKIE]: ERRO | COOKIE '${cookieSearch}' NAO CONTRADO`; }
             else { ret['ret'] = true; ret['msg'] = `CHROME ACTIONS [COOKIE]: OK`; ret['res'] = { 'array': retCookies, 'concat': cookie, }; }
-        } else if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'elementGetPath', 'inject', 'elementAwait',].includes(action)) {
+        } else if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'elementGetPath', 'inject', 'elementAwait', 'injectNew',].includes(action)) {
             let targetMode = (target.includes('<') || target.includes('>')) ? 'HTML' : 'INJECT';
             // →→→ ONDE EXECUTAR? HTML BRUTO FOI PASSADO (CRIAR DIV TEMPORÁRIA) | EXECUTAR NA PÁGINA (INJETANDO SCRIPT - DEFINIR ID DA ABA ALVO)
             if (targetMode === 'HTML') { divTemp = document.createElement('div'); divTemp.innerHTML = target; document.body.appendChild(divTemp); }
-            else if (typeof target === 'number') { tabId = target; } else { retTabS = await tabAction({ e, 'search': target, 'openIfNotExist': false, }); if (!retTabS.ret) { return retTabS; } tabId = retTabS.res.id; }
+            else if (typeof target === 'number') { tabId = target; } else { retTabS = await tabAction({ e, 'search': target, }); if (!retTabS.ret) { return retTabS; } tabId = retTabS.res[0].id; }
 
             // **************************************************************************************************************************************
-            function getBody() { return document.documentElement.outerHTML; } function elementAction({ action, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, }) {
+            function getBody() { return [document.body.outerHTML,]; } function manipulateElement({ action, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, }) {
                 function getElePath(ele) {
                     if (!ele) { return false; } if (ele.id) { return `//*[@id=${ele.id}]`; } else if (ele.tagName === 'BODY') { return '/html/body'; } else {
-                        let s = Array.from(ele.parentNode.childNodes).filter(e => e.nodeName === ele.nodeName); let idx = s.indexOf(ele);
+                        let s = Array.from(ele.parentNode.childNodes).filter(e => e.nodeName === ele.nodeName), idx = s.indexOf(ele);
                         return getElePath(ele.parentNode) + '/' + ele.tagName.toLowerCase() + (s.length > 1 ? `[${idx + 1}]` : '');
                     }
                 } // → ################ MODO SIMPLES (XPATH) | → ################ MODO AVANÇADO
@@ -84,14 +84,14 @@ async function chromeActions(inf = {}) {
 
             if (action === 'getBody') {
                 // PEGAR O BODY
-                code = `(${getBody.toString()})();`;
+                fun = getBody;
             } else if (['attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementIsHidden', 'elementGetPath',].includes(action)) {
                 // ATRIBUTO: PEGAR VALOR | ELEMENTO: PEGAR VALOR | ELEMENTO: DEFINIR VALOR | ELEMENTO: CLICAR | DIV: PEGAR (BRUTA)
                 let infElementAction = { e, action, elementName, elementValue, attribute, attributeAdd, content, tag, attributeValue, attributeValueAdd, }; // INJECT | HTML RENDERIZAR
-                if (targetMode === 'INJECT') { code = `(${elementAction.toString()})(${JSON.stringify(infElementAction)});`; } else { retExeS = elementAction(infElementAction); }
+                if (targetMode === 'INJECT') { code = `(${manipulateElement.toString()})(${JSON.stringify(infElementAction)});`; } else { retExeS = manipulateElement(infElementAction); }
             } else if (action === 'elementGetDiv') {
                 function elementGetDivFun(valor, tagName, attributeName, attributeValue, parentTagName) {
-                    let elements = document.querySelectorAll(tagName); let elementsFind = []; elements.forEach(ele => {
+                    let elements = document.querySelectorAll(tagName), elementsFind = []; elements.forEach(ele => {
                         if (ele.textContent.trim() === valor) {
                             if (!attributeName || ele.getAttribute(attributeName) === attributeValue) {
                                 if (tagName !== parentTagName) { if (!parentTagName || ele.parentElement.tagName.toLowerCase() === parentTagName) { elementsFind.push(ele.parentElement.outerHTML); } }
@@ -122,17 +122,27 @@ async function chromeActions(inf = {}) {
                 }
             }
 
-            if (targetMode === 'INJECT') {
+            action = 'injectNew';
+            if (targetMode === 'INJECT' && action !== 'injectNew') {
                 // INJETAR SCRIPT E EXECUTAR | ASYNC [NÃO] | [SIM]
                 if (!(action === 'elementAwait' || code.includes('(async function'))) {
                     retExeS = await new Promise((resolve) => { chrome.tabs.executeScript(tabId, { code, }, (res) => { resolve(res[0]); }); });
                 } else {
                     retExeS = await new Promise((resolve) => { let c = chrome.runtime.onMessage; chrome.tabs.executeScript(tabId, { code, }, () => { c.addListener(function l(r) { c.removeListener(l); resolve(r); }); }); });
                 }
+            } else if (action === 'injectNew') {
+                function injectAndRun({ tabId, fun, funInf = {}, }) {
+                    tabId = Number(tabId); let execId = Date.now() + Math.random().toString(36).slice(2); return new Promise((resolve, reject) => {
+                        function listener(r, s) { if (r.execId === execId && s.tab?.id === tabId) { chrome.runtime.onMessage.removeListener(listener); resolve(r.data); } }
+                        chrome.runtime.onMessage.addListener(listener); let code = ` (async()=>{try{let r=await(${fun.toString()})( ${JSON.stringify(funInf)} );
+                chrome.runtime.sendMessage({execId:"${execId}",data:r});}catch(e){chrome.runtime.sendMessage({execId:"${execId}",data:{error:e.message}});}})();
+                `; chrome.tabs.executeScript(tabId, { code, }, () => { if (chrome.runtime.lastError) { chrome.runtime.onMessage.removeListener(listener); reject(`#_DEU_ERRO_#\n\n${chrome.runtime.lastError}`); } });
+                    });
+                } retExeS = await injectAndRun({ 'tabId': `${tabId}`, fun, funInf, }); retExeS = retExeS[0]; // retExeS = retExeS.res || retExeS.ret;
             }
 
             let r = retExeS; r = (typeof r === 'string' && r.length > 0) || (Array.isArray(r) && r.length > 0) || (typeof r === 'object' && r !== null && Object.keys(r).length > 0) || (typeof r === 'boolean' && r === true);
-            if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'inject', 'elementGetPath',].includes(action) && r) { ret['res'] = retExeS; }
+            if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'inject', 'injectNew', 'elementGetPath',].includes(action) && r) { ret['res'] = retExeS; }
             ret['msg'] = `CHROME ACTIONS [SCRIPT → ${targetMode}]: ${r ? 'OK' : 'ERRO | ELEMENTO NÃO ENCONTRADO'}`; ret['ret'] = r;
 
             // REMOVER DIV TEMPORÁRIA (NECESSÁRIO PARA EVITAR VALORES DUPLICADOS!!!)
@@ -224,7 +234,7 @@ globalThis['chromeActions'] = chromeActions;
 // // → INJECT: ASYNC [SIM] (OBRIGATÓRIO O DELAY DE 100 MILESSEUNGOS NO INÍCIO!!!)
 // async function funTeste(funInf) { await new Promise(r=> { setTimeout(r, 100) }); console.log('OK', funInf); funInf = true; chrome.runtime.sendMessage(funInf); }; let funInf = { 'A': 'B' };
 
-// infChromeActions = { e, 'action': 'inject', 'target': `*file:///*`, 'fun': funTeste, 'funInf': funInf, };
+// infChromeActions = { e, 'action': 'injectNew', 'target': `*file:///*`, 'fun': funTeste, 'funInf': funInf, };
 
 // // ************************************************************************************************************
 

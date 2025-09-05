@@ -2,9 +2,9 @@
 // infGoogleTranslate = { e, 'source': 'auto', 'target': 'pt', 'text': `Hi, what your name?`, };
 // retGoogleTranslate = await googleTranslate(infGoogleTranslate); console.log(retGoogleTranslate);
 
-let e = currentFile(), ee = e; let libs = { 'cheerio': {}, };
+let e = currentFile(new Error()), ee = e; let libs = { 'cheerio': {}, };
 async function googleTranslate(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['cheerio']) { libs['cheerio']['cheerio'] = 1; libs = await importLibs(libs, 'googleTranslate'); }
 

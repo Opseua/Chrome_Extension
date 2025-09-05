@@ -2,9 +2,9 @@
 // 'breakLine' → 'false' NÃO ADICIONAR QUEBRA DE LINHA
 // logConsole({ e, ee, 'txt': `Mensagem do console`, });
 
-let e = currentFile();
-async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
-    let ret = { 'ret': false, }, ee = inf && inf.ee ? inf.ee : e; e = inf && inf.e ? inf.e : e;
+let e = currentFile(new Error());
+async function logConsole(inf = {}) {
+    let ret = { 'ret': false, }; e = inf.e || e; let ee = inf.ee || e;
     try {
         let { txt = 'x', write = true, breakLine = true, } = inf;
 
@@ -39,19 +39,20 @@ async function logConsole(inf = {}) { // NÃO POR COMO 'async'!!!
         txt = typeof txt === 'object' ? JSON.stringify(txt) : txt;
         let { day, mon, hou, min, sec, mil, /* hou12, houAmPm, */ } = time;
         let currentDateHour = `${hou}:${min}:${sec}.${mil}`;
-        let breakLineSta = breakLine ? '\n' : ' '; let breakLineEnd = breakLine ? '\n' : '';
+        let breakLineSta = breakLine ? '\n' : ' ', breakLineEnd = breakLine ? '\n' : '';
         colorConsole({
             // FORMATO: 24 HORAS (11h, 12h, 13h, 14h...)
             'text': `<verde>→ ${day}/${mon} ${currentDateHour}</verde> <azul>${projectConsole}</azul> <amarelo>${fileCall}</amarelo>${breakLineSta}${txt}${breakLineEnd}`,
             // FORMATO: 12 HORAS (11h, 12h, 01h, 02h...)
             // 'text': `<verde>→ ${day}/${mon} ${hou12}:${min}:${sec}.${mil} ${houAmPm}</verde> <azul>${project}</azul> <amarelo>${fileCall}</amarelo>${breakLineSta}${txt}${breakLineEnd}`
         });
+
         if (!eng && write) {
             await log({
                 // PRIMEIRO ARQUIVO EXECUTADO NO NODE 'server.js'       → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log.txt
                 // PRIMEIRO ARQUIVO EXECUTADO NO NODE 'serverCarro.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_Carro.txt
                 // PRIMEIRO ARQUIVO EXECUTADO NO NODE 'nomeArquivo.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_nomeArquivo.txt
-                e, 'folder': 'JavaScript', 'path': `log${gW.firstFileCall === 'server' ? '' : `_${gW.firstFileCall.replace('server', '')}`}.txt`,
+                e, 'folder': 'JavaScript', 'path': `log${gW.cloneProject === 'server' ? '' : `_${gW.cloneProject.replace('server', '')}`}.txt`,
                 'text': txt, projectConsole, fileCall, 'byHour': true, currentDateHour,
             });
         }

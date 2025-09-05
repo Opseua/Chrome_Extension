@@ -17,9 +17,9 @@
 // };
 // retCommandLine = await commandLine(infCommandLine); console.log(retCommandLine);
 
-let e = currentFile(), ee = e; let libs = { 'child_process': {}, };
+let e = currentFile(new Error()), ee = e; let libs = { 'child_process': {}, };
 async function commandLine(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['child_process']) { libs['child_process']['exec'] = 1; libs = await importLibs(libs, 'commandLine'); }
 

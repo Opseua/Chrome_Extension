@@ -14,21 +14,25 @@
 //     .then(res => { console.log('RES CODE:', res.status); console.log('RES HEADERS:', [...res.headers.entries(),]); return res.text(); })
 //     .then(body => { console.log('RES BODY:', body); }).catch(error => { console.error('RESPONSE error:', error); });
 
-// PUT → atualiza tudo | PATCH → atualiza apenas uma parte | TESTAR REQUISIÇÃO E TEMPO DE RESPOSTA → https://httpstat.us/200?sleep=5000
+// PUT → atualiza tudo | PATCH → atualiza apenas uma parte
+// https://fakeresponder.com/?sleep=3000&status=401 | https://postman-echo.com/delay/3 | https://postman-echo.com/status/401
+// https://postman-echo.com/get?foo1=bar1&foo2=bar2
+// https://httpbin.org/delay/3 | https://httpbin.org/status/401| https://httpstat.us/200?sleep=5000
+// CRIAR WEBHOOK https://webhook.site/
 
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function api(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
-        let type = (typeof globalThis.doGet !== 'undefined'); let reqE = 0, typeB = null; if (Array.isArray(inf)) { // MANTER ANTES DAS VARIÁVEIS DA 'inf'!!!
+        let type = (typeof globalThis.doGet !== 'undefined'), reqE = 0, typeB = null; if (Array.isArray(inf)) { // MANTER ANTES DAS VARIÁVEIS DA 'inf'!!!
             async function apiMulti(m, q) {
-                let cs = q.map(() => new AbortController()); let ts = []; let r = []; let f = q.map((req, index) => {
-                    let c = cs[index]; req.controller = c; let t = setTimeout(() => c.abort(), ((req.maxConnect || 20) * 1000)); ts.push(t); return api(req).then(res => {
+                let cs = q.map(() => new AbortController()), ts = [], r = [], f = q.map((req, index) => {
+                    let c = cs[index]; req.controller = c, t = setTimeout(() => c.abort(), ((req.maxConnect || 20) * 1000)); ts.push(t); return api(req).then(res => {
                         clearTimeout(t); r.push({ index, ...res, }); if (r.length >= m) { cs.forEach(c => c.abort()); ts.forEach(clearTimeout); }
                     }).catch(e => { clearTimeout(t); r.push({ index, ...{ ret: false, msg: `API [MULTI]: ERRO | ${e.message}`, }, }); });
                 }); await Promise.race(f); while (r.length < m && r.length < q.length) { await new Promise(resolve => setTimeout(resolve, 50)); } return r.slice(0, m);
-            } let m = 1; let i = inf.findIndex(v => typeof v === 'number'); if (i !== -1) { m = inf.splice(i, 1)[0]; } m = m === 0 ? inf.length : m;
-            let s = await apiMulti(m, inf); let t = Array.isArray(s) ? s.some(v => v.ret) : s.ret; return { t, 'msg': `API [MULTI]: ${t ? 'OK' : 'ERRO | ***'}`, s, };
+            } let m = 1, i = inf.findIndex(v => typeof v === 'number'); if (i !== -1) { m = inf.splice(i, 1)[0]; } m = m === 0 ? inf.length : m;
+            let s = await apiMulti(m, inf), t = Array.isArray(s) ? s.some(v => v.ret) : s.ret; return { t, 'msg': `API [MULTI]: ${t ? 'OK' : 'ERRO | ***'}`, s, };
         } let { method = '', url, headers = {}, body, maxConnect = 20, maxResponse = 20, object = false, controller, hideHeaders = true, bodyResRaw, bodyReqRaw, } = inf;
 
         // ❌❌❌❌❌❌❌❌❌❌❌❌ NÃO SUBIR AS LINHAS!!! (PARA SEREM VISUALIZADAS NO GOOGLE APP SCRIPT) | CHECAR SE TEM ERRO ❌❌❌❌❌❌❌❌❌❌❌❌
@@ -36,7 +40,7 @@ async function api(inf = {}) {
         if (reqE > 0) { ret['msg'] = `API: ERRO | ${reqE === 1 ? `MÉTODOS ACEITOS 'GET', 'POST', 'PUT', 'DELETE', 'PATCH'` : `INFORMAR O ${reqE === 2 ? `'url'` : `'body'`}`}`; return ret; }
 
         // REQ: HEADERS
-        let req, resU, resT, resC, resH = {}, resB; let reqOpt = { method, 'redirect': 'follow', 'keepalive': true, 'rejectUnauthorized': false, }; let timC = null, timR = null;
+        let req, resU, resT, resC, resH = {}, resB, reqOpt = { method, 'redirect': 'follow', 'keepalive': true, 'rejectUnauthorized': false, }, timC = null, timR = null;
         reqOpt['headers'] = {}; if (Object.keys(headers).length > 0) { reqOpt.headers = headers; } function cT() { if (timC) { clearTimeout(timC); } if (timR) { clearTimeout(timR); } }
 
         // REQ: BODY | CHECAR SE TEM ERRO
@@ -51,7 +55,7 @@ async function api(inf = {}) {
             controller = controller || new AbortController(); reqOpt['signal'] = controller.signal;
             if (body) {
                 reqOpt['body'] = body;
-                // let enc = new TextEncoder(); let len = enc.encode(reqOpt.body).length; reqOpt.headers['Content-Length'] = len;
+                // let enc = new TextEncoder(),len = enc.encode(reqOpt.body).length; reqOpt.headers['Content-Length'] = len;
 
                 // if (bodyReqRaw) {
                 //     if (typeof Buffer !== 'undefined' && Buffer.isBuffer(body)) {

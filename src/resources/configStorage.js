@@ -18,9 +18,9 @@
 // cs = await csf([{ 'a': 'b', },]); cs = cs.res; // ***** CS ***** SET VALOR NO 'reg.json'
 // console.log(cs);
 
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function configStorage(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         let { action = false, functionLocal = true, key = false, value = '#_VAZIA_#', path = gW.conf, returnValueKey = false, returnValueAll = false, } = inf;
 

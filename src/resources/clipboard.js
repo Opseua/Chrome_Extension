@@ -1,34 +1,61 @@
 // let infClipboard, retClipboard;
-// infClipboard = { e, 'value': `Esse é o texto`, };
+// infClipboard = { e, 'action': 'set', 'value': `Esse é o texto`, };
+// infClipboard = { e, 'action': 'get', };
 // retClipboard = await clipboard(infClipboard); console.log(retClipboard);
 
-let e = currentFile(), ee = e; let libs = { 'clipboardy': {}, };
+let e = currentFile(new Error()), ee = e; let libs = { 'clipboardy': {}, };
 async function clipboard(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         /* IMPORTAR BIBLIOTECA [NODE] */ if (!eng && libs['clipboardy']) { libs['clipboardy']['clipboard'] = 1; libs = await importLibs(libs, 'clipboard'); }
 
-        let { value, } = inf;
+        let { action, value, ignoreIndent, } = inf;
 
-        if (value === null || value === '') {
+        if (!['set', 'get',].includes(action)) {
+            ret['msg'] = `CLIPBOARD: ERRO | INFORMAR O 'action'`;
+        } else if (action === 'set' && (value === null || value === '')) {
             ret['msg'] = `CLIPBOARD: ERRO | INFORMAR O 'value'`;
         } else {
-            let text = value;
-            if (typeof text === 'object') { // OBJETO INDENTADO EM TEXTO BRUTO
-                text = JSON.stringify(text, null, 2);
+            let text;
+            if (action === 'set') {
+                // OBJETO INDENTADO EM TEXTO BRUTO (SE NECESSÁRIO)
+                text = typeof value === 'object' ? JSON.stringify(value, null, ignoreIndent ? undefined : 2) : value;
             }
-            if (eng) {
-                // CHROME
-                let element = document.createElement('textarea');
-                element.value = text; document.body.appendChild(element);
-                element.select(); document.execCommand('copy');
-                document.body.removeChild(element);
+
+            if (!eng) {
+                // *** NODE
+
+                if (action === 'set') {
+                    // AÇÃO → DEFINIR
+                    _clipboard.writeSync(text);
+                } else {
+                    text = _clipboard.readSync();
+                }
             } else {
-                // NODE
-                _clipboard.writeSync(text);
+                // *** CHROME
+
+                // ELEMENTO TEMPORÁRIO: CRIAR
+                let element = document.createElement('textarea');
+                document.body.appendChild(element);
+                if (action === 'set') {
+                    // AÇÃO → DEFINIR
+                    element.value = text;
+                    element.select(); document.execCommand('copy');
+                } else {
+                    // AÇÃO → PEGAR
+                    element.focus(); document.execCommand('paste');
+                    text = element.value;
+
+                }
+                // ELEMENTO TEMPORÁRIO: DELETAR
+                document.body.removeChild(element);
             }
+
             ret['msg'] = 'CLIPBOARD: OK';
             ret['ret'] = true;
+            if (action === 'get') {
+                ret['res'] = text;
+            }
 
         }
     } catch (catchErr) {

@@ -16,9 +16,9 @@
 // infChromeActionsNew.action = 'elementHighLight'; infChromeActionsNew.elementValue = 'TESTE';
 // infChromeActionsNew.path = '/html/body/div/div[9]'; // SELECIONAR ELEMENTO PELO PATH
 
-// retChromeActionsNew = await chromeActions({ e, 'action': 'inject', 'target': `*z_HTML.html*`, 'fun': chromeActionsNew, 'funInf': infChromeActionsNew, }); console.log(retChromeActionsNew);
+// retChromeActionsNew = await chromeActions({ e, 'action': 'injectNew', 'target': `*z_HTML.html*`, 'fun': chromeActionsNew, 'funInf': infChromeActionsNew, }); console.log(retChromeActionsNew);
 
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function chromeActionsNew(inf = {}) {
     let { tags = [], attributes = [], contents = [], action, elementValue, path = false, reFilter = [], } = inf;
 
@@ -27,7 +27,7 @@ async function chromeActionsNew(inf = {}) {
     function eleRegex(p, t, c) { if (!c) { p = p.toLowerCase(); t = t.toLowerCase(); } p = p.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*'); return new RegExp(`^${p}$`).test(t); } let res; let elements;
     function eleGetPath(ele) {
         if (ele.tagName === 'BODY') { return '/html/body'; } else {
-            let s = Array.from(ele.parentNode.childNodes).filter(e => e.nodeName === ele.nodeName); let idx = s.indexOf(ele);
+            let s = Array.from(ele.parentNode.childNodes).filter(e => e.nodeName === ele.nodeName), idx = s.indexOf(ele);
             return eleGetPath(ele.parentNode) + '/' + ele.tagName.toLowerCase() + (s.length > 1 ? `[${idx + 1}]` : '');
         }
     }
@@ -42,7 +42,7 @@ async function chromeActionsNew(inf = {}) {
         }
 
         // ORDENAR FILTRAGEM
-        let criteryOrder = Object.keys(inf).filter(value => ['tags', 'attributes', 'contents',].includes(value)); let elementsTemp = elements;
+        let criteryOrder = Object.keys(inf).filter(value => ['tags', 'attributes', 'contents',].includes(value)), elementsTemp = elements;
 
         // ELEMENTOS: FILTRAR 
         criteryOrder.forEach(key => {

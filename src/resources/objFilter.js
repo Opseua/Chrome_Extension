@@ -1,12 +1,12 @@
 // let infObjFilter, retObjFilter;
 // let obj = { 'comida': 'carro', 'cadeira': { 'moto': 'carro', 'comida': 'carro', }, };
-// infObjFilter = { e, 'obj': obj, 'noCaseSensitive': true, 'keys': ['MOto',], 'filters': [{ 'includes': ['*cadeira*',], }, { 'excludes': ['*cadeira.comida*',], },], };
-// infObjFilter = { e, 'obj': obj, 'noCaseSensitive': true, 'values': ['CArro',], 'filters': [{ 'includes': ['*cadeira*',], }, { 'excludes': ['*cadeira.comida*',], },], };
+// infObjFilter = { e, obj, 'noCaseSensitive': true, 'keys': ['MOto',], 'filters': [{ 'includes': ['*cadeira*',], }, { 'excludes': ['*cadeira.comida*',], },], };
+// infObjFilter = { e, obj, 'noCaseSensitive': true, 'values': ['CArro',], 'filters': [{ 'includes': ['*cadeira*',], }, { 'excludes': ['*cadeira.comida*',], },], };
 // retObjFilter = await objFilter(infObjFilter); console.log(retObjFilter);
 
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function objFilter(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         let { obj, noCaseSensitive, keys, values, filters, split, } = inf; let results = [];
 
@@ -35,7 +35,7 @@ async function objFilter(inf = {}) {
 
         // FILTRAR OS RESULTADOS
         function filter(inf = {}) {
-            let resultsOk = []; let { results, filters, } = inf;
+            let resultsOk = [], { results, filters, } = inf;
             for (let [index, value,] of results.entries()) {
                 let regexRes = [];
                 for (let [index, value1,] of (filters.includes || filters.excludes).entries()) {

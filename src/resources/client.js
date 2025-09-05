@@ -1,28 +1,26 @@
-let e = currentFile(), ee = e; let wsServers = { 'rooms': {}, }, reconnecting = {}, timSecCon = {}, secConnect = gW.secConnect; let libs = { 'ws': {}, };
+let e = currentFile(new Error()), ee = e; let wsServers = { 'rooms': {}, }, reconnecting = {}, timSecCon = {}, secConnect = gW.secConnect; let libs = { 'ws': {}, };
 async function client(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         /* IMPORTAR BIBLIOTECA [CHROME/NODE] */ if (libs['ws']) { libs['ws'] = { 'WebSocket': 1, 'pro': 'WebSocket', }; libs = await importLibs(libs, 'client'); }
 
         // ### CONEXÃO
         function connect(inf = {}) {
-            let { hostRoom, } = inf; let ws = new _WebSocket(`ws://${hostRoom}`); let url = ws._url || ws.url; let host = url.replace('ws://', '').split('/')[0]; let room = url.split(`${host}/`)[1].replace('?roo=', '');
+            let { hostRoom, } = inf; let ws = new _WebSocket(`ws://${hostRoom}`), url = ws._url || ws.url, host = url.replace('ws://', '').split('/')[0], room = url.split(`${host}/`)[1].replace('?roo=', '');
             let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; ws['host'] = host; ws['room'] = room; ws['hostRoom'] = hostRoom; ws['locWeb'] = locWeb; ws['method'] = 'WEBSOCKET';
             function clearTimRec(event) { clearTimeout(timSecCon[hostRoom]); if (event) { setTimeout(() => { reconnect({ host, room, hostRoom, 'resWs': ws, event, }); }, 1000); } }
 
             // # ON OPEN
             ws.onopen = async () => {
-                // LIMPAR TIMEOUT DE CONEXÃO | SALA [ADICIONAR] | ENVIAR PING DE INÍCIO DE CONEXÃO
-                clearTimRec(false); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set(); } wsServers.rooms[hostRoom].add(ws); logConsole({ e, ee, 'txt': `${locWeb} OK:\n'${room}'`, });
-
-                // LISTENER PARA RETORNAR O 'ws'
-                function getWs(inf = {}) { let { hostRoom, } = inf; if (wsServers.rooms[hostRoom]) { for (let ws of wsServers.rooms[hostRoom]) { if (ws.hostRoom === hostRoom) { return ws; } } } return null; }
-                ws.send(`ping`); listenerMonitorar(`getWs_${locWeb}`, async (/*nomeList, inf*/) => { return getWs({ hostRoom, }); });
+                // LIMPAR TIMEOUT DE CONEXÃO | SALA [ADICIONAR] | ENVIAR PING DE INÍCIO DE CONEXÃO | LISTENER PARA RETORNAR O 'ws'
+                clearTimRec(false); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set(); } wsServers.rooms[hostRoom].add(ws); function getWs(inf = {}) {
+                    let { host, } = inf; for (let clients of Object.values(wsServers.rooms)) { for (let ws of clients) { if (regex({ pattern: host, text: ws.host, simple: true, })) { return ws; } } } return null;
+                } logConsole({ e, ee, 'txt': `${locWeb} OK: ${ws.host.split(':')[0]}\n'${room}'`, }); ws.send(`ping`); listenerMonitorar(`getWs_${host}`, async (/*nomeList, inf*/) => { return getWs({ host, }); });
             };
 
             // # ON MESSAGE
             ws.onmessage = async (data) => {
-                let message = data.data.toString('utf-8'); let pingPong = message === `ping` ? 1 : message === `pong` ? 2 : 0;
+                let message = data.data.toString('utf-8'), pingPong = message === `ping` ? 1 : message === `pong` ? 2 : 0;
                 // ÚLTIMA MENSAGEM RECEBIDA
                 ws['lastMessage'] = ws.lastMessage || pingPong > 0 ? Number(dateHour().res.tim) : false; // logConsole({ e, ee, 'txt': `← CLI | ${ws.lastMessage} | ${hostRoom}` });
                 if (pingPong > 0) { // RECEBIDO: 'PING' ENVIAR 'PONG'
@@ -42,7 +40,7 @@ async function client(inf = {}) {
         // ### RECONEXÃO | REMOVER SERVIDOR
         function reconnect(inf = {}) {
             let { host, room, hostRoom, resWs, event, } = inf; let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; if (!reconnecting[hostRoom]) {
-                reconnecting[hostRoom] = true; let secReconnect = gW.secReconnect - secConnect + 1; removeSerCli({ hostRoom, resWs, msg: `${locWeb} RECONECTADO ${event}:\n${room}`, });
+                reconnecting[hostRoom] = true; let secReconnect = gW.secReconnect - secConnect + 1; removeSerCli({ hostRoom, resWs, msg: `${locWeb} RECONECTANDO ${event}: ${host.split(':')[0]}\n${room}`, });
                 setTimeout(() => { reconnecting[hostRoom] = false; connect({ hostRoom, }); }, (secReconnect * 1000) - 50); // ← MENOS SEGUNDOS DO TEMPO DE CONEXÃO
             }
         } function removeSerCli(inf = {}) {
@@ -50,10 +48,9 @@ async function client(inf = {}) {
             if (wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom].delete(resWs); if (wsServers.rooms[hostRoom].size === 0) { delete wsServers.rooms[hostRoom]; } }
         }
 
-        // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → GET [WEB] | GET [LOC] | {ESTRELAR}
-        let servers = []; if (gW.devMaster !== 'ESTRELAR') { servers = [gW.devGet[0], gW.devGet[1],]; } else {
-            let serverWebEstrelar = `${gW.serverWebEstrelar}:${gW.devGet[0].split(':')[1]}`; servers = [gW.devGet[0], gW.devGet[1], serverWebEstrelar,]; // ESTRELAR
-        } for (let [index, value,] of servers.entries()) {
+        // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → [LOC] + [WEB] (AWS) + [WEB] (Hetzner)
+        let servers = [gW.devGet[0], gW.devGet[1], `${gW.serverWebEstrelar}:${gW.devGet[0].split(':')[1]}`,];
+        for (let [index, value,] of servers.entries()) {
             if (!value.includes('127.0.0.1') && (gW.project === 'Sniffer_Python' || (!value.includes('USUARIO_0') && value.includes('USUARIO_')))) {
                 // NÃO CONECTAR AO WEBSOCKET
             } else { connect({ 'hostRoom': value, }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ nomeList, param1, }); }); }

@@ -1,12 +1,12 @@
 // → NO FINAL DO ARQUIVO
 
 // IMPORTAR OBJETOS COM AS AÇÕES
-let acts = {}; let imp = ['AIGeneratedTextEvaluationPortuguese', 'BroadMatchRatings', 'Ratingoftransformedtext', 'TextErrorCategorizationptBR',];
+let acts = {}, imp = ['AIGeneratedTextEvaluationPortuguese', 'BroadMatchRatings', 'Ratingoftransformedtext', 'TextErrorCategorizationptBR',];
 for (let [index, v,] of imp.entries()) { await import(`./objects/tryRating/act_${v}.js`); acts[v] = globalThis[`act_${v}`]; delete globalThis[`act_${v}`]; }
 
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function tryRatingSet(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         let { hitApp = 'x', elements = [], path = false, process = false, rA = false, } = inf;
 
@@ -17,7 +17,7 @@ async function tryRatingSet(inf = {}) {
             return path.split('.').reduce((acc, key) => { let match = key.match(/(\w+)\[(\d+)\]/); if (match) { let [, arrayKey, index,] = match; return acc[arrayKey]?.[Number(index)]; } return acc?.[key]; }, obj);
         }
 
-        let timeNow, timeStart = Number(dateHour().res.tim); let elementsObj = acts[hitApp].elementsObj; let timeSec = process ? 3 : acts[hitApp].timeSec;
+        let timeNow, timeStart = Number(dateHour().res.tim), elementsObj = acts[hitApp].elementsObj, timeSec = process ? 3 : acts[hitApp].timeSec;
         let target = `*${hitApp}/page_tryrating.mhtml*`; // target = '*tryrating.com*'
 
         // CAPTURAR INPUTS E ENVIAR PARA AI
@@ -25,7 +25,7 @@ async function tryRatingSet(inf = {}) {
             rA = process;
             if (path && !process) {
                 let retFile = await file({ e, 'action': 'read', path, }); if (!retFile.ret) { return retFile; } else { retFile = JSON.parse(retFile.res); }
-                let promptText = acts[hitApp].promptText; let inputs = acts[hitApp].inputs; let promptQuestion = acts[hitApp].promptQuestion;
+                let promptText = acts[hitApp].promptText, inputs = acts[hitApp].inputs, promptQuestion = acts[hitApp].promptQuestion;
 
                 let messagePrompt = ``; for (let [index, val,] of inputs.entries()) { let { name, path, } = val; messagePrompt = `${messagePrompt}${name}:\n${getValueByPath(retFile, path)}\n\n`; }
                 messagePrompt = `${promptText}\n${messagePrompt}${promptQuestion}\n\n`; // console.log(messagePrompt); // PROMPT INICIAL | PROMPT QUESTION
@@ -69,9 +69,9 @@ async function tryRatingSet(inf = {}) {
                     // TEMPO RESTANTE
                     timeNow = Number(dateHour().res.tim); timeSec -= (timeNow - timeStart); timeStart = timeNow;
                     // DEFINIR VALORES PASSADOS OU DO OBJ
-                    let element1Obj = elementObj[element1].element1Obj; let actionObj = elementObj[element1].actionsObj[index4].action;
+                    let element1Obj = elementObj[element1].element1Obj, actionObj = elementObj[element1].actionsObj[index4].action;
                     let awaitFor = element === 'submit_rating' ? [(timeSec - 10), timeSec,] : val4.awaitFor || elementObj[element1].actionsObj[index4].awaitFor;
-                    let value = val4.value || elementObj[element1].actionsObj[index4].value; let infChromeActionsNew = JSON.parse(JSON.stringify(elementsObj[element].infObj).replace(`###_REPLACE_1_###`, `${element1Obj}`));
+                    let value = val4.value || elementObj[element1].actionsObj[index4].value, infChromeActionsNew = JSON.parse(JSON.stringify(elementsObj[element].infObj).replace(`###_REPLACE_1_###`, `${element1Obj}`));
                     await new Promise(resolve => setTimeout(resolve, randomNumber(...awaitFor) * 1000)); console.log(`    ++ AÇÃO++\n    → ${awaitFor.toString()} | ${actionObj} \n    ${value} `);
                     let infChromeActions = { e, 'action': 'inject', target, 'fun': chromeActionsNew, 'funInf': { ...infChromeActionsNew, ...{ 'action': actionObj, }, }, };
                     let retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { return retChromeActions; } // console.log(retChromeActions);

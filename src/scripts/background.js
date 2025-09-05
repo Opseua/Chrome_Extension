@@ -1,17 +1,35 @@
 async function backgroundRun() {
-    // APAGAR TODO O CONTEUDO DO STORAGE
-    // await new Promise((resolve) => { chrome.storage.sync.clear(async () => { /* console.log('DEL 1'); */ resolve(true); }); }); // STORAGE: LIMPAR
-    await new Promise((resolve) => { chrome.storage.local.clear(async () => { /* console.log('DEL 2'); */ resolve(true); }); }); // STORAGE: LIMPAR
+    // chrome.runtime.reload(); // REINICIAR A EXTENSÃO
+    // await new Promise((resolve) => { chrome.storage.sync.clear(async () => { /* console.log('DEL 1'); */ resolve(true); }); }); // APAGAR STORAGE [SYNC]: LIMPAR
+    await new Promise((resolve) => { chrome.storage.local.clear(async () => { /* console.log('DEL 2'); */ resolve(true); }); }); // APAGAR STORAGE [LOCAL]: LIMPAR
 
     // **********************************
     await import('../server.js');
     // **********************************
 
-    chrome.browserAction.onClicked.addListener(async function (...inf) {
+    let activeStream = {}; chrome.browserAction.onClicked.addListener(async function (...inf) {
         console.log(`EVENTO: click no ícone\n`, inf); // chrome.browserAction.setPopup({popup: './popup.html'});
+
+        let infOk = { 'search': `*c6bank.my.site.com*`, 'active': true, 'pinned': true, 'index': 0, }; async function forceRunningTab(tab) { // FORÇAR ABA A FICAR ATIVA (MESMO EM SEGUNDO PLANO)
+            if (activeStream[tab.url]) { activeStream[tab.url].getTracks().forEach(t => t.stop()); delete activeStream[tab.url]; return; }
+            let streamId = await new Promise((res, rej) => chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id, }, id => chrome.runtime.lastError ? rej(chrome.runtime.lastError) : res(id)));
+            activeStream[tab.url] = await new Promise((res, rej) => navigator.webkitGetUserMedia({ audio: { mandatory: { chromeMediaSource: 'tab', chromeMediaSourceId: streamId, }, }, }, res, rej));
+        } let url = 'https://c6bank.my.site.com/partners/s/lead/Lead/Default', retTabAction = await tabAction({ ...infOk, });
+        if (!retTabAction?.res?.[0]?.id) { retTabAction = await tabAction({ ...infOk, 'openOrReload': url, }); } if (retTabAction?.res?.[0]) { forceRunningTab({ 'id': retTabAction?.res?.[0].id, url, }); }
+
+        // PEGAR CONTEUDO DA ABA (SÓ FUNCIONA COM AÇÃO DO USUÁRIO COM A ABA ABERTA)
+        // let e = currentFile(new Error()), ee = e; async function tabGetContent(inf = {}) {
+        //     let ret = { 'ret': false, }; e = inf.e || e; try {
+        //         let { id: tabId, filename, } = inf; let blob = await new Promise((resolve) => { chrome.pageCapture.saveAsMHTML({ tabId, }, (blob) => { resolve(blob); }); });
+        //         let content = await blob.text(); ret['res'] = {}; if (filename) {
+        //             let f = `${filename}.mhtml`; chrome.downloads.download({ 'url': `${'data:application/x-mimearchive;base64,' + btoa(content)}`, 'filename': f, }); ret['res']['filename'] = f;
+        //         } ret['msg'] = `TAB GET CONTENT: OK`; ret['ret'] = true; ret['res']['content'] = `${content}`;
+        //     } catch (catchErr) { let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res']; }
+        //     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
+        // } let retTabGetContent = await tabGetContent({ 'id': tabId, 'filename': 'aaa', }); console.log(retTabGetContent);
+
     });
 
-    // → BACKUP
     chrome.downloads.onChanged.addListener(async function (...inf) {
         let { id, } = inf; if (inf[0].state && inf[0].state.current === 'complete') {
             chrome.downloads.search({ id, }, async function (txt) {
@@ -26,12 +44,11 @@ async function backgroundRun() {
         }
     });
 
-    // FECHAR ABA DESNECESSÁRIA
-    chrome.tabs.onUpdated.addListener(function (...inf) {
-        let { id, url, } = inf[2]; if (url.includes('.msftconnecttest.com') || url.includes('.netcombowifi.com')) {
-            setTimeout(() => { chrome.tabs.remove(id, () => { if (chrome.runtime.lastError) { } }); }, (30 * 1000));
-        }
-    });
+    // chrome.tabs.onUpdated.addListener(function (...inf) { // FECHAR ABA DESNECESSÁRIA
+    //     let { id, url, } = inf[2]; if (url.includes('.msftconnecttest.com') || url.includes('.netcombowifi.com')) {
+    //         setTimeout(() => { chrome.tabs.remove(id, () => { if (chrome.runtime.lastError) { } }); }, (30 * 1000));
+    //     }
+    // });
 
     // chrome.commands.onCommand.addListener(async function (...inf) {
     //     console.log(`EVENTO: atalho pressionado\n`, inf);

@@ -1,8 +1,8 @@
 // → NO FINAL DO ARQUIVO
 
-let e = currentFile(), ee = e; let libs = { 'cheerio': {}, };
+let e = currentFile(new Error()), ee = e; let libs = { 'cheerio': {}, };
 async function htmlToJson(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         /* IMPORTAR BIBLIOTECA [NODE] */ if (!eng && libs['cheerio']) { libs['cheerio']['cheerio'] = 1; libs = await importLibs(libs, 'htmlToJson'); }
 
@@ -12,15 +12,16 @@ async function htmlToJson(inf = {}) {
 
             // ############## REMOVER ISSO E USAR APENAS O NOVO MÉTODO ##############
 
-            // MODO ANTIGO (ORIGINAL)
-            let $ = _cheerio.load(html); let headers = [], randomCol = !(mode === 1); let hasHeader = $('table thead').length > 0;
+            // MODO ANTIGO (NODE)
+            let $ = _cheerio.load(html), headers = [], randomCol = !(mode === 1), hasHeader = $('table thead').length > 0;
 
             // SE CONTEM O CABEÇALHO 
             if (hasHeader) { $('table thead th').each((i, header) => { headers.push(randomCol ? `col${i + 1}` : $(header).text().trim()); }); }
             $('table tbody tr').each((index, row) => {
                 let rowData = {}; $(row).find('td').each((i, cell) => { let key = hasHeader ? headers[i] : `col${i + 1}`; rowData[key] = $(cell).text().trim(); });
                 if (!hasHeader && index === 0) { result.push(Object.fromEntries(Object.entries(rowData).map(([key, value,]) => [key, value,]))); } else { result.push(rowData); }
-            }); if (mode === 3) {
+            });
+            if (mode === 3) {
                 let keys = Object.values(result[0]); result = result.slice(1).map(obj => { let newObj = {}; keys.forEach((key, index) => { newObj[key] = obj[`col${index + 1}`]; }); return newObj; });
             }
         } else {

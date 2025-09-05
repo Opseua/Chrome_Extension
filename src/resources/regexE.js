@@ -19,7 +19,7 @@ async function regexE(inf = {}) {
         let cng = (typeof globalThis.alert !== 'undefined') ? 1 : (typeof globalThis.doGet !== 'undefined') ? 3 : 2;
 
         // PEGAR O PROJETO, ARQUIVO E LINHA DO ERRO
-        let retGetPath = await getPath({ e, }); let { root, project, line, } = retGetPath.res; let fileOk = retGetPath.res.file;
+        let retGetPath = await getPath({ e, }), { root, project, line, } = retGetPath.res; let fileOk = retGetPath.res.file;
 
         // NOME E LINHA DO ARQUIVO | IDENTIFICAR HOST, PORT, SECURITYPASS E DEVMASTER
         let errorOk = {
@@ -33,18 +33,18 @@ async function regexE(inf = {}) {
 
         // LOG DE ERROS [NODE]
         if (errorOk.cng === 2) {
-            let dt1 = new Date(); dt1.setSeconds(new Date().getSeconds()).setSeconds; let dt2 = Date.now(); let dtRes = {
+            let dt1 = new Date(), dt2 = Date.now(); dt1.setSeconds(new Date().getSeconds()).setSeconds; let dtRes = {
                 'day': String(dt1.getDate()).padStart(2, '0'), 'mon': String(dt1.getMonth() + 1).padStart(2, '0'), 'yea': String(dt1.getFullYear()), 'hou': String(dt1.getHours()).padStart(2, '0'),
                 'min': String(dt1.getMinutes()).padStart(2, '0'), 'sec': String(dt1.getSeconds()).padStart(2, '0'), 'mil': String(dt2.toString().slice(-3)), 'tim': String(dt2.toString().slice(0, -3)),
                 'timMil': String(dt2.toString()), 'monNam': ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ',][dt1.getMonth()],
-            }; let time = dtRes, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`; let hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, text = errorOk;
+            }; let time = dtRes, mon = `MES_${time.mon}_${time.monNam}`, day = `DIA_${time.day}`, hou = `${time.hou}.${time.min}.${time.sec}.${time.mil}`, text = errorOk;
             try { text = text = typeof text === 'object' ? `${JSON.stringify(text)}\n\n` : `${text}\n\n`; } catch { text = `ERRO_AO_CONVERTER_PARA_JSON\n\n`; }
 
             let path = errorOk.file; if (path.includes('/')) { path = path.substring(path.lastIndexOf('/') + 1); }
             path = `${letter}:/${root}/${project}/logs/JavaScript/${mon}/${day}/${hou}_ERR_${path.replace(/[<>:"\\|?*]/g, '').replace('.js', '')}.txt`;
 
             if (typeof errorOk === 'object') {
-                let raw = ''; let obj = errorOk; for (let k in obj) { if (typeof obj[k] === 'object') { for (let subChave in obj[k]) { raw += obj[k][subChave] + concat; } } else { raw += obj[k] + concat; } }
+                let raw = '', obj = errorOk; for (let k in obj) { if (typeof obj[k] === 'object') { for (let subChave in obj[k]) { raw += obj[k][subChave] + concat; } } else { raw += obj[k] + concat; } }
                 text = `${hou}\n${raw}\n\n${text}`;
             } await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); await _fs.promises.writeFile(path, text, { flag: 'a', });
         }

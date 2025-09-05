@@ -6,7 +6,8 @@ let arrGlobal = [
   'XmlService',
 
   // VARIÁVEIS GLOBAIS
-  'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des', 'portStopwatch', 'sP',
+  'devSend', 'wsClients', 'wsClientLoc', 'eng', 'engType', 'engName', 'cng', 'letter', 'conf', 'infGlobal', 'gORem', 'gOAdd', 'csf', 'gW', 'legacy', 'platforms', 'ori', 'des',
+  'portStopwatch', 'firstFileCall',
 
   // VARIÁVEIS DO SISTEMA
   'fileChrome_Extension', 'fileProjetos', 'fileWindows',
@@ -30,7 +31,7 @@ let arrGlobal = [
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
   'log', 'logConsole', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar',
   'listenerMonitorar', 'chromeActionsNew', 'importFun', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1', 'audioTranscribe',
-  'command2', 'tryRatingComplete', 'startupTime', 'crashCode', 'replaceVars', 'stringGet',
+  'command2', 'tryRatingComplete', 'startupTime', 'crashCode', 'replaceVars', 'stringGet', 'clientImputChrome', 'clientImputChromeNew',
 
   // funções globais → [Sniffer_Python]
   'ewoq', 'scilliance', 'tryRating', 'getResponseTryRating', 'performTask', 'correiosServer', 'targetAlert',
@@ -43,7 +44,7 @@ let arrGlobal = [
   'clientImput', 'maquinaInput', 'screenshot', 'elementAction', 'newAccounts',
 
   // funções globais → [WebSocket]
-  'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams', 'timGetOrderDetails',
+  'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
 
   // funções globais → [IPTV]
   'parseM3u', 'chunksOrder', 'redeCanais',

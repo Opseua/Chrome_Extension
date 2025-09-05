@@ -1,6 +1,6 @@
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e;
 async function devFun(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         let { enc, data, } = inf;
 
@@ -32,7 +32,7 @@ async function devFun(inf = {}) {
             function label(funName) { return typeof globalThis[funName] === 'function'; }
             for (let [index, value,] of data.fun.entries()) {
                 let { resWs, destination, messageId, } = inf;
-                let retInf = !!value.retInf; let errAlert = false;
+                let retInf = !!value.retInf, errAlert = false;
                 if (value.securityPass !== gW.securityPass) {
                     errAlert = true;
                     ret['ret'] = false;

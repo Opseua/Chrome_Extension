@@ -17,11 +17,11 @@
 // IMPORTAR PROVEDORES ADICIONAIS
 await import('./chats/@import.js'); globalThis['zachey01___gpt4free_js'] = GPT4js; delete globalThis['GPT4js'];
 
-let e = currentFile(), ee = e; let objOpenAi = false, objChatPython = false;
+let e = currentFile(new Error()), ee = e; let objOpenAi = false, objChatPython = false;
 async function chat(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
-        let provider = '', model, messagePrompt; let infIsArray = Array.isArray(inf); if (!infIsArray) { ({ provider, model, messagePrompt, } = inf); }
+        let provider = '', model, messagePrompt, infIsArray = Array.isArray(inf); if (!infIsArray) { ({ provider, model, messagePrompt, } = inf); }
 
         let retApi, infApi;
         if (provider === 'openAi') {

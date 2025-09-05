@@ -13,30 +13,38 @@ rem REGISTRAR GATILHO
 if "!arg1!" == "APAGAR" ( goto COPIA_APAGAR ) else ( if "!arg1!" == "CRIAR" ( goto COPIA_CRIAR ) )
 !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\n\\nPARAMETROS INVALIDOS. Exemplo:\\n\\n!arquivo! 'APAGAR/CRIAR'"" & exit
 
-set "devMaster=#" & set "nodeOk=#" & set "pythonOk=#" & set fileQtdNode=0 & set "fileNode=" & set "fileBlNode=" & set fileQtdPython=0 & set "filePython=" & set "fileBlPython="
+& set "nodeOk=#" & set "pythonOk=#" & set fileQtdNode=0 & set "fileNode=" & set "fileBlNode=" & set fileQtdPython=0 & set "filePython=" & set "fileBlPython="
 :COPIA_CRIAR
-rem IDENTIFICAR O DEVMASTER PELO CONFIG (NAO SUBIR!!!)
+
+rem ****************************** IDENTIFICAR O DEVMASTER PELO CONFIG (NAO SUBIR!!!) ***************************************************************
+set "devMaster=#" & set "search=    master: " & set "replace="
 for /f "usebackq delims=" %%a in ("!fileChrome_Extension!\src\master.json") do ( 
 	set "conteudo=%%a"
 	set "conteudo=!conteudo:"=!"
 	if not "!conteudo!" == "!conteudo:master:=!" ( set "devMaster=!conteudo!" & goto DEVMASTER_ENCONTRADO )
 )
-
 !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\nDEVMASTER NAO ENCONTRADO!"" & exit
 :DEVMASTER_ENCONTRADO
+set "result=!devMaster:%search%=%replace%!" & set "result=!result:,=%replace%!" & set "devMaster=!result!"
+rem ********************************************************************************************************************************************************
 
 rem ************* AWS
 set "nodeAws=WebSocket_server" & set "pythonAws="
 rem ************* ESTRELAR
-set "nodeEstrelar=WebSocket_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2;WebScraper_serverC6_New3" & set "pythonEstrelar="
+set "nodeEstrelar=WebSocket_server;URA_Reversa_serverJsf;WebScraper_serverC6;WebScraper_serverC6_New2" & set "pythonEstrelar="
+rem ************* ESTRELAR_MARCOS
+set "nodeEstrelarMarcos=WebSocket_server" & set "pythonEstrelarMarcos="
+rem ************* ESTRELAR_THAYNA
+set "nodeEstrelarThayna=WebSocket_server" & set "pythonEstrelarThayna="
 rem ************* OPSEUA
 set "nodeOpseua=!nodeAws!;!nodeEstrelar!;IPTV_server;Sniffer_Python_server" & set "pythonOpseua=!pythonAws!;Sniffer_Python_server"
 
-rem ************* AWS | ESTRELAR | OPSEUA
-if not "!devMaster!" == "!devMaster:AWS=!" ( set "nodeOk=!nodeAws!" & set "pythonOk=!pythonAws!" )
-if not "!devMaster!" == "!devMaster:ESTRELAR=!" ( set "nodeOk=!nodeEstrelar!" & set "pythonOk=!pythonEstrelar!" )
-if not "!devMaster!" == "!devMaster:OPSEUA=!" ( set "nodeOk=!nodeOpseua!" & set "pythonOk=!pythonOpseua!" )
-if not "!devMaster!" == "!devMaster:NOTE_HP=!" ( set "nodeOk=!nodeOpseua!" & set "pythonOk=!pythonOpseua!" )
+if "!devMaster!" == "AWS" ( set "nodeOk=!nodeAws!" & set "pythonOk=!pythonAws!" )
+if "!devMaster!" == "ESTRELAR" ( set "nodeOk=!nodeEstrelar!" & set "pythonOk=!pythonEstrelar!" )
+if "!devMaster!" == "ESTRELAR_MARCOS" ( set "nodeOk=!nodeEstrelarMarcos!" & set "pythonOk=!pythonEstrelarMarcos!" )
+if "!devMaster!" == "ESTRELAR_THAYNA" ( set "nodeOk=!nodeEstrelarThayna!" & set "pythonOk=!pythonEstrelarThayna!" )
+if "!devMaster!" == "OPSEUA" ( set "nodeOk=!nodeOpseua!" & set "pythonOk=!pythonOpseua!" )
+if "!devMaster!" == "NOTE_HP" ( set "nodeOk=!nodeOpseua!" & set "pythonOk=!pythonOpseua!" )
 
 rem REMOVER DUPLICATAS (SEPARADOS POR ';') [NODE] | REMOVER CARACTERES DESNECESSARIOS '#;' E ';#' [NAO APAGAR!!!]
 set "varOk=#;"

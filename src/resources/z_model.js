@@ -2,11 +2,9 @@
 // infModel = { e, 'chaveUm': 'valorUm', 'chaveDois': 'valorDois' }
 // retModel = await model(infModel); console.log(retModel)
 
-let libs = { 'net': {}, };
-
-let e = currentFile(), ee = e;
+let e = currentFile(new Error()), ee = e; let libs = { 'net': {}, };
 async function model(inf = {}) {
-    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf.e || e;
     try {
         /* IMPORTAR BIBLIOTECA [NODE] */  if (libs['net']) { libs['net']['net'] = 1; libs = await importLibs(libs, 'serverRun [Sniffer_Python]'); }
 
