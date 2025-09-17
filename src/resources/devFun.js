@@ -40,9 +40,9 @@ async function devFun(inf = {}) {
                 } else if (!label(value.name)) {
                     errAlert = true;
                     ret['ret'] = false;
-                    ret['msg'] = `DEV FUN: ERRO | FUNÇÃO '${value.name}' NÃO EXITE`;
+                    ret['msg'] = `DEV FUN: ERRO | FUNÇÃO '${value.name}' NÃO EXISTE/NÃO DISPONÍVEL NO AMBIENTE`;
                 } else {
-                    let name = globalThis[value.name]; // CHROME ← : → NODE
+                    let name = globalThis[value.name];
                     let infName = value.par;
                     infName['retInf'] = retInf;
                     ret = await name(infName);

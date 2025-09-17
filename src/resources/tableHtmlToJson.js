@@ -1,10 +1,10 @@
 // → NO FINAL DO ARQUIVO
 
 let e = currentFile(new Error()), ee = e; let libs = { 'cheerio': {}, };
-async function htmlToJson(inf = {}) {
+async function tableHtmlToJson(inf = {}) {
     let ret = { 'ret': false, }; e = inf.e || e;
     try {
-        /* IMPORTAR BIBLIOTECA [NODE] */ if (!eng && libs['cheerio']) { libs['cheerio']['cheerio'] = 1; libs = await importLibs(libs, 'htmlToJson'); }
+        /* IMPORTAR BIBLIOTECA [NODE] */ if (!eng && libs['cheerio']) { libs['cheerio']['cheerio'] = 1; libs = await importLibs(libs, 'tableHtmlToJson'); }
 
         let { html, mode = 'new', object = true, } = inf; let result = [];
 
@@ -52,10 +52,10 @@ async function htmlToJson(inf = {}) {
 }
 
 // CHROME | NODE
-globalThis['htmlToJson'] = htmlToJson;
+globalThis['tableHtmlToJson'] = tableHtmlToJson;
 
-// let infHtmlToJson, retHtmlToJson;
-// infHtmlToJson = {
+// let infTableHtmlToJson, retTableHtmlToJson
+// infTableHtmlToJson = {
 //     e,
 //     // TEM O CABEÇALHO [SIM]
 //     'html':
@@ -89,7 +89,7 @@ globalThis['htmlToJson'] = htmlToJson;
 //     `,
 // };
 
-// infHtmlToJson = {
+// infTableHtmlToJson = {
 //     e,
 //     // TEM O CABEÇALHO [NÃO]
 //     'html':
@@ -116,4 +116,4 @@ globalThis['htmlToJson'] = htmlToJson;
 //     `,
 // };
 
-// retHtmlToJson = await htmlToJson(infHtmlToJson); console.log(retHtmlToJson);
+// retTableHtmlToJson = await tableHtmlToJson(infTableHtmlToJson); console.log(retTableHtmlToJson);

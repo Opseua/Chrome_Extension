@@ -7,7 +7,7 @@ async function messageReceived(inf = {}) {
     try {
         let { host, room, resWs, wsClients, messageId, partesRestantes = 0, message, buffer = false, origin, destination, } = inf;
 
-        messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId;
+        messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${randomId({ 'characters': 3, 'notNumber': false, 'notLetter': false, })}_messageId` : messageId;
         partesRestantes = partesRestantes > -99 ? partesRestantes : 0; message = typeof message === 'object' ? JSON.stringify(message) : message; buffer = buffer ? buffer : false;
         origin = origin ? origin.replace('ws://', '') : `${host}/?roo=${room}`; destination = destination ? destination.replace('ws://', '') : 'x';
 

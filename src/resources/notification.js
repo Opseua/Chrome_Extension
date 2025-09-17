@@ -1,6 +1,6 @@
 // let infNotification, retNotification;
-// infNotification = { 'duration': 3, 'icon': `icon_4.png`, 'buttons': [{ 'title': 'BOTAO 1', }, { 'title': `BOTAO 2`, },], };
-// infNotification = { e, 'retInf': false, 'title': `TITULO`, 'text': `TEXTO`, 'keepOld': true, 'ntfy': true, 'chromeNot': false, 'legacy': false, }; // 'legacy' PELO HTTP POST NÃO!!!
+// infNotification = { 'duration': 3, 'icon': `iconGreen`, 'buttons': [{ 'title': 'BOTAO 1', }, { 'title': `BOTAO 2`, },], };
+// infNotification = { e, 'retInf': false, 'title': `TITULO`, 'text': `TEXTO`, 'icon': `iconGreen`, 'keepOld': true, 'ntfy': true, 'chromeNot': false, 'legacy': false, }; // 'legacy' PELO HTTP POST NÃO!!!
 // retNotification = await notification(infNotification); console.log(retNotification);
 
 // // → 'duration': 5 | ERROS ( 'regexE' [crash Node] )
@@ -12,10 +12,10 @@ let e = currentFile(new Error()), ee = e; let rate = rateLimiter({ 'max': 5, 'se
 async function notification(inf = {}) {
     let ret = { 'ret': false, }; e = inf.e || e; if (!rate.check().ret) { crashCode('notification: MUITAS CHAMADAS!!!'); }
     try {
-        let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = true, chromeNot = false, duration = 5, icon = 'notification_3.png', buttons = [], legacy = false, } = inf;
+        let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = true, chromeNot = false, duration = 5, icon = 'iconRed', buttons = [], legacy = false, } = inf;
 
         // [1] → NOTIFICAÇÃO NÃO SOLICITADA | [2] → NOTIFICAÇÃO CHAMADA ret {true} | [msg] NOTIFICAÇÃO CHAMADA ret {false}
-        let { devMy, securityPass, devSever, } = gW; let promises = [], retDAF = {}, rets = [];
+        let { devMy, securityPass, devSever, } = gW; let promises = [], retDAF = {}, rets = []; icon = icon.includes('.png') ? icon : `${icon}.png`;
 
         // NTFY
         if (ntfy) {
@@ -55,7 +55,6 @@ async function notification(inf = {}) {
                             let nots = chrome.notifications; // MANTER NOTIFICAÇÕES ANTIGAS
                             if (!keepOld) { let nts = await new Promise((resolve) => { nots.getAll((n) => resolve(n)); }); for (let id in nts) { await new Promise((resolve) => { nots.clear(id, resolve); }); } }
                             // ÍCONE | MÁXIMO [CONSIDERANDO TUDO 'A']
-                            icon = icon.includes('media') ? icon.split('media/')[1] : icon; // ANTIGO → './src/media/notification_3.png'
                             icon = await fetch(`./src/media/${icon}`).then((v) => v.arrayBuffer()).then((buffer) => btoa(String.fromCharCode(...new Uint8Array(buffer)))); await new Promise((resolve, reject) => {
                                 nots.create({ 'type': 'basic', 'iconUrl': `data:image/png;base64,${icon}`, 'title': title.substring(0, 32), 'message': text.substring(0, 128), buttons, }, (notId) => {
                                     if (chrome.runtime.lastError) { return reject(chrome.runtime.lastError.message); } // ENVIAR NOTIFICAÇÃO

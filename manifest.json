@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "# BOT",
-  "version": "1.0",
+  "version": "2",
   "description": "",
   "host_permissions": [
     "*://*/*"
@@ -17,6 +17,7 @@
     "*://*/*",
     "scripting",
     "<all_urls>",
+	"proxy",
     "identity",
     "downloads",
     "fileSystem",
@@ -88,10 +89,10 @@
     "runtime"
   ],
   "icons": {
-    "16": "./src/media/icon_3.png",
-    "32": "./src/media/icon_3.png",
-    "48": "./src/media/icon_3.png",
-    "128": "./src/media/icon_3.png"
+    "16": "./src/media/iconBOT.png",
+    "32": "./src/media/iconBOT.png",
+    "48": "./src/media/iconBOT.png",
+    "128": "./src/media/iconBOT.png"
   },
   "browser_action": {
     "default_popupAAA": "./src/media/popup.html"
@@ -104,16 +105,10 @@
   },
   "commands": {
     "atalho_1": {
-      "description": "atalho_1 DESCRIÇÃO"
+      "description": "atalho_1"
     },
     "atalho_2": {
-      "description": "atalho_2 DESCRIÇÃO"
-    },
-    "atalho_3": {
-      "description": "atalho_3 DESCRIÇÃO"
-    },
-    "atalho_4": {
-      "description": "atalho_4 DESCRIÇÃO"
+      "description": "atalho_2"
     }
   },
   "content_scripts": [

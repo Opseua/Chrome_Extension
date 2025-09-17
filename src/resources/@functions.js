@@ -7,6 +7,8 @@
 
 // for (let [index, value,] of array.entries()) { console.log('INDEX', index, 'VALUE', value); };
 // let obj = { 'keyA': 'valueA', 'keyB': 'valueB', 'keyC': 'valueC' }; for (let key in obj) { console.log(key); console.log(obj[key]); }
+// let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8,]; console.log(arr.slice(1, 5));
+// let value = 'CASAMENTO'; console.log(['CADEIRA', 'casa', 'CARRO',].some(a => value.toLowerCase().includes(a.toLowerCase()))); // true
 
 /* FORMATAR EM '0001' */ // number = String(number).padStart(4, '0'); 
 /* ESPERAR E EXECUTAR UMA VEZ */ // setTimeout(() => { console.log('OK'); }, 2000);
@@ -59,8 +61,12 @@ function rateLimiter(inf = {}) {
     return { check: () => { let n = Date.now(); while (t[0] < n - i) { t.shift(); } r = t.length < max; if (r) { t.push(n); m = x; } else { m = b + f(t[0] + i); } return { ret: r, msg: m, }; }, reset: () => t = [], };
 }// let rate = rateLimiter({ 'max': 2, 'sec': 5 }); function testRate() { console.log(rate.check()); console.log(rate.check()); console.log(rate.check()); }; testRate(); rate.reset() // LIMPAR TODO O REGISTRO E LIBERAR
 
-// ############### NÚMERO ALEATÓRIO ###############
+// ############### NÚMERO ALEATÓRIO | ID ALEATÓRIO ###############
 function randomNumber(min, max) { return Math.floor(Math.random() * ((typeof max === 'number' ? max : min + 1) - min + 1) + min); } // console.log(randomNumber(2, 5))
+function randomId({ characters, notNumber, notLetter, }) {
+    let c = characters, n = notNumber, l = notLetter, chars = '', res = ''; if (n && l) { return chars; } if (!n) { chars += '0123456789'; }
+    if (!l) { chars += 'abcdefghijklmnopqrstuvwxyz'; } for (let i = 0; i < c; i++) { res += chars[Math.floor(Math.random() * chars.length)]; } return res;
+} // console.log(randomId({ 'characters': 5, 'notNumber': true, 'notLetter': false, })); console.log(randomId({ 'characters': 4, 'notNumber': false, 'notLetter': true, }));
 
 // ############### LISTENER ###############
 let lists = {}; function listenerMonitorar(namLis, callback) { if (!lists[namLis]) { lists[namLis] = []; } lists[namLis].push(callback); }
@@ -121,7 +127,7 @@ let gO = { 'inf': {}, }; Object.assign(globalThis, {
    // /* ## GLOBAL OBJECT */ gO, gOList,
    /* ## GLOBAL OBJECT */ gO,
     /* ## LISTENER */     listenerMonitorar, listenerAcionar,
-    /* ## FUNÇÕES */      crashCode, rateLimiter, randomNumber, awaitTimeout, clearRun, startupTime, importFun, importLibs, replaceVars, stringGet,
+    /* ## FUNÇÕES */      crashCode, rateLimiter, randomNumber, randomId, awaitTimeout, clearRun, startupTime, importFun, importLibs, replaceVars, stringGet,
 });
 
 // ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!! | NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'

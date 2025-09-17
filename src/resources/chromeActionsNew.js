@@ -16,7 +16,7 @@
 // infChromeActionsNew.action = 'elementHighLight'; infChromeActionsNew.elementValue = 'TESTE';
 // infChromeActionsNew.path = '/html/body/div/div[9]'; // SELECIONAR ELEMENTO PELO PATH
 
-// retChromeActionsNew = await chromeActions({ e, 'action': 'injectNew', 'target': `*z_HTML.html*`, 'fun': chromeActionsNew, 'funInf': infChromeActionsNew, }); console.log(retChromeActionsNew);
+// retChromeActionsNew = await chromeActions({ e, 'action': 'injectOld', 'target': `*z_HTML.html*`, 'fun': chromeActionsNew, 'funInf': infChromeActionsNew, }); console.log(retChromeActionsNew);
 
 let e = currentFile(new Error()), ee = e;
 async function chromeActionsNew(inf = {}) {

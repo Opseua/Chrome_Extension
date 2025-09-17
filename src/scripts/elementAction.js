@@ -2,7 +2,6 @@
 // infModel = { e, 'chaveUm': 'valorUm', 'chaveDois': 'valorDois' }
 // retModel = await elementoSearch(infModel); console.log(retModel)
 
-// IGUAL AO 'Chrome_Extension/src/resources/clientImputChromeNew.js'
 async function elementAction(inf = {}) {
     let nameSearch = inf.nameSearch || 'xx', maxReturn = Number(inf.element?.maxReturn) || 10, indexTarget = (inf.element?.indexTarget !== undefined) ? inf.element.indexTarget : -1;
     let element = inf.element || {}, maxAwaitMil = element.maxAwaitMil || 50; function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }

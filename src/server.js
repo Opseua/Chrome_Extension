@@ -34,8 +34,11 @@ async function serverRun(inf = {}) {
         // CLIENT (NÃO POR COMO 'await'!!!) [MANTER NO FINAL]
         await new Promise(r => { setTimeout(r, 50); }); client({ e, }); await new Promise(r => { setTimeout(r, 500); });
 
-        // CHAMAR PARA DEFINIR A FUNÇÃO
-        await chromeActionsNew();
+        // REINICIAR EXTENSÃO | CHECAR SE O BOT DA INDICAÇÃO ESTÁ PREPARADO
+        if (gW.devMaster.includes('ESTRELAR_')) {
+            scheduleRun('00:00'); let delay = (3 * 60 * 1000); // delay = 10000; // ← TESTES
+            setInterval(async () => { checkIndication({}); }, delay); // A CADA x MINUTO(s)
+        }
 
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;

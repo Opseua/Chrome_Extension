@@ -21,7 +21,6 @@ async function model(inf = {}) {
     }
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
-    // return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), }; // return ANTIGO
 }
 
 // CHROME | NODE

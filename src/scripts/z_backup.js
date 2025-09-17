@@ -1,10 +1,16 @@
-globalThis['firstFileCall'] = new Error(); await import('../resources/@export.js'); let e = firstFileCall, ee = e; let pars = process.argv;
+/* eslint-disable camelcase */
 
-async function backup() {
-    let show = true, m = `!fileChrome_Extension!/src/scripts/BAT/fileMsg.vbs`; if (pars?.[2] === 'HIDE' || pars?.[3] === 'HIDE') { show = false; }
+// let retBackup = await z_backup({ e, 'mode': `HIDEaaa`, }); console.log(retBackup);
+// CMD → node %fileChrome_Extension%/src/scripts/z_backup.js HIDEaaa
+
+let e, ee, pars; if (process?.argv?.[1]?.includes('backup.js')) { globalThis['firstFileCall'] = new Error(); await import('../resources/@export.js'); e = firstFileCall, ee = e; pars = process.argv; await z_backup(); }
+
+async function z_backup(inf = {}) {
+    let ret = { 'ret': false, }; e = inf.e || e;
+    let err, show = true, m = `!fileChrome_Extension!/src/scripts/BAT/fileMsg.vbs`; if ((pars?.[2] || '').toLowerCase() === 'hide' || (inf?.mode || '').toLowerCase() === 'hide') { show = false; }
     try {
         let n = `%nircmd%`, s = `sendkeypress lwin`, w = `wait 1500`, retDateHour = dateHour().res; retDateHour = `MES ${retDateHour.mon} - DIA ${retDateHour.day} - HORA ${retDateHour.hou}.${retDateHour.min}`;
-        let backupDestination = `${fileProjetos}/z_OUTROS/BACKUPS_${gW.devMaster}/${retDateHour}`, err, c, p = backupDestination;
+        let backupDestination = `${fileProjetos}/z_OUTROS/BACKUPS_${gW.devMaster}/${retDateHour}`, c, p = backupDestination;
 
         function getBackupPaths(base, includes, excludes) {
             let ps = [], normBase = _path.normalize(base); for (let pat of includes) {
@@ -15,18 +21,16 @@ async function backup() {
             let all = []; for (let i of _fs.readdirSync(dir)) { let fp = _path.join(dir, i); all.push(fp); if (_fs.existsSync(fp) && _fs.statSync(fp).isDirectory()) { all.push(...getRecursivePaths(fp)); } } return all;
         } function shouldExclude(fp, patterns, base) {
             let rel = _path.relative(base, fp).toLowerCase(), name = _path.basename(fp).toLowerCase(), full = fp.toLowerCase(); for (let pat of patterns) {
-                let clean = pat.replace(/^!/, '').replace(/^[\/\\]/, '').toLowerCase(); if (clean.includes('*')) {
-                    let regex = new RegExp('^' + clean.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$', 'i'); if (regex.test(name) || regex.test(rel)) { return true; }
-                } else if ([rel, name, full,].some(v => v.endsWith(clean) || v === clean)) { return true; }
+                let clean = pat.replace(/^!/, '').replace(/^[\/\\]/, '').toLowerCase();
+                if (clean.includes('*')) { let regex = new RegExp('^' + clean.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$', 'i'); if (regex.test(name) || regex.test(rel)) { return true; } }
+                else if ([rel, name, full,].some(v => v.endsWith(clean) || v === clean)) { return true; }
             } return false;
         } function copyFile(src, dest) { let dir = _path.dirname(dest); if (!_fs.existsSync(dir)) { _fs.mkdirSync(dir, { recursive: true, }); } _fs.copyFileSync(src, dest); }
 
         async function executeBackup({ backupPath, backupName, patternsIncludes, patternsExcludes, backupDestination, }) {
             let txt = '', result = getBackupPaths(backupPath, patternsIncludes, patternsExcludes), destRoot = _path.join(backupDestination, backupName); for (let src of result) {
-                let rel = _path.relative(backupPath, src), dest = _path.join(destRoot, rel);
-                if (_fs.statSync(src).isDirectory()) { if (!_fs.existsSync(dest)) { _fs.mkdirSync(dest, { recursive: true, }); } } else {
-                    copyFile(src, dest); let ok = src.split('\\').reverse()[0]; ok = `${src.replace(`\\${ok}`, '')}`; if (!txt.includes(ok)) { txt = `${txt}${ok}`; console.log(`OK: [${backupName}] → ${ok}`); }
-                }
+                let rel = _path.relative(backupPath, src), dest = _path.join(destRoot, rel); if (_fs.statSync(src).isDirectory()) { if (!_fs.existsSync(dest)) { _fs.mkdirSync(dest, { recursive: true, }); } }
+                else { copyFile(src, dest); let ok = src.split('\\').reverse()[0]; ok = `${src.replace(`\\${ok}`, '')}`; if (!txt.includes(ok)) { txt = `${txt}${ok}`; console.log(`OK: [${backupName}] → ${ok}`); } }
             } return result;
         }
 
@@ -64,25 +68,26 @@ async function backup() {
             ],
         };
 
-        // FAZER BACKUPS
+        // FAZER BACKUPS | ABRIR MENU INICIAR → TIRAR PRINT → FECHAR MENU INICIAR
         for (let bkp of rules.backups) { await executeBackup({ ...bkp, backupDestination: rules.backupDestination, }); }
-
-        // ABRIR MENU INICIAR → TIRAR PRINT → FECHAR MENU INICIAR
         await commandLine({ e, 'awaitFinish': true, 'command': `${show ? `${n} ${s} & ${n} ${w} & ` : ''}${n} savescreenshot "${p}/screenshot.png"${show ? ` & ${n} ${s}` : ''}`, 'withCmd': true, });
 
         // ZIPAR PASTA
         await new Promise(r => { setTimeout(r, 500); }); console.log(`ZIPANDO...`); c = `!fileWindows!/PORTABLE_WinRAR/z_OUTROS/PORTABLE_7-Zip/App/7-Zip64/7z.exe`;
         c = await commandLine({ e, 'awaitFinish': true, 'command': `"${c}" a -tzip "${p}.zip" "${p}/*"`, });
-        if (!c.ret) { err = `ERRO | AO ZIPAR`; console.log(`${err}`); commandLine({ e, 'command': `"${m}" "${err}"`, }); return; } else {
-            let f = await file({ e, 'action': 'del', 'path': p, }); if (!f.ret) { err = `ERRO | AO APAGAR PASTA ANTIGA`; console.log(`${err}`); if (show) { commandLine({ e, 'command': `"${m}" "${err}"`, }); } return; }
-            else { p = p.split('/').pop(); console.log(`CONCLUIDO → '${p}.zip'`); if (show) { commandLine({ e, 'command': `"${m}" "CONCLUIDO → '${p}.zip'"`, }); } }
-        } await new Promise(r => { setTimeout(r, 1500); });
+        if (!c.ret) { err = `ERRO | AO ZIPAR`; ret['msg'] = `BACKUP: ${err}`; console.log(err); commandLine({ e, 'command': `"${m}" "${err}"`, }); } else if (!(await file({ e, 'action': 'del', 'path': p, })).ret) {
+            err = `ERRO | AO APAGAR PASTA ANTIGA`; ret['msg'] = `BACKUP: ${err}`; console.log(err); if (show) { commandLine({ e, 'command': `"${m}" "${err}"`, }); }
+        } else { p = p.split('/').pop(); p = `CONCLUIDO → '${p}.zip'`; console.log(p); if (show) { commandLine({ e, 'command': `"${m}" "${p}"`, }); } ret['res'] = p; ret['msg'] = `BACKUP: OK`; ret['ret'] = true; }
 
     } catch (catchErr) {
-        console.log(`ERRO AO FAZER BACKUPS`, '\n', catchErr); if (show) { commandLine({ e, 'command': `"${m}" "ERRO AO FAZER BACKUPS"`, }); }
+        err = `ERRO | AO FAZER BACKUPS`; console.log(err, '\n', catchErr); if (show) { commandLine({ e, 'command': `"${m}" "${err}"`, }); }
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     }
 
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.hasOwnProperty('res') && { 'res': ret.res, }), };
 }
-backup();
+
+// CHROME | NODE
+globalThis['z_backup'] = z_backup;
 
 

@@ -9,7 +9,7 @@ async function messageSend(inf = {}) {
     try {
         let { resWs = false, messageId = true, secondsAwait = 0, destination = 'x', origin = false, message = {}, } = inf;
 
-        messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${Math.random().toString(36).substring(2, 5)}_messageId` : messageId.replace('_RET-TRUE', '_RET-OK');
+        messageId = messageId === true || !messageId ? `ID_${new Date().getTime()}_${randomId({ 'characters': 3, 'notNumber': false, 'notLetter': false, })}_messageId` : messageId.replace('_RET-TRUE', '_RET-OK');
         let retAwaitTimeout, listenerName, messageOk, buffer, chunkSize = gW.kbPartsMessage * 1024; if (typeof message === 'object') {
             messageOk = JSON.stringify(message); buffer = messageOk.includes(`"type":"Buffer"`) && messageOk.includes(`"data":[`) && !messageOk.includes(`"ret"`);
             messageOk = buffer ? Buffer.from(message).toString('base64') : messageOk;

@@ -1,4 +1,4 @@
-// let infApi, retApi; // 'object': true | 'maxConnect'/'maxResponse': 10 | 'bodyReqRaw'/'bodyResRaw': true (antigo buffer) [Buffer.from(retApi.res.body)] | 'hideHeaders': false
+// let infApi, retApi; // 'object': true | 'maxConnect'/'maxResponse': 10 | 'bodyReqRaw'/'bodyResRaw': true (conteudo em buffer) [Buffer.from(retApi.res.body)] | 'hideHeaders': false
 // infApi = { e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'application/json', }, 'body': { 'aaa': 'bbb', }, }; // ### json/object
 // infApi = { e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'application/x-www-form-urlencoded', }, 'body': { 'key': 'value', }, }; // ### x-www-form-urlencoded
 // infApi = { e, 'method': 'POST', 'url': `https://ntfy.sh/AAA`, 'headers': { 'Content-Type': 'text/plain;charset=UTF-8', }, 'body': `Esse é o texto`, }; // ### text

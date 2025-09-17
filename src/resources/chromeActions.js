@@ -27,7 +27,7 @@ async function chromeActions(inf = {}) {
             let cookie = ''; JSON.parse(retCookies).reduce((accumulator, v) => { cookie += `${v.name}=${v.value}; `; return accumulator; }, '');
             if ((cookieSearch) && !(retCookies.toString().includes(cookieSearch))) { ret['msg'] = `CHROME ACTIONS [COOKIE]: ERRO | COOKIE '${cookieSearch}' NAO CONTRADO`; }
             else { ret['ret'] = true; ret['msg'] = `CHROME ACTIONS [COOKIE]: OK`; ret['res'] = { 'array': retCookies, 'concat': cookie, }; }
-        } else if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'elementGetPath', 'inject', 'elementAwait', 'injectNew',].includes(action)) {
+        } else if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementSetValue', 'elementClick', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'elementGetPath', 'injectOld', 'elementAwait', 'injectNew',].includes(action)) {
             let targetMode = (target.includes('<') || target.includes('>')) ? 'HTML' : 'INJECT';
             // →→→ ONDE EXECUTAR? HTML BRUTO FOI PASSADO (CRIAR DIV TEMPORÁRIA) | EXECUTAR NA PÁGINA (INJETANDO SCRIPT - DEFINIR ID DA ABA ALVO)
             if (targetMode === 'HTML') { divTemp = document.createElement('div'); divTemp.innerHTML = target; document.body.appendChild(divTemp); }
@@ -109,7 +109,7 @@ async function chromeActions(inf = {}) {
                         if (elements && elements.length > 0) { ret = true; break; } await new Promise(resolve => setTimeout(resolve, 100));
                     } chrome.runtime.sendMessage(ret);
                 } code = `(${funAsync.toString()})(${JSON.stringify({ awaitElementMil, tag, attribute, attributeValue, })});`;
-            } else if (action === 'inject') {
+            } else if (action === 'injectOld') {
                 // INJECT
                 if (!(typeof fun === 'function')) {
                     code = fun;
@@ -122,7 +122,6 @@ async function chromeActions(inf = {}) {
                 }
             }
 
-            action = 'injectNew';
             if (targetMode === 'INJECT' && action !== 'injectNew') {
                 // INJETAR SCRIPT E EXECUTAR | ASYNC [NÃO] | [SIM]
                 if (!(action === 'elementAwait' || code.includes('(async function'))) {
@@ -142,7 +141,7 @@ async function chromeActions(inf = {}) {
             }
 
             let r = retExeS; r = (typeof r === 'string' && r.length > 0) || (Array.isArray(r) && r.length > 0) || (typeof r === 'object' && r !== null && Object.keys(r).length > 0) || (typeof r === 'boolean' && r === true);
-            if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'inject', 'injectNew', 'elementGetPath',].includes(action) && r) { ret['res'] = retExeS; }
+            if (['getBody', 'attributeGetValue', 'elementGetValue', 'elementGetDivXpath', 'elementGetDiv', 'elementIsHidden', 'injectOld', 'injectNew', 'elementGetPath',].includes(action) && r) { ret['res'] = retExeS; }
             ret['msg'] = `CHROME ACTIONS [SCRIPT → ${targetMode}]: ${r ? 'OK' : 'ERRO | ELEMENTO NÃO ENCONTRADO'}`; ret['ret'] = r;
 
             // REMOVER DIV TEMPORÁRIA (NECESSÁRIO PARA EVITAR VALORES DUPLICADOS!!!)

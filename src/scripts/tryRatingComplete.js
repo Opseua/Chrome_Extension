@@ -1,5 +1,5 @@
 // let infTryRatingComplete, retTryRatingComplete;
-// infTryRatingComplete = { e, 'infTryRatingComplete': 'https://maps.app.goo.gl/', };
+// infTryRatingComplete = { e, 'infTryRatingComplete': 'https://URL_EVIDENCIA_AQUI', };
 // retTryRatingComplete = await tryRatingComplete(infTryRatingComplete); console.log(retTryRatingComplete);
 
 // IMPORTAR OBJETOS COM AS OPÇÕES E RESPOSTAS
@@ -21,7 +21,7 @@ async function tryRatingComplete(inf = {}) {
 
         let infOk = {}; if (infTryRatingComplete.includes('{"')) { infOk = JSON.parse(infTryRatingComplete); } else if (infTryRatingComplete.includes('🟢')) {
             let gM = infTryRatingComplete.replace(/🔴|🔵/g, '🟢').split('🟢').map(x => x.trim()); infOk['name'] = gM[0]; infOk['category'] = gM[1]; infOk['address'] = gM[2]; infOk['urlGoogleMaps'] = gM[3];
-        } else if (hitApp === 'Search20') { let gM = infTryRatingComplete; infOk['urlGoogleMaps'] = gM.includes('maps.app.goo.gl') ? gM : false; }
+        } else if (hitApp === 'Search20') { let gM = infTryRatingComplete; infOk['urlGoogleMaps'] = ['http://', 'https://', 'www.',].some(a => gM.toLowerCase().includes(a)) ? gM : false; }
 
         // ETAPA 1: PEGAR A DIV DOS JUDGES
         let judgesDiv = []; for (let index = 0; index < 10; index++) {

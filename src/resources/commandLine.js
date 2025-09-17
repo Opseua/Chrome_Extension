@@ -7,7 +7,6 @@
 //     // 'command': `notepad & explorer`,
 //     // ****************** (SEM ESPAÇO)
 //     // 'command': `D:/ARQUIVOS/BAT.bat AAA`,
-//     // 'command': `%fileChrome_Extension%/src/scripts/BAT/z__AllOff.vbs`,
 //     // 'command': `%fileWindows%/PORTABLE_Notepad++/notepad++.exe D:/AAA.txt`,
 //     // 'command': `!fileProjetos!/WebSocket/src/z_OUTROS_server/OFF.vbs FORCE_STOP`,
 //     // ****************** (COM ESPAÇO)

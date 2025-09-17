@@ -73,7 +73,7 @@ async function tryRatingSet(inf = {}) {
                     let awaitFor = element === 'submit_rating' ? [(timeSec - 10), timeSec,] : val4.awaitFor || elementObj[element1].actionsObj[index4].awaitFor;
                     let value = val4.value || elementObj[element1].actionsObj[index4].value, infChromeActionsNew = JSON.parse(JSON.stringify(elementsObj[element].infObj).replace(`###_REPLACE_1_###`, `${element1Obj}`));
                     await new Promise(resolve => setTimeout(resolve, randomNumber(...awaitFor) * 1000)); console.log(`    ++ AÇÃO++\n    → ${awaitFor.toString()} | ${actionObj} \n    ${value} `);
-                    let infChromeActions = { e, 'action': 'inject', target, 'fun': chromeActionsNew, 'funInf': { ...infChromeActionsNew, ...{ 'action': actionObj, }, }, };
+                    let infChromeActions = { e, 'action': 'injectOld', target, 'fun': chromeActionsNew, 'funInf': { ...infChromeActionsNew, ...{ 'action': actionObj, }, }, };
                     let retChromeActions = await chromeActions(infChromeActions); if (!retChromeActions.ret) { return retChromeActions; } // console.log(retChromeActions);
                 }
             }

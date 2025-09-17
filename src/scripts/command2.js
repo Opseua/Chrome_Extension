@@ -2,7 +2,7 @@ let e = currentFile(new Error()), ee = e;
 async function command2(inf = {}) {
   let ret = { 'ret': false, }; e = inf.e || e;
   try {
-    await notification({ 'duration': 2, 'icon': 'icon_3.png', 'title': `AGUARDE...`, 'text': `Alternando sniffer`, 'ntfy': false, });
+    await notification({ 'duration': 2, 'icon': 'iconBOT', 'title': `AGUARDE...`, 'text': `Alternando sniffer`, 'ntfy': false, });
 
     await commandLine({ e, 'command': `${fileProjetos}/Sniffer_Python/src/z_OUTROS_server/TOGGLE_HIDE.vbs`, });
 

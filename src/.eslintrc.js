@@ -22,19 +22,19 @@ let arrGlobal = [
   // GLOBAL OBJECT
   'gO', 'gOList', 'cs',
   // FUNÇÕES
-  'rateLimiter', 'awaitTimeout', 'randomNumber',
+  'rateLimiter', 'awaitTimeout', 'randomNumber', 'randomId',
 
   // ### BIBLIOTECAS / NATIVO → GOOGLE 
   'UrlFetchApp', 'Browser',
 
   // funções globais → [Chrome_Extension]
-  'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'htmlToJson',
+  'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'tableHtmlToJson',
   'log', 'logConsole', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar',
   'listenerMonitorar', 'chromeActionsNew', 'importFun', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1', 'audioTranscribe',
-  'command2', 'tryRatingComplete', 'startupTime', 'crashCode', 'replaceVars', 'stringGet', 'clientImputChrome', 'clientImputChromeNew',
+  'command2', 'tryRatingComplete', 'startupTime', 'crashCode', 'replaceVars', 'stringGet', 'clientImputChrome', 'restartCode', 'checkIndication', 'scheduleRun', 'z_backup',
 
   // funções globais → [Sniffer_Python]
-  'ewoq', 'scilliance', 'tryRating', 'getResponseTryRating', 'performTask', 'correiosServer', 'targetAlert',
+  'ewoq', 'scilliance', 'tryRating', 'performTask', 'correiosServer', 'targetAlert',
 
   // funções globais → [URA_Reversa]
   'leadChangeStatus', 'leadGet', 'leads', 'leadsJsf', 'login',
@@ -47,7 +47,7 @@ let arrGlobal = [
   'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
 
   // funções globais → [IPTV]
-  'parseM3u', 'chunksOrder', 'redeCanais',
+  'parseM3u', 'chunksOrder', 'redeCanais', 'chunksGet',
 ],
 
   // ************** VARIÁVEIS NÃO USADAS **************

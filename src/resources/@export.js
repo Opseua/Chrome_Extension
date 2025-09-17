@@ -25,17 +25,15 @@ globalThis['file'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path
 globalThis['api'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/api.js', inf, project, }); };
 globalThis['chat'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/chat.js', inf, project, }); };
 globalThis['chromeActions'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/resources/chromeActions.js', inf, project, }); };
-globalThis['chromeActionsNew'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/resources/chromeActionsNew.js', inf, project, }); };
 globalThis['client'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/client.js', inf, project, }); };
 globalThis['clientImputChrome'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/resources/clientImputChrome.js', inf, project, }); };
-globalThis['clientImputChromeNew'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/resources/clientImputChromeNew.js', inf, project, }); };
 globalThis['clipboard'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/clipboard.js', inf, project, }); };
 globalThis['commandLine'] = (inf) => { return importFun({ 'engOk': (!eng), 'path': './src/resources/commandLine.js', inf, project, }); };
 globalThis['configStorage'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/configStorage.js', inf, project, }); };
 globalThis['devFun'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/devFun.js', inf, project, }); };
 globalThis['googleSheets'] = (inf) => { return importFun({ 'engOk': (!eng), 'path': './src/resources/googleSheets.js', inf, project, }); };
 globalThis['googleTranslate'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/googleTranslate.js', inf, project, }); };
-globalThis['htmlToJson'] = (inf) => { return importFun({ 'engOk': (true), 'path': './src/resources/htmlToJson.js', inf, project, }); };
+globalThis['tableHtmlToJson'] = (inf) => { return importFun({ 'engOk': (true), 'path': './src/resources/tableHtmlToJson.js', inf, project, }); };
 globalThis['log'] = (inf) => { return importFun({ 'engOk': (!eng), 'path': './src/resources/log.js', inf, project, }); };
 globalThis['logConsole'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/logConsole.js', inf, project, }); };
 globalThis['notification'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/notification.js', inf, project, }); };
@@ -49,10 +47,11 @@ globalThis['command1'] = (inf) => { return importFun({ 'engOk': (eng), 'path': '
 globalThis['command2'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/scripts/command2.js', inf, project, }); };
 globalThis['tryRatingComplete'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/scripts/tryRatingComplete.js', inf, project, }); };
 globalThis['tryRatingSet'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/scripts/tryRatingSet.js', inf, project, }); };
+globalThis['z_backup'] = (inf) => { return importFun({ 'engOk': (!eng), 'path': './src/scripts/z_backup.js', inf, project, }); };
 
 // *********** (LEGACY IMPORT) NÃO FUNCIONA COM 'importFun' ***********
 // → FUNÇÕES
-await import('./dateHour.js'); await import('./regex.js');
+await import('./dateHour.js'); await import('./regex.js'); await import('./chromeActions.js'); await import('./chromeActionsNew.js');
 
 // → SCRIPTS
 await import('../scripts/elementAction.js'); // → 'Chrome_Extension' / 'WebScraper'

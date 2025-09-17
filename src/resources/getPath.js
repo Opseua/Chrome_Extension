@@ -31,7 +31,7 @@ async function getPath(inf = {}) {
                 await new Promise((resolve) => { chrome.storage.local.set(confOk, async () => { resolve(true); }); }); // STORAGE: DEFINIR
 
                 // MASTER.json
-                master = await fetch(chrome.runtime.getURL(master)); master = await master.text(); master = JSON.parse(master);
+                master = await fetch(chrome.runtime.getURL(master)); master = await master.text(); try { master = JSON.parse(master); } catch { master = { 'master': nd, }; }
                 confOk['master'] = master.master;
 
                 res['letter'] = funLetter;
@@ -52,7 +52,7 @@ async function getPath(inf = {}) {
                 confOk = await _fs.promises.readFile(`${funLetter}:/${root}/${funProject}/${conf}`, 'utf8'); confOk = JSON.parse(confOk);
 
                 // MASTER.json
-                master = await _fs.promises.readFile(`${funLetter}:/${root}/${funProject}/${master}`, 'utf8'); master = JSON.parse(master);
+                master = await _fs.promises.readFile(`${funLetter}:/${root}/${funProject}/${master}`, 'utf8'); try { master = JSON.parse(master); } catch { master = { 'master': nd, }; }
                 confOk['master'] = master.master;
 
                 res['letter'] = funLetter;
