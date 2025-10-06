@@ -14,22 +14,22 @@ async function z_backup(inf = {}) {
 
         function getBackupPaths(base, includes, excludes) {
             let ps = [], normBase = _path.normalize(base); for (let pat of includes) {
-                let dir = pat.replace(/\/\*\*?$/, '').replace(/^\//, ''), full = _path.join(normBase, dir); if (!_fs.existsSync(full)) { continue; } ps.push(full);
-                if (pat.includes('/**')) { ps.push(...getRecursivePaths(full)); } else if (pat.includes('/*') && _fs.statSync(full).isDirectory()) { _fs.readdirSync(full).forEach(f => ps.push(_path.join(full, f))); }
+                let dir = pat.replace(/\/\*\*?$/, '').replace(/^\//, ''), full = fJoin(normBase, dir); if (!_fs.existsSync(full)) { continue; } ps.push(full);
+                if (pat.includes('/**')) { ps.push(...getRecursivePaths(full)); } else if (pat.includes('/*') && _fs.statSync(full).isDirectory()) { _fs.readdirSync(full).forEach(f => ps.push(fJoin(full, f))); }
             } ps = [...new Set(ps),]; return ps.filter(p => !shouldExclude(p, excludes, normBase)).sort();
         } function getRecursivePaths(dir) {
-            let all = []; for (let i of _fs.readdirSync(dir)) { let fp = _path.join(dir, i); all.push(fp); if (_fs.existsSync(fp) && _fs.statSync(fp).isDirectory()) { all.push(...getRecursivePaths(fp)); } } return all;
+            let all = []; for (let i of _fs.readdirSync(dir)) { let fp = fJoin(dir, i); all.push(fp); if (_fs.existsSync(fp) && _fs.statSync(fp).isDirectory()) { all.push(...getRecursivePaths(fp)); } } return all;
         } function shouldExclude(fp, patterns, base) {
             let rel = _path.relative(base, fp).toLowerCase(), name = _path.basename(fp).toLowerCase(), full = fp.toLowerCase(); for (let pat of patterns) {
                 let clean = pat.replace(/^!/, '').replace(/^[\/\\]/, '').toLowerCase();
                 if (clean.includes('*')) { let regex = new RegExp('^' + clean.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$', 'i'); if (regex.test(name) || regex.test(rel)) { return true; } }
                 else if ([rel, name, full,].some(v => v.endsWith(clean) || v === clean)) { return true; }
             } return false;
-        } function copyFile(src, dest) { let dir = _path.dirname(dest); if (!_fs.existsSync(dir)) { _fs.mkdirSync(dir, { recursive: true, }); } _fs.copyFileSync(src, dest); }
+        } function copyFile(src, dest) { let dir = fDirname(dest); if (!_fs.existsSync(dir)) { _fs.mkdirSync(dir, { 'recursive': true, }); } _fs.copyFileSync(src, dest); }
 
         async function executeBackup({ backupPath, backupName, patternsIncludes, patternsExcludes, backupDestination, }) {
-            let txt = '', result = getBackupPaths(backupPath, patternsIncludes, patternsExcludes), destRoot = _path.join(backupDestination, backupName); for (let src of result) {
-                let rel = _path.relative(backupPath, src), dest = _path.join(destRoot, rel); if (_fs.statSync(src).isDirectory()) { if (!_fs.existsSync(dest)) { _fs.mkdirSync(dest, { recursive: true, }); } }
+            let txt = '', result = getBackupPaths(backupPath, patternsIncludes, patternsExcludes), destRoot = fJoin(backupDestination, backupName); for (let src of result) {
+                let rel = _path.relative(backupPath, src), dest = fJoin(destRoot, rel); if (_fs.statSync(src).isDirectory()) { if (!_fs.existsSync(dest)) { _fs.mkdirSync(dest, { 'recursive': true, }); } }
                 else { copyFile(src, dest); let ok = src.split('\\').reverse()[0]; ok = `${src.replace(`\\${ok}`, '')}`; if (!txt.includes(ok)) { txt = `${txt}${ok}`; console.log(`OK: [${backupName}] → ${ok}`); } }
             } return result;
         }
@@ -69,7 +69,7 @@ async function z_backup(inf = {}) {
         };
 
         // FAZER BACKUPS | ABRIR MENU INICIAR → TIRAR PRINT → FECHAR MENU INICIAR
-        for (let bkp of rules.backups) { await executeBackup({ ...bkp, backupDestination: rules.backupDestination, }); }
+        for (let bkp of rules.backups) { await executeBackup({ ...bkp, 'backupDestination': rules.backupDestination, }); }
         await commandLine({ e, 'awaitFinish': true, 'command': `${show ? `${n} ${s} & ${n} ${w} & ` : ''}${n} savescreenshot "${p}/screenshot.png"${show ? ` & ${n} ${s}` : ''}`, 'withCmd': true, });
 
         // ZIPAR PASTA

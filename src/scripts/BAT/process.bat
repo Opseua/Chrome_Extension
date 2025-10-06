@@ -57,7 +57,7 @@ if "!actionRun!" == "ON" (
 		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title !programExe!_CMD& !programExePath! !fileScript! & !3_BACKGROUND! /NOCONSOLE /DELAY=2 "cmd.exe /c echo a" & call !fileChrome_Extension!\src\scripts\BAT\process.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!"
 	) else (
 		rem [VIEW] OBRIGATORIO O '/RUNAS'!!! | JANELA DO LOG POSICIONAR
-		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title !programExe!_CMD& start "!programExe!_WIND" /WAIT !programExePath! !fileScript! & !3_BACKGROUND! /NOCONSOLE /DELAY=2 "cmd.exe /c echo a" & call !fileChrome_Extension!\src\scripts\BAT\process.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!" "!3_BACKGROUND! /NOCONSOLE /DELAY=4 "cmd.exe /c !fileNircmdSetSize! !programExe!_WIND !action! EXATO"
+		!3_BACKGROUND! /NOCONSOLE /RUNAS "cmd.exe /c title !programExe!_CMD& start "!programExe!_WIND" /WAIT !programExePath! !fileScript! & !3_BACKGROUND! /NOCONSOLE /DELAY=2 "cmd.exe /c echo a" & call !fileChrome_Extension!\src\scripts\BAT\process.bat !arg1! !arg2! !arg3! !restartOnStop! !arg5! !arg6!" "!3_BACKGROUND! /NOCONSOLE /DELAY=4 "cmd.exe /c !fileSetSize! !programExe!_WIND !action! EXATO"
 	)
 )
 

@@ -36,12 +36,12 @@ async function command1(inf = {}) {
         await clipboard({ e, 'action': 'set', 'value': retListenerAcionar.res.comments[retListenerAcionar.res.current], });
       }
 
-      notification({ e, duration: retListenerAcionar.ret ? 1 : 2, icon: `icon${retListenerAcionar.ret ? 'BOT' : 'Red'}`, retInf: false, title: `Complete Judge`, text: retListenerAcionar.msg, ntfy: false, });
+      notification({ e, 'duration': retListenerAcionar.ret ? 1 : 2, 'icon': `icon${retListenerAcionar.ret ? 'BOT' : 'Red'}`, 'retInf': false, 'title': `Complete Judge`, 'text': retListenerAcionar.msg, 'ntfy': false, });
 
     } else if ((/^(?:[^\t]*\t){4}[^\t]*$/).test(retChromeActions)) {
 
       // INDICAÇÃO AUTOMÁTICA
-      await clientImputChrome({ 'lead': retChromeActions, 'origin': 'ATALHO', });
+      await clientInputChrome({ 'lead': retChromeActions, 'origin': 'ATALHO', });
 
     }
 

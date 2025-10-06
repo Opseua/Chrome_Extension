@@ -46,7 +46,7 @@ async function regexE(inf = {}) {
             if (typeof errorOk === 'object') {
                 let raw = '', obj = errorOk; for (let k in obj) { if (typeof obj[k] === 'object') { for (let subChave in obj[k]) { raw += obj[k][subChave] + concat; } } else { raw += obj[k] + concat; } }
                 text = `${hou}\n${raw}\n\n${text}`;
-            } await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); await _fs.promises.writeFile(path, text, { flag: 'a', });
+            } await _fs.promises.mkdir(fDirname(path), { 'recursive': true, }); await _fs.promises.writeFile(path, text, { 'flag': 'a', });
         }
 
         if (!ignoreAlert) {

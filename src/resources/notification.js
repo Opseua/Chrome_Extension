@@ -33,7 +33,7 @@ async function notification(inf = {}) {
                 (async () => {
                     let body = { 'fun': [{ securityPass, retInf, 'name': 'notification', 'par': { title, text, keepOld, chromeNot, duration, icon, buttons, 'ntfy': false, }, },], };
                     let retA2 = await api({ e, 'method': 'POST', 'url': `http://${devSever}`, 'headers': { 'raw': true, }, body, 'object': true, 'ignoreErr': true, }); retA2 = retA2.ret ? retA2.res.body : retA2;
-                    rets.push({ 'ret': retA2.ret, 'msg': `[CHROME {LEGACY}: ${retA2.ret ? 'OK' : `ERRO | ${retA2.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}]`, });
+                    rets.push({ 'ret': retA2.ret, 'msg': `[CHROME {LEGACY}: ${retA2.ret ? 'OK' : `ERRO | ${retA2?.msg?.replace(': ERRO | ', '#SPLIT#')?.split('#SPLIT#')?.[1]}`}]`, });
                 })()
             );
         }
@@ -43,7 +43,7 @@ async function notification(inf = {}) {
             promises.push(
                 (async () => { // IGNORAR PARA EVITAR NOTIFICAÇÕES DUPLICADAS DO NTFY
                     inf['ntfy'] = false; retDAF = await devFun({ e, 'enc': true, 'data': { retInf, 'name': 'notification', 'par': inf, }, });
-                    rets.push({ 'ret': retDAF.ret, 'msg': `[CHROME {DEV FUN}: ${retDAF.ret ? 'OK' : `ERRO | ${retDAF.msg.replace(': ERRO | ', '#SPLIT#').split('#SPLIT#')[1]}`}]`, });
+                    rets.push({ 'ret': retDAF.ret, 'msg': `[CHROME {DEV FUN}: ${retDAF.ret ? 'OK' : `ERRO | ${retDAF?.msg?.replace(': ERRO | ', '#SPLIT#')?.split('#SPLIT#')?.[1]}`}]`, });
                 })()
             );
         } else if (!legacy && !chromeNot) {

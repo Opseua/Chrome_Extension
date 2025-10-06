@@ -46,7 +46,7 @@ async function messageReceived(inf = {}) {
             }
         } else {
             // ######################################################################## RECEBIDO NO CLIENTE ########################################################################
-            if (!mensagensPartesRecebida[messageId]) { mensagensPartesRecebida[messageId] = { partes: [], }; } mensagensPartesRecebida[messageId].partes.push(message); if (partesRestantes === 0) {
+            if (!mensagensPartesRecebida[messageId]) { mensagensPartesRecebida[messageId] = { 'partes': [], }; } mensagensPartesRecebida[messageId].partes.push(message); if (partesRestantes === 0) {
                 message = mensagensPartesRecebida[messageId].partes.join(''); message = buffer ? eng ? atob(message) : Buffer.from(message, 'base64') : message; let listName = 'x';
                 if (messageId.includes(`SERVER`) || messageId.includes(`RET-OK`)) {
                     // RECEBIDO: RETORNO DO SERVIDOR OU RESPOSTA SENDO AGUARDADA
@@ -67,8 +67,8 @@ async function messageReceived(inf = {}) {
             //     file({ 'e': e, 'action': 'write', 'path': `D:/z_CLIENTE_RECEBENDO_[${partesRestantes}]_.txt`, 'content': message });
             //     if (partesRestantes === 0) {
             //         if (buffer && eng) {
-            //             let b = new Array(message.length); for (let i = 0; i < message.length; i++) { b[i] = message.charCodeAt(i); }; let l = new Blob([new Uint8Array(b)], { type: 'application/zip' });
-            //             chrome.downloads.download({ url: URL.createObjectURL(l), filename: `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.zip`, }, function () { });
+            //             let b = new Array(message.length); for (let i = 0; i < message.length; i++) { b[i] = message.charCodeAt(i); }; let l = new Blob([new Uint8Array(b)], { 'type': 'application/zip' });
+            //             chrome.downloads.download({ 'url': URL.createObjectURL(l), 'filename': `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.zip`, }, function () { });
             //         } else {
             //             file({ 'e': e, 'action': 'write', 'path': `D:/z_CLIENTE_RECEBENDO_[X]_COMPLETO.${buffer ? 'jpg' : 'txt'}`, 'content': message });
             //         }

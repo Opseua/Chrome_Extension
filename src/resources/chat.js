@@ -39,7 +39,7 @@ async function chat(inf = {}) {
             }
         } else if (provider === 'nextWay') {
             // ######## GPT4js
-            provider = 'Nextway'; let pass = false; messagePrompt = Array.isArray(messagePrompt) ? messagePrompt : [{ 'role': 'user', 'content': messagePrompt, },];
+            provider = 'Nextway'; let pass = false; messagePrompt = Array.isArray(messagePrompt) ? 'messagePrompt' : [{ 'role': 'user', 'content': messagePrompt, },];
             try { let pro = zachey01___gpt4free_js.createProvider(provider); pass = await pro.chatCompletion(messagePrompt, { provider, 'model': model || 'gpt-4o-free', }); } catch { }
             if (!pass) {
                 ret['msg'] = `CHAT [NEXTWAY]: ERRO | AO GERAR RESPOSTA`;

@@ -14,7 +14,7 @@ async function client(inf = {}) {
             ws.onopen = async () => {
                 // LIMPAR TIMEOUT DE CONEXÃO | SALA [ADICIONAR] | ENVIAR PING DE INÍCIO DE CONEXÃO | LISTENER PARA RETORNAR O 'ws'
                 clearTimRec(false); if (!wsServers.rooms[hostRoom]) { wsServers.rooms[hostRoom] = new Set(); } wsServers.rooms[hostRoom].add(ws); function getWs(inf = {}) {
-                    let { host, } = inf; for (let clients of Object.values(wsServers.rooms)) { for (let ws of clients) { if (regex({ pattern: host, text: ws.host, simple: true, })) { return ws; } } } return null;
+                    let { host, } = inf; for (let clients of Object.values(wsServers.rooms)) { for (let ws of clients) { if (regex({ 'pattern': host, 'text': ws.host, 'simple': true, })) { return ws; } } } return null;
                 } logConsole({ e, ee, 'txt': `${locWeb} OK: ${ws.host.split(':')[0]}\n'${room}'`, }); ws.send(`ping`); listenerMonitorar(`getWs_${host}`, async (/*nomeList, inf*/) => { return getWs({ host, }); });
             };
 
@@ -40,7 +40,7 @@ async function client(inf = {}) {
         // ### RECONEXÃO | REMOVER SERVIDOR
         function reconnect(inf = {}) {
             let { host, room, hostRoom, resWs, event, } = inf; let locWeb = host.includes('127.0.0') ? `[LOC]` : `[WEB]`; if (!reconnecting[hostRoom]) {
-                reconnecting[hostRoom] = true; let secReconnect = gW.secReconnect - secConnect + 1; removeSerCli({ hostRoom, resWs, msg: `${locWeb} RECONECTANDO ${event}: ${host.split(':')[0]}\n${room}`, });
+                reconnecting[hostRoom] = true; let secReconnect = gW.secReconnect - secConnect + 1; removeSerCli({ hostRoom, resWs, 'msg': `${locWeb} RECONECTANDO ${event}: ${host.split(':')[0]}\n${room}`, });
                 setTimeout(() => { reconnecting[hostRoom] = false; connect({ hostRoom, }); }, (secReconnect * 1000) - 50); // ← MENOS SEGUNDOS DO TEMPO DE CONEXÃO
             }
         } function removeSerCli(inf = {}) {
@@ -50,6 +50,7 @@ async function client(inf = {}) {
 
         // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → [LOC] + [WEB] (AWS) + [WEB] (Hetzner)
         let servers = [gW.devGet[0], gW.devGet[1], `${gW.serverWebEstrelar}:${gW.devGet[0].split(':')[1]}`,];
+        servers = [servers[0], servers[1],];
         for (let [index, value,] of servers.entries()) {
             if (!value.includes('127.0.0.1') && (gW.project === 'Sniffer_Python' || (!value.includes('USUARIO_0') && value.includes('USUARIO_')))) {
                 // NÃO CONECTAR AO WEBSOCKET

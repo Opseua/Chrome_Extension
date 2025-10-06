@@ -52,7 +52,7 @@ async function logConsole(inf = {}) {
                 // PRIMEIRO ARQUIVO EXECUTADO NO NODE 'server.js'       → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log.txt
                 // PRIMEIRO ARQUIVO EXECUTADO NO NODE 'serverCarro.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_Carro.txt
                 // PRIMEIRO ARQUIVO EXECUTADO NO NODE 'nomeArquivo.js'  → [project]/logs/JavaScript/MES_11_NOV/DIA_27/12.00-12.59_log_nomeArquivo.txt
-                e, 'folder': 'JavaScript', 'path': `log${gW.cloneProject === 'server' ? '' : `_${gW.cloneProject.replace('server', '')}`}.txt`,
+                e, 'folder': 'JavaScript', 'path': `log${['server', 'teste', 'logsDel', 'performanceDev',].includes(gW.cloneProject) ? '' : `_${gW.cloneProject.replace('server', '')}`}.txt`,
                 'text': txt, projectConsole, fileCall, 'byHour': true, currentDateHour,
             });
         }

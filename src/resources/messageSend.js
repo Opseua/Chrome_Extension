@@ -64,8 +64,8 @@ let filaBigFalse = [], filaBigTrue = [], sending = false; function enviarMensage
     let { resWs, big, message, } = inf; if (big) { if (Array.isArray(message)) { filaBigTrue.push(...message); } else { filaBigTrue.push(message); } }
     else if (Array.isArray(message)) { filaBigFalse.push(...message); } else { filaBigFalse.push(message); } if (!sending) { sending = true; enviarMensagens({ resWs, }); }
 } function processarFilas() {
-    if (filaBigFalse.length > 0) { return { big: false, value: filaBigFalse.shift(), }; }
-    else if (filaBigTrue.length > 0) { return { big: true, value: filaBigTrue.shift(), }; } else { return { big: false, value: false, }; }
+    if (filaBigFalse.length > 0) { return { 'big': false, 'value': filaBigFalse.shift(), }; }
+    else if (filaBigTrue.length > 0) { return { 'big': true, 'value': filaBigTrue.shift(), }; } else { return { 'big': false, 'value': false, }; }
 } async function enviarMensagens(inf = {}) {
     while (true) {
         let { resWs, } = inf; let { big, value, } = processarFilas(); if (!value) { sending = false; break; } let { messageId, partesRestantes, secondsAwait, } = value; let message = JSON.stringify(value);

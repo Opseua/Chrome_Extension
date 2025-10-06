@@ -55,7 +55,7 @@ async function configStorage(inf = {}) {
             ret['msg'] = `${type} [SET]: ERRO | INFORMAR O 'value'`;
         } else {
 
-            let config, ok, retFile = await file({ e, action: 'read', path, functionLocal, }); if ((['get', 'del',].includes(action) || (eng)) && !retFile.ret) { return retFile; }
+            let config, ok, retFile = await file({ e, 'action': 'read', path, functionLocal, }); if ((['get', 'del',].includes(action) || (eng)) && !retFile.ret) { return retFile; }
             config = retFile.ret ? JSON.parse(retFile.res) : {}; ok = await processJson({ action, key, value, config, });
             if (['get', 'del',].includes(action)) { returnValueKey = false; if (action === 'get') { returnValueAll = false; } }
             if (ok.ret) {

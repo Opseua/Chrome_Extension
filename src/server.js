@@ -32,12 +32,14 @@ async function serverRun(inf = {}) {
         // *************************
 
         // CLIENT (NÃO POR COMO 'await'!!!) [MANTER NO FINAL]
-        await new Promise(r => { setTimeout(r, 50); }); client({ e, }); await new Promise(r => { setTimeout(r, 500); });
+        await new Promise(r => { setTimeout(r, 50); }); client({ e, }); await new Promise(r => { setTimeout(r, 1000); });
 
         // REINICIAR EXTENSÃO | CHECAR SE O BOT DA INDICAÇÃO ESTÁ PREPARADO
-        if (gW.devMaster.includes('ESTRELAR_')) {
-            scheduleRun('00:00'); let delay = (3 * 60 * 1000); // delay = 10000; // ← TESTES
-            setInterval(async () => { checkIndication({}); }, delay); // A CADA x MINUTO(s)
+        // setTimeout(() => { tabActions({ 'filters': { 'url': gO.inf.WebScraper_Chrome_Extension.url, }, 'actions': [{ 'sharedMedia': false, },], }); console.log('sharedMedia: OFF'); }, 20000); // TESTES
+        if ((`${gW.devGet[0]}`).includes('ESTRELAR_')) {
+            logConsole({ e, ee, 'txt': `ACIONADO → REINICIAR EXTENSÃO | CHECAR SE O BOT DA INDICAÇÃO ESTÁ PREPARADO`, });
+            scheduleRun('00:00'); let delay = (1 * 60 * 1000); // delay = 15000; // ← TESTES
+            setInterval(async () => { indicationCheck({}); }, delay); // A CADA x MINUTO(s)
         }
 
         ret['ret'] = true;

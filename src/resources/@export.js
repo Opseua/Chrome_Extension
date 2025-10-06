@@ -26,7 +26,7 @@ globalThis['api'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path'
 globalThis['chat'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/chat.js', inf, project, }); };
 globalThis['chromeActions'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/resources/chromeActions.js', inf, project, }); };
 globalThis['client'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/client.js', inf, project, }); };
-globalThis['clientImputChrome'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/resources/clientImputChrome.js', inf, project, }); };
+globalThis['clientInputChrome'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/resources/clientInputChrome.js', inf, project, }); };
 globalThis['clipboard'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/clipboard.js', inf, project, }); };
 globalThis['commandLine'] = (inf) => { return importFun({ 'engOk': (!eng), 'path': './src/resources/commandLine.js', inf, project, }); };
 globalThis['configStorage'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/configStorage.js', inf, project, }); };
@@ -40,7 +40,7 @@ globalThis['notification'] = (inf) => { return importFun({ 'engOk': (eng || !eng
 globalThis['objFilter'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/objFilter.js', inf, project, }); };
 globalThis['messageReceived'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/messageReceived.js', inf, project, }); };
 globalThis['messageSend'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/resources/messageSend.js', inf, project, }); };
-globalThis['tabAction'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/resources/tabAction.js', inf, project, }); };
+globalThis['tabActions'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/resources/tabActions.js', inf, project, }); };
 
 // SCRIPTS
 globalThis['command1'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/scripts/command1.js', inf, project, }); };

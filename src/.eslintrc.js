@@ -19,19 +19,22 @@ let arrGlobal = [
   '_WebSocketServer', '_WebSocket', '_fs', '_path', '_cheerio', '_clipboardy', '_http', '_exec', '_google', '_createHash', '_puppeteer', '_net', '_getFolderSize', 'process',
   'Buffer', '_parse', '_stackTrace', '_auth', '_sheets', '_clipboard', '_createRequire', '_axios', '_createWriteStream', '_getVideoDurationInSeconds', '_https', '_m3u8Parser',
   '_createServer', '_createInterface', '_zlib',
+
   // GLOBAL OBJECT
-  'gO', 'gOList', 'cs',
+  'cs', 'gO', 'gOList',
+
   // FUNÇÕES
-  'rateLimiter', 'awaitTimeout', 'randomNumber', 'randomId',
+  'clearConsole', 'getTypeof', 'crashCode', 'rateLimiter', 'randomNumber', 'randomId', 'awaitTimeout', 'startupTime', 'importFun', 'importLibs', 'replaceVars', 'stringGet', 'fDirname',
+  'fJoin',
 
   // ### BIBLIOTECAS / NATIVO → GOOGLE 
   'UrlFetchApp', 'Browser',
 
   // funções globais → [Chrome_Extension]
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'tableHtmlToJson',
-  'log', 'logConsole', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabAction', 'GPT4js', 'listenerAcionar',
-  'listenerMonitorar', 'chromeActionsNew', 'importFun', 'importLibs', 'taskInfTryRating', 'clearRun', 'zachey01___gpt4free_js', 'background', 'command1', 'audioTranscribe',
-  'command2', 'tryRatingComplete', 'startupTime', 'crashCode', 'replaceVars', 'stringGet', 'clientImputChrome', 'restartCode', 'checkIndication', 'scheduleRun', 'z_backup',
+  'log', 'logConsole', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabActions', 'GPT4js', 'listenerAcionar',
+  'listenerMonitorar', 'chromeActionsNew', 'taskInfTryRating', 'zachey01___gpt4free_js', 'background', 'command1', 'audioTranscribe',
+  'command2', 'tryRatingComplete', 'clientInputChrome', 'restartCode', 'indicationCheck', 'scheduleRun', 'z_backup',
 
   // funções globais → [Sniffer_Python]
   'ewoq', 'scilliance', 'tryRating', 'performTask', 'correiosServer', 'targetAlert',
@@ -40,8 +43,8 @@ let arrGlobal = [
   'leadChangeStatus', 'leadGet', 'leads', 'leadsJsf', 'login',
 
   // funções globais → [WebScraper]
-  'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'imput', 'navigate', 'sendData', 'clientSearch', 'clientGetData',
-  'clientImput', 'maquinaInput', 'screenshot', 'elementAction', 'newAccounts',
+  'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'input', 'navigate', 'sendData', 'clientSearch', 'clientGetData',
+  'clientInput', 'maquinaInput', 'screenshot', 'elementAction', 'newAccounts',
 
   // funções globais → [WebSocket]
   'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
@@ -135,7 +138,7 @@ export let jsConfig = [
       // 'true' NO WHILE
       'no-constant-condition': 'off',
 
-      // CHAVES DUPLICADAS → { bar: "baz", bar: "qux" }
+      // CHAVES DUPLICADAS → { 'bar': "baz", 'bar': "qux" }
       'no-dupe-keys': 'error',
 
       // IF DESNECESSÁRIO

@@ -11,6 +11,7 @@
 // retDateHour = dateHour('31*12*1999*23*59*59'); // → DATA/HORA DO TEMPO
 // retDateHour = dateHour('31#12#23#59#59');      // → DATA/HORA DO TEMPO (ANO ATUAL)
 // console.log(retDateHour);
+// let { yea, mon, day, hou, min, sec, mil, } = dateHour().res;
 
 // let timestamp = Math.floor(Date.now() / 1000);
 
@@ -76,9 +77,9 @@ function dateHour(inf) { // NÃO POR COMO 'async'!!!
         let x2 = ['JANEIRO', 'FEVEREIRO', 'MARCO', 'ABRIL', 'MAIO', 'JUNHO', 'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO',];
 
         ret['res'] = {
+            'yea': local.getFullYear().toString(),                      // ANO (1999)
             'day': local.getDate().toString().padStart(2, '0'),         // DIA (01)
             'mon': (localGetMonth + 1).toString().padStart(2, '0'),     // MÊS (01)
-            'yea': local.getFullYear().toString(),                      // ANO (1999)
             'hou': hou.toString().padStart(2, '0'),                     // HORA (13)
             'hou12': (hou % 12 || 12).toString().padStart(2, '0'),      // HORA (01)
             'houAmPm': hou < 12 ? 'AM' : 'PM',                          // (AM/PM)

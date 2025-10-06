@@ -1,4 +1,6 @@
-// let infFile, retFile; // 'add': true, 'functionLocal': true, 'encoding': false (conteudo é buffer) | 'latin1' [padrão 'utf8']
+// 'functionLocal': true, 'encoding': false (CONTEUDO BUFFER) | 'latin1' [PADRÃO 'utf8'] | 'editSec': (60) SEGUNDOS: 60 / (2 * (60 * 60)) HORAS: 2 / (5 * (24 * 60 * 60)) DIAS: 5 [- OU +]
+// 'ignoreEditDeep': true (NÃO USAR DATA DE EDIÇÃO PRODUNDA NAS PASTAS) | 'filesDeepFirst': true/false (ORDENAR OS ARQUIVOS PROFUNDOS PRIMEIRO)
+// let infFile, retFile;
 // infFile = { e, 'action': 'relative', 'path': `./PASTA/arquivo.txt`, };
 // infFile = { e, 'action': 'write', 'path': `./PASTA/arquivo.txt`, 'add': true, 'content': `1234\n`, };
 // infFile = { e, 'action': 'isFolder', 'path': `./PASTA/`, };
@@ -7,6 +9,7 @@
 // infFile = { e, 'action': 'copy', 'path': `./PASTA/arquivo.txt`, 'pathNew': `./PASTA/arquivoCopy.txt`, };
 // infFile = { e, 'action': 'change', 'path': `./PASTA/arquivo.txt`, 'pathNew': `./PASTA/arquivo2.txt`, };
 // infFile = { e, 'action': 'list', 'path': `./PASTA`, 'max': 10, };
+// infFile = { e, 'action': 'listNew', 'path': `./PASTA`, 'max': 5000, 'subFolders': 4, 'filesDeepFirst': true, 'editSec': -60, };
 // infFile = { e, 'action': 'del', 'path': `./PASTA`, };
 // infFile = { e, 'action': 'storage', 'path': `C:`, }; // SEMPRE COMO 'ADM'!!!
 // retFile = await file(infFile); console.log(retFile);
@@ -21,7 +24,7 @@ async function file(inf = {}) {
         let retFile, pathAndPathNew = `${path || 'NADA'}#_SPLIT_#${pathNew || 'NADA'}`; pathAndPathNew = replaceVars({ 'content': pathAndPathNew, }).split('#_SPLIT_#');
         path = pathAndPathNew[0] === 'NADA' ? false : pathAndPathNew[0]; inf.path = path; pathNew = pathAndPathNew[1] === 'NADA' ? false : pathAndPathNew[1]; inf.pathNew = pathNew;
 
-        if (!action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'change', 'copy', 'md5', 'isFolder', 'storage',].includes(action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
+        if (!action || !['write', 'read', 'del', 'inf', 'relative', 'list', 'listNew', 'change', 'copy', 'md5', 'isFolder', 'storage',].includes(action)) { ret['msg'] = `FILE: ERRO | INFORMAR O 'action'`; }
         else if (typeof functionLocal !== 'boolean' && action !== 'inf' && !path.includes(':')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'functionLocal'`; }
         else if (action !== 'inf' && (!path || path === '')) { ret['msg'] = `FILE: ERRO | INFORMAR O 'path'`; } else {
             function formatBytes(b, d = 2) {
@@ -55,11 +58,11 @@ async function file(inf = {}) {
                         } if (eng) { // CHROME | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                             if (path.includes('%/')) { path = path.split('%/')[1]; } else if (path.includes(':')) { path = path.split(':/')[1]; } if (add) {
                                 retFile = await fileRead({ path, 'functionLocal': functionLocal && !eng, }); content = `${retFile.res || ''}${content}`;
-                            } let blob = new Blob([content,], { type: 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); // 'overwrite' LIMPA | 'uniquify' ADD (1), (2)... NO FINAL
+                            } let blob = new Blob([content,], { 'type': 'text/plain', }); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, ''); // 'overwrite' LIMPA | 'uniquify' ADD (1), (2)... NO FINAL
                             let downloadOptions = { 'url': URL.createObjectURL(blob), 'filename': path, 'saveAs': false, 'conflictAction': 'overwrite', }; chrome.downloads.download(downloadOptions);
                         } else { // NODE | REMOVER CARACTERES NÃO ACEITOS PELO WINDOWS E DEFINIR O MÁXIMO DE 250
                             let pathLetter = path.charAt(0); path = path.substring(0, 250).replace(/[<>:"\\|?*]/g, '').replace(pathLetter, `${pathLetter}:`); // DENTRO DE UMA PASTA (CRIAR ELA)
-                            if (path.split('/').length > 2) { await _fs.promises.mkdir(_path.dirname(path), { recursive: true, }); }
+                            if (path.split('/').length > 2) { await _fs.promises.mkdir(fDirname(path), { 'recursive': true, }); }
                             let options = { 'flag': add ? 'a' : 'w', }; if (encoding) { options['encoding'] = encoding; } await _fs.promises.writeFile(path, content, options);
                         } resNew['ret'] = true; resNew['msg'] = `FILE [WRITE]: OK`; resNew['res'] = path;
                     }
@@ -68,12 +71,13 @@ async function file(inf = {}) {
 
             async function fileRead(inf = {}) {
                 let { functionLocal, path, encoding, } = inf; encoding = typeEncoding(encoding); let resNew = { 'ret': false, }; try {
-                    let retFetch; if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } if (eng) { // CHROME
+                    let retFetch; if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; }
+                    let options = path.match(/\.(jpg|jpeg|png|ico)$/) ? undefined : encoding; if (eng) { // CHROME
                         if (!functionLocal) { path = `file:///${path}`; } path = path.replace('%', ''); // ENCODIFICAR PATH *********************
                         let pathParts = path.replace('file:///', '').split(':/'); path = (path.includes('file:///') ? 'file:///' : '') + pathParts[0] + ':/' + pathParts[1].split('/').map(encodeURIComponent).join('/');
-                        retFetch = await fetch(path); retFetch = await retFetch.text(); if (retFetch.includes('The Chromium Authors')) { throw new Error('erro'); } // NODE
-                    } else { let options = path.match(/\.(jpg|jpeg|png|ico)$/) ? undefined : encoding; retFetch = await _fs.promises.readFile(path, options); }
-                    resNew['ret'] = true; resNew['msg'] = `FILE [READ]: OK`; resNew['res'] = retFetch;
+                        retFetch = await fetch(path); if (encoding === false || options === undefined) { retFetch = await retFetch.arrayBuffer(); retFetch = new Uint8Array(retFetch); }
+                        else { retFetch = await retFetch.text(); if (retFetch.includes('The Chromium Authors')) { throw new Error('erro'); } }
+                    } else { retFetch = await _fs.promises.readFile(path, options); /* NODE */ } resNew['ret'] = true; resNew['msg'] = `FILE [READ]: OK`; resNew['res'] = retFetch;
                 } catch { delete resNew['res']; resNew['msg'] = `FILE [READ]: ERRO | AO LER ARQUIVO '${path}'`; } return resNew;
             }
 
@@ -81,7 +85,7 @@ async function file(inf = {}) {
                 let { functionLocal, path, } = inf; let resNew = { 'ret': false, }; try {
                     if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; } async function delP(t) {
                         try {
-                            let s = await _fs.promises.stat(t); if (s.isDirectory()) { let as = await _fs.promises.readdir(t); for (let a of as) { let c = _path.join(t, a); await delP(c); } await _fs.promises.rmdir(t); }
+                            let s = await _fs.promises.stat(t); if (s.isDirectory()) { let as = await _fs.promises.readdir(t); for (let a of as) { let c = fJoin(t, a); await delP(c); } await _fs.promises.rmdir(t); }
                             else { await _fs.promises.unlink(t); }
                         } catch (catchErr) { throw new Error(catchErr); }
                     } await delP(path); resNew['ret'] = true; resNew['msg'] = `FILE [DEL]: OK`; return resNew;
@@ -95,7 +99,7 @@ async function file(inf = {}) {
                             let status = _fs.statSync(name); status['atime'] = new Date(status.atime.getTime() - (3 * 60 * 60 * 1000)); status['mtime'] = new Date(status.mtime.getTime() - (3 * 60 * 60 * 1000));
                             status['ctime'] = new Date(status.ctime.getTime() - (3 * 60 * 60 * 1000)); status['birthtime'] = new Date(status.birthtime.getTime() - (3 * 60 * 60 * 1000)); return status;
                         } let entries = await _fs.promises.readdir(path), result = [], count = 0, isFolder, stats, size; for (let entry of entries) {
-                            if (count >= max) { break; } let fullPath = _path.join(path, entry); try {
+                            if (count >= max) { break; } let fullPath = fJoin(path, entry); try {
                                 let md5 = false; count++; isFolder = _fs.statSync(fullPath).isDirectory(); stats = getStatus(fullPath); if (!isFolder) { size = await _fs.promises.stat(fullPath); size = size.size; }
                                 if (!isFolder && size && size <= (1 * 1024 * 1024)) { retFile = await fileMd5({ 'path': fullPath, }); md5 = retFile.res; } else if (!isFolder) { md5 = `arquivo muito grande`; }
                                 result.push({ 'ret': true, isFolder, 'name': entry, 'path': fullPath.replace(/\\/g, '/'), 'edit': stats.mtime.toISOString(), 'size': size ? formatBytes(size) : false, md5, });
@@ -106,12 +110,34 @@ async function file(inf = {}) {
                 } catch { delete resNew['res']; resNew['msg'] = `FILE [LIST]: ERRO | AO LISTAR '${path}'`; } return resNew;
             }
 
+            async function fileListNew(inf = {}) {
+                let { functionLocal, path, max, subFolders = 0, filesDeepFirst, ignoreEditDeep = false, editSec = 0, } = inf; let resNew = { 'ret': false, }; try {
+                    let r = await fileList({ functionLocal, path, max, }); if (!r.ret || !r.res?.length) { return r; } let all = [...r.res,], count = all.length, folders = all.filter(f => f.isFolder), level = 0;
+                    let fDF = filesDeepFirst; while (folders.length && level < subFolders && count < max) {
+                        let nextFolders = []; for (let folder of folders) {
+                            if (count >= max) { break; } let sub = await fileList({ functionLocal, 'path': folder.path, max, }); if (!sub.ret || !sub.res?.length) { continue; } let remaining = max - count;
+                            let toAdd = sub.res.slice(0, remaining); all.push(...toAdd); count += toAdd.length; for (let f of toAdd) { if (f.isFolder) { nextFolders.push(f); } }
+                        } folders = nextFolders; level++;
+                    } if (!ignoreEditDeep) {
+                        let fileItems = all.filter(f => !f.isFolder && f.edit); let foldersOnly = all.filter(f => f.isFolder); for (let folder of foldersOnly) {
+                            let p = folder.path + '/'; let filesInFolder = fileItems.filter(f => f.path.startsWith(p)); folder.edit = filesInFolder.length ? filesInFolder.map(f => f.edit).sort().pop() : folder.edit;
+                        }
+                    } if (fDF === true) { all.sort((a, b) => b.path.split('/').length - a.path.split('/').length); } else if (fDF === false) { all.sort((a, b) => a.path.split('/').length - b.path.split('/').length); }
+                    // let filterEdit = (n, r, e) => { return r.filter(f => { if (!f.edit) { return false; } let t = new Date(f.edit).getTime(); return e >= 0 ? t < n - e * 1e3 : t > n + e * 1e3; }); }; // FILTRAR EDIT
+
+                    let filterEdit = (n, r, s) => r.filter(f => { if (!f.edit) { return false; } let t = new Date(f.edit).getTime() / 1000; return s >= 0 ? t < n - s : t > n + s; });
+
+
+                    if (editSec !== 0) { all = filterEdit(Math.floor(Date.now() / 1000) - 3 * 3600, all, (editSec)); } resNew['ret'] = true; resNew['msg'] = `FILE [LIST NEW]: OK`; resNew['res'] = all;
+                } catch { delete resNew.res; resNew['msg'] = `FILE [LIST NEW]: ERRO | AO LISTAR '${path}'`; } return resNew;
+            }
+
             async function fileChange(inf = {}) {
                 let { functionLocal, path, pathNew, action, } = inf; let resNew = { 'ret': false, }; try {
                     if (!pathNew || pathNew === '') { resNew['msg'] = `FILE [${action.toUpperCase()}]: ERRO | INFORMAR O 'pathNew'`; } else {
                         pathNew = pathNew.replace(/!letter!/g, letter); if (!path.includes(':')) { retFile = await fileRelative({ path, functionLocal, }); path = retFile.res[0]; }
                         if (!pathNew.includes(':')) { retFile = await fileRelative({ 'path': pathNew, functionLocal, }); pathNew = retFile.res[0]; }
-                        await _fs.promises.mkdir(_path.dirname(pathNew), { recursive: true, }); if (action === 'change') { await _fs.promises.rename(path, pathNew); /* MOVER */ }
+                        await _fs.promises.mkdir(fDirname(pathNew), { 'recursive': true, }); if (action === 'change') { await _fs.promises.rename(path, pathNew); /* MOVER */ }
                         else { await _fs.promises.copyFile(path, pathNew); /* COPIAR */ } resNew['ret'] = true; resNew['msg'] = `FILE [${action.toUpperCase()}]: OK`; resNew['res'] = pathNew;
                     }
                 } catch { delete resNew['res']; resNew['msg'] = `FILE [${action.toUpperCase()}]: ERRO | AO MOVER/COPIAR ARQUIVO '${path}'`; } return resNew;
@@ -152,7 +178,7 @@ async function file(inf = {}) {
 
             // ****************************************************************************************************************************************
             if (action === 'write') { return await fileWrite(inf); } else if (action === 'read') { return await fileRead(inf); } else if (action === 'del' && !eng) { return await fileDel(inf); }
-            else if (action === 'relative') { return await fileRelative(inf); } else if (action === 'list' && !eng) { return await fileList(inf); }
+            else if (action === 'relative') { return await fileRelative(inf); } else if (action === 'list' && !eng) { return await fileList(inf); } else if (action === 'listNew' && !eng) { return await fileListNew(inf); }
             else if (['change', 'copy',].includes(action) && !eng) { return await fileChange(inf); } else if (action === 'md5' && !eng) { return await fileMd5(inf); }
             else if (action === 'isFolder' && !eng) { return await fileIsFolder(inf); } else if (action === 'storage' && !eng) { return await fileStorage(inf); }
             ret['msg'] = `FILE: ERRO | ACTION '${action}' NÃO DISPONÍVEL NO AMBIENTE`;

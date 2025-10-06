@@ -1,9 +1,10 @@
-// let infLog, retLog; // 'raw': true,
+// 'raw': true,
+// let infLog, retLog;
 // // (ESCREVE NO MESMO ARQUIVO: NÃO) | CRIA UM NOVO POR HORA: [NAO] → [project]/logs/#_PASTA_#/MES_11_NOV/DIA_27/00.48.10.064_ARQUIVO.txt
 // infLog = { e, 'folder': '#_PASTA_#', 'path': `ARQUIVO.txt`, 'text': `INF AQUI`, };
 // // (ESCREVE NO MESMO ARQUIVO: SIM) | CRIA UM NOVO POR HORA: [NAO] → [project]/logs/JavaScript/MES_11_NOV/DIA_27_log.txt
 // infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'byHour': false, };
-// // (ESCREVE NO MESMO ARQUIVO: SIM) | CRIA UM NOVO POR HORA: [SIM] → [project]/logs/JavaScript/MES_11_NOV/DIA_27/00.48.10.064_log.txt
+// // (ESCREVE NO MESMO ARQUIVO: SIM) | CRIA UM NOVO POR HORA: [SIM] → [project]/logs/JavaScript/MES_11_NOV/DIA_27/20.00-20.59_log.txt
 // infLog = { e, 'folder': 'JavaScript', 'path': `log.txt`, 'text': `INF AQUI`, 'byHour': true, };
 // retLog = await log(infLog); console.log(retLog);
 

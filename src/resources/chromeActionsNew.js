@@ -35,7 +35,7 @@ async function chromeActionsNew(inf = {}) {
     if (!actions.includes(action)) { res = 'PARÂMETROS INVÁLIDOS'; } else {
         if (path) {
             // ELEMENTOS: PEGAR TODOS (PATH)
-            let result = document.evaluate(path, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null); elements = Array.from({ length: result.snapshotLength, }, (_, i) => result.snapshotItem(i));
+            let result = document.evaluate(path, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null); elements = Array.from({ 'length': result.snapshotLength, }, (_, i) => result.snapshotItem(i));
         } else {
             // ELEMENTOS: PEGAR TODOS (QUERY SELECTOR)
             elements = [...document.querySelectorAll('*'),];
@@ -131,7 +131,7 @@ async function chromeActionsNew(inf = {}) {
             function clear(pat, arr) { return arr.filter(p => { function clear(v) { if (Array.isArray(v)) { return v.some(s => clear(s)); } return eleRegex(pat, v); } return clear(p); }); } elements = clear(v, elements);
         }
 
-        let qtdElements = elements.length; res = !elements.flat(Infinity).some(v => v !== undefined) ? false : { qtdElements, res: elements, };
+        let qtdElements = elements.length; res = !elements.flat(Infinity).some(v => v !== undefined) ? false : { qtdElements, 'res': elements, };
 
     }
 
