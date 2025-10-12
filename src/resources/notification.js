@@ -10,7 +10,7 @@
 
 let e = currentFile(new Error()), ee = e; let rate = rateLimiter({ 'max': 5, 'sec': 5, });
 async function notification(inf = {}) {
-    let ret = { 'ret': false, }; e = inf.e || e; if (!rate.check().ret) { crashCode('notification: MUITAS CHAMADAS!!!'); }
+    let ret = { 'ret': false, }; e = inf.e || e; if (!rate.check().ret) { codeStop('notification: MUITAS CHAMADAS!!!'); }
     try {
         let { retInf = false, title = 'TITULO VAZIO', text = 'TEXTO VAZIO', keepOld = false, ntfy = true, chromeNot = false, duration = 5, icon = 'iconRed', buttons = [], legacy = false, } = inf;
 

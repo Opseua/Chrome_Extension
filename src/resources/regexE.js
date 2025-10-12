@@ -11,7 +11,7 @@
 
 let rate = rateLimiter({ 'max': 5, 'sec': 5, });
 async function regexE(inf = {}) {
-    let ret = { 'ret': false, }; if (!rate.check().ret) { crashCode('REGEXe: ERRO | EM LOOP!!!'); }
+    let ret = { 'ret': false, }; if (!rate.check().ret) { codeStop('REGEXe: ERRO | EM LOOP!!!'); }
     try {
         let { e, ignoreAlert = false, concat = `\n\n#######\n\n`, } = inf;
 

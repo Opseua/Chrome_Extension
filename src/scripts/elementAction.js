@@ -1,7 +1,13 @@
 // → NO FINAL DO ARQUIVO
 
+async function runElementAction(inf = {}) {
+    let { e, paramsArr, urlTarget, page, } = inf; let promise = paramsArr.map(parOk => eng ? chromeActions({ e, action: 'injectNew', target: urlTarget, fun: elementAction, funInf: { 'newAction': true, ...parOk, }, })
+        : page.evaluate(async (fun, pars) => (await (new Function('return ' + fun)())(pars)), elementAction.toString(), { 'newAction': true, ...parOk, })
+    ); return await Promise.race(promise);
+} globalThis['runElementAction'] = runElementAction;
+
 async function elementAction(inf = {}) {
-    let paramId = inf.paramId || 'xx', maxReturn = Number(inf.element?.maxReturn) || 10, indexTarget = (inf.element?.indexTarget !== undefined) ? inf.element.indexTarget : -1;
+    let paramId = inf.paramId || 'xx', maxElements = Number(inf.element?.maxElements) || 10, indexTarget = (inf.element?.indexTarget !== undefined) ? inf.element.indexTarget : -1;
     let element = inf.element || {}, maxAwaitMil = element.maxAwaitMil || 50; function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
     function getElementXPath(el) {
@@ -9,9 +15,7 @@ async function elementAction(inf = {}) {
             let index = 1, sibling = el.previousSibling; while (sibling) { if (sibling.nodeType === Node.ELEMENT_NODE && sibling.nodeName === el.nodeName) { index++; } sibling = sibling.previousSibling; }
             parts.unshift(el.nodeName.toLowerCase() + (index > 1 ? `[${index}]` : '')); el = el.parentNode;
         } return '/' + parts.join('/');
-    }
-
-    async function simulateTyping(el, texto, intervalo = 50, teclaFinal = null) {
+    } async function simulateTyping(el, texto, intervalo = 50, teclaFinal = null) {
         let valorAtual = ''; for (let i = 0; i < texto.length; i++) {
             let char = texto[i]; el.dispatchEvent(new KeyboardEvent('keydown', { 'key': char, 'bubbles': true, })); el.dispatchEvent(new KeyboardEvent('keypress', { 'key': char, 'bubbles': true, }));
             valorAtual += char; el.value = valorAtual; el.dispatchEvent(new Event('input', { 'bubbles': true, })); el.dispatchEvent(new KeyboardEvent('keyup', { 'key': char, 'bubbles': true, })); await sleep(intervalo);
@@ -19,163 +23,135 @@ async function elementAction(inf = {}) {
             el.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'Enter', 'bubbles': true, })); el.dispatchEvent(new KeyboardEvent('keypress', { 'key': 'Enter', 'bubbles': true, }));
             el.dispatchEvent(new KeyboardEvent('keyup', { 'key': 'Enter', 'bubbles': true, }));
         }
+    } function getAllElementsIncludingShadowDOM(root = document) {
+        let result = []; let walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+        while (walker.nextNode()) { let node = walker.currentNode; result.push(node); if (node.shadowRoot) { result.push(...getAllElementsIncludingShadowDOM(node.shadowRoot)); } } return result;
+    } function getRelativeElements(el, direction = 0) {
+        if (!el || typeof el !== 'object' || !('nodeType' in el)) { return []; } if (direction === 1) { return el.parentElement ? [el.parentElement,] : []; }
+        if (direction === -1) { return el.children ? Array.from(el.children) : []; } return [el,];
     }
 
-    async function elementSearch(inf = {}) {
-        let inicio = Date.now(); return await new Promise(resolve => {
+    async function elementSearch(inf = {}, maxAwaitMil = 5000, checkInterval = 250) {
+        let inicio = Date.now(); function aplicarFiltros(elementos) {
+            let encontrados = elementos;
+            // XPATH
+            if (inf.xpath) {
+                let xpathResult = document.evaluate(inf.xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                encontrados = []; for (let i = 0; i < xpathResult.snapshotLength; i++) { encontrados.push(xpathResult.snapshotItem(i)); }
+            }
+            // TAG / ATRIBUTO NOME / ATRIBUTO VALOR / CONTEUDO
+            if (inf.tag || inf.properties?.length || inf.content) {
+                encontrados = encontrados.filter(el => {
+                    let ok = true; if (inf.tag) { ok = el.tagName.toLowerCase() === inf.tag.toLowerCase(); } if (ok && inf.properties?.length) {
+                        ok = inf.properties.every(p => { return (!p.attributeName || el.hasAttribute(p.attributeName)) && (!p.attributeValue || Array.from(el.attributes).some(a => a.value.includes(p.attributeValue))); });
+                    } if (ok && inf.content) { let termo = inf.content.toLowerCase(); ok = (el.textContent || '').toLowerCase().includes(termo) || (el.value || '').toLowerCase().includes(termo); } return ok;
+                });
+            }
+            // --- DIREÇÃO (-1 SOBRE PARA O PAI | +1 ACESSO OS FILHOS)
+            if (inf.direction) { encontrados = encontrados.flatMap(el => getRelativeElements(el, inf.direction)); }
+            return encontrados;
+        }
+        return await new Promise(resolve => {
             let intervalo = setInterval(() => {
-                if (inf.xpath) {  // ⬇️ Busca por XPath, se definido
-                    let xpathResult = document.evaluate(inf.xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null), encontrados = [];
-                    for (let i = 0; i < xpathResult.snapshotLength; i++) { encontrados.push(xpathResult.snapshotItem(i)); } if (encontrados.length > 0) { clearInterval(intervalo); return resolve(encontrados); }
-                } let getAllElementsIncludingShadowDOM = (root = document) => {
-                    let result = new Set(), walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT); while (walker.nextNode()) {
-                        let node = walker.currentNode; result.add(node); if (node.shadowRoot) { for (let el of getAllElementsIncludingShadowDOM(node.shadowRoot)) { result.add(el); } }
-                    } return [...result,];
-                }; let todos = getAllElementsIncludingShadowDOM(), resultadoBase = new Set(); for (let el of todos) {
-                    let ok = true; if (ok && inf.buscaRapida && inf.buscaRapida.length > 0) {  // buscaRapida: todos os termos devem estar no outerHTML
-                        let html = (el.outerHTML || '').toLowerCase(); for (let termo of inf.buscaRapida) { if (!html.includes(termo.toLowerCase())) { ok = false; break; } }
-                    } if (ok && inf.tag) { if (el.tagName.toLowerCase() !== inf.tag.toLowerCase()) { ok = false; } /* tag: deve ser uma das informadas */ }
-                    if (ok && inf.content) { // content: todos os termos devem estar no textContent ou value
-                        let termo = inf.content.toLowerCase(); if (!(((el.textContent || '').toLowerCase()).includes(termo) || ((el.value || '').toLowerCase()).includes(termo))) { ok = false; }
-                    } if (ok && inf.properties && inf.properties.length > 0) {
-                        for (let prop of inf.properties) { // properties: todos devem ser atendidos
-                            let nomeOk = true, valorOk = true; if (prop.attributeName) { nomeOk = el.hasAttribute(prop.attributeName); } if (prop.attributeValue) {
-                                valorOk = false; for (let attr of el.attributes) { if (attr.value.includes(prop.attributeValue)) { valorOk = true; break; } }
-                            } if (!(nomeOk && valorOk)) { ok = false; break; }
-                        }
-                    } if (ok) { resultadoBase.add(el); }
-                } if (resultadoBase.size > 0 || maxAwaitMil === 0) {   // Aplicar filtro de elementoParente, se houver
-                    clearInterval(intervalo); if (!inf.elementoParente) { return resolve([...resultadoBase,]); } let resultadoFinal = new Set(); for (let baseEl of resultadoBase) {
-                        let candidatos = new Set(), tipo = inf.elementoParente.tipo;
-                        if (tipo === 'pai') { let atual = baseEl.parentElement; while (atual) { for (let el of getAllElementsIncludingShadowDOM(atual)) { candidatos.add(el); } atual = atual.parentElement; } }
-                        if (tipo === 'filho') { for (let el of getAllElementsIncludingShadowDOM(baseEl)) { candidatos.add(el); } } for (let el of candidatos) {
-                            let tagOk = true; if (inf.elementoParente.tag) { tagOk = el.tagName.toLowerCase() === inf.elementoParente.tag.toLowerCase(); } let propOk = true;
-                            if (inf.elementoParente.properties) {
-                                propOk = inf.elementoParente.properties.every(p => {
-                                    let achou = false; for (let attr of el.attributes) {
-                                        if (p.attributeName && !p.attributeValue) { if (attr.name === p.attributeName) { achou = true; } } else if (!p.attributeName && p.attributeValue) {
-                                            if (attr.value.includes(p.attributeValue)) { achou = true; }
-                                        } else if (p.attributeName && p.attributeValue) { if (attr.name === p.attributeName && attr.value.includes(p.attributeValue)) { achou = true; } }
-                                    } return achou;
-                                });
-                            } if (tagOk && propOk) { resultadoFinal.add(el); }
-                        }
-                    } return resolve([...resultadoFinal,]);
-                } if (Date.now() - inicio >= maxAwaitMil) { clearInterval(intervalo); return resolve([]); }
-            }, 250); // intervalo de verificação
+                let todos = getAllElementsIncludingShadowDOM(); let resultados = aplicarFiltros(todos); if (resultados.length > 0 || Date.now() - inicio >= maxAwaitMil) { clearInterval(intervalo); resolve(resultados); }
+            }, checkInterval);
         });
     }
 
-    let elementos = await elementSearch(element), resultados = [], actions = inf.actions || [], ehBodyIncludes = actions.some(a => a.action === 'bodyIncludes');
-    if ((!elementos || elementos.length === 0) && !ehBodyIncludes) { return [{ 'ret': false, 'msg': `ELEMENT ACTION: ERRO | NÃO ENCONTRADO/NÃO APARECEU A TEMPO (${paramId})`, },]; }
-    if (ehBodyIncludes) { elementos = [document.body,]; }
+    let elementos = [], resultados = [], actions = inf.actions || [], allBody = actions.some(a => a.action === 'bodyIncludes' || a.action === 'getBody');
+    if (allBody) { elementos = [document.body,]; } else { elementos = await elementSearch(element, maxAwaitMil); }
+    if ((!elementos || elementos.length === 0) && !allBody) { return [{ 'ret': false, 'msg': `ELEMENT ACTION: ERRO | NÃO ENCONTRADO/NÃO APARECEU A TEMPO (${paramId})`, },]; }
 
-    if (indexTarget > -1) { elementos = [elementos[indexTarget],]; } elementos = elementos.slice(0, maxReturn || elementos.length); for (let el of elementos) {
+    // AÇÕES
+    // if (indexTarget > -1) { elementos = [elementos[indexTarget],]; }
+    if (indexTarget > -1) { elementos = [elementos[indexTarget],]; } else if (indexTarget === '>') { elementos = [elementos[elementos.length - 1],]; } elementos = elementos.slice(0, maxElements || elementos.length);
+    for (let el of elementos) {
         for (let [idx, valueOk,] of actions.entries()) {
             let { action, elementValue, elementIndex, attribute, time, text, textId, lowerCase, } = valueOk;
             try {
                 if (!el.isConnected) { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | ELEMENTO NÃO ESTÁ MAIS NO DOM (${paramId})`, }); continue; }
                 // -------------------
-                switch (action) {
-                    case 'elementGetXpath':
-                        resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, 'res': getElementXPath(el), }); break;
 
-                    case 'elementClick':
-                        // el.click(); // ANTIGO
-                        // ------------------------------------------------------------- NOVO
-                        if (el.tagName.toLowerCase() === 'input') {
-                            let tipo = el.type.toLowerCase(); if (tipo === 'button' || tipo === 'submit' || tipo === 'checkbox' || tipo === 'radio') { el.click(); } else { el.focus(); }
-                        } else { el.click(); }
-                        // ------------------------------------------------------------- 
-                        resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
-                        break;
+                if (action === 'elementGetXpath') {
+                    resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, 'res': getElementXPath(el), });
 
-                    case 'elementGetValue':
-                        resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, 'res': el.value?.trim() ? el.value : el.textContent, });
-                        break;
+                } else if (action === 'elementClick') {
+                    // el.click(); // ANTIGO
+                    // ------------------------------------------------------------- NOVO
+                    if (el.tagName.toLowerCase() === 'input') { let t = el.type.toLowerCase(); if (t === 'button' || t === 'submit' || t === 'checkbox' || t === 'radio') { el.click(); } else { el.focus(); } }
+                    else { el.click(); } resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
 
-                    case 'attributeGetValue':
-                        if (attribute) { resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, 'res': el.getAttribute(attribute), }); }
-                        else { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | INFORMAR O 'attribute' (${paramId})`, }); }
-                        break;
+                } else if (action === 'elementGet') {
+                    resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, 'res': el.outerHTML || el.textContent || '', });
 
-                    case 'elementSetValue':
-                        if (elementValue) {
-                            let ehComboFake = el.tagName.toLowerCase() === 'button' && el.getAttribute('role') === 'combobox';
-                            if (ehComboFake) {
-                                try {
-                                    el.click(); await sleep(500); /* espera abrir dropdown */ await simulateTyping(el, `${elementValue}`, 50, 'ENTER');
-                                    resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
-                                } catch (err) {
-                                    resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO AO DEFINIR VALOR (${paramId}) → ${err.message}`, });
-                                }
-                            } else if ('value' in el) {
-                                el.focus(); el.value = elementValue;
-                                el.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'a', 'bubbles': true, })); el.dispatchEvent(new KeyboardEvent('keyup', { 'key': 'a', 'bubbles': true, }));
-                                el.dispatchEvent(new Event('input', { 'bubbles': true, })); el.dispatchEvent(new Event('change', { 'bubbles': true, })); el.blur();
+                } else if (action === 'elementGetValue') {
+                    resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, 'res': el.value?.trim() ? el.value : el.textContent, });
+
+                } else if (action === 'attributeGetValue') {
+                    if (attribute) { resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, 'res': el.getAttribute(attribute), }); }
+                    else { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | INFORMAR O 'attribute' (${paramId})`, }); }
+
+                } else if (action === 'elementSetValue') {
+                    if (elementValue) {
+                        let ehComboFake = el.tagName.toLowerCase() === 'button' && el.getAttribute('role') === 'combobox'; if (ehComboFake) {
+                            try {
+                                el.click(); await sleep(500); /* espera abrir dropdown */ await simulateTyping(el, `${elementValue}`, 50, 'ENTER');
                                 resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
-                            } else {
-                                resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | ELEMENTO NÃO ACEITA INPUT (${paramId})`, });
-                            }
-                        } else {
-                            resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | INFORMAR O 'elementValue' (${paramId}) `, });
-                        }
-                        break;
+                            } catch (err) { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO AO DEFINIR VALOR (${paramId}) → ${err.message}`, }); }
+                        } else if ('value' in el) {
+                            el.focus(); el.value = elementValue; el.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'a', 'bubbles': true, }));
+                            el.dispatchEvent(new KeyboardEvent('keyup', { 'key': 'a', 'bubbles': true, })); el.dispatchEvent(new Event('input', { 'bubbles': true, }));
+                            el.dispatchEvent(new Event('change', { 'bubbles': true, })); el.blur(); resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
+                        } else { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | ELEMENTO NÃO ACEITA INPUT (${paramId})`, }); }
+                    } else { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | INFORMAR O 'elementValue' (${paramId}) `, }); }
 
-                    case 'awaitMil':
-                        await sleep(time || 1000); resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
-                        break;
+                } else if (action === 'awaitMil') {
+                    await sleep(time || 1000); resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
 
-                    case 'elementHover':
-                        let event = new MouseEvent('mouseover', { 'bubbles': true, 'cancelable': true, 'view': window, }); el.dispatchEvent(event);
-                        resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
-                        break;
+                } else if (action === 'elementHover') {
+                    let event = new MouseEvent('mouseover', { 'bubbles': true, 'cancelable': true, 'view': window, }); el.dispatchEvent(event);
+                    resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
 
-                    case 'getBody':
-                        resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, 'res': (document.body.textContent || ''), });
-                        break;
+                } else if (action === 'getBody') {
+                    resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, 'res': (el.textContent || ''), }); break;
 
-                    case 'bodyIncludes':
-                        let inicio = Date.now(), encontrou = false; while ((Date.now() - inicio) < maxAwaitMil) {
-                            let body = (document.body.textContent || ''); if (lowerCase) { body = body.toLowerCase(); } if (body.includes(text)) { encontrou = true; break; } await sleep(250);
-                        } if (encontrou) { resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK | TEXTO ENCONTRADO (${paramId})`, 'res': textId || text, }); }
-                        else { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | TEXTO NÃO ENCONTRADO/NÃO APARECEU A TEMPO (${paramId})`, }); }
-                        break;
+                } else if (action === 'bodyIncludes') {
+                    let inicio = Date.now(), encontrou = false; while ((Date.now() - inicio) < maxAwaitMil) {
+                        let body = (el.textContent || ''); if (lowerCase) { body = body.toLowerCase(); } if (body.includes(text.toLowerCase())) { encontrou = true; break; } await sleep(250);
+                    } if (encontrou) { resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK | TEXTO ENCONTRADO (${paramId})`, 'res': textId || text, }); }
+                    else { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | TEXTO NÃO ENCONTRADO/NÃO APARECEU A TEMPO (${paramId})`, }); }
 
-                    case 'elementScrollIntoView':
-                        el.scrollIntoView({ 'behavior': 'smooth', 'block': 'center', 'inline': 'nearest', });
-                        resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
-                        break;
+                } else if (action === 'elementScrollIntoView') {
+                    el.scrollIntoView({ 'behavior': 'smooth', 'block': 'center', 'inline': 'nearest', }); resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, });
 
-                    case 'elementSelectOption':
-                        let errOption = false; if (el.tagName.toLowerCase() === 'select') {
-                            if (elementValue !== undefined) { // SELECIONAR POR [VALOR]
-                                let option = Array.from(el.options).find(o => o.value === elementValue);
-                                if (option) { el.value = option.value; el.dispatchEvent(new Event('input', { 'bubbles': true, })); el.dispatchEvent(new Event('change', { 'bubbles': true, })); }
-                                else { errOption = `Valor não encontrado (${paramId})`; }
-                            } else if (elementIndex !== undefined) { // SELECIONAR POR [ÍNDICE]
-                                if (elementIndex >= 0 && elementIndex < el.options.length) {
-                                    el.selectedIndex = elementIndex; el.dispatchEvent(new Event('input', { 'bubbles': true, })); el.dispatchEvent(new Event('change', { 'bubbles': true, }));
-                                } else { errOption = `Índice não encontrado (${paramId})`; }
-                            } else { errOption = `Informar 'elementValue' ou 'elementIndex' (${paramId})`; }
-                        } else { errOption = `Elemento não é <select> (${paramId})`; }
-                        if (errOption) { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | ${errOption}`, }); }
-                        else { resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, }); }
-                        break;
+                } else if (action === 'elementSelectOption') {
+                    let errOption = false; if (el.tagName.toLowerCase() === 'select') {
+                        if (elementValue !== undefined) { // SELECIONAR POR [VALOR]
+                            let option = Array.from(el.options).find(o => o.value === elementValue);
+                            if (option) { el.value = option.value; el.dispatchEvent(new Event('input', { 'bubbles': true, })); el.dispatchEvent(new Event('change', { 'bubbles': true, })); }
+                            else { errOption = `Valor não encontrado (${paramId})`; }
+                        } else if (elementIndex !== undefined) { // SELECIONAR POR [ÍNDICE]
+                            if (elementIndex >= 0 && elementIndex < el.options.length) {
+                                el.selectedIndex = elementIndex; el.dispatchEvent(new Event('input', { 'bubbles': true, })); el.dispatchEvent(new Event('change', { 'bubbles': true, }));
+                            } else { errOption = `Índice não encontrado (${paramId})`; }
+                        } else { errOption = `Informar 'elementValue' ou 'elementIndex' (${paramId})`; }
+                    } else { errOption = `Elemento não é <select> (${paramId})`; } if (errOption) { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | ${errOption}`, }); }
+                    else { resultados.push({ 'ret': true, 'msg': `ELEMENT ACTION [${action}]: OK (${paramId})`, }); }
 
-
-
+                } else {
                     // ------------------------------------------------------------------------------------------------------------------------
-                    default:
-                        resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | AÇÃO INVÁLIDA (${paramId})`, });
+                    resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | AÇÃO INVÁLIDA (${paramId})`, });
                     // ------------------------------------------------------------------------------------------------------------------------
                 }
-            } catch (err) {
-                resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | (${paramId}) ${err.message}`, });
-            }
+
+            } catch (err) { resultados.push({ 'ret': false, 'msg': `ELEMENT ACTION [${action}]: ERRO | (${paramId}) ${err.message}`, }); }
         }
 
     }
+
+    // @@@ NOVO BLOCO
+    if (!!inf.newAction) { if (resultados.length === 0) { resultados = [[],]; } else { resultados = [resultados,]; } } // REMOVER ISSO NO FUTURO E RETIRAR 'retExeS = retExeS[0]' DA 'chromeActions'
+    // @@@ NOVO BLOCO
 
     return resultados;
 
@@ -185,133 +161,87 @@ async function elementAction(inf = {}) {
 globalThis['elementAction'] = elementAction;
 
 
-// let params, retElementAction;
 
-// // [elementGetValue]
+// let params, res, urlTarget = '*c6bank.my.site.com*', page;
+
+// // ------------------------------------------------ ELEMENTO: BUSCAR ------------------------------------------------
+
+// // PELO XPATH
 // params = {
-//     'paramId': `{INDICADO}`, 'element': {
-//         'maxAwaitMil': 2000, 'tag': 'records-entity-label',
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000, 'xpath': `/html/body/div[4]/div[2]/div/div[1]/div/div/c-c6-business-highlights/div/div[1]/c-c6-business-highlights-information/lightning-card/article/div[2]/slot/div[1]/div[2]/p`,
+//     }, 'actions': [{ 'action': `elementGetXpath`, },],
+// }; // res = await runElementAction({ e, urlTarget, page, 'paramsArr': [params,], }); res = res?.res || res; console.log(res);
+
+// // PELA TAG + ATRIBUTO NOME + ATRIBUTO VALOR + CONTEÚDO
+// params = {
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000, 'tag': `lightning-formatted-date-time`, // 'content': `Enviar`,
+//         'direction': +1, 'maxElements': 2, 'properties': [{ 'attributeName': `c-c6businesshighlightsinformation_c6businesshighlightsinformation`, 'attributeValue': ``, },],
+//     }, 'actions': [{ 'action': `elementGetValue`, },],
+// }; // res = await runElementAction({ e, urlTarget, page, 'paramsArr': [params,], }); res = res?.res || res; console.log(res);
+
+// // BODY COMPLETO
+// params = {
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000,
+//     }, 'actions': [{ 'action': `getBody`, },],
+// }; // res = await runElementAction({ e, urlTarget, page, 'paramsArr': [params,], }); res = res?.res || res; console.log(res);
+
+// // BODY INCLUI
+// params = {
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000,
+//     }, 'actions': [{ 'action': `bodyIncludes`, 'text': `<br>BRA`, 'lowerCase': true, },],
+// }; // res = await runElementAction({ e, urlTarget, page, 'paramsArr': [params,], }); res = res?.res || res; console.log(res);
+
+// // ------------------------------------------------ ELEMENTO: AÇÃO ------------------------------------------------
+
+// // ELEMENTO: CLICAR
+// params = {
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000, 'xpath': `/html/body/div[4]/div[1]/div/div/div/div/div[3]/div[2]/div/div/div/div/nav/ul/li[6]/a`,
+//     }, 'actions': [{ 'action': `elementClick`, },],
+// }; // res = await runElementAction({ e, urlTarget, page, 'paramsArr': [params,], }); res = res?.res || res; console.log(res);
+
+// // ELEMENTO: PEGAR ATRIBUTO
+// params = {
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000, 'xpath': `/html/body/div[4]/div[1]/div/div/div/div/div[3]/div[2]/div/div/div/div/nav/ul/li[6]/a`,
+//     }, 'actions': [{ 'action': `attributeGetValue`, 'attribute': `role`, },],
+// }; // res = await runElementAction({ e, urlTarget, page, 'paramsArr': [params,], }); res = res?.res || res; console.log(res);
+
+// // ELEMENTO: DEFINIR VALOR
+// params = {
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000, 'tag': 'input',
+//         'properties': [{ 'attributeName': `placeholder`, 'attributeValue': `Pesquisar`, }, { 'attributeName': `class`, 'attributeValue': `search-input search-input--right`, },],
+//     }, 'actions': [{ 'action': `elementSetValue`, 'elementValue': `123`, }, { 'action': `awaitMil`, 'time': 1500, }, { 'action': `elementSetValue`, 'elementValue': `456`, },],
+// }; // res = await runElementAction({ e, urlTarget, page, 'paramsArr': [params,], }); res = res?.res || res; console.log(res);
+
+// // ELEMENTO: PASSAR O MOUSE
+// params = {
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000, 'tag': `p`,
 //         'properties': [
-//             { 'attributeName': 'slot', 'attributeValue': 'entityLabel', },
+//             { 'attributeName': `c-c6businesshighlightsinformation_c6businesshighlightsinformation`, 'attributeValue': ``, },
+//             { 'attributeName': `class`, 'attributeValue': `slds-truncate slds-text-link hover-cursor`, },
 //         ],
-//     }, 'actions': [{ 'action': 'elementGetValue', },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
+//     }, 'actions': [{ 'action': `elementHover`, },],
+// }; // res = await runElementAction({ e, urlTarget, page, 'paramsArr': [params,], }); res = res?.res || res; console.log(res);
 
-// // [elementGetXpath]
+// // ELEMENTO: ROLAR ATÉ ELE
 // params = {
-//     'paramId': '{EXEMPLO_XPATH}', 'element': {
-//         'maxAwaitMil': 2000, 'tag': 'input',
-//         'properties': [
-//             { 'attributeName': 'type', 'attributeValue': 'text', },
-//         ],
-//     },
-//     'actions': [{ 'action': 'elementGetXpath', },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000, 'content': `Mostrar todas as atividades`, 'indexTarget': '>', // OU NÚMERO
+//     }, 'actions': [{ 'action': `elementScrollIntoView`, },],
+// }; // res = await runElementAction({ e, urlTarget, page, 'paramsArr': [params,], }); res = res?.res || res; console.log(res);
 
-// // [elementClick]
+// // ELEMENTO: SELECIONAR OPÇÃO
 // params = {
-//     'paramId': '{EXEMPLO_CLICK}', 'element': {
-//         'tag': 'button', 'content': 'Enviar',
-//         'properties': [
-
-//         ],
-//     },
-//     'actions': [{ 'action': 'elementClick', },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
-
-// // [attributeGetValue]
-// params = {
-//     'paramId': '{EXEMPLO_ATTRIBUTE}', 'element': {
-//         'tag': 'a', 'content': 'Clique aqui',
-//         'properties': [
-
-//         ],
-//     },
-//     'actions': [{ 'action': 'attributeGetValue', 'attribute': 'href', },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
-
-// // [elementSetValue]
-// params = {
-//     'paramId': '{EXEMPLO_SET_VALUE}', 'element': {
-//         'tag': 'input',
-//         'properties': [
-//             { 'attributeName': 'name', 'attributeValue': 'username', },
-//         ],
-//     },
-//     'actions': [{ 'action': 'elementSetValue', 'elementValue': 'orlando_user', },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
-
-// // [awaitMil]
-// params = {
-//     'paramId': '{EXEMPLO_AWAIT}',
-//     'element': {
-//         'tag': 'body',
-//         'properties': [
-
-//         ],
-//     },
-//     'actions': [{ 'action': 'awaitMil', 'time': 1500, },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
-
-// // [elementHover]
-// params = {
-//     'paramId': '{EXEMPLO_HOVER}',
-//     'element': {
-//         'tag': 'div',
-//         'properties': [
-//             { 'attributeName': 'class', 'attributeValue': 'menu-item', },
-//         ],
-//     },
-//     'actions': [{ 'action': 'elementHover', },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
-
-// // [getBody]
-// params = {
-//     'paramId': '{EXEMPLO_GET_BODY}',
-//     'element': {},
-//     'actions': [{ 'action': 'getBody', },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
-
-// // [bodyIncludes]
-// params = {
-//     'paramId': '{EXEMPLO_BODY_INCLUDES}',
-//     'element': {},
-//     'actions': [{ 'action': 'bodyIncludes', 'text': 'Bem-vindo', 'lowerCase': true, },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
-
-// // [elementScrollIntoView]
-// params = {
-//     'paramId': '{EXEMPLO_SCROLL}',
-//     'element': {
-//         'tag': 'div',
-//         'properties': [
-//             { 'attributeName': 'class', 'attributeValue': 'menu-item', },
-//         ],
-//     },
-//     'actions': [{ 'action': 'elementScrollIntoView', },],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
-
-// // [elementSelectOption]
-// params = {
-//     'paramId': `TESTES`, 'element': {
-//         'maxAwaitMil': 250, 'tag': 'select',
-//         'properties': [
-//             { 'attributeName': 'id', 'attributeValue': 'idNome1', },
-//         ],
-//     }, 'actions': [
-//         { 'action': 'elementSelectOption', 'elementValue': 'SELECT 2', /* OU */ 'elementIndex': 2, },
-//     ],
-// };
-// retElementAction = await elementAction(params); console.log(retElementAction);
+//     'paramId': `TESTE`, 'element': {
+//         'maxAwaitMil': 1000, 'content': `Seleciona a opção`,
+//     }, 'actions': [{ 'action': `elementSelectOption`, 'elementValue': 'Opção aqui', /* OU */ 'elementIndex': 2, },],
+// };  // res = await chromeActions({ e, 'action': 'injectNew', 'target': urlTarget, 'fun': elementAction, 'funInf': params, }); res = res?.res || res; console.log(res);
 
 

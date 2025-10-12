@@ -16,7 +16,8 @@ if (!globalThis.all1) {
     // console.log(`${eng} | ${engType} | ${engName} | ${letter}\n${fileProjetos} | ${fileWindows}`); console.log('\n'); console.log('securityPass:', gW.securityPass);
     // console.log('portWeb:', gW.portWeb, '|', 'serverWeb:', gW.serverWeb); console.log('portLoc:', gW.portLoc, '|', 'serverLoc:', gW.serverLoc);
     // console.log(`devMaster: ${gW.devMaster}\ndevSlave: ${gW.devSlave}\ndevChildren: ${gW.devChildren}`); console.log(`devSend:\n${gW.devSend}`);
-    // console.log(`devGet:\n${gW.devGet[0]}\n${gW.devGet[1]}`); console.log('conf:', gW.conf); console.log('root:', gW.root); console.log('functions:', gW.functions); console.log('project:', gW.project);
+    // console.log(`devGet:\n${gW.devGet[0]}\n${gW.devGet[1]}`); console.log('conf:', gW.conf); console.log('root:', gW.root); console.log('functions:', gW.functions);
+    // console.log('project:', gW.project);
 }
 
 /* FUNÇÕES */ let project = gW.project;
@@ -48,6 +49,7 @@ globalThis['command2'] = (inf) => { return importFun({ 'engOk': (eng), 'path': '
 globalThis['tryRatingComplete'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/scripts/tryRatingComplete.js', inf, project, }); };
 globalThis['tryRatingSet'] = (inf) => { return importFun({ 'engOk': (eng), 'path': './src/scripts/tryRatingSet.js', inf, project, }); };
 globalThis['z_backup'] = (inf) => { return importFun({ 'engOk': (!eng), 'path': './src/scripts/z_backup.js', inf, project, }); };
+globalThis['z_testeElementAction'] = (inf) => { return importFun({ 'engOk': (eng || !eng), 'path': './src/scripts/z_testeElementAction.js', inf, project, }); };
 
 // *********** (LEGACY IMPORT) NÃO FUNCIONA COM 'importFun' ***********
 // → FUNÇÕES

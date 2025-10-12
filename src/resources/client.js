@@ -49,9 +49,9 @@ async function client(inf = {}) {
         }
 
         // SERVIDORES: CONECTAR E LISTENER DE MENSAGENS RECEBIDAS → [LOC] + [WEB] (AWS) + [WEB] (Hetzner)
-        let servers = [gW.devGet[0], gW.devGet[1], `${gW.serverWebEstrelar}:${gW.devGet[0].split(':')[1]}`,];
-        servers = [servers[0], servers[1],];
-        for (let [index, value,] of servers.entries()) {
+        let servers = [gW.devGet[0], gW.devGet[1],]; if ((`${gW.devGet[0]}`).includes('ESTRELAR')) {
+            servers.push(`${gW.serverWebEstrelar}:${gW.devGet[0].split(':')[1]}`);
+        } for (let [index, value,] of servers.entries()) {
             if (!value.includes('127.0.0.1') && (gW.project === 'Sniffer_Python' || (!value.includes('USUARIO_0') && value.includes('USUARIO_')))) {
                 // NÃO CONECTAR AO WEBSOCKET
             } else { connect({ 'hostRoom': value, }); listenerMonitorar(value, async (nomeList, param1) => { runLis({ nomeList, param1, }); }); }

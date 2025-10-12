@@ -25,7 +25,9 @@ console.log = function () { runClearConsole.apply(console, arguments); msgQtd++;
 function getTypeof(v) { // 'number' / 'nan' / 'string' / 'boolean' / 'null' / 'undefined' / 'array' / 'object' / 'buffer' / 'function' / 'date' / 'set' / 'map' / 'regexp' / 'error' → let a = getTypeof(false)
     let t = typeof v; return (t !== 'object') ? ((t === 'number') ? (Number.isNaN(v) ? 'nan' : 'number') : t) : (v === null) ? 'null' : ((eng ? (v instanceof Uint8Array) : Buffer.isBuffer(v)) ? 'buffer' :
         (Array.isArray(v)) ? 'array' : (v instanceof Error) ? 'error' : (v instanceof Date) ? 'date' : (v instanceof Set) ? 'set' : (v instanceof Map) ? 'map' : (v instanceof RegExp) ? 'regexp' : 'object');
-} /* *** */ function crashCode(txt = 'QUEBRANDO CÓDIGO...') { console.log(txt); if (eng) { chrome.management.setEnabled(chrome.runtime.id, false); } else { process.exit(); } } // crashCode()
+} // eslint-disable-next-line no-undef
+function codeStop(msg = 'QUEBRANDO CÓDIGO...') { if (!eng && msg === true) { ignoreThis; } console.log(msg); if (eng) { chrome.management.setEnabled(chrome.runtime.id, false); } else { process.exit(); } }
+// codeStop(`Parada forçada pelo TAL`); /* → ENCERRAR O CÓDIGO */ codeStop(true); /* → QUEBRA O CÓDIGO */
 
 // *-*-*-*-*-*-* eng: [true|false → CHROME|NODE/GOOGLE/BROWSER] *-*-*-*-*-*-* engType: [1|2|3|4 → CHROME|NODE|GOOGLE|BROWSER] *-*-*-*-*-*-*
 let _fs, cs, x; globalThis['fileProjetos'] = 'x'; globalThis['fileChrome_Extension'] = 'x'; globalThis['letter'] = 'x'; globalThis['fileWindows'] = 'x'; function getEngType() {
@@ -94,16 +96,16 @@ function startupTime(b, c) { let a = c - b, s = Math.floor(a / 1000), m = a % 10
 
 // {IMPORT FUNÇÕES} → DINAMICAMENTE QUANDO NECESSÁRIO | FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) * ENCAMINHAR PARA DEVICE
 let qtd0 = 0; async function importFun(infOk = {}) {
-    let { engOk, path, inf, project, } = infOk; qtd0++; let name = path.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; if (qtd0 > 50) { console.log(`IMPORT FUN: ERRO | EM LOOP!!! '${path}'`); crashCode(); }
+    let { engOk, path, inf, project, } = infOk; qtd0++; let name = path.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; if (qtd0 > 50) { console.log(`IMPORT FUN: ERRO | EM LOOP!!! '${path}'`); codeStop(); }
     if (engOk) { await import((eng ? `${gW.root}://${gW.functions}` : `file://${fileProjetos}/${project === 'NAO_DEFINIDO' ? 'Chrome_Extension' : project}`) + `/${path.replace('./', '')}`); return globalThis[name](inf); }
     else { let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { name, 'par': inf, }, }); return retDevAndFun; }
 }
 
 // {IMPORT BIBLIOTECAS} → [NODE] DINAMICAMENTE QUANDO NECESSÁRIO
 let qtd1 = 0; async function importLibs(...args) {
-    let libs = args[0], libsT = libs; qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [1]!!!`); crashCode(); } for (let m in libs) {
-        qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [2]!!!`); crashCode(); } for (let l in libs[m]) {
-            qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [3]!!!`); crashCode(); } let mL = false; if (l !== 'pro') {
+    let libs = args[0], libsT = libs; qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [1]!!!`); codeStop(); } for (let m in libs) {
+        qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [2]!!!`); codeStop(); } for (let l in libs[m]) {
+            qtd1++; if (qtd1 > 50) { console.log(`IMPORT LIBS: ERRO | EM LOOP [3]!!!`); codeStop(); } let mL = false; if (l !== 'pro') {
                 let pro = libs[m]['pro'] === true ? gW.project : libs[m]['pro'], b0 = libs[m][l] === 1, b1 = globalThis[`_${l}`]; if (b0 && !b1) {
                     mL = true; if (!eng) { mL = await import(pro ? libPath({ 'p': pro, m, l, }) : m); } globalThis[`_${l}`] = eng ? globalThis[`${l}`] : (m === l) ? mL : mL[l] || mL.default[l] || mL.default;
                 } if (globalThis[`_${l}`]) { Object.keys(libsT[m] || {}).length === 2 && libsT?.[m]?.pro && delete libsT[m].pro; delete libsT?.[m]?.[l], Object.keys(libsT[m] || {}).length || delete libsT[m]; }
@@ -138,7 +140,7 @@ let gO = { 'inf': {}, }; Object.assign(globalThis, {
     /* ## VARIÁVEIS */       cs,
     /* ## GLOBAL OBJECT */   gO, // gOList,
     /* ## LISTENER */        listenerMonitorar, listenerAcionar,
-    /* ## FUNÇÕES */         clearConsole, getTypeof, crashCode, rateLimiter, randomNumber, randomId, awaitTimeout, startupTime, importFun, importLibs, replaceVars, stringGet, fDirname, fJoin,
+    /* ## FUNÇÕES */         clearConsole, getTypeof, codeStop, rateLimiter, randomNumber, randomId, awaitTimeout, startupTime, importFun, importLibs, replaceVars, stringGet, fDirname, fJoin,
 });
 
 // ********************** OBRIGATÓRIO FICAR APOS O EXPORT GLOBAL (não subir!!!) NÃO USAR !!! | NÃO COMENTAR! NECESSÁRIO QUANDO NÃO FOR 'Chrome_Extension'

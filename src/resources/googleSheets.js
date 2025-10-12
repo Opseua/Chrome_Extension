@@ -4,7 +4,9 @@ let e = currentFile(new Error()), ee = e; let keyFile = `${fileProjetos}/${gW.fu
 let libs = { '@googleapis/sheets': {}, };
 async function googleSheets(inf = {}) {
     let ret = { 'ret': false, }; e = inf.e || e;
-    let { action, id, tab, range, values, attempts = 2, googleAppScript = false, idOrigin, idDestination, tabOrigin, tabDestination, linStart, linEnd, colsOrigin, colsDestination, } = inf; let errAll = '';
+    let { action, id, tab, range, values, attempts = 2, googleAppScript = false, idOrigin, idDestination, tabOrigin, tabDestination, linStart, linEnd, colsOrigin, colsDestination, isCol,
+        linesQtd,
+    } = inf; let errAll = '';
     try {
         /* IMPORTAR BIBLIOTECA [NODE] */ if (libs['@googleapis/sheets']) {
             libs['@googleapis/sheets'] = { 'sheets': 1, 'auth': 1, }; libs = await importLibs(libs, 'googleSheets'); _sheets = await _sheets({ version: 'v4', auth: (await new _auth.GoogleAuth({ keyFile, scopes, })), });
@@ -26,12 +28,13 @@ async function googleSheets(inf = {}) {
             } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [${act}]: ERRO | ${identifyErr(catchErr)} '${id}' '${range}'`; }
         } else if (action === 'send') {
             // →→→  SEND
-            let act = `SEND`; let col = range.replace(/[^a-zA-Z]/g, ''), lin = ''; values = { values, }; if (/[0-9]/.test(range)) { lin = range.replace(/[^0-9]/g, ''); } else if (range.includes('*')) {
-                range = `${range}:${range}`; range = range.replace(/\*/g, ''); lin = await googleSheets({ e, 'action': 'lastLin', id, tab, range, }); if (!lin.ret) { return lin; } lin = lin.res.lastLineWithData + 1;
-            } else { ret['msg'] = `GOOGLE SHEET [${act}]: ERRO | 'range' INVÁLIDO`; return ret; }
-            range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`; try {
-                await _sheets.spreadsheets.values.update({ 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values, }); ret['msg'] = `GOOGLE SHEET [${act}]: OK`; ret['ret'] = true;
-            } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [${act}]: ERRO | ${identifyErr(catchErr)} '${id}' '${range}'`; }
+            let act = `SEND`; values = { values, }; if (!isCol) {
+                let col = range.replace(/[^a-zA-Z]/g, ''), lin = ''; if (/[0-9]/.test(range)) { lin = range.replace(/[^0-9]/g, ''); } else if (range.includes('*')) {
+                    range = `${range}:${range}`; range = range.replace(/\*/g, ''); lin = await googleSheets({ e, 'action': 'lastLin', id, tab, range, }); if (!lin.ret) { return lin; } lin = lin.res.lastLineWithData + 1;
+                } else { ret['msg'] = `GOOGLE SHEET [${act}]: ERRO | 'range' INVÁLIDO`; return ret; }
+                range = `${tab}!${col}${lin}:${String.fromCharCode(col.charCodeAt(0) + values.values[0].length - 1)}${lin}`;
+            } try { await _sheets.spreadsheets.values.update({ 'spreadsheetId': id, range, 'valueInputOption': 'USER_ENTERED', 'resource': values, }); ret['msg'] = `GOOGLE SHEET [${act}]: OK`; ret['ret'] = true; }
+            catch (catchErr) { ret['msg'] = `GOOGLE SHEET [${act}]: ERRO | ${identifyErr(catchErr)} '${id}' '${range}'`; }
         } else if (action === 'lastLin') {
             // →→→  LAST LIN
             let act = `LAST LIN`; try {
@@ -83,7 +86,15 @@ async function googleSheets(inf = {}) {
                     'valueInputOption': 'RAW', 'requestBody': { 'values': valores, },
                 }); ret['msg'] = `GOOGLE SHEET [${act}]: OK`; ret['ret'] = true;
             } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [${act}]: ERRO | ${identifyErr(catchErr)}`; }
-
+        } else if (action === 'deleteLines') {
+            // →→→ DELETE LINES
+            let act = `DELETE LINES`; try {
+                if (typeof linStart !== 'number' || linStart < 1) { ret['msg'] = `GOOGLE SHEET [${act}]: ERRO | INFORMAR O 'linStart'`; return ret; }
+                if (typeof linesQtd !== 'number' || linesQtd < 1) { ret['msg'] = `GOOGLE SHEET [${act}]: ERRO | INFORMAR O 'linesQtd'`; return ret; }
+                let data = [{ 'deleteDimension': { 'range': { 'sheetId': Number(tab), 'dimension': 'ROWS', 'startIndex': linStart - 1, 'endIndex': linStart - 1 + linesQtd, }, }, },];
+                await _sheets.spreadsheets.batchUpdate({ 'spreadsheetId': id, 'resource': { 'requests': data, }, });
+                ret['msg'] = `GOOGLE SHEET [${act}]: OK | LINHAS ${linStart} A ${linStart + linesQtd - 1} DELETADAS`; ret['ret'] = true;
+            } catch (catchErr) { ret['msg'] = `GOOGLE SHEET [${act}]: ERRO | ${identifyErr(catchErr)} '${id}' '${tab}'`; }
         } else {
             ret['msg'] = `GOOGLE SHEET: ERRO | 'action' INVÁLIDO`; return ret;
         }
@@ -151,6 +162,10 @@ globalThis['googleSheets'] = googleSheets;
 //     'idOrigin': '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc', 'tabOrigin': 'INDICAR_AUTOMATICO', 'colsOrigin': ['N', 'S',],
 //     'idDestination': '19itKQqFsvKp7Y8nlTycO1X5OqRz4r0ekHcg_FzTtz0Y', 'tabDestination': 'INDICACOES_STATUS', 'colsDestination': ['K', 'L',],
 // };
+// infGoogleSheets = {
+//     e, 'action': 'deleteLines', 'linStart': 1, 'linesQtd': 3, 'id': '1Rj_eyyhJtwY-XyEoNYeOAQ_nESrtmskPNyCLO0bTRak', 'tab': '1260776603',
+// };
+// retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 // retGoogleSheets = await googleSheets(infGoogleSheets); console.log(retGoogleSheets);
 
 

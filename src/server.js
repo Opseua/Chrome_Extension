@@ -42,6 +42,8 @@ async function serverRun(inf = {}) {
             setInterval(async () => { indicationCheck({}); }, delay); // A CADA x MINUTO(s)
         }
 
+        // z_testeElementAction({});
+
         ret['ret'] = true;
         ret['msg'] = `SERVER: OK`;
 

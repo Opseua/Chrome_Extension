@@ -24,7 +24,7 @@ let arrGlobal = [
   'cs', 'gO', 'gOList',
 
   // FUNÇÕES
-  'clearConsole', 'getTypeof', 'crashCode', 'rateLimiter', 'randomNumber', 'randomId', 'awaitTimeout', 'startupTime', 'importFun', 'importLibs', 'replaceVars', 'stringGet', 'fDirname',
+  'clearConsole', 'getTypeof', 'codeStop', 'rateLimiter', 'randomNumber', 'randomId', 'awaitTimeout', 'startupTime', 'importFun', 'importLibs', 'replaceVars', 'stringGet', 'fDirname',
   'fJoin',
 
   // ### BIBLIOTECAS / NATIVO → GOOGLE 
@@ -34,7 +34,7 @@ let arrGlobal = [
   'api', 'chat', 'chromeActions', 'client', 'clipboard', 'commandLine', 'configStorage', 'dateHour', 'devFun', 'file', 'getPath', 'googleSheets', 'googleTranslate', 'tableHtmlToJson',
   'log', 'logConsole', 'messageSend', 'messageReceived', 'notification', 'objFilter', 'regex', 'regexE', 'tabActions', 'GPT4js', 'listenerAcionar',
   'listenerMonitorar', 'chromeActionsNew', 'taskInfTryRating', 'zachey01___gpt4free_js', 'background', 'command1', 'audioTranscribe',
-  'command2', 'tryRatingComplete', 'clientInputChrome', 'restartCode', 'indicationCheck', 'scheduleRun', 'z_backup',
+  'command2', 'tryRatingComplete', 'clientInputChrome', 'restartCode', 'indicationCheck', 'scheduleRun', 'z_backup', 'z_testeElementAction',
 
   // funções globais → [Sniffer_Python]
   'ewoq', 'scilliance', 'tryRating', 'performTask', 'correiosServer', 'targetAlert',
@@ -44,7 +44,7 @@ let arrGlobal = [
 
   // funções globais → [WebScraper]
   'apiCnpj', 'apiNire', 'awaitLoad', 'browsers', 'buttonElement', 'checkPage', 'cookiesGetSet', 'getTextElement', 'input', 'navigate', 'sendData', 'clientSearch', 'clientGetData',
-  'clientInput', 'maquinaInput', 'screenshot', 'elementAction', 'newAccounts',
+  'clientInput', 'maquinaInput', 'screenshot', 'elementAction', 'runElementAction', 'newAccounts', 'moveLeadsMaquinas',
 
   // funções globais → [WebSocket]
   'html', 'logsDel', 'messageAction', 'performanceDev', 'roomParams',
